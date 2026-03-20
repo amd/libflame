@@ -12,23 +12,23 @@
 
 FLA_Error FLA_Apply_pivots_macro_external( FLA_Side side, FLA_Trans trans, FLA_Obj p, FLA_Obj A )
 {
-   integer          i, j;
-   integer          ipiv;
-   integer*         buf_p    = ( integer* ) FLA_Obj_buffer_at_view( p );
+   fla_dim_t          i, j;
+   fla_dim_t          ipiv;
+   fla_dim_t*         buf_p    = ( fla_dim_t* ) FLA_Obj_buffer_at_view( p );
    FLA_Obj*     blocks   = FLASH_OBJ_PTR_AT( A );
-   integer          m_blocks = FLA_Obj_length( A );
-   integer          m_A      = FLA_Obj_length( *blocks );
-   integer          n_A      = FLA_Obj_width( *blocks );
+   fla_dim_t          m_blocks = FLA_Obj_length( A );
+   fla_dim_t          m_A      = FLA_Obj_length( *blocks );
+   fla_dim_t          n_A      = FLA_Obj_width( *blocks );
    FLA_Datatype datatype = FLA_Obj_datatype( A );
 
 #ifdef FLA_ENABLE_WINDOWS_BUILD
-   integer* m  = ( integer* ) _alloca( m_blocks * sizeof( integer ) );
-   integer* cs = ( integer* ) _alloca( m_blocks * sizeof( integer ) );
+   fla_dim_t* m  = ( fla_dim_t* ) _alloca( m_blocks * sizeof( fla_dim_t ) );
+   fla_dim_t* cs = ( fla_dim_t* ) _alloca( m_blocks * sizeof( fla_dim_t ) );
 #else
-   integer* m  = ( integer* ) malloc( m_blocks * sizeof( integer ) );
-   integer* cs = ( integer* ) malloc( m_blocks * sizeof( integer ) );
-   //integer m[m_blocks];
-   //integer cs[m_blocks];
+   fla_dim_t* m  = ( fla_dim_t* ) malloc( m_blocks * sizeof( fla_dim_t ) );
+   fla_dim_t* cs = ( fla_dim_t* ) malloc( m_blocks * sizeof( fla_dim_t ) );
+   //fla_dim_t m[m_blocks];
+   //fla_dim_t cs[m_blocks];
 #endif
 
    if ( side != FLA_LEFT || trans != FLA_NO_TRANSPOSE )

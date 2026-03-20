@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b12 = -1.;
 static doublereal c_b14 = 1.;
 /* > \brief \b DPORFS */
@@ -181,48 +181,57 @@ static doublereal c_b14 = 1.;
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dporfs_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *af,
-             integer *ldaf, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
-             doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda,
+             doublereal *af, aocl_int_t *ldaf, doublereal *b, aocl_int_t *ldb, doublereal *x,
+             aocl_int_t *ldx, doublereal *ferr, doublereal *berr, doublereal *work,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dporfs(uplo, n, nrhs, a, lda, af, ldaf, b, ldb, x, ldx, ferr, berr, work, iwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dporfs(uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, b, &ldb_64, x, &ldx_64,
+                       ferr, berr, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dporfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
+                        aocl_int64_t *lda, doublereal *af, aocl_int64_t *ldaf, doublereal *b,
+                        aocl_int64_t *ldb, doublereal *x, aocl_int64_t *ldx, doublereal *ferr,
+                        doublereal *berr, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dporfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
                       *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
-        i__3;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2, i__3;
     doublereal d__1, d__2, d__3;
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal s, xk;
-    integer nz;
+    aocl_int64_t nz;
     doublereal eps;
-    integer kase;
+    aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
-    integer count;
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-               doublereal *, doublereal *, integer *),
-        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
     doublereal lstres;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -298,7 +307,7 @@ void dporfs_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPORFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPORFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -329,9 +338,9 @@ void dporfs_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
         lstres = 3.;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        dcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        dsymv_(uplo, n, &c_b12, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b14, &work[*n + 1],
-               &c__1);
+        aocl_blas_dcopy(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+        aocl_blas_dsymv(uplo, n, &c_b12, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b14,
+                        &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -414,8 +423,8 @@ void dporfs_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            dpotrs_(uplo, n, &c__1, &af[af_offset], ldaf, &work[*n + 1], n, info);
-            daxpy_(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_dpotrs(uplo, n, &c__1, &af[af_offset], ldaf, &work[*n + 1], n, info);
+            aocl_blas_daxpy(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -452,13 +461,14 @@ void dporfs_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
         }
         kase = 0;
     L100:
-        dlacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
+        aocl_lapack_dlacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
+                           isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(A**T). */
-                dpotrs_(uplo, n, &c__1, &af[af_offset], ldaf, &work[*n + 1], n, info);
+                aocl_lapack_dpotrs(uplo, n, &c__1, &af[af_offset], ldaf, &work[*n + 1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -475,7 +485,7 @@ void dporfs_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L120: */
                 }
-                dpotrs_(uplo, n, &c__1, &af[af_offset], ldaf, &work[*n + 1], n, info);
+                aocl_lapack_dpotrs(uplo, n, &c__1, &af[af_offset], ldaf, &work[*n + 1], n, info);
             }
             goto L100;
         }

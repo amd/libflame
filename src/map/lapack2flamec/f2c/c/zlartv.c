@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors. */
+#include "FLA_f2c.h" /* > \brief \b ZLARTV applies a vector of plane rotations with real cosines and scomplex sines to the elements of a pair of vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -37,8 +37,8 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARTV applies a vector of complex plane rotations with real cosines */
-/* > to elements of the complex vectors x and y. For i = 1,2,...,n */
+/* > ZLARTV applies a vector of scomplex plane rotations with real cosines */
+/* > to elements of the scomplex vectors x and y. For i = 1,2,...,n */
 /* > */
 /* > ( x(i) ) := ( c(i) s(i) ) ( x(i) ) */
 /* > ( y(i) ) ( -conjg(s(i)) c(i) ) ( y(i) ) */
@@ -102,21 +102,37 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlartv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy,
-             doublereal *c__, doublecomplex *s, integer *incc)
+/** Generated wrapper function */
+void zlartv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int_t *incy,
+             doublereal *c__, dcomplex *s, aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlartv(n, x, incx, y, incy, c__, s, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_zlartv(&n_64, x, &incx_64, y, &incy_64, c__, s, &incc_64);
+#endif
+}
+
+void aocl_lapack_zlartv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcomplex *y,
+                        aocl_int64_t *incy, doublereal *c__, dcomplex *s, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
                       ", incc %" FLA_IS "",
                       *n, *incx, *incy, *incc);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    doublecomplex z__1, z__2, z__3, z__4;
+    aocl_int64_t i__1, i__2, i__3, i__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, ic, ix, iy;
-    doublecomplex xi, yi;
+    aocl_int64_t i__, ic, ix, iy;
+    dcomplex xi, yi;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -144,33 +160,33 @@ void zlartv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = ix;
-        xi.r = x[i__2].r;
-        xi.i = x[i__2].i; // , expr subst
+        xi.real = x[i__2].real;
+        xi.imag = x[i__2].imag; // , expr subst
         i__2 = iy;
-        yi.r = y[i__2].r;
-        yi.i = y[i__2].i; // , expr subst
+        yi.real = y[i__2].real;
+        yi.imag = y[i__2].imag; // , expr subst
         i__2 = ix;
         i__3 = ic;
-        z__2.r = c__[i__3] * xi.r;
-        z__2.i = c__[i__3] * xi.i; // , expr subst
+        z__2.real = c__[i__3] * xi.real;
+        z__2.imag = c__[i__3] * xi.imag; // , expr subst
         i__4 = ic;
-        z__3.r = s[i__4].r * yi.r - s[i__4].i * yi.i;
-        z__3.i = s[i__4].r * yi.i + s[i__4].i * yi.r; // , expr subst
-        z__1.r = z__2.r + z__3.r;
-        z__1.i = z__2.i + z__3.i; // , expr subst
-        x[i__2].r = z__1.r;
-        x[i__2].i = z__1.i; // , expr subst
+        z__3.real = s[i__4].real * yi.real - s[i__4].imag * yi.imag;
+        z__3.imag = s[i__4].real * yi.imag + s[i__4].imag * yi.real; // , expr subst
+        z__1.real = z__2.real + z__3.real;
+        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+        x[i__2].real = z__1.real;
+        x[i__2].imag = z__1.imag; // , expr subst
         i__2 = iy;
         i__3 = ic;
-        z__2.r = c__[i__3] * yi.r;
-        z__2.i = c__[i__3] * yi.i; // , expr subst
+        z__2.real = c__[i__3] * yi.real;
+        z__2.imag = c__[i__3] * yi.imag; // , expr subst
         d_cnjg(&z__4, &s[ic]);
-        z__3.r = z__4.r * xi.r - z__4.i * xi.i;
-        z__3.i = z__4.r * xi.i + z__4.i * xi.r; // , expr subst
-        z__1.r = z__2.r - z__3.r;
-        z__1.i = z__2.i - z__3.i; // , expr subst
-        y[i__2].r = z__1.r;
-        y[i__2].i = z__1.i; // , expr subst
+        z__3.real = z__4.real * xi.real - z__4.imag * xi.imag;
+        z__3.imag = z__4.real * xi.imag + z__4.imag * xi.real; // , expr subst
+        z__1.real = z__2.real - z__3.real;
+        z__1.imag = z__2.imag - z__3.imag; // , expr subst
+        y[i__2].real = z__1.real;
+        y[i__2].imag = z__1.imag; // , expr subst
         ix += *incx;
         iy += *incy;
         ic += *incc;

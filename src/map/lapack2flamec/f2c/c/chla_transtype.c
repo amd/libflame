@@ -53,7 +53,18 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Character */
-VOID chla_transtype_(char *ret_val, integer *trans)
+/** Generated wrapper function */
+void chla_transtype_(char *ret_val, aocl_int_t *trans)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chla_transtype(ret_val, trans);
+#else
+    aocl_int64_t trans_64 = (aocl_int64_t)*trans;
+    aocl_lapack_chla_transtype(ret_val, &trans_64);
+#endif
+}
+
+void aocl_lapack_chla_transtype(char *ret_val, aocl_int64_t *trans)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE

@@ -4,10 +4,10 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static doublecomplex c_b15 = {1., 0.};
-static doublecomplex c_b19 = {-1., -0.};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static dcomplex c_b15 = {1., 0.};
+static dcomplex c_b19 = {-1., -0.};
 /* > \brief \b ZSYTRF_AA */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,13 +43,13 @@ static doublecomplex c_b19 = {-1., -0.};
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZSYTRF_AA computes the factorization of a complex symmetric matrix A */
+/* > ZSYTRF_AA computes the factorization of a scomplex symmetric matrix A */
 /* > using the Aasen's algorithm. The form of the factorization is */
 /* > */
 /* > A = U**T*T*U or A = L*T*L**T */
 /* > */
 /* > where U (or L) is a product of permutation and unit upper (lower) */
-/* > triangular matrices, and T is a complex symmetric tridiagonal matrix. */
+/* > triangular matrices, and T is a scomplex symmetric tridiagonal matrix. */
 /* > */
 /* > This is the blocked version of the algorithm, calling Level 3 BLAS. */
 /* > \endverbatim */
@@ -135,39 +135,41 @@ the routine */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
-                doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zsytrf_aa_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsytrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsytrf_aa(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsytrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                           aocl_int_t *ipiv, dcomplex *work, aocl_int64_t *lwork,
+                           aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytrf_aa inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
                       "",
                       *uplo, *n, *lda, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer j;
-    extern /* Subroutine */
-        void
-        zlasyf_aa_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
-                   doublecomplex *, integer *, doublecomplex *);
-    integer j1, k1, k2, j2, j3, jb, nb, mj, nj;
-    doublecomplex alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t j;
+    aocl_int64_t j1, k1, k2, j2, j3, jb, nb, mj, nj;
+    dcomplex alpha;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -196,7 +198,7 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
     --ipiv;
     --work;
     /* Function Body */
-    nb = ilaenv_(&c__1, "ZSYTRF_AA", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZSYTRF_AA", uplo, n, &c_n1, &c_n1, &c_n1);
     /* Test the input parameters. */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
@@ -226,13 +228,13 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
     if(*info == 0)
     {
         lwkopt = (nb + 1) * *n;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYTRF_AA", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("ZSYTRF_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -264,7 +266,7 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
         /* Factorize A as U**T*D*U using the upper triangle of A */
         /* ..................................................... */
         /* Copy first row A(1, 1:N) into H(1:n) (stored in WORK(1:N)) */
-        zcopy_(n, &a[a_dim1 + 1], lda, &work[1], &c__1);
+        aocl_blas_zcopy(n, &a[a_dim1 + 1], lda, &work[1], &c__1);
         /* J is the main loop index, increasing from 1 to N in steps of */
         /* JB, where JB is the number of columns factorized by ZLASYF;
          */
@@ -289,8 +291,8 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
         /* Panel factorization */
         i__1 = 2 - k1;
         i__2 = *n - j;
-        zlasyf_aa_(uplo, &i__1, &i__2, &jb, &a[fla_max(1, j) + (j + 1) * a_dim1], lda, &ipiv[j + 1],
-                   &work[1], n, &work[*n * nb + 1]);
+        aocl_lapack_zlasyf_aa(uplo, &i__1, &i__2, &jb, &a[fla_max(1, j) + (j + 1) * a_dim1], lda,
+                              &ipiv[j + 1], &work[1], n, &work[*n * nb + 1]);
         /* Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot) */
         /* Computing MIN */
         i__2 = *n;
@@ -298,11 +300,12 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
         i__1 = fla_min(i__2, i__3);
         for(j2 = j + 2; j2 <= i__1; ++j2)
         {
-            ipiv[j2] += j;
+            ipiv[j2] += (aocl_int_t)(j);
             if(j2 != ipiv[j2] && j1 - k1 > 2)
             {
                 i__2 = j1 - k1 - 2;
-                zswap_(&i__2, &a[j2 * a_dim1 + 1], &c__1, &a[ipiv[j2] * a_dim1 + 1], &c__1);
+                aocl_blas_zswap(&i__2, &a[j2 * a_dim1 + 1], &c__1, &a[ipiv[j2] * a_dim1 + 1],
+                                &c__1);
             }
         }
         j += jb;
@@ -316,16 +319,16 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
             {
                 /* Merge rank-1 update with BLAS-3 update */
                 i__1 = j + (j + 1) * a_dim1;
-                alpha.r = a[i__1].r;
-                alpha.i = a[i__1].i; // , expr subst
+                alpha.real = a[i__1].real;
+                alpha.imag = a[i__1].imag; // , expr subst
                 i__1 = j + (j + 1) * a_dim1;
-                a[i__1].r = 1.;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = 1.;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = *n - j;
-                zcopy_(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda, &work[j + 1 - j1 + 1 + jb * *n],
-                       &c__1);
+                aocl_blas_zcopy(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda,
+                                &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 i__1 = *n - j;
-                zscal_(&i__1, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
+                aocl_blas_zscal(&i__1, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 /* K1 identifies if the previous column of the panel has been */
                 /* explicitly stored, e.g., K1=1 and K2= 0 for the first panel, */
                 /* while K1=0 and K2=1 for the rest */
@@ -354,25 +357,26 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
                     for(mj = nj - 1; mj >= 1; --mj)
                     {
                         i__3 = jb + 1;
-                        zgemv_("No transpose", &mj, &i__3, &c_b19, &work[j3 - j1 + 1 + k1 * *n], n,
-                               &a[j1 - k2 + j3 * a_dim1], &c__1, &c_b15, &a[j3 + j3 * a_dim1], lda);
+                        aocl_blas_zgemv("No transpose", &mj, &i__3, &c_b19,
+                                        &work[j3 - j1 + 1 + k1 * *n], n, &a[j1 - k2 + j3 * a_dim1],
+                                        &c__1, &c_b15, &a[j3 + j3 * a_dim1], lda);
                         ++j3;
                     }
                     /* Update off-diagonal block of J2-th block row with ZGEMM */
                     i__3 = *n - j3 + 1;
                     i__4 = jb + 1;
-                    zgemm_("Transpose", "Transpose", &nj, &i__3, &i__4, &c_b19,
-                           &a[j1 - k2 + j2 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n, &c_b15,
-                           &a[j2 + j3 * a_dim1], lda);
+                    aocl_blas_zgemm("Transpose", "Transpose", &nj, &i__3, &i__4, &c_b19,
+                                    &a[j1 - k2 + j2 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n,
+                                    &c_b15, &a[j2 + j3 * a_dim1], lda);
                 }
                 /* Recover T( J, J+1 ) */
                 i__2 = j + (j + 1) * a_dim1;
-                a[i__2].r = alpha.r;
-                a[i__2].i = alpha.i; // , expr subst
+                a[i__2].real = alpha.real;
+                a[i__2].imag = alpha.imag; // , expr subst
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__2 = *n - j;
-            zcopy_(&i__2, &a[j + 1 + (j + 1) * a_dim1], lda, &work[1], &c__1);
+            aocl_blas_zcopy(&i__2, &a[j + 1 + (j + 1) * a_dim1], lda, &work[1], &c__1);
         }
         goto L10;
     }
@@ -383,7 +387,7 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
         /* ..................................................... */
         /* copy first column A(1:N, 1) into H(1:N, 1) */
         /* (stored in WORK(1:N)) */
-        zcopy_(n, &a[a_dim1 + 1], &c__1, &work[1], &c__1);
+        aocl_blas_zcopy(n, &a[a_dim1 + 1], &c__1, &work[1], &c__1);
         /* J is the main loop index, increasing from 1 to N in steps of */
         /* JB, where JB is the number of columns factorized by ZLASYF;
          */
@@ -408,8 +412,8 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
         /* Panel factorization */
         i__2 = 2 - k1;
         i__1 = *n - j;
-        zlasyf_aa_(uplo, &i__2, &i__1, &jb, &a[j + 1 + fla_max(1, j) * a_dim1], lda, &ipiv[j + 1],
-                   &work[1], n, &work[*n * nb + 1]);
+        aocl_lapack_zlasyf_aa(uplo, &i__2, &i__1, &jb, &a[j + 1 + fla_max(1, j) * a_dim1], lda,
+                              &ipiv[j + 1], &work[1], n, &work[*n * nb + 1]);
         /* Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot) */
         /* Computing MIN */
         i__1 = *n;
@@ -417,11 +421,11 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
         i__2 = fla_min(i__1, i__3);
         for(j2 = j + 2; j2 <= i__2; ++j2)
         {
-            ipiv[j2] += j;
+            ipiv[j2] += (aocl_int_t)(j);
             if(j2 != ipiv[j2] && j1 - k1 > 2)
             {
                 i__1 = j1 - k1 - 2;
-                zswap_(&i__1, &a[j2 + a_dim1], lda, &a[ipiv[j2] + a_dim1], lda);
+                aocl_blas_zswap(&i__1, &a[j2 + a_dim1], lda, &a[ipiv[j2] + a_dim1], lda);
             }
         }
         j += jb;
@@ -435,16 +439,16 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
             {
                 /* Merge rank-1 update with BLAS-3 update */
                 i__2 = j + 1 + j * a_dim1;
-                alpha.r = a[i__2].r;
-                alpha.i = a[i__2].i; // , expr subst
+                alpha.real = a[i__2].real;
+                alpha.imag = a[i__2].imag; // , expr subst
                 i__2 = j + 1 + j * a_dim1;
-                a[i__2].r = 1.;
-                a[i__2].i = 0.; // , expr subst
+                a[i__2].real = 1.;
+                a[i__2].imag = 0.; // , expr subst
                 i__2 = *n - j;
-                zcopy_(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1, &work[j + 1 - j1 + 1 + jb * *n],
-                       &c__1);
+                aocl_blas_zcopy(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1,
+                                &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 i__2 = *n - j;
-                zscal_(&i__2, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
+                aocl_blas_zscal(&i__2, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 /* K1 identifies if the previous column of the panel has been */
                 /* explicitly stored, e.g., K1=1 and K2= 0 for the first panel, */
                 /* while K1=0 and K2=1 for the rest */
@@ -473,26 +477,26 @@ void zsytrf_aa_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer 
                     for(mj = nj - 1; mj >= 1; --mj)
                     {
                         i__3 = jb + 1;
-                        zgemv_("No transpose", &mj, &i__3, &c_b19, &work[j3 - j1 + 1 + k1 * *n], n,
-                               &a[j3 + (j1 - k2) * a_dim1], lda, &c_b15, &a[j3 + j3 * a_dim1],
-                               &c__1);
+                        aocl_blas_zgemv(
+                            "No transpose", &mj, &i__3, &c_b19, &work[j3 - j1 + 1 + k1 * *n], n,
+                            &a[j3 + (j1 - k2) * a_dim1], lda, &c_b15, &a[j3 + j3 * a_dim1], &c__1);
                         ++j3;
                     }
                     /* Update off-diagonal block in J2-th block column with ZGEMM */
                     i__3 = *n - j3 + 1;
                     i__4 = jb + 1;
-                    zgemm_("No transpose", "Transpose", &i__3, &nj, &i__4, &c_b19,
-                           &work[j3 - j1 + 1 + k1 * *n], n, &a[j2 + (j1 - k2) * a_dim1], lda,
-                           &c_b15, &a[j3 + j2 * a_dim1], lda);
+                    aocl_blas_zgemm("No transpose", "Transpose", &i__3, &nj, &i__4, &c_b19,
+                                    &work[j3 - j1 + 1 + k1 * *n], n, &a[j2 + (j1 - k2) * a_dim1],
+                                    lda, &c_b15, &a[j3 + j2 * a_dim1], lda);
                 }
                 /* Recover T( J+1, J ) */
                 i__1 = j + 1 + j * a_dim1;
-                a[i__1].r = alpha.r;
-                a[i__1].i = alpha.i; // , expr subst
+                a[i__1].real = alpha.real;
+                a[i__1].imag = alpha.imag; // , expr subst
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__1 = *n - j;
-            zcopy_(&i__1, &a[j + 1 + (j + 1) * a_dim1], &c__1, &work[1], &c__1);
+            aocl_blas_zcopy(&i__1, &a[j + 1 + (j + 1) * a_dim1], &c__1, &work[1], &c__1);
         }
         goto L11;
     }

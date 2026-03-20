@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_sytrf.c
@@ -94,7 +94,8 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             }
             copy_matrix(datatype, "full", n, n, temp, n, work, n);
             /* Forming triagluar matrix U from U(k) * U(k-1) * U(k-2) ... */
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, work, &n, A_val, &n, temp, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, work, &n, A_val, &n, d_zero,
+                            temp, &n);
         }
     }
     else if(same_char(*uplo, 'L'))
@@ -144,15 +145,15 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             copy_matrix(datatype, "full", n, n, temp, n, work, n);
 
             /* Forming triagluar matrix L from L(1) * L(2) * L(3) ... */
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, work, &n, A_val, &n, temp, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, work, &n, A_val, &n, d_zero,
+                            temp, &n);
         }
     }
     switch(datatype)
     {
         case FLOAT:
         {
-            float norm_a, eps, norm;
-            eps = fla_lapack_slamch("E");
+            float norm_a, norm;
             /* Test-1
              * Compute norm(A_res'*B - X)/(norm(X) * eps * n)
              */
@@ -168,7 +169,7 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             norm_a = fla_lapack_slange("1", &n, &i_one, X, &i_one, NULL);
             saxpy_(&n, &s_n_one, B, &i_one, X, &i_one);
             norm = fla_lapack_slange("1", &n, &i_one, X, &i_one, NULL);
-            resid1 = norm / (eps * norm_a * n);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
 
             /* Test-2
              * Compute norm(A-(U*D*U**T))/(norm(A) * eps * n)
@@ -181,13 +182,12 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             sgemm_("N", "N", &n, &n, &n, &s_one, temp, &n, D, &n, &s_zero, A_val, &n);
             sgemm_("N", "T", &n, &n, &n, &s_one, A_val, &n, temp, &n, &s_n_one, A, &lda);
             norm = fla_lapack_slange("1", &n, &n, A, &lda, NULL);
-            resid2 = norm / (eps * norm_a * n);
+            resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
             break;
         }
         case DOUBLE:
         {
-            double norm_a, eps, norm;
-            eps = fla_lapack_dlamch("E");
+            double norm_a, norm;
             /* Test-1
              * Compute norm(A_res'*B - X)/(norm(X) * eps * n)
              */
@@ -203,7 +203,7 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             norm_a = fla_lapack_dlange("1", &n, &i_one, X, &i_one, NULL);
             daxpy_(&n, &d_n_one, B, &i_one, X, &i_one);
             norm = fla_lapack_dlange("1", &n, &i_one, X, &i_one, NULL);
-            resid1 = norm / (eps * norm_a * n);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
 
             /* Test-2
              * Compute norm(A-(U*D*U**T))/(norm(A) * eps * n)
@@ -216,13 +216,12 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             dgemm_("N", "N", &n, &n, &n, &d_one, temp, &n, D, &n, &d_zero, A_val, &n);
             dgemm_("N", "T", &n, &n, &n, &d_one, A_val, &n, temp, &n, &d_n_one, A, &lda);
             norm = fla_lapack_dlange("1", &n, &n, A, &lda, NULL);
-            resid2 = norm / (eps * norm_a * n);
+            resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
             break;
         }
         case COMPLEX:
         {
-            float norm_a, eps, norm;
-            eps = fla_lapack_slamch("E");
+            float norm_a, norm;
             /* Test-1
              *Compute norm(A_res'*B - X)/(norm(X) * eps * n)
              */
@@ -238,7 +237,7 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             norm_a = fla_lapack_clange("1", &n, &i_one, X, &i_one, NULL);
             caxpy_(&n, &c_n_one, X, &i_one, B, &i_one);
             norm = fla_lapack_clange("1", &n, &i_one, B, &i_one, NULL);
-            resid1 = norm / (eps * norm_a * n);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
 
             /* Test-2
              * Compute norm(A-(U*D*U**T))/(norm(A) * eps * n)
@@ -252,13 +251,12 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             cgemm_("N", "N", &n, &n, &n, &c_one, temp, &n, D, &n, &c_zero, A_val, &n);
             cgemm_("N", "T", &n, &n, &n, &c_one, A_val, &n, temp, &n, &c_n_one, A, &lda);
             norm = fla_lapack_clange("1", &n, &n, A, &lda, NULL);
-            resid2 = norm / (eps * norm_a * n);
+            resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_a, eps, norm;
-            eps = fla_lapack_dlamch("E");
+            double norm_a, norm;
             /* Test-1
              * Compute norm(A_res'*B - X)/(norm(X) * eps * n)
              */
@@ -274,7 +272,7 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             norm_a = fla_lapack_zlange("1", &n, &i_one, X, &i_one, NULL);
             zaxpy_(&n, &z_n_one, X, &i_one, B, &i_one);
             norm = fla_lapack_zlange("1", &n, &i_one, B, &i_one, NULL);
-            resid1 = norm / (eps * norm_a * n);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
 
             /* Test-2
              * Compute norm(A-(U*D*U**T))/(norm(A) * eps * n)
@@ -288,7 +286,7 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             zgemm_("N", "N", &n, &n, &n, &z_one, temp, &n, D, &n, &z_zero, A_val, &n);
             zgemm_("N", "T", &n, &n, &n, &z_one, A_val, &n, temp, &n, &z_n_one, A, &lda);
             norm = fla_lapack_zlange("1", &n, &n, A, &lda, NULL);
-            resid2 = norm / (eps * norm_a * n);
+            resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
             break;
         }
     }

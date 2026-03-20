@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHBTRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHBTRD reduces a complex Hermitian band matrix A to real symmetric */
+/* > CHBTRD reduces a scomplex Hermitian band matrix A to real symmetric */
 /* > tridiagonal form T by a unitary similarity transformation: */
 /* > Q**H * A * Q = T. */
 /* > \endverbatim */
@@ -171,8 +171,28 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *d__,
-             real *e, complex *q, integer *ldq, complex *work, integer *info)
+/** Generated wrapper function */
+void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab,
+             real *d__, real *e, scomplex *q, aocl_int_t *ldq, scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chbtrd(vect, uplo, n, kd, ab, ldab, d__, e, q, ldq, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chbtrd(vect, uplo, &n_64, &kd_64, ab, &ldab_64, d__, e, q, &ldq_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
+                        aocl_int64_t *ldab, real *d__, real *e, scomplex *q, aocl_int64_t *ldq,
+                        scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -187,43 +207,24 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, j, k, l;
-    complex t;
-    integer i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend, jinc;
+    aocl_int64_t i__, j, k, l;
+    scomplex t;
+    aocl_int64_t i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend, jinc;
     real abst;
-    integer incx, last;
-    complex temp;
-    extern /* Subroutine */
-        void
-        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
-    integer j1end, j1inc;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    integer iqend;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t incx, last;
+    scomplex temp;
+    aocl_int64_t j1end, j1inc;
+    aocl_int64_t iqend;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical initq, wantq, upper;
-    extern /* Subroutine */
-        void
-        clar2v_(integer *, complex *, complex *, complex *, integer *, real *, complex *,
-                integer *),
-        clacgv_(integer *, complex *, integer *);
-    integer iqaend;
-    extern /* Subroutine */
-        void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        clartg_(complex *, complex *, real *, complex *, complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *),
-        clartv_(integer *, complex *, integer *, complex *, integer *, real *, complex *,
-                integer *);
+    aocl_int64_t iqaend;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -291,7 +292,7 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHBTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHBTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -304,11 +305,11 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
     /* Initialize Q to the unit matrix, if needed */
     if(initq)
     {
-        claset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
+        aocl_lapack_claset("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
     }
     /* Wherever possible, plane rotations are generated and applied in */
     /* vector operations of length NR over the index set J1:J2:KD1. */
-    /* The real cosines and complex sines of the plane rotations are */
+    /* The real cosines and scomplex sines of the plane rotations are */
     /* stored in the arrays D and WORK. */
     inca = kd1 * *ldab;
     /* Computing MIN */
@@ -318,16 +319,16 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
     {
         if(*kd > 1)
         {
-            /* Reduce to complex Hermitian tridiagonal form, working with */
+            /* Reduce to scomplex Hermitian tridiagonal form, working with */
             /* the upper triangle */
             nr = 0;
             j1 = kdn + 2;
             j2 = 1;
             i__1 = kd1 + ab_dim1;
             i__2 = kd1 + ab_dim1;
-            r__1 = ab[i__2].r;
-            ab[i__1].r = r__1;
-            ab[i__1].i = 0.f; // , expr subst
+            r__1 = ab[i__2].real;
+            ab[i__1].real = r__1;
+            ab[i__1].imag = 0.f; // , expr subst
             i__1 = *n - 2;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -340,8 +341,8 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                     {
                         /* generate plane rotations to annihilate nonzero */
                         /* elements which have been created outside the band */
-                        clargv_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &work[j1], &kd1, &d__[j1],
-                                &kd1);
+                        aocl_lapack_clargv(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &work[j1], &kd1,
+                                           &d__[j1], &kd1);
                         /* apply rotations from the right */
                         /* Dependent on the the number of diagonals either */
                         /* CLARTV or CROT is used */
@@ -350,8 +351,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             i__2 = *kd - 1;
                             for(l = 1; l <= i__2; ++l)
                             {
-                                clartv_(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], &inca,
-                                        &ab[l + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
+                                aocl_lapack_clartv(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], &inca,
+                                                   &ab[l + j1 * ab_dim1], &inca, &d__[j1],
+                                                   &work[j1], &kd1);
                                 /* L10: */
                             }
                         }
@@ -362,8 +364,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             i__3 = kd1;
                             for(jinc = j1; i__3 < 0 ? jinc >= i__2 : jinc <= i__2; jinc += i__3)
                             {
-                                crot_(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &c__1,
-                                      &ab[jinc * ab_dim1 + 1], &c__1, &d__[jinc], &work[jinc]);
+                                aocl_lapack_crot(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &c__1,
+                                                 &ab[jinc * ab_dim1 + 1], &c__1, &d__[jinc],
+                                                 &work[jinc]);
                                 /* L20: */
                             }
                         }
@@ -378,13 +381,13 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                                     &ab[*kd - k + 2 + (i__ + k - 1) * ab_dim1], &d__[i__ + k - 1],
                                     &work[i__ + k - 1], &temp);
                             i__3 = *kd - k + 3 + (i__ + k - 2) * ab_dim1;
-                            ab[i__3].r = temp.r;
-                            ab[i__3].i = temp.i; // , expr subst
+                            ab[i__3].real = temp.real;
+                            ab[i__3].imag = temp.imag; // , expr subst
                             /* apply rotation from the right */
                             i__3 = k - 3;
-                            crot_(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * ab_dim1], &c__1,
-                                  &ab[*kd - k + 3 + (i__ + k - 1) * ab_dim1], &c__1,
-                                  &d__[i__ + k - 1], &work[i__ + k - 1]);
+                            aocl_lapack_crot(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * ab_dim1],
+                                             &c__1, &ab[*kd - k + 3 + (i__ + k - 1) * ab_dim1],
+                                             &c__1, &d__[i__ + k - 1], &work[i__ + k - 1]);
                         }
                         ++nr;
                         j1 = j1 - kdn - 1;
@@ -393,13 +396,14 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                     /* blocks */
                     if(nr > 0)
                     {
-                        clar2v_(&nr, &ab[kd1 + (j1 - 1) * ab_dim1], &ab[kd1 + j1 * ab_dim1],
-                                &ab[*kd + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
+                        aocl_lapack_clar2v(&nr, &ab[kd1 + (j1 - 1) * ab_dim1],
+                                           &ab[kd1 + j1 * ab_dim1], &ab[*kd + j1 * ab_dim1], &inca,
+                                           &d__[j1], &work[j1], &kd1);
                     }
                     /* apply plane rotations from the left */
                     if(nr > 0)
                     {
-                        clacgv_(&nr, &work[j1], &kd1);
+                        aocl_lapack_clacgv(&nr, &work[j1], &kd1);
                         if((*kd << 1) - 1 < nr)
                         {
                             /* Dependent on the the number of diagonals either */
@@ -417,9 +421,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                                 }
                                 if(nrt > 0)
                                 {
-                                    clartv_(&nrt, &ab[*kd - l + (j1 + l) * ab_dim1], &inca,
-                                            &ab[*kd - l + 1 + (j1 + l) * ab_dim1], &inca, &d__[j1],
-                                            &work[j1], &kd1);
+                                    aocl_lapack_clartv(&nrt, &ab[*kd - l + (j1 + l) * ab_dim1],
+                                                       &inca, &ab[*kd - l + 1 + (j1 + l) * ab_dim1],
+                                                       &inca, &d__[j1], &work[j1], &kd1);
                                 }
                                 /* L30: */
                             }
@@ -434,9 +438,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                                 for(jin = j1; i__2 < 0 ? jin >= i__3 : jin <= i__3; jin += i__2)
                                 {
                                     i__4 = *kd - 1;
-                                    crot_(&i__4, &ab[*kd - 1 + (jin + 1) * ab_dim1], &incx,
-                                          &ab[*kd + (jin + 1) * ab_dim1], &incx, &d__[jin],
-                                          &work[jin]);
+                                    aocl_lapack_crot(&i__4, &ab[*kd - 1 + (jin + 1) * ab_dim1],
+                                                     &incx, &ab[*kd + (jin + 1) * ab_dim1], &incx,
+                                                     &d__[jin], &work[jin]);
                                     /* L40: */
                                 }
                             }
@@ -447,9 +451,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             last = j1end + kd1;
                             if(lend > 0)
                             {
-                                crot_(&lend, &ab[*kd - 1 + (last + 1) * ab_dim1], &incx,
-                                      &ab[*kd + (last + 1) * ab_dim1], &incx, &d__[last],
-                                      &work[last]);
+                                aocl_lapack_crot(&lend, &ab[*kd - 1 + (last + 1) * ab_dim1], &incx,
+                                                 &ab[*kd + (last + 1) * ab_dim1], &incx, &d__[last],
+                                                 &work[last]);
                             }
                         }
                     }
@@ -486,8 +490,8 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                                 i__4 = iqaend + *kd;
                                 iqaend = fla_min(i__4, iqend);
                                 r_cnjg(&q__1, &work[j]);
-                                crot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1],
-                                      &c__1, &d__[j], &q__1);
+                                aocl_lapack_crot(&nq, &q[iqb + (j - 1) * q_dim1], &c__1,
+                                                 &q[iqb + j * q_dim1], &c__1, &d__[j], &q__1);
                                 /* L50: */
                             }
                         }
@@ -498,8 +502,8 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             for(j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2)
                             {
                                 r_cnjg(&q__1, &work[j]);
-                                crot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
-                                      &d__[j], &q__1);
+                                aocl_lapack_crot(n, &q[(j - 1) * q_dim1 + 1], &c__1,
+                                                 &q[j * q_dim1 + 1], &c__1, &d__[j], &q__1);
                                 /* L60: */
                             }
                         }
@@ -519,18 +523,18 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                         i__4 = j + *kd;
                         i__5 = j;
                         i__6 = (j + *kd) * ab_dim1 + 1;
-                        q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                        q__1.i
-                            = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                        work[i__4].r = q__1.r;
-                        work[i__4].i = q__1.i; // , expr subst
+                        q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                        q__1.imag
+                            = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                        work[i__4].real = q__1.real;
+                        work[i__4].imag = q__1.imag; // , expr subst
                         i__4 = (j + *kd) * ab_dim1 + 1;
                         i__5 = j;
                         i__6 = (j + *kd) * ab_dim1 + 1;
-                        q__1.r = d__[i__5] * ab[i__6].r;
-                        q__1.i = d__[i__5] * ab[i__6].i; // , expr subst
-                        ab[i__4].r = q__1.r;
-                        ab[i__4].i = q__1.i; // , expr subst
+                        q__1.real = d__[i__5] * ab[i__6].real;
+                        q__1.imag = d__[i__5] * ab[i__6].imag; // , expr subst
+                        ab[i__4].real = q__1.real;
+                        ab[i__4].imag = q__1.imag; // , expr subst
                         /* L70: */
                     }
                     /* L80: */
@@ -545,38 +549,38 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__3 = *kd + (i__ + 1) * ab_dim1;
-                t.r = ab[i__3].r;
-                t.i = ab[i__3].i; // , expr subst
+                t.real = ab[i__3].real;
+                t.imag = ab[i__3].imag; // , expr subst
                 abst = c_abs(&t);
                 i__3 = *kd + (i__ + 1) * ab_dim1;
-                ab[i__3].r = abst;
-                ab[i__3].i = 0.f; // , expr subst
+                ab[i__3].real = abst;
+                ab[i__3].imag = 0.f; // , expr subst
                 e[i__] = abst;
                 if(abst != 0.f)
                 {
-                    q__1.r = t.r / abst;
-                    q__1.i = t.i / abst; // , expr subst
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    q__1.real = t.real / abst;
+                    q__1.imag = t.imag / abst; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                 }
                 else
                 {
-                    t.r = 1.f;
-                    t.i = 0.f; // , expr subst
+                    t.real = 1.f;
+                    t.imag = 0.f; // , expr subst
                 }
                 if(i__ < *n - 1)
                 {
                     i__3 = *kd + (i__ + 2) * ab_dim1;
                     i__2 = *kd + (i__ + 2) * ab_dim1;
-                    q__1.r = ab[i__2].r * t.r - ab[i__2].i * t.i;
-                    q__1.i = ab[i__2].r * t.i + ab[i__2].i * t.r; // , expr subst
-                    ab[i__3].r = q__1.r;
-                    ab[i__3].i = q__1.i; // , expr subst
+                    q__1.real = ab[i__2].real * t.real - ab[i__2].imag * t.imag;
+                    q__1.imag = ab[i__2].real * t.imag + ab[i__2].imag * t.real; // , expr subst
+                    ab[i__3].real = q__1.real;
+                    ab[i__3].imag = q__1.imag; // , expr subst
                 }
                 if(wantq)
                 {
                     r_cnjg(&q__1, &t);
-                    cscal_(n, &q__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                    aocl_blas_cscal(n, &q__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
                 }
                 /* L100: */
             }
@@ -597,7 +601,7 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
         {
             i__3 = i__;
             i__2 = kd1 + i__ * ab_dim1;
-            d__[i__3] = ab[i__2].r;
+            d__[i__3] = ab[i__2].real;
             /* L120: */
         }
     }
@@ -605,16 +609,16 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
     {
         if(*kd > 1)
         {
-            /* Reduce to complex Hermitian tridiagonal form, working with */
+            /* Reduce to scomplex Hermitian tridiagonal form, working with */
             /* the lower triangle */
             nr = 0;
             j1 = kdn + 2;
             j2 = 1;
             i__1 = ab_dim1 + 1;
             i__3 = ab_dim1 + 1;
-            r__1 = ab[i__3].r;
-            ab[i__1].r = r__1;
-            ab[i__1].i = 0.f; // , expr subst
+            r__1 = ab[i__3].real;
+            ab[i__1].real = r__1;
+            ab[i__1].imag = 0.f; // , expr subst
             i__1 = *n - 2;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -627,8 +631,8 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                     {
                         /* generate plane rotations to annihilate nonzero */
                         /* elements which have been created outside the band */
-                        clargv_(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &work[j1], &kd1,
-                                &d__[j1], &kd1);
+                        aocl_lapack_clargv(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &work[j1],
+                                           &kd1, &d__[j1], &kd1);
                         /* apply plane rotations from one side */
                         /* Dependent on the the number of diagonals either */
                         /* CLARTV or CROT is used */
@@ -637,9 +641,10 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             i__3 = *kd - 1;
                             for(l = 1; l <= i__3; ++l)
                             {
-                                clartv_(&nr, &ab[kd1 - l + (j1 - kd1 + l) * ab_dim1], &inca,
-                                        &ab[kd1 - l + 1 + (j1 - kd1 + l) * ab_dim1], &inca,
-                                        &d__[j1], &work[j1], &kd1);
+                                aocl_lapack_clartv(&nr, &ab[kd1 - l + (j1 - kd1 + l) * ab_dim1],
+                                                   &inca,
+                                                   &ab[kd1 - l + 1 + (j1 - kd1 + l) * ab_dim1],
+                                                   &inca, &d__[j1], &work[j1], &kd1);
                                 /* L130: */
                             }
                         }
@@ -650,9 +655,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             i__2 = kd1;
                             for(jinc = j1; i__2 < 0 ? jinc >= i__3 : jinc <= i__3; jinc += i__2)
                             {
-                                crot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
-                                      &ab[kd1 + (jinc - *kd) * ab_dim1], &incx, &d__[jinc],
-                                      &work[jinc]);
+                                aocl_lapack_crot(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
+                                                 &ab[kd1 + (jinc - *kd) * ab_dim1], &incx,
+                                                 &d__[jinc], &work[jinc]);
                                 /* L140: */
                             }
                         }
@@ -666,15 +671,15 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             clartg_(&ab[k - 1 + i__ * ab_dim1], &ab[k + i__ * ab_dim1],
                                     &d__[i__ + k - 1], &work[i__ + k - 1], &temp);
                             i__2 = k - 1 + i__ * ab_dim1;
-                            ab[i__2].r = temp.r;
-                            ab[i__2].i = temp.i; // , expr subst
+                            ab[i__2].real = temp.real;
+                            ab[i__2].imag = temp.imag; // , expr subst
                             /* apply rotation from the left */
                             i__2 = k - 3;
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            crot_(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &i__3,
-                                  &ab[k - 1 + (i__ + 1) * ab_dim1], &i__4, &d__[i__ + k - 1],
-                                  &work[i__ + k - 1]);
+                            aocl_lapack_crot(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &i__3,
+                                             &ab[k - 1 + (i__ + 1) * ab_dim1], &i__4,
+                                             &d__[i__ + k - 1], &work[i__ + k - 1]);
                         }
                         ++nr;
                         j1 = j1 - kdn - 1;
@@ -683,15 +688,16 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                     /* blocks */
                     if(nr > 0)
                     {
-                        clar2v_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * ab_dim1 + 1],
-                                &ab[(j1 - 1) * ab_dim1 + 2], &inca, &d__[j1], &work[j1], &kd1);
+                        aocl_lapack_clar2v(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * ab_dim1 + 1],
+                                           &ab[(j1 - 1) * ab_dim1 + 2], &inca, &d__[j1], &work[j1],
+                                           &kd1);
                     }
                     /* apply plane rotations from the right */
                     /* Dependent on the the number of diagonals either */
                     /* CLARTV or CROT is used */
                     if(nr > 0)
                     {
-                        clacgv_(&nr, &work[j1], &kd1);
+                        aocl_lapack_clacgv(&nr, &work[j1], &kd1);
                         if(nr > (*kd << 1) - 1)
                         {
                             i__2 = *kd - 1;
@@ -707,9 +713,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                                 }
                                 if(nrt > 0)
                                 {
-                                    clartv_(&nrt, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca,
-                                            &ab[l + 1 + j1 * ab_dim1], &inca, &d__[j1], &work[j1],
-                                            &kd1);
+                                    aocl_lapack_clartv(&nrt, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca,
+                                                       &ab[l + 1 + j1 * ab_dim1], &inca, &d__[j1],
+                                                       &work[j1], &kd1);
                                 }
                                 /* L150: */
                             }
@@ -724,9 +730,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                                 for(j1inc = j1; i__3 < 0 ? j1inc >= i__2 : j1inc <= i__2;
                                     j1inc += i__3)
                                 {
-                                    crot_(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 3], &c__1,
-                                          &ab[j1inc * ab_dim1 + 2], &c__1, &d__[j1inc],
-                                          &work[j1inc]);
+                                    aocl_lapack_crot(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 3], &c__1,
+                                                     &ab[j1inc * ab_dim1 + 2], &c__1, &d__[j1inc],
+                                                     &work[j1inc]);
                                     /* L160: */
                                 }
                             }
@@ -737,8 +743,9 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             last = j1end + kd1;
                             if(lend > 0)
                             {
-                                crot_(&lend, &ab[(last - 1) * ab_dim1 + 3], &c__1,
-                                      &ab[last * ab_dim1 + 2], &c__1, &d__[last], &work[last]);
+                                aocl_lapack_crot(&lend, &ab[(last - 1) * ab_dim1 + 3], &c__1,
+                                                 &ab[last * ab_dim1 + 2], &c__1, &d__[last],
+                                                 &work[last]);
                             }
                         }
                     }
@@ -774,8 +781,8 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                                 /* Computing MIN */
                                 i__4 = iqaend + *kd;
                                 iqaend = fla_min(i__4, iqend);
-                                crot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1],
-                                      &c__1, &d__[j], &work[j]);
+                                aocl_lapack_crot(&nq, &q[iqb + (j - 1) * q_dim1], &c__1,
+                                                 &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
                                 /* L170: */
                             }
                         }
@@ -785,8 +792,8 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                             i__3 = kd1;
                             for(j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3)
                             {
-                                crot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
-                                      &d__[j], &work[j]);
+                                aocl_lapack_crot(n, &q[(j - 1) * q_dim1 + 1], &c__1,
+                                                 &q[j * q_dim1 + 1], &c__1, &d__[j], &work[j]);
                                 /* L180: */
                             }
                         }
@@ -806,18 +813,18 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
                         i__4 = j + *kd;
                         i__5 = j;
                         i__6 = kd1 + j * ab_dim1;
-                        q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                        q__1.i
-                            = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                        work[i__4].r = q__1.r;
-                        work[i__4].i = q__1.i; // , expr subst
+                        q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                        q__1.imag
+                            = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                        work[i__4].real = q__1.real;
+                        work[i__4].imag = q__1.imag; // , expr subst
                         i__4 = kd1 + j * ab_dim1;
                         i__5 = j;
                         i__6 = kd1 + j * ab_dim1;
-                        q__1.r = d__[i__5] * ab[i__6].r;
-                        q__1.i = d__[i__5] * ab[i__6].i; // , expr subst
-                        ab[i__4].r = q__1.r;
-                        ab[i__4].i = q__1.i; // , expr subst
+                        q__1.real = d__[i__5] * ab[i__6].real;
+                        q__1.imag = d__[i__5] * ab[i__6].imag; // , expr subst
+                        ab[i__4].real = q__1.real;
+                        ab[i__4].imag = q__1.imag; // , expr subst
                         /* L190: */
                     }
                     /* L200: */
@@ -832,37 +839,37 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__ * ab_dim1 + 2;
-                t.r = ab[i__2].r;
-                t.i = ab[i__2].i; // , expr subst
+                t.real = ab[i__2].real;
+                t.imag = ab[i__2].imag; // , expr subst
                 abst = c_abs(&t);
                 i__2 = i__ * ab_dim1 + 2;
-                ab[i__2].r = abst;
-                ab[i__2].i = 0.f; // , expr subst
+                ab[i__2].real = abst;
+                ab[i__2].imag = 0.f; // , expr subst
                 e[i__] = abst;
                 if(abst != 0.f)
                 {
-                    q__1.r = t.r / abst;
-                    q__1.i = t.i / abst; // , expr subst
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    q__1.real = t.real / abst;
+                    q__1.imag = t.imag / abst; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                 }
                 else
                 {
-                    t.r = 1.f;
-                    t.i = 0.f; // , expr subst
+                    t.real = 1.f;
+                    t.imag = 0.f; // , expr subst
                 }
                 if(i__ < *n - 1)
                 {
                     i__2 = (i__ + 1) * ab_dim1 + 2;
                     i__3 = (i__ + 1) * ab_dim1 + 2;
-                    q__1.r = ab[i__3].r * t.r - ab[i__3].i * t.i;
-                    q__1.i = ab[i__3].r * t.i + ab[i__3].i * t.r; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__1.real = ab[i__3].real * t.real - ab[i__3].imag * t.imag;
+                    q__1.imag = ab[i__3].real * t.imag + ab[i__3].imag * t.real; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                 }
                 if(wantq)
                 {
-                    cscal_(n, &t, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                    aocl_blas_cscal(n, &t, &q[(i__ + 1) * q_dim1 + 1], &c__1);
                 }
                 /* L220: */
             }
@@ -883,7 +890,7 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
         {
             i__2 = i__;
             i__3 = i__ * ab_dim1 + 1;
-            d__[i__2] = ab[i__3].r;
+            d__[i__2] = ab[i__3].real;
             /* L240: */
         }
     }

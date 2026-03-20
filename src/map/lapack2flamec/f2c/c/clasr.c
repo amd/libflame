@@ -38,7 +38,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLASR applies a sequence of real plane rotations to a complex matrix */
+/* > CLASR applies a sequence of real plane rotations to a scomplex matrix */
 /* > A, from either the left or the right. */
 /* > */
 /* > When SIDE = 'L', the transformation takes the form */
@@ -195,8 +195,23 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s,
-            complex *a, integer *lda)
+/** Generated wrapper function */
+void clasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n, real *c__, real *s,
+            scomplex *a, aocl_int_t *lda)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clasr(side, pivot, direct, m, n, c__, s, a, lda);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_clasr(side, pivot, direct, &m_64, &n_64, c__, s, a, &lda_64);
+#endif
+}
+
+void aocl_lapack_clasr(char *side, char *pivot, char *direct, aocl_int64_t *m, aocl_int64_t *n,
+                       real *c__, real *s, scomplex *a, aocl_int64_t *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -211,16 +226,13 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    scomplex q__1, q__2, q__3;
     /* Local variables */
-    integer i__, j, info;
-    complex temp;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j, info;
+    scomplex temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real ctemp, stemp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -276,7 +288,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     }
     if(info != 0)
     {
-        xerbla_("CLASR ", &info, (ftnlen)6);
+        aocl_blas_xerbla("CLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -304,28 +316,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + 1 + i__ * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = j + 1 + i__ * a_dim1;
-                            q__2.r = ctemp * temp.r;
-                            q__2.i = ctemp * temp.i; // , expr subst
+                            q__2.real = ctemp * temp.real;
+                            q__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = j + i__ * a_dim1;
-                            q__3.r = stemp * a[i__4].r;
-                            q__3.i = stemp * a[i__4].i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__3.real = stemp * a[i__4].real;
+                            q__3.imag = stemp * a[i__4].imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            q__2.r = stemp * temp.r;
-                            q__2.i = stemp * temp.i; // , expr subst
+                            q__2.real = stemp * temp.real;
+                            q__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = j + i__ * a_dim1;
-                            q__3.r = ctemp * a[i__4].r;
-                            q__3.i = ctemp * a[i__4].i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__3.real = ctemp * a[i__4].real;
+                            q__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             /* L10: */
                         }
                     }
@@ -344,28 +356,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + 1 + i__ * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = j + 1 + i__ * a_dim1;
-                            q__2.r = ctemp * temp.r;
-                            q__2.i = ctemp * temp.i; // , expr subst
+                            q__2.real = ctemp * temp.real;
+                            q__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            q__3.r = stemp * a[i__3].r;
-                            q__3.i = stemp * a[i__3].i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__3.real = stemp * a[i__3].real;
+                            q__3.imag = stemp * a[i__3].imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
-                            q__2.r = stemp * temp.r;
-                            q__2.i = stemp * temp.i; // , expr subst
+                            q__2.real = stemp * temp.real;
+                            q__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            q__3.r = ctemp * a[i__3].r;
-                            q__3.i = ctemp * a[i__3].i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__3.real = ctemp * a[i__3].real;
+                            q__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             /* L30: */
                         }
                     }
@@ -388,28 +400,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + i__ * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            q__2.r = ctemp * temp.r;
-                            q__2.i = ctemp * temp.i; // , expr subst
+                            q__2.real = ctemp * temp.real;
+                            q__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
-                            q__3.r = stemp * a[i__4].r;
-                            q__3.i = stemp * a[i__4].i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__3.real = stemp * a[i__4].real;
+                            q__3.imag = stemp * a[i__4].imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            q__2.r = stemp * temp.r;
-                            q__2.i = stemp * temp.i; // , expr subst
+                            q__2.real = stemp * temp.real;
+                            q__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
-                            q__3.r = ctemp * a[i__4].r;
-                            q__3.i = ctemp * a[i__4].i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__3.real = ctemp * a[i__4].real;
+                            q__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             /* L50: */
                         }
                     }
@@ -428,28 +440,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + i__ * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
-                            q__2.r = ctemp * temp.r;
-                            q__2.i = ctemp * temp.i; // , expr subst
+                            q__2.real = ctemp * temp.real;
+                            q__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            q__3.r = stemp * a[i__3].r;
-                            q__3.i = stemp * a[i__3].i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__3.real = stemp * a[i__3].real;
+                            q__3.imag = stemp * a[i__3].imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             i__2 = i__ * a_dim1 + 1;
-                            q__2.r = stemp * temp.r;
-                            q__2.i = stemp * temp.i; // , expr subst
+                            q__2.real = stemp * temp.real;
+                            q__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            q__3.r = ctemp * a[i__3].r;
-                            q__3.i = ctemp * a[i__3].i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__3.real = ctemp * a[i__3].real;
+                            q__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             /* L70: */
                         }
                     }
@@ -472,28 +484,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + i__ * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
-                            q__2.r = stemp * a[i__4].r;
-                            q__2.i = stemp * a[i__4].i; // , expr subst
-                            q__3.r = ctemp * temp.r;
-                            q__3.i = ctemp * temp.i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__2.real = stemp * a[i__4].real;
+                            q__2.imag = stemp * a[i__4].imag; // , expr subst
+                            q__3.real = ctemp * temp.real;
+                            q__3.imag = ctemp * temp.imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             i__3 = *m + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
-                            q__2.r = ctemp * a[i__4].r;
-                            q__2.i = ctemp * a[i__4].i; // , expr subst
-                            q__3.r = stemp * temp.r;
-                            q__3.i = stemp * temp.i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__2.real = ctemp * a[i__4].real;
+                            q__2.imag = ctemp * a[i__4].imag; // , expr subst
+                            q__3.real = stemp * temp.real;
+                            q__3.imag = stemp * temp.imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             /* L90: */
                         }
                     }
@@ -512,28 +524,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + i__ * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
-                            q__2.r = stemp * a[i__3].r;
-                            q__2.i = stemp * a[i__3].i; // , expr subst
-                            q__3.r = ctemp * temp.r;
-                            q__3.i = ctemp * temp.i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__2.real = stemp * a[i__3].real;
+                            q__2.imag = stemp * a[i__3].imag; // , expr subst
+                            q__3.real = ctemp * temp.real;
+                            q__3.imag = ctemp * temp.imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             i__2 = *m + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
-                            q__2.r = ctemp * a[i__3].r;
-                            q__2.i = ctemp * a[i__3].i; // , expr subst
-                            q__3.r = stemp * temp.r;
-                            q__3.i = stemp * temp.i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__2.real = ctemp * a[i__3].real;
+                            q__2.imag = ctemp * a[i__3].imag; // , expr subst
+                            q__3.real = stemp * temp.real;
+                            q__3.imag = stemp * temp.imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             /* L110: */
                         }
                     }
@@ -560,28 +572,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + (j + 1) * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = i__ + (j + 1) * a_dim1;
-                            q__2.r = ctemp * temp.r;
-                            q__2.i = ctemp * temp.i; // , expr subst
+                            q__2.real = ctemp * temp.real;
+                            q__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ + j * a_dim1;
-                            q__3.r = stemp * a[i__4].r;
-                            q__3.i = stemp * a[i__4].i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__3.real = stemp * a[i__4].real;
+                            q__3.imag = stemp * a[i__4].imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            q__2.r = stemp * temp.r;
-                            q__2.i = stemp * temp.i; // , expr subst
+                            q__2.real = stemp * temp.real;
+                            q__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ + j * a_dim1;
-                            q__3.r = ctemp * a[i__4].r;
-                            q__3.i = ctemp * a[i__4].i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__3.real = ctemp * a[i__4].real;
+                            q__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             /* L130: */
                         }
                     }
@@ -600,28 +612,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + (j + 1) * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + (j + 1) * a_dim1;
-                            q__2.r = ctemp * temp.r;
-                            q__2.i = ctemp * temp.i; // , expr subst
+                            q__2.real = ctemp * temp.real;
+                            q__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            q__3.r = stemp * a[i__3].r;
-                            q__3.i = stemp * a[i__3].i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__3.real = stemp * a[i__3].real;
+                            q__3.imag = stemp * a[i__3].imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            q__2.r = stemp * temp.r;
-                            q__2.i = stemp * temp.i; // , expr subst
+                            q__2.real = stemp * temp.real;
+                            q__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            q__3.r = ctemp * a[i__3].r;
-                            q__3.i = ctemp * a[i__3].i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__3.real = ctemp * a[i__3].real;
+                            q__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             /* L150: */
                         }
                     }
@@ -644,28 +656,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            q__2.r = ctemp * temp.r;
-                            q__2.i = ctemp * temp.i; // , expr subst
+                            q__2.real = ctemp * temp.real;
+                            q__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ + a_dim1;
-                            q__3.r = stemp * a[i__4].r;
-                            q__3.i = stemp * a[i__4].i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__3.real = stemp * a[i__4].real;
+                            q__3.imag = stemp * a[i__4].imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            q__2.r = stemp * temp.r;
-                            q__2.i = stemp * temp.i; // , expr subst
+                            q__2.real = stemp * temp.real;
+                            q__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ + a_dim1;
-                            q__3.r = ctemp * a[i__4].r;
-                            q__3.i = ctemp * a[i__4].i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__3.real = ctemp * a[i__4].real;
+                            q__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             /* L170: */
                         }
                     }
@@ -684,28 +696,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            q__2.r = ctemp * temp.r;
-                            q__2.i = ctemp * temp.i; // , expr subst
+                            q__2.real = ctemp * temp.real;
+                            q__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            q__3.r = stemp * a[i__3].r;
-                            q__3.i = stemp * a[i__3].i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__3.real = stemp * a[i__3].real;
+                            q__3.imag = stemp * a[i__3].imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             i__2 = i__ + a_dim1;
-                            q__2.r = stemp * temp.r;
-                            q__2.i = stemp * temp.i; // , expr subst
+                            q__2.real = stemp * temp.real;
+                            q__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            q__3.r = ctemp * a[i__3].r;
-                            q__3.i = ctemp * a[i__3].i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__3.real = ctemp * a[i__3].real;
+                            q__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             /* L190: */
                         }
                     }
@@ -728,28 +740,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             i__4 = i__ + *n * a_dim1;
-                            q__2.r = stemp * a[i__4].r;
-                            q__2.i = stemp * a[i__4].i; // , expr subst
-                            q__3.r = ctemp * temp.r;
-                            q__3.i = ctemp * temp.i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__2.real = stemp * a[i__4].real;
+                            q__2.imag = stemp * a[i__4].imag; // , expr subst
+                            q__3.real = ctemp * temp.real;
+                            q__3.imag = ctemp * temp.imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             i__3 = i__ + *n * a_dim1;
                             i__4 = i__ + *n * a_dim1;
-                            q__2.r = ctemp * a[i__4].r;
-                            q__2.i = ctemp * a[i__4].i; // , expr subst
-                            q__3.r = stemp * temp.r;
-                            q__3.i = stemp * temp.i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__2.real = ctemp * a[i__4].real;
+                            q__2.imag = ctemp * a[i__4].imag; // , expr subst
+                            q__3.real = stemp * temp.real;
+                            q__3.imag = stemp * temp.imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             /* L210: */
                         }
                     }
@@ -768,28 +780,28 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
                             i__3 = i__ + *n * a_dim1;
-                            q__2.r = stemp * a[i__3].r;
-                            q__2.i = stemp * a[i__3].i; // , expr subst
-                            q__3.r = ctemp * temp.r;
-                            q__3.i = ctemp * temp.i; // , expr subst
-                            q__1.r = q__2.r + q__3.r;
-                            q__1.i = q__2.i + q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__2.real = stemp * a[i__3].real;
+                            q__2.imag = stemp * a[i__3].imag; // , expr subst
+                            q__3.real = ctemp * temp.real;
+                            q__3.imag = ctemp * temp.imag; // , expr subst
+                            q__1.real = q__2.real + q__3.real;
+                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             i__2 = i__ + *n * a_dim1;
                             i__3 = i__ + *n * a_dim1;
-                            q__2.r = ctemp * a[i__3].r;
-                            q__2.i = ctemp * a[i__3].i; // , expr subst
-                            q__3.r = stemp * temp.r;
-                            q__3.i = stemp * temp.i; // , expr subst
-                            q__1.r = q__2.r - q__3.r;
-                            q__1.i = q__2.i - q__3.i; // , expr subst
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            q__2.real = ctemp * a[i__3].real;
+                            q__2.imag = ctemp * a[i__3].imag; // , expr subst
+                            q__3.real = stemp * temp.real;
+                            q__3.imag = stemp * temp.imag; // , expr subst
+                            q__1.real = q__2.real - q__3.real;
+                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             /* L230: */
                         }
                     }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file test_common.h
@@ -25,6 +25,11 @@
 
 #define USE_ABS_EIGEN_VALUES 1
 #define USE_SIGNED_EIGEN_VALUES 0
+
+#ifndef aocl_int64_t
+typedef int64_t aocl_int64_t;
+#endif
+
 // --- Complex type definitions -----------------------------------------------
 
 #ifndef _DEFINED_SCOMPLEX
@@ -160,7 +165,7 @@ extern int matrix_layout;
 #define TRIANGULAR_DIAG_MIN 1.0
 #define TRIANGULAR_DIAG_MAX 2.0
 #define TRIANGULAR_OFFDIAG_MIN -0.01
-#define TRIANGULAR_OFFDIAG_MAX  0.01
+#define TRIANGULAR_OFFDIAG_MAX 0.01
 
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
@@ -269,16 +274,16 @@ void assign_value(integer datatype, void *x, double data_real, double data_imag)
 void matrix_difference(integer datatype, integer m, integer n, void *A, integer lda, void *B,
                        integer ldb);
 
-/* GEMM implementation for  C := alpha*op( A )*op( B ) + beta*C
- * Where alpha = 1, beta = 0
+/* General matrix multiplication: C := alpha*op(A)*op(B) + beta*C
+ * Wrapper function that calls the appropriate BLAS gemm routine based on datatype.
  */
 void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, integer *n,
-                     integer *k, void *A, integer *lda, void *B, integer *ldb, void *C,
-                     integer *ldc);
+                     integer *k, double alpha, void *A, integer *lda, void *B, integer *ldb,
+                     double beta, void *C, integer *ldc);
 /* orthgonality property of matrix */
 double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, integer n, integer k,
-                               integer lda);
-double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda);
+                               integer lda, void *params);
+double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda, void *params);
 void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Diag);
 void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Subdiag);
 /*Tridiagonal matrix functions*/
@@ -295,7 +300,7 @@ void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, inte
 void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A, integer lda,
                                 void *D, void *E, integer *info);
 
-/* Division of complex types */
+/* Division of scomplex types */
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp);
 void z_div_t(dcomplex *cp, dcomplex *ap, dcomplex *bp);
 
@@ -313,7 +318,7 @@ void set_transpose(integer datatype, char *uplo, char *trans_A, char *trans_B);
 /* Create diagonal matrix by copying elements from vector to matrix */
 void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n,
                                  integer LDA);
-/* To calculate matrix multiplication with real and complex datatypes */
+/* To calculate matrix multiplication with real and scomplex datatypes */
 void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alpha, float *a,
             integer lda, scomplex *v, integer incv, float beta, scomplex *c, integer inc);
 
@@ -345,7 +350,7 @@ void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, vo
    On output: A has upper hessenberg matrix.
               Z has orthogonal matrix.
               wr_in has eigen values.
-              wi_in has eigen values for imaginary parts of complex conjugate pairs
+              wi_in has eigen values for imaginary parts of scomplex conjugate pairs
               for real/double datatypes. */
 void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
@@ -355,7 +360,8 @@ void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
 /* Pack a symmetric matrix in column first order */
 void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda);
 /* Convert matrix to upper hessenberg form */
-void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda);
+void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, integer ilo,
+                                     integer ihi);
 /* Convert matrix according to ILO and IHI values */
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
                                    integer ihi, integer AInitialized);
@@ -477,7 +483,7 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
                          integer lda);
 /* Sort the given vector in specified order */
 void sort_vector(integer datatype, char *order, integer vect_len, void *w, integer incw);
-/* Generate a block diagonal matrix with complex conjugate eigen value pairs as
+/* Generate a block diagonal matrix with scomplex conjugate eigen value pairs as
    2 * 2 blocks along the diagonal. This is used for generating asymmetric matrix */
 void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda);
 /* Create input matrix A(Asymmetric) by randomly generating eigen values(EVs) */
@@ -491,7 +497,7 @@ integer compare_vector(integer datatype, integer vect_len, void *A, integer inca
 /* Create diagonal matrix by copying elements from a vector to matrix */
 void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA);
 /* Find negative value of each element and store in next location
-   Used to store imaginary parts of complex conjuate pair of eigen values
+   Used to store imaginary parts of scomplex conjuate pair of eigen values
    in asymmetric matrix eigen decomposition APIs
    Ex: input vector {a, 0, -b, 0 ...}
        output vector {a, -a, -b, b, ...} */
@@ -593,4 +599,19 @@ void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n);
 void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
                                         integer lda, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type);
 
+/* Case-insensitive string comparison of given two strings*/
+logical same_string(const char *str_a, const char *str_b);
+
+/* Compute the inverse of a square matrix using GETRF + GETRI */
+integer compute_matrix_inverse(integer datatype, integer n, void *A, integer lda);
+
+/* Computes residual value based on input norms & size given.
+   If norm_base <= 0, then residual is 0*/
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params);
+
+/* This function computes the residual normalized by the matrix norm.
+ * If the matrix norm is less than or equal to the safe minimum, the residual is set to 0.
+ * Otherwise, the residual is computed as norm / norm_a.
+ */
+double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params);
 #endif // TEST_COMMON_H

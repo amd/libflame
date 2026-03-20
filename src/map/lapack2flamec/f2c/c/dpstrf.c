@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b22 = -1.;
 static doublereal c_b24 = 1.;
 /* > \brief \b DPSTRF computes the Cholesky factorization with complete pivoting of a real symmetric
@@ -142,48 +142,47 @@ static doublereal c_b24 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, integer *rank,
-             doublereal *tol, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dpstrf_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *piv,
+             aocl_int_t *rank, doublereal *tol, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpstrf(uplo, n, a, lda, piv, rank, tol, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpstrf(uplo, &n_64, a, &lda_64, piv, &rank_64, tol, work, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpstrf(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        aocl_int_t *piv, aocl_int64_t *rank, doublereal *tol, doublereal *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpstrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, jb, nb;
+    aocl_int64_t i__, j, k, jb, nb;
     doublereal ajj;
-    integer pvt;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t pvt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp;
-    integer itemp;
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t itemp;
     doublereal dstop;
     logical upper;
-    extern /* Subroutine */
-        void
-        dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
-               doublereal *, doublereal *, integer *),
-        dpstf2_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *,
-                doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *),
-        dmaxloc_(doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,7 +228,7 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPSTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPSTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -240,11 +239,11 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
         return;
     }
     /* Get block size */
-    nb = ilaenv_(&c__1, "DPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "DPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {
         /* Use unblocked code */
-        dpstf2_(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
+        aocl_lapack_dpstf2(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
         goto L200;
     }
     else
@@ -253,7 +252,7 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            piv[i__] = i__;
+            piv[i__] = (aocl_int_t)(i__);
             /* L100: */
         }
         /* Compute stopping value */
@@ -324,7 +323,7 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
                     if(j > 1)
                     {
                         i__4 = *n - j + 1;
-                        itemp = dmaxloc_(&work[*n + j], &i__4);
+                        itemp = aocl_lapack_dmaxloc(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
                         if(ajj <= dstop || disnan_(&ajj))
@@ -338,23 +337,24 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
                         /* Pivot OK, so can now swap pivot rows and columns */
                         a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
                         i__4 = j - 1;
-                        dswap_(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
+                        aocl_blas_dswap(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1],
+                                        &c__1);
                         if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            dswap_(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
-                                   &a[pvt + (pvt + 1) * a_dim1], lda);
+                            aocl_blas_dswap(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
+                                            &a[pvt + (pvt + 1) * a_dim1], lda);
                         }
                         i__4 = pvt - j - 1;
-                        dswap_(&i__4, &a[j + (j + 1) * a_dim1], lda, &a[j + 1 + pvt * a_dim1],
-                               &c__1);
+                        aocl_blas_dswap(&i__4, &a[j + (j + 1) * a_dim1], lda,
+                                        &a[j + 1 + pvt * a_dim1], &c__1);
                         /* Swap dot products and PIV */
                         dtemp = work[j];
                         work[j] = work[pvt];
                         work[pvt] = dtemp;
                         itemp = piv[pvt];
                         piv[pvt] = piv[j];
-                        piv[j] = itemp;
+                        piv[j] = (aocl_int_t)(itemp);
                     }
                     ajj = sqrt(ajj);
                     a[j + j * a_dim1] = ajj;
@@ -363,11 +363,12 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
                     {
                         i__4 = j - k;
                         i__5 = *n - j;
-                        dgemv_("Trans", &i__4, &i__5, &c_b22, &a[k + (j + 1) * a_dim1], lda,
-                               &a[k + j * a_dim1], &c__1, &c_b24, &a[j + (j + 1) * a_dim1], lda);
+                        aocl_blas_dgemv("Trans", &i__4, &i__5, &c_b22, &a[k + (j + 1) * a_dim1],
+                                        lda, &a[k + j * a_dim1], &c__1, &c_b24,
+                                        &a[j + (j + 1) * a_dim1], lda);
                         i__4 = *n - j;
                         d__1 = 1. / ajj;
-                        dscal_(&i__4, &d__1, &a[j + (j + 1) * a_dim1], lda);
+                        aocl_blas_dscal(&i__4, &d__1, &a[j + (j + 1) * a_dim1], lda);
                     }
                     /* L130: */
                 }
@@ -375,8 +376,8 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
                 if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    dsyrk_("Upper", "Trans", &i__3, &jb, &c_b22, &a[k + j * a_dim1], lda, &c_b24,
-                           &a[j + j * a_dim1], lda);
+                    aocl_blas_dsyrk("Upper", "Trans", &i__3, &jb, &c_b22, &a[k + j * a_dim1], lda,
+                                    &c_b24, &a[j + j * a_dim1], lda);
                 }
                 /* L140: */
             }
@@ -422,7 +423,7 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
                     if(j > 1)
                     {
                         i__4 = *n - j + 1;
-                        itemp = dmaxloc_(&work[*n + j], &i__4);
+                        itemp = aocl_lapack_dmaxloc(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
                         if(ajj <= dstop || disnan_(&ajj))
@@ -436,23 +437,23 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
                         /* Pivot OK, so can now swap pivot rows and columns */
                         a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
                         i__4 = j - 1;
-                        dswap_(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
+                        aocl_blas_dswap(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
                         if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            dswap_(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
-                                   &a[pvt + 1 + pvt * a_dim1], &c__1);
+                            aocl_blas_dswap(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
+                                            &a[pvt + 1 + pvt * a_dim1], &c__1);
                         }
                         i__4 = pvt - j - 1;
-                        dswap_(&i__4, &a[j + 1 + j * a_dim1], &c__1, &a[pvt + (j + 1) * a_dim1],
-                               lda);
+                        aocl_blas_dswap(&i__4, &a[j + 1 + j * a_dim1], &c__1,
+                                        &a[pvt + (j + 1) * a_dim1], lda);
                         /* Swap dot products and PIV */
                         dtemp = work[j];
                         work[j] = work[pvt];
                         work[pvt] = dtemp;
                         itemp = piv[pvt];
                         piv[pvt] = piv[j];
-                        piv[j] = itemp;
+                        piv[j] = (aocl_int_t)(itemp);
                     }
                     ajj = sqrt(ajj);
                     a[j + j * a_dim1] = ajj;
@@ -461,11 +462,12 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
                     {
                         i__4 = *n - j;
                         i__5 = j - k;
-                        dgemv_("No Trans", &i__4, &i__5, &c_b22, &a[j + 1 + k * a_dim1], lda,
-                               &a[j + k * a_dim1], lda, &c_b24, &a[j + 1 + j * a_dim1], &c__1);
+                        aocl_blas_dgemv("No Trans", &i__4, &i__5, &c_b22, &a[j + 1 + k * a_dim1],
+                                        lda, &a[j + k * a_dim1], lda, &c_b24,
+                                        &a[j + 1 + j * a_dim1], &c__1);
                         i__4 = *n - j;
                         d__1 = 1. / ajj;
-                        dscal_(&i__4, &d__1, &a[j + 1 + j * a_dim1], &c__1);
+                        aocl_blas_dscal(&i__4, &d__1, &a[j + 1 + j * a_dim1], &c__1);
                     }
                     /* L170: */
                 }
@@ -473,8 +475,8 @@ void dpstrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *piv, 
                 if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    dsyrk_("Lower", "No Trans", &i__3, &jb, &c_b22, &a[j + k * a_dim1], lda, &c_b24,
-                           &a[j + j * a_dim1], lda);
+                    aocl_blas_dsyrk("Lower", "No Trans", &i__3, &jb, &c_b22, &a[j + k * a_dim1],
+                                    lda, &c_b24, &a[j + j * a_dim1], lda);
                 }
                 /* L180: */
             }

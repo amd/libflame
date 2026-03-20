@@ -1,13 +1,13 @@
 /* cswap.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int cswap_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy)
+int cswap_(integer *n, scomplex *cx, integer *incx, scomplex * cy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     /* Local variables */
     integer i__;
-    complex ctemp;
+    scomplex ctemp;
     integer ix, iy;
     /* interchanges two vectors. */
     /* jack dongarra, linpack, 3/11/78. */
@@ -42,12 +42,12 @@ int cswap_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy)
             ++i__)
     {
         i__2 = ix;
-        ctemp.r = cx[i__2].r, ctemp.i = cx[i__2].i;
+        ctemp.real = cx[i__2].real, ctemp.imag = cx[i__2].imag;
         i__2 = ix;
         i__3 = iy;
-        cx[i__2].r = cy[i__3].r, cx[i__2].i = cy[i__3].i;
+        cx[i__2].real = cy[i__3].real, cx[i__2].imag = cy[i__3].imag;
         i__2 = iy;
-        cy[i__2].r = ctemp.r, cy[i__2].i = ctemp.i;
+        cy[i__2].real = ctemp.real, cy[i__2].imag = ctemp.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -61,12 +61,12 @@ L20:
             ++i__)
     {
         i__2 = i__;
-        ctemp.r = cx[i__2].r, ctemp.i = cx[i__2].i;
+        ctemp.real = cx[i__2].real, ctemp.imag = cx[i__2].imag;
         i__2 = i__;
         i__3 = i__;
-        cx[i__2].r = cy[i__3].r, cx[i__2].i = cy[i__3].i;
+        cx[i__2].real = cy[i__3].real, cx[i__2].imag = cy[i__3].imag;
         i__2 = i__;
-        cy[i__2].r = ctemp.r, cy[i__2].i = ctemp.i;
+        cy[i__2].real = ctemp.real, cy[i__2].imag = ctemp.imag;
         /* L30: */
     }
     return 0;

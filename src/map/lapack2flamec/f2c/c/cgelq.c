@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CGELQ */
 /* Definition: */
 /* =========== */
@@ -23,7 +23,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGELQ computes an LQ factorization of a complex M-by-N matrix A: */
+/* > CGELQ computes an LQ factorization of a scomplex M-by-N matrix A: */
 /* > */
 /* > A = ( L 0 ) * Q */
 /* > */
@@ -172,35 +172,42 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *tsize,
-            complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cgelq_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *t,
+            aocl_int_t *tsize, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgelq(m, n, a, lda, t, tsize, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t tsize_64 = *tsize;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgelq(&m_64, &n_64, a, &lda_64, t, &tsize_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgelq(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *t,
+                       aocl_int64_t *tsize, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgelq inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS
                       "",
                       *m, *n, *lda, *tsize);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer mb, nb;
+    aocl_int64_t mb, nb;
     logical mint, minw;
-    integer lwmin, lwreq, lwopt, nblcks;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        cgelqt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
-                complex *, integer *);
+    aocl_int64_t lwmin, lwreq, lwopt, nblcks;
     logical lminws, lquery;
-    integer mintsz;
-    extern real sroundup_lwork(integer *);
-    extern /* Subroutine */
-        void
-        claswlq_(integer *, integer *, integer *, integer *, complex *, integer *, complex *,
-                 integer *, complex *, integer *, integer *);
+    aocl_int64_t mintsz;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -247,8 +254,8 @@ void cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
     /* Determine the block size */
     if(fla_min(*m, *n) > 0)
     {
-        mb = ilaenv_(&c__1, "CGELQ ", " ", m, n, &c__1, &c_n1);
-        nb = ilaenv_(&c__1, "CGELQ ", " ", m, n, &c__2, &c_n1);
+        mb = aocl_lapack_ilaenv(&c__1, "CGELQ ", " ", m, n, &c__1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "CGELQ ", " ", m, n, &c__2, &c_n1);
     }
     else
     {
@@ -362,36 +369,36 @@ void cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
     {
         if(mint)
         {
-            t[1].r = (real)mintsz;
-            t[1].i = 0.f; // , expr subst
+            t[1].real = (real)mintsz;
+            t[1].imag = 0.f; // , expr subst
         }
         else
         {
             i__1 = mb * *m * nblcks + 5;
-            t[1].r = (real)i__1;
-            t[1].i = 0.f; // , expr subst
+            t[1].real = (real)i__1;
+            t[1].imag = 0.f; // , expr subst
         }
-        t[2].r = (real)mb;
-        t[2].i = 0.f; // , expr subst
-        t[3].r = (real)nb;
-        t[3].i = 0.f; // , expr subst
+        t[2].real = (real)mb;
+        t[2].imag = 0.f; // , expr subst
+        t[3].real = (real)nb;
+        t[3].imag = 0.f; // , expr subst
         if(minw)
         {
-            r__1 = sroundup_lwork(&lwmin);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         else
         {
-            r__1 = sroundup_lwork(&lwreq);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            r__1 = aocl_lapack_sroundup_lwork(&lwreq);
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGELQ", &i__1, (ftnlen)5);
+        aocl_blas_xerbla("CGELQ", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -409,15 +416,15 @@ void cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
     /* The LQ Decomposition */
     if(*n <= *m || nb <= *m || nb >= *n)
     {
-        cgelqt_(m, n, &mb, &a[a_offset], lda, &t[6], &mb, &work[1], info);
+        aocl_lapack_cgelqt(m, n, &mb, &a[a_offset], lda, &t[6], &mb, &work[1], info);
     }
     else
     {
-        claswlq_(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &work[1], lwork, info);
+        aocl_lapack_claswlq(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &work[1], lwork, info);
     }
-    r__1 = sroundup_lwork(&lwreq);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwreq);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGELQ */

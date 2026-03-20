@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b STRSEN */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -89,11 +89,11 @@ each */
 /* > SELECT is LOGICAL array, dimension (N) */
 /* > SELECT specifies the eigenvalues in the selected cluster. To */
 /* > select a real eigenvalue w(j), SELECT(j) must be set to */
-/* > .TRUE.. To select a complex conjugate pair of eigenvalues */
+/* > .TRUE.. To select a scomplex conjugate pair of eigenvalues */
 /* > w(j) and w(j+1), corresponding to a 2-by-2 diagonal block, */
 /* > either SELECT(j) or SELECT(j+1) or both must be set to */
 /* > .TRUE.;
-a complex conjugate pair of eigenvalues must be */
+a scomplex conjugate pair of eigenvalues must be */
 /* > either both included in the cluster or both excluded. */
 /* > \endverbatim */
 /* > */
@@ -152,7 +152,7 @@ and if COMPQ = 'V', LDQ >= N. */
 /* > eigenvalues of T. The eigenvalues are stored in the same */
 /* > order as on the diagonal of T, with WR(i) = T(i,i) and, if */
 /* > T(i:i+1,i:i+1) is a 2-by-2 diagonal block, WI(i) > 0 and */
-/* > WI(i+1) = -WI(i). Note that if a complex eigenvalue is */
+/* > WI(i+1) = -WI(i). Note that if a scomplex eigenvalue is */
 /* > sufficiently ill-conditioned, then its value may differ */
 /* > significantly from its value before reordering. */
 /* > \endverbatim */
@@ -324,54 +324,61 @@ S and */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integer *ldt, real *q,
-             integer *ldq, real *wr, real *wi, integer *m, real *s, real *sep, real *work,
-             integer *lwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void strsen_(char *job, char *compq, logical *select, aocl_int_t *n, real *t, aocl_int_t *ldt,
+             real *q, aocl_int_t *ldq, real *wr, real *wi, aocl_int_t *m, real *s, real *sep,
+             real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_strsen(job, compq, select, n, t, ldt, q, ldq, wr, wi, m, s, sep, work, lwork, iwork,
+                       liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_strsen(job, compq, select, &n_64, t, &ldt_64, q, &ldq_64, wr, wi, &m_64, s, sep,
+                       work, &lwork_64, iwork, &liwork_64, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_strsen(char *job, char *compq, logical *select, aocl_int64_t *n, real *t,
+                        aocl_int64_t *ldt, real *q, aocl_int64_t *ldq, real *wr, real *wi,
+                        aocl_int64_t *m, real *s, real *sep, real *work, aocl_int64_t *lwork,
+                        aocl_int_t *iwork, aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "strsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
-             ", lwork %" FLA_IS ", liwork %" FLA_IS "",
-             *job, *compq, *n, *ldt, *ldq, *lwork, *liwork);
+    AOCL_DTL_SNPRINTF("strsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS
+                      ", ldq %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
+                      *job, *compq, *n, *ldt, *ldq, *lwork, *liwork);
     /* System generated locals */
-    integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer k, n1, n2, kk, nn, ks;
+    aocl_int64_t k, n1, n2, kk, nn, ks;
     real est;
-    integer kase;
+    aocl_int64_t kase;
     logical pair;
-    integer ierr;
+    aocl_int64_t ierr;
     logical swap;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer isave[3], lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int_t isave[3];
+    aocl_int64_t lwmin;
     logical wantq, wants;
     real rnorm;
-    extern /* Subroutine */
-        void
-        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
-    extern real slange_(char *, integer *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    integer liwmin;
-    extern /* Subroutine */
-        void
-        strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *,
-                real *, integer *);
+    aocl_int64_t liwmin;
     logical wantsp, lquery;
-    extern /* Subroutine */
-        void
-        strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
-                integer *, real *, integer *, real *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -510,13 +517,13 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     }
     if(*info == 0)
     {
-        work[1] = sroundup_lwork(&lwmin);
-        iwork[1] = liwmin;
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+        iwork[1] = (aocl_int_t)(liwmin);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STRSEN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STRSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -534,7 +541,7 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
         }
         if(wantsp)
         {
-            *sep = slange_("1", n, n, &t[t_offset], ldt, &work[1]);
+            *sep = aocl_lapack_slange("1", n, n, &t[t_offset], ldt, &work[1]);
         }
         goto L40;
     }
@@ -567,8 +574,8 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
                 kk = k;
                 if(k != ks)
                 {
-                    strexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &kk, &ks, &work[1],
-                            &ierr);
+                    aocl_lapack_strexc(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &kk, &ks,
+                                       &work[1], &ierr);
                 }
                 if(ierr == 1 || ierr == 2)
                 {
@@ -596,12 +603,12 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     {
         /* Solve Sylvester equation for R: */
         /* T11*R - R*T22 = scale*T12 */
-        slacpy_("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
-        strsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt,
-                &work[1], &n1, &scale, &ierr);
+        aocl_lapack_slacpy("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
+        aocl_lapack_strsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                           &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
         /* Estimate the reciprocal of the condition number of the cluster */
         /* of eigenvalues. */
-        rnorm = slange_("F", &n1, &n2, &work[1], &n1, &work[1]);
+        rnorm = aocl_lapack_slange("F", &n1, &n2, &work[1], &n1, &work[1]);
         if(rnorm == 0.f)
         {
             *s = 1.f;
@@ -617,20 +624,22 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
         est = 0.f;
         kase = 0;
     L30:
-        slacn2_(&nn, &work[nn + 1], &work[1], &iwork[1], &est, &kase, isave);
+        aocl_lapack_slacn2(&nn, &work[nn + 1], &work[1], &iwork[1], &est, &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Solve T11*R - R*T22 = scale*X. */
-                strsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
+                aocl_lapack_strsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
+                                   &ierr);
             }
             else
             {
                 /* Solve T11**T*R - R*T22**T = scale*X. */
-                strsyl_("T", "T", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
+                aocl_lapack_strsyl("T", "T", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
+                                   &ierr);
             }
             goto L30;
         }
@@ -655,8 +664,8 @@ L40: /* Store the output eigenvalues in WR and WI. */
         }
         /* L60: */
     }
-    work[1] = sroundup_lwork(&lwmin);
-    iwork[1] = liwmin;
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STRSEN */

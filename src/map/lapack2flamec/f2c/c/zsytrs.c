@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZSYTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZSYTRS solves a system of linear equations A*X = B with a complex */
+/* > ZSYTRS solves a system of linear equations A*X = B with a scomplex */
 /* > symmetric matrix A using the factorization A = U*D*U**T or */
 /* > A = L*D*L**T computed by ZSYTRF. */
 /* > \endverbatim */
@@ -119,37 +119,46 @@ static integer c__1 = 1;
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv,
-             doublecomplex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void zsytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda,
+             aocl_int_t *ipiv, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsytrs(uplo, n, nrhs, a, lda, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsytrs(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsytrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
+                        aocl_int64_t *lda, aocl_int_t *ipiv, dcomplex *b, aocl_int64_t *ldb,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer j, k;
-    doublecomplex ak, bk;
-    integer kp;
-    doublecomplex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, integer, integer);
-    doublecomplex denom;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t j, k;
+    dcomplex ak, bk;
+    aocl_int64_t kp;
+    dcomplex akm1, bkm1, akm1k;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    dcomplex denom;
     logical upper;
-    extern /* Subroutine */
-        void
-        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -204,7 +213,7 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSYTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -233,18 +242,18 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             kp = ipiv[k];
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgeru_(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
-                   &b[b_dim1 + 1], ldb);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
+                            &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             z_div(&z__1, &c_b1, &a[k + k * a_dim1]);
-            zscal_(nrhs, &z__1, &b[k + b_dim1], ldb);
+            aocl_blas_zscal(nrhs, &z__1, &b[k + b_dim1], ldb);
             --k;
         }
         else
@@ -254,61 +263,61 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             kp = -ipiv[k];
             if(kp != k - 1)
             {
-                zswap_(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in columns K-1 and K of A. */
             i__1 = k - 2;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgeru_(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
-                   &b[b_dim1 + 1], ldb);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
+                            &b[b_dim1 + 1], ldb);
             i__1 = k - 2;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgeru_(&i__1, nrhs, &z__1, &a[(k - 1) * a_dim1 + 1], &c__1, &b[k - 1 + b_dim1], ldb,
-                   &b[b_dim1 + 1], ldb);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[(k - 1) * a_dim1 + 1], &c__1, &b[k - 1 + b_dim1],
+                            ldb, &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k - 1 + k * a_dim1;
-            akm1k.r = a[i__1].r;
-            akm1k.i = a[i__1].i; // , expr subst
+            akm1k.real = a[i__1].real;
+            akm1k.imag = a[i__1].imag; // , expr subst
             z_div(&z__1, &a[k - 1 + (k - 1) * a_dim1], &akm1k);
-            akm1.r = z__1.r;
-            akm1.i = z__1.i; // , expr subst
+            akm1.real = z__1.real;
+            akm1.imag = z__1.imag; // , expr subst
             z_div(&z__1, &a[k + k * a_dim1], &akm1k);
-            ak.r = z__1.r;
-            ak.i = z__1.i; // , expr subst
-            z__2.r = akm1.r * ak.r - akm1.i * ak.i;
-            z__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-            z__1.r = z__2.r - 1.;
-            z__1.i = z__2.i - 0.; // , expr subst
-            denom.r = z__1.r;
-            denom.i = z__1.i; // , expr subst
+            ak.real = z__1.real;
+            ak.imag = z__1.imag; // , expr subst
+            z__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+            z__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+            z__1.real = z__2.real - 1.;
+            z__1.imag = z__2.imag - 0.; // , expr subst
+            denom.real = z__1.real;
+            denom.imag = z__1.imag; // , expr subst
             i__1 = *nrhs;
             for(j = 1; j <= i__1; ++j)
             {
                 z_div(&z__1, &b[k - 1 + j * b_dim1], &akm1k);
-                bkm1.r = z__1.r;
-                bkm1.i = z__1.i; // , expr subst
+                bkm1.real = z__1.real;
+                bkm1.imag = z__1.imag; // , expr subst
                 z_div(&z__1, &b[k + j * b_dim1], &akm1k);
-                bk.r = z__1.r;
-                bk.i = z__1.i; // , expr subst
+                bk.real = z__1.real;
+                bk.imag = z__1.imag; // , expr subst
                 i__2 = k - 1 + j * b_dim1;
-                z__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                z__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                z__2.r = z__3.r - bk.r;
-                z__2.i = z__3.i - bk.i; // , expr subst
+                z__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                z__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                z__2.real = z__3.real - bk.real;
+                z__2.imag = z__3.imag - bk.imag; // , expr subst
                 z_div(&z__1, &z__2, &denom);
-                b[i__2].r = z__1.r;
-                b[i__2].i = z__1.i; // , expr subst
+                b[i__2].real = z__1.real;
+                b[i__2].imag = z__1.imag; // , expr subst
                 i__2 = k + j * b_dim1;
-                z__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                z__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                z__2.r = z__3.r - bkm1.r;
-                z__2.i = z__3.i - bkm1.i; // , expr subst
+                z__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                z__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                z__2.real = z__3.real - bkm1.real;
+                z__2.imag = z__3.imag - bkm1.imag; // , expr subst
                 z_div(&z__1, &z__2, &denom);
-                b[i__2].r = z__1.r;
-                b[i__2].i = z__1.i; // , expr subst
+                b[i__2].real = z__1.real;
+                b[i__2].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
             k += -2;
@@ -329,15 +338,15 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             /* Multiply by inv(U**T(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[k * a_dim1 + 1], &c__1,
-                   &c_b1, &b[k + b_dim1], ldb);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[k * a_dim1 + 1],
+                            &c__1, &c_b1, &b[k + b_dim1], ldb);
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             ++k;
         }
@@ -347,20 +356,20 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             /* Multiply by inv(U**T(K+1)), where U(K+1) is the transformation */
             /* stored in columns K and K+1 of A. */
             i__1 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[k * a_dim1 + 1], &c__1,
-                   &c_b1, &b[k + b_dim1], ldb);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[k * a_dim1 + 1],
+                            &c__1, &c_b1, &b[k + b_dim1], ldb);
             i__1 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[(k + 1) * a_dim1 + 1],
-                   &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
+                            &a[(k + 1) * a_dim1 + 1], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             k += 2;
         }
@@ -386,21 +395,21 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             kp = ipiv[k];
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(L(K)), where L(K) is the transformation */
             /* stored in column K of A. */
             if(k < *n)
             {
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgeru_(&i__1, nrhs, &z__1, &a[k + 1 + k * a_dim1], &c__1, &b[k + b_dim1], ldb,
-                       &b[k + 1 + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 1 + k * a_dim1], &c__1, &b[k + b_dim1],
+                                ldb, &b[k + 1 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             z_div(&z__1, &c_b1, &a[k + k * a_dim1]);
-            zscal_(nrhs, &z__1, &b[k + b_dim1], ldb);
+            aocl_blas_zscal(nrhs, &z__1, &b[k + b_dim1], ldb);
             ++k;
         }
         else
@@ -410,64 +419,64 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             kp = -ipiv[k];
             if(kp != k + 1)
             {
-                zswap_(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(L(K)), where L(K) is the transformation */
             /* stored in columns K and K+1 of A. */
             if(k < *n - 1)
             {
                 i__1 = *n - k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgeru_(&i__1, nrhs, &z__1, &a[k + 2 + k * a_dim1], &c__1, &b[k + b_dim1], ldb,
-                       &b[k + 2 + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 2 + k * a_dim1], &c__1, &b[k + b_dim1],
+                                ldb, &b[k + 2 + b_dim1], ldb);
                 i__1 = *n - k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgeru_(&i__1, nrhs, &z__1, &a[k + 2 + (k + 1) * a_dim1], &c__1, &b[k + 1 + b_dim1],
-                       ldb, &b[k + 2 + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 2 + (k + 1) * a_dim1], &c__1,
+                                &b[k + 1 + b_dim1], ldb, &b[k + 2 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k + 1 + k * a_dim1;
-            akm1k.r = a[i__1].r;
-            akm1k.i = a[i__1].i; // , expr subst
+            akm1k.real = a[i__1].real;
+            akm1k.imag = a[i__1].imag; // , expr subst
             z_div(&z__1, &a[k + k * a_dim1], &akm1k);
-            akm1.r = z__1.r;
-            akm1.i = z__1.i; // , expr subst
+            akm1.real = z__1.real;
+            akm1.imag = z__1.imag; // , expr subst
             z_div(&z__1, &a[k + 1 + (k + 1) * a_dim1], &akm1k);
-            ak.r = z__1.r;
-            ak.i = z__1.i; // , expr subst
-            z__2.r = akm1.r * ak.r - akm1.i * ak.i;
-            z__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-            z__1.r = z__2.r - 1.;
-            z__1.i = z__2.i - 0.; // , expr subst
-            denom.r = z__1.r;
-            denom.i = z__1.i; // , expr subst
+            ak.real = z__1.real;
+            ak.imag = z__1.imag; // , expr subst
+            z__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+            z__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+            z__1.real = z__2.real - 1.;
+            z__1.imag = z__2.imag - 0.; // , expr subst
+            denom.real = z__1.real;
+            denom.imag = z__1.imag; // , expr subst
             i__1 = *nrhs;
             for(j = 1; j <= i__1; ++j)
             {
                 z_div(&z__1, &b[k + j * b_dim1], &akm1k);
-                bkm1.r = z__1.r;
-                bkm1.i = z__1.i; // , expr subst
+                bkm1.real = z__1.real;
+                bkm1.imag = z__1.imag; // , expr subst
                 z_div(&z__1, &b[k + 1 + j * b_dim1], &akm1k);
-                bk.r = z__1.r;
-                bk.i = z__1.i; // , expr subst
+                bk.real = z__1.real;
+                bk.imag = z__1.imag; // , expr subst
                 i__2 = k + j * b_dim1;
-                z__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                z__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                z__2.r = z__3.r - bk.r;
-                z__2.i = z__3.i - bk.i; // , expr subst
+                z__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                z__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                z__2.real = z__3.real - bk.real;
+                z__2.imag = z__3.imag - bk.imag; // , expr subst
                 z_div(&z__1, &z__2, &denom);
-                b[i__2].r = z__1.r;
-                b[i__2].i = z__1.i; // , expr subst
+                b[i__2].real = z__1.real;
+                b[i__2].imag = z__1.imag; // , expr subst
                 i__2 = k + 1 + j * b_dim1;
-                z__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                z__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                z__2.r = z__3.r - bkm1.r;
-                z__2.i = z__3.i - bkm1.i; // , expr subst
+                z__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                z__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                z__2.real = z__3.real - bkm1.real;
+                z__2.imag = z__3.imag - bkm1.imag; // , expr subst
                 z_div(&z__1, &z__2, &denom);
-                b[i__2].r = z__1.r;
-                b[i__2].i = z__1.i; // , expr subst
+                b[i__2].real = z__1.real;
+                b[i__2].imag = z__1.imag; // , expr subst
                 /* L70: */
             }
             k += 2;
@@ -490,16 +499,16 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             if(k < *n)
             {
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
-                       &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
+                                &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             --k;
         }
@@ -511,21 +520,22 @@ void zsytrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             if(k < *n)
             {
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
-                       &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
+                                &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
-                       &a[k + 1 + (k - 1) * a_dim1], &c__1, &c_b1, &b[k - 1 + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
+                                &a[k + 1 + (k - 1) * a_dim1], &c__1, &c_b1, &b[k - 1 + b_dim1],
+                                ldb);
             }
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             k += -2;
         }

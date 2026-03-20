@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {-1.f, 0.f};
+static scomplex c_b1 = {-1.f, 0.f};
 static doublereal c_b11 = -.125;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CBBCSD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -339,11 +339,43 @@ the */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, integer *m,
-             integer *p, integer *q, real *theta, real *phi, complex *u1, integer *ldu1,
-             complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex *v2t, integer *ldv2t,
-             real *b11d, real *b11e, real *b12d, real *b12e, real *b21d, real *b21e, real *b22d,
-             real *b22e, real *rwork, integer *lrwork, integer *info)
+/** Generated wrapper function */
+void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, aocl_int_t *m,
+             aocl_int_t *p, aocl_int_t *q, real *theta, real *phi, scomplex *u1, aocl_int_t *ldu1,
+             scomplex *u2, aocl_int_t *ldu2, scomplex *v1t, aocl_int_t *ldv1t, scomplex *v2t,
+             aocl_int_t *ldv2t, real *b11d, real *b11e, real *b12d, real *b12e, real *b21d,
+             real *b21e, real *b22d, real *b22e, real *rwork, aocl_int_t *lrwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
+                       v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e,
+                       rwork, lrwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t q_64 = *q;
+    aocl_int64_t ldu1_64 = *ldu1;
+    aocl_int64_t ldu2_64 = *ldu2;
+    aocl_int64_t ldv1t_64 = *ldv1t;
+    aocl_int64_t ldv2t_64 = *ldv2t;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, &m_64, &p_64, &q_64, theta, phi, u1,
+                       &ldu1_64, u2, &ldu2_64, v1t, &ldv1t_64, v2t, &ldv2t_64, b11d, b11e, b12d,
+                       b12e, b21d, b21e, b22d, b22e, rwork, &lrwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans,
+                        aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, real *theta, real *phi,
+                        scomplex *u1, aocl_int64_t *ldu1, scomplex *u2, aocl_int64_t *ldu2,
+                        scomplex *v1t, aocl_int64_t *ldv1t, scomplex *v2t, aocl_int64_t *ldv2t,
+                        real *b11d, real *b11e, real *b12d, real *b12e, real *b21d, real *b21e,
+                        real *b22d, real *b22e, real *rwork, aocl_int64_t *lrwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -352,7 +384,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         ", ldv2t %" FLA_IS "",
         *jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
     /* System generated locals */
-    integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
+    aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         i__1, i__2;
     real r__1, r__2, r__3, r__4;
     doublereal d__1;
@@ -363,35 +395,25 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     logical colmajor;
     real thetamin, thetamax;
     logical restart11, restart12, restart21, restart22;
-    integer i__, j;
+    aocl_int64_t i__, j;
     real r__, x1, x2, y1, y2;
-    integer lrworkmin, lrworkopt;
+    aocl_int64_t lrworkmin, lrworkopt;
     real mu, nu, eps, tol;
-    integer imin, mini, imax, iter;
+    aocl_int64_t imin, mini, imax, iter;
     real unfl, temp;
-    integer iu1cs, iu2cs;
+    aocl_int64_t iu1cs, iu2cs;
     extern /* Subroutine */
         void
         slas2_(real *, real *, real *, real *, real *);
-    integer iu1sn, iu2sn;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer maxit;
+    aocl_int64_t iu1sn, iu2sn;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t maxit;
     real dummy;
-    integer iv1tcs, iv2tcs;
+    aocl_int64_t iv1tcs, iv2tcs;
     logical wantu1, wantu2;
-    integer iv1tsn, iv2tsn;
+    aocl_int64_t iv1tsn, iv2tsn;
     real sigma11, sigma21;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real thresh, tolmul;
     logical lquery;
     real b11bulge, b12bulge;
@@ -514,7 +536,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CBBCSD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CBBCSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -1104,14 +1126,14 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             if(colmajor)
             {
                 i__1 = imax - imin + 1;
-                clasr_("R", "V", "F", p, &i__1, &rwork[iu1cs + imin - 1], &rwork[iu1sn + imin - 1],
-                       &u1[imin * u1_dim1 + 1], ldu1);
+                aocl_lapack_clasr("R", "V", "F", p, &i__1, &rwork[iu1cs + imin - 1],
+                                  &rwork[iu1sn + imin - 1], &u1[imin * u1_dim1 + 1], ldu1);
             }
             else
             {
                 i__1 = imax - imin + 1;
-                clasr_("L", "V", "F", &i__1, p, &rwork[iu1cs + imin - 1], &rwork[iu1sn + imin - 1],
-                       &u1[imin + u1_dim1], ldu1);
+                aocl_lapack_clasr("L", "V", "F", &i__1, p, &rwork[iu1cs + imin - 1],
+                                  &rwork[iu1sn + imin - 1], &u1[imin + u1_dim1], ldu1);
             }
         }
         if(wantu2)
@@ -1120,15 +1142,15 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 i__1 = *m - *p;
                 i__2 = imax - imin + 1;
-                clasr_("R", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
-                       &rwork[iu2sn + imin - 1], &u2[imin * u2_dim1 + 1], ldu2);
+                aocl_lapack_clasr("R", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
+                                  &rwork[iu2sn + imin - 1], &u2[imin * u2_dim1 + 1], ldu2);
             }
             else
             {
                 i__1 = imax - imin + 1;
                 i__2 = *m - *p;
-                clasr_("L", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
-                       &rwork[iu2sn + imin - 1], &u2[imin + u2_dim1], ldu2);
+                aocl_lapack_clasr("L", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
+                                  &rwork[iu2sn + imin - 1], &u2[imin + u2_dim1], ldu2);
             }
         }
         if(wantv1t)
@@ -1136,14 +1158,14 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             if(colmajor)
             {
                 i__1 = imax - imin + 1;
-                clasr_("L", "V", "F", &i__1, q, &rwork[iv1tcs + imin - 1],
-                       &rwork[iv1tsn + imin - 1], &v1t[imin + v1t_dim1], ldv1t);
+                aocl_lapack_clasr("L", "V", "F", &i__1, q, &rwork[iv1tcs + imin - 1],
+                                  &rwork[iv1tsn + imin - 1], &v1t[imin + v1t_dim1], ldv1t);
             }
             else
             {
                 i__1 = imax - imin + 1;
-                clasr_("R", "V", "F", q, &i__1, &rwork[iv1tcs + imin - 1],
-                       &rwork[iv1tsn + imin - 1], &v1t[imin * v1t_dim1 + 1], ldv1t);
+                aocl_lapack_clasr("R", "V", "F", q, &i__1, &rwork[iv1tcs + imin - 1],
+                                  &rwork[iv1tsn + imin - 1], &v1t[imin * v1t_dim1 + 1], ldv1t);
             }
         }
         if(wantv2t)
@@ -1152,15 +1174,15 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 i__1 = imax - imin + 1;
                 i__2 = *m - *q;
-                clasr_("L", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
-                       &rwork[iv2tsn + imin - 1], &v2t[imin + v2t_dim1], ldv2t);
+                aocl_lapack_clasr("L", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
+                                  &rwork[iv2tsn + imin - 1], &v2t[imin + v2t_dim1], ldv2t);
             }
             else
             {
                 i__1 = *m - *q;
                 i__2 = imax - imin + 1;
-                clasr_("R", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
-                       &rwork[iv2tsn + imin - 1], &v2t[imin * v2t_dim1 + 1], ldv2t);
+                aocl_lapack_clasr("R", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
+                                  &rwork[iv2tsn + imin - 1], &v2t[imin * v2t_dim1 + 1], ldv2t);
             }
         }
         /* Fix signs on B11(IMAX-1,IMAX) and B21(IMAX-1,IMAX) */
@@ -1172,11 +1194,11 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 if(colmajor)
                 {
-                    cscal_(q, &c_b1, &v1t[imax + v1t_dim1], ldv1t);
+                    aocl_blas_cscal(q, &c_b1, &v1t[imax + v1t_dim1], ldv1t);
                 }
                 else
                 {
-                    cscal_(q, &c_b1, &v1t[imax * v1t_dim1 + 1], &c__1);
+                    aocl_blas_cscal(q, &c_b1, &v1t[imax * v1t_dim1 + 1], &c__1);
                 }
             }
         }
@@ -1193,11 +1215,11 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 if(colmajor)
                 {
-                    cscal_(p, &c_b1, &u1[imax * u1_dim1 + 1], &c__1);
+                    aocl_blas_cscal(p, &c_b1, &u1[imax * u1_dim1 + 1], &c__1);
                 }
                 else
                 {
-                    cscal_(p, &c_b1, &u1[imax + u1_dim1], ldu1);
+                    aocl_blas_cscal(p, &c_b1, &u1[imax + u1_dim1], ldu1);
                 }
             }
         }
@@ -1209,12 +1231,12 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 if(colmajor)
                 {
                     i__1 = *m - *p;
-                    cscal_(&i__1, &c_b1, &u2[imax * u2_dim1 + 1], &c__1);
+                    aocl_blas_cscal(&i__1, &c_b1, &u2[imax * u2_dim1 + 1], &c__1);
                 }
                 else
                 {
                     i__1 = *m - *p;
-                    cscal_(&i__1, &c_b1, &u2[imax + u2_dim1], ldu2);
+                    aocl_blas_cscal(&i__1, &c_b1, &u2[imax + u2_dim1], ldu2);
                 }
             }
         }
@@ -1226,12 +1248,12 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 if(colmajor)
                 {
                     i__1 = *m - *q;
-                    cscal_(&i__1, &c_b1, &v2t[imax + v2t_dim1], ldv2t);
+                    aocl_blas_cscal(&i__1, &c_b1, &v2t[imax + v2t_dim1], ldv2t);
                 }
                 else
                 {
                     i__1 = *m - *q;
-                    cscal_(&i__1, &c_b1, &v2t[imax * v2t_dim1 + 1], &c__1);
+                    aocl_blas_cscal(&i__1, &c_b1, &v2t[imax * v2t_dim1 + 1], &c__1);
                 }
             }
         }
@@ -1312,43 +1334,47 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 if(wantu1)
                 {
-                    cswap_(p, &u1[i__ * u1_dim1 + 1], &c__1, &u1[mini * u1_dim1 + 1], &c__1);
+                    aocl_blas_cswap(p, &u1[i__ * u1_dim1 + 1], &c__1, &u1[mini * u1_dim1 + 1],
+                                    &c__1);
                 }
                 if(wantu2)
                 {
                     i__2 = *m - *p;
-                    cswap_(&i__2, &u2[i__ * u2_dim1 + 1], &c__1, &u2[mini * u2_dim1 + 1], &c__1);
+                    aocl_blas_cswap(&i__2, &u2[i__ * u2_dim1 + 1], &c__1, &u2[mini * u2_dim1 + 1],
+                                    &c__1);
                 }
                 if(wantv1t)
                 {
-                    cswap_(q, &v1t[i__ + v1t_dim1], ldv1t, &v1t[mini + v1t_dim1], ldv1t);
+                    aocl_blas_cswap(q, &v1t[i__ + v1t_dim1], ldv1t, &v1t[mini + v1t_dim1], ldv1t);
                 }
                 if(wantv2t)
                 {
                     i__2 = *m - *q;
-                    cswap_(&i__2, &v2t[i__ + v2t_dim1], ldv2t, &v2t[mini + v2t_dim1], ldv2t);
+                    aocl_blas_cswap(&i__2, &v2t[i__ + v2t_dim1], ldv2t, &v2t[mini + v2t_dim1],
+                                    ldv2t);
                 }
             }
             else
             {
                 if(wantu1)
                 {
-                    cswap_(p, &u1[i__ + u1_dim1], ldu1, &u1[mini + u1_dim1], ldu1);
+                    aocl_blas_cswap(p, &u1[i__ + u1_dim1], ldu1, &u1[mini + u1_dim1], ldu1);
                 }
                 if(wantu2)
                 {
                     i__2 = *m - *p;
-                    cswap_(&i__2, &u2[i__ + u2_dim1], ldu2, &u2[mini + u2_dim1], ldu2);
+                    aocl_blas_cswap(&i__2, &u2[i__ + u2_dim1], ldu2, &u2[mini + u2_dim1], ldu2);
                 }
                 if(wantv1t)
                 {
-                    cswap_(q, &v1t[i__ * v1t_dim1 + 1], &c__1, &v1t[mini * v1t_dim1 + 1], &c__1);
+                    aocl_blas_cswap(q, &v1t[i__ * v1t_dim1 + 1], &c__1, &v1t[mini * v1t_dim1 + 1],
+                                    &c__1);
                 }
                 if(wantv2t)
                 {
                     i__2 = *m - *q;
-                    cswap_(&i__2, &v2t[i__ * v2t_dim1 + 1], &c__1, &v2t[mini * v2t_dim1 + 1],
-                           &c__1);
+                    aocl_blas_cswap(&i__2, &v2t[i__ * v2t_dim1 + 1], &c__1,
+                                    &v2t[mini * v2t_dim1 + 1], &c__1);
                 }
             }
         }

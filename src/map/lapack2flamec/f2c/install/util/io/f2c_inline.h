@@ -30,9 +30,11 @@ use or performance of this software.
 #error f2c_include.h cannot be included as is
 #endif
 
-static inline double c_abs(const complex *z)
+#include "FLA_type_defs.h"
+
+static inline double c_abs(const scomplex *z)
 {
-    return hypot(z->r, z->i);
+    return hypot(z->real, z->imag);
 }
 static inline double d_abs(const double *x)
 {
@@ -67,10 +69,10 @@ static inline double d_atn2(const double *x, double *y)
     return atan2(*x, *y);
 }
 
-static inline void d_cnjg(doublecomplex *r, const doublecomplex *z)
+static inline void d_cnjg(dcomplex *r, const dcomplex *z)
 {
-    r->r = z->r;
-    r->i = -z->i;
+    r->real = z->real;
+    r->imag = -z->imag;
 }
 
 static inline double d_cos(const double *x)
@@ -92,9 +94,9 @@ static inline double d_exp(const double *x)
 {
     return exp(*x);
 }
-static inline double d_imag(doublecomplex *x)
+static inline double d_imag(dcomplex *x)
 {
-    return x->i;
+    return x->imag;
 }
 
 static inline double d_int(const double *x)
@@ -231,9 +233,9 @@ static inline integer i_mod(const integer *a, const integer *b)
 {
     return *a % *b;
 }
-static inline integer fla_i_nint(const float *x)
+static inline aocl_int64_t fla_i_nint(const float *x)
 {
-    return (integer)round(*x);
+    return (aocl_int64_t)round(*x);
 }
 static inline integer i_dnnt(const doublereal *x)
 {
@@ -248,9 +250,9 @@ static inline ftnint iargc_(void)
 {
     return xargc - 1;
 }
-static inline double z_abs(const doublecomplex *z)
+static inline double z_abs(const dcomplex *z)
 {
-    return hypot(z->r, z->i);
+    return hypot(z->real, z->imag);
 }
 
 static int s_copy(char *a, const char *b, ftnlen la, ftnlen lb)

@@ -28,6 +28,15 @@ double prepare_lapacke_hseqr_run(integer datatype, int matrix_layout, char *job,
                                  integer n, integer *ilo, integer *ihi, void *h, integer ldh,
                                  void *w, void *wr, void *wi, void *z, integer ldz, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_hseqr_outputs(void *filename, integer datatype, char job, char compz, integer n,
+                         integer ilo, integer ihi, void *h, integer ldh, void *w, void *wr,
+                         void *wi, void *z, integer ldz, void *params);
+integer check_bit_reproducibility_hseqr(void *filename, integer datatype, char job, char compz,
+                                        integer n, integer ilo, integer ihi, void *h, integer ldh,
+                                        void *w, void *wr, void *wi, void *z, integer ldz,
+                                        void *params);
+
 void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Computing Eigen value of a Hessenberg matrix";
@@ -133,6 +142,7 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
     char job;
     char compz;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -187,34 +197,49 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
         create_vector(datatype, &wi, n);
     }
 
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix_from_file(datatype, H, n, n, ldh, g_ext_fptr);
-        init_matrix_from_file(datatype, Z, n, n, ldz, g_ext_fptr);
-    }
-    else
-    {
-        create_vector(datatype, &wr_in, n);
-        if(datatype == FLOAT || datatype == DOUBLE)
+        if(g_ext_fptr != NULL)
         {
-            create_vector(datatype, &wi_in, n);
-            reset_vector(datatype, wi_in, n, 1);
+            init_matrix_from_file(datatype, H, n, n, ldh, g_ext_fptr);
+            init_matrix_from_file(datatype, Z, n, n, ldz, g_ext_fptr);
         }
         else
         {
-            wi_in = wr_in;
-        }
+            /* NOTE: HSEQR requires structured input;
+               Random matrix initialization is incompatible */
+            create_vector(datatype, &wr_in, n);
+            if(datatype == FLOAT || datatype == DOUBLE)
+            {
+                create_vector(datatype, &wi_in, n);
+                reset_vector(datatype, wi_in, n, 1);
+            }
+            else
+            {
+                wi_in = wr_in;
+            }
 
-        get_hessenberg_matrix_from_EVs(datatype, n, H, ldh, Z, ldz, &ilo, &ihi, &info, wr_in,
-                                       wi_in);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            create_realtype_vector(datatype, &scal_H, n);
-            scale_matrix_overflow_underflow_hseqr(datatype, n, H, ldh, params->imatrix_char,
-                                                  scal_H);
+            get_hessenberg_matrix_from_EVs(datatype, n, H, ldh, Z, ldz, &ilo, &ihi, &info, wr_in,
+                                           wi_in);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                create_realtype_vector(datatype, &scal_H, n);
+                scale_matrix_overflow_underflow_hseqr(datatype, n, H, ldh, params->imatrix_char,
+                                                      scal_H);
+            }
+            if(same_char(compz, 'I'))
+                set_identity_matrix(datatype, n, n, Z, ldz);
         }
-        if(same_char(compz, 'I'))
-            set_identity_matrix(datatype, n, n, Z, ldz);
+    }
+    if(same_char(compz, 'N'))
+    {
+        FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, H, ldh, "ccdddddd", job, compz, n, ilo, ihi,
+                                     ldh, ldz, g_lwork);
+    }
+    else
+    {
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, H, ldh, datatype, n, n, Z, ldz, "ccdddddd", job,
+                                  compz, n, ilo, ihi, ldh, ldz, g_lwork);
     }
 
     /* Make copy of matrix H and Z. This is required to validate the API functionality */
@@ -228,11 +253,11 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Performance computation
     (7)n^3 flops for eigen vectors for real
-    (25)n^3 flops for eigen vectors for complex
+    (25)n^3 flops for eigen vectors for scomplex
     (10)n^3 flops for Schur form is computed for real
-    (35)n^3 flops for Schur form is computed for complex
+    (35)n^3 flops for Schur form is computed for scomplex
     (20)n^3 flops full Schur factorization is computed for real
-    (70)n^3 flops full Schur factorization is computed for complex */
+    (70)n^3 flops full Schur factorization is computed for scomplex */
 
     if(same_char(compz, 'N'))
     {
@@ -258,7 +283,20 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output Validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(n, n,
+                          store_hseqr_outputs(filename, datatype, job, compz, n, ilo, ihi, H, ldh,
+                                              w, wr, wi, Z, ldz, params),
+                          validate_hseqr(tst_api, &job, &compz, n, H, H_test, ldh, Z, Z_Test, ldz,
+                                         wr, wr_in, wi, wi_in, w, datatype, residual, &ilo, &ihi,
+                                         params->imatrix_char, scal_H, params),
+                          check_bit_reproducibility_hseqr(filename, datatype, job, compz, n, ilo,
+                                                          ihi, H, ldh, w, wr, wi, Z, ldz, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_hseqr(tst_api, &job, &compz, n, H, H_test, ldh, Z, Z_Test, ldz, wr, wr_in, wi,
                        wi_in, w, datatype, residual, &ilo, &ihi, params->imatrix_char, scal_H,
@@ -270,11 +308,24 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
-    free_matrix(H);
-    free_matrix(Z);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_vector(wr_in);
+        if(!(datatype == COMPLEX || datatype == DOUBLE_COMPLEX))
+        {
+            free_vector(wi_in);
+        }
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            free_vector(scal_H);
+        }
+    }
     free_matrix(H_test);
     free_matrix(Z_Test);
-    free_vector(wr_in);
+free_buffers:
+    FLA_FREE_FILENAME(filename)
+    free_matrix(H);
+    free_matrix(Z);
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
         free_vector(w);
@@ -283,11 +334,6 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
     {
         free_vector(wr);
         free_vector(wi);
-        free_vector(wi_in);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal_H);
     }
 }
 
@@ -473,4 +519,55 @@ void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer 
             break;
         }
     }
+}
+
+void store_hseqr_outputs(void *filename, integer datatype, char job, char compz, integer n,
+                         integer ilo, integer ihi, void *h, integer ldh, void *w, void *wr,
+                         void *wi, void *z, integer ldz, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Store the output matrices in the file */
+    FLA_STORE_BRT_MATRIX(datatype, n, n, h, ldh)
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        FLA_STORE_BRT_VECTOR(datatype, n, wr)
+        FLA_STORE_BRT_VECTOR(datatype, n, wi)
+    }
+    else
+    {
+        FLA_STORE_BRT_VECTOR(datatype, n, w)
+    }
+    if(!same_char(compz, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, z, ldz)
+    }
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+integer check_bit_reproducibility_hseqr(void *filename, integer datatype, char job, char compz,
+                                        integer n, integer ilo, integer ihi, void *h, integer ldh,
+                                        void *w, void *wr, void *wi, void *z, integer ldz,
+                                        void *params)
+{
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, h, ldh)
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, n, wr)
+        FLA_VERIFY_BRT_VECTOR(datatype, n, wi)
+    }
+    else
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, n, w)
+    }
+    if(!same_char(compz, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, z, ldz)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

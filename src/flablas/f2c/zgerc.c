@@ -1,16 +1,16 @@
 /* zgerc.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zgerc_(integer *m, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy, doublecomplex *a, integer *lda)
+int zgerc_(integer *m, integer *n, dcomplex *alpha, dcomplex *x, integer *incx, dcomplex *y, integer *incy, dcomplex *a, integer *lda)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     integer info;
-    doublecomplex temp;
+    dcomplex temp;
     integer i__, j, ix, jy, kx;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -110,7 +110,7 @@ int zgerc_(integer *m, integer *n, doublecomplex *alpha, doublecomplex *x, integ
         return 0;
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0 || alpha->r == 0. && alpha->i == 0.)
+    if (*m == 0 || *n == 0 || alpha->real == 0. && alpha->imag == 0.)
     {
         return 0;
     }
@@ -132,11 +132,11 @@ int zgerc_(integer *m, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                 ++j)
         {
             i__2 = jy;
-            if (y[i__2].r != 0. || y[i__2].i != 0.)
+            if (y[i__2].real != 0. || y[i__2].imag != 0.)
             {
                 d_cnjg(&z__2, &y[jy]);
-                z__1.r = alpha->r * z__2.r - alpha->i * z__2.i, z__1.i = alpha->r * z__2.i + alpha->i * z__2.r;
-                temp.r = z__1.r, temp.i = z__1.i;
+                z__1.real = alpha->real * z__2.real - alpha->imag * z__2.imag, z__1.imag = alpha->real * z__2.imag + alpha->imag * z__2.real;
+                temp.real = z__1.real, temp.imag = z__1.imag;
                 i__2 = *m;
                 for (i__ = 1;
                         i__ <= i__2;
@@ -145,9 +145,9 @@ int zgerc_(integer *m, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__ + j * a_dim1;
                     i__5 = i__;
-                    z__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i, z__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r;
-                    z__1.r = a[i__4].r + z__2.r, z__1.i = a[i__4].i + z__2.i;
-                    a[i__3].r = z__1.r, a[i__3].i = z__1.i;
+                    z__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag, z__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real;
+                    z__1.real = a[i__4].real + z__2.real, z__1.imag = a[i__4].imag + z__2.imag;
+                    a[i__3].real = z__1.real, a[i__3].imag = z__1.imag;
                     /* L10: */
                 }
             }
@@ -171,11 +171,11 @@ int zgerc_(integer *m, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                 ++j)
         {
             i__2 = jy;
-            if (y[i__2].r != 0. || y[i__2].i != 0.)
+            if (y[i__2].real != 0. || y[i__2].imag != 0.)
             {
                 d_cnjg(&z__2, &y[jy]);
-                z__1.r = alpha->r * z__2.r - alpha->i * z__2.i, z__1.i = alpha->r * z__2.i + alpha->i * z__2.r;
-                temp.r = z__1.r, temp.i = z__1.i;
+                z__1.real = alpha->real * z__2.real - alpha->imag * z__2.imag, z__1.imag = alpha->real * z__2.imag + alpha->imag * z__2.real;
+                temp.real = z__1.real, temp.imag = z__1.imag;
                 ix = kx;
                 i__2 = *m;
                 for (i__ = 1;
@@ -185,9 +185,9 @@ int zgerc_(integer *m, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__ + j * a_dim1;
                     i__5 = ix;
-                    z__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i, z__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r;
-                    z__1.r = a[i__4].r + z__2.r, z__1.i = a[i__4].i + z__2.i;
-                    a[i__3].r = z__1.r, a[i__3].i = z__1.i;
+                    z__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag, z__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real;
+                    z__1.real = a[i__4].real + z__2.real, z__1.imag = a[i__4].imag + z__2.imag;
+                    a[i__3].real = z__1.real, a[i__3].imag = z__1.imag;
                     ix += *incx;
                     /* L30: */
                 }

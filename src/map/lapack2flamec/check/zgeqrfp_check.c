@@ -1,16 +1,16 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int zgeqrfp_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *work,
-                  integer *lwork, integer *info)
+int zgeqrfp_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
+                  aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer k, nb;
-    integer lwkopt;
+    aocl_int64_t k, nb;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -21,7 +21,7 @@ int zgeqrfp_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *t
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *n * nb;
     work[1].real = (double)lwkopt;
     work[1].imag = 0.; // , expr subst
@@ -45,7 +45,7 @@ int zgeqrfp_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEQRFP", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZGEQRFP", &i__1, (ftnlen)7);
         return LAPACK_FAILURE;
     }
     else if(lquery)

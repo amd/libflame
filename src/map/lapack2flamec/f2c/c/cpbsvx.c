@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> CPBSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -46,7 +46,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CPBSVX uses the Cholesky factorization A = U**H*U or A = L*L**H to */
-/* > compute the solution to a complex system of linear equations */
+/* > compute the solution to a scomplex system of linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N Hermitian positive definite band matrix and X */
 /* > and B are N-by-NRHS matrices. */
@@ -343,10 +343,37 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab,
-             integer *ldab, complex *afb, integer *ldafb, char *equed, real *s, complex *b,
-             integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr,
-             complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, scomplex *ab,
+             aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb, char *equed, real *s, scomplex *b,
+             aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr, real *berr,
+             scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpbsvx(fact, uplo, n, kd, nrhs, ab, ldab, afb, ldafb, equed, s, b, ldb, x, ldx,
+                       rcond, ferr, berr, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpbsvx(fact, uplo, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64, equed, s,
+                       b, &ldb_64, x, &ldx_64, rcond, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpbsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *kd,
+                        aocl_int64_t *nrhs, scomplex *ab, aocl_int64_t *ldab, scomplex *afb,
+                        aocl_int64_t *ldafb, char *equed, real *s, scomplex *b, aocl_int64_t *ldb,
+                        scomplex *x, aocl_int64_t *ldx, real *rcond, real *ferr, real *berr,
+                        scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -365,45 +392,20 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, j1, j2;
+    aocl_int64_t i__, j, j1, j2;
     real amax, smin, smax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real scond, anorm;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil, rcequ, upper;
-    extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        claqhb_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, char *),
-        cpbcon_(char *, integer *, integer *, complex *, integer *, real *, real *, complex *,
-                real *, integer *);
     extern real slamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cpbequ_(char *, integer *, integer *, complex *, integer *, real *, real *, real *,
-                integer *),
-        cpbrfs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
-                complex *, integer *, complex *, integer *, real *, real *, complex *, real *,
-                integer *);
     real bignum;
-    extern /* Subroutine */
-        void
-        cpbtrf_(char *, integer *, integer *, complex *, integer *, integer *);
-    integer infequ;
-    extern /* Subroutine */
-        void
-        cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
-                integer *);
+    aocl_int64_t infequ;
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -541,18 +543,18 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPBSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        cpbequ_(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, &infequ);
+        aocl_lapack_cpbequ(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            claqhb_(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, equed);
+            aocl_lapack_claqhb(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, equed);
             rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
@@ -568,10 +570,10 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * b_dim1;
-                q__1.r = s[i__4] * b[i__5].r;
-                q__1.i = s[i__4] * b[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = s[i__4] * b[i__5].real;
+                q__1.imag = s[i__4] * b[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             /* L30: */
@@ -589,8 +591,8 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
                 i__2 = j - *kd;
                 j1 = fla_max(i__2, 1);
                 i__2 = j - j1 + 1;
-                ccopy_(&i__2, &ab[*kd + 1 - j + j1 + j * ab_dim1], &c__1,
-                       &afb[*kd + 1 - j + j1 + j * afb_dim1], &c__1);
+                aocl_blas_ccopy(&i__2, &ab[*kd + 1 - j + j1 + j * ab_dim1], &c__1,
+                                &afb[*kd + 1 - j + j1 + j * afb_dim1], &c__1);
                 /* L40: */
             }
         }
@@ -603,11 +605,11 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
                 i__2 = j + *kd;
                 j2 = fla_min(i__2, *n);
                 i__2 = j2 - j + 1;
-                ccopy_(&i__2, &ab[j * ab_dim1 + 1], &c__1, &afb[j * afb_dim1 + 1], &c__1);
+                aocl_blas_ccopy(&i__2, &ab[j * ab_dim1 + 1], &c__1, &afb[j * afb_dim1 + 1], &c__1);
                 /* L50: */
             }
         }
-        cpbtrf_(uplo, n, kd, &afb[afb_offset], ldafb, info);
+        aocl_lapack_cpbtrf(uplo, n, kd, &afb[afb_offset], ldafb, info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -617,16 +619,18 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
         }
     }
     /* Compute the norm of the matrix A. */
-    anorm = clanhb_("1", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
+    anorm = aocl_lapack_clanhb("1", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
     /* Compute the reciprocal of the condition number of A. */
-    cpbcon_(uplo, n, kd, &afb[afb_offset], ldafb, &anorm, rcond, &work[1], &rwork[1], info);
+    aocl_lapack_cpbcon(uplo, n, kd, &afb[afb_offset], ldafb, &anorm, rcond, &work[1], &rwork[1],
+                       info);
     /* Compute the solution matrix X. */
-    clacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    cpbtrs_(uplo, n, kd, nrhs, &afb[afb_offset], ldafb, &x[x_offset], ldx, info);
+    aocl_lapack_clacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_cpbtrs(uplo, n, kd, nrhs, &afb[afb_offset], ldafb, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    cpbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb,
-            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_cpbrfs(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
+                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
+                       &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)
@@ -640,10 +644,10 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
                 i__3 = i__ + j * x_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * x_dim1;
-                q__1.r = s[i__4] * x[i__5].r;
-                q__1.i = s[i__4] * x[i__5].i; // , expr subst
-                x[i__3].r = q__1.r;
-                x[i__3].i = q__1.i; // , expr subst
+                q__1.real = s[i__4] * x[i__5].real;
+                q__1.imag = s[i__4] * x[i__5].imag; // , expr subst
+                x[i__3].real = q__1.real;
+                x[i__3].imag = q__1.imag; // , expr subst
                 /* L60: */
             }
             /* L70: */

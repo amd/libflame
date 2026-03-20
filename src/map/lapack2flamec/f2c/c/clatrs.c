@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b40 = .5f;
 /* > \brief \b CLATRS solves a triangular system of equations with the scale factor set to prevent
  * overflow. */
@@ -241,63 +241,59 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, complex *a,
-             integer *lda, complex *x, real *scale, real *cnorm, integer *info)
+/** Generated wrapper function */
+void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, scomplex *a,
+             aocl_int_t *lda, scomplex *x, real *scale, real *cnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clatrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clatrs(uplo, trans, diag, normin, &n_64, a, &lda_64, x, scale, cnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
+                        scomplex *a, aocl_int64_t *lda, scomplex *x, real *scale, real *cnorm,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clatrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",
                       *uplo, *trans, *diag, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real xj, rec, tjj;
-    integer jinc;
+    aocl_int64_t jinc;
     real xbnd;
-    integer imax;
+    aocl_int64_t imax;
     real tmax;
-    complex tjjs;
+    scomplex tjjs;
     real xmax, grow;
-    extern /* Complex */
-        void
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real tscal;
-    complex uscal;
-    integer jlast;
-    extern /* Complex */
-        void
-        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    complex csumj;
-    extern /* Subroutine */
-        void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    scomplex uscal;
+    aocl_int64_t jlast;
+    scomplex csumj;
     logical upper;
-    extern /* Subroutine */
-        void
-        ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern integer isamax_(integer *, real *, integer *);
-    extern real scasum_(integer *, complex *, integer *);
     logical notran;
-    integer jfirst;
+    aocl_int64_t jfirst;
     real smlnum;
     logical nounit;
     /* -- LAPACK auxiliary routine -- */
@@ -362,7 +358,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLATRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLATRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -386,7 +382,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                cnorm[j] = scasum_(&i__2, &a[j * a_dim1 + 1], &c__1);
+                cnorm[j] = aocl_blas_scasum(&i__2, &a[j * a_dim1 + 1], &c__1);
                 /* L10: */
             }
         }
@@ -397,7 +393,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                cnorm[j] = scasum_(&i__2, &a[j + 1 + j * a_dim1], &c__1);
+                cnorm[j] = aocl_blas_scasum(&i__2, &a[j + 1 + j * a_dim1], &c__1);
                 /* L20: */
             }
             cnorm[*n] = 0.f;
@@ -405,7 +401,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     }
     /* Scale the column norms by TSCAL if the maximum element in CNORM is */
     /* greater than BIGNUM/2. */
-    imax = isamax_(n, &cnorm[1], &c__1);
+    imax = aocl_blas_isamax(n, &cnorm[1], &c__1);
     tmax = cnorm[imax];
     if(tmax <= bignum * .5f)
     {
@@ -419,7 +415,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
         {
             /* Case 1: All entries in CNORM are valid floating-point numbers */
             tscal = .5f / (smlnum * tmax);
-            sscal_(n, &tscal, &cnorm[1], &c__1);
+            aocl_blas_sscal(n, &tscal, &cnorm[1], &c__1);
         }
         else
         {
@@ -440,7 +436,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     {
                         /* Computing MAX */
                         i__3 = i__ + j * a_dim1;
-                        r__3 = tmax, r__4 = (r__1 = a[i__3].r, f2c_abs(r__1));
+                        r__3 = tmax, r__4 = (r__1 = a[i__3].real, f2c_abs(r__1));
                         r__3 = fla_max(r__3, r__4);
                         r__4 = (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // ; expr subst
                         tmax = fla_max(r__3, r__4);
@@ -458,7 +454,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     {
                         /* Computing MAX */
                         i__3 = i__ + j * a_dim1;
-                        r__3 = tmax, r__4 = (r__1 = a[i__3].r, f2c_abs(r__1));
+                        r__3 = tmax, r__4 = (r__1 = a[i__3].real, f2c_abs(r__1));
                         r__3 = fla_max(r__3, r__4);
                         r__4 = (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // ; expr subst
                         tmax = fla_max(r__3, r__4);
@@ -488,7 +484,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                             {
                                 i__3 = i__ + j * a_dim1;
                                 cnorm[j] += tscal
-                                            * ((r__1 = a[i__3].r / 2.f, f2c_abs(r__1))
+                                            * ((r__1 = a[i__3].real / 2.f, f2c_abs(r__1))
                                                + (r__2 = r_imag(&a[i__ + j * a_dim1]) / 2.f,
                                                   f2c_abs(r__2)));
                             }
@@ -500,7 +496,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                             {
                                 i__3 = i__ + j * a_dim1;
                                 cnorm[j] += tscal
-                                            * ((r__1 = a[i__3].r / 2.f, f2c_abs(r__1))
+                                            * ((r__1 = a[i__3].real / 2.f, f2c_abs(r__1))
                                                + (r__2 = r_imag(&a[i__ + j * a_dim1]) / 2.f,
                                                   f2c_abs(r__2)));
                             }
@@ -513,7 +509,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             {
                 /* At least one entry of A is not a valid floating-point */
                 /* entry. Rely on TRSV to propagate Inf and NaN. */
-                ctrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
+                aocl_blas_ctrsv(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -528,7 +524,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
         /* Computing MAX */
         i__2 = j;
         r__3 = xmax;
-        r__4 = (r__1 = x[i__2].r / 2.f, f2c_abs(r__1))
+        r__4 = (r__1 = x[i__2].real / 2.f, f2c_abs(r__1))
                + (r__2 = r_imag(&x[j]) / 2.f, f2c_abs(r__2)); // , expr subst
         xmax = fla_max(r__3, r__4);
         /* L30: */
@@ -573,9 +569,9 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     goto L60;
                 }
                 i__3 = j + j * a_dim1;
-                tjjs.r = a[i__3].r;
-                tjjs.i = a[i__3].i; // , expr subst
-                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
+                tjjs.real = a[i__3].real;
+                tjjs.imag = a[i__3].imag; // , expr subst
+                tjj = (r__1 = tjjs.real, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                 if(tjj >= smlnum)
                 {
                     /* M(j) = G(j-1) / f2c_abs(A(j,j)) */
@@ -674,9 +670,9 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 r__2 = xbnd / xj; // , expr subst
                 grow = fla_min(r__1, r__2);
                 i__3 = j + j * a_dim1;
-                tjjs.r = a[i__3].r;
-                tjjs.i = a[i__3].i; // , expr subst
-                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
+                tjjs.real = a[i__3].real;
+                tjjs.imag = a[i__3].imag; // , expr subst
+                tjj = (r__1 = tjjs.real, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                 if(tjj >= smlnum)
                 {
                     /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_abs(A(j,j)) */
@@ -725,7 +721,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     {
         /* Use the Level 2 BLAS solve if the reciprocal of the bound on */
         /* elements of X is not too small. */
-        ctrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
+        aocl_blas_ctrsv(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
     }
     else
     {
@@ -735,7 +731,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             /* Scale X so that its components are less than or equal to */
             /* BIGNUM in absolute value. */
             *scale = bignum * .5f / xmax;
-            csscal_(n, scale, &x[1], &c__1);
+            aocl_blas_csscal(n, scale, &x[1], &c__1);
             xmax = bignum;
         }
         else
@@ -751,25 +747,25 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
                 i__3 = j;
-                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
+                xj = (r__1 = x[i__3].real, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 if(nounit)
                 {
                     i__3 = j + j * a_dim1;
-                    q__1.r = tscal * a[i__3].r;
-                    q__1.i = tscal * a[i__3].i; // , expr subst
-                    tjjs.r = q__1.r;
-                    tjjs.i = q__1.i; // , expr subst
+                    q__1.real = tscal * a[i__3].real;
+                    q__1.imag = tscal * a[i__3].imag; // , expr subst
+                    tjjs.real = q__1.real;
+                    tjjs.imag = q__1.imag; // , expr subst
                 }
                 else
                 {
-                    tjjs.r = tscal;
-                    tjjs.i = 0.f; // , expr subst
+                    tjjs.real = tscal;
+                    tjjs.imag = 0.f; // , expr subst
                     if(tscal == 1.f)
                     {
                         goto L105;
                     }
                 }
-                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
+                tjj = (r__1 = tjjs.real, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                 if(tjj > smlnum)
                 {
                     /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -779,17 +775,17 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         {
                             /* Scale x by 1/b(j). */
                             rec = 1.f / xj;
-                            csscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
                     }
                     i__3 = j;
                     cladiv_f2c_(&q__1, &x[j], &tjjs);
-                    x[i__3].r = q__1.r;
-                    x[i__3].i = q__1.i; // , expr subst
+                    x[i__3].real = q__1.real;
+                    x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].real, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else if(tjj > 0.f)
                 {
@@ -805,16 +801,16 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                             /* multiplying x(j) times column j. */
                             rec /= cnorm[j];
                         }
-                        csscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
                     i__3 = j;
                     cladiv_f2c_(&q__1, &x[j], &tjjs);
-                    x[i__3].r = q__1.r;
-                    x[i__3].i = q__1.i; // , expr subst
+                    x[i__3].real = q__1.real;
+                    x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].real, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else
                 {
@@ -824,13 +820,13 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     for(i__ = 1; i__ <= i__3; ++i__)
                     {
                         i__4 = i__;
-                        x[i__4].r = 0.f;
-                        x[i__4].i = 0.f; // , expr subst
+                        x[i__4].real = 0.f;
+                        x[i__4].imag = 0.f; // , expr subst
                         /* L100: */
                     }
                     i__3 = j;
-                    x[i__3].r = 1.f;
-                    x[i__3].i = 0.f; // , expr subst
+                    x[i__3].real = 1.f;
+                    x[i__3].imag = 0.f; // , expr subst
                     xj = 1.f;
                     *scale = 0.f;
                     xmax = 0.f;
@@ -844,14 +840,14 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     {
                         /* Scale x by 1/(2*abs(x(j))). */
                         rec *= .5f;
-                        csscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                     }
                 }
                 else if(xj * cnorm[j] > bignum - xmax)
                 {
                     /* Scale x by 1/2. */
-                    csscal_(n, &c_b40, &x[1], &c__1);
+                    aocl_blas_csscal(n, &c_b40, &x[1], &c__1);
                     *scale *= .5f;
                 }
                 if(upper)
@@ -862,15 +858,15 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         /* x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
                         i__3 = j - 1;
                         i__4 = j;
-                        q__2.r = -x[i__4].r;
-                        q__2.i = -x[i__4].i; // , expr subst
-                        q__1.r = tscal * q__2.r;
-                        q__1.i = tscal * q__2.i; // , expr subst
-                        caxpy_(&i__3, &q__1, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
+                        q__2.real = -x[i__4].real;
+                        q__2.imag = -x[i__4].imag; // , expr subst
+                        q__1.real = tscal * q__2.real;
+                        q__1.imag = tscal * q__2.imag; // , expr subst
+                        aocl_blas_caxpy(&i__3, &q__1, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
                         i__3 = j - 1;
-                        i__ = icamax_(&i__3, &x[1], &c__1);
+                        i__ = aocl_blas_icamax(&i__3, &x[1], &c__1);
                         i__3 = i__;
-                        xmax = (r__1 = x[i__3].r, f2c_abs(r__1))
+                        xmax = (r__1 = x[i__3].real, f2c_abs(r__1))
                                + (r__2 = r_imag(&x[i__]), f2c_abs(r__2));
                     }
                 }
@@ -882,15 +878,16 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         /* x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
                         i__3 = *n - j;
                         i__4 = j;
-                        q__2.r = -x[i__4].r;
-                        q__2.i = -x[i__4].i; // , expr subst
-                        q__1.r = tscal * q__2.r;
-                        q__1.i = tscal * q__2.i; // , expr subst
-                        caxpy_(&i__3, &q__1, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
+                        q__2.real = -x[i__4].real;
+                        q__2.imag = -x[i__4].imag; // , expr subst
+                        q__1.real = tscal * q__2.real;
+                        q__1.imag = tscal * q__2.imag; // , expr subst
+                        aocl_blas_caxpy(&i__3, &q__1, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1],
+                                        &c__1);
                         i__3 = *n - j;
-                        i__ = j + icamax_(&i__3, &x[j + 1], &c__1);
+                        i__ = j + aocl_blas_icamax(&i__3, &x[j + 1], &c__1);
                         i__3 = i__;
-                        xmax = (r__1 = x[i__3].r, f2c_abs(r__1))
+                        xmax = (r__1 = x[i__3].real, f2c_abs(r__1))
                                + (r__2 = r_imag(&x[i__]), f2c_abs(r__2));
                     }
                 }
@@ -907,9 +904,9 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
                 i__3 = j;
-                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
-                uscal.r = tscal;
-                uscal.i = 0.f; // , expr subst
+                xj = (r__1 = x[i__3].real, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
+                uscal.real = tscal;
+                uscal.imag = 0.f; // , expr subst
                 rec = 1.f / fla_max(xmax, 1.f);
                 if(cnorm[j] > (bignum - xj) * rec)
                 {
@@ -918,17 +915,17 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     if(nounit)
                     {
                         i__3 = j + j * a_dim1;
-                        q__1.r = tscal * a[i__3].r;
-                        q__1.i = tscal * a[i__3].i; // , expr subst
-                        tjjs.r = q__1.r;
-                        tjjs.i = q__1.i; // , expr subst
+                        q__1.real = tscal * a[i__3].real;
+                        q__1.imag = tscal * a[i__3].imag; // , expr subst
+                        tjjs.real = q__1.real;
+                        tjjs.imag = q__1.imag; // , expr subst
                     }
                     else
                     {
-                        tjjs.r = tscal;
-                        tjjs.i = 0.f; // , expr subst
+                        tjjs.real = tscal;
+                        tjjs.imag = 0.f; // , expr subst
                     }
-                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
+                    tjj = (r__1 = tjjs.real, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                     if(tjj > 1.f)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
@@ -937,35 +934,35 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         r__2 = rec * tjj; // , expr subst
                         rec = fla_min(r__1, r__2);
                         cladiv_f2c_(&q__1, &uscal, &tjjs);
-                        uscal.r = q__1.r;
-                        uscal.i = q__1.i; // , expr subst
+                        uscal.real = q__1.real;
+                        uscal.imag = q__1.imag; // , expr subst
                     }
                     if(rec < 1.f)
                     {
-                        csscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
                 }
-                csumj.r = 0.f;
-                csumj.i = 0.f; // , expr subst
-                if(uscal.r == 1.f && uscal.i == 0.f)
+                csumj.real = 0.f;
+                csumj.imag = 0.f; // , expr subst
+                if(uscal.real == 1.f && uscal.imag == 0.f)
                 {
                     /* If the scaling needed for A in the dot product is 1, */
                     /* call CDOTU to perform the dot product. */
                     if(upper)
                     {
                         i__3 = j - 1;
-                        cdotu_f2c_(&q__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
-                        csumj.r = q__1.r;
-                        csumj.i = q__1.i; // , expr subst
+                        aocl_lapack_cdotu_f2c(&q__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
+                        csumj.real = q__1.real;
+                        csumj.imag = q__1.imag; // , expr subst
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        cdotu_f2c_(&q__1, &i__3, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
-                        csumj.r = q__1.r;
-                        csumj.i = q__1.i; // , expr subst
+                        aocl_lapack_cdotu_f2c(&q__1, &i__3, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
+                        csumj.real = q__1.real;
+                        csumj.imag = q__1.imag; // , expr subst
                     }
                 }
                 else
@@ -977,15 +974,15 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + j * a_dim1;
-                            q__3.r = a[i__4].r * uscal.r - a[i__4].i * uscal.i;
-                            q__3.i = a[i__4].r * uscal.i + a[i__4].i * uscal.r; // , expr subst
+                            q__3.real = a[i__4].real * uscal.real - a[i__4].imag * uscal.imag;
+                            q__3.imag = a[i__4].real * uscal.imag + a[i__4].imag * uscal.real; // , expr subst
                             i__5 = i__;
-                            q__2.r = q__3.r * x[i__5].r - q__3.i * x[i__5].i;
-                            q__2.i = q__3.r * x[i__5].i + q__3.i * x[i__5].r; // , expr subst
-                            q__1.r = csumj.r + q__2.r;
-                            q__1.i = csumj.i + q__2.i; // , expr subst
-                            csumj.r = q__1.r;
-                            csumj.i = q__1.i; // , expr subst
+                            q__2.real = q__3.real * x[i__5].real - q__3.imag * x[i__5].imag;
+                            q__2.imag = q__3.real * x[i__5].imag + q__3.imag * x[i__5].real; // , expr subst
+                            q__1.real = csumj.real + q__2.real;
+                            q__1.imag = csumj.imag + q__2.imag; // , expr subst
+                            csumj.real = q__1.real;
+                            csumj.imag = q__1.imag; // , expr subst
                             /* L120: */
                         }
                     }
@@ -995,52 +992,52 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         for(i__ = j + 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + j * a_dim1;
-                            q__3.r = a[i__4].r * uscal.r - a[i__4].i * uscal.i;
-                            q__3.i = a[i__4].r * uscal.i + a[i__4].i * uscal.r; // , expr subst
+                            q__3.real = a[i__4].real * uscal.real - a[i__4].imag * uscal.imag;
+                            q__3.imag = a[i__4].real * uscal.imag + a[i__4].imag * uscal.real; // , expr subst
                             i__5 = i__;
-                            q__2.r = q__3.r * x[i__5].r - q__3.i * x[i__5].i;
-                            q__2.i = q__3.r * x[i__5].i + q__3.i * x[i__5].r; // , expr subst
-                            q__1.r = csumj.r + q__2.r;
-                            q__1.i = csumj.i + q__2.i; // , expr subst
-                            csumj.r = q__1.r;
-                            csumj.i = q__1.i; // , expr subst
+                            q__2.real = q__3.real * x[i__5].real - q__3.imag * x[i__5].imag;
+                            q__2.imag = q__3.real * x[i__5].imag + q__3.imag * x[i__5].real; // , expr subst
+                            q__1.real = csumj.real + q__2.real;
+                            q__1.imag = csumj.imag + q__2.imag; // , expr subst
+                            csumj.real = q__1.real;
+                            csumj.imag = q__1.imag; // , expr subst
                             /* L130: */
                         }
                     }
                 }
-                q__1.r = tscal;
-                q__1.i = 0.f; // , expr subst
-                if(uscal.r == q__1.r && uscal.i == q__1.i)
+                q__1.real = tscal;
+                q__1.imag = 0.f; // , expr subst
+                if(uscal.real == q__1.real && uscal.imag == q__1.imag)
                 {
                     /* Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
                     /* was not used to scale the dotproduct. */
                     i__3 = j;
                     i__4 = j;
-                    q__1.r = x[i__4].r - csumj.r;
-                    q__1.i = x[i__4].i - csumj.i; // , expr subst
-                    x[i__3].r = q__1.r;
-                    x[i__3].i = q__1.i; // , expr subst
+                    q__1.real = x[i__4].real - csumj.real;
+                    q__1.imag = x[i__4].imag - csumj.imag; // , expr subst
+                    x[i__3].real = q__1.real;
+                    x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].real, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if(nounit)
                     {
                         i__3 = j + j * a_dim1;
-                        q__1.r = tscal * a[i__3].r;
-                        q__1.i = tscal * a[i__3].i; // , expr subst
-                        tjjs.r = q__1.r;
-                        tjjs.i = q__1.i; // , expr subst
+                        q__1.real = tscal * a[i__3].real;
+                        q__1.imag = tscal * a[i__3].imag; // , expr subst
+                        tjjs.real = q__1.real;
+                        tjjs.imag = q__1.imag; // , expr subst
                     }
                     else
                     {
-                        tjjs.r = tscal;
-                        tjjs.i = 0.f; // , expr subst
+                        tjjs.real = tscal;
+                        tjjs.imag = 0.f; // , expr subst
                         if(tscal == 1.f)
                         {
                             goto L145;
                         }
                     }
                     /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
-                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
+                    tjj = (r__1 = tjjs.real, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                     if(tjj > smlnum)
                     {
                         /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -1050,15 +1047,15 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                             {
                                 /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
-                                csscal_(n, &rec, &x[1], &c__1);
+                                aocl_blas_csscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
                                 xmax *= rec;
                             }
                         }
                         i__3 = j;
                         cladiv_f2c_(&q__1, &x[j], &tjjs);
-                        x[i__3].r = q__1.r;
-                        x[i__3].i = q__1.i; // , expr subst
+                        x[i__3].real = q__1.real;
+                        x[i__3].imag = q__1.imag; // , expr subst
                     }
                     else if(tjj > 0.f)
                     {
@@ -1067,14 +1064,14 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         {
                             /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
-                            csscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
                         i__3 = j;
                         cladiv_f2c_(&q__1, &x[j], &tjjs);
-                        x[i__3].r = q__1.r;
-                        x[i__3].i = q__1.i; // , expr subst
+                        x[i__3].real = q__1.real;
+                        x[i__3].imag = q__1.imag; // , expr subst
                     }
                     else
                     {
@@ -1084,13 +1081,13 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__;
-                            x[i__4].r = 0.f;
-                            x[i__4].i = 0.f; // , expr subst
+                            x[i__4].real = 0.f;
+                            x[i__4].imag = 0.f; // , expr subst
                             /* L140: */
                         }
                         i__3 = j;
-                        x[i__3].r = 1.f;
-                        x[i__3].i = 0.f; // , expr subst
+                        x[i__3].real = 1.f;
+                        x[i__3].imag = 0.f; // , expr subst
                         *scale = 0.f;
                         xmax = 0.f;
                     }
@@ -1102,15 +1099,15 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     /* product has already been divided by 1/A(j,j). */
                     i__3 = j;
                     cladiv_f2c_(&q__2, &x[j], &tjjs);
-                    q__1.r = q__2.r - csumj.r;
-                    q__1.i = q__2.i - csumj.i; // , expr subst
-                    x[i__3].r = q__1.r;
-                    x[i__3].i = q__1.i; // , expr subst
+                    q__1.real = q__2.real - csumj.real;
+                    q__1.imag = q__2.imag - csumj.imag; // , expr subst
+                    x[i__3].real = q__1.real;
+                    x[i__3].imag = q__1.imag; // , expr subst
                 }
                 /* Computing MAX */
                 i__3 = j;
                 r__3 = xmax;
-                r__4 = (r__1 = x[i__3].r, f2c_abs(r__1))
+                r__4 = (r__1 = x[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&x[j]), f2c_abs(r__2)); // , expr subst
                 xmax = fla_max(r__3, r__4);
                 /* L150: */
@@ -1126,9 +1123,9 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
                 i__3 = j;
-                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
-                uscal.r = tscal;
-                uscal.i = 0.f; // , expr subst
+                xj = (r__1 = x[i__3].real, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
+                uscal.real = tscal;
+                uscal.imag = 0.f; // , expr subst
                 rec = 1.f / fla_max(xmax, 1.f);
                 if(cnorm[j] > (bignum - xj) * rec)
                 {
@@ -1137,17 +1134,17 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     if(nounit)
                     {
                         r_cnjg(&q__2, &a[j + j * a_dim1]);
-                        q__1.r = tscal * q__2.r;
-                        q__1.i = tscal * q__2.i; // , expr subst
-                        tjjs.r = q__1.r;
-                        tjjs.i = q__1.i; // , expr subst
+                        q__1.real = tscal * q__2.real;
+                        q__1.imag = tscal * q__2.imag; // , expr subst
+                        tjjs.real = q__1.real;
+                        tjjs.imag = q__1.imag; // , expr subst
                     }
                     else
                     {
-                        tjjs.r = tscal;
-                        tjjs.i = 0.f; // , expr subst
+                        tjjs.real = tscal;
+                        tjjs.imag = 0.f; // , expr subst
                     }
-                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
+                    tjj = (r__1 = tjjs.real, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                     if(tjj > 1.f)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
@@ -1156,35 +1153,35 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         r__2 = rec * tjj; // , expr subst
                         rec = fla_min(r__1, r__2);
                         cladiv_f2c_(&q__1, &uscal, &tjjs);
-                        uscal.r = q__1.r;
-                        uscal.i = q__1.i; // , expr subst
+                        uscal.real = q__1.real;
+                        uscal.imag = q__1.imag; // , expr subst
                     }
                     if(rec < 1.f)
                     {
-                        csscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
                 }
-                csumj.r = 0.f;
-                csumj.i = 0.f; // , expr subst
-                if(uscal.r == 1.f && uscal.i == 0.f)
+                csumj.real = 0.f;
+                csumj.imag = 0.f; // , expr subst
+                if(uscal.real == 1.f && uscal.imag == 0.f)
                 {
                     /* If the scaling needed for A in the dot product is 1, */
                     /* call CDOTC to perform the dot product. */
                     if(upper)
                     {
                         i__3 = j - 1;
-                        cdotc_f2c_(&q__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
-                        csumj.r = q__1.r;
-                        csumj.i = q__1.i; // , expr subst
+                        aocl_lapack_cdotc_f2c(&q__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
+                        csumj.real = q__1.real;
+                        csumj.imag = q__1.imag; // , expr subst
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        cdotc_f2c_(&q__1, &i__3, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
-                        csumj.r = q__1.r;
-                        csumj.i = q__1.i; // , expr subst
+                        aocl_lapack_cdotc_f2c(&q__1, &i__3, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
+                        csumj.real = q__1.real;
+                        csumj.imag = q__1.imag; // , expr subst
                     }
                 }
                 else
@@ -1196,15 +1193,15 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             r_cnjg(&q__4, &a[i__ + j * a_dim1]);
-                            q__3.r = q__4.r * uscal.r - q__4.i * uscal.i;
-                            q__3.i = q__4.r * uscal.i + q__4.i * uscal.r; // , expr subst
+                            q__3.real = q__4.real * uscal.real - q__4.imag * uscal.imag;
+                            q__3.imag = q__4.real * uscal.imag + q__4.imag * uscal.real; // , expr subst
                             i__4 = i__;
-                            q__2.r = q__3.r * x[i__4].r - q__3.i * x[i__4].i;
-                            q__2.i = q__3.r * x[i__4].i + q__3.i * x[i__4].r; // , expr subst
-                            q__1.r = csumj.r + q__2.r;
-                            q__1.i = csumj.i + q__2.i; // , expr subst
-                            csumj.r = q__1.r;
-                            csumj.i = q__1.i; // , expr subst
+                            q__2.real = q__3.real * x[i__4].real - q__3.imag * x[i__4].imag;
+                            q__2.imag = q__3.real * x[i__4].imag + q__3.imag * x[i__4].real; // , expr subst
+                            q__1.real = csumj.real + q__2.real;
+                            q__1.imag = csumj.imag + q__2.imag; // , expr subst
+                            csumj.real = q__1.real;
+                            csumj.imag = q__1.imag; // , expr subst
                             /* L160: */
                         }
                     }
@@ -1214,52 +1211,52 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         for(i__ = j + 1; i__ <= i__3; ++i__)
                         {
                             r_cnjg(&q__4, &a[i__ + j * a_dim1]);
-                            q__3.r = q__4.r * uscal.r - q__4.i * uscal.i;
-                            q__3.i = q__4.r * uscal.i + q__4.i * uscal.r; // , expr subst
+                            q__3.real = q__4.real * uscal.real - q__4.imag * uscal.imag;
+                            q__3.imag = q__4.real * uscal.imag + q__4.imag * uscal.real; // , expr subst
                             i__4 = i__;
-                            q__2.r = q__3.r * x[i__4].r - q__3.i * x[i__4].i;
-                            q__2.i = q__3.r * x[i__4].i + q__3.i * x[i__4].r; // , expr subst
-                            q__1.r = csumj.r + q__2.r;
-                            q__1.i = csumj.i + q__2.i; // , expr subst
-                            csumj.r = q__1.r;
-                            csumj.i = q__1.i; // , expr subst
+                            q__2.real = q__3.real * x[i__4].real - q__3.imag * x[i__4].imag;
+                            q__2.imag = q__3.real * x[i__4].imag + q__3.imag * x[i__4].real; // , expr subst
+                            q__1.real = csumj.real + q__2.real;
+                            q__1.imag = csumj.imag + q__2.imag; // , expr subst
+                            csumj.real = q__1.real;
+                            csumj.imag = q__1.imag; // , expr subst
                             /* L170: */
                         }
                     }
                 }
-                q__1.r = tscal;
-                q__1.i = 0.f; // , expr subst
-                if(uscal.r == q__1.r && uscal.i == q__1.i)
+                q__1.real = tscal;
+                q__1.imag = 0.f; // , expr subst
+                if(uscal.real == q__1.real && uscal.imag == q__1.imag)
                 {
                     /* Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
                     /* was not used to scale the dotproduct. */
                     i__3 = j;
                     i__4 = j;
-                    q__1.r = x[i__4].r - csumj.r;
-                    q__1.i = x[i__4].i - csumj.i; // , expr subst
-                    x[i__3].r = q__1.r;
-                    x[i__3].i = q__1.i; // , expr subst
+                    q__1.real = x[i__4].real - csumj.real;
+                    q__1.imag = x[i__4].imag - csumj.imag; // , expr subst
+                    x[i__3].real = q__1.real;
+                    x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].real, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if(nounit)
                     {
                         r_cnjg(&q__2, &a[j + j * a_dim1]);
-                        q__1.r = tscal * q__2.r;
-                        q__1.i = tscal * q__2.i; // , expr subst
-                        tjjs.r = q__1.r;
-                        tjjs.i = q__1.i; // , expr subst
+                        q__1.real = tscal * q__2.real;
+                        q__1.imag = tscal * q__2.imag; // , expr subst
+                        tjjs.real = q__1.real;
+                        tjjs.imag = q__1.imag; // , expr subst
                     }
                     else
                     {
-                        tjjs.r = tscal;
-                        tjjs.i = 0.f; // , expr subst
+                        tjjs.real = tscal;
+                        tjjs.imag = 0.f; // , expr subst
                         if(tscal == 1.f)
                         {
                             goto L185;
                         }
                     }
                     /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
-                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
+                    tjj = (r__1 = tjjs.real, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                     if(tjj > smlnum)
                     {
                         /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -1269,15 +1266,15 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                             {
                                 /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
-                                csscal_(n, &rec, &x[1], &c__1);
+                                aocl_blas_csscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
                                 xmax *= rec;
                             }
                         }
                         i__3 = j;
                         cladiv_f2c_(&q__1, &x[j], &tjjs);
-                        x[i__3].r = q__1.r;
-                        x[i__3].i = q__1.i; // , expr subst
+                        x[i__3].real = q__1.real;
+                        x[i__3].imag = q__1.imag; // , expr subst
                     }
                     else if(tjj > 0.f)
                     {
@@ -1286,14 +1283,14 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         {
                             /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
-                            csscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
                         i__3 = j;
                         cladiv_f2c_(&q__1, &x[j], &tjjs);
-                        x[i__3].r = q__1.r;
-                        x[i__3].i = q__1.i; // , expr subst
+                        x[i__3].real = q__1.real;
+                        x[i__3].imag = q__1.imag; // , expr subst
                     }
                     else
                     {
@@ -1303,13 +1300,13 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__;
-                            x[i__4].r = 0.f;
-                            x[i__4].i = 0.f; // , expr subst
+                            x[i__4].real = 0.f;
+                            x[i__4].imag = 0.f; // , expr subst
                             /* L180: */
                         }
                         i__3 = j;
-                        x[i__3].r = 1.f;
-                        x[i__3].i = 0.f; // , expr subst
+                        x[i__3].real = 1.f;
+                        x[i__3].imag = 0.f; // , expr subst
                         *scale = 0.f;
                         xmax = 0.f;
                     }
@@ -1321,15 +1318,15 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     /* product has already been divided by 1/A(j,j). */
                     i__3 = j;
                     cladiv_f2c_(&q__2, &x[j], &tjjs);
-                    q__1.r = q__2.r - csumj.r;
-                    q__1.i = q__2.i - csumj.i; // , expr subst
-                    x[i__3].r = q__1.r;
-                    x[i__3].i = q__1.i; // , expr subst
+                    q__1.real = q__2.real - csumj.real;
+                    q__1.imag = q__2.imag - csumj.imag; // , expr subst
+                    x[i__3].real = q__1.real;
+                    x[i__3].imag = q__1.imag; // , expr subst
                 }
                 /* Computing MAX */
                 i__3 = j;
                 r__3 = xmax;
-                r__4 = (r__1 = x[i__3].r, f2c_abs(r__1))
+                r__4 = (r__1 = x[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&x[j]), f2c_abs(r__2)); // , expr subst
                 xmax = fla_max(r__3, r__4);
                 /* L190: */
@@ -1341,7 +1338,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     if(tscal != 1.f)
     {
         r__1 = 1.f / tscal;
-        sscal_(n, &r__1, &cnorm[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

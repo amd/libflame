@@ -1,16 +1,16 @@
 /* cgerc.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int cgerc_(integer *m, integer *n, complex *alpha, complex * x, integer *incx, complex *y, integer *incy, complex *a, integer *lda)
+int cgerc_(integer *m, integer *n, scomplex *alpha, scomplex * x, integer *incx, scomplex *y, integer *incy, scomplex *a, integer *lda)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
-    complex temp;
+    scomplex temp;
     integer i__, j, ix, jy, kx;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -110,7 +110,7 @@ int cgerc_(integer *m, integer *n, complex *alpha, complex * x, integer *incx, c
         return 0;
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0 || alpha->r == 0.f && alpha->i == 0.f)
+    if (*m == 0 || *n == 0 || alpha->real == 0.f && alpha->imag == 0.f)
     {
         return 0;
     }
@@ -132,11 +132,11 @@ int cgerc_(integer *m, integer *n, complex *alpha, complex * x, integer *incx, c
                 ++j)
         {
             i__2 = jy;
-            if (y[i__2].r != 0.f || y[i__2].i != 0.f)
+            if (y[i__2].real != 0.f || y[i__2].imag != 0.f)
             {
                 r_cnjg(&q__2, &y[jy]);
-                q__1.r = alpha->r * q__2.r - alpha->i * q__2.i, q__1.i = alpha->r * q__2.i + alpha->i * q__2.r;
-                temp.r = q__1.r, temp.i = q__1.i;
+                q__1.real = alpha->real * q__2.real - alpha->imag * q__2.imag, q__1.imag = alpha->real * q__2.imag + alpha->imag * q__2.real;
+                temp.real = q__1.real, temp.imag = q__1.imag;
                 i__2 = *m;
                 for (i__ = 1;
                         i__ <= i__2;
@@ -145,9 +145,9 @@ int cgerc_(integer *m, integer *n, complex *alpha, complex * x, integer *incx, c
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__ + j * a_dim1;
                     i__5 = i__;
-                    q__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i, q__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r;
-                    q__1.r = a[i__4].r + q__2.r, q__1.i = a[i__4].i + q__2.i;
-                    a[i__3].r = q__1.r, a[i__3].i = q__1.i;
+                    q__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag, q__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real;
+                    q__1.real = a[i__4].real + q__2.real, q__1.imag = a[i__4].imag + q__2.imag;
+                    a[i__3].real = q__1.real, a[i__3].imag = q__1.imag;
                     /* L10: */
                 }
             }
@@ -171,11 +171,11 @@ int cgerc_(integer *m, integer *n, complex *alpha, complex * x, integer *incx, c
                 ++j)
         {
             i__2 = jy;
-            if (y[i__2].r != 0.f || y[i__2].i != 0.f)
+            if (y[i__2].real != 0.f || y[i__2].imag != 0.f)
             {
                 r_cnjg(&q__2, &y[jy]);
-                q__1.r = alpha->r * q__2.r - alpha->i * q__2.i, q__1.i = alpha->r * q__2.i + alpha->i * q__2.r;
-                temp.r = q__1.r, temp.i = q__1.i;
+                q__1.real = alpha->real * q__2.real - alpha->imag * q__2.imag, q__1.imag = alpha->real * q__2.imag + alpha->imag * q__2.real;
+                temp.real = q__1.real, temp.imag = q__1.imag;
                 ix = kx;
                 i__2 = *m;
                 for (i__ = 1;
@@ -185,9 +185,9 @@ int cgerc_(integer *m, integer *n, complex *alpha, complex * x, integer *incx, c
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__ + j * a_dim1;
                     i__5 = ix;
-                    q__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i, q__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r;
-                    q__1.r = a[i__4].r + q__2.r, q__1.i = a[i__4].i + q__2.i;
-                    a[i__3].r = q__1.r, a[i__3].i = q__1.i;
+                    q__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag, q__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real;
+                    q__1.real = a[i__4].real + q__2.real, q__1.imag = a[i__4].imag + q__2.imag;
+                    a[i__3].real = q__1.real, a[i__3].imag = q__1.imag;
                     ix += *incx;
                     /* L30: */
                 }

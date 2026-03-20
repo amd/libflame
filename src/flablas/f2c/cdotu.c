@@ -1,15 +1,15 @@
 /* cdotu.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-complex cdotu_(/*complex * ret_val,*/
-    integer *n, complex *cx, integer *incx, complex *cy, integer *incy)
+scomplex cdotu_(/*scomplex * ret_val,*/
+    integer *n, scomplex *cx, integer *incx, scomplex *cy, integer *incy)
 {
-    complex ret_val;
+    scomplex ret_val;
     /* System generated locals */
     integer i__1, i__2, i__3;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Local variables */
     integer i__;
-    complex ctemp;
+    scomplex ctemp;
     integer ix, iy;
     /* forms the dot product of two vectors. */
     /* jack dongarra, linpack, 3/11/78. */
@@ -18,8 +18,8 @@ complex cdotu_(/*complex * ret_val,*/
     --cy;
     --cx;
     /* Function Body */
-    ctemp.r = 0.f, ctemp.i = 0.f;
-    ret_val.r = 0.f, ret_val.i = 0.f;
+    ctemp.real = 0.f, ctemp.imag = 0.f;
+    ret_val.real = 0.f, ret_val.imag = 0.f;
     if (*n <= 0)
     {
         return ret_val ;
@@ -47,14 +47,14 @@ complex cdotu_(/*complex * ret_val,*/
     {
         i__2 = ix;
         i__3 = iy;
-        q__2.r = cx[i__2].r * cy[i__3].r - cx[i__2].i * cy[i__3].i, q__2.i = cx[i__2].r * cy[i__3].i + cx[i__2].i * cy[i__3].r;
-        q__1.r = ctemp.r + q__2.r, q__1.i = ctemp.i + q__2.i;
-        ctemp.r = q__1.r, ctemp.i = q__1.i;
+        q__2.real = cx[i__2].real * cy[i__3].real - cx[i__2].imag * cy[i__3].imag, q__2.imag = cx[i__2].real * cy[i__3].imag + cx[i__2].imag * cy[i__3].real;
+        q__1.real = ctemp.real + q__2.real, q__1.imag = ctemp.imag + q__2.imag;
+        ctemp.real = q__1.real, ctemp.imag = q__1.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
     }
-    ret_val.r = ctemp.r, ret_val.i = ctemp.i;
+    ret_val.real = ctemp.real, ret_val.imag = ctemp.imag;
     return ret_val ;
     /* code for both increments equal to 1 */
 L20:
@@ -65,12 +65,12 @@ L20:
     {
         i__2 = i__;
         i__3 = i__;
-        q__2.r = cx[i__2].r * cy[i__3].r - cx[i__2].i * cy[i__3].i, q__2.i = cx[i__2].r * cy[i__3].i + cx[i__2].i * cy[i__3].r;
-        q__1.r = ctemp.r + q__2.r, q__1.i = ctemp.i + q__2.i;
-        ctemp.r = q__1.r, ctemp.i = q__1.i;
+        q__2.real = cx[i__2].real * cy[i__3].real - cx[i__2].imag * cy[i__3].imag, q__2.imag = cx[i__2].real * cy[i__3].imag + cx[i__2].imag * cy[i__3].real;
+        q__1.real = ctemp.real + q__2.real, q__1.imag = ctemp.imag + q__2.imag;
+        ctemp.real = q__1.real, ctemp.imag = q__1.imag;
         /* L30: */
     }
-    ret_val.r = ctemp.r, ret_val.i = ctemp.i;
+    ret_val.real = ctemp.real, ret_val.imag = ctemp.imag;
     return ret_val ;
 }
 /* cdotu_ */

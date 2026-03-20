@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHPGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZHPGVD computes all the eigenvalues and, optionally, the eigenvectors */
-/* > of a complex generalized Hermitian-definite eigenproblem, of the form */
+/* > of a scomplex generalized Hermitian-definite eigenproblem, of the form */
 /* > A*x=(lambda)*B*x, A*Bx=(lambda)*x, or B*A*x=(lambda)*x. Here A and */
 /* > B are assumed to be Hermitian, stored in packed format, and B is also */
 /* > positive definite. */
@@ -236,43 +236,53 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void zhpgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *ap,
-             doublecomplex *bp, doublereal *w, doublecomplex *z__, integer *ldz,
-             doublecomplex *work, integer *lwork, doublereal *rwork, integer *lrwork,
-             integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void zhpgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap,
+             dcomplex *bp, doublereal *w, dcomplex *z__, aocl_int_t *ldz,
+             dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork,
+             aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhpgvd(itype, jobz, uplo, n, ap, bp, w, z__, ldz, work, lwork, rwork, lrwork, iwork,
+                       liwork, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhpgvd(&itype_64, jobz, uplo, &n_64, ap, bp, w, z__, &ldz_64, work, &lwork_64,
+                       rwork, &lrwork_64, iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n,
+                        dcomplex *ap, dcomplex *bp, doublereal *w, dcomplex *z__,
+                        aocl_int64_t *ldz, dcomplex *work, aocl_int64_t *lwork,
+                        doublereal *rwork, aocl_int64_t *lrwork, aocl_int_t *iwork,
+                        aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
                       ", ldz %" FLA_IS "",
                       *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     doublereal d__1, d__2;
     /* Local variables */
-    integer j, neig;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lwmin;
+    aocl_int64_t j, neig;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwmin;
     char trans[1];
     logical upper, wantz;
-    extern /* Subroutine */
-        void
-        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer liwmin;
-    extern /* Subroutine */
-        void
-        zhpevd_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublereal *, integer *, integer *,
-                integer *, integer *);
-    integer lrwmin;
-    extern /* Subroutine */
-        void
-        zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t liwmin;
+    aocl_int64_t lrwmin;
     logical lquery;
-    extern /* Subroutine */
-        void
-        zpptrf_(char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -352,10 +362,10 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
                 liwmin = 1;
             }
         }
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
         rwork[1] = (doublereal)lrwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -372,7 +382,7 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPGVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHPGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -388,7 +398,7 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
         return;
     }
     /* Form a Cholesky factorization of B. */
-    zpptrf_(uplo, n, &bp[1], info);
+    aocl_lapack_zpptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -396,12 +406,12 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    zhpgst_(itype, uplo, n, &ap[1], &bp[1], info);
-    zhpevd_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork, &rwork[1], lrwork,
-            &iwork[1], liwork, info);
+    aocl_lapack_zhpgst(itype, uplo, n, &ap[1], &bp[1], info);
+    aocl_lapack_zhpevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
+                       &rwork[1], lrwork, &iwork[1], liwork, info);
     /* Computing MAX */
     d__1 = (doublereal)lwmin;
-    d__2 = work[1].r; // , expr subst
+    d__2 = work[1].real; // , expr subst
     lwmin = (integer)fla_max(d__1, d__2);
     /* Computing MAX */
     d__1 = (doublereal)lrwmin;
@@ -434,7 +444,7 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
             i__1 = neig;
             for(j = 1; j <= i__1; ++j)
             {
-                ztpsv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_ztpsv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L10: */
             }
         }
@@ -454,15 +464,15 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
             i__1 = neig;
             for(j = 1; j <= i__1; ++j)
             {
-                ztpmv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_ztpmv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L20: */
             }
         }
     }
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     rwork[1] = (doublereal)lrwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHPGVD */

@@ -110,22 +110,36 @@
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ssyconv_(char *uplo, char *way, integer *n, real *a, integer *lda, integer *ipiv, real *e,
-              integer *info)
+/** Generated wrapper function */
+void ssyconv_(char *uplo, char *way, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv,
+              real *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssyconv(uplo, way, n, a, lda, ipiv, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssyconv(uplo, way, &n_64, a, &lda_64, ipiv, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssyconv(char *uplo, char *way, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                         aocl_int_t *ipiv, real *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssyconv inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-             *way, *n, *lda);
+                      *way, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer i__, j, ip;
+    aocl_int64_t i__, j, ip;
     real temp;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -172,7 +186,7 @@ void ssyconv_(char *uplo, char *way, integer *n, real *a, integer *lda, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYCONV", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SSYCONV", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

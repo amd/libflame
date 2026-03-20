@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_hseqr.c
@@ -52,7 +52,7 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
     if(datatype == FLOAT || datatype == DOUBLE)
     {
         /* Find negative value of every 2nd element (starting from ilo-1 till ihi-2) and store in
-         * next location. Used to store imaginary parts of complex conjuate pair of eigen
+         * next location. Used to store imaginary parts of scomplex conjuate pair of eigen
          * values */
         add_negative_values_ilo_ihi(datatype, wi_in, *ilo, *ihi);
 
@@ -73,19 +73,18 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
         {
             /* Validate the eigen values returned by the api */
             void *work = NULL;
-            float norm, norm1, norm2, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm1, norm2;
             compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm1, imatrix, work);
             saxpy_(&n, &s_n_one, wr, &i_one, wr_in, &i_one);
             compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm, imatrix, work);
-            resid1 = norm / (eps * norm1 * n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, n, params);
 
             if(*ilo != *ihi)
             {
                 compute_matrix_norm(datatype, NORM, n, i_one, wi_in, i_one, &norm2, imatrix, work);
                 saxpy_(&n, &s_n_one, wi, &i_one, wi_in, &i_one);
                 compute_matrix_norm(datatype, NORM, n, i_one, wi_in, i_one, &norm, imatrix, work);
-                resid2 = norm / (eps * norm2 * n);
+                resid2 = fla_compute_residual(datatype, 'P', norm, norm2, n, params);
             }
             break;
         }
@@ -94,19 +93,18 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
         {
             /* Validate the eigen values returned by the api */
             void *work = NULL;
-            double norm, norm1, norm2, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm1, norm2;
             compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm1, imatrix, work);
             daxpy_(&n, &d_n_one, wr, &i_one, wr_in, &i_one);
             compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm, imatrix, work);
-            resid1 = norm / (eps * norm1 * n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, n, params);
 
             if(*ilo != *ihi)
             {
                 compute_matrix_norm(datatype, NORM, n, i_one, wi_in, i_one, &norm2, imatrix, work);
                 daxpy_(&n, &d_n_one, wi, &i_one, wi_in, &i_one);
                 compute_matrix_norm(datatype, NORM, n, i_one, wi_in, i_one, &norm, imatrix, work);
-                resid2 = norm / (eps * norm2 * n);
+                resid2 = fla_compute_residual(datatype, 'P', norm, norm2, n, params);
             }
 
             break;
@@ -115,27 +113,25 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
         {
             /* Validate the eigen values returned by the api */
             void *work = NULL;
-            float norm, norm1, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm1;
 
             compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm1, imatrix, work);
             caxpy_(&n, &c_n_one, w, &i_one, wr_in, &i_one);
             compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm, imatrix, work);
             norm = fla_lapack_clange("1", &n, &i_one, wr_in, &i_one, work);
-            resid1 = norm / (eps * norm1 * n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
             /* Validate the eigen values returned by the api */
             void *work = NULL;
-            double norm, norm1, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm1;
 
             compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm1, imatrix, work);
             zaxpy_(&n, &z_n_one, w, &i_one, wr_in, &i_one);
             compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm, imatrix, work);
-            resid1 = norm / (eps * norm1 * n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, n, params);
             break;
         }
     }
@@ -160,8 +156,7 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
     {
         case FLOAT:
         {
-            float norm, norm_H, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_H;
 
             /* Test 1
                 lambda = Z' * ZU
@@ -171,16 +166,15 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
             sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, H_test, &ldh, &s_zero, zlambda, &n);
             sgemm_("N", "T", &n, &n, &n, &s_one, zlambda, &n, lambda, &n, &s_n_one, H, &ldh);
             compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
-            resid3 = norm / (eps * norm_H * (float)n);
+            resid3 = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
             /* Test 2
                 compute norm(I - Z'*Z) / (N * EPS)*/
-            resid4 = (float)check_orthogonality(datatype, lambda, n, n, n);
+            resid4 = (float)check_orthogonality(datatype, lambda, n, n, n, params);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_H, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_H;
 
             /* Test 1
                 lambda = Z' * ZU
@@ -190,17 +184,16 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
             dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, H_test, &ldh, &d_zero, zlambda, &n);
             dgemm_("N", "T", &n, &n, &n, &d_one, zlambda, &n, lambda, &n, &d_n_one, H, &ldh);
             compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
-            resid3 = norm / (norm_H * (float)n * eps);
+            resid3 = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
 
             /* Test 2
                 compute norm(I - Z'*Z) / (N * EPS)*/
-            resid4 = check_orthogonality(datatype, lambda, n, n, n);
+            resid4 = check_orthogonality(datatype, lambda, n, n, n, params);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_H, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_H;
 
             /* Test 1
                 lambda = Z' * ZU
@@ -210,18 +203,17 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
             cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, H_test, &ldh, &c_zero, zlambda, &n);
             cgemm_("N", "C", &n, &n, &n, &c_one, zlambda, &n, lambda, &n, &c_n_one, H, &ldh);
             compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
-            resid3 = norm / (norm_H * (float)n * eps);
+            resid3 = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
 
             /* Test 2
                 compute norm(I - Z'*Z) / (N * EPS)*/
-            resid4 = (float)check_orthogonality(datatype, lambda, n, n, n);
+            resid4 = (float)check_orthogonality(datatype, lambda, n, n, n, params);
 
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_H, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_H;
 
             /* Test 1
                 lambda = Z' * ZU
@@ -231,11 +223,11 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
             zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, H_test, &ldh, &z_zero, zlambda, &n);
             zgemm_("N", "C", &n, &n, &n, &z_one, zlambda, &n, lambda, &n, &z_n_one, H, &ldh);
             compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
-            resid3 = norm / (norm_H * (float)n * eps);
+            resid3 = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
 
             /* Test 2
                 compute norm(I - Z'*Z) / (N * EPS)*/
-            resid4 = check_orthogonality(datatype, lambda, n, n, n);
+            resid4 = check_orthogonality(datatype, lambda, n, n, n, params);
             break;
         }
     }

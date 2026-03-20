@@ -12,19 +12,19 @@
 
 FLA_Error FLA_Svdd_external( FLA_Svd_type jobz, FLA_Obj A, FLA_Obj s, FLA_Obj U, FLA_Obj V )
 {
-  integer      info = 0;
+  fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
   FLA_Datatype dt_real;
   FLA_Datatype dt_int;
-  integer          m_A, n_A, cs_A;
-  integer          cs_U;
-  integer          cs_V;
-  integer          min_m_n;
-  integer          lwork, lrwork, liwork;
+  fla_dim_t          m_A, n_A, cs_A;
+  fla_dim_t          cs_U;
+  fla_dim_t          cs_V;
+  fla_dim_t          min_m_n;
+  fla_dim_t          lwork, lrwork, liwork;
   FLA_Obj      work, rwork, iwork;
   char         blas_jobz;
-  integer          i;
+  fla_dim_t          i;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Svdd_check( jobz, A, s, U, V );
@@ -69,9 +69,9 @@ FLA_Error FLA_Svdd_external( FLA_Svd_type jobz, FLA_Obj A, FLA_Obj s, FLA_Obj U,
       // Grab the queried ideal workspace size from the work array, free the
       // work object, and then re-allocate the workspace with the ideal size.
       if      ( datatype == FLA_FLOAT || datatype == FLA_COMPLEX )
-        lwork = ( integer ) *FLA_FLOAT_PTR( work );
+        lwork = ( fla_dim_t ) *FLA_FLOAT_PTR( work );
       else if ( datatype == FLA_DOUBLE || datatype == FLA_DOUBLE_COMPLEX )
-        lwork = ( integer ) *FLA_DOUBLE_PTR( work );
+        lwork = ( fla_dim_t ) *FLA_DOUBLE_PTR( work );
 
       FLA_Obj_free( &work );
       FLA_Obj_create( datatype, lwork, 1, 0, 0, &work );
@@ -86,7 +86,7 @@ FLA_Error FLA_Svdd_external( FLA_Svd_type jobz, FLA_Obj A, FLA_Obj s, FLA_Obj U,
       float*    buff_U     = ( float*    ) FLA_FLOAT_PTR( U );
       float*    buff_V     = ( float*    ) FLA_FLOAT_PTR( V );
       float*    buff_work  = ( float*    ) FLA_FLOAT_PTR( work );
-      integer*      buff_iwork = ( integer*      ) FLA_INT_PTR( iwork );
+      aocl_int_t*      buff_iwork = ( aocl_int_t*      ) FLA_INT_PTR( iwork );
   
       F77_sgesdd( &blas_jobz,
                   &m_A,
@@ -109,7 +109,7 @@ FLA_Error FLA_Svdd_external( FLA_Svd_type jobz, FLA_Obj A, FLA_Obj s, FLA_Obj U,
       double*   buff_U     = ( double*   ) FLA_DOUBLE_PTR( U );
       double*   buff_V     = ( double*   ) FLA_DOUBLE_PTR( V );
       double*   buff_work  = ( double*   ) FLA_DOUBLE_PTR( work );
-      integer*      buff_iwork = ( integer*      ) FLA_INT_PTR( iwork );
+      aocl_int_t*      buff_iwork = ( aocl_int_t*      ) FLA_INT_PTR( iwork );
   
       F77_dgesdd( &blas_jobz,
                   &m_A,
@@ -133,7 +133,7 @@ FLA_Error FLA_Svdd_external( FLA_Svd_type jobz, FLA_Obj A, FLA_Obj s, FLA_Obj U,
       scomplex* buff_V     = ( scomplex* ) FLA_COMPLEX_PTR( V );
       scomplex* buff_work  = ( scomplex* ) FLA_COMPLEX_PTR( work );
       float*    buff_rwork = ( float*    ) FLA_FLOAT_PTR( rwork );
-      integer*      buff_iwork = ( integer*      ) FLA_INT_PTR( iwork );
+      aocl_int_t*      buff_iwork = ( aocl_int_t*      ) FLA_INT_PTR( iwork );
   
       F77_cgesdd( &blas_jobz,
                   &m_A,
@@ -158,7 +158,7 @@ FLA_Error FLA_Svdd_external( FLA_Svd_type jobz, FLA_Obj A, FLA_Obj s, FLA_Obj U,
       dcomplex* buff_V     = ( dcomplex* ) FLA_DOUBLE_COMPLEX_PTR( V );
       dcomplex* buff_work  = ( dcomplex* ) FLA_DOUBLE_COMPLEX_PTR( work );
       double*   buff_rwork = ( double*   ) FLA_DOUBLE_PTR( rwork );
-      integer*      buff_iwork = ( integer*      ) FLA_INT_PTR( iwork );
+      aocl_int_t*      buff_iwork = ( aocl_int_t*      ) FLA_INT_PTR( iwork );
   
       F77_zgesdd( &blas_jobz,
                   &m_A,

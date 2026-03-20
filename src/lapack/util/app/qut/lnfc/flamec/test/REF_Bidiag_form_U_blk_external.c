@@ -12,15 +12,15 @@
 
 FLA_Error REF_Bidiag_form_U_blk_external( FLA_Side side, FLA_Trans trans, FLA_Obj A, FLA_Obj t, FLA_Obj B )
 {
-  integer          info = 0;
+  aocl_int64_t          info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
   // integer          m_A, n_A;
-  integer          m_B, n_B;
-  integer          cs_A;
-  integer          cs_B;
-  integer          k_t;
-  integer          lwork;
+  aocl_int64_t          m_B, n_B;
+  aocl_int64_t          cs_A;
+  aocl_int64_t          cs_B;
+  aocl_int64_t          k_t;
+  aocl_int64_t          lwork;
   char         blas_side;
   char         blas_trans;
   FLA_Obj      work_obj;
@@ -66,7 +66,7 @@ FLA_Error REF_Bidiag_form_U_blk_external( FLA_Side side, FLA_Trans trans, FLA_Ob
     blas_side = 'L';
     blas_trans = 'N';
 
-      zunmbr_( &blas_vect,
+      aocl_lapack_zunmbr( &blas_vect,
                &blas_side,
                &blas_trans,
                &m_B,

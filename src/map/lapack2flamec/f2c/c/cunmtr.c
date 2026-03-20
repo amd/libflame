@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CUNMTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,13 +42,13 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNMTR overwrites the general complex M-by-N matrix C with */
+/* > CUNMTR overwrites the general scomplex M-by-N matrix C with */
 /* > */
 /* > SIDE = 'L' SIDE = 'R' */
 /* > TRANS = 'N': Q * C C * Q */
 /* > TRANS = 'C': Q**H * C C * Q**H */
 /* > */
-/* > where Q is a complex unitary matrix of order nq, with nq = m if */
+/* > where Q is a scomplex unitary matrix of order nq, with nq = m if */
 /* > SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of */
 /* > nq-1 elementary reflectors, as returned by CHETRD: */
 /* > */
@@ -175,39 +175,51 @@ the routine */
 /* > \ingroup unmtr */
 /* ===================================================================== */
 /* Subroutine */
-void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a, integer *lda,
-             complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, scomplex *a,
+             aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cunmtr(side, uplo, trans, m, n, a, lda, tau, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cunmtr(side, uplo, trans, &m_64, &n_64, a, &lda_64, tau, c__, &ldc_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cunmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                        scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *c__,
+                        aocl_int64_t *ldc, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cunmtr inputs: side %c ,uplo %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS
                       ",lda %" FLA_IS ",ldc %" FLA_IS ",lwork %" FLA_IS ",info %" FLA_IS "",
                       *side, *uplo, *trans, *m, *n, *lda, *ldc, *lwork, *info);
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     real r__1;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i1, i2, nb, mi, ni, nq, nw;
+    aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *),
-        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -291,13 +303,13 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = ilaenv_(&c__1, "CUNMQL", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "CUNMQL", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = ilaenv_(&c__1, "CUNMQL", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "CUNMQL", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         else
@@ -306,24 +318,24 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = ilaenv_(&c__1, "CUNMQR", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "CUNMQR", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = ilaenv_(&c__1, "CUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "CUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         lwkopt = nw * nb;
-        r__1 = sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("CUNMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("CUNMTR", &i__2, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -335,8 +347,8 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nq == 1)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -354,8 +366,8 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     {
         /* Q was determined by a call to CHETRD with UPLO = 'U' */
         i__2 = nq - 1;
-        cunmql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
-                ldc, &work[1], lwork, &iinfo);
+        aocl_lapack_cunmql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
+                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
     }
     else
     {
@@ -371,12 +383,12 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             i2 = 2;
         }
         i__2 = nq - 1;
-        cunmqr_(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1], &c__[i1 + i2 * c_dim1],
-                ldc, &work[1], lwork, &iinfo);
+        aocl_lapack_cunmqr(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
+                           &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    r__1 = sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CUNMTR */

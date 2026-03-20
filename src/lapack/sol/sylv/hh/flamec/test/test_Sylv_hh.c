@@ -17,14 +17,14 @@
 
 
 void time_Sylv_hh(
-               integer variant, integer type, integer n_repeats, integer m, integer n, integer nb_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t n, aocl_int64_t nb_alg,
                FLA_Obj isgn, FLA_Obj A, FLA_Obj B, FLA_Obj C, FLA_Obj C_ref, FLA_Obj scale,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     m_input, n_input,
     m, n,
     p_first, p_last, p_inc,
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     datatype,
     n_variants = 18;
 
-  integer  sign;
+  aocl_int64_t  sign;
   
   integer  blocksize[16];
 

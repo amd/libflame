@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b9 = -1.;
 /* > \brief \b DPBSTF */
 /* =========== DOCUMENTATION =========== */
@@ -153,29 +153,41 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dpbstf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, integer *info)
+/** Generated wrapper function */
+void dpbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int_t *ldab,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpbstf(uplo, n, kd, ab, ldab, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpbstf(uplo, &n_64, &kd_64, ab, &ldab_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublereal *ab,
+                        aocl_int64_t *ldab, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbstf inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
                       *uplo, *n, *kd, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer j, m, km;
+    aocl_int64_t j, m, km;
     doublereal ajj;
-    integer kld;
-    extern /* Subroutine */
-        void
-        dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t kld;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,7 +235,7 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPBSTF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPBSTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -259,9 +271,9 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
             /* Compute elements j-km:j-1 of the j-th column and update the */
             /* the leading submatrix within the band. */
             d__1 = 1. / ajj;
-            dscal_(&km, &d__1, &ab[*kd + 1 - km + j * ab_dim1], &c__1);
-            dsyr_("Upper", &km, &c_b9, &ab[*kd + 1 - km + j * ab_dim1], &c__1,
-                  &ab[*kd + 1 + (j - km) * ab_dim1], &kld);
+            aocl_blas_dscal(&km, &d__1, &ab[*kd + 1 - km + j * ab_dim1], &c__1);
+            aocl_blas_dsyr("Upper", &km, &c_b9, &ab[*kd + 1 - km + j * ab_dim1], &c__1,
+                           &ab[*kd + 1 + (j - km) * ab_dim1], &kld);
             /* L10: */
         }
         /* Factorize the updated submatrix A(1:m,1:m) as U**T*U. */
@@ -285,9 +297,9 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
             if(km > 0)
             {
                 d__1 = 1. / ajj;
-                dscal_(&km, &d__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                dsyr_("Upper", &km, &c_b9, &ab[*kd + (j + 1) * ab_dim1], &kld,
-                      &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
+                aocl_blas_dscal(&km, &d__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
+                aocl_blas_dsyr("Upper", &km, &c_b9, &ab[*kd + (j + 1) * ab_dim1], &kld,
+                               &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
             }
             /* L20: */
         }
@@ -312,9 +324,9 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
             /* Compute elements j-km:j-1 of the j-th row and update the */
             /* trailing submatrix within the band. */
             d__1 = 1. / ajj;
-            dscal_(&km, &d__1, &ab[km + 1 + (j - km) * ab_dim1], &kld);
-            dsyr_("Lower", &km, &c_b9, &ab[km + 1 + (j - km) * ab_dim1], &kld,
-                  &ab[(j - km) * ab_dim1 + 1], &kld);
+            aocl_blas_dscal(&km, &d__1, &ab[km + 1 + (j - km) * ab_dim1], &kld);
+            aocl_blas_dsyr("Lower", &km, &c_b9, &ab[km + 1 + (j - km) * ab_dim1], &kld,
+                           &ab[(j - km) * ab_dim1 + 1], &kld);
             /* L30: */
         }
         /* Factorize the updated submatrix A(1:m,1:m) as U**T*U. */
@@ -338,9 +350,9 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
             if(km > 0)
             {
                 d__1 = 1. / ajj;
-                dscal_(&km, &d__1, &ab[j * ab_dim1 + 2], &c__1);
-                dsyr_("Lower", &km, &c_b9, &ab[j * ab_dim1 + 2], &c__1, &ab[(j + 1) * ab_dim1 + 1],
-                      &kld);
+                aocl_blas_dscal(&km, &d__1, &ab[j * ab_dim1 + 2], &c__1);
+                aocl_blas_dsyr("Lower", &km, &c_b9, &ab[j * ab_dim1 + 2], &c__1,
+                               &ab[(j + 1) * ab_dim1 + 1], &kld);
             }
             /* L40: */
         }

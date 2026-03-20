@@ -5,10 +5,10 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b5 = -1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b13 = 1.f;
 static real c_b15 = 0.f;
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b CLALS0 applies back multiplying factors in solving the least squares problem using
  * divide and c onquer SVD approach. Used by sgelsd. */
 /* =========== DOCUMENTATION =========== */
@@ -271,11 +271,44 @@ the */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, complex *b,
-             integer *ldb, complex *bx, integer *ldbx, integer *perm, integer *givptr,
-             integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum, real *poles,
-             real *difl, real *difr, real *z__, integer *k, real *c__, real *s, real *rwork,
-             integer *info)
+/** Generated wrapper function */
+void clals0_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *nrhs,
+             scomplex *b, aocl_int_t *ldb, scomplex *bx, aocl_int_t *ldbx, aocl_int_t *perm,
+             aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol, real *givnum,
+             aocl_int_t *ldgnum, real *poles, real *difl, real *difr, real *z__, aocl_int_t *k,
+             real *c__, real *s, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clals0(icompq, nl, nr, sqre, nrhs, b, ldb, bx, ldbx, perm, givptr, givcol, ldgcol,
+                       givnum, ldgnum, poles, difl, difr, z__, k, c__, s, rwork, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldbx_64 = *ldbx;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t ldgcol_64 = *ldgcol;
+    aocl_int64_t ldgnum_64 = *ldgnum;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clals0(&icompq_64, &nl_64, &nr_64, &sqre_64, &nrhs_64, b, &ldb_64, bx, &ldbx_64,
+                       perm, &givptr_64, givcol, &ldgcol_64, givnum, &ldgnum_64, poles, difl, difr,
+                       z__, &k_64, c__, s, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clals0(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr,
+                        aocl_int64_t *sqre, aocl_int64_t *nrhs, scomplex *b, aocl_int64_t *ldb,
+                        scomplex *bx, aocl_int64_t *ldbx, aocl_int_t *perm, aocl_int64_t *givptr,
+                        aocl_int_t *givcol, aocl_int64_t *ldgcol, real *givnum,
+                        aocl_int64_t *ldgnum, real *poles, real *difl, real *difr, real *z__,
+                        aocl_int64_t *k, real *c__, real *s, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -294,35 +327,21 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
+    aocl_int64_t givcol_dim1, givcol_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
         poles_dim1, poles_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1, i__2, i__3, i__4,
         i__5;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j, m, n;
+    aocl_int64_t i__, j, m, n;
     real dj;
-    integer nlp1, jcol;
+    aocl_int64_t nlp1, jcol;
     real temp;
-    integer jrow;
-    extern real snrm2_(integer *, real *, integer *);
+    aocl_int64_t jrow;
     real diflj, difrj, dsigj;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
     extern real slamc3_(real *, real *);
-    extern /* Subroutine */
-        void
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *),
-        csscal_(integer *, real *, complex *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real dsigjp;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -419,7 +438,7 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLALS0", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLALS0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -432,27 +451,27 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         i__1 = *givptr;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            csrot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
-                   &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
-                   &givnum[i__ + givnum_dim1]);
+            aocl_blas_csrot(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                            &b[givcol[i__ + givcol_dim1] + b_dim1], ldb,
+                            &givnum[i__ + (givnum_dim1 << 1)], &givnum[i__ + givnum_dim1]);
             /* L10: */
         }
         /* Step (2L): permute rows of B. */
-        ccopy_(nrhs, &b[nlp1 + b_dim1], ldb, &bx[bx_dim1 + 1], ldbx);
+        aocl_blas_ccopy(nrhs, &b[nlp1 + b_dim1], ldb, &bx[bx_dim1 + 1], ldbx);
         i__1 = n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            ccopy_(nrhs, &b[perm[i__] + b_dim1], ldb, &bx[i__ + bx_dim1], ldbx);
+            aocl_blas_ccopy(nrhs, &b[perm[i__] + b_dim1], ldb, &bx[i__ + bx_dim1], ldbx);
             /* L20: */
         }
         /* Step (3L): apply the inverse of the left singular vector */
         /* matrix to BX. */
         if(*k == 1)
         {
-            ccopy_(nrhs, &bx[bx_offset], ldbx, &b[b_offset], ldb);
+            aocl_blas_ccopy(nrhs, &bx[bx_offset], ldbx, &b[b_offset], ldb);
             if(z__[1] < 0.f)
             {
-                csscal_(nrhs, &c_b5, &b[b_offset], ldb);
+                aocl_blas_csscal(nrhs, &c_b5, &b[b_offset], ldb);
             }
         }
         else
@@ -508,8 +527,8 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     /* L40: */
                 }
                 rwork[1] = -1.f;
-                temp = snrm2_(k, &rwork[1], &c__1);
-                /* Since B and BX are complex, the following call to SGEMV */
+                temp = aocl_blas_snrm2(k, &rwork[1], &c__1);
+                /* Since B and BX are scomplex, the following call to SGEMV */
                 /* is performed in two steps (real and imaginary parts). */
                 /* CALL SGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO, */
                 /* $ B( J, 1 ), LDB ) */
@@ -522,13 +541,13 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     {
                         ++i__;
                         i__4 = jrow + jcol * bx_dim1;
-                        rwork[i__] = bx[i__4].r;
+                        rwork[i__] = bx[i__4].real;
                         /* L50: */
                     }
                     /* L60: */
                 }
-                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
-                       &c_b15, &rwork[*k + 1], &c__1);
+                aocl_blas_sgemv("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1],
+                                &c__1, &c_b15, &rwork[*k + 1], &c__1);
                 i__ = *k + (*nrhs << 1);
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
@@ -542,21 +561,22 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L80: */
                 }
-                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
-                       &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
+                aocl_blas_sgemv("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1],
+                                &c__1, &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = j + jcol * b_dim1;
                     i__4 = jcol + *k;
                     i__5 = jcol + *k + *nrhs;
-                    q__1.r = rwork[i__4];
-                    q__1.i = rwork[i__5]; // , expr subst
-                    b[i__3].r = q__1.r;
-                    b[i__3].i = q__1.i; // , expr subst
+                    q__1.real = rwork[i__4];
+                    q__1.imag = rwork[i__5]; // , expr subst
+                    b[i__3].real = q__1.real;
+                    b[i__3].imag = q__1.imag; // , expr subst
                     /* L90: */
                 }
-                clascl_("G", &c__0, &c__0, &temp, &c_b13, &c__1, nrhs, &b[j + b_dim1], ldb, info);
+                aocl_lapack_clascl("G", &c__0, &c__0, &temp, &c_b13, &c__1, nrhs, &b[j + b_dim1],
+                                   ldb, info);
                 /* L100: */
             }
         }
@@ -564,7 +584,8 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
-            clacpy_("A", &i__1, nrhs, &bx[*k + 1 + bx_dim1], ldbx, &b[*k + 1 + b_dim1], ldb);
+            aocl_lapack_clacpy("A", &i__1, nrhs, &bx[*k + 1 + bx_dim1], ldbx, &b[*k + 1 + b_dim1],
+                               ldb);
         }
     }
     else
@@ -574,7 +595,7 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         /* to B. */
         if(*k == 1)
         {
-            ccopy_(nrhs, &b[b_offset], ldb, &bx[bx_offset], ldbx);
+            aocl_blas_ccopy(nrhs, &b[b_offset], ldb, &bx[bx_offset], ldbx);
         }
         else
         {
@@ -623,7 +644,7 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L120: */
                 }
-                /* Since B and BX are complex, the following call to SGEMV */
+                /* Since B and BX are scomplex, the following call to SGEMV */
                 /* is performed in two steps (real and imaginary parts). */
                 /* CALL SGEMV( 'T', K, NRHS, ONE, B, LDB, WORK, 1, ZERO, */
                 /* $ BX( J, 1 ), LDBX ) */
@@ -636,13 +657,13 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     {
                         ++i__;
                         i__4 = jrow + jcol * b_dim1;
-                        rwork[i__] = b[i__4].r;
+                        rwork[i__] = b[i__4].real;
                         /* L130: */
                     }
                     /* L140: */
                 }
-                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
-                       &c_b15, &rwork[*k + 1], &c__1);
+                aocl_blas_sgemv("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1],
+                                &c__1, &c_b15, &rwork[*k + 1], &c__1);
                 i__ = *k + (*nrhs << 1);
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
@@ -656,18 +677,18 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L160: */
                 }
-                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
-                       &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
+                aocl_blas_sgemv("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1],
+                                &c__1, &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = j + jcol * bx_dim1;
                     i__4 = jcol + *k;
                     i__5 = jcol + *k + *nrhs;
-                    q__1.r = rwork[i__4];
-                    q__1.i = rwork[i__5]; // , expr subst
-                    bx[i__3].r = q__1.r;
-                    bx[i__3].i = q__1.i; // , expr subst
+                    q__1.real = rwork[i__4];
+                    q__1.imag = rwork[i__5]; // , expr subst
+                    bx[i__3].real = q__1.real;
+                    bx[i__3].imag = q__1.imag; // , expr subst
                     /* L170: */
                 }
                 /* L180: */
@@ -677,33 +698,34 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         /* related to the right null space of the subproblem. */
         if(*sqre == 1)
         {
-            ccopy_(nrhs, &b[m + b_dim1], ldb, &bx[m + bx_dim1], ldbx);
-            csrot_(nrhs, &bx[bx_dim1 + 1], ldbx, &bx[m + bx_dim1], ldbx, c__, s);
+            aocl_blas_ccopy(nrhs, &b[m + b_dim1], ldb, &bx[m + bx_dim1], ldbx);
+            aocl_blas_csrot(nrhs, &bx[bx_dim1 + 1], ldbx, &bx[m + bx_dim1], ldbx, c__, s);
         }
         if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
-            clacpy_("A", &i__1, nrhs, &b[*k + 1 + b_dim1], ldb, &bx[*k + 1 + bx_dim1], ldbx);
+            aocl_lapack_clacpy("A", &i__1, nrhs, &b[*k + 1 + b_dim1], ldb, &bx[*k + 1 + bx_dim1],
+                               ldbx);
         }
         /* Step (3R): permute rows of B. */
-        ccopy_(nrhs, &bx[bx_dim1 + 1], ldbx, &b[nlp1 + b_dim1], ldb);
+        aocl_blas_ccopy(nrhs, &bx[bx_dim1 + 1], ldbx, &b[nlp1 + b_dim1], ldb);
         if(*sqre == 1)
         {
-            ccopy_(nrhs, &bx[m + bx_dim1], ldbx, &b[m + b_dim1], ldb);
+            aocl_blas_ccopy(nrhs, &bx[m + bx_dim1], ldbx, &b[m + b_dim1], ldb);
         }
         i__1 = n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            ccopy_(nrhs, &bx[i__ + bx_dim1], ldbx, &b[perm[i__] + b_dim1], ldb);
+            aocl_blas_ccopy(nrhs, &bx[i__ + bx_dim1], ldbx, &b[perm[i__] + b_dim1], ldb);
             /* L190: */
         }
         /* Step (4R): apply back the Givens rotations performed. */
         for(i__ = *givptr; i__ >= 1; --i__)
         {
             r__1 = -givnum[i__ + givnum_dim1];
-            csrot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
-                   &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
-                   &r__1);
+            aocl_blas_csrot(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                            &b[givcol[i__ + givcol_dim1] + b_dim1], ldb,
+                            &givnum[i__ + (givnum_dim1 << 1)], &r__1);
             /* L200: */
         }
     }

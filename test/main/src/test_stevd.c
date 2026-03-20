@@ -24,6 +24,12 @@ void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ld
 double prepare_lapacke_stevd_run(integer datatype, int matrix_layout, char *jobz, integer n,
                                  void *Z, integer ldz, void *D, void *E, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_stevd_outputs(void *filename, integer datatype, char jobz, integer n, void *Z_test,
+                         integer ldz, void *D_test, void *params);
+integer check_bit_reproducibility_stevd(void *filename, integer datatype, char jobz, integer n,
+                                        void *Z_test, integer ldz, void *D_test, void *params);
+
 #define STEVD_VL 0.1
 #define STEVD_VU 1000
 
@@ -133,6 +139,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     void *Q = NULL, *A = NULL, *L = NULL, *scal = NULL;
     char range = 'V', uplo = 'U';
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -178,27 +185,44 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     reset_matrix(datatype, n, n, A, lda);
 
-    if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
-        init_matrix(datatype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
-    }
-    else
-    {
-        /* Generate input from known eigen values */
-        create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEVD_VL, STEVD_VU,
-                                 USE_ABS_EIGEN_VALUES);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
         {
-            create_realtype_vector(get_datatype(datatype), &scal, n);
-            scale_matrix_underflow_overflow_stevd(datatype, n, A, lda, &params->imatrix_char, scal);
+            init_matrix(datatype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
+            init_matrix(datatype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
         }
-        copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-        get_sym_tridiagonal_matrix(datatype, &uplo, n, Q, lda, D, E, &info);
+        else
+        {
+            /* Generate input from known eigen values */
+            create_realtype_vector(datatype, &L, n);
+            generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEVD_VL, STEVD_VU,
+                                     USE_ABS_EIGEN_VALUES);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                create_realtype_vector(get_datatype(datatype), &scal, n);
+                scale_matrix_underflow_overflow_stevd(datatype, n, A, lda, &params->imatrix_char,
+                                                      scal);
+            }
+            copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
+            get_sym_tridiagonal_matrix(datatype, &uplo, n, Q, lda, D, E, &info);
+        }
+        /* Get symmetric tridiagonal matrix from D, E and use for validation.*/
+        copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
     }
-    /* Get symmetric tridiagonal matrix from D, E and use for validation.*/
-    copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the input is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, 1, D, 1, datatype, n - 1, 1, E, 1, "cdddd", jobz, n, ldz,
+                              g_lwork, g_liwork)
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
     create_vector(datatype, &D_test, n);
@@ -219,7 +243,12 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n, store_stevd_outputs(filename, datatype, jobz, n, Z_test, ldz, D_test, params),
+        validate_syev(tst_api, &jobz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype,
+                      residual, params->imatrix_char, scal, params),
+        check_bit_reproducibility_stevd(filename, datatype, jobz, n, Z_test, ldz, D_test, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &jobz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype,
                       residual, params->imatrix_char, scal, params);
@@ -246,22 +275,27 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    free_vector(D_test);
+    free_vector(E_test);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(!(g_ext_fptr))
+        {
+            free_vector(L);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                free_vector(scal);
+            }
+        }
+    }
+    free_matrix(Z_test);
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(Q);
     free_matrix(A);
     free_matrix(Z);
     free_vector(D);
     free_vector(E);
-    free_matrix(Z_test);
-    free_vector(D_test);
-    free_vector(E_test);
-    if(L != NULL)
-    {
-        free_vector(L);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
@@ -422,4 +456,41 @@ void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ld
             break;
         }
     }
+}
+
+void store_stevd_outputs(void *filename, integer datatype, char jobz, integer n, void *Z_test,
+                         integer ldz, void *D_test, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Always store eigenvalues */
+    FLA_STORE_BRT_VECTOR(datatype, n, D_test)
+
+    /* Only store eigenvectors if jobz = 'V' */
+    if(!same_char(jobz, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, Z_test, ldz)
+    }
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+
+integer check_bit_reproducibility_stevd(void *filename, integer datatype, char jobz, integer n,
+                                        void *Z_test, integer ldz, void *D_test, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Always verify eigenvalues */
+    FLA_VERIFY_BRT_VECTOR(datatype, n, D_test)
+
+    /* Only verify eigenvectors if jobz = 'V' */
+    if(!same_char(jobz, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, Z_test, ldz)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

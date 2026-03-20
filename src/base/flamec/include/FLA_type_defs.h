@@ -33,14 +33,113 @@ typedef unsigned __int64 uint64_t;
 #endif
 #endif
 
-#if defined(FLA_ENABLE_ILP64)
+/* typedef long fla_dim_t fla_dim_t; */
+#ifdef FLA_ENABLE_ILP64
 typedef int64_t integer;
 typedef uint64_t uinteger;
+typedef int64_t aocl_int_t;
 #else
-typedef int integer;
-typedef unsigned long uinteger;
+typedef int32_t integer;
+typedef unsigned long int uinteger;
+typedef int32_t aocl_int_t;
 #endif
 
+typedef int64_t fla_dim_t;
+typedef int64_t aocl_int64_t;
+
+typedef char *address;
+typedef short int shortint;
+typedef float real;
+typedef double doublereal;
+
+// --- Complex type definitions -----------------------------------------------
+
+#ifndef _DEFINED_SCOMPLEX
+#define _DEFINED_SCOMPLEX
+typedef struct scomplex_
+{
+  float real;
+  float imag;
+} scomplex;
+#endif
+
+#ifndef _DEFINED_DCOMPLEX
+#define _DEFINED_DCOMPLEX
+typedef struct dcomplex_
+{
+  double real;
+  double imag;
+} dcomplex;
+#endif
+
+// typedef struct { real real, imag; } scomplex;
+// typedef struct { doublereal r, i; } dcomplex;
+
+/* typedef long int logical; */
+typedef aocl_int_t logical; 
+
+typedef short int shortlogical;
+typedef char logical1;
+typedef char integer1;
+#ifdef INTEGER_STAR_8	/* Adjust for fla_dim_t*8. */
+typedef long long longint;		/* system-dependent */
+typedef unsigned long long ulongint;	/* system-dependent */
+#define qbit_clear(a,b)	((a) & ~((ulongint)1 << (b)))
+#define qbit_set(a,b)	((a) |  ((ulongint)1 << (b)))
+#endif
+
+
+/* procedure parameter types for -A and -C++ */
+
+#define F2C_proc_par_types 1
+#ifdef __cplusplus
+typedef int /* Unknown procedure type */ (*U_fp)(...);
+typedef shortint (*J_fp)(...);
+typedef fla_dim_t (*I_fp)(...);
+typedef real (*R_fp)(...);
+typedef doublereal (*D_fp)(...);
+typedef doublereal (*E_fp)(...);
+typedef /* Complex */ void (*C_fp)(...);
+typedef /* Double Complex */ void (*Z_fp)(...);
+typedef logical (*L_fp)(...);
+typedef logical (*L_fp1)(scomplex *);
+typedef logical (*L_fp2)(scomplex *, scomplex *);
+typedef logical (*L_fps2)(real *, real *);
+typedef logical (*L_fps3)(real *, real *, real *);
+typedef logical (*L_fpd2)(doublereal *, doublereal *);
+typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
+typedef logical (*L_fpz1)(dcomplex *);
+typedef logical (*L_fpz2)(dcomplex *, dcomplex *);
+typedef shortlogical (*K_fp)(...);
+typedef /* Character */ void (*H_fp)(...);
+typedef /* Subroutine */ int (*S_fp)(...);
+#else
+typedef int /* Unknown procedure type */ (*U_fp)();
+typedef shortint (*J_fp)();
+typedef fla_dim_t (*I_fp)();
+typedef real (*R_fp)();
+typedef doublereal (*D_fp)();
+typedef doublereal (*E_fp)();
+typedef /* Complex */ void (*C_fp)();
+typedef /* Double Complex */ void (*Z_fp)();
+typedef logical (*L_fp)();
+typedef logical (*L_fp1)(scomplex *);
+typedef logical (*L_fp2)(scomplex *, scomplex *);
+typedef logical (*L_fps2)(real *, real *);
+typedef logical (*L_fps3)(real *, real *, real *);
+typedef logical (*L_fpd2)(doublereal *, doublereal *);
+typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
+typedef logical (*L_fpz1)(dcomplex *);
+typedef logical (*L_fpz2)(dcomplex *, dcomplex *);
+typedef shortlogical (*K_fp)();
+typedef /* Character */ void (*H_fp)();
+typedef /* Subroutine */ int (*S_fp)();
+#endif
+/* E_fp is for real functions when -R is not specified */
+typedef void C_f;	/* scomplex function */
+typedef void H_f;	/* character function */
+typedef void Z_f;	/* double scomplex function */
+typedef doublereal E_f;	/* real function with -R not specified */
 
 
 #if   FLA_MULTITHREADING_MODEL == FLA_OPENMP
@@ -52,26 +151,6 @@ typedef unsigned long uinteger;
 #elif FLA_MULTITHREADING_MODEL == FLA_PTHREADS
 #include <pthread.h>
 #endif
-
-
-// --- Complex type definitions -----------------------------------------------
-
-#ifndef _DEFINED_SCOMPLEX
-#define _DEFINED_SCOMPLEX
-typedef struct scomplex
-{
-  float real, imag;
-} scomplex;
-#endif
-
-#ifndef _DEFINED_DCOMPLEX
-#define _DEFINED_DCOMPLEX
-typedef struct dcomplex
-{
-  double real, imag;
-} dcomplex;
-#endif
-
 
 // --- Parameter and return type definitions ----------------------------------
 
@@ -100,7 +179,7 @@ typedef int FLA_Diag_off;
 
 #ifndef _DEFINED_FLA_DIM_T
 #define _DEFINED_FLA_DIM_T
-typedef uinteger fla_dim_t;
+typedef int64_t fla_dim_t;
 #endif
 
 // --- Intrinsic/assembly definitions ----------------------------------------

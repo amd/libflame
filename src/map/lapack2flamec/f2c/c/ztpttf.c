@@ -205,24 +205,37 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomplex *arf,
-             integer *info)
+/** Generated wrapper function */
+void ztpttf_(char *transr, char *uplo, aocl_int_t *n, dcomplex *ap, dcomplex *arf,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztpttf(transr, uplo, n, ap, arf, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztpttf(transr, uplo, &n_64, ap, arf, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztpttf(char *transr, char *uplo, aocl_int64_t *n, dcomplex *ap,
+                        dcomplex *arf, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztpttf inputs: transr %c, uplo %c, n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    doublecomplex z__1;
+    aocl_int64_t i__1, i__2, i__3, i__4;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, k, n1, n2, ij, jp, js, lda, ijp;
+    aocl_int64_t i__, j, k, n1, n2, ij, jp, js, lda, ijp;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -262,7 +275,7 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTPTTF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTPTTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -276,14 +289,14 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
     {
         if(normaltransr)
         {
-            arf[0].r = ap[0].r;
-            arf[0].i = ap[0].i; // , expr subst
+            arf[0].real = ap[0].real;
+            arf[0].imag = ap[0].imag; // , expr subst
         }
         else
         {
             d_cnjg(&z__1, ap);
-            arf[0].r = z__1.r;
-            arf[0].i = z__1.i; // , expr subst
+            arf[0].real = z__1.real;
+            arf[0].imag = z__1.imag; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -345,8 +358,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                         ij = i__ + jp;
                         i__3 = ij;
                         i__4 = ijp;
-                        arf[i__3].r = ap[i__4].r;
-                        arf[i__3].i = ap[i__4].i; // , expr subst
+                        arf[i__3].real = ap[i__4].real;
+                        arf[i__3].imag = ap[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     jp += lda;
@@ -360,8 +373,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                         ij = i__ + j * lda;
                         i__3 = ij;
                         d_cnjg(&z__1, &ap[ijp]);
-                        arf[i__3].r = z__1.r;
-                        arf[i__3].i = z__1.i; // , expr subst
+                        arf[i__3].real = z__1.real;
+                        arf[i__3].imag = z__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -381,8 +394,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__3 = ij;
                         d_cnjg(&z__1, &ap[ijp]);
-                        arf[i__3].r = z__1.r;
-                        arf[i__3].i = z__1.i; // , expr subst
+                        arf[i__3].real = z__1.real;
+                        arf[i__3].imag = z__1.imag; // , expr subst
                         ++ijp;
                         ij += lda;
                     }
@@ -397,8 +410,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__3 = ij;
                         i__4 = ijp;
-                        arf[i__3].r = ap[i__4].r;
-                        arf[i__3].i = ap[i__4].i; // , expr subst
+                        arf[i__3].real = ap[i__4].real;
+                        arf[i__3].imag = ap[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -424,8 +437,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__4 = ij;
                         d_cnjg(&z__1, &ap[ijp]);
-                        arf[i__4].r = z__1.r;
-                        arf[i__4].i = z__1.i; // , expr subst
+                        arf[i__4].real = z__1.real;
+                        arf[i__4].imag = z__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -438,8 +451,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__2 = ij;
                         i__4 = ijp;
-                        arf[i__2].r = ap[i__4].r;
-                        arf[i__2].i = ap[i__4].i; // , expr subst
+                        arf[i__2].real = ap[i__4].real;
+                        arf[i__2].imag = ap[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js = js + lda + 1;
@@ -461,8 +474,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__2 = ij;
                         i__4 = ijp;
-                        arf[i__2].r = ap[i__4].r;
-                        arf[i__2].i = ap[i__4].i; // , expr subst
+                        arf[i__2].real = ap[i__4].real;
+                        arf[i__2].imag = ap[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -476,8 +489,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__4 = ij;
                         d_cnjg(&z__1, &ap[ijp]);
-                        arf[i__4].r = z__1.r;
-                        arf[i__4].i = z__1.i; // , expr subst
+                        arf[i__4].real = z__1.real;
+                        arf[i__4].imag = z__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -506,8 +519,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                         ij = i__ + 1 + jp;
                         i__3 = ij;
                         i__4 = ijp;
-                        arf[i__3].r = ap[i__4].r;
-                        arf[i__3].i = ap[i__4].i; // , expr subst
+                        arf[i__3].real = ap[i__4].real;
+                        arf[i__3].imag = ap[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     jp += lda;
@@ -521,8 +534,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                         ij = i__ + j * lda;
                         i__3 = ij;
                         d_cnjg(&z__1, &ap[ijp]);
-                        arf[i__3].r = z__1.r;
-                        arf[i__3].i = z__1.i; // , expr subst
+                        arf[i__3].real = z__1.real;
+                        arf[i__3].imag = z__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -542,8 +555,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__3 = ij;
                         d_cnjg(&z__1, &ap[ijp]);
-                        arf[i__3].r = z__1.r;
-                        arf[i__3].i = z__1.i; // , expr subst
+                        arf[i__3].real = z__1.real;
+                        arf[i__3].imag = z__1.imag; // , expr subst
                         ++ijp;
                         ij += lda;
                     }
@@ -558,8 +571,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__3 = ij;
                         i__4 = ijp;
-                        arf[i__3].r = ap[i__4].r;
-                        arf[i__3].i = ap[i__4].i; // , expr subst
+                        arf[i__3].real = ap[i__4].real;
+                        arf[i__3].imag = ap[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -585,8 +598,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__4 = ij;
                         d_cnjg(&z__1, &ap[ijp]);
-                        arf[i__4].r = z__1.r;
-                        arf[i__4].i = z__1.i; // , expr subst
+                        arf[i__4].real = z__1.real;
+                        arf[i__4].imag = z__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -599,8 +612,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__2 = ij;
                         i__4 = ijp;
-                        arf[i__2].r = ap[i__4].r;
-                        arf[i__2].i = ap[i__4].i; // , expr subst
+                        arf[i__2].real = ap[i__4].real;
+                        arf[i__2].imag = ap[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js = js + lda + 1;
@@ -622,8 +635,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__2 = ij;
                         i__4 = ijp;
-                        arf[i__2].r = ap[i__4].r;
-                        arf[i__2].i = ap[i__4].i; // , expr subst
+                        arf[i__2].real = ap[i__4].real;
+                        arf[i__2].imag = ap[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -637,8 +650,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
                     {
                         i__4 = ij;
                         d_cnjg(&z__1, &ap[ijp]);
-                        arf[i__4].r = z__1.r;
-                        arf[i__4].i = z__1.i; // , expr subst
+                        arf[i__4].real = z__1.real;
+                        arf[i__4].imag = z__1.imag; // , expr subst
                         ++ijp;
                     }
                 }

@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {.5f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {.5f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b18 = 1.f;
 /* > \brief \b CHEGST */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static real c_b18 = 1.f;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHEGST reduces a complex Hermitian-definite generalized */
+/* > CHEGST reduces a scomplex Hermitian-definite generalized */
 /* > eigenproblem to standard form. */
 /* > */
 /* > If ITYPE = 1, the problem is A*x = lambda*B*x, */
@@ -130,34 +130,16 @@ static real c_b18 = 1.f;
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void chegst_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda, complex *b,
-                integer *ldb, integer *info)
+void chegst_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Local variables */
-    integer k, kb, nb;
-    extern /* Subroutine */
-        void
-        chemm_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *,
-               integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *),
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    aocl_int64_t k, kb, nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        chegs2_(integer *, char *, integer *, complex *, integer *, complex *, integer *,
-                integer *),
-        cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *,
-                integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,7 +193,7 @@ void chegst_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEGST", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHEGST", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -220,11 +202,11 @@ void chegst_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
         return;
     }
     /* Determine the block size for this environment. */
-    nb = ilaenv_(&c__1, "CHEGST", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "CHEGST", uplo, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {
         /* Use unblocked code */
-        chegs2_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+        aocl_lapack_chegs2(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
     }
     else
     {
@@ -242,34 +224,36 @@ void chegst_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
                     i__3 = *n - k + 1;
                     kb = fla_min(i__3, nb);
                     /* Update the upper triangle of A(k:n,k:n) */
-                    chegs2_(itype, uplo, &kb, &a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb,
-                            info);
+                    aocl_lapack_chegs2(itype, uplo, &kb, &a[k + k * a_dim1], lda,
+                                       &b[k + k * b_dim1], ldb, info);
                     if(k + kb <= *n)
                     {
                         i__3 = *n - k - kb + 1;
-                        ctrsm_("Left", uplo, "Conjugate transpose", "Non-unit", &kb, &i__3, &c_b1,
-                               &b[k + k * b_dim1], ldb, &a[k + (k + kb) * a_dim1], lda);
+                        aocl_blas_ctrsm("Left", uplo, "Conjugate transpose", "Non-unit", &kb, &i__3,
+                                        &c_b1, &b[k + k * b_dim1], ldb, &a[k + (k + kb) * a_dim1],
+                                        lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -.5f;
-                        q__1.i = -0.f; // , expr subst
-                        chemm_("Left", uplo, &kb, &i__3, &q__1, &a[k + k * a_dim1], lda,
-                               &b[k + (k + kb) * b_dim1], ldb, &c_b1, &a[k + (k + kb) * a_dim1],
-                               lda);
+                        q__1.real = -.5f;
+                        q__1.imag = -0.f; // , expr subst
+                        aocl_blas_chemm("Left", uplo, &kb, &i__3, &q__1, &a[k + k * a_dim1], lda,
+                                        &b[k + (k + kb) * b_dim1], ldb, &c_b1,
+                                        &a[k + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
-                        cher2k_(uplo, "Conjugate transpose", &i__3, &kb, &q__1,
-                                &a[k + (k + kb) * a_dim1], lda, &b[k + (k + kb) * b_dim1], ldb,
-                                &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
+                        aocl_blas_cher2k(uplo, "Conjugate transpose", &i__3, &kb, &q__1,
+                                         &a[k + (k + kb) * a_dim1], lda, &b[k + (k + kb) * b_dim1],
+                                         ldb, &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -.5f;
-                        q__1.i = -0.f; // , expr subst
-                        chemm_("Left", uplo, &kb, &i__3, &q__1, &a[k + k * a_dim1], lda,
-                               &b[k + (k + kb) * b_dim1], ldb, &c_b1, &a[k + (k + kb) * a_dim1],
-                               lda);
+                        q__1.real = -.5f;
+                        q__1.imag = -0.f; // , expr subst
+                        aocl_blas_chemm("Left", uplo, &kb, &i__3, &q__1, &a[k + k * a_dim1], lda,
+                                        &b[k + (k + kb) * b_dim1], ldb, &c_b1,
+                                        &a[k + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        ctrsm_("Right", uplo, "No transpose", "Non-unit", &kb, &i__3, &c_b1,
-                               &b[k + kb + (k + kb) * b_dim1], ldb, &a[k + (k + kb) * a_dim1], lda);
+                        aocl_blas_ctrsm("Right", uplo, "No transpose", "Non-unit", &kb, &i__3,
+                                        &c_b1, &b[k + kb + (k + kb) * b_dim1], ldb,
+                                        &a[k + (k + kb) * a_dim1], lda);
                     }
                     /* L10: */
                 }
@@ -285,35 +269,38 @@ void chegst_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
                     i__3 = *n - k + 1;
                     kb = fla_min(i__3, nb);
                     /* Update the lower triangle of A(k:n,k:n) */
-                    chegs2_(itype, uplo, &kb, &a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb,
-                            info);
+                    aocl_lapack_chegs2(itype, uplo, &kb, &a[k + k * a_dim1], lda,
+                                       &b[k + k * b_dim1], ldb, info);
                     if(k + kb <= *n)
                     {
                         i__3 = *n - k - kb + 1;
-                        ctrsm_("Right", uplo, "Conjugate transpose",
-                               "Non-un"
-                               "it",
-                               &i__3, &kb, &c_b1, &b[k + k * b_dim1], ldb, &a[k + kb + k * a_dim1],
-                               lda);
+                        aocl_blas_ctrsm("Right", uplo, "Conjugate transpose",
+                                        "Non-un"
+                                        "it",
+                                        &i__3, &kb, &c_b1, &b[k + k * b_dim1], ldb,
+                                        &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -.5f;
-                        q__1.i = -0.f; // , expr subst
-                        chemm_("Right", uplo, &i__3, &kb, &q__1, &a[k + k * a_dim1], lda,
-                               &b[k + kb + k * b_dim1], ldb, &c_b1, &a[k + kb + k * a_dim1], lda);
+                        q__1.real = -.5f;
+                        q__1.imag = -0.f; // , expr subst
+                        aocl_blas_chemm("Right", uplo, &i__3, &kb, &q__1, &a[k + k * a_dim1], lda,
+                                        &b[k + kb + k * b_dim1], ldb, &c_b1,
+                                        &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
-                        cher2k_(uplo, "No transpose", &i__3, &kb, &q__1, &a[k + kb + k * a_dim1],
-                                lda, &b[k + kb + k * b_dim1], ldb, &c_b18,
-                                &a[k + kb + (k + kb) * a_dim1], lda);
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
+                        aocl_blas_cher2k(uplo, "No transpose", &i__3, &kb, &q__1,
+                                         &a[k + kb + k * a_dim1], lda, &b[k + kb + k * b_dim1], ldb,
+                                         &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -.5f;
-                        q__1.i = -0.f; // , expr subst
-                        chemm_("Right", uplo, &i__3, &kb, &q__1, &a[k + k * a_dim1], lda,
-                               &b[k + kb + k * b_dim1], ldb, &c_b1, &a[k + kb + k * a_dim1], lda);
+                        q__1.real = -.5f;
+                        q__1.imag = -0.f; // , expr subst
+                        aocl_blas_chemm("Right", uplo, &i__3, &kb, &q__1, &a[k + k * a_dim1], lda,
+                                        &b[k + kb + k * b_dim1], ldb, &c_b1,
+                                        &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        ctrsm_("Left", uplo, "No transpose", "Non-unit", &i__3, &kb, &c_b1,
-                               &b[k + kb + (k + kb) * b_dim1], ldb, &a[k + kb + k * a_dim1], lda);
+                        aocl_blas_ctrsm("Left", uplo, "No transpose", "Non-unit", &i__3, &kb, &c_b1,
+                                        &b[k + kb + (k + kb) * b_dim1], ldb,
+                                        &a[k + kb + k * a_dim1], lda);
                     }
                     /* L20: */
                 }
@@ -333,22 +320,22 @@ void chegst_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
                     kb = fla_min(i__3, nb);
                     /* Update the upper triangle of A(1:k+kb-1,1:k+kb-1) */
                     i__3 = k - 1;
-                    ctrmm_("Left", uplo, "No transpose", "Non-unit", &i__3, &kb, &c_b1,
-                           &b[b_offset], ldb, &a[k * a_dim1 + 1], lda);
+                    aocl_blas_ctrmm("Left", uplo, "No transpose", "Non-unit", &i__3, &kb, &c_b1,
+                                    &b[b_offset], ldb, &a[k * a_dim1 + 1], lda);
                     i__3 = k - 1;
-                    chemm_("Right", uplo, &i__3, &kb, &c_b2, &a[k + k * a_dim1], lda,
-                           &b[k * b_dim1 + 1], ldb, &c_b1, &a[k * a_dim1 + 1], lda);
+                    aocl_blas_chemm("Right", uplo, &i__3, &kb, &c_b2, &a[k + k * a_dim1], lda,
+                                    &b[k * b_dim1 + 1], ldb, &c_b1, &a[k * a_dim1 + 1], lda);
                     i__3 = k - 1;
-                    cher2k_(uplo, "No transpose", &i__3, &kb, &c_b1, &a[k * a_dim1 + 1], lda,
-                            &b[k * b_dim1 + 1], ldb, &c_b18, &a[a_offset], lda);
+                    aocl_blas_cher2k(uplo, "No transpose", &i__3, &kb, &c_b1, &a[k * a_dim1 + 1],
+                                     lda, &b[k * b_dim1 + 1], ldb, &c_b18, &a[a_offset], lda);
                     i__3 = k - 1;
-                    chemm_("Right", uplo, &i__3, &kb, &c_b2, &a[k + k * a_dim1], lda,
-                           &b[k * b_dim1 + 1], ldb, &c_b1, &a[k * a_dim1 + 1], lda);
+                    aocl_blas_chemm("Right", uplo, &i__3, &kb, &c_b2, &a[k + k * a_dim1], lda,
+                                    &b[k * b_dim1 + 1], ldb, &c_b1, &a[k * a_dim1 + 1], lda);
                     i__3 = k - 1;
-                    ctrmm_("Right", uplo, "Conjugate transpose", "Non-unit", &i__3, &kb, &c_b1,
-                           &b[k + k * b_dim1], ldb, &a[k * a_dim1 + 1], lda);
-                    chegs2_(itype, uplo, &kb, &a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb,
-                            info);
+                    aocl_blas_ctrmm("Right", uplo, "Conjugate transpose", "Non-unit", &i__3, &kb,
+                                    &c_b1, &b[k + k * b_dim1], ldb, &a[k * a_dim1 + 1], lda);
+                    aocl_lapack_chegs2(itype, uplo, &kb, &a[k + k * a_dim1], lda,
+                                       &b[k + k * b_dim1], ldb, info);
                     /* L30: */
                 }
             }
@@ -364,22 +351,22 @@ void chegst_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
                     kb = fla_min(i__3, nb);
                     /* Update the lower triangle of A(1:k+kb-1,1:k+kb-1) */
                     i__3 = k - 1;
-                    ctrmm_("Right", uplo, "No transpose", "Non-unit", &kb, &i__3, &c_b1,
-                           &b[b_offset], ldb, &a[k + a_dim1], lda);
+                    aocl_blas_ctrmm("Right", uplo, "No transpose", "Non-unit", &kb, &i__3, &c_b1,
+                                    &b[b_offset], ldb, &a[k + a_dim1], lda);
                     i__3 = k - 1;
-                    chemm_("Left", uplo, &kb, &i__3, &c_b2, &a[k + k * a_dim1], lda, &b[k + b_dim1],
-                           ldb, &c_b1, &a[k + a_dim1], lda);
+                    aocl_blas_chemm("Left", uplo, &kb, &i__3, &c_b2, &a[k + k * a_dim1], lda,
+                                    &b[k + b_dim1], ldb, &c_b1, &a[k + a_dim1], lda);
                     i__3 = k - 1;
-                    cher2k_(uplo, "Conjugate transpose", &i__3, &kb, &c_b1, &a[k + a_dim1], lda,
-                            &b[k + b_dim1], ldb, &c_b18, &a[a_offset], lda);
+                    aocl_blas_cher2k(uplo, "Conjugate transpose", &i__3, &kb, &c_b1, &a[k + a_dim1],
+                                     lda, &b[k + b_dim1], ldb, &c_b18, &a[a_offset], lda);
                     i__3 = k - 1;
-                    chemm_("Left", uplo, &kb, &i__3, &c_b2, &a[k + k * a_dim1], lda, &b[k + b_dim1],
-                           ldb, &c_b1, &a[k + a_dim1], lda);
+                    aocl_blas_chemm("Left", uplo, &kb, &i__3, &c_b2, &a[k + k * a_dim1], lda,
+                                    &b[k + b_dim1], ldb, &c_b1, &a[k + a_dim1], lda);
                     i__3 = k - 1;
-                    ctrmm_("Left", uplo, "Conjugate transpose", "Non-unit", &kb, &i__3, &c_b1,
-                           &b[k + k * b_dim1], ldb, &a[k + a_dim1], lda);
-                    chegs2_(itype, uplo, &kb, &a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb,
-                            info);
+                    aocl_blas_ctrmm("Left", uplo, "Conjugate transpose", "Non-unit", &kb, &i__3,
+                                    &c_b1, &b[k + k * b_dim1], ldb, &a[k + a_dim1], lda);
+                    aocl_lapack_chegs2(itype, uplo, &kb, &a[k + k * a_dim1], lda,
+                                       &b[k + k * b_dim1], ldb, info);
                     /* L40: */
                 }
             }

@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNGR2 generates an m by n complex matrix Q with orthonormal rows, */
+/* > ZUNGR2 generates an m by n scomplex matrix Q with orthonormal rows, */
 /* > which is defined as the last m rows of a product of k elementary */
 /* > reflectors of order n */
 /* > */
@@ -109,26 +109,39 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau,
-             doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zungr2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a, aocl_int_t *lda,
+             dcomplex *tau, dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zungr2(m, n, k, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zungr2(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zungr2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zungr2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
                       *m, *n, *k, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublecomplex z__1, z__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, l, ii;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__, j, l, ii;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,7 +188,7 @@ void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNGR2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNGR2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -195,15 +208,15 @@ void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
             for(l = 1; l <= i__2; ++l)
             {
                 i__3 = l + j * a_dim1;
-                a[i__3].r = 0.;
-                a[i__3].i = 0.; // , expr subst
+                a[i__3].real = 0.;
+                a[i__3].imag = 0.; // , expr subst
                 /* L10: */
             }
             if(j > *n - *m && j <= *n - *k)
             {
                 i__2 = *m - *n + j + j * a_dim1;
-                a[i__2].r = 1.;
-                a[i__2].i = 0.; // , expr subst
+                a[i__2].real = 1.;
+                a[i__2].imag = 0.; // , expr subst
             }
             /* L20: */
         }
@@ -214,34 +227,35 @@ void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
         ii = *m - *k + i__;
         /* Apply H(i)**H to A(1:m-k+i,1:n-k+i) from the right */
         i__2 = *n - *m + ii - 1;
-        zlacgv_(&i__2, &a[ii + a_dim1], lda);
+        aocl_lapack_zlacgv(&i__2, &a[ii + a_dim1], lda);
         i__2 = ii + (*n - *m + ii) * a_dim1;
-        a[i__2].r = 1.;
-        a[i__2].i = 0.; // , expr subst
+        a[i__2].real = 1.;
+        a[i__2].imag = 0.; // , expr subst
         i__2 = ii - 1;
         i__3 = *n - *m + ii;
         d_cnjg(&z__1, &tau[i__]);
-        zlarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &z__1, &a[a_offset], lda, &work[1]);
+        aocl_lapack_zlarf("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &z__1, &a[a_offset], lda,
+                          &work[1]);
         i__2 = *n - *m + ii - 1;
         i__3 = i__;
-        z__1.r = -tau[i__3].r;
-        z__1.i = -tau[i__3].i; // , expr subst
-        zscal_(&i__2, &z__1, &a[ii + a_dim1], lda);
+        z__1.real = -tau[i__3].real;
+        z__1.imag = -tau[i__3].imag; // , expr subst
+        aocl_blas_zscal(&i__2, &z__1, &a[ii + a_dim1], lda);
         i__2 = *n - *m + ii - 1;
-        zlacgv_(&i__2, &a[ii + a_dim1], lda);
+        aocl_lapack_zlacgv(&i__2, &a[ii + a_dim1], lda);
         i__2 = ii + (*n - *m + ii) * a_dim1;
         d_cnjg(&z__2, &tau[i__]);
-        z__1.r = 1. - z__2.r;
-        z__1.i = 0. - z__2.i; // , expr subst
-        a[i__2].r = z__1.r;
-        a[i__2].i = z__1.i; // , expr subst
+        z__1.real = 1. - z__2.real;
+        z__1.imag = 0. - z__2.imag; // , expr subst
+        a[i__2].real = z__1.real;
+        a[i__2].imag = z__1.imag; // , expr subst
         /* Set A(m-k+i,n-k+i+1:n) to zero */
         i__2 = *n;
         for(l = *n - *m + ii + 1; l <= i__2; ++l)
         {
             i__3 = ii + l * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L30: */
         }
         /* L40: */

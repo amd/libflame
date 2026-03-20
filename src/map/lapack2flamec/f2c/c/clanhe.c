@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANHE returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
- * or the ele ment of largest absolute value of a complex Hermitian matrix. */
+ * or the ele ment of largest absolute value of a scomplex Hermitian matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > CLANHE returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex hermitian matrix A. */
+/* > scomplex hermitian matrix A. */
 /* > \endverbatim */
 /* > */
 /* > \return CLANHE */
@@ -121,7 +121,21 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup complexHEauxiliary */
 /* ===================================================================== */
-real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real *work)
+/** Generated wrapper function */
+real clanhe_(char *norm, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_clanhe(norm, uplo, n, a, lda, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_clanhe(norm, uplo, &n_64, a, &lda_64, work);
+#endif
+}
+
+real aocl_lapack_clanhe(char *norm, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -135,18 +149,15 @@ real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_abs(complex *), sqrt(doublereal);
+    double c_abs(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -198,7 +209,7 @@ real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real 
                     /* L10: */
                 }
                 i__2 = j + j * a_dim1;
-                sum = (r__1 = a[i__2].r, f2c_abs(r__1));
+                sum = (r__1 = a[i__2].real, f2c_abs(r__1));
                 if(value < sum || sisnan_(&sum))
                 {
                     value = sum;
@@ -212,7 +223,7 @@ real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real 
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j + j * a_dim1;
-                sum = (r__1 = a[i__2].r, f2c_abs(r__1));
+                sum = (r__1 = a[i__2].real, f2c_abs(r__1));
                 if(value < sum || sisnan_(&sum))
                 {
                     value = sum;
@@ -250,7 +261,7 @@ real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real 
                     /* L50: */
                 }
                 i__2 = j + j * a_dim1;
-                work[j] = sum + (r__1 = a[i__2].r, f2c_abs(r__1));
+                work[j] = sum + (r__1 = a[i__2].real, f2c_abs(r__1));
                 /* L60: */
             }
             i__1 = *n;
@@ -276,7 +287,7 @@ real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real 
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j + j * a_dim1;
-                sum = work[j] + (r__1 = a[i__2].r, f2c_abs(r__1));
+                sum = work[j] + (r__1 = a[i__2].real, f2c_abs(r__1));
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
@@ -304,7 +315,7 @@ real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real 
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                classq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+                aocl_lapack_classq(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
                 /* L110: */
             }
         }
@@ -314,7 +325,7 @@ real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real 
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                classq_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
+                aocl_lapack_classq(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
                 /* L120: */
             }
         }
@@ -323,10 +334,10 @@ real clanhe_(char *norm, char *uplo, integer *n, complex *a, integer *lda, real 
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            if(a[i__2].r != 0.f)
+            if(a[i__2].real != 0.f)
             {
                 i__2 = i__ + i__ * a_dim1;
-                absa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                absa = (r__1 = a[i__2].real, f2c_abs(r__1));
                 if(scale < absa)
                 {
                     /* Computing 2nd power */

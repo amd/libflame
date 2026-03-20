@@ -38,7 +38,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLASR applies a sequence of real plane rotations to a complex matrix */
+/* > ZLASR applies a sequence of real plane rotations to a scomplex matrix */
 /* > A, from either the left or the right. */
 /* > */
 /* > When SIDE = 'L', the transformation takes the form */
@@ -195,8 +195,23 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__,
-            doublereal *s, doublecomplex *a, integer *lda)
+/** Generated wrapper function */
+void zlasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n, doublereal *c__,
+            doublereal *s, dcomplex *a, aocl_int_t *lda)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlasr(side, pivot, direct, m, n, c__, s, a, lda);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zlasr(side, pivot, direct, &m_64, &n_64, c__, s, a, &lda_64);
+#endif
+}
+
+void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, aocl_int64_t *n,
+                       doublereal *c__, doublereal *s, dcomplex *a, aocl_int64_t *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS
@@ -204,16 +219,13 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                       *side, *pivot, *direct, *m, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    dcomplex z__1, z__2, z__3;
     /* Local variables */
-    integer i__, j, info;
-    doublecomplex temp;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j, info;
+    dcomplex temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal ctemp, stemp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,7 +281,7 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
     }
     if(info != 0)
     {
-        xerbla_("ZLASR ", &info, (ftnlen)6);
+        aocl_blas_xerbla("ZLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -297,28 +309,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + 1 + i__ * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = j + 1 + i__ * a_dim1;
-                            z__2.r = ctemp * temp.r;
-                            z__2.i = ctemp * temp.i; // , expr subst
+                            z__2.real = ctemp * temp.real;
+                            z__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = j + i__ * a_dim1;
-                            z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__4].real;
+                            z__3.imag = stemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            z__2.r = stemp * temp.r;
-                            z__2.i = stemp * temp.i; // , expr subst
+                            z__2.real = stemp * temp.real;
+                            z__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = j + i__ * a_dim1;
-                            z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__4].real;
+                            z__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L10: */
                         }
                     }
@@ -337,28 +349,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + 1 + i__ * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = j + 1 + i__ * a_dim1;
-                            z__2.r = ctemp * temp.r;
-                            z__2.i = ctemp * temp.i; // , expr subst
+                            z__2.real = ctemp * temp.real;
+                            z__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__3].real;
+                            z__3.imag = stemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
-                            z__2.r = stemp * temp.r;
-                            z__2.i = stemp * temp.i; // , expr subst
+                            z__2.real = stemp * temp.real;
+                            z__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__3].real;
+                            z__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L30: */
                         }
                     }
@@ -381,28 +393,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + i__ * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            z__2.r = ctemp * temp.r;
-                            z__2.i = ctemp * temp.i; // , expr subst
+                            z__2.real = ctemp * temp.real;
+                            z__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
-                            z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__4].real;
+                            z__3.imag = stemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            z__2.r = stemp * temp.r;
-                            z__2.i = stemp * temp.i; // , expr subst
+                            z__2.real = stemp * temp.real;
+                            z__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
-                            z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__4].real;
+                            z__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L50: */
                         }
                     }
@@ -421,28 +433,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + i__ * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
-                            z__2.r = ctemp * temp.r;
-                            z__2.i = ctemp * temp.i; // , expr subst
+                            z__2.real = ctemp * temp.real;
+                            z__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__3].real;
+                            z__3.imag = stemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = i__ * a_dim1 + 1;
-                            z__2.r = stemp * temp.r;
-                            z__2.i = stemp * temp.i; // , expr subst
+                            z__2.real = stemp * temp.real;
+                            z__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__3].real;
+                            z__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L70: */
                         }
                     }
@@ -465,28 +477,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + i__ * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
-                            z__2.r = stemp * a[i__4].r;
-                            z__2.i = stemp * a[i__4].i; // , expr subst
-                            z__3.r = ctemp * temp.r;
-                            z__3.i = ctemp * temp.i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__2.real = stemp * a[i__4].real;
+                            z__2.imag = stemp * a[i__4].imag; // , expr subst
+                            z__3.real = ctemp * temp.real;
+                            z__3.imag = ctemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = *m + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
-                            z__2.r = ctemp * a[i__4].r;
-                            z__2.i = ctemp * a[i__4].i; // , expr subst
-                            z__3.r = stemp * temp.r;
-                            z__3.i = stemp * temp.i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__2.real = ctemp * a[i__4].real;
+                            z__2.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__3.real = stemp * temp.real;
+                            z__3.imag = stemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L90: */
                         }
                     }
@@ -505,28 +517,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + i__ * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
-                            z__2.r = stemp * a[i__3].r;
-                            z__2.i = stemp * a[i__3].i; // , expr subst
-                            z__3.r = ctemp * temp.r;
-                            z__3.i = ctemp * temp.i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__2.real = stemp * a[i__3].real;
+                            z__2.imag = stemp * a[i__3].imag; // , expr subst
+                            z__3.real = ctemp * temp.real;
+                            z__3.imag = ctemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = *m + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
-                            z__2.r = ctemp * a[i__3].r;
-                            z__2.i = ctemp * a[i__3].i; // , expr subst
-                            z__3.r = stemp * temp.r;
-                            z__3.i = stemp * temp.i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__2.real = ctemp * a[i__3].real;
+                            z__2.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__3.real = stemp * temp.real;
+                            z__3.imag = stemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L110: */
                         }
                     }
@@ -553,28 +565,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + (j + 1) * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = i__ + (j + 1) * a_dim1;
-                            z__2.r = ctemp * temp.r;
-                            z__2.i = ctemp * temp.i; // , expr subst
+                            z__2.real = ctemp * temp.real;
+                            z__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ + j * a_dim1;
-                            z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__4].real;
+                            z__3.imag = stemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            z__2.r = stemp * temp.r;
-                            z__2.i = stemp * temp.i; // , expr subst
+                            z__2.real = stemp * temp.real;
+                            z__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ + j * a_dim1;
-                            z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__4].real;
+                            z__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L130: */
                         }
                     }
@@ -593,28 +605,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + (j + 1) * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + (j + 1) * a_dim1;
-                            z__2.r = ctemp * temp.r;
-                            z__2.i = ctemp * temp.i; // , expr subst
+                            z__2.real = ctemp * temp.real;
+                            z__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__3].real;
+                            z__3.imag = stemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            z__2.r = stemp * temp.r;
-                            z__2.i = stemp * temp.i; // , expr subst
+                            z__2.real = stemp * temp.real;
+                            z__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__3].real;
+                            z__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L150: */
                         }
                     }
@@ -637,28 +649,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            z__2.r = ctemp * temp.r;
-                            z__2.i = ctemp * temp.i; // , expr subst
+                            z__2.real = ctemp * temp.real;
+                            z__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ + a_dim1;
-                            z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__4].real;
+                            z__3.imag = stemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            z__2.r = stemp * temp.r;
-                            z__2.i = stemp * temp.i; // , expr subst
+                            z__2.real = stemp * temp.real;
+                            z__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ + a_dim1;
-                            z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__4].real;
+                            z__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L170: */
                         }
                     }
@@ -677,28 +689,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            z__2.r = ctemp * temp.r;
-                            z__2.i = ctemp * temp.i; // , expr subst
+                            z__2.real = ctemp * temp.real;
+                            z__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__3].real;
+                            z__3.imag = stemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = i__ + a_dim1;
-                            z__2.r = stemp * temp.r;
-                            z__2.i = stemp * temp.i; // , expr subst
+                            z__2.real = stemp * temp.real;
+                            z__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__3].real;
+                            z__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L190: */
                         }
                     }
@@ -721,28 +733,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
-                            temp.r = a[i__3].r;
-                            temp.i = a[i__3].i; // , expr subst
+                            temp.real = a[i__3].real;
+                            temp.imag = a[i__3].imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             i__4 = i__ + *n * a_dim1;
-                            z__2.r = stemp * a[i__4].r;
-                            z__2.i = stemp * a[i__4].i; // , expr subst
-                            z__3.r = ctemp * temp.r;
-                            z__3.i = ctemp * temp.i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__2.real = stemp * a[i__4].real;
+                            z__2.imag = stemp * a[i__4].imag; // , expr subst
+                            z__3.real = ctemp * temp.real;
+                            z__3.imag = ctemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = i__ + *n * a_dim1;
                             i__4 = i__ + *n * a_dim1;
-                            z__2.r = ctemp * a[i__4].r;
-                            z__2.i = ctemp * a[i__4].i; // , expr subst
-                            z__3.r = stemp * temp.r;
-                            z__3.i = stemp * temp.i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__2.real = ctemp * a[i__4].real;
+                            z__2.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__3.real = stemp * temp.real;
+                            z__3.imag = stemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L210: */
                         }
                     }
@@ -761,28 +773,28 @@ void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                         for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
                             i__3 = i__ + *n * a_dim1;
-                            z__2.r = stemp * a[i__3].r;
-                            z__2.i = stemp * a[i__3].i; // , expr subst
-                            z__3.r = ctemp * temp.r;
-                            z__3.i = ctemp * temp.i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__2.real = stemp * a[i__3].real;
+                            z__2.imag = stemp * a[i__3].imag; // , expr subst
+                            z__3.real = ctemp * temp.real;
+                            z__3.imag = ctemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = i__ + *n * a_dim1;
                             i__3 = i__ + *n * a_dim1;
-                            z__2.r = ctemp * a[i__3].r;
-                            z__2.i = ctemp * a[i__3].i; // , expr subst
-                            z__3.r = stemp * temp.r;
-                            z__3.i = stemp * temp.i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__2.real = ctemp * a[i__3].real;
+                            z__2.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__3.real = stemp * temp.real;
+                            z__3.imag = stemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L230: */
                         }
                     }

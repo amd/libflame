@@ -7,8 +7,8 @@
 #include "blis.h"
 #endif
 
-/* Subroutine */ integer lapack_cgetf2(integer *m, integer *n, scomplex *a, integer *lda,
-	 integer *ipiv, integer *info)
+/* Subroutine */ fla_dim_t lapack_cgetf2(fla_dim_t *m, fla_dim_t *n, scomplex *a, fla_dim_t *lda,
+	 aocl_int_t *ipiv, fla_dim_t *info)
 {
 
 
@@ -63,18 +63,17 @@
 
        Parameter adjustments */
     /* Table of constant values */
-    static TLS_CLASS_SPEC complex c_b1 = {1.f,0.f};
-    static TLS_CLASS_SPEC integer c__1 = 1;
+    static TLS_CLASS_SPEC scomplex c_b1 = {1.f, 0.f};
+    static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3;
     scomplex q__1;
     /* Builtin functions */
-    void c_div(scomplex *, complex *, scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    static TLS_CLASS_SPEC integer j;
-    static TLS_CLASS_SPEC integer jp;
-    extern /* Subroutine */ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    static TLS_CLASS_SPEC fla_dim_t j;
+    static TLS_CLASS_SPEC fla_dim_t jp;
 #define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
 #define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
 
@@ -95,7 +94,7 @@
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	xerbla_("LAPACK_CGETF2", &i__1, (ftnlen)13);
+	aocl_blas_xerbla("LAPACK_CGETF2", &i__1, (ftnlen)13);
 	return 0;
     }
 
@@ -111,7 +110,7 @@
 /*        Find pivot and test for singularity. */
 
 	i__2 = *m - j + 1;
-	jp = j - 1 + icamax_(&i__2, &a_ref(j, j), &c__1);
+	jp = j - 1 + aocl_blas_icamax(&i__2, &a_ref(j, j), &c__1);
 	ipiv[j] = jp;
 	i__2 = a_subscr(jp, j);
 	if (a[i__2].real != 0.f || a[i__2].imag != 0.f) {
@@ -119,7 +118,7 @@
 /*           Apply the interchange to columns 1:N. */
 
 	    if (jp != j) {
-		cswap_(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
+		aocl_blas_cswap(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
 	    }
 
 /*           Compute elements J+1:M of J-th column. */
@@ -127,7 +126,7 @@
 	    if (j < *m) {
 		i__2 = *m - j;
 		c_div(&q__1, &c_b1, &a_ref(j, j));
-		cscal_(&i__2, &q__1, &a_ref(j + 1, j), &c__1);
+		aocl_blas_cscal(&i__2, &q__1, &a_ref(j + 1, j), &c__1);
 	    }
 
 	} else if (*info == 0) {
@@ -142,7 +141,7 @@
 	    i__2 = *m - j;
 	    i__3 = *n - j;
 	    q__1.real = -1.f, q__1.imag = 0.f;
-	    cgeru_(&i__2, &i__3, &q__1, &a_ref(j + 1, j), &c__1, &a_ref(j, j
+	    aocl_blas_cgeru(&i__2, &i__3, &q__1, &a_ref(j + 1, j), &c__1, &a_ref(j, j
 		    + 1), lda, &a_ref(j + 1, j + 1), lda);
 	}
 /* L10: */

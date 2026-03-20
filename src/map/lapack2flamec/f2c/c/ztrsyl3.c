@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b18 = 2.;
 static doublereal c_b106 = 1.;
 /* > \brief \b ZTRSYL3 */
@@ -17,7 +17,7 @@ static doublereal c_b106 = 1.;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZTRSYL3 solves the complex Sylvester matrix equation: */
+/* > ZTRSYL3 solves the scomplex Sylvester matrix equation: */
 /* > */
 /* > op(A)*X + X*op(B) = scale*C or */
 /* > op(A)*X - X*op(B) = scale*C, */
@@ -158,57 +158,66 @@ perturbed */
 /* Angelika Schwarz, Umea University, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, doublecomplex *a,
-              integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc,
-              doublereal *scale, doublereal *swork, integer *ldswork, integer *info)
+/** Generated wrapper function */
+void ztrsyl3_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int_t *n,
+              dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb,
+              dcomplex *c__, aocl_int_t *ldc, doublereal *scale, doublereal *swork,
+              aocl_int_t *ldswork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztrsyl3(trana, tranb, isgn, m, n, a, lda, b, ldb, c__, ldc, scale, swork, ldswork,
+                        info);
+#else
+    aocl_int64_t isgn_64 = *isgn;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t ldswork_64 = *ldswork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztrsyl3(trana, tranb, &isgn_64, &m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64,
+                        scale, swork, &ldswork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64_t *m,
+                         aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                         aocl_int64_t *ldb, dcomplex *c__, aocl_int64_t *ldc,
+                         doublereal *scale, doublereal *swork, aocl_int64_t *ldswork,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrsyl3 inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS
                       ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",
                       *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, swork_dim1, swork_offset, i__1,
-        i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, swork_dim1, swork_offset,
+        i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *), d_imag(doublecomplex *);
+    double pow_dd(doublereal *, doublereal *), d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, k, l, i1, i2, j1, j2, k1, k2, l1, l2, nb, jj, ll, nba, nbb;
+    aocl_int64_t i__, j, k, l, i1, i2, j1, j2, k1, k2, l1, l2, nb, jj, ll, nba, nbb;
     doublereal buf, sgn, scal;
-    doublecomplex csgn;
+    dcomplex csgn;
     doublereal anrm, bnrm, cnrm;
-    integer awrk, bwrk;
+    aocl_int64_t awrk, bwrk;
     int temp;
     doublereal *wnrm, xnrm;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     extern doublereal dlamch_(char *);
     doublereal scaloc, scamin;
     extern doublereal dlarmm_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *);
     logical notrna, notrnb;
     doublereal smlnum;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ztrsyl_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -251,7 +260,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
     /* Use the same block size for all matrices. */
     /* Computing fla_max */
     i__1 = 8;
-    i__2 = ilaenv_(&c__1, "ZTRSYL", "", m, n, &c_n1, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__1, "ZTRSYL", "", m, n, &c_n1, &c_n1); // , expr subst
     nb = fla_max(i__1, i__2);
     /* Compute number of blocks in A and B */
     /* Computing fla_max */
@@ -307,7 +316,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTRSYL3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZTRSYL3", &i__1, (ftnlen)7);
         free(wnrm);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -330,8 +339,8 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
     /* workspace is provided */
     if(fla_min(nba, nbb) == 1 || *ldswork < fla_max(nba, nbb))
     {
-        ztrsyl_(trana, tranb, isgn, m, n, &a[a_offset], lda, &b[b_offset], ldb, &c__[c_offset], ldc,
-                scale, info);
+        aocl_lapack_ztrsyl(trana, tranb, isgn, m, n, &a[a_offset], lda, &b[b_offset], ldb,
+                           &c__[c_offset], ldc, scale, info);
         free(wnrm);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -373,14 +382,14 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 i__3 = k2 - k1;
                 i__4 = l2 - l1;
                 swork[k + (awrk + l) * swork_dim1]
-                    = zlange_("I", &i__3, &i__4, &a[k1 + l1 * a_dim1], lda, wnrm);
+                    = aocl_lapack_zlange("I", &i__3, &i__4, &a[k1 + l1 * a_dim1], lda, wnrm);
             }
             else
             {
                 i__3 = k2 - k1;
                 i__4 = l2 - l1;
                 swork[l + (awrk + k) * swork_dim1]
-                    = zlange_("1", &i__3, &i__4, &a[k1 + l1 * a_dim1], lda, wnrm);
+                    = aocl_lapack_zlange("1", &i__3, &i__4, &a[k1 + l1 * a_dim1], lda, wnrm);
             }
         }
     }
@@ -404,22 +413,22 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 i__3 = k2 - k1;
                 i__4 = l2 - l1;
                 swork[k + (bwrk + l) * swork_dim1]
-                    = zlange_("I", &i__3, &i__4, &b[k1 + l1 * b_dim1], ldb, wnrm);
+                    = aocl_lapack_zlange("I", &i__3, &i__4, &b[k1 + l1 * b_dim1], ldb, wnrm);
             }
             else
             {
                 i__3 = k2 - k1;
                 i__4 = l2 - l1;
                 swork[l + (bwrk + k) * swork_dim1]
-                    = zlange_("1", &i__3, &i__4, &b[k1 + l1 * b_dim1], ldb, wnrm);
+                    = aocl_lapack_zlange("1", &i__3, &i__4, &b[k1 + l1 * b_dim1], ldb, wnrm);
             }
         }
     }
     sgn = (doublereal)(*isgn);
-    z__1.r = sgn;
-    z__1.i = 0.; // , expr subst
-    csgn.r = z__1.r;
-    csgn.i = z__1.i; // , expr subst
+    z__1.real = sgn;
+    z__1.imag = 0.; // , expr subst
+    csgn.real = z__1.real;
+    csgn.imag = z__1.imag; // , expr subst
     if(notrna && notrnb)
     {
         /* Solve A*X + ISGN*X*B = scale*C. */
@@ -452,8 +461,9 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 l2 = fla_min(i__2, *n) + 1;
                 i__2 = k2 - k1;
                 i__3 = l2 - l1;
-                ztrsyl_(trana, tranb, isgn, &i__2, &i__3, &a[k1 + k1 * a_dim1], lda,
-                        &b[l1 + l1 * b_dim1], ldb, &c__[k1 + l1 * c_dim1], ldc, &scaloc, &iinfo);
+                aocl_lapack_ztrsyl(trana, tranb, isgn, &i__2, &i__3, &a[k1 + k1 * a_dim1], lda,
+                                   &b[l1 + l1 * b_dim1], ldb, &c__[k1 + l1 * c_dim1], ldc, &scaloc,
+                                   &iinfo);
                 *info = fla_max(*info, iinfo);
                 if(scaloc * swork[k + l * swork_dim1] == 0.)
                 {
@@ -494,7 +504,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 swork[k + l * swork_dim1] = scaloc * swork[k + l * swork_dim1];
                 i__2 = k2 - k1;
                 i__3 = l2 - l1;
-                xnrm = zlange_("I", &i__2, &i__3, &c__[k1 + l1 * c_dim1], ldc, wnrm);
+                xnrm = aocl_lapack_zlange("I", &i__2, &i__3, &c__[k1 + l1 * c_dim1], ldc, wnrm);
                 for(i__ = k - 1; i__ >= 1; --i__)
                 {
                     /* C( I, L ) := C( I, L ) - A( I, K ) * C( K, L ) */
@@ -506,7 +516,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     /* simulating consistent scaling. */
                     i__2 = i2 - i1;
                     i__3 = l2 - l1;
-                    cnrm = zlange_("I", &i__2, &i__3, &c__[i1 + l1 * c_dim1], ldc, wnrm);
+                    cnrm = aocl_lapack_zlange("I", &i__2, &i__3, &c__[i1 + l1 * c_dim1], ldc, wnrm);
                     /* Computing fla_min */
                     d__1 = swork[i__ + l * swork_dim1];
                     d__2 = swork[k + l * swork_dim1]; // , expr subst
@@ -554,7 +564,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(jj = l1; jj <= i__2; ++jj)
                         {
                             i__3 = k2 - k1;
-                            zdscal_(&i__3, &scal, &c__[k1 + jj * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__3, &scal, &c__[k1 + jj * c_dim1], &c__1);
                         }
                     }
                     scal = scamin / swork[i__ + l * swork_dim1] * scaloc;
@@ -564,7 +574,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__2; ++ll)
                         {
                             i__3 = i2 - i1;
-                            zdscal_(&i__3, &scal, &c__[i1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__3, &scal, &c__[i1 + ll * c_dim1], &c__1);
                         }
                     }
                     /* Record current scaling factor */
@@ -573,10 +583,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     i__2 = i2 - i1;
                     i__3 = l2 - l1;
                     i__4 = k2 - k1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemm_("N", "N", &i__2, &i__3, &i__4, &z__1, &a[i1 + k1 * a_dim1], lda,
-                           &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1], ldc);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemm("N", "N", &i__2, &i__3, &i__4, &z__1, &a[i1 + k1 * a_dim1], lda,
+                                    &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1],
+                                    ldc);
                 }
                 i__2 = nbb;
                 for(j = l + 1; j <= i__2; ++j)
@@ -590,7 +601,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     /* simulating consistent scaling. */
                     i__3 = k2 - k1;
                     i__4 = j2 - j1;
-                    cnrm = zlange_("I", &i__3, &i__4, &c__[k1 + j1 * c_dim1], ldc, wnrm);
+                    cnrm = aocl_lapack_zlange("I", &i__3, &i__4, &c__[k1 + j1 * c_dim1], ldc, wnrm);
                     /* Computing fla_min */
                     d__1 = swork[k + j * swork_dim1];
                     d__2 = swork[k + l * swork_dim1]; // , expr subst
@@ -638,7 +649,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__3; ++ll)
                         {
                             i__4 = k2 - k1;
-                            zdscal_(&i__4, &scal, &c__[k1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__4, &scal, &c__[k1 + ll * c_dim1], &c__1);
                         }
                     }
                     scal = scamin / swork[k + j * swork_dim1] * scaloc;
@@ -648,7 +659,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(jj = j1; jj <= i__3; ++jj)
                         {
                             i__4 = k2 - k1;
-                            zdscal_(&i__4, &scal, &c__[k1 + jj * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__4, &scal, &c__[k1 + jj * c_dim1], &c__1);
                         }
                     }
                     /* Record current scaling factor */
@@ -657,10 +668,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     i__3 = k2 - k1;
                     i__4 = j2 - j1;
                     i__5 = l2 - l1;
-                    z__1.r = -csgn.r;
-                    z__1.i = -csgn.i; // , expr subst
-                    zgemm_("N", "N", &i__3, &i__4, &i__5, &z__1, &c__[k1 + l1 * c_dim1], ldc,
-                           &b[l1 + j1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1], ldc);
+                    z__1.real = -csgn.real;
+                    z__1.imag = -csgn.imag; // , expr subst
+                    aocl_blas_zgemm("N", "N", &i__3, &i__4, &i__5, &z__1, &c__[k1 + l1 * c_dim1],
+                                    ldc, &b[l1 + j1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1],
+                                    ldc);
                 }
             }
         }
@@ -698,8 +710,9 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 l2 = fla_min(i__3, *n) + 1;
                 i__3 = k2 - k1;
                 i__4 = l2 - l1;
-                ztrsyl_(trana, tranb, isgn, &i__3, &i__4, &a[k1 + k1 * a_dim1], lda,
-                        &b[l1 + l1 * b_dim1], ldb, &c__[k1 + l1 * c_dim1], ldc, &scaloc, &iinfo);
+                aocl_lapack_ztrsyl(trana, tranb, isgn, &i__3, &i__4, &a[k1 + k1 * a_dim1], lda,
+                                   &b[l1 + l1 * b_dim1], ldb, &c__[k1 + l1 * c_dim1], ldc, &scaloc,
+                                   &iinfo);
                 *info = fla_max(*info, iinfo);
                 if(scaloc * swork[k + l * swork_dim1] == 0.)
                 {
@@ -741,7 +754,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 swork[k + l * swork_dim1] = scaloc * swork[k + l * swork_dim1];
                 i__3 = k2 - k1;
                 i__4 = l2 - l1;
-                xnrm = zlange_("I", &i__3, &i__4, &c__[k1 + l1 * c_dim1], ldc, wnrm);
+                xnrm = aocl_lapack_zlange("I", &i__3, &i__4, &c__[k1 + l1 * c_dim1], ldc, wnrm);
                 i__3 = nba;
                 for(i__ = k + 1; i__ <= i__3; ++i__)
                 {
@@ -754,7 +767,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     /* simulating consistent scaling. */
                     i__4 = i2 - i1;
                     i__5 = l2 - l1;
-                    cnrm = zlange_("I", &i__4, &i__5, &c__[i1 + l1 * c_dim1], ldc, wnrm);
+                    cnrm = aocl_lapack_zlange("I", &i__4, &i__5, &c__[i1 + l1 * c_dim1], ldc, wnrm);
                     /* Computing fla_min */
                     d__1 = swork[i__ + l * swork_dim1];
                     d__2 = swork[k + l * swork_dim1]; // , expr subst
@@ -802,7 +815,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__4; ++ll)
                         {
                             i__5 = k2 - k1;
-                            zdscal_(&i__5, &scal, &c__[k1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__5, &scal, &c__[k1 + ll * c_dim1], &c__1);
                         }
                     }
                     scal = scamin / swork[i__ + l * swork_dim1] * scaloc;
@@ -812,7 +825,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__4; ++ll)
                         {
                             i__5 = i2 - i1;
-                            zdscal_(&i__5, &scal, &c__[i1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__5, &scal, &c__[i1 + ll * c_dim1], &c__1);
                         }
                     }
                     /* Record current scaling factor */
@@ -821,10 +834,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     i__4 = i2 - i1;
                     i__5 = l2 - l1;
                     i__6 = k2 - k1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemm_("C", "N", &i__4, &i__5, &i__6, &z__1, &a[k1 + i1 * a_dim1], lda,
-                           &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1], ldc);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemm("C", "N", &i__4, &i__5, &i__6, &z__1, &a[k1 + i1 * a_dim1], lda,
+                                    &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1],
+                                    ldc);
                 }
                 i__3 = nbb;
                 for(j = l + 1; j <= i__3; ++j)
@@ -838,7 +852,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     /* simulating consistent scaling. */
                     i__4 = k2 - k1;
                     i__5 = j2 - j1;
-                    cnrm = zlange_("I", &i__4, &i__5, &c__[k1 + j1 * c_dim1], ldc, wnrm);
+                    cnrm = aocl_lapack_zlange("I", &i__4, &i__5, &c__[k1 + j1 * c_dim1], ldc, wnrm);
                     /* Computing fla_min */
                     d__1 = swork[k + j * swork_dim1];
                     d__2 = swork[k + l * swork_dim1]; // , expr subst
@@ -886,7 +900,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__4; ++ll)
                         {
                             i__5 = k2 - k1;
-                            zdscal_(&i__5, &scal, &c__[k1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__5, &scal, &c__[k1 + ll * c_dim1], &c__1);
                         }
                     }
                     scal = scamin / swork[k + j * swork_dim1] * scaloc;
@@ -896,7 +910,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(jj = j1; jj <= i__4; ++jj)
                         {
                             i__5 = k2 - k1;
-                            zdscal_(&i__5, &scal, &c__[k1 + jj * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__5, &scal, &c__[k1 + jj * c_dim1], &c__1);
                         }
                     }
                     /* Record current scaling factor */
@@ -905,10 +919,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     i__4 = k2 - k1;
                     i__5 = j2 - j1;
                     i__6 = l2 - l1;
-                    z__1.r = -csgn.r;
-                    z__1.i = -csgn.i; // , expr subst
-                    zgemm_("N", "N", &i__4, &i__5, &i__6, &z__1, &c__[k1 + l1 * c_dim1], ldc,
-                           &b[l1 + j1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1], ldc);
+                    z__1.real = -csgn.real;
+                    z__1.imag = -csgn.imag; // , expr subst
+                    aocl_blas_zgemm("N", "N", &i__4, &i__5, &i__6, &z__1, &c__[k1 + l1 * c_dim1],
+                                    ldc, &b[l1 + j1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1],
+                                    ldc);
                 }
             }
         }
@@ -945,8 +960,9 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 l2 = fla_min(i__2, *n) + 1;
                 i__2 = k2 - k1;
                 i__3 = l2 - l1;
-                ztrsyl_(trana, tranb, isgn, &i__2, &i__3, &a[k1 + k1 * a_dim1], lda,
-                        &b[l1 + l1 * b_dim1], ldb, &c__[k1 + l1 * c_dim1], ldc, &scaloc, &iinfo);
+                aocl_lapack_ztrsyl(trana, tranb, isgn, &i__2, &i__3, &a[k1 + k1 * a_dim1], lda,
+                                   &b[l1 + l1 * b_dim1], ldb, &c__[k1 + l1 * c_dim1], ldc, &scaloc,
+                                   &iinfo);
                 *info = fla_max(*info, iinfo);
                 if(scaloc * swork[k + l * swork_dim1] == 0.)
                 {
@@ -988,7 +1004,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 swork[k + l * swork_dim1] = scaloc * swork[k + l * swork_dim1];
                 i__2 = k2 - k1;
                 i__3 = l2 - l1;
-                xnrm = zlange_("I", &i__2, &i__3, &c__[k1 + l1 * c_dim1], ldc, wnrm);
+                xnrm = aocl_lapack_zlange("I", &i__2, &i__3, &c__[k1 + l1 * c_dim1], ldc, wnrm);
                 i__2 = nba;
                 for(i__ = k + 1; i__ <= i__2; ++i__)
                 {
@@ -1001,7 +1017,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     /* simulating consistent scaling. */
                     i__3 = i2 - i1;
                     i__4 = l2 - l1;
-                    cnrm = zlange_("I", &i__3, &i__4, &c__[i1 + l1 * c_dim1], ldc, wnrm);
+                    cnrm = aocl_lapack_zlange("I", &i__3, &i__4, &c__[i1 + l1 * c_dim1], ldc, wnrm);
                     /* Computing fla_min */
                     d__1 = swork[i__ + l * swork_dim1];
                     d__2 = swork[k + l * swork_dim1]; // , expr subst
@@ -1049,7 +1065,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__3; ++ll)
                         {
                             i__4 = k2 - k1;
-                            zdscal_(&i__4, &scal, &c__[k1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__4, &scal, &c__[k1 + ll * c_dim1], &c__1);
                         }
                     }
                     scal = scamin / swork[i__ + l * swork_dim1] * scaloc;
@@ -1059,7 +1075,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__3; ++ll)
                         {
                             i__4 = i2 - i1;
-                            zdscal_(&i__4, &scal, &c__[i1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__4, &scal, &c__[i1 + ll * c_dim1], &c__1);
                         }
                     }
                     /* Record current scaling factor */
@@ -1068,10 +1084,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     i__3 = i2 - i1;
                     i__4 = l2 - l1;
                     i__5 = k2 - k1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemm_("C", "N", &i__3, &i__4, &i__5, &z__1, &a[k1 + i1 * a_dim1], lda,
-                           &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1], ldc);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemm("C", "N", &i__3, &i__4, &i__5, &z__1, &a[k1 + i1 * a_dim1], lda,
+                                    &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1],
+                                    ldc);
                 }
                 i__2 = l - 1;
                 for(j = 1; j <= i__2; ++j)
@@ -1085,7 +1102,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     /* simulating consistent scaling. */
                     i__3 = k2 - k1;
                     i__4 = j2 - j1;
-                    cnrm = zlange_("I", &i__3, &i__4, &c__[k1 + j1 * c_dim1], ldc, wnrm);
+                    cnrm = aocl_lapack_zlange("I", &i__3, &i__4, &c__[k1 + j1 * c_dim1], ldc, wnrm);
                     /* Computing fla_min */
                     d__1 = swork[k + j * swork_dim1];
                     d__2 = swork[k + l * swork_dim1]; // , expr subst
@@ -1133,7 +1150,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__3; ++ll)
                         {
                             i__4 = k2 - k1;
-                            zdscal_(&i__4, &scal, &c__[k1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__4, &scal, &c__[k1 + ll * c_dim1], &c__1);
                         }
                     }
                     scal = scamin / swork[k + j * swork_dim1] * scaloc;
@@ -1143,7 +1160,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(jj = j1; jj <= i__3; ++jj)
                         {
                             i__4 = k2 - k1;
-                            zdscal_(&i__4, &scal, &c__[k1 + jj * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__4, &scal, &c__[k1 + jj * c_dim1], &c__1);
                         }
                     }
                     /* Record current scaling factor */
@@ -1152,10 +1169,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     i__3 = k2 - k1;
                     i__4 = j2 - j1;
                     i__5 = l2 - l1;
-                    z__1.r = -csgn.r;
-                    z__1.i = -csgn.i; // , expr subst
-                    zgemm_("N", "C", &i__3, &i__4, &i__5, &z__1, &c__[k1 + l1 * c_dim1], ldc,
-                           &b[j1 + l1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1], ldc);
+                    z__1.real = -csgn.real;
+                    z__1.imag = -csgn.imag; // , expr subst
+                    aocl_blas_zgemm("N", "C", &i__3, &i__4, &i__5, &z__1, &c__[k1 + l1 * c_dim1],
+                                    ldc, &b[j1 + l1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1],
+                                    ldc);
                 }
             }
         }
@@ -1191,8 +1209,9 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 l2 = fla_min(i__1, *n) + 1;
                 i__1 = k2 - k1;
                 i__2 = l2 - l1;
-                ztrsyl_(trana, tranb, isgn, &i__1, &i__2, &a[k1 + k1 * a_dim1], lda,
-                        &b[l1 + l1 * b_dim1], ldb, &c__[k1 + l1 * c_dim1], ldc, &scaloc, &iinfo);
+                aocl_lapack_ztrsyl(trana, tranb, isgn, &i__1, &i__2, &a[k1 + k1 * a_dim1], lda,
+                                   &b[l1 + l1 * b_dim1], ldb, &c__[k1 + l1 * c_dim1], ldc, &scaloc,
+                                   &iinfo);
                 *info = fla_max(*info, iinfo);
                 if(scaloc * swork[k + l * swork_dim1] == 0.)
                 {
@@ -1234,7 +1253,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 swork[k + l * swork_dim1] = scaloc * swork[k + l * swork_dim1];
                 i__1 = k2 - k1;
                 i__2 = l2 - l1;
-                xnrm = zlange_("I", &i__1, &i__2, &c__[k1 + l1 * c_dim1], ldc, wnrm);
+                xnrm = aocl_lapack_zlange("I", &i__1, &i__2, &c__[k1 + l1 * c_dim1], ldc, wnrm);
                 i__1 = k - 1;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
@@ -1247,7 +1266,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     /* simulating consistent scaling. */
                     i__2 = i2 - i1;
                     i__3 = l2 - l1;
-                    cnrm = zlange_("I", &i__2, &i__3, &c__[i1 + l1 * c_dim1], ldc, wnrm);
+                    cnrm = aocl_lapack_zlange("I", &i__2, &i__3, &c__[i1 + l1 * c_dim1], ldc, wnrm);
                     /* Computing fla_min */
                     d__1 = swork[i__ + l * swork_dim1];
                     d__2 = swork[k + l * swork_dim1]; // , expr subst
@@ -1295,7 +1314,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__2; ++ll)
                         {
                             i__3 = k2 - k1;
-                            zdscal_(&i__3, &scal, &c__[k1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__3, &scal, &c__[k1 + ll * c_dim1], &c__1);
                         }
                     }
                     scal = scamin / swork[i__ + l * swork_dim1] * scaloc;
@@ -1305,7 +1324,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(ll = l1; ll <= i__2; ++ll)
                         {
                             i__3 = i2 - i1;
-                            zdscal_(&i__3, &scal, &c__[i1 + ll * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__3, &scal, &c__[i1 + ll * c_dim1], &c__1);
                         }
                     }
                     /* Record current scaling factor */
@@ -1314,10 +1333,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     i__2 = i2 - i1;
                     i__3 = l2 - l1;
                     i__4 = k2 - k1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemm_("N", "N", &i__2, &i__3, &i__4, &z__1, &a[i1 + k1 * a_dim1], lda,
-                           &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1], ldc);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemm("N", "N", &i__2, &i__3, &i__4, &z__1, &a[i1 + k1 * a_dim1], lda,
+                                    &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1],
+                                    ldc);
                 }
                 i__1 = l - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -1331,7 +1351,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     /* simulating consistent scaling. */
                     i__2 = k2 - k1;
                     i__3 = j2 - j1;
-                    cnrm = zlange_("I", &i__2, &i__3, &c__[k1 + j1 * c_dim1], ldc, wnrm);
+                    cnrm = aocl_lapack_zlange("I", &i__2, &i__3, &c__[k1 + j1 * c_dim1], ldc, wnrm);
                     /* Computing fla_min */
                     d__1 = swork[k + j * swork_dim1];
                     d__2 = swork[k + l * swork_dim1]; // , expr subst
@@ -1379,7 +1399,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(jj = l1; jj <= i__2; ++jj)
                         {
                             i__3 = k2 - k1;
-                            zdscal_(&i__3, &scal, &c__[k1 + jj * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__3, &scal, &c__[k1 + jj * c_dim1], &c__1);
                         }
                     }
                     scal = scamin / swork[k + j * swork_dim1] * scaloc;
@@ -1389,7 +1409,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                         for(jj = j1; jj <= i__2; ++jj)
                         {
                             i__3 = k2 - k1;
-                            zdscal_(&i__3, &scal, &c__[k1 + jj * c_dim1], &c__1);
+                            aocl_blas_zdscal(&i__3, &scal, &c__[k1 + jj * c_dim1], &c__1);
                         }
                     }
                     /* Record current scaling factor */
@@ -1398,10 +1418,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                     i__2 = k2 - k1;
                     i__3 = j2 - j1;
                     i__4 = l2 - l1;
-                    z__1.r = -csgn.r;
-                    z__1.i = -csgn.i; // , expr subst
-                    zgemm_("N", "C", &i__2, &i__3, &i__4, &z__1, &c__[k1 + l1 * c_dim1], ldc,
-                           &b[j1 + l1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1], ldc);
+                    z__1.real = -csgn.real;
+                    z__1.imag = -csgn.imag; // , expr subst
+                    aocl_blas_zgemm("N", "C", &i__2, &i__3, &i__4, &z__1, &c__[k1 + l1 * c_dim1],
+                                    ldc, &b[j1 + l1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1],
+                                    ldc);
                 }
             }
         }
@@ -1454,7 +1475,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
                 for(ll = l1; ll <= i__3; ++ll)
                 {
                     i__4 = k2 - k1;
-                    zdscal_(&i__4, &scal, &c__[k1 + ll * c_dim1], &c__1);
+                    aocl_blas_zdscal(&i__4, &scal, &c__[k1 + ll * c_dim1], &c__1);
                 }
             }
         }
@@ -1479,7 +1500,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
         /* How much can the normwise largest entry be upscaled? */
         /* Computing fla_max */
         i__1 = c_dim1 + 1;
-        d__3 = (d__1 = c__[i__1].r, f2c_abs(d__1));
+        d__3 = (d__1 = c__[i__1].real, f2c_abs(d__1));
         d__4 = (d__2 = d_imag(&c__[c_dim1 + 1]), f2c_abs(d__2)); // , expr subst
         scal = fla_max(d__3, d__4);
         i__1 = *m;
@@ -1490,7 +1511,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
             {
                 /* Computing fla_max */
                 i__3 = k + l * c_dim1;
-                d__3 = scal, d__4 = (d__1 = c__[i__3].r, f2c_abs(d__1));
+                d__3 = scal, d__4 = (d__1 = c__[i__3].real, f2c_abs(d__1));
                 d__3 = fla_max(d__3, d__4);
                 d__4 = (d__2 = d_imag(&c__[k + l * c_dim1]), f2c_abs(d__2)); // ; expr subst
                 scal = fla_max(d__3, d__4);
@@ -1502,7 +1523,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
         d__2 = 1. / buf; // , expr subst
         scaloc = fla_min(d__1, d__2);
         buf *= scaloc;
-        zlascl_("G", &c_n1, &c_n1, &c_b106, &scaloc, m, n, &c__[c_offset], ldc, &iinfo);
+        aocl_lapack_zlascl("G", &c_n1, &c_n1, &c_b106, &scaloc, m, n, &c__[c_offset], ldc, &iinfo);
     }
     /* Combine with buffer scaling factor. SCALE will be flushed if */
     /* BUF is less than one here. */

@@ -4,19 +4,12 @@
 
 #include "FLA_f2c.h"
 
-extern void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
-extern void dgemm_(char *transa, char *transb, integer *m, integer *n, integer *k,
-                   doublereal *alpha, doublereal *a, integer *lda, doublereal *b, integer *ldb,
-                   doublereal *beta, doublereal *c__, integer *ldc);
-
-#ifdef FLA_ENABLE_BLAS_EXT_GEMMT
-extern void dgemmt_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-                    integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-#endif
-
-static void dspffrt2_fla_def(doublereal *ap, integer *n, integer *ncolm, doublereal *work);
-static void dspffrt2_fla_unp_var1(doublereal *ap, integer *n, integer *ncolm, doublereal *work);
-static void dspffrt2_fla_unp_var2(doublereal *ap, integer *n, integer *ncolm, doublereal *work);
+static void dspffrt2_fla_def(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
+                             doublereal *work);
+static void dspffrt2_fla_unp_var1(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
+                                  doublereal *work);
+static void dspffrt2_fla_unp_var2(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
+                                  doublereal *work);
 
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
@@ -82,10 +75,11 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
 
     \endverbatim
     *  */
-void dspffrt2_fla(doublereal *ap, integer *n, integer *ncolm, doublereal *work, doublereal *work2)
+void dspffrt2_fla(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm, doublereal *work,
+                  doublereal *work2)
 {
     /* ncolm as fraction of n */
-    integer ncolm_pc = (integer)((*ncolm * 100) / *n);
+    aocl_int64_t ncolm_pc = (integer)((*ncolm * 100) / *n);
 
     if((*n < FLA_SPFFRT2__NTHRESH1)
        || (*n < FLA_SPFFRT2__NTHRESH2 && ncolm_pc < FLA_SPFFRT2__NCOLFRAC_THRESH1)
@@ -96,12 +90,12 @@ void dspffrt2_fla(doublereal *ap, integer *n, integer *ncolm, doublereal *work, 
     }
     else if(ncolm_pc < FLA_SPFFRT2__NCOLFRAC_THRESH2)
     {
-        /* Unpacking/packing based variant for large ncolm values */
+        /* Unpacking/packing based variant for smaller ncolm values */
         dspffrt2_fla_unp_var1(ap, n, ncolm, work);
     }
     else
     {
-        /* Unpacking/packing based variant for smaller ncolm values */
+        /* Unpacking/packing based variant for large ncolm values */
         dspffrt2_fla_unp_var2(ap, n, ncolm, work);
     }
     return;
@@ -112,9 +106,9 @@ void dspffrt2_fla(doublereal *ap, integer *n, integer *ncolm, doublereal *work, 
  *  triangular part of unpacked full matrix.
  *  The strictly upper triangular part is left untouched.
  */
-void dunpack_fla(doublereal *ap, doublereal *a, integer m, integer n, integer lda)
+void dunpack_fla(doublereal *ap, doublereal *a, aocl_int64_t m, aocl_int64_t n, aocl_int64_t lda)
 {
-    integer i, j;
+    aocl_int64_t i, j;
     doublereal *aptr = ap;
 
     for(i = 0; i < n; i++)
@@ -134,9 +128,9 @@ void dunpack_fla(doublereal *ap, doublereal *a, integer m, integer n, integer ld
  *  The strictly upper triangular parts of the input and output are
  *  left unused and untouched respectiely.
  */
-void dpack_fla(doublereal *a, doublereal *ap, integer m, integer n, integer lda)
+void dpack_fla(doublereal *a, doublereal *ap, aocl_int64_t m, aocl_int64_t n, aocl_int64_t lda)
 {
-    integer i, j;
+    aocl_int64_t i, j;
     doublereal *aptr = ap;
 
     for(i = 0; i < n; i++)
@@ -157,19 +151,14 @@ void dpack_fla(doublereal *a, doublereal *ap, integer m, integer n, integer lda)
  * Only the lower trapezoidal part of the matrix is updated.
  * The strictly upper triangular part is left untouched.
  */
-void dsffrk2_fla(doublereal *au, integer *m, integer *n, integer *lda, doublereal *bt,
-                 integer *ldbt)
+void dsffrk2_fla(doublereal *au, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *lda,
+                 doublereal *bt, aocl_int64_t *ldbt)
 {
     doublereal d__1;
-    integer i__1, i__2, i__3;
-    integer k, kc, kcn;
-    integer c__1 = 1;
+    aocl_int64_t i__1, i__2, i__3;
+    aocl_int64_t k, kc, kcn;
+    aocl_int64_t c__1 = 1;
     doublereal r1;
-    extern void dger_(integer * m, integer * n, doublereal * alpha, doublereal * x, integer * incx,
-                      doublereal * y, integer * incy, doublereal * a, integer * lda);
-    extern void dcopy_(integer * n, doublereal * dx, integer * incx, doublereal * dy,
-                       integer * incy);
-    extern void dscal_(integer * n, doublereal * da, doublereal * dx, integer * incx);
 
     --au;
     --bt;
@@ -192,11 +181,11 @@ void dsffrk2_fla(doublereal *au, integer *m, integer *n, integer *lda, doublerea
         kcn = kc + *lda + 1;
 
         /* Update trailing matrix with rank-1 operation */
-        dger_(&i__2, &i__1, &d__1, &au[kc + 1], &c__1, &au[kc + 1], &c__1, &au[kcn], lda);
+        aocl_blas_dger(&i__2, &i__1, &d__1, &au[kc + 1], &c__1, &au[kc + 1], &c__1, &au[kcn], lda);
 
         /* Compute b**T/a */
-        dcopy_(&i__3, &au[kc + *n - k + 1], &c__1, &bt[k], ldbt);
-        dscal_(&i__3, &d__1, &bt[k], ldbt);
+        aocl_blas_dcopy(&i__3, &au[kc + *n - k + 1], &c__1, &bt[k], ldbt);
+        aocl_blas_dscal(&i__3, &d__1, &bt[k], ldbt);
 
         au[kc] = r1;
         kc = kcn;
@@ -217,11 +206,11 @@ void dsffrk2_fla(doublereal *au, integer *m, integer *n, integer *lda, doublerea
  * trailing matrix update inside the main loop
  */
 
-void dspffrt2_fla_unp_var1(doublereal *ap, integer *n, integer *ncolm, doublereal *work)
+void dspffrt2_fla_unp_var1(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm, doublereal *work)
 {
     doublereal d__1 = 1.0;
-    integer k, kc;
-    integer m, nb;
+    aocl_int64_t k, kc;
+    aocl_int64_t m, nb;
 
     doublereal *au, *bt;
     doublereal *mau, *mbt;
@@ -236,8 +225,15 @@ void dspffrt2_fla_unp_var1(doublereal *ap, integer *n, integer *ncolm, doublerea
     nb = (nb > *ncolm) ? *ncolm : nb;
 
     /* Allocate unpacked matrix and do the unpacking */
-    mau = (doublereal *)malloc(*n * *n * sizeof(doublereal));
-    mbt = (doublereal *)malloc(nb * (*n - nb) * sizeof(doublereal));
+    mau = NULL;
+    mau = (doublereal *) malloc(*n * *n * sizeof(doublereal) + nb * (*n - nb) * sizeof(doublereal));
+    if(mau == NULL)
+    {
+        /* call default version */
+        dspffrt2_fla_def(ap, n, ncolm, work);
+        return;
+    }
+    mbt = mau + *n * *n;
 
     dunpack_fla(ap, mau, *n, *n, *n);
 
@@ -258,10 +254,10 @@ void dspffrt2_fla_unp_var1(doublereal *ap, integer *n, integer *ncolm, doublerea
 
         /* Update trailing matrix */
 #ifndef FLA_ENABLE_BLAS_EXT_GEMMT
-        dgemm_("N", "N", &m, &m, &nb, &d__1, &au[kc + nb], n, &bt[1], &nb, &d__1,
+        aocl_blas_dgemm("N", "N", &m, &m, &nb, &d__1, &au[kc + nb], n, &bt[1], &nb, &d__1,
                &au[kc + nb * *n + nb], n);
 #else
-        dgemmt_("L", "N", "N", &m, &nb, &d__1, &au[kc + nb], n, &bt[1], &nb, &d__1,
+        aocl_blas_dgemmt("L", "N", "N", &m, &nb, &d__1, &au[kc + nb], n, &bt[1], &nb, &d__1,
                 &au[kc + nb * *n + nb], n);
 #endif
     }
@@ -278,10 +274,10 @@ void dspffrt2_fla_unp_var1(doublereal *ap, integer *n, integer *ncolm, doublerea
 
         /* Update trailing matrix */
 #ifndef FLA_ENABLE_BLAS_EXT_GEMMT
-        dgemm_("N", "N", &m, &m, &nb, &d__1, &au[kc + nb], n, &bt[1], &nb, &d__1,
+        aocl_blas_dgemm("N", "N", &m, &m, &nb, &d__1, &au[kc + nb], n, &bt[1], &nb, &d__1,
                &au[kc + nb * *n + nb], n);
 #else
-        dgemmt_("L", "N", "N", &m, &nb, &d__1, &au[kc + nb], n, &bt[1], &nb, &d__1,
+        aocl_blas_dgemmt("L", "N", "N", &m, &nb, &d__1, &au[kc + nb], n, &bt[1], &nb, &d__1,
                 &au[kc + nb * *n + nb], n);
 #endif
     }
@@ -290,7 +286,6 @@ void dspffrt2_fla_unp_var1(doublereal *ap, integer *n, integer *ncolm, doublerea
     dpack_fla(mau, &ap[1], *n, *n, *n);
 
     free(mau);
-    free(mbt);
     return;
 }
 
@@ -306,11 +301,11 @@ void dspffrt2_fla_unp_var1(doublereal *ap, integer *n, integer *ncolm, doublerea
  * and the trailing matrix is updated outside the main loop
  */
 
-void dspffrt2_fla_unp_var2(doublereal *ap, integer *n, integer *ncolm, doublereal *work)
+void dspffrt2_fla_unp_var2(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm, doublereal *work)
 {
     doublereal d__1 = 1.0;
-    integer kc, mg, nb;
-    integer k, ni, mp;
+    aocl_int64_t kc, mg, nb;
+    aocl_int64_t k, ni, mp;
 
     doublereal *au;
     doublereal *mau;
@@ -325,7 +320,14 @@ void dspffrt2_fla_unp_var2(doublereal *ap, integer *n, integer *ncolm, doublerea
     nb = (nb > *ncolm) ? *ncolm : nb;
 
     /* Allocate unpacked matrix and do the unpacking */
+    mau = NULL;
     mau = (doublereal *)malloc(*n * *n * sizeof(doublereal));
+    if(mau == NULL)
+    {
+        /* call default version */
+        dspffrt2_fla_def(ap, n, ncolm, work);
+        return;
+    }
 
     dunpack_fla(ap, mau, *n, *n, *n);
 
@@ -349,13 +351,13 @@ void dspffrt2_fla_unp_var2(doublereal *ap, integer *n, integer *ncolm, doublerea
         /* Update trailing matrix within the panel */
 #ifndef FLA_ENABLE_BLAS_EXT_GEMMT
         mg = *n - *ncolm + ni;
-        dgemm_("N", "N", &mg, &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n, &d__1,
-               &au[kc + nb * *n + nb], n);
+        aocl_blas_dgemm("N", "N", &mg, &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n,
+                        &d__1, &au[kc + nb * *n + nb], n);
 #else
-        dgemmt_("L", "N", "N", &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n, &d__1,
+        aocl_blas_dgemmt("L", "N", "N", &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n, &d__1,
                 &au[kc + nb * *n + nb], n);
-        dgemm_("N", "N", &mg, &ni, &nb, &d__1, &au[kc + ni + nb], n, &au[kc + nb * *n], n, &d__1,
-               &au[kc + nb * *n + nb + ni], n);
+        aocl_blas_dgemm("N", "N", &mg, &ni, &nb, &d__1, &au[kc + ni + nb], n, &au[kc + nb * *n], n,
+                        &d__1, &au[kc + nb * *n + nb + ni], n);
 #endif
     }
 
@@ -373,10 +375,10 @@ void dspffrt2_fla_unp_var2(doublereal *ap, integer *n, integer *ncolm, doublerea
     /* Update trailing matrix */
 #ifndef FLA_ENABLE_BLAS_EXT_GEMMT
     mg = *n - *ncolm;
-    dgemm_("N", "N", &mg, &mg, ncolm, &d__1, &au[*ncolm + 1], n, &au[*ncolm * *n + 1], n, &d__1,
+    aocl_blas_dgemm("N", "N", &mg, &mg, ncolm, &d__1, &au[*ncolm + 1], n, &au[*ncolm * *n + 1], n, &d__1,
            &au[*ncolm + *ncolm * *n + 1], n);
 #else
-    dgemmt_("L", "N", "N", &mg, ncolm, &d__1, &au[*ncolm + 1], n, &au[*ncolm * *n + 1], n, &d__1,
+    aocl_blas_dgemmt("L", "N", "N", &mg, ncolm, &d__1, &au[*ncolm + 1], n, &au[*ncolm * *n + 1], n, &d__1,
             &au[*ncolm + *ncolm * *n + 1], n);
 #endif
 
@@ -387,11 +389,11 @@ void dspffrt2_fla_unp_var2(doublereal *ap, integer *n, integer *ncolm, doublerea
     return;
 }
 
-void dspffrt2_fla_def(doublereal *ap, integer *n, integer *ncolm, doublereal *work)
+void dspffrt2_fla_def(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm, doublereal *work)
 {
     doublereal d__1;
-    integer i__1, k, kc;
-    integer c__1 = 1;
+    aocl_int64_t i__1, k, kc;
+    aocl_int64_t c__1 = 1;
     doublereal r1;
 
     --ap;
@@ -414,7 +416,7 @@ void dspffrt2_fla_def(doublereal *ap, integer *n, integer *ncolm, doublereal *wo
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
         /* A := A - L(k)*D(k)*L(k)**T */
         i__1 = *n - k;
-        dspr_("Lower", &i__1, &d__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
+        aocl_blas_dspr("Lower", &i__1, &d__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
 
         ap[kc] = r1;
         kc = kc + *n - k + 1;

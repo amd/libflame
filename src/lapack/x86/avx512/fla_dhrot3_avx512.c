@@ -12,9 +12,9 @@
 #if FLA_ENABLE_AMD_OPT
 
 /* Application of 3x3 Householder reflector on a nx3 matrix from the right */
-int fla_dhrot3_avx512(integer *n, doublereal *a, integer *lda, doublereal *v, doublereal *tau)
+int fla_dhrot3_avx512(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *v, doublereal *tau)
 {
-    integer ir;
+    aocl_int64_t ir;
     doublereal mtau = -*tau;
 
     __m512d vd8_a0, vd8_a1, vd8_a2;

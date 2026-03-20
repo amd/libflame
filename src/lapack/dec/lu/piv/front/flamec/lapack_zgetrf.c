@@ -7,8 +7,8 @@
 #include "blis.h"
 #endif
 
-/* Subroutine */ integer lapack_zgetrf(integer *m, integer *n, dcomplex *a,
-	integer *lda, integer *ipiv, integer *info)
+/* Subroutine */ fla_dim_t lapack_zgetrf(fla_dim_t *m, fla_dim_t *n, dcomplex *a,
+	fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info)
 {
 
 
@@ -64,17 +64,15 @@
        Parameter adjustments */
     /* Table of constant values */
     static TLS_CLASS_SPEC dcomplex c_b1 = {1.,0.};
-    static TLS_CLASS_SPEC integer c__1 = 1;
-    static TLS_CLASS_SPEC integer c_n1 = -1;
+    static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
+    static TLS_CLASS_SPEC fla_dim_t c_n1 = -1;
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1;
     /* Local variables */
-    static TLS_CLASS_SPEC integer i__, j, iinfo;
-    static TLS_CLASS_SPEC integer jb, nb;
-    extern /* Subroutine */ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *,integer *, integer *);
+    static TLS_CLASS_SPEC fla_dim_t i__, j, iinfo;
+    static TLS_CLASS_SPEC fla_dim_t jb, nb;
 #define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
 #define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
 
@@ -98,7 +96,7 @@
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	xerbla_("LAPACK_ZGETRF", &i__1, (ftnlen)13);
+	aocl_blas_xerbla("LAPACK_ZGETRF", &i__1, (ftnlen)13);
 	return 0;
     }
 
@@ -110,7 +108,7 @@
 
 /*     Determine the block size for this environment. */
 
-    nb = ilaenv_(&c__1, "ZGETRF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZGETRF", " ", m, n, &c_n1, &c_n1);
     if (nb <= 1 || nb >= fla_min(*m,*n)) {
 
 /*        Use unblocked code. */
@@ -159,7 +157,7 @@
              singularity. */
 
 	    i__3 = *m - j + 1;
-	    zgetrf2_(&i__3, &jb, &a_ref(j, j), lda, &ipiv[j], &iinfo);
+	    aocl_lapack_zgetrf2(&i__3, &jb, &a_ref(j, j), lda, &ipiv[j], &iinfo);
 
 /*           Adjust INFO and the pivot indices. */
 
@@ -170,7 +168,7 @@
 	    i__4 = *m, i__5 = j + jb - 1;
 	    i__3 = fla_min(i__4,i__5);
 	    for (i__ = j; i__ <= i__3; ++i__) {
-		ipiv[i__] = j - 1 + ipiv[i__];
+		ipiv[i__] = (aocl_int_t)(j - 1 + ipiv[i__]);
 /* L10: */
 	    }
 
@@ -178,7 +176,7 @@
 
 	    i__3 = j - 1;
 	    i__4 = j + jb - 1;
-	    zlaswp_(&i__3, &a[a_offset], lda, &j, &i__4, &ipiv[1], &c__1);
+	    aocl_lapack_zlaswp(&i__3, &a[a_offset], lda, &j, &i__4, &ipiv[1], &c__1);
 
 	    if (j + jb <= *n) {
 
@@ -186,13 +184,13 @@
 
 		i__3 = *n - j - jb + 1;
 		i__4 = j + jb - 1;
-		zlaswp_(&i__3, &a_ref(1, j + jb), lda, &j, &i__4, &ipiv[1], &
+		aocl_lapack_zlaswp(&i__3, &a_ref(1, j + jb), lda, &j, &i__4, &ipiv[1], &
 			c__1);
 
 /*              Compute block row of U. */
 
 		i__3 = *n - j - jb + 1;
-		ztrsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &
+		aocl_blas_ztrsm("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &
 			c_b1, &a_ref(j, j), lda, &a_ref(j, j + jb), lda);
 		if (j + jb <= *m) {
 
@@ -201,7 +199,7 @@
 		    i__3 = *m - j - jb + 1;
 		    i__4 = *n - j - jb + 1;
 		    z__1.real = -1., z__1.imag = 0.;
-		    zgemm_("No transpose", "No transpose", &i__3, &i__4, &jb,
+		    aocl_blas_zgemm("No transpose", "No transpose", &i__3, &i__4, &jb,
 			    &z__1, &a_ref(j + jb, j), lda, &a_ref(j, j + jb),
 			    lda, &c_b1, &a_ref(j + jb, j + jb), lda);
 		}

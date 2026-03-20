@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
+static dcomplex c_b1 = {1., 0.};
 /* > \brief \b ZPOTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -108,8 +108,27 @@ static doublecomplex c_b1 = {1., 0.};
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpotrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-             doublecomplex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void zpotrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda,
+             dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpotrs(uplo, n, nrhs, a, lda, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpotrs(uplo, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpotrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpotrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
@@ -117,15 +136,10 @@ void zpotrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
                       *uplo, *n, *nrhs, *lda, *ldb);
 
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -180,7 +194,7 @@ void zpotrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPOTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPOTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -194,21 +208,21 @@ void zpotrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     {
         /* Solve A*X = B where A = U**H *U. */
         /* Solve U**H *X = B, overwriting B with X. */
-        ztrsm_("Left", "Upper", "Conjugate transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset],
-               lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("Left", "Upper", "Conjugate transpose", "Non-unit", n, nrhs, &c_b1,
+                        &a[a_offset], lda, &b[b_offset], ldb);
         /* Solve U*X = B, overwriting B with X. */
-        ztrsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset], lda,
-               &b[b_offset], ldb);
+        aocl_blas_ztrsm("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset],
+                        lda, &b[b_offset], ldb);
     }
     else
     {
         /* Solve A*X = B where A = L*L**H. */
         /* Solve L*X = B, overwriting B with X. */
-        ztrsm_("Left", "Lower", "No transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset], lda,
-               &b[b_offset], ldb);
+        aocl_blas_ztrsm("Left", "Lower", "No transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset],
+                        lda, &b[b_offset], ldb);
         /* Solve L**H *X = B, overwriting B with X. */
-        ztrsm_("Left", "Lower", "Conjugate transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset],
-               lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("Left", "Lower", "Conjugate transpose", "Non-unit", n, nrhs, &c_b1,
+                        &a[a_offset], lda, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

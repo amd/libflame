@@ -1,14 +1,14 @@
 /* caxpy.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int caxpy_(integer *n, complex *ca, complex *cx, integer * incx, complex *cy, integer *incy)
+int caxpy_(integer *n, scomplex *ca, scomplex *cx, integer * incx, scomplex *cy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     real r__1, r__2;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     integer i__, ix, iy;
     /* constant times a vector plus a vector. */
@@ -22,7 +22,7 @@ int caxpy_(integer *n, complex *ca, complex *cx, integer * incx, complex *cy, in
     {
         return 0;
     }
-    if ((r__1 = ca->r, f2c_abs(r__1)) + (r__2 = r_imag(ca), f2c_abs(r__2)) == 0.f)
+    if ((r__1 = ca->real, f2c_abs(r__1)) + (r__2 = r_imag(ca), f2c_abs(r__2)) == 0.f)
     {
         return 0;
     }
@@ -50,9 +50,9 @@ int caxpy_(integer *n, complex *ca, complex *cx, integer * incx, complex *cy, in
         i__2 = iy;
         i__3 = iy;
         i__4 = ix;
-        q__2.r = ca->r * cx[i__4].r - ca->i * cx[i__4].i, q__2.i = ca->r * cx[ i__4].i + ca->i * cx[i__4].r;
-        q__1.r = cy[i__3].r + q__2.r, q__1.i = cy[i__3].i + q__2.i;
-        cy[i__2].r = q__1.r, cy[i__2].i = q__1.i;
+        q__2.real = ca->real * cx[i__4].real - ca->imag * cx[i__4].imag, q__2.imag = ca->real * cx[ i__4].imag + ca->imag * cx[i__4].real;
+        q__1.real = cy[i__3].real + q__2.real, q__1.imag = cy[i__3].imag + q__2.imag;
+        cy[i__2].real = q__1.real, cy[i__2].imag = q__1.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -68,9 +68,9 @@ L20:
         i__2 = i__;
         i__3 = i__;
         i__4 = i__;
-        q__2.r = ca->r * cx[i__4].r - ca->i * cx[i__4].i, q__2.i = ca->r * cx[ i__4].i + ca->i * cx[i__4].r;
-        q__1.r = cy[i__3].r + q__2.r, q__1.i = cy[i__3].i + q__2.i;
-        cy[i__2].r = q__1.r, cy[i__2].i = q__1.i;
+        q__2.real = ca->real * cx[i__4].real - ca->imag * cx[i__4].imag, q__2.imag = ca->real * cx[ i__4].imag + ca->imag * cx[i__4].real;
+        q__1.real = cy[i__3].real + q__2.real, q__1.imag = cy[i__3].imag + q__2.imag;
+        cy[i__2].real = q__1.real, cy[i__2].imag = q__1.imag;
         /* L30: */
     }
     return 0;

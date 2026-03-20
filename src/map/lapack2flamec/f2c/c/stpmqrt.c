@@ -217,33 +217,51 @@ V2 is upper trapezoidal, consisting of the first L */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *nb,
-              real *v, integer *ldv, real *t, integer *ldt, real *a, integer *lda, real *b,
-              integer *ldb, real *work, integer *info)
+/** Generated wrapper function */
+void stpmqrt_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, aocl_int_t *l,
+              aocl_int_t *nb, real *v, aocl_int_t *ldv, real *t, aocl_int_t *ldt, real *a,
+              aocl_int_t *lda, real *b, aocl_int_t *ldb, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stpmqrt(side, trans, m, n, k, l, nb, v, ldv, t, ldt, a, lda, b, ldb, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stpmqrt(side, trans, &m_64, &n_64, &k_64, &l_64, &nb_64, v, &ldv_64, t, &ldt_64, a,
+                        &lda_64, b, &ldb_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stpmqrt(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                         aocl_int64_t *l, aocl_int64_t *nb, real *v, aocl_int64_t *ldv, real *t,
+                         aocl_int64_t *ldt, real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb,
+                         real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "stpmqrt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-             ", l %" FLA_IS ", nb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS
-             ", ldb %" FLA_IS "",
-             *side, *trans, *m, *n, *k, *l, *nb, *ldv, *ldt, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("stpmqrt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", l %" FLA_IS ", nb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *l, *nb, *ldv, *ldt, *lda, *ldb);
     /* System generated locals */
-    integer v_dim1, v_offset, a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2,
+    aocl_int64_t v_dim1, v_offset, a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2,
         i__3, i__4;
     /* Local variables */
-    integer i__, ib, lb, mb, kf, ldaq;
+    aocl_int64_t i__, ib, lb, mb, kf, ldaq;
     logical left, tran;
-    integer ldvq;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t ldvq;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        stprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *,
-                integer *, real *, integer *, real *, integer *, real *, integer *, real *,
-                integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -342,7 +360,7 @@ void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STPMQRT", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("STPMQRT", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -373,9 +391,9 @@ void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = mb - *m + *l - i__ + 1;
             }
-            stprfb_("L", "T", "F", "C", &mb, n, &ib, &lb, &v[i__ * v_dim1 + 1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb, &work[1],
-                    &ib);
+            aocl_lapack_stprfb("L", "T", "F", "C", &mb, n, &ib, &lb, &v[i__ * v_dim1 + 1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb,
+                               &work[1], &ib);
         }
     }
     else if(right && notran)
@@ -399,9 +417,9 @@ void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = mb - *n + *l - i__ + 1;
             }
-            stprfb_("R", "N", "F", "C", m, &mb, &ib, &lb, &v[i__ * v_dim1 + 1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset], ldb,
-                    &work[1], m);
+            aocl_lapack_stprfb("R", "N", "F", "C", m, &mb, &ib, &lb, &v[i__ * v_dim1 + 1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset],
+                               ldb, &work[1], m);
         }
     }
     else if(left && notran)
@@ -425,9 +443,9 @@ void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = mb - *m + *l - i__ + 1;
             }
-            stprfb_("L", "N", "F", "C", &mb, n, &ib, &lb, &v[i__ * v_dim1 + 1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb, &work[1],
-                    &ib);
+            aocl_lapack_stprfb("L", "N", "F", "C", &mb, n, &ib, &lb, &v[i__ * v_dim1 + 1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb,
+                               &work[1], &ib);
         }
     }
     else if(right && tran)
@@ -451,9 +469,9 @@ void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = mb - *n + *l - i__ + 1;
             }
-            stprfb_("R", "T", "F", "C", m, &mb, &ib, &lb, &v[i__ * v_dim1 + 1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset], ldb,
-                    &work[1], m);
+            aocl_lapack_stprfb("R", "T", "F", "C", m, &mb, &ib, &lb, &v[i__ * v_dim1 + 1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset],
+                               ldb, &work[1], m);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

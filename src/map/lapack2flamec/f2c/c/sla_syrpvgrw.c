@@ -67,7 +67,7 @@
 /* > \param[in] INFO */
 /* > \verbatim */
 /* > INFO is INTEGER */
-/* > The value of INFO returned from SSYTRF, .i.e., the pivot in */
+/* > The value of INFO returned from SSYTRF, .imag.e., the pivot in */
 /* > column INFO is exactly 0. */
 /* > \endverbatim */
 /* > */
@@ -116,17 +116,34 @@
 /* > \date December 2016 */
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
-real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer *lda, real *af,
-                   integer *ldaf, integer *ipiv, real *work)
+/** Generated wrapper function */
+real sla_syrpvgrw_(char *uplo, aocl_int_t *n, aocl_int_t *info, real *a, aocl_int_t *lda, real *af,
+                   aocl_int_t *ldaf, aocl_int_t *ipiv, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_sla_syrpvgrw(uplo, n, info, a, lda, af, ldaf, ipiv, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_sla_syrpvgrw(uplo, &n_64, &info_64, a, &lda_64, af, &ldaf_64, ipiv, work);
+#endif
+}
+
+real aocl_lapack_sla_syrpvgrw(char *uplo, aocl_int64_t *n, aocl_int64_t *info, real *a,
+                              aocl_int64_t *lda, real *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
+                              real *work)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     real ret_val, r__1, r__2, r__3;
     /* Local variables */
-    integer i__, j, k, kp;
+    aocl_int64_t i__, j, k, kp;
     real tmp, amax, umax;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer ncols;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t ncols;
     logical upper;
     real rpvgrw;
     /* -- LAPACK computational routine (version 3.7.0) -- */

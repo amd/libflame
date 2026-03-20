@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHESWAPR applies an elementary permutation on the rows and columns of a Hermitian
  * matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -102,7 +102,24 @@ if UPLO = 'L' the lower triangular part of the */
 /* > \ingroup complex16HEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i1, integer *i2)
+/** Generated wrapper function */
+void zheswapr_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *i1,
+               aocl_int_t *i2)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zheswapr(uplo, n, a, lda, i1, i2);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t i1_64 = *i1;
+    aocl_int64_t i2_64 = *i2;
+
+    aocl_lapack_zheswapr(uplo, &n_64, a, &lda_64, &i1_64, &i2_64);
+#endif
+}
+
+void aocl_lapack_zheswapr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                          aocl_int64_t *i1, aocl_int64_t *i2)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zheswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS
@@ -110,18 +127,15 @@ void zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                       *uplo, *n, *lda, *i1, *i2);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__;
-    doublecomplex tmp;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__;
+    dcomplex tmp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -149,55 +163,55 @@ void zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
         /* first swap */
         /* - swap column I1 and I2 from I1 to I1-1 */
         i__1 = *i1 - 1;
-        zswap_(&i__1, &a[*i1 * a_dim1 + 1], &c__1, &a[*i2 * a_dim1 + 1], &c__1);
+        aocl_blas_zswap(&i__1, &a[*i1 * a_dim1 + 1], &c__1, &a[*i2 * a_dim1 + 1], &c__1);
         /* second swap : */
         /* - swap A(I1,I1) and A(I2,I2) */
         /* - swap row I1 from I1+1 to I2-1 with col I2 from I1+1 to I2-1 */
         /* - swap A(I2,I1) and A(I1,I2) */
         i__1 = *i1 + *i1 * a_dim1;
-        tmp.r = a[i__1].r;
-        tmp.i = a[i__1].i; // , expr subst
+        tmp.real = a[i__1].real;
+        tmp.imag = a[i__1].imag; // , expr subst
         i__1 = *i1 + *i1 * a_dim1;
         i__2 = *i2 + *i2 * a_dim1;
-        a[i__1].r = a[i__2].r;
-        a[i__1].i = a[i__2].i; // , expr subst
+        a[i__1].real = a[i__2].real;
+        a[i__1].imag = a[i__2].imag; // , expr subst
         i__1 = *i2 + *i2 * a_dim1;
-        a[i__1].r = tmp.r;
-        a[i__1].i = tmp.i; // , expr subst
+        a[i__1].real = tmp.real;
+        a[i__1].imag = tmp.imag; // , expr subst
         i__1 = *i2 - *i1 - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *i1 + (*i1 + i__) * a_dim1;
-            tmp.r = a[i__2].r;
-            tmp.i = a[i__2].i; // , expr subst
+            tmp.real = a[i__2].real;
+            tmp.imag = a[i__2].imag; // , expr subst
             i__2 = *i1 + (*i1 + i__) * a_dim1;
             d_cnjg(&z__1, &a[*i1 + i__ + *i2 * a_dim1]);
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
             i__2 = *i1 + i__ + *i2 * a_dim1;
             d_cnjg(&z__1, &tmp);
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
         }
         i__1 = *i1 + *i2 * a_dim1;
         d_cnjg(&z__1, &a[*i1 + *i2 * a_dim1]);
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
         /* third swap */
         /* - swap row I1 and I2 from I2+1 to N */
         i__1 = *n;
         for(i__ = *i2 + 1; i__ <= i__1; ++i__)
         {
             i__2 = *i1 + i__ * a_dim1;
-            tmp.r = a[i__2].r;
-            tmp.i = a[i__2].i; // , expr subst
+            tmp.real = a[i__2].real;
+            tmp.imag = a[i__2].imag; // , expr subst
             i__2 = *i1 + i__ * a_dim1;
             i__3 = *i2 + i__ * a_dim1;
-            a[i__2].r = a[i__3].r;
-            a[i__2].i = a[i__3].i; // , expr subst
+            a[i__2].real = a[i__3].real;
+            a[i__2].imag = a[i__3].imag; // , expr subst
             i__2 = *i2 + i__ * a_dim1;
-            a[i__2].r = tmp.r;
-            a[i__2].i = tmp.i; // , expr subst
+            a[i__2].real = tmp.real;
+            a[i__2].imag = tmp.imag; // , expr subst
         }
     }
     else
@@ -206,55 +220,55 @@ void zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
         /* first swap */
         /* - swap row I1 and I2 from 1 to I1-1 */
         i__1 = *i1 - 1;
-        zswap_(&i__1, &a[*i1 + a_dim1], lda, &a[*i2 + a_dim1], lda);
+        aocl_blas_zswap(&i__1, &a[*i1 + a_dim1], lda, &a[*i2 + a_dim1], lda);
         /* second swap : */
         /* - swap A(I1,I1) and A(I2,I2) */
         /* - swap col I1 from I1+1 to I2-1 with row I2 from I1+1 to I2-1 */
         /* - swap A(I2,I1) and A(I1,I2) */
         i__1 = *i1 + *i1 * a_dim1;
-        tmp.r = a[i__1].r;
-        tmp.i = a[i__1].i; // , expr subst
+        tmp.real = a[i__1].real;
+        tmp.imag = a[i__1].imag; // , expr subst
         i__1 = *i1 + *i1 * a_dim1;
         i__2 = *i2 + *i2 * a_dim1;
-        a[i__1].r = a[i__2].r;
-        a[i__1].i = a[i__2].i; // , expr subst
+        a[i__1].real = a[i__2].real;
+        a[i__1].imag = a[i__2].imag; // , expr subst
         i__1 = *i2 + *i2 * a_dim1;
-        a[i__1].r = tmp.r;
-        a[i__1].i = tmp.i; // , expr subst
+        a[i__1].real = tmp.real;
+        a[i__1].imag = tmp.imag; // , expr subst
         i__1 = *i2 - *i1 - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *i1 + i__ + *i1 * a_dim1;
-            tmp.r = a[i__2].r;
-            tmp.i = a[i__2].i; // , expr subst
+            tmp.real = a[i__2].real;
+            tmp.imag = a[i__2].imag; // , expr subst
             i__2 = *i1 + i__ + *i1 * a_dim1;
             d_cnjg(&z__1, &a[*i2 + (*i1 + i__) * a_dim1]);
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
             i__2 = *i2 + (*i1 + i__) * a_dim1;
             d_cnjg(&z__1, &tmp);
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
         }
         i__1 = *i2 + *i1 * a_dim1;
         d_cnjg(&z__1, &a[*i2 + *i1 * a_dim1]);
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
         /* third swap */
         /* - swap col I1 and I2 from I2+1 to N */
         i__1 = *n;
         for(i__ = *i2 + 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + *i1 * a_dim1;
-            tmp.r = a[i__2].r;
-            tmp.i = a[i__2].i; // , expr subst
+            tmp.real = a[i__2].real;
+            tmp.imag = a[i__2].imag; // , expr subst
             i__2 = i__ + *i1 * a_dim1;
             i__3 = i__ + *i2 * a_dim1;
-            a[i__2].r = a[i__3].r;
-            a[i__2].i = a[i__3].i; // , expr subst
+            a[i__2].real = a[i__3].real;
+            a[i__2].imag = a[i__3].imag; // , expr subst
             i__2 = i__ + *i2 * a_dim1;
-            a[i__2].r = tmp.r;
-            a[i__2].i = tmp.i; // , expr subst
+            a[i__2].real = tmp.real;
+            a[i__2].imag = tmp.imag; // , expr subst
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

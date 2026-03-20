@@ -24,12 +24,6 @@ void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *ld
 double prepare_lapacke_gerqf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
                                  void *A, integer lda, void *T, integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gerqf_outputs(void *filename, integer datatype, integer m, integer n, void *A,
-                         integer lda, void *T, void *params);
-integer check_bit_reproducibility_gerqf(void *filename, integer datatype, integer m, integer n,
-                                        void *A, integer lda, void *T, void *params);
-
 void fla_test_gerqf(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "RQ factorization";
@@ -202,9 +196,17 @@ void fla_test_gerqf_experiment(char *tst_api, test_params_t *params, integer dat
      * compared with the generated output
      *  */
     IF_FLA_BRT_VALIDATION(
-        m, n, store_gerqf_outputs(filename, datatype, m, n, A, lda, T, params),
+        m, n,
+        store_outputs_base(filename, params, 1, 1, datatype, m, n, A_test, lda, datatype,
+                           fla_min(m, n), T),
         validate_gerqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params),
-        check_bit_reproducibility_gerqf(filename, datatype, m, n, A, lda, T, params))
+        check_reproducibility_base(filename, params, 1, 1, datatype, m, n, A_test, lda, datatype,
+                                   fla_min(m, n), T))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gerqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);
@@ -397,30 +399,4 @@ void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
-}
-
-void store_gerqf_outputs(void *filename, integer datatype, integer m, integer n, void *A,
-                         integer lda, void *T, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    /* Store the ground truth data */
-    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
-    FLA_STORE_BRT_VECTOR(datatype, fla_min(m, n), T)
-
-    fclose(gt_file);
-}
-integer check_bit_reproducibility_gerqf(void *filename, integer datatype, integer m, integer n,
-                                        void *A, integer lda, void *T, void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    /* Load stored GT and verify with current API outputs */
-    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
-    FLA_VERIFY_BRT_VECTOR(datatype, fla_min(m, n), T)
-
-    fclose(gt_file);
-    return 1;
 }

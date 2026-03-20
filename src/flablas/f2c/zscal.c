@@ -1,11 +1,11 @@
 /* zscal.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zscal_(integer *n, doublecomplex *za, doublecomplex *zx, integer *incx)
+int zscal_(integer *n, dcomplex *za, dcomplex *zx, integer *incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
     integer i__, ix;
     /* scales a vector by a constant. */
@@ -32,8 +32,8 @@ int zscal_(integer *n, doublecomplex *za, doublecomplex *zx, integer *incx)
     {
         i__2 = ix;
         i__3 = ix;
-        z__1.r = za->r * zx[i__3].r - za->i * zx[i__3].i, z__1.i = za->r * zx[ i__3].i + za->i * zx[i__3].r;
-        zx[i__2].r = z__1.r, zx[i__2].i = z__1.i;
+        z__1.real = za->real * zx[i__3].real - za->imag * zx[i__3].imag, z__1.imag = za->real * zx[ i__3].imag + za->imag * zx[i__3].real;
+        zx[i__2].real = z__1.real, zx[i__2].imag = z__1.imag;
         ix += *incx;
         /* L10: */
     }
@@ -47,8 +47,8 @@ L20:
     {
         i__2 = i__;
         i__3 = i__;
-        z__1.r = za->r * zx[i__3].r - za->i * zx[i__3].i, z__1.i = za->r * zx[ i__3].i + za->i * zx[i__3].r;
-        zx[i__2].r = z__1.r, zx[i__2].i = z__1.i;
+        z__1.real = za->real * zx[i__3].real - za->imag * zx[i__3].imag, z__1.imag = za->real * zx[ i__3].imag + za->imag * zx[i__3].real;
+        zx[i__2].real = z__1.real, zx[i__2].imag = z__1.imag;
         /* L30: */
     }
     return 0;

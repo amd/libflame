@@ -136,8 +136,23 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *s, real *scond,
-             real *amax, char *equed)
+/** Generated wrapper function */
+void claqhb_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab, real *s,
+             real *scond, real *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqhb(uplo, n, kd, ab, ldab, s, scond, amax, equed);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+
+    aocl_lapack_claqhb(uplo, &n_64, &kd_64, ab, &ldab_64, s, scond, amax, equed);
+#endif
+}
+
+void aocl_lapack_claqhb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
+                        aocl_int64_t *ldab, real *s, real *scond, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -151,13 +166,13 @@ void claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real cj, large;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -218,17 +233,17 @@ void claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
                     i__2 = *kd + 1 + i__ - j + j * ab_dim1;
                     r__1 = cj * s[i__];
                     i__3 = *kd + 1 + i__ - j + j * ab_dim1;
-                    q__1.r = r__1 * ab[i__3].r;
-                    q__1.i = r__1 * ab[i__3].i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__1.real = r__1 * ab[i__3].real;
+                    q__1.imag = r__1 * ab[i__3].imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L10: */
                 }
                 i__4 = *kd + 1 + j * ab_dim1;
                 i__2 = *kd + 1 + j * ab_dim1;
-                r__1 = cj * cj * ab[i__2].r;
-                ab[i__4].r = r__1;
-                ab[i__4].i = 0.f; // , expr subst
+                r__1 = cj * cj * ab[i__2].real;
+                ab[i__4].real = r__1;
+                ab[i__4].imag = 0.f; // , expr subst
                 /* L20: */
             }
         }
@@ -241,9 +256,9 @@ void claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
                 cj = s[j];
                 i__4 = j * ab_dim1 + 1;
                 i__2 = j * ab_dim1 + 1;
-                r__1 = cj * cj * ab[i__2].r;
-                ab[i__4].r = r__1;
-                ab[i__4].i = 0.f; // , expr subst
+                r__1 = cj * cj * ab[i__2].real;
+                ab[i__4].real = r__1;
+                ab[i__4].imag = 0.f; // , expr subst
                 /* Computing MIN */
                 i__2 = *n;
                 i__3 = j + *kd; // , expr subst
@@ -253,10 +268,10 @@ void claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
                     i__2 = i__ + 1 - j + j * ab_dim1;
                     r__1 = cj * s[i__];
                     i__3 = i__ + 1 - j + j * ab_dim1;
-                    q__1.r = r__1 * ab[i__3].r;
-                    q__1.i = r__1 * ab[i__3].i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__1.real = r__1 * ab[i__3].real;
+                    q__1.imag = r__1 * ab[i__3].imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L30: */
                 }
                 /* L40: */

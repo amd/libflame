@@ -43,7 +43,7 @@
 /* > \verbatim */
 /* > */
 /* > ZPOSVX uses the Cholesky factorization A = U**H*U or A = L*L**H to */
-/* > compute the solution to a complex system of linear equations */
+/* > compute the solution to a scomplex system of linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N Hermitian positive definite matrix and X and B */
 /* > are N-by-NRHS matrices. */
@@ -303,10 +303,38 @@ if EQUED = 'Y', */
 /* > \ingroup complex16POsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-             doublecomplex *af, integer *ldaf, char *equed, doublereal *s, doublecomplex *b,
-             integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr,
-             doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a,
+             aocl_int_t *lda, dcomplex *af, aocl_int_t *ldaf, char *equed, doublereal *s,
+             dcomplex *b, aocl_int_t *ldb, dcomplex *x, aocl_int_t *ldx,
+             doublereal *rcond, doublereal *ferr, doublereal *berr, dcomplex *work,
+             doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zposvx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, ferr,
+                       berr, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zposvx(fact, uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, equed, s, b, &ldb_64,
+                       x, &ldx_64, rcond, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zposvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs,
+                        dcomplex *a, aocl_int64_t *lda, dcomplex *af, aocl_int64_t *ldaf,
+                        char *equed, doublereal *s, dcomplex *b, aocl_int64_t *ldb,
+                        dcomplex *x, aocl_int64_t *ldx, doublereal *rcond, doublereal *ferr,
+                        doublereal *berr, dcomplex *work, doublereal *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zposvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
@@ -314,45 +342,21 @@ void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
                       *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
-        i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal amax, smin, smax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal scond, anorm;
     logical equil, rcequ;
     extern doublereal dlamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
-    extern /* Subroutine */
-        void
-        zlaqhe_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublereal *, char *);
-    integer infequ;
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, doublereal *, integer *);
+    aocl_int64_t infequ;
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zpoequ_(integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *,
-                integer *),
-        zporfs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                doublereal *, doublecomplex *, doublereal *, integer *),
-        zpotrf_(char *, integer *, doublecomplex *, integer *, integer *),
-        zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -484,18 +488,18 @@ void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPOSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPOSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        zpoequ_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
+        aocl_lapack_zpoequ(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            zlaqhe_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
+            aocl_lapack_zlaqhe(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
             rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
@@ -511,10 +515,10 @@ void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * b_dim1;
-                z__1.r = s[i__4] * b[i__5].r;
-                z__1.i = s[i__4] * b[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = s[i__4] * b[i__5].real;
+                z__1.imag = s[i__4] * b[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
             /* L30: */
@@ -523,8 +527,8 @@ void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
     if(nofact || equil)
     {
         /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
-        zlacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
-        zpotrf_(uplo, n, &af[af_offset], ldaf, info);
+        aocl_lapack_zlacpy(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
+        aocl_lapack_zpotrf(uplo, n, &af[af_offset], ldaf, info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -534,16 +538,16 @@ void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
         }
     }
     /* Compute the norm of the matrix A. */
-    anorm = zlanhe_("1", uplo, n, &a[a_offset], lda, &rwork[1]);
+    anorm = aocl_lapack_zlanhe("1", uplo, n, &a[a_offset], lda, &rwork[1]);
     /* Compute the reciprocal of the condition number of A. */
-    zpocon_(uplo, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &rwork[1], info);
+    aocl_lapack_zpocon(uplo, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &rwork[1], info);
     /* Compute the solution matrix X. */
-    zlacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    zpotrs_(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
+    aocl_lapack_zlacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_zpotrs(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    zporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb, &x[x_offset],
-            ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_zporfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb,
+                       &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)
@@ -557,10 +561,10 @@ void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
                 i__3 = i__ + j * x_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * x_dim1;
-                z__1.r = s[i__4] * x[i__5].r;
-                z__1.i = s[i__4] * x[i__5].i; // , expr subst
-                x[i__3].r = z__1.r;
-                x[i__3].i = z__1.i; // , expr subst
+                z__1.real = s[i__4] * x[i__5].real;
+                z__1.imag = s[i__4] * x[i__5].imag; // , expr subst
+                x[i__3].real = z__1.real;
+                x[i__3].imag = z__1.imag; // , expr subst
                 /* L40: */
             }
             /* L50: */

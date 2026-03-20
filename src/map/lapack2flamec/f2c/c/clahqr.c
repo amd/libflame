@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg
  * matrix, using th e double-shift/single-shift QR algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -198,9 +198,34 @@ elements i+1:ihi of W contain */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__,
-             integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz,
-             integer *info)
+/** Generated wrapper function */
+void clahqr_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             scomplex *h__, aocl_int_t *ldh, scomplex *w, aocl_int_t *iloz, aocl_int_t *ihiz,
+             scomplex *z__, aocl_int_t *ldz, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clahqr(wantt, wantz, n, ilo, ihi, h__, ldh, w, iloz, ihiz, z__, ldz, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clahqr(wantt, wantz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, w, &iloz_64, &ihiz_64,
+                       z__, &ldz_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clahqr(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, scomplex *h__, aocl_int64_t *ldh, scomplex *w,
+                        aocl_int64_t *iloz, aocl_int64_t *ihiz, scomplex *z__, aocl_int64_t *ldz,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -216,48 +241,41 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4, r__5, r__6;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
-    void c_sqrt(complex *, complex *), pow_ci(complex *, complex *, integer *);
+    double r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
+    void c_sqrt(scomplex *, scomplex *), pow_ci(scomplex *, scomplex *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, k, l, m;
+    aocl_int64_t i__, j, k, l, m;
     real s;
-    complex t, u, v[2], x, y;
-    integer i1, i2;
-    complex t1;
+    scomplex t, u, v[2], x, y;
+    aocl_int64_t i1, i2;
+    scomplex t1;
     real t2;
-    complex v2;
+    scomplex v2;
     real aa, ab, ba, bb, h10;
-    complex h11;
+    scomplex h11;
     real h21;
-    complex h22, sc;
-    integer nh, nz;
+    scomplex h22, sc;
+    aocl_int64_t nh, nz;
     real sx;
-    integer jhi;
-    complex h11s;
-    integer jlo, its;
+    aocl_int64_t jhi;
+    scomplex h11s;
+    aocl_int64_t jlo, its;
     real ulp;
-    complex sum;
+    scomplex sum;
     real tst;
-    complex temp;
-    integer kdefl;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    integer itmax;
+    scomplex temp;
+    aocl_int64_t kdefl;
+    aocl_int64_t itmax;
     real rtemp;
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     extern real slamch_(char *);
     real safmin, smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -306,8 +324,8 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     {
         i__1 = *ilo;
         i__2 = *ilo + *ilo * h_dim1;
-        w[i__1].r = h__[i__2].r;
-        w[i__1].i = h__[i__2].i; // , expr subst
+        w[i__1].real = h__[i__2].real;
+        w[i__1].imag = h__[i__2].imag; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -316,18 +334,18 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     for(j = *ilo; j <= i__1; ++j)
     {
         i__2 = j + 2 + j * h_dim1;
-        h__[i__2].r = 0.f;
-        h__[i__2].i = 0.f; // , expr subst
+        h__[i__2].real = 0.f;
+        h__[i__2].imag = 0.f; // , expr subst
         i__2 = j + 3 + j * h_dim1;
-        h__[i__2].r = 0.f;
-        h__[i__2].i = 0.f; // , expr subst
+        h__[i__2].real = 0.f;
+        h__[i__2].imag = 0.f; // , expr subst
         /* L10: */
     }
     if(*ilo <= *ihi - 2)
     {
         i__1 = *ihi + (*ihi - 2) * h_dim1;
-        h__[i__1].r = 0.f;
-        h__[i__1].i = 0.f; // , expr subst
+        h__[i__1].real = 0.f;
+        h__[i__1].imag = 0.f; // , expr subst
     }
     /* ==== ensure that subdiagonal entries are real ==== */
     if(*wantt)
@@ -350,35 +368,35 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
             /* . sudden underflow in ABS(H(I,I-1)) ==== */
             i__2 = i__ + (i__ - 1) * h_dim1;
             i__3 = i__ + (i__ - 1) * h_dim1;
-            r__3 = (r__1 = h__[i__3].r, f2c_abs(r__1))
+            r__3 = (r__1 = h__[i__3].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&h__[i__ + (i__ - 1) * h_dim1]), f2c_abs(r__2));
-            q__1.r = h__[i__2].r / r__3;
-            q__1.i = h__[i__2].i / r__3; // , expr subst
-            sc.r = q__1.r;
-            sc.i = q__1.i; // , expr subst
+            q__1.real = h__[i__2].real / r__3;
+            q__1.imag = h__[i__2].imag / r__3; // , expr subst
+            sc.real = q__1.real;
+            sc.imag = q__1.imag; // , expr subst
             r_cnjg(&q__2, &sc);
             r__1 = c_abs(&sc);
-            q__1.r = q__2.r / r__1;
-            q__1.i = q__2.i / r__1; // , expr subst
-            sc.r = q__1.r;
-            sc.i = q__1.i; // , expr subst
+            q__1.real = q__2.real / r__1;
+            q__1.imag = q__2.imag / r__1; // , expr subst
+            sc.real = q__1.real;
+            sc.imag = q__1.imag; // , expr subst
             i__2 = i__ + (i__ - 1) * h_dim1;
             r__1 = c_abs(&h__[i__ + (i__ - 1) * h_dim1]);
-            h__[i__2].r = r__1;
-            h__[i__2].i = 0.f; // , expr subst
+            h__[i__2].real = r__1;
+            h__[i__2].imag = 0.f; // , expr subst
             i__2 = jhi - i__ + 1;
-            cscal_(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
+            aocl_blas_cscal(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
             /* Computing MIN */
             i__3 = jhi;
             i__4 = i__ + 1; // , expr subst
             i__2 = fla_min(i__3, i__4) - jlo + 1;
             r_cnjg(&q__1, &sc);
-            cscal_(&i__2, &q__1, &h__[jlo + i__ * h_dim1], &c__1);
+            aocl_blas_cscal(&i__2, &q__1, &h__[jlo + i__ * h_dim1], &c__1);
             if(*wantz)
             {
                 i__2 = *ihiz - *iloz + 1;
                 r_cnjg(&q__1, &sc);
-                cscal_(&i__2, &q__1, &z__[*iloz + i__ * z_dim1], &c__1);
+                aocl_blas_cscal(&i__2, &q__1, &z__[*iloz + i__ * z_dim1], &c__1);
             }
         }
         /* L20: */
@@ -424,7 +442,7 @@ L30:
         for(k = i__; k >= i__2; --k)
         {
             i__3 = k + (k - 1) * h_dim1;
-            if((r__1 = h__[i__3].r, f2c_abs(r__1))
+            if((r__1 = h__[i__3].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&h__[k + (k - 1) * h_dim1]), f2c_abs(r__2))
                <= smlnum)
             {
@@ -432,21 +450,21 @@ L30:
             }
             i__3 = k - 1 + (k - 1) * h_dim1;
             i__4 = k + k * h_dim1;
-            tst = (r__1 = h__[i__3].r, f2c_abs(r__1))
+            tst = (r__1 = h__[i__3].real, f2c_abs(r__1))
                   + (r__2 = r_imag(&h__[k - 1 + (k - 1) * h_dim1]), f2c_abs(r__2))
-                  + ((r__3 = h__[i__4].r, f2c_abs(r__3))
+                  + ((r__3 = h__[i__4].real, f2c_abs(r__3))
                      + (r__4 = r_imag(&h__[k + k * h_dim1]), f2c_abs(r__4)));
             if(tst == 0.f)
             {
                 if(k - 2 >= *ilo)
                 {
                     i__3 = k - 1 + (k - 2) * h_dim1;
-                    tst += (r__1 = h__[i__3].r, f2c_abs(r__1));
+                    tst += (r__1 = h__[i__3].real, f2c_abs(r__1));
                 }
                 if(k + 1 <= *ihi)
                 {
                     i__3 = k + 1 + k * h_dim1;
-                    tst += (r__1 = h__[i__3].r, f2c_abs(r__1));
+                    tst += (r__1 = h__[i__3].real, f2c_abs(r__1));
                 }
             }
             /* ==== The following is a conservative small subdiagonal */
@@ -454,48 +472,48 @@ L30:
             /* . 1997). It has better mathematical foundation and */
             /* . improves accuracy in some examples. ==== */
             i__3 = k + (k - 1) * h_dim1;
-            if((r__1 = h__[i__3].r, f2c_abs(r__1)) <= ulp * tst)
+            if((r__1 = h__[i__3].real, f2c_abs(r__1)) <= ulp * tst)
             {
                 /* Computing MAX */
                 i__3 = k + (k - 1) * h_dim1;
                 i__4 = k - 1 + k * h_dim1;
-                r__5 = (r__1 = h__[i__3].r, f2c_abs(r__1))
+                r__5 = (r__1 = h__[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&h__[k + (k - 1) * h_dim1]), f2c_abs(r__2));
-                r__6 = (r__3 = h__[i__4].r, f2c_abs(r__3))
+                r__6 = (r__3 = h__[i__4].real, f2c_abs(r__3))
                        + (r__4 = r_imag(&h__[k - 1 + k * h_dim1]), f2c_abs(r__4)); // , expr subst
                 ab = fla_max(r__5, r__6);
                 /* Computing MIN */
                 i__3 = k + (k - 1) * h_dim1;
                 i__4 = k - 1 + k * h_dim1;
-                r__5 = (r__1 = h__[i__3].r, f2c_abs(r__1))
+                r__5 = (r__1 = h__[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&h__[k + (k - 1) * h_dim1]), f2c_abs(r__2));
-                r__6 = (r__3 = h__[i__4].r, f2c_abs(r__3))
+                r__6 = (r__3 = h__[i__4].real, f2c_abs(r__3))
                        + (r__4 = r_imag(&h__[k - 1 + k * h_dim1]), f2c_abs(r__4)); // , expr subst
                 ba = fla_min(r__5, r__6);
                 i__3 = k - 1 + (k - 1) * h_dim1;
                 i__4 = k + k * h_dim1;
-                q__2.r = h__[i__3].r - h__[i__4].r;
-                q__2.i = h__[i__3].i - h__[i__4].i; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
+                q__2.real = h__[i__3].real - h__[i__4].real;
+                q__2.imag = h__[i__3].imag - h__[i__4].imag; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
                 /* Computing MAX */
                 i__5 = k + k * h_dim1;
-                r__5 = (r__1 = h__[i__5].r, f2c_abs(r__1))
+                r__5 = (r__1 = h__[i__5].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&h__[k + k * h_dim1]), f2c_abs(r__2));
-                r__6 = (r__3 = q__1.r, f2c_abs(r__3))
+                r__6 = (r__3 = q__1.real, f2c_abs(r__3))
                        + (r__4 = r_imag(&q__1), f2c_abs(r__4)); // , expr subst
                 aa = fla_max(r__5, r__6);
                 i__3 = k - 1 + (k - 1) * h_dim1;
                 i__4 = k + k * h_dim1;
-                q__2.r = h__[i__3].r - h__[i__4].r;
-                q__2.i = h__[i__3].i - h__[i__4].i; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
+                q__2.real = h__[i__3].real - h__[i__4].real;
+                q__2.imag = h__[i__3].imag - h__[i__4].imag; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
                 /* Computing MIN */
                 i__5 = k + k * h_dim1;
-                r__5 = (r__1 = h__[i__5].r, f2c_abs(r__1))
+                r__5 = (r__1 = h__[i__5].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&h__[k + k * h_dim1]), f2c_abs(r__2));
-                r__6 = (r__3 = q__1.r, f2c_abs(r__3))
+                r__6 = (r__3 = q__1.real, f2c_abs(r__3))
                        + (r__4 = r_imag(&q__1), f2c_abs(r__4)); // , expr subst
                 bb = fla_min(r__5, r__6);
                 s = aa + ab;
@@ -515,8 +533,8 @@ L30:
         {
             /* H(L,L-1) is negligible */
             i__2 = l + (l - 1) * h_dim1;
-            h__[i__2].r = 0.f;
-            h__[i__2].i = 0.f; // , expr subst
+            h__[i__2].real = 0.f;
+            h__[i__2].imag = 0.f; // , expr subst
         }
         /* Exit from loop if a submatrix of order 1 has split off. */
         if(l >= i__)
@@ -536,88 +554,88 @@ L30:
         {
             /* Exceptional shift. */
             i__2 = i__ + (i__ - 1) * h_dim1;
-            s = (r__1 = h__[i__2].r, f2c_abs(r__1)) * .75f;
+            s = (r__1 = h__[i__2].real, f2c_abs(r__1)) * .75f;
             i__2 = i__ + i__ * h_dim1;
-            q__1.r = s + h__[i__2].r;
-            q__1.i = h__[i__2].i; // , expr subst
-            t.r = q__1.r;
-            t.i = q__1.i; // , expr subst
+            q__1.real = s + h__[i__2].real;
+            q__1.imag = h__[i__2].imag; // , expr subst
+            t.real = q__1.real;
+            t.imag = q__1.imag; // , expr subst
         }
         else if(kdefl % 10 == 0)
         {
             /* Exceptional shift. */
             i__2 = l + 1 + l * h_dim1;
-            s = (r__1 = h__[i__2].r, f2c_abs(r__1)) * .75f;
+            s = (r__1 = h__[i__2].real, f2c_abs(r__1)) * .75f;
             i__2 = l + l * h_dim1;
-            q__1.r = s + h__[i__2].r;
-            q__1.i = h__[i__2].i; // , expr subst
-            t.r = q__1.r;
-            t.i = q__1.i; // , expr subst
+            q__1.real = s + h__[i__2].real;
+            q__1.imag = h__[i__2].imag; // , expr subst
+            t.real = q__1.real;
+            t.imag = q__1.imag; // , expr subst
         }
         else
         {
             /* Wilkinson's shift. */
             i__2 = i__ + i__ * h_dim1;
-            t.r = h__[i__2].r;
-            t.i = h__[i__2].i; // , expr subst
+            t.real = h__[i__2].real;
+            t.imag = h__[i__2].imag; // , expr subst
             c_sqrt(&q__2, &h__[i__ - 1 + i__ * h_dim1]);
             c_sqrt(&q__3, &h__[i__ + (i__ - 1) * h_dim1]);
-            q__1.r = q__2.r * q__3.r - q__2.i * q__3.i;
-            q__1.i = q__2.r * q__3.i + q__2.i * q__3.r; // , expr subst
-            u.r = q__1.r;
-            u.i = q__1.i; // , expr subst
-            s = (r__1 = u.r, f2c_abs(r__1)) + (r__2 = r_imag(&u), f2c_abs(r__2));
+            q__1.real = q__2.real * q__3.real - q__2.imag * q__3.imag;
+            q__1.imag = q__2.real * q__3.imag + q__2.imag * q__3.real; // , expr subst
+            u.real = q__1.real;
+            u.imag = q__1.imag; // , expr subst
+            s = (r__1 = u.real, f2c_abs(r__1)) + (r__2 = r_imag(&u), f2c_abs(r__2));
             if(s != 0.f)
             {
                 i__2 = i__ - 1 + (i__ - 1) * h_dim1;
-                q__2.r = h__[i__2].r - t.r;
-                q__2.i = h__[i__2].i - t.i; // , expr subst
-                q__1.r = q__2.r * .5f;
-                q__1.i = q__2.i * .5f; // , expr subst
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
-                sx = (r__1 = x.r, f2c_abs(r__1)) + (r__2 = r_imag(&x), f2c_abs(r__2));
+                q__2.real = h__[i__2].real - t.real;
+                q__2.imag = h__[i__2].imag - t.imag; // , expr subst
+                q__1.real = q__2.real * .5f;
+                q__1.imag = q__2.imag * .5f; // , expr subst
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
+                sx = (r__1 = x.real, f2c_abs(r__1)) + (r__2 = r_imag(&x), f2c_abs(r__2));
                 /* Computing MAX */
                 r__3 = s;
-                r__4 = (r__1 = x.r, f2c_abs(r__1))
+                r__4 = (r__1 = x.real, f2c_abs(r__1))
                        + (r__2 = r_imag(&x), f2c_abs(r__2)); // , expr subst
                 s = fla_max(r__3, r__4);
-                q__5.r = x.r / s;
-                q__5.i = x.i / s; // , expr subst
+                q__5.real = x.real / s;
+                q__5.imag = x.imag / s; // , expr subst
                 pow_ci(&q__4, &q__5, &c__2);
-                q__7.r = u.r / s;
-                q__7.i = u.i / s; // , expr subst
+                q__7.real = u.real / s;
+                q__7.imag = u.imag / s; // , expr subst
                 pow_ci(&q__6, &q__7, &c__2);
-                q__3.r = q__4.r + q__6.r;
-                q__3.i = q__4.i + q__6.i; // , expr subst
+                q__3.real = q__4.real + q__6.real;
+                q__3.imag = q__4.imag + q__6.imag; // , expr subst
                 c_sqrt(&q__2, &q__3);
-                q__1.r = s * q__2.r;
-                q__1.i = s * q__2.i; // , expr subst
-                y.r = q__1.r;
-                y.i = q__1.i; // , expr subst
+                q__1.real = s * q__2.real;
+                q__1.imag = s * q__2.imag; // , expr subst
+                y.real = q__1.real;
+                y.imag = q__1.imag; // , expr subst
                 if(sx > 0.f)
                 {
-                    q__1.r = x.r / sx;
-                    q__1.i = x.i / sx; // , expr subst
-                    q__2.r = x.r / sx;
-                    q__2.i = x.i / sx; // , expr subst
-                    if(q__1.r * y.r + r_imag(&q__2) * r_imag(&y) < 0.f)
+                    q__1.real = x.real / sx;
+                    q__1.imag = x.imag / sx; // , expr subst
+                    q__2.real = x.real / sx;
+                    q__2.imag = x.imag / sx; // , expr subst
+                    if(q__1.real * y.real + r_imag(&q__2) * r_imag(&y) < 0.f)
                     {
-                        q__3.r = -y.r;
-                        q__3.i = -y.i; // , expr subst
-                        y.r = q__3.r;
-                        y.i = q__3.i; // , expr subst
+                        q__3.real = -y.real;
+                        q__3.imag = -y.imag; // , expr subst
+                        y.real = q__3.real;
+                        y.imag = q__3.imag; // , expr subst
                     }
                 }
-                q__4.r = x.r + y.r;
-                q__4.i = x.i + y.i; // , expr subst
+                q__4.real = x.real + y.real;
+                q__4.imag = x.imag + y.imag; // , expr subst
                 cladiv_f2c_(&q__3, &u, &q__4);
-                q__2.r = u.r * q__3.r - u.i * q__3.i;
-                q__2.i = u.r * q__3.i + u.i * q__3.r; // , expr subst
-                q__1.r = t.r - q__2.r;
-                q__1.i = t.i - q__2.i; // , expr subst
-                t.r = q__1.r;
-                t.i = q__1.i; // , expr subst
+                q__2.real = u.real * q__3.real - u.imag * q__3.imag;
+                q__2.imag = u.real * q__3.imag + u.imag * q__3.real; // , expr subst
+                q__1.real = t.real - q__2.real;
+                q__1.imag = t.imag - q__2.imag; // , expr subst
+                t.real = q__1.real;
+                t.imag = q__1.imag; // , expr subst
             }
         }
         /* Look for two consecutive small subdiagonal elements. */
@@ -628,35 +646,35 @@ L30:
             /* iteration at row M, and see if this would make H(M,M-1) */
             /* negligible. */
             i__3 = m + m * h_dim1;
-            h11.r = h__[i__3].r;
-            h11.i = h__[i__3].i; // , expr subst
+            h11.real = h__[i__3].real;
+            h11.imag = h__[i__3].imag; // , expr subst
             i__3 = m + 1 + (m + 1) * h_dim1;
-            h22.r = h__[i__3].r;
-            h22.i = h__[i__3].i; // , expr subst
-            q__1.r = h11.r - t.r;
-            q__1.i = h11.i - t.i; // , expr subst
-            h11s.r = q__1.r;
-            h11s.i = q__1.i; // , expr subst
+            h22.real = h__[i__3].real;
+            h22.imag = h__[i__3].imag; // , expr subst
+            q__1.real = h11.real - t.real;
+            q__1.imag = h11.imag - t.imag; // , expr subst
+            h11s.real = q__1.real;
+            h11s.imag = q__1.imag; // , expr subst
             i__3 = m + 1 + m * h_dim1;
-            h21 = h__[i__3].r;
-            s = (r__1 = h11s.r, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2))
+            h21 = h__[i__3].real;
+            s = (r__1 = h11s.real, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2))
                 + f2c_abs(h21);
-            q__1.r = h11s.r / s;
-            q__1.i = h11s.i / s; // , expr subst
-            h11s.r = q__1.r;
-            h11s.i = q__1.i; // , expr subst
+            q__1.real = h11s.real / s;
+            q__1.imag = h11s.imag / s; // , expr subst
+            h11s.real = q__1.real;
+            h11s.imag = q__1.imag; // , expr subst
             h21 /= s;
-            v[0].r = h11s.r;
-            v[0].i = h11s.i; // , expr subst
-            v[1].r = h21;
-            v[1].i = 0.f; // , expr subst
+            v[0].real = h11s.real;
+            v[0].imag = h11s.imag; // , expr subst
+            v[1].real = h21;
+            v[1].imag = 0.f; // , expr subst
             i__3 = m + (m - 1) * h_dim1;
-            h10 = h__[i__3].r;
+            h10 = h__[i__3].real;
             if(f2c_abs(h10) * f2c_abs(h21)
                <= ulp
-                      * (((r__1 = h11s.r, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2)))
-                         * ((r__3 = h11.r, f2c_abs(r__3)) + (r__4 = r_imag(&h11), f2c_abs(r__4))
-                            + ((r__5 = h22.r, f2c_abs(r__5))
+                      * (((r__1 = h11s.real, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2)))
+                         * ((r__3 = h11.real, f2c_abs(r__3)) + (r__4 = r_imag(&h11), f2c_abs(r__4))
+                            + ((r__5 = h22.real, f2c_abs(r__5))
                                + (r__6 = r_imag(&h22), f2c_abs(r__6))))))
             {
                 goto L70;
@@ -664,27 +682,27 @@ L30:
             /* L60: */
         }
         i__2 = l + l * h_dim1;
-        h11.r = h__[i__2].r;
-        h11.i = h__[i__2].i; // , expr subst
+        h11.real = h__[i__2].real;
+        h11.imag = h__[i__2].imag; // , expr subst
         i__2 = l + 1 + (l + 1) * h_dim1;
-        h22.r = h__[i__2].r;
-        h22.i = h__[i__2].i; // , expr subst
-        q__1.r = h11.r - t.r;
-        q__1.i = h11.i - t.i; // , expr subst
-        h11s.r = q__1.r;
-        h11s.i = q__1.i; // , expr subst
+        h22.real = h__[i__2].real;
+        h22.imag = h__[i__2].imag; // , expr subst
+        q__1.real = h11.real - t.real;
+        q__1.imag = h11.imag - t.imag; // , expr subst
+        h11s.real = q__1.real;
+        h11s.imag = q__1.imag; // , expr subst
         i__2 = l + 1 + l * h_dim1;
-        h21 = h__[i__2].r;
-        s = (r__1 = h11s.r, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2)) + f2c_abs(h21);
-        q__1.r = h11s.r / s;
-        q__1.i = h11s.i / s; // , expr subst
-        h11s.r = q__1.r;
-        h11s.i = q__1.i; // , expr subst
+        h21 = h__[i__2].real;
+        s = (r__1 = h11s.real, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2)) + f2c_abs(h21);
+        q__1.real = h11s.real / s;
+        q__1.imag = h11s.imag / s; // , expr subst
+        h11s.real = q__1.real;
+        h11s.imag = q__1.imag; // , expr subst
         h21 /= s;
-        v[0].r = h11s.r;
-        v[0].i = h11s.i; // , expr subst
-        v[1].r = h21;
-        v[1].i = 0.f; // , expr subst
+        v[0].real = h11s.real;
+        v[0].imag = h11s.imag; // , expr subst
+        v[1].real = h21;
+        v[1].imag = 0.f; // , expr subst
     L70: /* Single-shift QR step */
         i__2 = i__ - 1;
         for(k = m; k <= i__2; ++k)
@@ -700,23 +718,23 @@ L30:
             /* after the call T2 ( = T1*V(2) ) is also real. */
             if(k > m)
             {
-                ccopy_(&c__2, &h__[k + (k - 1) * h_dim1], &c__1, v, &c__1);
+                aocl_blas_ccopy(&c__2, &h__[k + (k - 1) * h_dim1], &c__1, v, &c__1);
             }
-            clarfg_(&c__2, v, &v[1], &c__1, &t1);
+            aocl_lapack_clarfg(&c__2, v, &v[1], &c__1, &t1);
             if(k > m)
             {
                 i__3 = k + (k - 1) * h_dim1;
-                h__[i__3].r = v[0].r;
-                h__[i__3].i = v[0].i; // , expr subst
+                h__[i__3].real = v[0].real;
+                h__[i__3].imag = v[0].imag; // , expr subst
                 i__3 = k + 1 + (k - 1) * h_dim1;
-                h__[i__3].r = 0.f;
-                h__[i__3].i = 0.f; // , expr subst
+                h__[i__3].real = 0.f;
+                h__[i__3].imag = 0.f; // , expr subst
             }
-            v2.r = v[1].r;
-            v2.i = v[1].i; // , expr subst
-            q__1.r = t1.r * v2.r - t1.i * v2.i;
-            q__1.i = t1.r * v2.i + t1.i * v2.r; // , expr subst
-            t2 = q__1.r;
+            v2.real = v[1].real;
+            v2.imag = v[1].imag; // , expr subst
+            q__1.real = t1.real * v2.real - t1.imag * v2.imag;
+            q__1.imag = t1.real * v2.imag + t1.imag * v2.real; // , expr subst
+            t2 = q__1.real;
             /* Apply G from the left to transform the rows of the matrix */
             /* in columns K to I2. */
             i__3 = i2;
@@ -724,29 +742,29 @@ L30:
             {
                 r_cnjg(&q__3, &t1);
                 i__4 = k + j * h_dim1;
-                q__2.r = q__3.r * h__[i__4].r - q__3.i * h__[i__4].i;
-                q__2.i = q__3.r * h__[i__4].i + q__3.i * h__[i__4].r; // , expr subst
+                q__2.real = q__3.real * h__[i__4].real - q__3.imag * h__[i__4].imag;
+                q__2.imag = q__3.real * h__[i__4].imag + q__3.imag * h__[i__4].real; // , expr subst
                 i__5 = k + 1 + j * h_dim1;
-                q__4.r = t2 * h__[i__5].r;
-                q__4.i = t2 * h__[i__5].i; // , expr subst
-                q__1.r = q__2.r + q__4.r;
-                q__1.i = q__2.i + q__4.i; // , expr subst
-                sum.r = q__1.r;
-                sum.i = q__1.i; // , expr subst
+                q__4.real = t2 * h__[i__5].real;
+                q__4.imag = t2 * h__[i__5].imag; // , expr subst
+                q__1.real = q__2.real + q__4.real;
+                q__1.imag = q__2.imag + q__4.imag; // , expr subst
+                sum.real = q__1.real;
+                sum.imag = q__1.imag; // , expr subst
                 i__4 = k + j * h_dim1;
                 i__5 = k + j * h_dim1;
-                q__1.r = h__[i__5].r - sum.r;
-                q__1.i = h__[i__5].i - sum.i; // , expr subst
-                h__[i__4].r = q__1.r;
-                h__[i__4].i = q__1.i; // , expr subst
+                q__1.real = h__[i__5].real - sum.real;
+                q__1.imag = h__[i__5].imag - sum.imag; // , expr subst
+                h__[i__4].real = q__1.real;
+                h__[i__4].imag = q__1.imag; // , expr subst
                 i__4 = k + 1 + j * h_dim1;
                 i__5 = k + 1 + j * h_dim1;
-                q__2.r = sum.r * v2.r - sum.i * v2.i;
-                q__2.i = sum.r * v2.i + sum.i * v2.r; // , expr subst
-                q__1.r = h__[i__5].r - q__2.r;
-                q__1.i = h__[i__5].i - q__2.i; // , expr subst
-                h__[i__4].r = q__1.r;
-                h__[i__4].i = q__1.i; // , expr subst
+                q__2.real = sum.real * v2.real - sum.imag * v2.imag;
+                q__2.imag = sum.real * v2.imag + sum.imag * v2.real; // , expr subst
+                q__1.real = h__[i__5].real - q__2.real;
+                q__1.imag = h__[i__5].imag - q__2.imag; // , expr subst
+                h__[i__4].real = q__1.real;
+                h__[i__4].imag = q__1.imag; // , expr subst
                 /* L80: */
             }
             /* Apply G from the right to transform the columns of the */
@@ -757,30 +775,30 @@ L30:
             for(j = i1; j <= i__3; ++j)
             {
                 i__4 = j + k * h_dim1;
-                q__2.r = t1.r * h__[i__4].r - t1.i * h__[i__4].i;
-                q__2.i = t1.r * h__[i__4].i + t1.i * h__[i__4].r; // , expr subst
+                q__2.real = t1.real * h__[i__4].real - t1.imag * h__[i__4].imag;
+                q__2.imag = t1.real * h__[i__4].imag + t1.imag * h__[i__4].real; // , expr subst
                 i__5 = j + (k + 1) * h_dim1;
-                q__3.r = t2 * h__[i__5].r;
-                q__3.i = t2 * h__[i__5].i; // , expr subst
-                q__1.r = q__2.r + q__3.r;
-                q__1.i = q__2.i + q__3.i; // , expr subst
-                sum.r = q__1.r;
-                sum.i = q__1.i; // , expr subst
+                q__3.real = t2 * h__[i__5].real;
+                q__3.imag = t2 * h__[i__5].imag; // , expr subst
+                q__1.real = q__2.real + q__3.real;
+                q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                sum.real = q__1.real;
+                sum.imag = q__1.imag; // , expr subst
                 i__4 = j + k * h_dim1;
                 i__5 = j + k * h_dim1;
-                q__1.r = h__[i__5].r - sum.r;
-                q__1.i = h__[i__5].i - sum.i; // , expr subst
-                h__[i__4].r = q__1.r;
-                h__[i__4].i = q__1.i; // , expr subst
+                q__1.real = h__[i__5].real - sum.real;
+                q__1.imag = h__[i__5].imag - sum.imag; // , expr subst
+                h__[i__4].real = q__1.real;
+                h__[i__4].imag = q__1.imag; // , expr subst
                 i__4 = j + (k + 1) * h_dim1;
                 i__5 = j + (k + 1) * h_dim1;
                 r_cnjg(&q__3, &v2);
-                q__2.r = sum.r * q__3.r - sum.i * q__3.i;
-                q__2.i = sum.r * q__3.i + sum.i * q__3.r; // , expr subst
-                q__1.r = h__[i__5].r - q__2.r;
-                q__1.i = h__[i__5].i - q__2.i; // , expr subst
-                h__[i__4].r = q__1.r;
-                h__[i__4].i = q__1.i; // , expr subst
+                q__2.real = sum.real * q__3.real - sum.imag * q__3.imag;
+                q__2.imag = sum.real * q__3.imag + sum.imag * q__3.real; // , expr subst
+                q__1.real = h__[i__5].real - q__2.real;
+                q__1.imag = h__[i__5].imag - q__2.imag; // , expr subst
+                h__[i__4].real = q__1.real;
+                h__[i__4].imag = q__1.imag; // , expr subst
                 /* L90: */
             }
             if(*wantz)
@@ -790,30 +808,30 @@ L30:
                 for(j = *iloz; j <= i__3; ++j)
                 {
                     i__4 = j + k * z_dim1;
-                    q__2.r = t1.r * z__[i__4].r - t1.i * z__[i__4].i;
-                    q__2.i = t1.r * z__[i__4].i + t1.i * z__[i__4].r; // , expr subst
+                    q__2.real = t1.real * z__[i__4].real - t1.imag * z__[i__4].imag;
+                    q__2.imag = t1.real * z__[i__4].imag + t1.imag * z__[i__4].real; // , expr subst
                     i__5 = j + (k + 1) * z_dim1;
-                    q__3.r = t2 * z__[i__5].r;
-                    q__3.i = t2 * z__[i__5].i; // , expr subst
-                    q__1.r = q__2.r + q__3.r;
-                    q__1.i = q__2.i + q__3.i; // , expr subst
-                    sum.r = q__1.r;
-                    sum.i = q__1.i; // , expr subst
+                    q__3.real = t2 * z__[i__5].real;
+                    q__3.imag = t2 * z__[i__5].imag; // , expr subst
+                    q__1.real = q__2.real + q__3.real;
+                    q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                    sum.real = q__1.real;
+                    sum.imag = q__1.imag; // , expr subst
                     i__4 = j + k * z_dim1;
                     i__5 = j + k * z_dim1;
-                    q__1.r = z__[i__5].r - sum.r;
-                    q__1.i = z__[i__5].i - sum.i; // , expr subst
-                    z__[i__4].r = q__1.r;
-                    z__[i__4].i = q__1.i; // , expr subst
+                    q__1.real = z__[i__5].real - sum.real;
+                    q__1.imag = z__[i__5].imag - sum.imag; // , expr subst
+                    z__[i__4].real = q__1.real;
+                    z__[i__4].imag = q__1.imag; // , expr subst
                     i__4 = j + (k + 1) * z_dim1;
                     i__5 = j + (k + 1) * z_dim1;
                     r_cnjg(&q__3, &v2);
-                    q__2.r = sum.r * q__3.r - sum.i * q__3.i;
-                    q__2.i = sum.r * q__3.i + sum.i * q__3.r; // , expr subst
-                    q__1.r = z__[i__5].r - q__2.r;
-                    q__1.i = z__[i__5].i - q__2.i; // , expr subst
-                    z__[i__4].r = q__1.r;
-                    z__[i__4].i = q__1.i; // , expr subst
+                    q__2.real = sum.real * q__3.real - sum.imag * q__3.imag;
+                    q__2.imag = sum.real * q__3.imag + sum.imag * q__3.real; // , expr subst
+                    q__1.real = z__[i__5].real - q__2.real;
+                    q__1.imag = z__[i__5].imag - q__2.imag; // , expr subst
+                    z__[i__4].real = q__1.real;
+                    z__[i__4].imag = q__1.imag; // , expr subst
                     /* L100: */
                 }
             }
@@ -823,30 +841,30 @@ L30:
                 /* consecutive small subdiagonals were found, then extra */
                 /* scaling must be performed to ensure that H(M,M-1) remains */
                 /* real. */
-                q__1.r = 1.f - t1.r;
-                q__1.i = 0.f - t1.i; // , expr subst
-                temp.r = q__1.r;
-                temp.i = q__1.i; // , expr subst
+                q__1.real = 1.f - t1.real;
+                q__1.imag = 0.f - t1.imag; // , expr subst
+                temp.real = q__1.real;
+                temp.imag = q__1.imag; // , expr subst
                 r__1 = c_abs(&temp);
-                q__1.r = temp.r / r__1;
-                q__1.i = temp.i / r__1; // , expr subst
-                temp.r = q__1.r;
-                temp.i = q__1.i; // , expr subst
+                q__1.real = temp.real / r__1;
+                q__1.imag = temp.imag / r__1; // , expr subst
+                temp.real = q__1.real;
+                temp.imag = q__1.imag; // , expr subst
                 i__3 = m + 1 + m * h_dim1;
                 i__4 = m + 1 + m * h_dim1;
                 r_cnjg(&q__2, &temp);
-                q__1.r = h__[i__4].r * q__2.r - h__[i__4].i * q__2.i;
-                q__1.i = h__[i__4].r * q__2.i + h__[i__4].i * q__2.r; // , expr subst
-                h__[i__3].r = q__1.r;
-                h__[i__3].i = q__1.i; // , expr subst
+                q__1.real = h__[i__4].real * q__2.real - h__[i__4].imag * q__2.imag;
+                q__1.imag = h__[i__4].real * q__2.imag + h__[i__4].imag * q__2.real; // , expr subst
+                h__[i__3].real = q__1.real;
+                h__[i__3].imag = q__1.imag; // , expr subst
                 if(m + 2 <= i__)
                 {
                     i__3 = m + 2 + (m + 1) * h_dim1;
                     i__4 = m + 2 + (m + 1) * h_dim1;
-                    q__1.r = h__[i__4].r * temp.r - h__[i__4].i * temp.i;
-                    q__1.i = h__[i__4].r * temp.i + h__[i__4].i * temp.r; // , expr subst
-                    h__[i__3].r = q__1.r;
-                    h__[i__3].i = q__1.i; // , expr subst
+                    q__1.real = h__[i__4].real * temp.real - h__[i__4].imag * temp.imag;
+                    q__1.imag = h__[i__4].real * temp.imag + h__[i__4].imag * temp.real; // , expr subst
+                    h__[i__3].real = q__1.real;
+                    h__[i__3].imag = q__1.imag; // , expr subst
                 }
                 i__3 = i__;
                 for(j = m; j <= i__3; ++j)
@@ -856,15 +874,15 @@ L30:
                         if(i2 > j)
                         {
                             i__4 = i2 - j;
-                            cscal_(&i__4, &temp, &h__[j + (j + 1) * h_dim1], ldh);
+                            aocl_blas_cscal(&i__4, &temp, &h__[j + (j + 1) * h_dim1], ldh);
                         }
                         i__4 = j - i1;
                         r_cnjg(&q__1, &temp);
-                        cscal_(&i__4, &q__1, &h__[i1 + j * h_dim1], &c__1);
+                        aocl_blas_cscal(&i__4, &q__1, &h__[i1 + j * h_dim1], &c__1);
                         if(*wantz)
                         {
                             r_cnjg(&q__1, &temp);
-                            cscal_(&nz, &q__1, &z__[*iloz + j * z_dim1], &c__1);
+                            aocl_blas_cscal(&nz, &q__1, &z__[*iloz + j * z_dim1], &c__1);
                         }
                     }
                     /* L110: */
@@ -874,29 +892,29 @@ L30:
         }
         /* Ensure that H(I,I-1) is real. */
         i__2 = i__ + (i__ - 1) * h_dim1;
-        temp.r = h__[i__2].r;
-        temp.i = h__[i__2].i; // , expr subst
+        temp.real = h__[i__2].real;
+        temp.imag = h__[i__2].imag; // , expr subst
         if(r_imag(&temp) != 0.f)
         {
             rtemp = c_abs(&temp);
             i__2 = i__ + (i__ - 1) * h_dim1;
-            h__[i__2].r = rtemp;
-            h__[i__2].i = 0.f; // , expr subst
-            q__1.r = temp.r / rtemp;
-            q__1.i = temp.i / rtemp; // , expr subst
-            temp.r = q__1.r;
-            temp.i = q__1.i; // , expr subst
+            h__[i__2].real = rtemp;
+            h__[i__2].imag = 0.f; // , expr subst
+            q__1.real = temp.real / rtemp;
+            q__1.imag = temp.imag / rtemp; // , expr subst
+            temp.real = q__1.real;
+            temp.imag = q__1.imag; // , expr subst
             if(i2 > i__)
             {
                 i__2 = i2 - i__;
                 r_cnjg(&q__1, &temp);
-                cscal_(&i__2, &q__1, &h__[i__ + (i__ + 1) * h_dim1], ldh);
+                aocl_blas_cscal(&i__2, &q__1, &h__[i__ + (i__ + 1) * h_dim1], ldh);
             }
             i__2 = i__ - i1;
-            cscal_(&i__2, &temp, &h__[i1 + i__ * h_dim1], &c__1);
+            aocl_blas_cscal(&i__2, &temp, &h__[i1 + i__ * h_dim1], &c__1);
             if(*wantz)
             {
-                cscal_(&nz, &temp, &z__[*iloz + i__ * z_dim1], &c__1);
+                aocl_blas_cscal(&nz, &temp, &z__[*iloz + i__ * z_dim1], &c__1);
             }
         }
         /* L130: */
@@ -908,8 +926,8 @@ L30:
 L140: /* H(I,I-1) is negligible: one eigenvalue has converged. */
     i__1 = i__;
     i__2 = i__ + i__ * h_dim1;
-    w[i__1].r = h__[i__2].r;
-    w[i__1].i = h__[i__2].i; // , expr subst
+    w[i__1].real = h__[i__2].real;
+    w[i__1].imag = h__[i__2].imag; // , expr subst
     /* reset deflation counter */
     kdefl = 0;
     /* return to start of the main loop with new value of I. */

@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {-1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {-1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNBDB4 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -208,9 +208,35 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cunbdb4_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, complex *x21,
-              integer *ldx21, real *theta, real *phi, complex *taup1, complex *taup2,
-              complex *tauq1, complex *phantom, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cunbdb4_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, scomplex *x11, aocl_int_t *ldx11,
+              scomplex *x21, aocl_int_t *ldx21, real *theta, real *phi, scomplex *taup1,
+              scomplex *taup2, scomplex *tauq1, scomplex *phantom, scomplex *work, aocl_int_t *lwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cunbdb4(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, phantom,
+                        work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t q_64 = *q;
+    aocl_int64_t ldx11_64 = *ldx11;
+    aocl_int64_t ldx21_64 = *ldx21;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cunbdb4(&m_64, &p_64, &q_64, x11, &ldx11_64, x21, &ldx21_64, theta, phi, taup1,
+                        taup2, tauq1, phantom, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cunbdb4(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scomplex *x11,
+                         aocl_int64_t *ldx11, scomplex *x21, aocl_int64_t *ldx21, real *theta,
+                         real *phi, scomplex *taup1, scomplex *taup2, scomplex *tauq1,
+                         scomplex *phantom, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -226,43 +252,22 @@ void cunbdb4_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
     double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal);
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     double sqrt(doublereal);
     /* Local variables */
-    integer lworkmin, lworkopt;
+    aocl_int64_t lworkmin, lworkopt;
     real c__;
-    integer i__, j;
+    aocl_int64_t i__, j;
     real s;
-    integer childinfo;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *);
-    integer ilarf, llarf;
-    extern /* Subroutine */
-        void
-        csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t childinfo;
+    aocl_int64_t ilarf, llarf;
     logical lquery;
-    extern /* Subroutine */
-        void
-        cunbdb5_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
-                 complex *, integer *, complex *, integer *, complex *, integer *, integer *);
-    integer iorbdb5, lorbdb5;
-    extern /* Subroutine */
-        void
-        clarfgp_(integer *, complex *, complex *, integer *, complex *);
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t iorbdb5, lorbdb5;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -343,9 +348,9 @@ void cunbdb4_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
         i__2 = iorbdb5 + lorbdb5 - 1; // , expr subst
         lworkopt = fla_max(i__1, i__2);
         lworkmin = lworkopt;
-        r__1 = sroundup_lwork(&lworkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lworkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {
             *info = -14;
@@ -354,7 +359,7 @@ void cunbdb4_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNBDB4", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CUNBDB4", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -373,100 +378,103 @@ void cunbdb4_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
             for(j = 1; j <= i__2; ++j)
             {
                 i__3 = j;
-                phantom[i__3].r = 0.f;
-                phantom[i__3].i = 0.f; // , expr subst
+                phantom[i__3].real = 0.f;
+                phantom[i__3].imag = 0.f; // , expr subst
             }
             i__2 = *m - *p;
-            cunbdb5_(p, &i__2, q, &phantom[1], &c__1, &phantom[*p + 1], &c__1, &x11[x11_offset],
-                     ldx11, &x21[x21_offset], ldx21, &work[iorbdb5], &lorbdb5, &childinfo);
-            cscal_(p, &c_b1, &phantom[1], &c__1);
-            clarfgp_(p, &phantom[1], &phantom[2], &c__1, &taup1[1]);
+            aocl_lapack_cunbdb5(p, &i__2, q, &phantom[1], &c__1, &phantom[*p + 1], &c__1,
+                                &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &work[iorbdb5],
+                                &lorbdb5, &childinfo);
+            aocl_blas_cscal(p, &c_b1, &phantom[1], &c__1);
+            aocl_lapack_clarfgp(p, &phantom[1], &phantom[2], &c__1, &taup1[1]);
             i__2 = *m - *p;
-            clarfgp_(&i__2, &phantom[*p + 1], &phantom[*p + 2], &c__1, &taup2[1]);
-            theta[i__] = atan2((real)phantom[1].r, (real)phantom[*p + 1].r);
+            aocl_lapack_clarfgp(&i__2, &phantom[*p + 1], &phantom[*p + 2], &c__1, &taup2[1]);
+            theta[i__] = atan2((real)phantom[1].real, (real)phantom[*p + 1].real);
             c__ = cos(theta[i__]);
             s = sin(theta[i__]);
-            phantom[1].r = 1.f;
-            phantom[1].i = 0.f; // , expr subst
+            phantom[1].real = 1.f;
+            phantom[1].imag = 0.f; // , expr subst
             i__2 = *p + 1;
-            phantom[i__2].r = 1.f;
-            phantom[i__2].i = 0.f; // , expr subst
+            phantom[i__2].real = 1.f;
+            phantom[i__2].imag = 0.f; // , expr subst
             r_cnjg(&q__1, &taup1[1]);
-            clarf_("L", p, q, &phantom[1], &c__1, &q__1, &x11[x11_offset], ldx11, &work[ilarf]);
+            aocl_lapack_clarf("L", p, q, &phantom[1], &c__1, &q__1, &x11[x11_offset], ldx11,
+                              &work[ilarf]);
             i__2 = *m - *p;
             r_cnjg(&q__1, &taup2[1]);
-            clarf_("L", &i__2, q, &phantom[*p + 1], &c__1, &q__1, &x21[x21_offset], ldx21,
-                   &work[ilarf]);
+            aocl_lapack_clarf("L", &i__2, q, &phantom[*p + 1], &c__1, &q__1, &x21[x21_offset],
+                              ldx21, &work[ilarf]);
         }
         else
         {
             i__2 = *p - i__ + 1;
             i__3 = *m - *p - i__ + 1;
             i__4 = *q - i__ + 1;
-            cunbdb5_(&i__2, &i__3, &i__4, &x11[i__ + (i__ - 1) * x11_dim1], &c__1,
-                     &x21[i__ + (i__ - 1) * x21_dim1], &c__1, &x11[i__ + i__ * x11_dim1], ldx11,
-                     &x21[i__ + i__ * x21_dim1], ldx21, &work[iorbdb5], &lorbdb5, &childinfo);
+            aocl_lapack_cunbdb5(&i__2, &i__3, &i__4, &x11[i__ + (i__ - 1) * x11_dim1], &c__1,
+                                &x21[i__ + (i__ - 1) * x21_dim1], &c__1, &x11[i__ + i__ * x11_dim1],
+                                ldx11, &x21[i__ + i__ * x21_dim1], ldx21, &work[iorbdb5], &lorbdb5,
+                                &childinfo);
             i__2 = *p - i__ + 1;
-            cscal_(&i__2, &c_b1, &x11[i__ + (i__ - 1) * x11_dim1], &c__1);
+            aocl_blas_cscal(&i__2, &c_b1, &x11[i__ + (i__ - 1) * x11_dim1], &c__1);
             i__2 = *p - i__ + 1;
-            clarfgp_(&i__2, &x11[i__ + (i__ - 1) * x11_dim1], &x11[i__ + 1 + (i__ - 1) * x11_dim1],
-                     &c__1, &taup1[i__]);
+            aocl_lapack_clarfgp(&i__2, &x11[i__ + (i__ - 1) * x11_dim1],
+                                &x11[i__ + 1 + (i__ - 1) * x11_dim1], &c__1, &taup1[i__]);
             i__2 = *m - *p - i__ + 1;
-            clarfgp_(&i__2, &x21[i__ + (i__ - 1) * x21_dim1], &x21[i__ + 1 + (i__ - 1) * x21_dim1],
-                     &c__1, &taup2[i__]);
-            theta[i__] = atan2((real)x11[i__ + (i__ - 1) * x11_dim1].r,
-                               (real)x21[i__ + (i__ - 1) * x21_dim1].r);
+            aocl_lapack_clarfgp(&i__2, &x21[i__ + (i__ - 1) * x21_dim1],
+                                &x21[i__ + 1 + (i__ - 1) * x21_dim1], &c__1, &taup2[i__]);
+            theta[i__] = atan2((real)x11[i__ + (i__ - 1) * x11_dim1].real,
+                               (real)x21[i__ + (i__ - 1) * x21_dim1].real);
             c__ = cos(theta[i__]);
             s = sin(theta[i__]);
             i__2 = i__ + (i__ - 1) * x11_dim1;
-            x11[i__2].r = 1.f;
-            x11[i__2].i = 0.f; // , expr subst
+            x11[i__2].real = 1.f;
+            x11[i__2].imag = 0.f; // , expr subst
             i__2 = i__ + (i__ - 1) * x21_dim1;
-            x21[i__2].r = 1.f;
-            x21[i__2].i = 0.f; // , expr subst
+            x21[i__2].real = 1.f;
+            x21[i__2].imag = 0.f; // , expr subst
             i__2 = *p - i__ + 1;
             i__3 = *q - i__ + 1;
             r_cnjg(&q__1, &taup1[i__]);
-            clarf_("L", &i__2, &i__3, &x11[i__ + (i__ - 1) * x11_dim1], &c__1, &q__1,
-                   &x11[i__ + i__ * x11_dim1], ldx11, &work[ilarf]);
+            aocl_lapack_clarf("L", &i__2, &i__3, &x11[i__ + (i__ - 1) * x11_dim1], &c__1, &q__1,
+                              &x11[i__ + i__ * x11_dim1], ldx11, &work[ilarf]);
             i__2 = *m - *p - i__ + 1;
             i__3 = *q - i__ + 1;
             r_cnjg(&q__1, &taup2[i__]);
-            clarf_("L", &i__2, &i__3, &x21[i__ + (i__ - 1) * x21_dim1], &c__1, &q__1,
-                   &x21[i__ + i__ * x21_dim1], ldx21, &work[ilarf]);
+            aocl_lapack_clarf("L", &i__2, &i__3, &x21[i__ + (i__ - 1) * x21_dim1], &c__1, &q__1,
+                              &x21[i__ + i__ * x21_dim1], ldx21, &work[ilarf]);
         }
         i__2 = *q - i__ + 1;
         r__1 = -c__;
-        csrot_(&i__2, &x11[i__ + i__ * x11_dim1], ldx11, &x21[i__ + i__ * x21_dim1], ldx21, &s,
-               &r__1);
+        aocl_blas_csrot(&i__2, &x11[i__ + i__ * x11_dim1], ldx11, &x21[i__ + i__ * x21_dim1], ldx21,
+                        &s, &r__1);
         i__2 = *q - i__ + 1;
-        clacgv_(&i__2, &x21[i__ + i__ * x21_dim1], ldx21);
+        aocl_lapack_clacgv(&i__2, &x21[i__ + i__ * x21_dim1], ldx21);
         i__2 = *q - i__ + 1;
-        clarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
-                 &tauq1[i__]);
+        aocl_lapack_clarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1],
+                            ldx21, &tauq1[i__]);
         i__2 = i__ + i__ * x21_dim1;
-        c__ = x21[i__2].r;
+        c__ = x21[i__2].real;
         i__2 = i__ + i__ * x21_dim1;
-        x21[i__2].r = 1.f;
-        x21[i__2].i = 0.f; // , expr subst
+        x21[i__2].real = 1.f;
+        x21[i__2].imag = 0.f; // , expr subst
         i__2 = *p - i__;
         i__3 = *q - i__ + 1;
-        clarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
-               &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[ilarf]);
+        aocl_lapack_clarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
+                          &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[ilarf]);
         i__2 = *m - *p - i__;
         i__3 = *q - i__ + 1;
-        clarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
-               &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
+        aocl_lapack_clarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
+                          &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
         i__2 = *q - i__ + 1;
-        clacgv_(&i__2, &x21[i__ + i__ * x21_dim1], ldx21);
+        aocl_lapack_clacgv(&i__2, &x21[i__ + i__ * x21_dim1], ldx21);
         if(i__ < *m - *q)
         {
             i__2 = *p - i__;
             /* Computing 2nd power */
-            r__1 = scnrm2_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &c__1);
+            r__1 = aocl_blas_scnrm2(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &c__1);
             i__3 = *m - *p - i__;
             /* Computing 2nd power */
-            r__2 = scnrm2_(&i__3, &x21[i__ + 1 + i__ * x21_dim1], &c__1);
+            r__2 = aocl_blas_scnrm2(&i__3, &x21[i__ + 1 + i__ * x21_dim1], &c__1);
             s = sqrt(r__1 * r__1 + r__2 * r__2);
             phi[i__] = atan2(s, c__);
         }
@@ -476,42 +484,43 @@ void cunbdb4_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
     for(i__ = *m - *q + 1; i__ <= i__1; ++i__)
     {
         i__2 = *q - i__ + 1;
-        clacgv_(&i__2, &x11[i__ + i__ * x11_dim1], ldx11);
+        aocl_lapack_clacgv(&i__2, &x11[i__ + i__ * x11_dim1], ldx11);
         i__2 = *q - i__ + 1;
-        clarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
-                 &tauq1[i__]);
+        aocl_lapack_clarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1],
+                            ldx11, &tauq1[i__]);
         i__2 = i__ + i__ * x11_dim1;
-        x11[i__2].r = 1.f;
-        x11[i__2].i = 0.f; // , expr subst
+        x11[i__2].real = 1.f;
+        x11[i__2].imag = 0.f; // , expr subst
         i__2 = *p - i__;
         i__3 = *q - i__ + 1;
-        clarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[i__],
-               &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[ilarf]);
+        aocl_lapack_clarf("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[i__],
+                          &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[ilarf]);
         i__2 = *q - *p;
         i__3 = *q - i__ + 1;
-        clarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[i__],
-               &x21[*m - *q + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
+        aocl_lapack_clarf("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[i__],
+                          &x21[*m - *q + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
         i__2 = *q - i__ + 1;
-        clacgv_(&i__2, &x11[i__ + i__ * x11_dim1], ldx11);
+        aocl_lapack_clacgv(&i__2, &x11[i__ + i__ * x11_dim1], ldx11);
     }
     /* Reduce the bottom-right portion of X21 to [ 0 I ] */
     i__1 = *q;
     for(i__ = *p + 1; i__ <= i__1; ++i__)
     {
         i__2 = *q - i__ + 1;
-        clacgv_(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21);
+        aocl_lapack_clacgv(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21);
         i__2 = *q - i__ + 1;
-        clarfgp_(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1],
-                 &x21[*m - *q + i__ - *p + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__]);
+        aocl_lapack_clarfgp(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1],
+                            &x21[*m - *q + i__ - *p + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__]);
         i__2 = *m - *q + i__ - *p + i__ * x21_dim1;
-        x21[i__2].r = 1.f;
-        x21[i__2].i = 0.f; // , expr subst
+        x21[i__2].real = 1.f;
+        x21[i__2].imag = 0.f; // , expr subst
         i__2 = *q - i__;
         i__3 = *q - i__ + 1;
-        clarf_("R", &i__2, &i__3, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21, &tauq1[i__],
-               &x21[*m - *q + i__ - *p + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
+        aocl_lapack_clarf("R", &i__2, &i__3, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21,
+                          &tauq1[i__], &x21[*m - *q + i__ - *p + 1 + i__ * x21_dim1], ldx21,
+                          &work[ilarf]);
         i__2 = *q - i__ + 1;
-        clacgv_(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21);
+        aocl_lapack_clacgv(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

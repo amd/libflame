@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGTCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGTCON estimates the reciprocal of the condition number of a complex */
+/* > ZGTCON estimates the reciprocal of the condition number of a scomplex */
 /* > tridiagonal matrix A using the LU factorization as computed by */
 /* > ZGTTRF. */
 /* > */
@@ -140,29 +140,38 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *du,
-             doublecomplex *du2, integer *ipiv, doublereal *anorm, doublereal *rcond,
-             doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
+             dcomplex *du2, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
+             dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgtcon(norm, n, dl, d__, du, du2, ipiv, anorm, rcond, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgtcon(norm, &n_64, dl, d__, du, du2, ipiv, anorm, rcond, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgtcon(char *norm, aocl_int64_t *n, dcomplex *dl, dcomplex *d__,
+                        dcomplex *du, dcomplex *du2, aocl_int_t *ipiv, doublereal *anorm,
+                        doublereal *rcond, dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgtcon inputs: norm %c, n %" FLA_IS "", *norm, *n);
 
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer i__, kase, kase1;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, kase, kase1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
-    extern /* Subroutine */
-        void
-        zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,7 +220,7 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGTCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -233,7 +242,7 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if(d__[i__2].r == 0. && d__[i__2].i == 0.)
+        if(d__[i__2].real == 0. && d__[i__2].imag == 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -251,20 +260,20 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     }
     kase = 0;
 L20:
-    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            zgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1],
-                    n, info);
+            aocl_lapack_zgttrs("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                               &work[1], n, info);
         }
         else
         {
             /* Multiply by inv(L**H)*inv(U**H). */
-            zgttrs_("Conjugate transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
-                    &work[1], n, info);
+            aocl_lapack_zgttrs("Conjugate transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1],
+                               &ipiv[1], &work[1], n, info);
         }
         goto L20;
     }

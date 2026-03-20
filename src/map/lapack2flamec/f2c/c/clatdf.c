@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b24 = 1.f;
 /* > \brief \b CLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
  * a contrib ution to the reciprocal Dif-estimate. */
@@ -168,8 +168,23 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs, real *rdsum,
-             real *rdscal, integer *ipiv, integer *jpiv)
+/** Generated wrapper function */
+void clatdf_(aocl_int_t *ijob, aocl_int_t *n, scomplex *z__, aocl_int_t *ldz, scomplex *rhs,
+             real *rdsum, real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clatdf(ijob, n, z__, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+
+    aocl_lapack_clatdf(&ijob_64, &n_64, z__, &ldz_64, rhs, rdsum, rdscal, ipiv, jpiv);
+#endif
+}
+
+void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl_int64_t *ldz,
+                        scomplex *rhs, real *rdsum, real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -182,40 +197,20 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2, q__3;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *);
-    double c_abs(complex *);
-    void c_sqrt(complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
+    double c_abs(scomplex *);
+    void c_sqrt(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k;
-    complex bm, bp, xm[2], xp[2];
-    integer info;
-    complex temp, work[8];
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
+    aocl_int64_t i__, j, k;
+    scomplex bm, bp, xm[2], xp[2];
+    aocl_int64_t info;
+    scomplex temp, work[8];
     real scale;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    complex pmone;
-    extern /* Subroutine */
-        void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    scomplex pmone;
     real rtemp, sminu, rwork[2], splus;
-    extern /* Subroutine */
-        void
-        cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *),
-        cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
-                integer *),
-        classq_(integer *, complex *, integer *, real *, real *),
-        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
-    extern real scasum_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -250,48 +245,48 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
     {
         /* Apply permutations IPIV to RHS */
         i__1 = *n - 1;
-        claswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
+        aocl_lapack_claswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
         /* Solve for L-part choosing RHS either to +1 or -1. */
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        pmone.r = q__1.r;
-        pmone.i = q__1.i; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        pmone.real = q__1.real;
+        pmone.imag = q__1.imag; // , expr subst
         i__1 = *n - 1;
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
-            q__1.r = rhs[i__2].r + 1.f;
-            q__1.i = rhs[i__2].i + 0.f; // , expr subst
-            bp.r = q__1.r;
-            bp.i = q__1.i; // , expr subst
+            q__1.real = rhs[i__2].real + 1.f;
+            q__1.imag = rhs[i__2].imag + 0.f; // , expr subst
+            bp.real = q__1.real;
+            bp.imag = q__1.imag; // , expr subst
             i__2 = j;
-            q__1.r = rhs[i__2].r - 1.f;
-            q__1.i = rhs[i__2].i - 0.f; // , expr subst
-            bm.r = q__1.r;
-            bm.i = q__1.i; // , expr subst
+            q__1.real = rhs[i__2].real - 1.f;
+            q__1.imag = rhs[i__2].imag - 0.f; // , expr subst
+            bm.real = q__1.real;
+            bm.imag = q__1.imag; // , expr subst
             splus = 1.f;
             /* Lockahead for L- part RHS(1:N-1) = +-1 */
             /* SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
             i__2 = *n - j;
-            cdotc_f2c_(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
+            aocl_lapack_cdotc_f2c(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
                        &c__1);
-            splus += q__1.r;
+            splus += q__1.real;
             i__2 = *n - j;
-            cdotc_f2c_(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
-            sminu = q__1.r;
+            aocl_lapack_cdotc_f2c(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
+            sminu = q__1.real;
             i__2 = j;
-            splus *= rhs[i__2].r;
+            splus *= rhs[i__2].real;
             if(splus > sminu)
             {
                 i__2 = j;
-                rhs[i__2].r = bp.r;
-                rhs[i__2].i = bp.i; // , expr subst
+                rhs[i__2].real = bp.real;
+                rhs[i__2].imag = bp.imag; // , expr subst
             }
             else if(sminu > splus)
             {
                 i__2 = j;
-                rhs[i__2].r = bm.r;
-                rhs[i__2].i = bm.i; // , expr subst
+                rhs[i__2].real = bm.real;
+                rhs[i__2].imag = bm.imag; // , expr subst
             }
             else
             {
@@ -302,21 +297,21 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
                 /* (see [1]). (Not done in BSOLVE.) */
                 i__2 = j;
                 i__3 = j;
-                q__1.r = rhs[i__3].r + pmone.r;
-                q__1.i = rhs[i__3].i + pmone.i; // , expr subst
-                rhs[i__2].r = q__1.r;
-                rhs[i__2].i = q__1.i; // , expr subst
-                pmone.r = 1.f;
-                pmone.i = 0.f; // , expr subst
+                q__1.real = rhs[i__3].real + pmone.real;
+                q__1.imag = rhs[i__3].imag + pmone.imag; // , expr subst
+                rhs[i__2].real = q__1.real;
+                rhs[i__2].imag = q__1.imag; // , expr subst
+                pmone.real = 1.f;
+                pmone.imag = 0.f; // , expr subst
             }
             /* Compute the remaining r.h.s. */
             i__2 = j;
-            q__1.r = -rhs[i__2].r;
-            q__1.i = -rhs[i__2].i; // , expr subst
-            temp.r = q__1.r;
-            temp.i = q__1.i; // , expr subst
+            q__1.real = -rhs[i__2].real;
+            q__1.imag = -rhs[i__2].imag; // , expr subst
+            temp.real = q__1.real;
+            temp.imag = q__1.imag; // , expr subst
             i__2 = *n - j;
-            caxpy_(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
+            aocl_blas_caxpy(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             /* L10: */
         }
         /* Solve for U- part, lockahead for RHS(N) = +-1. This is not done */
@@ -324,38 +319,38 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
         /* any ill-conditioning of the original matrix is transfered to U */
         /* and not to L. U(N, N) is an approximation to sigma_min(LU). */
         i__1 = *n - 1;
-        ccopy_(&i__1, &rhs[1], &c__1, work, &c__1);
+        aocl_blas_ccopy(&i__1, &rhs[1], &c__1, work, &c__1);
         i__1 = *n - 1;
         i__2 = *n;
-        q__1.r = rhs[i__2].r + 1.f;
-        q__1.i = rhs[i__2].i + 0.f; // , expr subst
-        work[i__1].r = q__1.r;
-        work[i__1].i = q__1.i; // , expr subst
+        q__1.real = rhs[i__2].real + 1.f;
+        q__1.imag = rhs[i__2].imag + 0.f; // , expr subst
+        work[i__1].real = q__1.real;
+        work[i__1].imag = q__1.imag; // , expr subst
         i__1 = *n;
         i__2 = *n;
-        q__1.r = rhs[i__2].r - 1.f;
-        q__1.i = rhs[i__2].i - 0.f; // , expr subst
-        rhs[i__1].r = q__1.r;
-        rhs[i__1].i = q__1.i; // , expr subst
+        q__1.real = rhs[i__2].real - 1.f;
+        q__1.imag = rhs[i__2].imag - 0.f; // , expr subst
+        rhs[i__1].real = q__1.real;
+        rhs[i__1].imag = q__1.imag; // , expr subst
         splus = 0.f;
         sminu = 0.f;
         for(i__ = *n; i__ >= 1; --i__)
         {
             c_div(&q__1, &c_b1, &z__[i__ + i__ * z_dim1]);
-            temp.r = q__1.r;
-            temp.i = q__1.i; // , expr subst
+            temp.real = q__1.real;
+            temp.imag = q__1.imag; // , expr subst
             i__1 = i__ - 1;
             i__2 = i__ - 1;
-            q__1.r = work[i__2].r * temp.r - work[i__2].i * temp.i;
-            q__1.i = work[i__2].r * temp.i + work[i__2].i * temp.r; // , expr subst
-            work[i__1].r = q__1.r;
-            work[i__1].i = q__1.i; // , expr subst
+            q__1.real = work[i__2].real * temp.real - work[i__2].imag * temp.imag;
+            q__1.imag = work[i__2].real * temp.imag + work[i__2].imag * temp.real; // , expr subst
+            work[i__1].real = q__1.real;
+            work[i__1].imag = q__1.imag; // , expr subst
             i__1 = i__;
             i__2 = i__;
-            q__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i;
-            q__1.i = rhs[i__2].r * temp.i + rhs[i__2].i * temp.r; // , expr subst
-            rhs[i__1].r = q__1.r;
-            rhs[i__1].i = q__1.i; // , expr subst
+            q__1.real = rhs[i__2].real * temp.real - rhs[i__2].imag * temp.imag;
+            q__1.imag = rhs[i__2].real * temp.imag + rhs[i__2].imag * temp.real; // , expr subst
+            rhs[i__1].real = q__1.real;
+            rhs[i__1].imag = q__1.imag; // , expr subst
             i__1 = *n;
             for(k = i__ + 1; k <= i__1; ++k)
             {
@@ -363,26 +358,26 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
                 i__3 = i__ - 1;
                 i__4 = k - 1;
                 i__5 = i__ + k * z_dim1;
-                q__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i;
-                q__3.i = z__[i__5].r * temp.i + z__[i__5].i * temp.r; // , expr subst
-                q__2.r = work[i__4].r * q__3.r - work[i__4].i * q__3.i;
-                q__2.i = work[i__4].r * q__3.i + work[i__4].i * q__3.r; // , expr subst
-                q__1.r = work[i__3].r - q__2.r;
-                q__1.i = work[i__3].i - q__2.i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__3.real = z__[i__5].real * temp.real - z__[i__5].imag * temp.imag;
+                q__3.imag = z__[i__5].real * temp.imag + z__[i__5].imag * temp.real; // , expr subst
+                q__2.real = work[i__4].real * q__3.real - work[i__4].imag * q__3.imag;
+                q__2.imag = work[i__4].real * q__3.imag + work[i__4].imag * q__3.real; // , expr subst
+                q__1.real = work[i__3].real - q__2.real;
+                q__1.imag = work[i__3].imag - q__2.imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = k;
                 i__5 = i__ + k * z_dim1;
-                q__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i;
-                q__3.i = z__[i__5].r * temp.i + z__[i__5].i * temp.r; // , expr subst
-                q__2.r = rhs[i__4].r * q__3.r - rhs[i__4].i * q__3.i;
-                q__2.i = rhs[i__4].r * q__3.i + rhs[i__4].i * q__3.r; // , expr subst
-                q__1.r = rhs[i__3].r - q__2.r;
-                q__1.i = rhs[i__3].i - q__2.i; // , expr subst
-                rhs[i__2].r = q__1.r;
-                rhs[i__2].i = q__1.i; // , expr subst
+                q__3.real = z__[i__5].real * temp.real - z__[i__5].imag * temp.imag;
+                q__3.imag = z__[i__5].real * temp.imag + z__[i__5].imag * temp.real; // , expr subst
+                q__2.real = rhs[i__4].real * q__3.real - rhs[i__4].imag * q__3.imag;
+                q__2.imag = rhs[i__4].real * q__3.imag + rhs[i__4].imag * q__3.real; // , expr subst
+                q__1.real = rhs[i__3].real - q__2.real;
+                q__1.imag = rhs[i__3].imag - q__2.imag; // , expr subst
+                rhs[i__2].real = q__1.real;
+                rhs[i__2].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             splus += c_abs(&work[i__ - 1]);
@@ -391,42 +386,42 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
         }
         if(splus > sminu)
         {
-            ccopy_(n, work, &c__1, &rhs[1], &c__1);
+            aocl_blas_ccopy(n, work, &c__1, &rhs[1], &c__1);
         }
         /* Apply the permutations JPIV to the computed solution (RHS) */
         i__1 = *n - 1;
-        claswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
+        aocl_lapack_claswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
         /* Compute the sum of squares */
-        classq_(n, &rhs[1], &c__1, rdscal, rdsum);
+        aocl_lapack_classq(n, &rhs[1], &c__1, rdscal, rdsum);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* ENTRY IJOB = 2 */
     /* Compute approximate nullvector XM of Z */
-    cgecon_("I", n, &z__[z_offset], ldz, &c_b24, &rtemp, work, rwork, &info);
-    ccopy_(n, &work[*n], &c__1, xm, &c__1);
+    aocl_lapack_cgecon("I", n, &z__[z_offset], ldz, &c_b24, &rtemp, work, rwork, &info);
+    aocl_blas_ccopy(n, &work[*n], &c__1, xm, &c__1);
     /* Compute RHS */
     i__1 = *n - 1;
-    claswp_(&c__1, xm, ldz, &c__1, &i__1, &ipiv[1], &c_n1);
-    cdotc_f2c_(&q__3, n, xm, &c__1, xm, &c__1);
+    aocl_lapack_claswp(&c__1, xm, ldz, &c__1, &i__1, &ipiv[1], &c_n1);
+    aocl_lapack_cdotc_f2c(&q__3, n, xm, &c__1, xm, &c__1);
     c_sqrt(&q__2, &q__3);
     c_div(&q__1, &c_b1, &q__2);
-    temp.r = q__1.r;
-    temp.i = q__1.i; // , expr subst
-    cscal_(n, &temp, xm, &c__1);
-    ccopy_(n, xm, &c__1, xp, &c__1);
-    caxpy_(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
-    q__1.r = -1.f;
-    q__1.i = -0.f; // , expr subst
-    caxpy_(n, &q__1, xm, &c__1, &rhs[1], &c__1);
-    cgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
-    cgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
-    if(scasum_(n, xp, &c__1) > scasum_(n, &rhs[1], &c__1))
+    temp.real = q__1.real;
+    temp.imag = q__1.imag; // , expr subst
+    aocl_blas_cscal(n, &temp, xm, &c__1);
+    aocl_blas_ccopy(n, xm, &c__1, xp, &c__1);
+    aocl_blas_caxpy(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
+    q__1.real = -1.f;
+    q__1.imag = -0.f; // , expr subst
+    aocl_blas_caxpy(n, &q__1, xm, &c__1, &rhs[1], &c__1);
+    aocl_lapack_cgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
+    aocl_lapack_cgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
+    if(aocl_blas_scasum(n, xp, &c__1) > aocl_blas_scasum(n, &rhs[1], &c__1))
     {
-        ccopy_(n, xp, &c__1, &rhs[1], &c__1);
+        aocl_blas_ccopy(n, xp, &c__1, &rhs[1], &c__1);
     }
     /* Compute the sum of squares */
-    classq_(n, &rhs[1], &c__1, rdscal, rdsum);
+    aocl_lapack_classq(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CLATDF */

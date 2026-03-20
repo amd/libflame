@@ -96,7 +96,23 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *ayb, real *berr)
+/** Generated wrapper function */
+void cla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, scomplex *res, real *ayb,
+                   real *berr)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cla_lin_berr(n, nz, nrhs, res, ayb, berr);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nz_64 = *nz;
+    aocl_int64_t nrhs_64 = *nrhs;
+
+    aocl_lapack_cla_lin_berr(&n_64, &nz_64, &nrhs_64, res, ayb, berr);
+#endif
+}
+
+void aocl_lapack_cla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *nrhs, scomplex *res,
+                              real *ayb, real *berr)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -109,13 +125,13 @@ void cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *a
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real tmp, safe1;
     extern real slamch_(char *);
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -162,16 +178,16 @@ void cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *a
             if(ayb[i__ + j * ayb_dim1] != 0.f)
             {
                 i__3 = i__ + j * res_dim1;
-                r__3 = (r__1 = res[i__3].r, f2c_abs(r__1))
+                r__3 = (r__1 = res[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&res[i__ + j * res_dim1]), f2c_abs(r__2));
-                q__3.r = r__3;
-                q__3.i = 0.f; // , expr subst
-                q__2.r = safe1 + q__3.r;
-                q__2.i = q__3.i; // , expr subst
+                q__3.real = r__3;
+                q__3.imag = 0.f; // , expr subst
+                q__2.real = safe1 + q__3.real;
+                q__2.imag = q__3.imag; // , expr subst
                 i__4 = i__ + j * ayb_dim1;
-                q__1.r = q__2.r / ayb[i__4];
-                q__1.i = q__2.i / ayb[i__4]; // , expr subst
-                tmp = q__1.r;
+                q__1.real = q__2.real / ayb[i__4];
+                q__1.imag = q__2.imag / ayb[i__4]; // , expr subst
+                tmp = q__1.real;
                 /* Computing MAX */
                 r__1 = berr[j];
                 berr[j] = fla_max(r__1, tmp);

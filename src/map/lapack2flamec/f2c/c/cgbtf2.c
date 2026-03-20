@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CGBTF2 computes the LU factorization of a general band matrix using the unblocked
  * version of th e algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGBTF2 computes an LU factorization of a complex m-by-n band matrix */
+/* > CGBTF2 computes an LU factorization of a scomplex m-by-n band matrix */
 /* > A using partial pivoting with row interchanges. */
 /* > */
 /* > This is the unblocked version of the algorithm, calling Level 2 BLAS. */
@@ -147,8 +147,28 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
-             integer *ipiv, integer *info)
+/** Generated wrapper function */
+void cgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomplex *ab,
+             aocl_int_t *ldab, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgbtf2(m, n, kl, ku, ab, ldab, ipiv, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgbtf2(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        scomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -163,22 +183,12 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
-    complex q__1;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    scomplex q__1;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, km, jp, ju, kv;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, km, jp, ju, kv;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,7 +247,7 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGBTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -264,8 +274,8 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         for(i__ = kv - j + 2; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * ab_dim1;
-            ab[i__3].r = 0.f;
-            ab[i__3].i = 0.f; // , expr subst
+            ab[i__3].real = 0.f;
+            ab[i__3].imag = 0.f; // , expr subst
             /* L10: */
         }
         /* L20: */
@@ -295,8 +305,8 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (j + kv) * ab_dim1;
-                ab[i__3].r = 0.f;
-                ab[i__3].i = 0.f; // , expr subst
+                ab[i__3].real = 0.f;
+                ab[i__3].imag = 0.f; // , expr subst
                 /* L30: */
             }
         }
@@ -307,10 +317,10 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         i__3 = *m - j; // , expr subst
         km = fla_min(i__2, i__3);
         i__2 = km + 1;
-        jp = icamax_(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
-        ipiv[j] = jp + j - 1;
+        jp = aocl_blas_icamax(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
+        ipiv[j] = (aocl_int_t)(jp + j - 1);
         i__2 = kv + jp + j * ab_dim1;
-        if(ab[i__2].r != 0.f || ab[i__2].i != 0.f)
+        if(ab[i__2].real != 0.f || ab[i__2].imag != 0.f)
         {
             /* Computing MAX */
             /* Computing MIN */
@@ -324,24 +334,25 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 i__2 = ju - j + 1;
                 i__3 = *ldab - 1;
                 i__4 = *ldab - 1;
-                cswap_(&i__2, &ab[kv + jp + j * ab_dim1], &i__3, &ab[kv + 1 + j * ab_dim1], &i__4);
+                aocl_blas_cswap(&i__2, &ab[kv + jp + j * ab_dim1], &i__3, &ab[kv + 1 + j * ab_dim1],
+                                &i__4);
             }
             if(km > 0)
             {
                 /* Compute multipliers. */
                 c_div(&q__1, &c_b1, &ab[kv + 1 + j * ab_dim1]);
-                cscal_(&km, &q__1, &ab[kv + 2 + j * ab_dim1], &c__1);
+                aocl_blas_cscal(&km, &q__1, &ab[kv + 2 + j * ab_dim1], &c__1);
                 /* Update trailing submatrix within the band. */
                 if(ju > j)
                 {
                     i__2 = ju - j;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
-                    cgeru_(&km, &i__2, &q__1, &ab[kv + 2 + j * ab_dim1], &c__1,
-                           &ab[kv + (j + 1) * ab_dim1], &i__3, &ab[kv + 1 + (j + 1) * ab_dim1],
-                           &i__4);
+                    aocl_blas_cgeru(&km, &i__2, &q__1, &ab[kv + 2 + j * ab_dim1], &c__1,
+                                    &ab[kv + (j + 1) * ab_dim1], &i__3,
+                                    &ab[kv + 1 + (j + 1) * ab_dim1], &i__4);
                 }
             }
         }

@@ -4,9 +4,9 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CLAUNHR_COL_GETRFNP */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > */
 /* > CLAUNHR_COL_GETRFNP computes the modified LU factorization without */
-/* > pivoting of a complex general M-by-N matrix A. The factorization has */
+/* > pivoting of a scomplex general M-by-N matrix A. The factorization has */
 /* > the form: */
 /* > */
 /* > A - S = L * U, */
@@ -148,8 +148,26 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void claunhr_col_getrfnp_(integer *m, integer *n, complex *a, integer *lda, complex *d__,
-                          integer *info)
+/** Generated wrapper function */
+void claunhr_col_getrfnp_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *d__,
+                          aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claunhr_col_getrfnp(m, n, a, lda, d__, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_claunhr_col_getrfnp(&m_64, &n_64, a, &lda_64, d__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_claunhr_col_getrfnp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a,
+                                     aocl_int64_t *lda, scomplex *d__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -162,22 +180,11 @@ void claunhr_col_getrfnp_(integer *m, integer *n, complex *a, integer *lda, comp
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    scomplex q__1;
     /* Local variables */
-    integer j, jb, nb;
-    extern /* Subroutine */
-        void
-        claunhr_col_getrfnp2_(integer *, integer *, complex *, integer *, complex *, integer *),
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    aocl_int64_t j, jb, nb;
+    aocl_int64_t iinfo;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -221,7 +228,7 @@ void claunhr_col_getrfnp_(integer *m, integer *n, complex *a, integer *lda, comp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLAUNHR_COL_GETRFNP", &i__1, (ftnlen)19);
+        aocl_blas_xerbla("CLAUNHR_COL_GETRFNP", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -232,11 +239,11 @@ void claunhr_col_getrfnp_(integer *m, integer *n, complex *a, integer *lda, comp
         return;
     }
     /* Determine the block size for this environment. */
-    nb = ilaenv_(&c__1, "CLAUNHR_COL_GETRFNP", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "CLAUNHR_COL_GETRFNP", " ", m, n, &c_n1, &c_n1);
     if(nb <= 1 || nb >= fla_min(*m, *n))
     {
         /* Use unblocked code. */
-        claunhr_col_getrfnp2_(m, n, &a[a_offset], lda, &d__[1], info);
+        aocl_lapack_claunhr_col_getrfnp2(m, n, &a[a_offset], lda, &d__[1], info);
     }
     else
     {
@@ -250,23 +257,23 @@ void claunhr_col_getrfnp_(integer *m, integer *n, complex *a, integer *lda, comp
             jb = fla_min(i__3, nb);
             /* Factor diagonal and subdiagonal blocks. */
             i__3 = *m - j + 1;
-            claunhr_col_getrfnp2_(&i__3, &jb, &a[j + j * a_dim1], lda, &d__[j], &iinfo);
+            aocl_lapack_claunhr_col_getrfnp2(&i__3, &jb, &a[j + j * a_dim1], lda, &d__[j], &iinfo);
             if(j + jb <= *n)
             {
                 /* Compute block row of U. */
                 i__3 = *n - j - jb + 1;
-                ctrsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &c_b1,
-                       &a[j + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda);
+                aocl_blas_ctrsm("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &c_b1,
+                                &a[j + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda);
                 if(j + jb <= *m)
                 {
                     /* Update trailing submatrix. */
                     i__3 = *m - j - jb + 1;
                     i__4 = *n - j - jb + 1;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
-                    cgemm_("No transpose", "No transpose", &i__3, &i__4, &jb, &q__1,
-                           &a[j + jb + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda, &c_b1,
-                           &a[j + jb + (j + jb) * a_dim1], lda);
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
+                    aocl_blas_cgemm("No transpose", "No transpose", &i__3, &i__4, &jb, &q__1,
+                                    &a[j + jb + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda,
+                                    &c_b1, &a[j + jb + (j + jb) * a_dim1], lda);
                 }
             }
         }

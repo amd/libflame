@@ -110,8 +110,25 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claswp_(integer *n, complex *a, integer *lda, integer *k1, integer *k2, integer *ipiv,
-             integer *incx)
+/** Generated wrapper function */
+void claswp_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *k1, aocl_int_t *k2,
+             aocl_int_t *ipiv, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claswp(n, a, lda, k1, k2, ipiv, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t k1_64 = *k1;
+    aocl_int64_t k2_64 = *k2;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_claswp(&n_64, a, &lda_64, &k1_64, &k2_64, ipiv, &incx_64);
+#endif
+}
+
+void aocl_lapack_claswp(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *k1,
+                        aocl_int64_t *k2, aocl_int_t *ipiv, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -126,10 +143,10 @@ void claswp_(integer *n, complex *a, integer *lda, integer *k1, integer *k2, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     /* Local variables */
-    integer i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
-    complex temp;
+    aocl_int64_t i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
+    scomplex temp;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,15 +204,15 @@ void claswp_(integer *n, complex *a, integer *lda, integer *k1, integer *k2, int
                     for(k = j; k <= i__4; ++k)
                     {
                         i__5 = i__ + k * a_dim1;
-                        temp.r = a[i__5].r;
-                        temp.i = a[i__5].i; // , expr subst
+                        temp.real = a[i__5].real;
+                        temp.imag = a[i__5].imag; // , expr subst
                         i__5 = i__ + k * a_dim1;
                         i__6 = ip + k * a_dim1;
-                        a[i__5].r = a[i__6].r;
-                        a[i__5].i = a[i__6].i; // , expr subst
+                        a[i__5].real = a[i__6].real;
+                        a[i__5].imag = a[i__6].imag; // , expr subst
                         i__5 = ip + k * a_dim1;
-                        a[i__5].r = temp.r;
-                        a[i__5].i = temp.i; // , expr subst
+                        a[i__5].real = temp.real;
+                        a[i__5].imag = temp.imag; // , expr subst
                         /* L10: */
                     }
                 }
@@ -220,15 +237,148 @@ void claswp_(integer *n, complex *a, integer *lda, integer *k1, integer *k2, int
                 for(k = n32; k <= i__2; ++k)
                 {
                     i__4 = i__ + k * a_dim1;
-                    temp.r = a[i__4].r;
-                    temp.i = a[i__4].i; // , expr subst
+                    temp.real = a[i__4].real;
+                    temp.imag = a[i__4].imag; // , expr subst
                     i__4 = i__ + k * a_dim1;
                     i__5 = ip + k * a_dim1;
-                    a[i__4].r = a[i__5].r;
-                    a[i__4].i = a[i__5].i; // , expr subst
+                    a[i__4].real = a[i__5].real;
+                    a[i__4].imag = a[i__5].imag; // , expr subst
                     i__4 = ip + k * a_dim1;
-                    a[i__4].r = temp.r;
-                    a[i__4].i = temp.i; // , expr subst
+                    a[i__4].real = temp.real;
+                    a[i__4].imag = temp.imag; // , expr subst
+                    /* L40: */
+                }
+            }
+            ix += *incx;
+            /* L50: */
+        }
+    }
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return;
+    /* End of CLASWP */
+}
+/* claswp_ */
+
+
+void aocl_lapack_claswp64(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *k1,
+                        aocl_int64_t *k2, aocl_int64_t *ipiv, aocl_int64_t *incx)
+{
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if LF_AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
+    snprintf(buffer, 256, "claswp inputs: n %lld, lda %lld, k1 %lld, k2 %lld, incx %lld", *n, *lda,
+             *k1, *k2, *incx);
+#else
+    snprintf(buffer, 256, "claswp inputs: n %d, lda %d, k1 %d, k2 %d, incx %d", *n, *lda, *k1, *k2,
+             *incx);
+#endif
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
+    /* System generated locals */
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    /* Local variables */
+    aocl_int64_t i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
+    scomplex temp;
+    /* -- LAPACK auxiliary routine (version 3.7.1) -- */
+    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* June 2017 */
+    /* .. Scalar Arguments .. */
+    /* .. */
+    /* .. Array Arguments .. */
+    /* .. */
+    /* ===================================================================== */
+    /* .. Local Scalars .. */
+    /* .. */
+    /* .. Executable Statements .. */
+    /* Interchange row I with row IPIV(K1+(I-K1)*f2c_abs(INCX)) for each of rows */
+    /* K1 through K2. */
+    /* Parameter adjustments */
+    a_dim1 = *lda;
+    a_offset = 1 + a_dim1;
+    a -= a_offset;
+    --ipiv;
+    /* Function Body */
+    if(*incx > 0)
+    {
+        ix0 = *k1;
+        i1 = *k1;
+        i2 = *k2;
+        inc = 1;
+    }
+    else if(*incx < 0)
+    {
+        ix0 = *k1 + (*k1 - *k2) * *incx;
+        i1 = *k2;
+        i2 = *k1;
+        inc = -1;
+    }
+    else
+    {
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
+    }
+    n32 = *n / 32 << 5;
+    if(n32 != 0)
+    {
+        i__1 = n32;
+        for(j = 1; j <= i__1; j += 32)
+        {
+            ix = ix0;
+            i__2 = i2;
+            i__3 = inc;
+            for(i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3)
+            {
+                ip = ipiv[ix];
+                if(ip != i__)
+                {
+                    i__4 = j + 31;
+                    for(k = j; k <= i__4; ++k)
+                    {
+                        i__5 = i__ + k * a_dim1;
+                        temp.real = a[i__5].real;
+                        temp.imag = a[i__5].imag; // , expr subst
+                        i__5 = i__ + k * a_dim1;
+                        i__6 = ip + k * a_dim1;
+                        a[i__5].real = a[i__6].real;
+                        a[i__5].imag = a[i__6].imag; // , expr subst
+                        i__5 = ip + k * a_dim1;
+                        a[i__5].real = temp.real;
+                        a[i__5].imag = temp.imag; // , expr subst
+                        /* L10: */
+                    }
+                }
+                ix += *incx;
+                /* L20: */
+            }
+            /* L30: */
+        }
+    }
+    if(n32 != *n)
+    {
+        ++n32;
+        ix = ix0;
+        i__1 = i2;
+        i__3 = inc;
+        for(i__ = i1; i__3 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__3)
+        {
+            ip = ipiv[ix];
+            if(ip != i__)
+            {
+                i__2 = *n;
+                for(k = n32; k <= i__2; ++k)
+                {
+                    i__4 = i__ + k * a_dim1;
+                    temp.real = a[i__4].real;
+                    temp.imag = a[i__4].imag; // , expr subst
+                    i__4 = i__ + k * a_dim1;
+                    i__5 = ip + k * a_dim1;
+                    a[i__4].real = a[i__5].real;
+                    a[i__4].imag = a[i__5].imag; // , expr subst
+                    i__4 = ip + k * a_dim1;
+                    a[i__4].real = temp.real;
+                    a[i__4].imag = temp.imag; // , expr subst
                     /* L40: */
                 }
             }

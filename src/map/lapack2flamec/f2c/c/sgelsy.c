@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__0 = 0;
 static real c_b31 = 0.f;
-static integer c__2 = 2;
+static aocl_int64_t c__2 = 2;
 static real c_b54 = 1.f;
 /* > \brief <b> SGELSY solves overdetermined or underdetermined systems for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -208,56 +208,55 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
-             integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda, real *b,
+             aocl_int_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int_t *rank, real *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgelsy(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, jpvt, rcond, &rank_64, work,
+                       &lwork_64, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                        aocl_int64_t *lda, real *b, aocl_int64_t *ldb, aocl_int_t *jpvt,
+                        real *rcond, aocl_int64_t *rank, real *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgelsy inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
                       ",ldb %" FLA_IS ",lwork %" FLA_IS "",
                       *m, *n, *nrhs, *lda, *ldb, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1, r__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real c1, c2, s1, s2;
-    integer nb, mn, nb1, nb2, nb3, nb4;
+    aocl_int64_t nb, mn, nb1, nb2, nb3, nb4;
     real anrm, bnrm, smin, smax;
-    integer iascl, ibscl, ismin, ismax;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t iascl, ibscl, ismin, ismax;
     real wsize;
-    extern /* Subroutine */
-        void
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *),
-        sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *,
-                integer *);
-    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
-    integer lwkmin;
+    aocl_int64_t lwkmin;
     real sminpr, smaxpr, smlnum;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *),
-        sormrz_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
-                real *, real *, integer *, real *, integer *, integer *),
-        stzrzf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -328,10 +327,10 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
         }
         else
         {
-            nb1 = ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
-            nb2 = ilaenv_(&c__1, "SGERQF", " ", m, n, &c_n1, &c_n1);
-            nb3 = ilaenv_(&c__1, "SORMQR", " ", m, n, nrhs, &c_n1);
-            nb4 = ilaenv_(&c__1, "SORMRQ", " ", m, n, nrhs, &c_n1);
+            nb1 = aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
+            nb2 = aocl_lapack_ilaenv(&c__1, "SGERQF", " ", m, n, &c_n1, &c_n1);
+            nb3 = aocl_lapack_ilaenv(&c__1, "SORMQR", " ", m, n, nrhs, &c_n1);
+            nb4 = aocl_lapack_ilaenv(&c__1, "SORMRQ", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
             i__1 = fla_max(nb1, nb2);
             i__1 = fla_max(i__1, nb3); // , expr subst
@@ -347,7 +346,7 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
             i__2 = (mn << 1) + nb * *nrhs; // ; expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
@@ -356,7 +355,7 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGELSY", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGELSY", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -376,46 +375,46 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
     /* Scale A, B if max entries outside range [SMLNUM,BIGNUM] */
-    anrm = slange_("M", m, n, &a[a_offset], lda, &work[1]);
+    anrm = aocl_lapack_slange("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;
     if(anrm > 0.f && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        slascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
     else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        slascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
         i__1 = fla_max(*m, *n);
-        slaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
+        aocl_lapack_slaset("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         *rank = 0;
         goto L70;
     }
-    bnrm = slange_("M", m, nrhs, &b[b_offset], ldb, &work[1]);
+    bnrm = aocl_lapack_slange("M", m, nrhs, &b[b_offset], ldb, &work[1]);
     ibscl = 0;
     if(bnrm > 0.f && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        slascl_("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
     else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        slascl_("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 2;
     }
     /* Compute QR factorization with column pivoting of A: */
     /* A * P = Q * R */
     i__1 = *lwork - mn;
-    sgeqp3_(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &i__1, info);
+    aocl_lapack_sgeqp3(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &i__1, info);
     wsize = mn + work[mn + 1];
     /* workspace: MN+2*N+NB*(N+1). */
     /* Details of Householder rotations stored in WORK(1:MN). */
@@ -428,7 +427,7 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);
-        slaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
+        aocl_lapack_slaset("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         goto L70;
     }
     else
@@ -439,10 +438,10 @@ L10:
     if(*rank < mn)
     {
         i__ = *rank + 1;
-        slaic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
-                &sminpr, &s1, &c1);
-        slaic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
-                &smaxpr, &s2, &c2);
+        aocl_lapack_slaic1(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1],
+                           &a[i__ + i__ * a_dim1], &sminpr, &s1, &c1);
+        aocl_lapack_slaic1(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1],
+                           &a[i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
         if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
@@ -468,22 +467,23 @@ L10:
     if(*rank < *n)
     {
         i__1 = *lwork - (mn << 1);
-        stzrzf_(rank, n, &a[a_offset], lda, &work[mn + 1], &work[(mn << 1) + 1], &i__1, info);
+        aocl_lapack_stzrzf(rank, n, &a[a_offset], lda, &work[mn + 1], &work[(mn << 1) + 1], &i__1,
+                           info);
     }
     /* workspace: 2*MN. */
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS) */
     i__1 = *lwork - (mn << 1);
-    sormqr_("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset], ldb,
-            &work[(mn << 1) + 1], &i__1, info);
+    aocl_lapack_sormqr("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
+                       ldb, &work[(mn << 1) + 1], &i__1, info);
     /* Computing MAX */
     r__1 = wsize;
     r__2 = (mn << 1) + work[(mn << 1) + 1]; // , expr subst
     wsize = fla_max(r__1, r__2);
     /* workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    strsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset], lda,
-           &b[b_offset], ldb);
+    aocl_blas_strsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset],
+                    lda, &b[b_offset], ldb);
     i__1 = *nrhs;
     for(j = 1; j <= i__1; ++j)
     {
@@ -500,8 +500,8 @@ L10:
     {
         i__1 = *n - *rank;
         i__2 = *lwork - (mn << 1);
-        sormrz_("Left", "Transpose", n, nrhs, rank, &i__1, &a[a_offset], lda, &work[mn + 1],
-                &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
+        aocl_lapack_sormrz("Left", "Transpose", n, nrhs, rank, &i__1, &a[a_offset], lda,
+                           &work[mn + 1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
     }
     /* workspace: 2*MN+NRHS. */
     /* B(1:N,1:NRHS) := P * B(1:N,1:NRHS) */
@@ -514,31 +514,31 @@ L10:
             work[jpvt[i__]] = b[i__ + j * b_dim1];
             /* L50: */
         }
-        scopy_(n, &work[1], &c__1, &b[j * b_dim1 + 1], &c__1);
+        aocl_blas_scopy(n, &work[1], &c__1, &b[j * b_dim1 + 1], &c__1);
         /* L60: */
     }
     /* workspace: N. */
     /* Undo scaling */
     if(iascl == 1)
     {
-        slascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
-        slascl_("U", &c__0, &c__0, &smlnum, &anrm, rank, rank, &a[a_offset], lda, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("U", &c__0, &c__0, &smlnum, &anrm, rank, rank, &a[a_offset], lda, info);
     }
     else if(iascl == 2)
     {
-        slascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
-        slascl_("U", &c__0, &c__0, &bignum, &anrm, rank, rank, &a[a_offset], lda, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("U", &c__0, &c__0, &bignum, &anrm, rank, rank, &a[a_offset], lda, info);
     }
     if(ibscl == 1)
     {
-        slascl_("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
     else if(ibscl == 2)
     {
-        slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSY */

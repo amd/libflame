@@ -4,11 +4,11 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c_n1 = -1;
-static integer c__1 = 1;
-static integer c__0 = 0;
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b141 = 1.;
 static logical c_false = FALSE_;
 /* > \brief \b ZGEJSV */
@@ -50,7 +50,7 @@ static logical c_false = FALSE_;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGEJSV computes the singular value decomposition (SVD) of a complex M-by-N */
+/* > ZGEJSV computes the singular value decomposition (SVD) of a scomplex M-by-N */
 /* > matrix [A], where M >= N. The SVD of [A] is written as */
 /* > */
 /* > [A] = [U] * [SIGMA] * [V]^*, */
@@ -584,10 +584,39 @@ drmac@math.hr */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m,
-             integer *n, doublecomplex *a, integer *lda, doublereal *sva, doublecomplex *u,
-             integer *ldu, doublecomplex *v, integer *ldv, doublecomplex *cwork, integer *lwork,
-             doublereal *rwork, integer *lrwork, integer *iwork, integer *info)
+/** Generated wrapper function */
+void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, aocl_int_t *m,
+             aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *sva, dcomplex *u,
+             aocl_int_t *ldu, dcomplex *v, aocl_int_t *ldv, dcomplex *cwork,
+             aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgejsv(joba, jobu, jobv, jobr, jobt, jobp, m, n, a, lda, sva, u, ldu, v, ldv, cwork,
+                       lwork, rwork, lrwork, iwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgejsv(joba, jobu, jobv, jobr, jobt, jobp, &m_64, &n_64, a, &lda_64, sva, u,
+                       &ldu_64, v, &ldv_64, cwork, &lwork_64, rwork, &lrwork_64, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp,
+                        aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        doublereal *sva, dcomplex *u, aocl_int64_t *ldu, dcomplex *v,
+                        aocl_int64_t *ldv, dcomplex *cwork, aocl_int64_t *lwork,
+                        doublereal *rwork, aocl_int64_t *lrwork, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -595,133 +624,63 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         ", n %" FLA_IS ", lda %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS "",
         *joba, *jobu, *jobv, *jobr, *jobt, *jobp, *m, *n, *lda, *ldu, *ldv);
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5,
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5,
         i__6, i__7, i__8, i__9, i__10, i__11;
     doublereal d__1, d__2, d__3;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double sqrt(doublereal), z_abs(doublecomplex *), log(doublereal);
-    void d_cnjg(doublecomplex *, doublecomplex *),
-        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), z_abs(dcomplex *), log(doublereal);
+    void d_cnjg(dcomplex *, dcomplex *),
+        z_div(dcomplex *, dcomplex *, dcomplex *);
     integer i_dnnt(doublereal *);
     /* Local variables */
-    integer lwunmqrm, p, q, j1, n1, nr;
+    aocl_int64_t lwunmqrm, p, q, j1, n1, nr;
     doublereal big, xsc;
-    integer lwrk_zgeqp3__;
+    aocl_int64_t lwrk_zgeqp3__;
     doublereal big1;
-    integer lwrk_zgelqf__, lwrk_zgeqrf__, lwrk_zgesvj__;
+    aocl_int64_t lwrk_zgelqf__, lwrk_zgeqrf__, lwrk_zgesvj__;
     logical defr;
     doublereal aapp, aaqq;
-    integer lwrk_zunmlq__, lwrk_zunmqr__;
+    aocl_int64_t lwrk_zunmlq__, lwrk_zunmqr__;
     logical kill;
-    integer ierr, lwrk_zgeqp3n__;
+    aocl_int64_t ierr, lwrk_zgeqp3n__;
     doublereal temp1;
-    integer lwqp3;
+    aocl_int64_t lwqp3;
     logical jracc;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    integer lwrk_zgesvju__, lwrk_zgesvjv__;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lwrk_zunmqrm__;
-    doublecomplex ctemp;
+    aocl_int64_t lwrk_zgesvju__, lwrk_zgesvjv__;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwrk_zunmqrm__;
+    dcomplex ctemp;
     doublereal entra, small_val;
-    integer iwoff;
+    aocl_int64_t iwoff;
     doublereal sfmin;
     logical lsvec;
     doublereal epsln;
     logical rsvec;
-    integer lwcon, lwlqf, lwqrf;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    aocl_int64_t lwcon, lwlqf, lwqrf;
     logical l2aber;
-    extern /* Subroutine */
-        void
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal condr1, condr2, uscal1, uscal2;
     logical l2kill, l2rank, l2tran, l2pert;
-    extern /* Subroutine */
-        void
-        zgeqp3_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
-                doublecomplex *, integer *, doublereal *, integer *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    integer lrwqp3;
+    aocl_int64_t lrwqp3;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
     doublereal scalem, sconda;
     logical goscal;
     doublereal aatmin, aatmax;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical noscal;
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
-        zlacgv_(integer *, doublecomplex *, integer *),
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        zgelqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *);
     doublereal entrat;
     logical almort;
-    doublecomplex cdummy[1];
-    extern /* Subroutine */
-        void
-        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *);
+    dcomplex cdummy[1];
     doublereal maxprj;
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
     logical errest;
-    integer lrwcon;
-    extern /* Subroutine */
-        void
-        zlapmr_(logical *, integer *, integer *, doublecomplex *, integer *, integer *);
+    aocl_int64_t lrwcon;
     logical transp;
-    integer minwrk, lwsvdj;
-    extern /* Subroutine */
-        void
-        zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, doublereal *, integer *),
-        zgesvj_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-                doublereal *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublereal *, integer *, integer *);
+    aocl_int64_t minwrk, lwsvdj;
     doublereal rdummy[1];
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     logical lquery;
-    extern /* Subroutine */
-        void
-        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     logical rowpiv;
-    integer optwrk;
-    extern /* Subroutine */
-        void
-        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *),
-        zunmlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
-        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    aocl_int64_t optwrk;
     doublereal cond_ok__;
-    integer warning, numrank, miniwrk, minrwrk, lrwsvdj, lwunmlq, lwsvdjv, lwunmqr;
+    aocl_int64_t warning, numrank, miniwrk, minrwrk, lrwsvdj, lwunmlq, lwsvdjv, lwunmqr;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -856,19 +815,20 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         lrwsvdj = *n;
         if(lquery)
         {
-            zgeqp3_(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy, &ierr);
-            lwrk_zgeqp3__ = (integer)cdummy[0].r;
-            zgeqrf_(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
-            lwrk_zgeqrf__ = (integer)cdummy[0].r;
-            zgelqf_(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
-            lwrk_zgelqf__ = (integer)cdummy[0].r;
+            aocl_lapack_zgeqp3(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy,
+                               &ierr);
+            lwrk_zgeqp3__ = (integer)cdummy[0].real;
+            aocl_lapack_zgeqrf(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
+            lwrk_zgeqrf__ = (integer)cdummy[0].real;
+            aocl_lapack_zgelqf(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
+            lwrk_zgelqf__ = (integer)cdummy[0].real;
         }
         minwrk = 2;
         optwrk = 2;
         miniwrk = *n;
         if(!(lsvec || rsvec))
         {
-            /* .. minimal and optimal sizes of the complex workspace if */
+            /* .. minimal and optimal sizes of the scomplex workspace if */
             /* only the singular values are requested */
             if(errest)
             {
@@ -890,9 +850,9 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             if(lquery)
             {
-                zgesvj_("L", "N", "N", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv,
-                        cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_zgesvj__ = (integer)cdummy[0].r;
+                aocl_lapack_zgesvj("L", "N", "N", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset],
+                                   ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                lwrk_zgesvj__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing MAX */
@@ -955,7 +915,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         }
         else if(rsvec && !lsvec)
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* singular values and the right singular vectors are requested */
             if(errest)
             {
@@ -979,12 +939,12 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             if(lquery)
             {
-                zgesvj_("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset], lda,
-                        cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_zgesvj__ = (integer)cdummy[0].r;
-                zunmlq_("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset], ldv, cdummy,
-                        &c_n1, &ierr);
-                lwrk_zunmlq__ = (integer)cdummy[0].r;
+                aocl_lapack_zgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset],
+                                   lda, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                lwrk_zgesvj__ = (integer)cdummy[0].real;
+                aocl_lapack_zunmlq("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset], ldv,
+                                   cdummy, &c_n1, &ierr);
+                lwrk_zunmlq__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing MAX */
@@ -1050,7 +1010,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         }
         else if(lsvec && !rsvec)
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* singular values and the left singular vectors are requested */
             if(errest)
             {
@@ -1070,12 +1030,12 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             if(lquery)
             {
-                zgesvj_("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset], lda,
-                        cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_zgesvj__ = (integer)cdummy[0].r;
-                zunmqr_("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
-                lwrk_zunmqrm__ = (integer)cdummy[0].r;
+                aocl_lapack_zgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset],
+                                   lda, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                lwrk_zgesvj__ = (integer)cdummy[0].real;
+                aocl_lapack_zunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
+                lwrk_zunmqrm__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing MAX */
@@ -1135,7 +1095,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         }
         else
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* full SVD is requested */
             if(!jracc)
             {
@@ -1255,29 +1215,29 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             if(lquery)
             {
-                zunmqr_("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
-                lwrk_zunmqrm__ = (integer)cdummy[0].r;
-                zunmqr_("L", "N", n, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
-                lwrk_zunmqr__ = (integer)cdummy[0].r;
+                aocl_lapack_zunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
+                lwrk_zunmqrm__ = (integer)cdummy[0].real;
+                aocl_lapack_zunmqr("L", "N", n, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
+                lwrk_zunmqr__ = (integer)cdummy[0].real;
                 if(!jracc)
                 {
-                    zgeqp3_(n, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy,
-                            &ierr);
-                    lwrk_zgeqp3n__ = (integer)cdummy[0].r;
-                    zgesvj_("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                            cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_zgesvj__ = (integer)cdummy[0].r;
-                    zgesvj_("U", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                            cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_zgesvju__ = (integer)cdummy[0].r;
-                    zgesvj_("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                            cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_zgesvjv__ = (integer)cdummy[0].r;
-                    zunmlq_("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset], ldv, cdummy,
-                            &c_n1, &ierr);
-                    lwrk_zunmlq__ = (integer)cdummy[0].r;
+                    aocl_lapack_zgeqp3(n, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1,
+                                       rdummy, &ierr);
+                    lwrk_zgeqp3n__ = (integer)cdummy[0].real;
+                    aocl_lapack_zgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                    lwrk_zgesvj__ = (integer)cdummy[0].real;
+                    aocl_lapack_zgesvj("U", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                    lwrk_zgesvju__ = (integer)cdummy[0].real;
+                    aocl_lapack_zgesvj("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                    lwrk_zgesvjv__ = (integer)cdummy[0].real;
+                    aocl_lapack_zunmlq("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset],
+                                       ldv, cdummy, &c_n1, &ierr);
+                    lwrk_zunmlq__ = (integer)cdummy[0].real;
                     if(errest)
                     {
                         /* Computing MAX */
@@ -1363,15 +1323,15 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 }
                 else
                 {
-                    zgesvj_("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                            cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_zgesvjv__ = (integer)cdummy[0].r;
-                    zunmqr_("L", "N", n, n, n, cdummy, n, cdummy, &v[v_offset], ldv, cdummy, &c_n1,
-                            &ierr);
-                    lwrk_zunmqr__ = (integer)cdummy[0].r;
-                    zunmqr_("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                            &c_n1, &ierr);
-                    lwrk_zunmqrm__ = (integer)cdummy[0].r;
+                    aocl_lapack_zgesvj("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                    lwrk_zgesvjv__ = (integer)cdummy[0].real;
+                    aocl_lapack_zunmqr("L", "N", n, n, n, cdummy, n, cdummy, &v[v_offset], ldv,
+                                       cdummy, &c_n1, &ierr);
+                    lwrk_zunmqr__ = (integer)cdummy[0].real;
+                    aocl_lapack_zunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset],
+                                       ldu, cdummy, &c_n1, &ierr);
+                    lwrk_zunmqrm__ = (integer)cdummy[0].real;
                     if(errest)
                     {
                         /* Computing MAX */
@@ -1441,16 +1401,16 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         /* #:( */
         i__1 = -(*info);
-        xerbla_("ZGEJSV", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEJSV", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        cwork[1].r = (doublereal)optwrk;
-        cwork[1].i = 0.; // , expr subst
-        cwork[2].r = (doublereal)minwrk;
-        cwork[2].i = 0.; // , expr subst
+        cwork[1].real = (doublereal)optwrk;
+        cwork[1].imag = 0.; // , expr subst
+        cwork[2].real = (doublereal)minwrk;
+        cwork[2].imag = 0.; // , expr subst
         rwork[1] = (doublereal)minrwrk;
         iwork[1] = fla_max(4, miniwrk);
         AOCL_DTL_TRACE_LOG_EXIT
@@ -1501,12 +1461,12 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         aapp = 0.;
         aaqq = 1.;
-        zlassq_(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
+        aocl_lapack_zlassq(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
         if(aapp > big)
         {
             *info = -9;
             i__2 = -(*info);
-            xerbla_("ZGEJSV", &i__2, (ftnlen)6);
+            aocl_blas_xerbla("ZGEJSV", &i__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -1523,7 +1483,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 goscal = FALSE_;
                 i__2 = p - 1;
-                dscal_(&i__2, &scalem, &sva[1], &c__1);
+                aocl_blas_dscal(&i__2, &scalem, &sva[1], &c__1);
             }
         }
         /* L1874: */
@@ -1556,11 +1516,11 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         if(lsvec)
         {
-            zlaset_("G", m, &n1, &c_b1, &c_b2, &u[u_offset], ldu);
+            aocl_lapack_zlaset("G", m, &n1, &c_b1, &c_b2, &u[u_offset], ldu);
         }
         if(rsvec)
         {
-            zlaset_("G", n, n, &c_b1, &c_b2, &v[v_offset], ldv);
+            aocl_lapack_zlaset("G", n, n, &c_b1, &c_b2, &v[v_offset], ldv);
         }
         rwork[1] = 1.;
         rwork[2] = 1.;
@@ -1602,23 +1562,26 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         if(lsvec)
         {
-            zlascl_("G", &c__0, &c__0, &sva[1], &scalem, m, &c__1, &a[a_dim1 + 1], lda, &ierr);
-            zlacpy_("A", m, &c__1, &a[a_offset], lda, &u[u_offset], ldu);
+            aocl_lapack_zlascl("G", &c__0, &c__0, &sva[1], &scalem, m, &c__1, &a[a_dim1 + 1], lda,
+                               &ierr);
+            aocl_lapack_zlacpy("A", m, &c__1, &a[a_offset], lda, &u[u_offset], ldu);
             /* computing all M left singular vectors of the M x 1 matrix */
             if(n1 != *n)
             {
                 i__1 = *lwork - *n;
-                zgeqrf_(m, n, &u[u_offset], ldu, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
+                aocl_lapack_zgeqrf(m, n, &u[u_offset], ldu, &cwork[1], &cwork[*n + 1], &i__1,
+                                   &ierr);
                 i__1 = *lwork - *n;
-                zungqr_(m, &n1, &c__1, &u[u_offset], ldu, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
-                zcopy_(m, &a[a_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
+                aocl_lapack_zungqr(m, &n1, &c__1, &u[u_offset], ldu, &cwork[1], &cwork[*n + 1],
+                                   &i__1, &ierr);
+                aocl_blas_zcopy(m, &a[a_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
             }
         }
         if(rsvec)
         {
             i__1 = v_dim1 + 1;
-            v[i__1].r = 1.;
-            v[i__1].i = 0.; // , expr subst
+            v[i__1].real = 1.;
+            v[i__1].imag = 0.; // , expr subst
         }
         if(sva[1] < big * scalem)
         {
@@ -1679,7 +1642,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 xsc = 0.;
                 temp1 = 1.;
-                zlassq_(n, &a[p + a_dim1], lda, &xsc, &temp1);
+                aocl_lapack_zlassq(n, &a[p + a_dim1], lda, &xsc, &temp1);
                 /* ZLASSQ gets both the ell_2 and the ell_infinity norm */
                 /* in one pass through the vector */
                 rwork[*m + p] = xsc * scalem;
@@ -1703,7 +1666,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             i__1 = *m;
             for(p = 1; p <= i__1; ++p)
             {
-                rwork[*m + p] = scalem * z_abs(&a[p + izamax_(n, &a[p + a_dim1], lda) * a_dim1]);
+                rwork[*m + p] = scalem * z_abs(&a[p + aocl_blas_izamax(n, &a[p + a_dim1], lda) * a_dim1]);
                 /* Computing MAX */
                 d__1 = aatmax;
                 d__2 = rwork[*m + p]; // , expr subst
@@ -1728,7 +1691,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         xsc = 0.;
         temp1 = 1.;
-        dlassq_(n, &sva[1], &c__1, &xsc, &temp1);
+        aocl_lapack_dlassq(n, &sva[1], &c__1, &xsc, &temp1);
         temp1 = 1. / temp1;
         entra = 0.;
         i__1 = *n;
@@ -1777,29 +1740,29 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 i__2 = p + p * a_dim1;
                 d_cnjg(&z__1, &a[p + p * a_dim1]);
-                a[i__2].r = z__1.r;
-                a[i__2].i = z__1.i; // , expr subst
+                a[i__2].real = z__1.real;
+                a[i__2].imag = z__1.imag; // , expr subst
                 i__2 = *n;
                 for(q = p + 1; q <= i__2; ++q)
                 {
                     d_cnjg(&z__1, &a[q + p * a_dim1]);
-                    ctemp.r = z__1.r;
-                    ctemp.i = z__1.i; // , expr subst
+                    ctemp.real = z__1.real;
+                    ctemp.imag = z__1.imag; // , expr subst
                     i__3 = q + p * a_dim1;
                     d_cnjg(&z__1, &a[p + q * a_dim1]);
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     i__3 = p + q * a_dim1;
-                    a[i__3].r = ctemp.r;
-                    a[i__3].i = ctemp.i; // , expr subst
+                    a[i__3].real = ctemp.real;
+                    a[i__3].imag = ctemp.imag; // , expr subst
                     /* L1116: */
                 }
                 /* L1115: */
             }
             i__1 = *n + *n * a_dim1;
             d_cnjg(&z__1, &a[*n + *n * a_dim1]);
-            a[i__1].r = z__1.r;
-            a[i__1].i = z__1.i; // , expr subst
+            a[i__1].real = z__1.real;
+            a[i__1].imag = z__1.imag; // , expr subst
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
@@ -1840,7 +1803,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     big1 = sqrt(big);
     temp1 = sqrt(big / (doublereal)(*n));
     /* TEMP1 = BIG/DBLE(N) */
-    dlascl_("G", &c__0, &c__0, &aapp, &temp1, n, &c__1, &sva[1], n, &ierr);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &aapp, &temp1, n, &c__1, &sva[1], n, &ierr);
     if(aaqq > aapp * sfmin)
     {
         aaqq = aaqq / aapp * temp1;
@@ -1850,7 +1813,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         aaqq = aaqq * temp1 / aapp;
     }
     temp1 *= scalem;
-    zlascl_("G", &c__0, &c__0, &aapp, &temp1, m, n, &a[a_offset], lda, &ierr);
+    aocl_lapack_zlascl("G", &c__0, &c__0, &aapp, &temp1, m, n, &a[a_offset], lda, &ierr);
     /* To undo scaling at the end of this procedure, multiply the */
     /* computed singular values with USCAL2 / USCAL1. */
     uscal1 = temp1;
@@ -1885,7 +1848,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         {
             if(sva[p] < xsc)
             {
-                zlaset_("A", m, &c__1, &c_b1, &c_b1, &a[p * a_dim1 + 1], lda);
+                aocl_lapack_zlaset("A", m, &c__1, &c_b1, &c_b1, &a[p * a_dim1 + 1], lda);
                 sva[p] = 0.;
             }
             /* L700: */
@@ -1911,8 +1874,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = *m - p + 1;
-            q = idamax_(&i__2, &rwork[*m + p], &c__1) + p - 1;
-            iwork[iwoff + p] = q;
+            q = aocl_blas_idamax(&i__2, &rwork[*m + p], &c__1) + p - 1;
+            iwork[iwoff + p] = (aocl_int_t)(q);
             if(p != q)
             {
                 temp1 = rwork[*m + p];
@@ -1922,7 +1885,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             /* L1952: */
         }
         i__1 = *m - 1;
-        zlaswp_(n, &a[a_offset], lda, &c__1, &i__1, &iwork[iwoff + 1], &c__1);
+        aocl_lapack_zlaswp(n, &a[a_offset], lda, &c__1, &i__1, &iwork[iwoff + 1], &c__1);
     }
     /* End of the preparation phase (scaling, optional sorting and */
     /* transposing, optional flushing of small columns). */
@@ -1944,7 +1907,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         /* L1963: */
     }
     i__1 = *lwork - *n;
-    zgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &cwork[1], &cwork[*n + 1], &i__1, &rwork[1], &ierr);
+    aocl_lapack_zgeqp3(m, n, &a[a_offset], lda, &iwork[1], &cwork[1], &cwork[*n + 1], &i__1,
+                       &rwork[1], &ierr);
     /* The upper triangular matrix R1 from the first QRF is inspected for */
     /* rank deficiency and possibilities for deflation, or possible */
     /* ill-conditioning. Depending on the user specified flag L2RANK, */
@@ -2045,44 +2009,44 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             if(rsvec)
             {
                 /* .. V is available as workspace */
-                zlacpy_("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
+                aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
                     temp1 = sva[iwork[p]];
                     d__1 = 1. / temp1;
-                    zdscal_(&p, &d__1, &v[p * v_dim1 + 1], &c__1);
+                    aocl_blas_zdscal(&p, &d__1, &v[p * v_dim1 + 1], &c__1);
                     /* L3053: */
                 }
                 if(lsvec)
                 {
-                    zpocon_("U", n, &v[v_offset], ldv, &c_b141, &temp1, &cwork[*n + 1], &rwork[1],
-                            &ierr);
+                    aocl_lapack_zpocon("U", n, &v[v_offset], ldv, &c_b141, &temp1, &cwork[*n + 1],
+                                       &rwork[1], &ierr);
                 }
                 else
                 {
-                    zpocon_("U", n, &v[v_offset], ldv, &c_b141, &temp1, &cwork[1], &rwork[1],
-                            &ierr);
+                    aocl_lapack_zpocon("U", n, &v[v_offset], ldv, &c_b141, &temp1, &cwork[1],
+                                       &rwork[1], &ierr);
                 }
             }
             else if(lsvec)
             {
                 /* .. U is available as workspace */
-                zlacpy_("U", n, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &u[u_offset], ldu);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
                     temp1 = sva[iwork[p]];
                     d__1 = 1. / temp1;
-                    zdscal_(&p, &d__1, &u[p * u_dim1 + 1], &c__1);
+                    aocl_blas_zdscal(&p, &d__1, &u[p * u_dim1 + 1], &c__1);
                     /* L3054: */
                 }
-                zpocon_("U", n, &u[u_offset], ldu, &c_b141, &temp1, &cwork[*n + 1], &rwork[1],
-                        &ierr);
+                aocl_lapack_zpocon("U", n, &u[u_offset], ldu, &c_b141, &temp1, &cwork[*n + 1],
+                                   &rwork[1], &ierr);
             }
             else
             {
-                zlacpy_("U", n, n, &a[a_offset], lda, &cwork[1], n);
+                aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &cwork[1], n);
                 /* [] CALL ZLACPY( 'U', N, N, A, LDA, CWORK(N+1), N ) */
                 /* Change: here index shifted by N to the left, CWORK(1:N) */
                 /* not needed for SIGMA only computation */
@@ -2092,14 +2056,14 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     temp1 = sva[iwork[p]];
                     /* [] CALL ZDSCAL( p, ONE/TEMP1, CWORK(N+(p-1)*N+1), 1 ) */
                     d__1 = 1. / temp1;
-                    zdscal_(&p, &d__1, &cwork[(p - 1) * *n + 1], &c__1);
+                    aocl_blas_zdscal(&p, &d__1, &cwork[(p - 1) * *n + 1], &c__1);
                     /* L3052: */
                 }
                 /* .. the columns of R are scaled to have unit Euclidean lengths. */
                 /* [] CALL ZPOCON( 'U', N, CWORK(N+1), N, ONE, TEMP1, */
                 /* [] $ CWORK(N+N*N+1), RWORK, IERR ) */
-                zpocon_("U", n, &cwork[1], n, &c_b141, &temp1, &cwork[*n * *n + 1], &rwork[1],
-                        &ierr);
+                aocl_lapack_zpocon("U", n, &cwork[1], n, &c_b141, &temp1, &cwork[*n * *n + 1],
+                                   &rwork[1], &ierr);
             }
             if(temp1 != 0.)
             {
@@ -2131,17 +2095,17 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = *n - p;
-            zcopy_(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1], &c__1);
+            aocl_blas_zcopy(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1], &c__1);
             i__2 = *n - p + 1;
-            zlacgv_(&i__2, &a[p + p * a_dim1], &c__1);
+            aocl_lapack_zlacgv(&i__2, &a[p + p * a_dim1], &c__1);
             /* L1946: */
         }
         if(nr == *n)
         {
             i__1 = *n + *n * a_dim1;
             d_cnjg(&z__1, &a[*n + *n * a_dim1]);
-            a[i__1].r = z__1.r;
-            a[i__1].i = z__1.i; // , expr subst
+            a[i__1].real = z__1.real;
+            a[i__1].imag = z__1.imag; // , expr subst
         }
         /* The following two DO-loops introduce small relative perturbation */
         /* into the strict upper triangle of the lower triangular matrix. */
@@ -2164,18 +2128,18 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 for(q = 1; q <= i__1; ++q)
                 {
                     d__1 = xsc * z_abs(&a[q + q * a_dim1]);
-                    z__1.r = d__1;
-                    z__1.i = 0.; // , expr subst
-                    ctemp.r = z__1.r;
-                    ctemp.i = z__1.i; // , expr subst
+                    z__1.real = d__1;
+                    z__1.imag = 0.; // , expr subst
+                    ctemp.real = z__1.real;
+                    ctemp.imag = z__1.imag; // , expr subst
                     i__2 = *n;
                     for(p = 1; p <= i__2; ++p)
                     {
                         if(p > q && z_abs(&a[p + q * a_dim1]) <= temp1 || p < q)
                         {
                             i__3 = p + q * a_dim1;
-                            a[i__3].r = ctemp.r;
-                            a[i__3].i = ctemp.i; // , expr subst
+                            a[i__3].real = ctemp.real;
+                            a[i__3].imag = ctemp.imag; // , expr subst
                         }
                         /* $ A(p,q) = TEMP1 * ( A(p,q) / ABS(A(p,q)) ) */
                         /* L4949: */
@@ -2187,19 +2151,20 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
             }
             /* .. second preconditioning using the QR factorization */
             i__1 = *lwork - *n;
-            zgeqrf_(n, &nr, &a[a_offset], lda, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_zgeqrf(n, &nr, &a[a_offset], lda, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
             /* .. and transpose upper to lower triangular */
             i__1 = nr - 1;
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p;
-                zcopy_(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1], &c__1);
+                aocl_blas_zcopy(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1],
+                                &c__1);
                 i__2 = nr - p + 1;
-                zlacgv_(&i__2, &a[p + p * a_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__2, &a[p + p * a_dim1], &c__1);
                 /* L1948: */
             }
         }
@@ -2214,18 +2179,18 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             for(q = 1; q <= i__1; ++q)
             {
                 d__1 = xsc * z_abs(&a[q + q * a_dim1]);
-                z__1.r = d__1;
-                z__1.i = 0.; // , expr subst
-                ctemp.r = z__1.r;
-                ctemp.i = z__1.i; // , expr subst
+                z__1.real = d__1;
+                z__1.imag = 0.; // , expr subst
+                ctemp.real = z__1.real;
+                ctemp.imag = z__1.imag; // , expr subst
                 i__2 = nr;
                 for(p = 1; p <= i__2; ++p)
                 {
                     if(p > q && z_abs(&a[p + q * a_dim1]) <= temp1 || p < q)
                     {
                         i__3 = p + q * a_dim1;
-                        a[i__3].r = ctemp.r;
-                        a[i__3].i = ctemp.i; // , expr subst
+                        a[i__3].real = ctemp.real;
+                        a[i__3].imag = ctemp.imag; // , expr subst
                     }
                     /* $ A(p,q) = TEMP1 * ( A(p,q) / ABS(A(p,q)) ) */
                     /* L1949: */
@@ -2237,13 +2202,13 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         {
             i__1 = nr - 1;
             i__2 = nr - 1;
-            zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+            aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
         }
         /* .. and one-sided Jacobi rotations are started on a lower */
         /* triangular matrix (plus perturbation which is ignored in */
         /* the part which destroys triangular form (confusing?!)) */
-        zgesvj_("L", "N", "N", &nr, &nr, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv,
-                &cwork[1], lwork, &rwork[1], lrwork, info);
+        aocl_lapack_zgesvj("L", "N", "N", &nr, &nr, &a[a_offset], lda, &sva[1], n, &v[v_offset],
+                           ldv, &cwork[1], lwork, &rwork[1], lrwork, info);
         scalem = rwork[1];
         numrank = i_dnnt(&rwork[2]);
     }
@@ -2257,16 +2222,16 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = *n - p + 1;
-                zcopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
+                aocl_blas_zcopy(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
                 i__2 = *n - p + 1;
-                zlacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__2, &v[p + p * v_dim1], &c__1);
                 /* L1998: */
             }
             i__1 = nr - 1;
             i__2 = nr - 1;
-            zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
-            zgesvj_("L", "U", "N", n, &nr, &v[v_offset], ldv, &sva[1], &nr, &a[a_offset], lda,
-                    &cwork[1], lwork, &rwork[1], lrwork, info);
+            aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+            aocl_lapack_zgesvj("L", "U", "N", n, &nr, &v[v_offset], ldv, &sva[1], &nr, &a[a_offset],
+                               lda, &cwork[1], lwork, &rwork[1], lrwork, info);
             scalem = rwork[1];
             numrank = i_dnnt(&rwork[2]);
         }
@@ -2276,68 +2241,69 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             /* accumulated product of Jacobi rotations, three are perfect ) */
             i__1 = nr - 1;
             i__2 = nr - 1;
-            zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+            aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
             i__1 = *lwork - *n;
-            zgelqf_(&nr, n, &a[a_offset], lda, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
-            zlacpy_("L", &nr, &nr, &a[a_offset], lda, &v[v_offset], ldv);
+            aocl_lapack_zgelqf(&nr, n, &a[a_offset], lda, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_zlacpy("L", &nr, &nr, &a[a_offset], lda, &v[v_offset], ldv);
             i__1 = nr - 1;
             i__2 = nr - 1;
-            zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+            aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
             i__1 = *lwork - (*n << 1);
-            zgeqrf_(&nr, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1,
-                    &ierr);
+            aocl_lapack_zgeqrf(&nr, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1],
+                               &i__1, &ierr);
             i__1 = nr;
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p + 1;
-                zcopy_(&i__2, &v[p + p * v_dim1], ldv, &v[p + p * v_dim1], &c__1);
+                aocl_blas_zcopy(&i__2, &v[p + p * v_dim1], ldv, &v[p + p * v_dim1], &c__1);
                 i__2 = nr - p + 1;
-                zlacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__2, &v[p + p * v_dim1], &c__1);
                 /* L8998: */
             }
             i__1 = nr - 1;
             i__2 = nr - 1;
-            zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+            aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
             i__1 = *lwork - *n;
-            zgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset], ldu,
-                    &cwork[*n + 1], &i__1, &rwork[1], lrwork, info);
+            aocl_lapack_zgesvj("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr,
+                               &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], lrwork, info);
             scalem = rwork[1];
             numrank = i_dnnt(&rwork[2]);
             if(nr < *n)
             {
                 i__1 = *n - nr;
-                zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                 i__1 = *n - nr;
-                zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
                 i__1 = *n - nr;
                 i__2 = *n - nr;
-                zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
+                                   ldv);
             }
             i__1 = *lwork - *n;
-            zunmlq_("L", "C", n, n, &nr, &a[a_offset], lda, &cwork[1], &v[v_offset], ldv,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_zunmlq("L", "C", n, n, &nr, &a[a_offset], lda, &cwork[1], &v[v_offset], ldv,
+                               &cwork[*n + 1], &i__1, &ierr);
         }
         /* .. permute the rows of V */
         /* DO 8991 p = 1, N */
         /* CALL ZCOPY( N, V(p,1), LDV, A(IWORK(p),1), LDA ) */
         /* 8991 CONTINUE */
         /* CALL ZLACPY( 'All', N, N, A, LDA, V, LDV ) */
-        zlapmr_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+        aocl_lapack_zlapmr(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
         if(transp)
         {
-            zlacpy_("A", n, n, &v[v_offset], ldv, &u[u_offset], ldu);
+            aocl_lapack_zlacpy("A", n, n, &v[v_offset], ldv, &u[u_offset], ldu);
         }
     }
     else if(jracc && !lsvec && nr == *n)
     {
         i__1 = *n - 1;
         i__2 = *n - 1;
-        zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
-        zgesvj_("U", "N", "V", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv, &cwork[1],
-                lwork, &rwork[1], lrwork, info);
+        aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+        aocl_lapack_zgesvj("U", "N", "V", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv,
+                           &cwork[1], lwork, &rwork[1], lrwork, info);
         scalem = rwork[1];
         numrank = i_dnnt(&rwork[2]);
-        zlapmr_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+        aocl_lapack_zlapmr(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
     }
     else if(lsvec && !rsvec)
     {
@@ -2348,64 +2314,66 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = *n - p + 1;
-            zcopy_(&i__2, &a[p + p * a_dim1], lda, &u[p + p * u_dim1], &c__1);
+            aocl_blas_zcopy(&i__2, &a[p + p * a_dim1], lda, &u[p + p * u_dim1], &c__1);
             i__2 = *n - p + 1;
-            zlacgv_(&i__2, &u[p + p * u_dim1], &c__1);
+            aocl_lapack_zlacgv(&i__2, &u[p + p * u_dim1], &c__1);
             /* L1965: */
         }
         i__1 = nr - 1;
         i__2 = nr - 1;
-        zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+        aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
         i__1 = *lwork - (*n << 1);
-        zgeqrf_(n, &nr, &u[u_offset], ldu, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1, &ierr);
+        aocl_lapack_zgeqrf(n, &nr, &u[u_offset], ldu, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1,
+                           &ierr);
         i__1 = nr - 1;
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = nr - p;
-            zcopy_(&i__2, &u[p + (p + 1) * u_dim1], ldu, &u[p + 1 + p * u_dim1], &c__1);
+            aocl_blas_zcopy(&i__2, &u[p + (p + 1) * u_dim1], ldu, &u[p + 1 + p * u_dim1], &c__1);
             i__2 = *n - p + 1;
-            zlacgv_(&i__2, &u[p + p * u_dim1], &c__1);
+            aocl_lapack_zlacgv(&i__2, &u[p + p * u_dim1], &c__1);
             /* L1967: */
         }
         i__1 = nr - 1;
         i__2 = nr - 1;
-        zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+        aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
         i__1 = *lwork - *n;
-        zgesvj_("L", "U", "N", &nr, &nr, &u[u_offset], ldu, &sva[1], &nr, &a[a_offset], lda,
-                &cwork[*n + 1], &i__1, &rwork[1], lrwork, info);
+        aocl_lapack_zgesvj("L", "U", "N", &nr, &nr, &u[u_offset], ldu, &sva[1], &nr, &a[a_offset],
+                           lda, &cwork[*n + 1], &i__1, &rwork[1], lrwork, info);
         scalem = rwork[1];
         numrank = i_dnnt(&rwork[2]);
         if(nr < *m)
         {
             i__1 = *m - nr;
-            zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+            aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
             if(nr < n1)
             {
                 i__1 = n1 - nr;
-                zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
                 i__1 = *m - nr;
                 i__2 = n1 - nr;
-                zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1], ldu);
+                aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
+                                   ldu);
             }
         }
         i__1 = *lwork - *n;
-        zunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                &cwork[*n + 1], &i__1, &ierr);
+        aocl_lapack_zunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
+                           &cwork[*n + 1], &i__1, &ierr);
         if(rowpiv)
         {
             i__1 = *m - 1;
-            zlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
+            aocl_lapack_zlaswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
         }
         i__1 = n1;
         for(p = 1; p <= i__1; ++p)
         {
-            xsc = 1. / dznrm2_(m, &u[p * u_dim1 + 1], &c__1);
-            zdscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
+            xsc = 1. / aocl_blas_dznrm2(m, &u[p * u_dim1 + 1], &c__1);
+            aocl_blas_zdscal(m, &xsc, &u[p * u_dim1 + 1], &c__1);
             /* L1974: */
         }
         if(transp)
         {
-            zlacpy_("A", n, n, &u[u_offset], ldu, &v[v_offset], ldv);
+            aocl_lapack_zlacpy("A", n, n, &u[u_offset], ldu, &v[v_offset], ldv);
         }
     }
     else
@@ -2425,9 +2393,9 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 for(p = 1; p <= i__1; ++p)
                 {
                     i__2 = *n - p + 1;
-                    zcopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
+                    aocl_blas_zcopy(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
                     i__2 = *n - p + 1;
-                    zlacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                    aocl_lapack_zlacgv(&i__2, &v[p + p * v_dim1], &c__1);
                     /* L1968: */
                 }
                 /* .. the following two loops perturb small entries to avoid */
@@ -2448,28 +2416,28 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     for(q = 1; q <= i__1; ++q)
                     {
                         d__1 = xsc * z_abs(&v[q + q * v_dim1]);
-                        z__1.r = d__1;
-                        z__1.i = 0.; // , expr subst
-                        ctemp.r = z__1.r;
-                        ctemp.i = z__1.i; // , expr subst
+                        z__1.real = d__1;
+                        z__1.imag = 0.; // , expr subst
+                        ctemp.real = z__1.real;
+                        ctemp.imag = z__1.imag; // , expr subst
                         i__2 = *n;
                         for(p = 1; p <= i__2; ++p)
                         {
                             if(p > q && z_abs(&v[p + q * v_dim1]) <= temp1 || p < q)
                             {
                                 i__3 = p + q * v_dim1;
-                                v[i__3].r = ctemp.r;
-                                v[i__3].i = ctemp.i; // , expr subst
+                                v[i__3].real = ctemp.real;
+                                v[i__3].imag = ctemp.imag; // , expr subst
                             }
                             /* $ V(p,q) = TEMP1 * ( V(p,q) / ABS(V(p,q)) ) */
                             if(p < q)
                             {
                                 i__3 = p + q * v_dim1;
                                 i__4 = p + q * v_dim1;
-                                z__1.r = -v[i__4].r;
-                                z__1.i = -v[i__4].i; // , expr subst
-                                v[i__3].r = z__1.r;
-                                v[i__3].i = z__1.i; // , expr subst
+                                z__1.real = -v[i__4].real;
+                                z__1.imag = -v[i__4].imag; // , expr subst
+                                v[i__3].real = z__1.real;
+                                v[i__3].imag = z__1.imag; // , expr subst
                             }
                             /* L2968: */
                         }
@@ -2480,24 +2448,24 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                    aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
                 }
                 /* Estimate the row scaled condition number of R1 */
                 /* (If R1 is rectangular, N > NR, then the condition number */
                 /* of the leading NR x NR submatrix is estimated.) */
-                zlacpy_("L", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], &nr);
+                aocl_lapack_zlacpy("L", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], &nr);
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
                 {
                     i__2 = nr - p + 1;
-                    temp1 = dznrm2_(&i__2, &cwork[(*n << 1) + (p - 1) * nr + p], &c__1);
+                    temp1 = aocl_blas_dznrm2(&i__2, &cwork[(*n << 1) + (p - 1) * nr + p], &c__1);
                     i__2 = nr - p + 1;
                     d__1 = 1. / temp1;
-                    zdscal_(&i__2, &d__1, &cwork[(*n << 1) + (p - 1) * nr + p], &c__1);
+                    aocl_blas_zdscal(&i__2, &d__1, &cwork[(*n << 1) + (p - 1) * nr + p], &c__1);
                     /* L3950: */
                 }
-                zpocon_("L", &nr, &cwork[(*n << 1) + 1], &nr, &c_b141, &temp1,
-                        &cwork[(*n << 1) + nr * nr + 1], &rwork[1], &ierr);
+                aocl_lapack_zpocon("L", &nr, &cwork[(*n << 1) + 1], &nr, &c_b141, &temp1,
+                                   &cwork[(*n << 1) + nr * nr + 1], &rwork[1], &ierr);
                 condr1 = 1. / sqrt(temp1);
                 /* .. here need a second opinion on the condition number */
                 /* .. then assume worst case scenario */
@@ -2512,8 +2480,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     /* of a lower triangular matrix. */
                     /* R1^* = Q2 * R2 */
                     i__1 = *lwork - (*n << 1);
-                    zgeqrf_(n, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1,
-                            &ierr);
+                    aocl_lapack_zgeqrf(n, &nr, &v[v_offset], ldv, &cwork[*n + 1],
+                                       &cwork[(*n << 1) + 1], &i__1, &ierr);
                     if(l2pert)
                     {
                         xsc = sqrt(small_val) / epsln;
@@ -2527,15 +2495,15 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                                 d__2 = z_abs(&v[p + p * v_dim1]);
                                 d__3 = z_abs(&v[q + q * v_dim1]); // , expr subst
                                 d__1 = xsc * fla_min(d__2, d__3);
-                                z__1.r = d__1;
-                                z__1.i = 0.; // , expr subst
-                                ctemp.r = z__1.r;
-                                ctemp.i = z__1.i; // , expr subst
+                                z__1.real = d__1;
+                                z__1.imag = 0.; // , expr subst
+                                ctemp.real = z__1.real;
+                                ctemp.imag = z__1.imag; // , expr subst
                                 if(z_abs(&v[q + p * v_dim1]) <= temp1)
                                 {
                                     i__3 = q + p * v_dim1;
-                                    v[i__3].r = ctemp.r;
-                                    v[i__3].i = ctemp.i; // , expr subst
+                                    v[i__3].real = ctemp.real;
+                                    v[i__3].imag = ctemp.imag; // , expr subst
                                 }
                                 /* $ V(q,p) = TEMP1 * ( V(q,p) / ABS(V(q,p)) ) */
                                 /* L3958: */
@@ -2545,7 +2513,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     }
                     if(nr != *n)
                     {
-                        zlacpy_("A", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
+                        aocl_lapack_zlacpy("A", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1],
+                                           n);
                     }
                     /* .. save ... */
                     /* .. this transposed copy should be better than naive */
@@ -2553,15 +2522,16 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     for(p = 1; p <= i__1; ++p)
                     {
                         i__2 = nr - p;
-                        zcopy_(&i__2, &v[p + (p + 1) * v_dim1], ldv, &v[p + 1 + p * v_dim1], &c__1);
+                        aocl_blas_zcopy(&i__2, &v[p + (p + 1) * v_dim1], ldv,
+                                        &v[p + 1 + p * v_dim1], &c__1);
                         i__2 = nr - p + 1;
-                        zlacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                        aocl_lapack_zlacgv(&i__2, &v[p + p * v_dim1], &c__1);
                         /* L1969: */
                     }
                     i__1 = nr + nr * v_dim1;
                     d_cnjg(&z__1, &v[nr + nr * v_dim1]);
-                    v[i__1].r = z__1.r;
-                    v[i__1].i = z__1.i; // , expr subst
+                    v[i__1].real = z__1.real;
+                    v[i__1].imag = z__1.imag; // , expr subst
                     condr2 = condr1;
                 }
                 else
@@ -2580,8 +2550,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         /* L3003: */
                     }
                     i__1 = *lwork - (*n << 1);
-                    zgeqp3_(n, &nr, &v[v_offset], ldv, &iwork[*n + 1], &cwork[*n + 1],
-                            &cwork[(*n << 1) + 1], &i__1, &rwork[1], &ierr);
+                    aocl_lapack_zgeqp3(n, &nr, &v[v_offset], ldv, &iwork[*n + 1], &cwork[*n + 1],
+                                       &cwork[(*n << 1) + 1], &i__1, &rwork[1], &ierr);
                     /* * CALL ZGEQRF( N, NR, V, LDV, CWORK(N+1), CWORK(2*N+1), */
                     /* * $ LWORK-2*N, IERR ) */
                     if(l2pert)
@@ -2597,15 +2567,15 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                                 d__2 = z_abs(&v[p + p * v_dim1]);
                                 d__3 = z_abs(&v[q + q * v_dim1]); // , expr subst
                                 d__1 = xsc * fla_min(d__2, d__3);
-                                z__1.r = d__1;
-                                z__1.i = 0.; // , expr subst
-                                ctemp.r = z__1.r;
-                                ctemp.i = z__1.i; // , expr subst
+                                z__1.real = d__1;
+                                z__1.imag = 0.; // , expr subst
+                                ctemp.real = z__1.real;
+                                ctemp.imag = z__1.imag; // , expr subst
                                 if(z_abs(&v[q + p * v_dim1]) <= temp1)
                                 {
                                     i__3 = q + p * v_dim1;
-                                    v[i__3].r = ctemp.r;
-                                    v[i__3].i = ctemp.i; // , expr subst
+                                    v[i__3].real = ctemp.real;
+                                    v[i__3].imag = ctemp.imag; // , expr subst
                                 }
                                 /* $ V(q,p) = TEMP1 * ( V(q,p) / ABS(V(q,p)) ) */
                                 /* L3968: */
@@ -2613,7 +2583,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                             /* L3969: */
                         }
                     }
-                    zlacpy_("A", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
+                    aocl_lapack_zlacpy("A", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
                     if(l2pert)
                     {
                         xsc = sqrt(small_val);
@@ -2627,16 +2597,16 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                                 d__2 = z_abs(&v[p + p * v_dim1]);
                                 d__3 = z_abs(&v[q + q * v_dim1]); // , expr subst
                                 d__1 = xsc * fla_min(d__2, d__3);
-                                z__1.r = d__1;
-                                z__1.i = 0.; // , expr subst
-                                ctemp.r = z__1.r;
-                                ctemp.i = z__1.i; // , expr subst
+                                z__1.real = d__1;
+                                z__1.imag = 0.; // , expr subst
+                                ctemp.real = z__1.real;
+                                ctemp.imag = z__1.imag; // , expr subst
                                 /* V(p,q) = - TEMP1*( V(q,p) / ABS(V(q,p)) ) */
                                 i__3 = p + q * v_dim1;
-                                z__1.r = -ctemp.r;
-                                z__1.i = -ctemp.i; // , expr subst
-                                v[i__3].r = z__1.r;
-                                v[i__3].i = z__1.i; // , expr subst
+                                z__1.real = -ctemp.real;
+                                z__1.imag = -ctemp.imag; // , expr subst
+                                v[i__3].real = z__1.real;
+                                v[i__3].imag = z__1.imag; // , expr subst
                                 /* L8971: */
                             }
                             /* L8970: */
@@ -2646,25 +2616,26 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
+                        aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
                     }
                     /* Now, compute R2 = L3 * Q3, the LQ factorization. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    zgelqf_(&nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + 1],
-                            &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    aocl_lapack_zgelqf(&nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + 1],
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     /* .. and estimate the condition number */
-                    zlacpy_("L", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1],
-                            &nr);
+                    aocl_lapack_zlacpy("L", &nr, &nr, &v[v_offset], ldv,
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &nr);
                     i__1 = nr;
                     for(p = 1; p <= i__1; ++p)
                     {
-                        temp1 = dznrm2_(&p, &cwork[(*n << 1) + *n * nr + nr + p], &nr);
+                        temp1 = aocl_blas_dznrm2(&p, &cwork[(*n << 1) + *n * nr + nr + p], &nr);
                         d__1 = 1. / temp1;
-                        zdscal_(&p, &d__1, &cwork[(*n << 1) + *n * nr + nr + p], &nr);
+                        aocl_blas_zdscal(&p, &d__1, &cwork[(*n << 1) + *n * nr + nr + p], &nr);
                         /* L4950: */
                     }
-                    zpocon_("L", &nr, &cwork[(*n << 1) + *n * nr + nr + 1], &nr, &c_b141, &temp1,
-                            &cwork[(*n << 1) + *n * nr + nr + nr * nr + 1], &rwork[1], &ierr);
+                    aocl_lapack_zpocon("L", &nr, &cwork[(*n << 1) + *n * nr + nr + 1], &nr, &c_b141,
+                                       &temp1, &cwork[(*n << 1) + *n * nr + nr + nr * nr + 1],
+                                       &rwork[1], &ierr);
                     condr2 = 1. / sqrt(temp1);
                     if(condr2 >= cond_ok__)
                     {
@@ -2672,7 +2643,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         /* (this overwrites the copy of R2, as it will not be */
                         /* needed in this branch, but it does not overwritte the */
                         /* Huseholder vectors of Q2.). */
-                        zlacpy_("U", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
+                        aocl_lapack_zlacpy("U", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1],
+                                           n);
                         /* .. and the rest of the information on Q3 is in */
                         /* WORK(2*N+N*NR+1:2*N+N*NR+N) */
                     }
@@ -2684,19 +2656,19 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     for(q = 2; q <= i__1; ++q)
                     {
                         i__2 = q + q * v_dim1;
-                        z__1.r = xsc * v[i__2].r;
-                        z__1.i = xsc * v[i__2].i; // , expr subst
-                        ctemp.r = z__1.r;
-                        ctemp.i = z__1.i; // , expr subst
+                        z__1.real = xsc * v[i__2].real;
+                        z__1.imag = xsc * v[i__2].imag; // , expr subst
+                        ctemp.real = z__1.real;
+                        ctemp.imag = z__1.imag; // , expr subst
                         i__2 = q - 1;
                         for(p = 1; p <= i__2; ++p)
                         {
                             /* V(p,q) = - TEMP1*( V(p,q) / ABS(V(p,q)) ) */
                             i__3 = p + q * v_dim1;
-                            z__1.r = -ctemp.r;
-                            z__1.i = -ctemp.i; // , expr subst
-                            v[i__3].r = z__1.r;
-                            v[i__3].i = z__1.i; // , expr subst
+                            z__1.real = -ctemp.real;
+                            z__1.imag = -ctemp.imag; // , expr subst
+                            v[i__3].real = z__1.real;
+                            v[i__3].imag = z__1.imag; // , expr subst
                             /* L4969: */
                         }
                         /* L4968: */
@@ -2706,7 +2678,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                    aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
                 }
                 /* Second preconditioning finished;
                 continue with Jacobi SVD */
@@ -2716,16 +2688,16 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 if(condr1 < cond_ok__)
                 {
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    zgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
-                            ldu, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &rwork[1], lrwork,
-                            info);
+                    aocl_lapack_zgesvj("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr,
+                                       &u[u_offset], ldu, &cwork[(*n << 1) + *n * nr + nr + 1],
+                                       &i__1, &rwork[1], lrwork, info);
                     scalem = rwork[1];
                     numrank = i_dnnt(&rwork[2]);
                     i__1 = nr;
                     for(p = 1; p <= i__1; ++p)
                     {
-                        zcopy_(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
-                        zdscal_(&nr, &sva[p], &v[p * v_dim1 + 1], &c__1);
+                        aocl_blas_zcopy(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(&nr, &sva[p], &v[p * v_dim1 + 1], &c__1);
                         /* L3970: */
                     }
                     /* .. pick the right matrix equation and solve it */
@@ -2735,8 +2707,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         /* equation is Q2*V2 = the product of the Jacobi rotations */
                         /* used in ZGESVJ, premultiplied with the orthogonal matrix */
                         /* from the second QR factorization. */
-                        ztrsm_("L", "U", "N", "N", &nr, &nr, &c_b2, &a[a_offset], lda, &v[v_offset],
-                               ldv);
+                        aocl_blas_ztrsm("L", "U", "N", "N", &nr, &nr, &c_b2, &a[a_offset], lda,
+                                        &v[v_offset], ldv);
                     }
                     else
                     {
@@ -2744,23 +2716,25 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         /* is inverted to get the product of the Jacobi rotations */
                         /* used in ZGESVJ. The Q-factor from the second QR */
                         /* factorization is then built in explicitly. */
-                        ztrsm_("L", "U", "C", "N", &nr, &nr, &c_b2, &cwork[(*n << 1) + 1], n,
-                               &v[v_offset], ldv);
+                        aocl_blas_ztrsm("L", "U", "C", "N", &nr, &nr, &c_b2, &cwork[(*n << 1) + 1],
+                                        n, &v[v_offset], ldv);
                         if(nr < *n)
                         {
                             i__1 = *n - nr;
-                            zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                            aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1],
+                                               ldv);
                             i__1 = *n - nr;
-                            zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                            aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1,
+                                               &v[(nr + 1) * v_dim1 + 1], ldv);
                             i__1 = *n - nr;
                             i__2 = *n - nr;
-                            zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
-                                    ldv);
+                            aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                         }
                         i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                        zunmqr_("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1],
-                                &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1,
-                                &ierr);
+                        aocl_lapack_zunmqr("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n,
+                                           &cwork[*n + 1], &v[v_offset], ldv,
+                                           &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     }
                 }
                 else if(condr2 < cond_ok__)
@@ -2770,20 +2744,20 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     /* the lower triangular L3 from the LQ factorization of */
                     /* R2=L3*Q3), pre-multiplied with the transposed Q3. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    zgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
-                            ldu, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &rwork[1], lrwork,
-                            info);
+                    aocl_lapack_zgesvj("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr,
+                                       &u[u_offset], ldu, &cwork[(*n << 1) + *n * nr + nr + 1],
+                                       &i__1, &rwork[1], lrwork, info);
                     scalem = rwork[1];
                     numrank = i_dnnt(&rwork[2]);
                     i__1 = nr;
                     for(p = 1; p <= i__1; ++p)
                     {
-                        zcopy_(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
-                        zdscal_(&nr, &sva[p], &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_zcopy(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(&nr, &sva[p], &u[p * u_dim1 + 1], &c__1);
                         /* L3870: */
                     }
-                    ztrsm_("L", "U", "N", "N", &nr, &nr, &c_b2, &cwork[(*n << 1) + 1], n,
-                           &u[u_offset], ldu);
+                    aocl_blas_ztrsm("L", "U", "N", "N", &nr, &nr, &c_b2, &cwork[(*n << 1) + 1], n,
+                                    &u[u_offset], ldu);
                     /* .. apply the permutation from the second QR factorization */
                     i__1 = nr;
                     for(q = 1; q <= i__1; ++q)
@@ -2793,8 +2767,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         {
                             i__3 = (*n << 1) + *n * nr + nr + iwork[*n + p];
                             i__4 = p + q * u_dim1;
-                            cwork[i__3].r = u[i__4].r;
-                            cwork[i__3].i = u[i__4].i; // , expr subst
+                            cwork[i__3].real = u[i__4].real;
+                            cwork[i__3].imag = u[i__4].imag; // , expr subst
                             /* L872: */
                         }
                         i__2 = nr;
@@ -2802,8 +2776,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         {
                             i__3 = p + q * u_dim1;
                             i__4 = (*n << 1) + *n * nr + nr + p;
-                            u[i__3].r = cwork[i__4].r;
-                            u[i__3].i = cwork[i__4].i; // , expr subst
+                            u[i__3].real = cwork[i__4].real;
+                            u[i__3].imag = cwork[i__4].imag; // , expr subst
                             /* L874: */
                         }
                         /* L873: */
@@ -2811,17 +2785,19 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     if(nr < *n)
                     {
                         i__1 = *n - nr;
-                        zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                        aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                         i__1 = *n - nr;
-                        zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                        aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1],
+                                           ldv);
                         i__1 = *n - nr;
                         i__2 = *n - nr;
-                        zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
-                                ldv);
+                        aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                     }
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    zunmqr_("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1],
-                            &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    aocl_lapack_zunmqr("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n,
+                                       &cwork[*n + 1], &v[v_offset], ldv,
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                 }
                 else
                 {
@@ -2837,29 +2813,31 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     /* Compute the full SVD of L3 using ZGESVJ with explicit */
                     /* accumulation of Jacobi rotations. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    zgesvj_("L", "U", "V", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
-                            ldu, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &rwork[1], lrwork,
-                            info);
+                    aocl_lapack_zgesvj("L", "U", "V", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr,
+                                       &u[u_offset], ldu, &cwork[(*n << 1) + *n * nr + nr + 1],
+                                       &i__1, &rwork[1], lrwork, info);
                     scalem = rwork[1];
                     numrank = i_dnnt(&rwork[2]);
                     if(nr < *n)
                     {
                         i__1 = *n - nr;
-                        zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                        aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                         i__1 = *n - nr;
-                        zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                        aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1],
+                                           ldv);
                         i__1 = *n - nr;
                         i__2 = *n - nr;
-                        zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
-                                ldv);
+                        aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                     }
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    zunmqr_("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1],
-                            &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    aocl_lapack_zunmqr("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n,
+                                       &cwork[*n + 1], &v[v_offset], ldv,
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    zunmlq_("L", "C", &nr, &nr, &nr, &cwork[(*n << 1) + 1], n,
-                            &cwork[(*n << 1) + *n * nr + 1], &u[u_offset], ldu,
-                            &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    aocl_lapack_zunmlq("L", "C", &nr, &nr, &nr, &cwork[(*n << 1) + 1], n,
+                                       &cwork[(*n << 1) + *n * nr + 1], &u[u_offset], ldu,
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     i__1 = nr;
                     for(q = 1; q <= i__1; ++q)
                     {
@@ -2868,8 +2846,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         {
                             i__3 = (*n << 1) + *n * nr + nr + iwork[*n + p];
                             i__4 = p + q * u_dim1;
-                            cwork[i__3].r = u[i__4].r;
-                            cwork[i__3].i = u[i__4].i; // , expr subst
+                            cwork[i__3].real = u[i__4].real;
+                            cwork[i__3].imag = u[i__4].imag; // , expr subst
                             /* L772: */
                         }
                         i__2 = nr;
@@ -2877,8 +2855,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         {
                             i__3 = p + q * u_dim1;
                             i__4 = (*n << 1) + *n * nr + nr + p;
-                            u[i__3].r = cwork[i__4].r;
-                            u[i__3].i = cwork[i__4].i; // , expr subst
+                            u[i__3].real = cwork[i__4].real;
+                            u[i__3].imag = cwork[i__4].imag; // , expr subst
                             /* L774: */
                         }
                         /* L773: */
@@ -2896,8 +2874,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     {
                         i__3 = (*n << 1) + *n * nr + nr + iwork[p];
                         i__4 = p + q * v_dim1;
-                        cwork[i__3].r = v[i__4].r;
-                        cwork[i__3].i = v[i__4].i; // , expr subst
+                        cwork[i__3].real = v[i__4].real;
+                        cwork[i__3].imag = v[i__4].imag; // , expr subst
                         /* L972: */
                     }
                     i__2 = *n;
@@ -2905,14 +2883,14 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     {
                         i__3 = p + q * v_dim1;
                         i__4 = (*n << 1) + *n * nr + nr + p;
-                        v[i__3].r = cwork[i__4].r;
-                        v[i__3].i = cwork[i__4].i; // , expr subst
+                        v[i__3].real = cwork[i__4].real;
+                        v[i__3].imag = cwork[i__4].imag; // , expr subst
                         /* L973: */
                     }
-                    xsc = 1. / dznrm2_(n, &v[q * v_dim1 + 1], &c__1);
+                    xsc = 1. / aocl_blas_dznrm2(n, &v[q * v_dim1 + 1], &c__1);
                     if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                     {
-                        zdscal_(n, &xsc, &v[q * v_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(n, &xsc, &v[q * v_dim1 + 1], &c__1);
                     }
                     /* L1972: */
                 }
@@ -2921,31 +2899,32 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 if(nr < *m)
                 {
                     i__1 = *m - nr;
-                    zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                    aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                     if(nr < n1)
                     {
                         i__1 = n1 - nr;
-                        zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                        aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1],
+                                           ldu);
                         i__1 = *m - nr;
                         i__2 = n1 - nr;
-                        zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                ldu);
+                        aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                     }
                 }
                 /* The Q matrix from the first QRF is built into the left singular */
                 /* matrix U. This applies to all cases. */
                 i__1 = *lwork - *n;
-                zunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                        &cwork[*n + 1], &i__1, &ierr);
+                aocl_lapack_zunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset],
+                                   ldu, &cwork[*n + 1], &i__1, &ierr);
                 /* The columns of U are normalized. The cost is O(M*N) flops. */
                 temp1 = sqrt((doublereal)(*m)) * epsln;
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    xsc = 1. / dznrm2_(m, &u[p * u_dim1 + 1], &c__1);
+                    xsc = 1. / aocl_blas_dznrm2(m, &u[p * u_dim1 + 1], &c__1);
                     if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                     {
-                        zdscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(m, &xsc, &u[p * u_dim1 + 1], &c__1);
                     }
                     /* L1973: */
                 }
@@ -2954,14 +2933,15 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 if(rowpiv)
                 {
                     i__1 = *m - 1;
-                    zlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
+                    aocl_lapack_zlaswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1],
+                                       &c_n1);
                 }
             }
             else
             {
                 /* .. the initial matrix A has almost orthogonal columns and */
                 /* the second QRF is not needed */
-                zlacpy_("U", n, n, &a[a_offset], lda, &cwork[*n + 1], n);
+                aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &cwork[*n + 1], n);
                 if(l2pert)
                 {
                     xsc = sqrt(small_val);
@@ -2969,20 +2949,20 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     for(p = 2; p <= i__1; ++p)
                     {
                         i__2 = *n + (p - 1) * *n + p;
-                        z__1.r = xsc * cwork[i__2].r;
-                        z__1.i = xsc * cwork[i__2].i; // , expr subst
-                        ctemp.r = z__1.r;
-                        ctemp.i = z__1.i; // , expr subst
+                        z__1.real = xsc * cwork[i__2].real;
+                        z__1.imag = xsc * cwork[i__2].imag; // , expr subst
+                        ctemp.real = z__1.real;
+                        ctemp.imag = z__1.imag; // , expr subst
                         i__2 = p - 1;
                         for(q = 1; q <= i__2; ++q)
                         {
                             /* CWORK(N+(q-1)*N+p)=-TEMP1 * ( CWORK(N+(p-1)*N+q) / */
                             /* $ ABS(CWORK(N+(p-1)*N+q)) ) */
                             i__3 = *n + (q - 1) * *n + p;
-                            z__1.r = -ctemp.r;
-                            z__1.i = -ctemp.i; // , expr subst
-                            cwork[i__3].r = z__1.r;
-                            cwork[i__3].i = z__1.i; // , expr subst
+                            z__1.real = -ctemp.real;
+                            z__1.imag = -ctemp.imag; // , expr subst
+                            cwork[i__3].real = z__1.real;
+                            cwork[i__3].imag = z__1.imag; // , expr subst
                             /* L5971: */
                         }
                         /* L5970: */
@@ -2992,35 +2972,37 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__1 = *n - 1;
                     i__2 = *n - 1;
-                    zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &cwork[*n + 2], n);
+                    aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &cwork[*n + 2], n);
                 }
                 i__1 = *lwork - *n - *n * *n;
-                zgesvj_("U", "U", "N", n, n, &cwork[*n + 1], n, &sva[1], n, &u[u_offset], ldu,
-                        &cwork[*n + *n * *n + 1], &i__1, &rwork[1], lrwork, info);
+                aocl_lapack_zgesvj("U", "U", "N", n, n, &cwork[*n + 1], n, &sva[1], n, &u[u_offset],
+                                   ldu, &cwork[*n + *n * *n + 1], &i__1, &rwork[1], lrwork, info);
                 scalem = rwork[1];
                 numrank = i_dnnt(&rwork[2]);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    zcopy_(n, &cwork[*n + (p - 1) * *n + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
-                    zdscal_(n, &sva[p], &cwork[*n + (p - 1) * *n + 1], &c__1);
+                    aocl_blas_zcopy(n, &cwork[*n + (p - 1) * *n + 1], &c__1, &u[p * u_dim1 + 1],
+                                    &c__1);
+                    aocl_blas_zdscal(n, &sva[p], &cwork[*n + (p - 1) * *n + 1], &c__1);
                     /* L6970: */
                 }
-                ztrsm_("L", "U", "N", "N", n, n, &c_b2, &a[a_offset], lda, &cwork[*n + 1], n);
+                aocl_blas_ztrsm("L", "U", "N", "N", n, n, &c_b2, &a[a_offset], lda, &cwork[*n + 1],
+                                n);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    zcopy_(n, &cwork[*n + p], n, &v[iwork[p] + v_dim1], ldv);
+                    aocl_blas_zcopy(n, &cwork[*n + p], n, &v[iwork[p] + v_dim1], ldv);
                     /* L6972: */
                 }
                 temp1 = sqrt((doublereal)(*n)) * epsln;
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    xsc = 1. / dznrm2_(n, &v[p * v_dim1 + 1], &c__1);
+                    xsc = 1. / aocl_blas_dznrm2(n, &v[p * v_dim1 + 1], &c__1);
                     if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                     {
-                        zdscal_(n, &xsc, &v[p * v_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(n, &xsc, &v[p * v_dim1 + 1], &c__1);
                     }
                     /* L6971: */
                 }
@@ -3028,35 +3010,37 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 if(*n < *m)
                 {
                     i__1 = *m - *n;
-                    zlaset_("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
+                    aocl_lapack_zlaset("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
                     if(*n < n1)
                     {
                         i__1 = n1 - *n;
-                        zlaset_("A", n, &i__1, &c_b1, &c_b1, &u[(*n + 1) * u_dim1 + 1], ldu);
+                        aocl_lapack_zlaset("A", n, &i__1, &c_b1, &c_b1, &u[(*n + 1) * u_dim1 + 1],
+                                           ldu);
                         i__1 = *m - *n;
                         i__2 = n1 - *n;
-                        zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[*n + 1 + (*n + 1) * u_dim1],
-                                ldu);
+                        aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &u[*n + 1 + (*n + 1) * u_dim1], ldu);
                     }
                 }
                 i__1 = *lwork - *n;
-                zunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                        &cwork[*n + 1], &i__1, &ierr);
+                aocl_lapack_zunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset],
+                                   ldu, &cwork[*n + 1], &i__1, &ierr);
                 temp1 = sqrt((doublereal)(*m)) * epsln;
                 i__1 = n1;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    xsc = 1. / dznrm2_(m, &u[p * u_dim1 + 1], &c__1);
+                    xsc = 1. / aocl_blas_dznrm2(m, &u[p * u_dim1 + 1], &c__1);
                     if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                     {
-                        zdscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(m, &xsc, &u[p * u_dim1 + 1], &c__1);
                     }
                     /* L6973: */
                 }
                 if(rowpiv)
                 {
                     i__1 = *m - 1;
-                    zlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
+                    aocl_lapack_zlaswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1],
+                                       &c_n1);
                 }
             }
             /* end of the >> almost orthogonal case << in the full SVD */
@@ -3077,9 +3061,9 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = *n - p + 1;
-                zcopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
+                aocl_blas_zcopy(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
                 i__2 = *n - p + 1;
-                zlacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__2, &v[p + p * v_dim1], &c__1);
                 /* L7968: */
             }
             if(l2pert)
@@ -3089,28 +3073,28 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 for(q = 1; q <= i__1; ++q)
                 {
                     d__1 = xsc * z_abs(&v[q + q * v_dim1]);
-                    z__1.r = d__1;
-                    z__1.i = 0.; // , expr subst
-                    ctemp.r = z__1.r;
-                    ctemp.i = z__1.i; // , expr subst
+                    z__1.real = d__1;
+                    z__1.imag = 0.; // , expr subst
+                    ctemp.real = z__1.real;
+                    ctemp.imag = z__1.imag; // , expr subst
                     i__2 = *n;
                     for(p = 1; p <= i__2; ++p)
                     {
                         if(p > q && z_abs(&v[p + q * v_dim1]) <= temp1 || p < q)
                         {
                             i__3 = p + q * v_dim1;
-                            v[i__3].r = ctemp.r;
-                            v[i__3].i = ctemp.i; // , expr subst
+                            v[i__3].real = ctemp.real;
+                            v[i__3].imag = ctemp.imag; // , expr subst
                         }
                         /* $ V(p,q) = TEMP1 * ( V(p,q) / ABS(V(p,q)) ) */
                         if(p < q)
                         {
                             i__3 = p + q * v_dim1;
                             i__4 = p + q * v_dim1;
-                            z__1.r = -v[i__4].r;
-                            z__1.i = -v[i__4].i; // , expr subst
-                            v[i__3].r = z__1.r;
-                            v[i__3].i = z__1.i; // , expr subst
+                            z__1.real = -v[i__4].real;
+                            z__1.imag = -v[i__4].imag; // , expr subst
+                            v[i__3].real = z__1.real;
+                            v[i__3].imag = z__1.imag; // , expr subst
                         }
                         /* L5968: */
                     }
@@ -3121,18 +3105,19 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
             }
             i__1 = *lwork - (*n << 1);
-            zgeqrf_(n, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1, &ierr);
-            zlacpy_("L", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
+            aocl_lapack_zgeqrf(n, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1],
+                               &i__1, &ierr);
+            aocl_lapack_zlacpy("L", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
             i__1 = nr;
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p + 1;
-                zcopy_(&i__2, &v[p + p * v_dim1], ldv, &u[p + p * u_dim1], &c__1);
+                aocl_blas_zcopy(&i__2, &v[p + p * v_dim1], ldv, &u[p + p * u_dim1], &c__1);
                 i__2 = nr - p + 1;
-                zlacgv_(&i__2, &u[p + p * u_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__2, &u[p + p * u_dim1], &c__1);
                 /* L7969: */
             }
             if(l2pert)
@@ -3148,16 +3133,16 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         d__2 = z_abs(&u[p + p * u_dim1]);
                         d__3 = z_abs(&u[q + q * u_dim1]); // , expr subst
                         d__1 = xsc * fla_min(d__2, d__3);
-                        z__1.r = d__1;
-                        z__1.i = 0.; // , expr subst
-                        ctemp.r = z__1.r;
-                        ctemp.i = z__1.i; // , expr subst
+                        z__1.real = d__1;
+                        z__1.imag = 0.; // , expr subst
+                        ctemp.real = z__1.real;
+                        ctemp.imag = z__1.imag; // , expr subst
                         /* U(p,q) = - TEMP1 * ( U(q,p) / ABS(U(q,p)) ) */
                         i__3 = p + q * u_dim1;
-                        z__1.r = -ctemp.r;
-                        z__1.i = -ctemp.i; // , expr subst
-                        u[i__3].r = z__1.r;
-                        u[i__3].i = z__1.i; // , expr subst
+                        z__1.real = -ctemp.real;
+                        z__1.imag = -ctemp.imag; // , expr subst
+                        u[i__3].real = z__1.real;
+                        u[i__3].imag = z__1.imag; // , expr subst
                         /* L9971: */
                     }
                     /* L9970: */
@@ -3167,26 +3152,29 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+                aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
             }
             i__1 = *lwork - (*n << 1) - *n * nr;
-            zgesvj_("L", "U", "V", &nr, &nr, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                    &cwork[(*n << 1) + *n * nr + 1], &i__1, &rwork[1], lrwork, info);
+            aocl_lapack_zgesvj("L", "U", "V", &nr, &nr, &u[u_offset], ldu, &sva[1], n, &v[v_offset],
+                               ldv, &cwork[(*n << 1) + *n * nr + 1], &i__1, &rwork[1], lrwork,
+                               info);
             scalem = rwork[1];
             numrank = i_dnnt(&rwork[2]);
             if(nr < *n)
             {
                 i__1 = *n - nr;
-                zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                 i__1 = *n - nr;
-                zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
                 i__1 = *n - nr;
                 i__2 = *n - nr;
-                zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
+                                   ldv);
             }
             i__1 = *lwork - (*n << 1) - *n * nr - nr;
-            zunmqr_("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1], &v[v_offset],
-                    ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+            aocl_lapack_zunmqr("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1],
+                               &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1,
+                               &ierr);
             /* Permute the rows of V using the (column) permutation from the */
             /* first QRF. Also, scale the columns to make them unit in */
             /* Euclidean norm. This applies to all cases. */
@@ -3199,8 +3187,8 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__3 = (*n << 1) + *n * nr + nr + iwork[p];
                     i__4 = p + q * v_dim1;
-                    cwork[i__3].r = v[i__4].r;
-                    cwork[i__3].i = v[i__4].i; // , expr subst
+                    cwork[i__3].real = v[i__4].real;
+                    cwork[i__3].imag = v[i__4].imag; // , expr subst
                     /* L8972: */
                 }
                 i__2 = *n;
@@ -3208,14 +3196,14 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__3 = p + q * v_dim1;
                     i__4 = (*n << 1) + *n * nr + nr + p;
-                    v[i__3].r = cwork[i__4].r;
-                    v[i__3].i = cwork[i__4].i; // , expr subst
+                    v[i__3].real = cwork[i__4].real;
+                    v[i__3].imag = cwork[i__4].imag; // , expr subst
                     /* L8973: */
                 }
-                xsc = 1. / dznrm2_(n, &v[q * v_dim1 + 1], &c__1);
+                xsc = 1. / aocl_blas_dznrm2(n, &v[q * v_dim1 + 1], &c__1);
                 if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                 {
-                    zdscal_(n, &xsc, &v[q * v_dim1 + 1], &c__1);
+                    aocl_blas_zdscal(n, &xsc, &v[q * v_dim1 + 1], &c__1);
                 }
                 /* L7972: */
             }
@@ -3224,23 +3212,25 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             if(nr < *m)
             {
                 i__1 = *m - nr;
-                zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                 if(nr < n1)
                 {
                     i__1 = n1 - nr;
-                    zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                    aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1],
+                                       ldu);
                     i__1 = *m - nr;
                     i__2 = n1 - nr;
-                    zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1], ldu);
+                    aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                       &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                 }
             }
             i__1 = *lwork - *n;
-            zunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_zunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
+                               &cwork[*n + 1], &i__1, &ierr);
             if(rowpiv)
             {
                 i__1 = *m - 1;
-                zlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
+                aocl_lapack_zlaswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
             }
         }
         if(transp)
@@ -3249,7 +3239,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
-                zswap_(n, &u[p * u_dim1 + 1], &c__1, &v[p * v_dim1 + 1], &c__1);
+                aocl_blas_zswap(n, &u[p * u_dim1 + 1], &c__1, &v[p * v_dim1 + 1], &c__1);
                 /* L6974: */
             }
         }
@@ -3258,7 +3248,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* Undo scaling, if necessary (and possible) */
     if(uscal2 <= big / sva[1] * uscal1)
     {
-        dlascl_("G", &c__0, &c__0, &uscal1, &uscal2, &nr, &c__1, &sva[1], n, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &uscal1, &uscal2, &nr, &c__1, &sva[1], n, &ierr);
         uscal1 = 1.;
         uscal2 = 1.;
     }
@@ -3287,9 +3277,9 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         rwork[6] = entra;
         rwork[7] = entrat;
     }
-    iwork[1] = nr;
-    iwork[2] = numrank;
-    iwork[3] = warning;
+    iwork[1] = (aocl_int_t)(nr);
+    iwork[2] = (aocl_int_t)(numrank);
+    iwork[3] = (aocl_int_t)(warning);
     if(transp)
     {
         iwork[4] = 1;

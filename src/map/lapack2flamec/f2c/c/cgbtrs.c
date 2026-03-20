@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CGBTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -136,8 +136,32 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab,
-             integer *ldab, integer *ipiv, complex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void cgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs,
+             scomplex *ab, aocl_int_t *ldab, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgbtrs(trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgbtrs(trans, &n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, ipiv, b, &ldb_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgbtrs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        aocl_int64_t *nrhs, scomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv,
+                        scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -153,25 +177,12 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, l, kd, lm;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *),
-        ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
-               integer *);
+    aocl_int64_t i__, j, l, kd, lm;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lnoti;
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -236,7 +247,7 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGBTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -268,12 +279,12 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
                 l = ipiv[j];
                 if(l != j)
                 {
-                    cswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
-                cgeru_(&lm, nrhs, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1], ldb,
-                       &b[j + 1 + b_dim1], ldb);
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
+                aocl_blas_cgeru(&lm, nrhs, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1],
+                                ldb, &b[j + 1 + b_dim1], ldb);
                 /* L10: */
             }
         }
@@ -282,8 +293,8 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
         {
             /* Solve U*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            ctbsv_("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                   &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_ctbsv("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                            &b[i__ * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }
@@ -295,8 +306,8 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
         {
             /* Solve U**T * X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            ctbsv_("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                   &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_ctbsv("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                            &b[i__ * b_dim1 + 1], &c__1);
             /* L30: */
         }
         /* Solve L**T * X = B, overwriting B with X. */
@@ -308,14 +319,14 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
                 lm = fla_min(i__1, i__2);
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
-                cgemv_("Transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
-                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
+                aocl_blas_cgemv("Transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
+                                &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {
-                    cswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
                 /* L40: */
             }
@@ -329,8 +340,8 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
         {
             /* Solve U**H * X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            ctbsv_("Upper", "Conjugate transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                   &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_ctbsv("Upper", "Conjugate transpose", "Non-unit", n, &i__2, &ab[ab_offset],
+                            ldab, &b[i__ * b_dim1 + 1], &c__1);
             /* L50: */
         }
         /* Solve L**H * X = B, overwriting B with X. */
@@ -342,16 +353,16 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
                 lm = fla_min(i__1, i__2);
-                clacgv_(nrhs, &b[j + b_dim1], ldb);
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
-                cgemv_("Conjugate transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
-                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
-                clacgv_(nrhs, &b[j + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[j + b_dim1], ldb);
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
+                aocl_blas_cgemv("Conjugate transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
+                                &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {
-                    cswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
                 /* L60: */
             }

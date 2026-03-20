@@ -29,7 +29,7 @@ endif()
 message(STATUS "ENABLE_AOCL_EXTENSION_APIS : ${ENABLE_AOCL_EXTENSION_APIS}")
 
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin") 
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 if(WIN32)
     set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")
@@ -148,4 +148,49 @@ add_subdirectory(validate_src)
 include(main_ctest.cmake)
 include(conformance_test.cmake)
 include(overflow_underflow_test.cmake)
+include(bitrepro_test.cmake)
 include(repeatability_test.cmake)
+
+# ============================================================================
+# API wise ctests (Generated at build time)
+# ============================================================================
+
+# Define the test command
+set(CTEST_MAIN_COMMAND "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}")
+set(CTEST_WORKING_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+
+if(BUILD_TEST)
+    message(STATUS "Configuring API wise ctests")
+    # Generate test files at configure time in build directory
+    set(GENERATOR_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/validation_ctests/auto_generate_tests.py")
+    set(TEST_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/validation_ctests")
+
+    # Create output directory
+    file(MAKE_DIRECTORY ${TEST_OUTPUT_DIR})
+
+    execute_process(
+        COMMAND ${Python3_EXECUTABLE} ${GENERATOR_SCRIPT} --all ${TEST_OUTPUT_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/validation_ctests
+        RESULT_VARIABLE GEN_RESULT
+        ERROR_VARIABLE GEN_ERROR
+    )
+
+    if(GEN_RESULT)
+        message(WARNING "Test generation failed: ${GEN_ERROR}")
+    else()
+        message(STATUS "Generated API validation tests in ${TEST_OUTPUT_DIR}")
+        message(STATUS "Test generation output:\n${GEN_OUTPUT}")
+    endif()
+    # Include generated test files from build directory
+    file(GLOB YAML_TEST_FILES "${TEST_OUTPUT_DIR}/*_tests.cmake")
+    if(YAML_TEST_FILES)
+        foreach(TEST_FILE ${YAML_TEST_FILES})
+            get_filename_component(API_NAME ${TEST_FILE} NAME_WE)
+            string(REPLACE "_tests" "" API_NAME ${API_NAME})
+            include(${TEST_FILE})
+            message(STATUS "Included API validation tests for ${API_NAME}")
+        endforeach()
+    else()
+        message(WARNING "No API validation test files generated")
+    endif()
+endif()

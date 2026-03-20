@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_rot.c
@@ -31,7 +31,6 @@ void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx
     {
         case FLOAT:
         {
-            float eps = fla_lapack_slamch("P");
             float norm_cx, norm_cy;
 
             norm_cx = snrm2_(&n, cx, &incx);
@@ -47,15 +46,14 @@ void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx
             saxpy_(&n, &s_n_one, cy_test, &incy, cy, &incy);
 
             resid1 = snrm2_(&n, cx, &incx);
-            resid1 = resid1 / eps / norm_cx / ((float)n);
+            resid1 = fla_compute_residual(datatype, 'P', resid1, norm_cx, n, params);
             resid2 = snrm2_(&n, cy, &incy);
-            resid2 = resid2 / eps / norm_cy / ((float)n);
+            resid2 = fla_compute_residual(datatype, 'P', resid2, norm_cy, n, params);
             break;
         }
 
         case DOUBLE:
         {
-            double eps = fla_lapack_slamch("P");
             double norm_cx, norm_cy;
 
             norm_cx = dnrm2_(&n, cx, &incx);
@@ -71,14 +69,13 @@ void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx
             daxpy_(&n, &d_n_one, cy_test, &incy, cy, &incy);
 
             resid1 = dnrm2_(&n, cx, &incx);
-            resid1 = resid1 / eps / norm_cx / ((double)n);
+            resid1 = fla_compute_residual(datatype, 'P', resid1, norm_cx, n, params);
             resid2 = dnrm2_(&n, cy, &incy);
-            resid2 = resid2 / eps / norm_cy / ((double)n);
+            resid2 = fla_compute_residual(datatype, 'P', resid2, norm_cy, n, params);
             break;
         }
         case COMPLEX:
         {
-            float eps = fla_lapack_slamch("P");
             float norm_cx, norm_cy;
 
             norm_cx = scnrm2_(&n, cx, &incx);
@@ -96,14 +93,13 @@ void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx
             caxpy_(&n, &c_n_one, cy_test, &incy, cy, &incy);
 
             resid1 = scnrm2_(&n, cx, &incx);
-            resid1 = resid1 / eps / norm_cx / ((float)n);
+            resid1 = fla_compute_residual(datatype, 'P', resid1, norm_cx, n, params);
             resid2 = scnrm2_(&n, cy, &incy);
-            resid2 = resid2 / eps / norm_cy / ((float)n);
+            resid2 = fla_compute_residual(datatype, 'P', resid2, norm_cy, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double eps = fla_lapack_slamch("P");
             double norm_cx, norm_cy;
 
             norm_cx = dznrm2_(&n, cx, &incx);
@@ -121,9 +117,9 @@ void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx
             zaxpy_(&n, &z_n_one, cy_test, &incy, cy, &incy);
 
             resid1 = dznrm2_(&n, cx, &incx);
-            resid1 = resid1 / eps / norm_cx / ((double)n);
+            resid1 = fla_compute_residual(datatype, 'P', resid1, norm_cx, n, params);
             resid2 = dznrm2_(&n, cy, &incy);
-            resid2 = resid2 / eps / norm_cy / ((double)n);
+            resid2 = fla_compute_residual(datatype, 'P', resid2, norm_cy, n, params);
             break;
         }
     }

@@ -1,5 +1,5 @@
 #include "FLA_f2c.h"
- real r_imag(complex *z) {
- return(z->i);
+ real r_imag(scomplex *z) {
+ return(z->imag);
  }
  

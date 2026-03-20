@@ -53,3 +53,5 @@
 1   gebrd   Bi-Diagonalization                            (0 = disable; 1 = enable; 2 = enable only this)
 1   trtri   Inverse of triangular matrix                  (0 = disable; 1 = enable; 2 = enable only this)
 1   trtrs   Triangular Solve                              (0 = disable; 1 = enable; 2 = enable only this)
+1   geqpf   QR factorization with column pivoting         (0 = disable; 1 = enable; 2 = enable only this)
+1   bdsqr   SVD of Bidiagonal Matrix                      (0 = disable; 1 = enable; 2 = enable only this)

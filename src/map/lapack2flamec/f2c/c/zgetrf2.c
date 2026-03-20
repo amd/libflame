@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGETRF2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -108,37 +108,42 @@ for 1 <= i <= fla_min(M,N), row i of the */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zgetrf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgetrf2(m, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgetrf2(&m_64, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgetrf2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                         aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgetrf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    dcomplex z__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, n1, n2;
-    doublecomplex temp;
-    integer iinfo;
+    aocl_int64_t i__, n1, n2;
+    dcomplex temp;
+    aocl_int64_t iinfo;
     doublereal sfmin;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
 /* -- LAPACK computational routine (version 3.7.0) -- */
 /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
 /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -163,7 +168,7 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
 /* Parameter adjustments */
 #if AOCL_FLA_PROGRESS_H
     AOCL_FLA_PROGRESS_VAR;
-    static TLS_CLASS_SPEC integer progress_size = 0;
+    static TLS_CLASS_SPEC aocl_int64_t progress_size = 0;
 #endif
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -186,7 +191,7 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGETRF2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZGETRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -202,7 +207,7 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
         /* Just need to handle IPIV and INFO */
         ipiv[1] = 1;
         i__1 = a_dim1 + 1;
-        if(a[i__1].r == 0. && a[i__1].i == 0.)
+        if(a[i__1].real == 0. && a[i__1].imag == 0.)
         {
             *info = 1;
         }
@@ -213,31 +218,31 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
         /* Compute machine safe minimum */
         sfmin = dlamch_("S");
         /* Find pivot and test for singularity */
-        i__ = izamax_(m, &a[a_dim1 + 1], &c__1);
-        ipiv[1] = i__;
+        i__ = aocl_blas_izamax(m, &a[a_dim1 + 1], &c__1);
+        ipiv[1] = (aocl_int_t)(i__);
         i__1 = i__ + a_dim1;
-        if(a[i__1].r != 0. || a[i__1].i != 0.)
+        if(a[i__1].real != 0. || a[i__1].imag != 0.)
         {
             /* Apply the interchange */
             if(i__ != 1)
             {
                 i__1 = a_dim1 + 1;
-                temp.r = a[i__1].r;
-                temp.i = a[i__1].i; // , expr subst
+                temp.real = a[i__1].real;
+                temp.imag = a[i__1].imag; // , expr subst
                 i__1 = a_dim1 + 1;
                 i__2 = i__ + a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = i__ + a_dim1;
-                a[i__1].r = temp.r;
-                a[i__1].i = temp.i; // , expr subst
+                a[i__1].real = temp.real;
+                a[i__1].imag = temp.imag; // , expr subst
             }
             /* Compute elements 2:M of the column */
             if(z_abs(&a[a_dim1 + 1]) >= sfmin)
             {
                 i__1 = *m - 1;
                 z_div(&z__1, &c_b1, &a[a_dim1 + 1]);
-                zscal_(&i__1, &z__1, &a[a_dim1 + 2], &c__1);
+                aocl_blas_zscal(&i__1, &z__1, &a[a_dim1 + 2], &c__1);
             }
             else
             {
@@ -246,8 +251,8 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
                 {
                     i__2 = i__ + 1 + a_dim1;
                     z_div(&z__1, &a[i__ + 1 + a_dim1], &a[a_dim1 + 1]);
-                    a[i__2].r = z__1.r;
-                    a[i__2].i = z__1.i; // , expr subst
+                    a[i__2].real = z__1.real;
+                    a[i__2].imag = z__1.imag; // , expr subst
                     /* L10: */
                 }
             }
@@ -291,7 +296,7 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
 
 #endif
 
-        zgetrf2_(m, &n1, &a[a_offset], lda, &ipiv[1], &iinfo);
+        aocl_lapack_zgetrf2(m, &n1, &a[a_offset], lda, &ipiv[1], &iinfo);
         if(*info == 0 && iinfo > 0)
         {
             *info = iinfo;
@@ -299,19 +304,19 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
         /* [ A12 ] */
         /* Apply interchanges to [ --- ] */
         /* [ A22 ] */
-        zlaswp_(&n2, &a[(n1 + 1) * a_dim1 + 1], lda, &c__1, &n1, &ipiv[1], &c__1);
+        aocl_lapack_zlaswp(&n2, &a[(n1 + 1) * a_dim1 + 1], lda, &c__1, &n1, &ipiv[1], &c__1);
         /* Solve A12 */
-        ztrsm_("L", "L", "N", "U", &n1, &n2, &c_b1, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1],
-               lda);
+        aocl_blas_ztrsm("L", "L", "N", "U", &n1, &n2, &c_b1, &a[a_offset], lda,
+                        &a[(n1 + 1) * a_dim1 + 1], lda);
         /* Update A22 */
         i__1 = *m - n1;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
-        zgemm_("N", "N", &i__1, &n2, &n1, &z__1, &a[n1 + 1 + a_dim1], lda,
-               &a[(n1 + 1) * a_dim1 + 1], lda, &c_b1, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        aocl_blas_zgemm("N", "N", &i__1, &n2, &n1, &z__1, &a[n1 + 1 + a_dim1], lda,
+                        &a[(n1 + 1) * a_dim1 + 1], lda, &c_b1, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
         /* Factor A22 */
         i__1 = *m - n1;
-        zgetrf2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &ipiv[n1 + 1], &iinfo);
+        aocl_lapack_zgetrf2(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &ipiv[n1 + 1], &iinfo);
         /* Adjust INFO and the pivot indices */
         if(*info == 0 && iinfo > 0)
         {
@@ -320,13 +325,13 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
         i__1 = fla_min(*m, *n);
         for(i__ = n1 + 1; i__ <= i__1; ++i__)
         {
-            ipiv[i__] += n1;
+            ipiv[i__] += (aocl_int_t)(n1);
             /* L20: */
         }
         /* Apply interchanges to A21 */
         i__1 = n1 + 1;
         i__2 = fla_min(*m, *n);
-        zlaswp_(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
+        aocl_lapack_zlaswp(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

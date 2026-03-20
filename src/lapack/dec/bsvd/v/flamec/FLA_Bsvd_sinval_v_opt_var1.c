@@ -16,11 +16,11 @@ FLA_Error FLA_Bsvd_sinval_v_opt_var1( FLA_Obj tol, FLA_Obj thresh,
                                       FLA_Obj k )
 {
     FLA_Datatype datatype;
-    integer          m_A, n_GH;
-    integer          rs_G, cs_G;
-    integer          rs_H, cs_H;
-    integer          inc_d;
-    integer          inc_e;
+    fla_dim_t          m_A, n_GH;
+    fla_dim_t          rs_G, cs_G;
+    fla_dim_t          rs_H, cs_H;
+    fla_dim_t          inc_d;
+    fla_dim_t          inc_e;
 
     datatype = FLA_Obj_datatype( d );
 
@@ -47,7 +47,7 @@ FLA_Error FLA_Bsvd_sinval_v_opt_var1( FLA_Obj tol, FLA_Obj thresh,
         scomplex* buff_H      = FLA_COMPLEX_PTR( H );
         float*    buff_d      = FLA_FLOAT_PTR( d );
         float*    buff_e      = FLA_FLOAT_PTR( e );
-        integer*      buff_k      = FLA_INT_PTR( k );
+        fla_dim_t*      buff_k      = FLA_INT_PTR( k );
 
         FLA_Bsvd_sinval_v_ops_var1( m_A,
                                     n_GH,
@@ -71,7 +71,7 @@ FLA_Error FLA_Bsvd_sinval_v_opt_var1( FLA_Obj tol, FLA_Obj thresh,
         dcomplex* buff_H      = FLA_DOUBLE_COMPLEX_PTR( H );
         double*   buff_d      = FLA_DOUBLE_PTR( d );
         double*   buff_e      = FLA_DOUBLE_PTR( e );
-        integer*      buff_k      = FLA_INT_PTR( k );
+        fla_dim_t*      buff_k      = FLA_INT_PTR( k );
 
         FLA_Bsvd_sinval_v_opd_var1( m_A,
                                     n_GH,
@@ -93,16 +93,16 @@ FLA_Error FLA_Bsvd_sinval_v_opt_var1( FLA_Obj tol, FLA_Obj thresh,
 
 
 
-FLA_Error FLA_Bsvd_sinval_v_ops_var1( integer       m_A,
-                                      integer       n_GH,
-                                      integer       n_iter_allowed,
+FLA_Error FLA_Bsvd_sinval_v_ops_var1( fla_dim_t       m_A,
+                                      fla_dim_t       n_GH,
+                                      fla_dim_t       n_iter_allowed,
                                       float     tol,
                                       float     thresh,
-                                      scomplex* buff_G, integer rs_G, integer cs_G,
-                                      scomplex* buff_H, integer rs_H, integer cs_H,
-                                      float*    buff_d, integer inc_d,
-                                      float*    buff_e, integer inc_e,
-                                      integer*      n_iter )
+                                      scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                      scomplex* buff_H, fla_dim_t rs_H, fla_dim_t cs_H,
+                                      float*    buff_d, fla_dim_t inc_d,
+                                      float*    buff_e, fla_dim_t inc_e,
+                                      fla_dim_t*      n_iter )
 {
     FLA_Error r_val;
     float     one = bl1_s1();
@@ -114,7 +114,7 @@ FLA_Error FLA_Bsvd_sinval_v_ops_var1( integer       m_A,
     float     smin;
     float     sminl;
     float     shift;
-    integer       k;
+    fla_dim_t       k;
 
     // Initialize pointers to some diagonal and superdiagonal elements
     // that we will refer to later.
@@ -191,16 +191,16 @@ FLA_Error FLA_Bsvd_sinval_v_ops_var1( integer       m_A,
 
 //#define PRINTF
 
-FLA_Error FLA_Bsvd_sinval_v_opd_var1( integer       m_A,
-                                      integer       n_GH,
-                                      integer       n_iter_allowed,
+FLA_Error FLA_Bsvd_sinval_v_opd_var1( fla_dim_t       m_A,
+                                      fla_dim_t       n_GH,
+                                      fla_dim_t       n_iter_allowed,
                                       double    tol,
                                       double    thresh,
-                                      dcomplex* buff_G, integer rs_G, integer cs_G,
-                                      dcomplex* buff_H, integer rs_H, integer cs_H,
-                                      double*   buff_d, integer inc_d,
-                                      double*   buff_e, integer inc_e,
-                                      integer*      n_iter )
+                                      dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                      dcomplex* buff_H, fla_dim_t rs_H, fla_dim_t cs_H,
+                                      double*   buff_d, fla_dim_t inc_d,
+                                      double*   buff_e, fla_dim_t inc_e,
+                                      fla_dim_t*      n_iter )
 {
     FLA_Error r_val;
     double    one = bl1_d1();
@@ -212,7 +212,7 @@ FLA_Error FLA_Bsvd_sinval_v_opd_var1( integer       m_A,
     double    smin;
     double    sminl;
     double    shift;
-    integer       k;
+    fla_dim_t       k;
 
     // Initialize pointers to some diagonal and superdiagonal elements
     // that we will refer to later.

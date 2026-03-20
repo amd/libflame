@@ -147,9 +147,9 @@ void libfla_test_her2k_experiment( test_params_t params,
 	FLA_Obj      A_test, B_test, C_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur / abs(m_input);
+	if ( m_input < 0 ) m = p_cur / -m_input;
 	else               m = p_cur;
-	if ( k_input < 0 ) k = p_cur / abs(k_input);
+	if ( k_input < 0 ) k = p_cur / -k_input;
 	else               k = p_cur;
 
 	// Translate parameter characters to libflame constants.
@@ -190,7 +190,7 @@ void libfla_test_her2k_experiment( test_params_t params,
 
 	// Currently, all flamec variants for her2k compute the wrong answer
 	// if the imaginary component of alpha is non-zero. Only the BLIS
-	// handles complex alphas correctly, so we will only test with them
+	// handles scomplex alphas correctly, so we will only test with them
 	// when it will succeed.
 	if ( impl == FLA_TEST_HIER_FRONT_END ||
 	     impl == FLA_TEST_FLAT_FRONT_END ||

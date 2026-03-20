@@ -38,7 +38,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLASCL multiplies the M by N complex matrix A by the real scalar */
+/* > ZLASCL multiplies the M by N scomplex matrix A by the real scalar */
 /* > CTO/CFROM. This is done without over/underflow as long as the final */
 /* > result CTO*A(I,J)/CFROM does not over/underflow. TYPE specifies that */
 /* > A may be full, upper triangular, lower triangular, upper Hessenberg, */
@@ -140,30 +140,48 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m,
-             integer *n, doublecomplex *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void zlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, doublereal *cto,
+             aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlascl(type__, kl, ku, cfrom, cto, m, n, a, lda, info);
+#else
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlascl(type__, &kl_64, &ku_64, cfrom, cto, &m_64, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlascl(char *type__, aocl_int64_t *kl, aocl_int64_t *ku, doublereal *cfrom,
+                        doublereal *cto, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *lda, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS
                       ", cfrom %lf, cto %lf, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
                       *type__, *kl, *ku, *cfrom, *cto, *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j, k1, k2, k3, k4;
+    aocl_int64_t i__, j, k1, k2, k3, k4;
     doublereal mul, cto1;
     logical done;
     doublereal ctoc;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer itype;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t itype;
     doublereal cfrom1;
     extern doublereal dlamch_(char *);
     doublereal cfromc;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -273,7 +291,7 @@ void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLASCL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZLASCL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -343,10 +361,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                z__1.r = mul * a[i__4].r;
-                z__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = mul * a[i__4].real;
+                z__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
             /* L30: */
@@ -363,10 +381,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                z__1.r = mul * a[i__4].r;
-                z__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = mul * a[i__4].real;
+                z__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L40: */
             }
             /* L50: */
@@ -383,10 +401,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                z__1.r = mul * a[i__4].r;
-                z__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = mul * a[i__4].real;
+                z__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L60: */
             }
             /* L70: */
@@ -405,10 +423,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                z__1.r = mul * a[i__4].r;
-                z__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = mul * a[i__4].real;
+                z__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L80: */
             }
             /* L90: */
@@ -430,10 +448,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                z__1.r = mul * a[i__4].r;
-                z__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = mul * a[i__4].real;
+                z__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L100: */
             }
             /* L110: */
@@ -454,10 +472,10 @@ L10:
             {
                 i__2 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                z__1.r = mul * a[i__4].r;
-                z__1.i = mul * a[i__4].i; // , expr subst
-                a[i__2].r = z__1.r;
-                a[i__2].i = z__1.i; // , expr subst
+                z__1.real = mul * a[i__4].real;
+                z__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__2].real = z__1.real;
+                a[i__2].imag = z__1.imag; // , expr subst
                 /* L120: */
             }
             /* L130: */
@@ -483,10 +501,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                z__1.r = mul * a[i__4].r;
-                z__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = mul * a[i__4].real;
+                z__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L140: */
             }
             /* L150: */

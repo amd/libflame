@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors. */
+#include "FLA_f2c.h" /* > \brief \b CROT applies a plane rotation with real cosine and scomplex sine to a pair of scomplex vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -39,7 +39,7 @@
 /* > \verbatim */
 /* > */
 /* > CROT applies a plane rotation, where the cos (C) is real and the */
-/* > sin (S) is complex, and the vectors CX and CY are complex. */
+/* > sin (S) is scomplex, and the vectors CX and CY are scomplex. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -98,8 +98,23 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void crot_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, real *c__,
-           complex *s)
+/** Generated wrapper function */
+void crot_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int_t *incy, real *c__,
+           scomplex *s)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_crot(n, cx, incx, cy, incy, c__, s);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_crot(&n_64, cx, &incx_64, cy, &incy_64, c__, s);
+#endif
+}
+
+void aocl_lapack_crot(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx, scomplex *cy,
+                      aocl_int64_t *incy, real *c__, scomplex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -112,11 +127,11 @@ void crot_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, r
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1;
-    complex q__1, q__2, q__3;
+    aocl_int64_t i__1;
+    scomplex q__1, q__2, q__3;
     /* Local variables */
-    integer i__, ix, iy;
-    complex stemp;
+    aocl_int64_t i__, ix, iy;
+    scomplex stemp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -156,28 +171,28 @@ void crot_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, r
         iy = (-(*n) + 1) * *incy + 1;
     }
     i__1 = *n;
-    real sr = s->r;
-    real si = s->i;
+    real sr = s->real;
+    real si = s->imag;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        q__2.r = *c__ * cx[ix].r;
-        q__2.i = *c__ * cx[ix].i; // , expr subst
-        q__3.r = sr * cy[iy].r - si * cy[iy].i;
-        q__3.i = sr * cy[iy].i + si * cy[iy].r; // , expr subst
-        q__1.r = q__2.r + q__3.r;
-        q__1.i = q__2.i + q__3.i; // , expr subst
-        stemp.r = q__1.r;
-        stemp.i = q__1.i; // , expr subst
-        q__2.r = *c__ * cy[iy].r;
-        q__2.i = *c__ * cy[iy].i; // , expr subst
-        q__3.r = sr * cx[ix].r + si * cx[ix].i;
-        q__3.i = sr * cx[ix].i - si * cx[ix].r; // , expr subst
-        q__1.r = q__2.r - q__3.r;
-        q__1.i = q__2.i - q__3.i; // , expr subst
-        cy[iy].r = q__1.r;
-        cy[iy].i = q__1.i; // , expr subst
-        cx[ix].r = stemp.r;
-        cx[ix].i = stemp.i; // , expr subst
+        q__2.real = *c__ * cx[ix].real;
+        q__2.imag = *c__ * cx[ix].imag; // , expr subst
+        q__3.real = sr * cy[iy].real - si * cy[iy].imag;
+        q__3.imag = sr * cy[iy].imag + si * cy[iy].real; // , expr subst
+        q__1.real = q__2.real + q__3.real;
+        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+        stemp.real = q__1.real;
+        stemp.imag = q__1.imag; // , expr subst
+        q__2.real = *c__ * cy[iy].real;
+        q__2.imag = *c__ * cy[iy].imag; // , expr subst
+        q__3.real = sr * cx[ix].real + si * cx[ix].imag;
+        q__3.imag = sr * cx[ix].imag - si * cx[ix].real; // , expr subst
+        q__1.real = q__2.real - q__3.real;
+        q__1.imag = q__2.imag - q__3.imag; // , expr subst
+        cy[iy].real = q__1.real;
+        cy[iy].imag = q__1.imag; // , expr subst
+        cx[ix].real = stemp.real;
+        cx[ix].imag = stemp.imag; // , expr subst
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -186,29 +201,29 @@ void crot_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, r
     return;
     /* Code for both increments equal to 1 */
 L20:
-    sr = s->r;
-    si = s->i;
+    sr = s->real;
+    si = s->imag;
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        q__2.r = *c__ * cx[i__].r;
-        q__2.i = *c__ * cx[i__].i; // , expr subst
-        q__3.r = sr * cy[i__].r - si * cy[i__].i;
-        q__3.i = sr * cy[i__].i + si * cy[i__].r; // , expr subst
-        q__1.r = q__2.r + q__3.r;
-        q__1.i = q__2.i + q__3.i; // , expr subst
-        stemp.r = q__1.r;
-        stemp.i = q__1.i; // , expr subst
-        q__2.r = *c__ * cy[i__].r;
-        q__2.i = *c__ * cy[i__].i; // , expr subst
-        q__3.r = sr * cx[i__].r + si * cx[i__].i;
-        q__3.i = sr * cx[i__].i - si * cx[i__].r; // , expr subst
-        q__1.r = q__2.r - q__3.r;
-        q__1.i = q__2.i - q__3.i; // , expr subst
-        cy[i__].r = q__1.r;
-        cy[i__].i = q__1.i; // , expr subst
-        cx[i__].r = stemp.r;
-        cx[i__].i = stemp.i; // , expr subst
+        q__2.real = *c__ * cx[i__].real;
+        q__2.imag = *c__ * cx[i__].imag; // , expr subst
+        q__3.real = sr * cy[i__].real - si * cy[i__].imag;
+        q__3.imag = sr * cy[i__].imag + si * cy[i__].real; // , expr subst
+        q__1.real = q__2.real + q__3.real;
+        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+        stemp.real = q__1.real;
+        stemp.imag = q__1.imag; // , expr subst
+        q__2.real = *c__ * cy[i__].real;
+        q__2.imag = *c__ * cy[i__].imag; // , expr subst
+        q__3.real = sr * cx[i__].real + si * cx[i__].imag;
+        q__3.imag = sr * cx[i__].imag - si * cx[i__].real; // , expr subst
+        q__1.real = q__2.real - q__3.real;
+        q__1.imag = q__2.imag - q__3.imag; // , expr subst
+        cy[i__].real = q__1.real;
+        cy[i__].imag = q__1.imag; // , expr subst
+        cx[i__].real = stemp.real;
+        cx[i__].imag = stemp.imag; // , expr subst
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

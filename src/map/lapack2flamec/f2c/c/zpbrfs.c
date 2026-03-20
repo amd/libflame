@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZPBRFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -187,10 +187,37 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *ab, integer *ldab,
-             doublecomplex *afb, integer *ldafb, doublecomplex *b, integer *ldb, doublecomplex *x,
-             integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work,
-             doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, dcomplex *ab,
+             aocl_int_t *ldab, dcomplex *afb, aocl_int_t *ldafb, dcomplex *b,
+             aocl_int_t *ldb, dcomplex *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr,
+             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpbrfs(uplo, n, kd, nrhs, ab, ldab, afb, ldafb, b, ldb, x, ldx, ferr, berr, work,
+                       rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpbrfs(uplo, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64, b, &ldb_64, x,
+                       &ldx_64, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int64_t *nrhs,
+                        dcomplex *ab, aocl_int64_t *ldab, dcomplex *afb,
+                        aocl_int64_t *ldafb, dcomplex *b, aocl_int64_t *ldb, dcomplex *x,
+                        aocl_int64_t *ldx, doublereal *ferr, doublereal *berr, dcomplex *work,
+                        doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpbrfs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS
@@ -198,42 +225,26 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
                       *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
 
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     doublereal s, xk;
-    integer nz;
+    aocl_int64_t nz;
     doublereal eps;
-    integer kase;
+    aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        zhbmv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer count;
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
-    extern /* Subroutine */
-        void
-        zpbtrs_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -316,7 +327,7 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPBRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -350,11 +361,11 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
         lstres = 3.;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        zcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
-        zhbmv_(uplo, n, kd, &z__1, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1],
-               &c__1);
+        aocl_blas_zcopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        aocl_blas_zhbmv(uplo, n, kd, &z__1, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1, &c_b1,
+                        &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -365,7 +376,7 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+            rwork[i__] = (d__1 = b[i__3].real, f2c_dabs(d__1))
                          + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
             /* L30: */
         }
@@ -377,7 +388,7 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
             {
                 s = 0.;
                 i__3 = k + j * x_dim1;
-                xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                xk = (d__1 = x[i__3].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                 l = *kd + 1 - k;
                 /* Computing MAX */
@@ -387,19 +398,19 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
                 for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
                 {
                     i__3 = l + i__ + k * ab_dim1;
-                    rwork[i__] += ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                    rwork[i__] += ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                                    + (d__2 = d_imag(&ab[l + i__ + k * ab_dim1]), f2c_dabs(d__2)))
                                   * xk;
                     i__3 = l + i__ + k * ab_dim1;
                     i__4 = i__ + j * x_dim1;
-                    s += ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                    s += ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                           + (d__2 = d_imag(&ab[l + i__ + k * ab_dim1]), f2c_dabs(d__2)))
-                         * ((d__3 = x[i__4].r, f2c_dabs(d__3))
+                         * ((d__3 = x[i__4].real, f2c_dabs(d__3))
                             + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                     /* L40: */
                 }
                 i__5 = *kd + 1 + k * ab_dim1;
-                rwork[k] = rwork[k] + (d__1 = ab[i__5].r, f2c_dabs(d__1)) * xk + s;
+                rwork[k] = rwork[k] + (d__1 = ab[i__5].real, f2c_dabs(d__1)) * xk + s;
                 /* L50: */
             }
         }
@@ -410,10 +421,10 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
             {
                 s = 0.;
                 i__5 = k + j * x_dim1;
-                xk = (d__1 = x[i__5].r, f2c_dabs(d__1))
+                xk = (d__1 = x[i__5].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                 i__5 = k * ab_dim1 + 1;
-                rwork[k] += (d__1 = ab[i__5].r, f2c_dabs(d__1)) * xk;
+                rwork[k] += (d__1 = ab[i__5].real, f2c_dabs(d__1)) * xk;
                 l = 1 - k;
                 /* Computing MIN */
                 i__3 = *n;
@@ -422,14 +433,14 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
                 for(i__ = k + 1; i__ <= i__5; ++i__)
                 {
                     i__3 = l + i__ + k * ab_dim1;
-                    rwork[i__] += ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                    rwork[i__] += ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                                    + (d__2 = d_imag(&ab[l + i__ + k * ab_dim1]), f2c_dabs(d__2)))
                                   * xk;
                     i__3 = l + i__ + k * ab_dim1;
                     i__4 = i__ + j * x_dim1;
-                    s += ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                    s += ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                           + (d__2 = d_imag(&ab[l + i__ + k * ab_dim1]), f2c_dabs(d__2)))
-                         * ((d__3 = x[i__4].r, f2c_dabs(d__3))
+                         * ((d__3 = x[i__4].real, f2c_dabs(d__3))
                             + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                     /* L60: */
                 }
@@ -446,7 +457,7 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
                 /* Computing MAX */
                 i__5 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__5].r, f2c_dabs(d__1))
+                d__4 = ((d__1 = work[i__5].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)))
                        / rwork[i__]; // , expr subst
                 s = fla_max(d__3, d__4);
@@ -456,7 +467,7 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
                 /* Computing MAX */
                 i__5 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__5].r, f2c_dabs(d__1))
+                d__4 = ((d__1 = work[i__5].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1)
                        / (rwork[i__] + safe1); // , expr subst
                 s = fla_max(d__3, d__4);
@@ -472,8 +483,8 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            zpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
-            zaxpy_(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_zpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
+            aocl_blas_zaxpy(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -501,13 +512,13 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
             if(rwork[i__] > safe2)
             {
                 i__5 = i__;
-                rwork[i__] = (d__1 = work[i__5].r, f2c_dabs(d__1))
+                rwork[i__] = (d__1 = work[i__5].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__5 = i__;
-                rwork[i__] = (d__1 = work[i__5].r, f2c_dabs(d__1))
+                rwork[i__] = (d__1 = work[i__5].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__]
                              + safe1;
             }
@@ -515,23 +526,23 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
         }
         kase = 0;
     L100:
-        zlacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(A**H). */
-                zpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
+                aocl_lapack_zpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__5 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    z__1.r = rwork[i__3] * work[i__4].r;
-                    z__1.i = rwork[i__3] * work[i__4].i; // , expr subst
-                    work[i__5].r = z__1.r;
-                    work[i__5].i = z__1.i; // , expr subst
+                    z__1.real = rwork[i__3] * work[i__4].real;
+                    z__1.imag = rwork[i__3] * work[i__4].imag; // , expr subst
+                    work[i__5].real = z__1.real;
+                    work[i__5].imag = z__1.imag; // , expr subst
                     /* L110: */
                 }
             }
@@ -544,13 +555,13 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
                     i__5 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    z__1.r = rwork[i__3] * work[i__4].r;
-                    z__1.i = rwork[i__3] * work[i__4].i; // , expr subst
-                    work[i__5].r = z__1.r;
-                    work[i__5].i = z__1.i; // , expr subst
+                    z__1.real = rwork[i__3] * work[i__4].real;
+                    z__1.imag = rwork[i__3] * work[i__4].imag; // , expr subst
+                    work[i__5].real = z__1.real;
+                    work[i__5].imag = z__1.imag; // , expr subst
                     /* L120: */
                 }
-                zpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
+                aocl_lapack_zpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
             }
             goto L100;
         }
@@ -562,7 +573,7 @@ void zpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *
             /* Computing MAX */
             i__5 = i__ + j * x_dim1;
             d__3 = lstres;
-            d__4 = (d__1 = x[i__5].r, f2c_dabs(d__1))
+            d__4 = (d__1 = x[i__5].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
             lstres = fla_max(d__3, d__4);
             /* L130: */

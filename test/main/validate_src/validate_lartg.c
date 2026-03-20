@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_rot.c
@@ -30,10 +30,8 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
     {
         case FLOAT:
         {
-            float eps, norm_r, norm_f, norm_res, norm_1;
+            float norm_r, norm_f, norm_res, norm_1;
             float res = 0.0;
-
-            eps = fla_lapack_slamch("P");
 
             /*Test 1 validating C and S */
             norm_1 = snrm2_(&i_one, &s_one, &i_one);
@@ -42,7 +40,7 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
             /*res->res-1*/
             saxpy_(&i_one, &s_n_one, &s_one, &i_one, &res, &i_one);
             norm_res = snrm2_(&i_one, &res, &i_one);
-            resid1 = (norm_res / norm_1 / eps);
+            resid1 = fla_compute_residual(datatype, 'P', norm_res, norm_1, 1, params);
 
             /*Test 2 Validating R*/
             norm_r = snrm2_(&i_one, r, &i_one);
@@ -55,16 +53,14 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
             saxpy_(&i_one, &s_n_one, f, &i_one, r, &i_one);
             saxpy_(&i_one, &s_n_one, g, &i_one, out_zero, &i_one);
             norm_f = snrm2_(&i_one, r, &i_one);
-            resid2 = (norm_f / norm_r / eps);
+            resid2 = fla_compute_residual(datatype, 'P', norm_f, norm_r, 1, params);
             break;
         }
 
         case DOUBLE:
         {
-            double eps, norm_r, norm_f, norm_res, norm_1;
+            double norm_r, norm_f, norm_res, norm_1;
             double res = 0.0;
-
-            eps = fla_lapack_slamch("P");
 
             /*Test 1 validating C and S */
             norm_1 = dnrm2_(&i_one, &d_one, &i_one);
@@ -74,7 +70,7 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
             /*res->res -1*/
             daxpy_(&i_one, &d_n_one, &d_one, &i_one, &res, &i_one);
             norm_res = dnrm2_(&i_one, &res, &i_one);
-            resid1 = (norm_res / norm_1 / eps);
+            resid1 = fla_compute_residual(datatype, 'P', norm_res, norm_1, 1, params);
 
             /*Test 2 Validating R*/
             norm_r = dnrm2_(&i_one, r, &i_one);
@@ -87,17 +83,15 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
             daxpy_(&i_one, &d_n_one, f, &i_one, r, &i_one);
             daxpy_(&i_one, &d_n_one, g, &i_one, out_zero, &i_one);
             norm_f = dnrm2_(&i_one, r, &i_one);
-            resid2 = (norm_f / norm_r / eps);
+            resid2 = fla_compute_residual(datatype, 'P', norm_f, norm_r, 1, params);
             break;
         }
 
         case COMPLEX:
         {
-            float eps, norm_r, norm_f, norm_res, norm_1;
+            float norm_r, norm_f, norm_res, norm_1;
             float res = 0.0;
             ;
-
-            eps = fla_lapack_slamch("P");
 
             /*Test 1 validating C and S */
             norm_1 = snrm2_(&i_one, &s_one, &i_one);
@@ -108,7 +102,7 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
             /*res->res - 1*/
             saxpy_(&i_one, &s_n_one, &s_one, &i_one, &res, &i_one);
             norm_res = snrm2_(&i_one, &res, &i_one);
-            resid1 = (norm_res / norm_1 / eps);
+            resid1 = fla_compute_residual(datatype, 'P', norm_res, norm_1, 1, params);
 
             /*Test 2 Validating R*/
             norm_r = scnrm2_(&i_one, r, &i_one);
@@ -122,16 +116,14 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
             caxpy_(&i_one, &c_n_one, f, &i_one, r, &i_one);
             caxpy_(&i_one, &c_n_one, g, &i_one, out_zero, &i_one);
             norm_f = scnrm2_(&i_one, r, &i_one);
-            resid2 = (norm_f / norm_r / eps);
+            resid2 = fla_compute_residual(datatype, 'P', norm_f, norm_r, 1, params);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            double eps, norm_r, norm_f, norm_res, norm_1;
+            double norm_r, norm_f, norm_res, norm_1;
             double res = 0.0;
-
-            eps = fla_lapack_slamch("P");
 
             /*Test 1 validating C and S */
             norm_1 = snrm2_(&i_one, &s_one, &i_one);
@@ -142,7 +134,7 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
             /*res-> res - 1*/
             daxpy_(&i_one, &d_n_one, &d_one, &i_one, &res, &i_one);
             norm_res = dnrm2_(&i_one, &res, &i_one);
-            resid1 = (norm_res / norm_1 / eps);
+            resid1 = fla_compute_residual(datatype, 'P', norm_res, norm_1, 1, params);
 
             /*Test 2 Validating R*/
             norm_r = dznrm2_(&i_one, r, &i_one);
@@ -156,7 +148,7 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
             zaxpy_(&i_one, &z_n_one, f, &i_one, r, &i_one);
             zaxpy_(&i_one, &z_n_one, g, &i_one, out_zero, &i_one);
             norm_f = dznrm2_(&i_one, r, &i_one);
-            resid2 = (norm_f / norm_r / eps);
+            resid2 = fla_compute_residual(datatype, 'P', norm_f, norm_r, 1, params);
             break;
         }
     }

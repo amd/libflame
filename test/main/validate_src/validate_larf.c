@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_larf.c
@@ -18,11 +18,11 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
     /*
     This function does the following:
     1.1 If type = float or double, compute H = I - tau * v_tmp * v_tmp-transpose
-    1.2 If type = complex or double complex, compute H = I - tau * v_tmp * v_tmp-hermitian-transpose
+    1.2 If type = scomplex or double scomplex, compute H = I - tau * v_tmp * v_tmp-hermitian-transpose
 
     2.1 If type = float or double,  compute out_validate = H * c__out_tmp(when side = L) or
     c_out_tmp * H(when side = R)
-    2.2 If type = complex or double complex,  compute out_validate =
+    2.2 If type = scomplex or double scomplex,  compute out_validate =
     H-hermitian-transpose * c__out_tmp(when side = L) or c_out_tmp * H-hermitian-transpose(when side
     = R)
 
@@ -93,14 +93,13 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
             copy_matrix(datatype, "full", m, n, c__, ldc__, c__tmp, m);
             create_vector(datatype, &work, m);
 
-            float norm, norm1, eps;
+            float norm, norm1;
 
-            eps = fla_lapack_slamch("P");
             norm1 = fla_lapack_slange("1", &m, &n, c__tmp, &m, work);
             matrix_difference(datatype, m, n, c__tmp, m, out_validate, m);
             norm = fla_lapack_slange("1", &m, &n, c__tmp, &m, work);
 
-            residual = (double)(norm / (float)m / norm1 / eps);
+            residual = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
             break;
         }
         case DOUBLE:
@@ -132,14 +131,13 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
             copy_matrix(datatype, "full", m, n, c__, ldc__, c__tmp, m);
             create_vector(datatype, &work, m);
 
-            double norm, norm1, eps;
+            double norm, norm1;
 
-            eps = fla_lapack_dlamch("P");
             norm1 = fla_lapack_dlange("1", &m, &n, c__tmp, &m, work);
             matrix_difference(datatype, m, n, c__tmp, m, out_validate, m);
             norm = fla_lapack_dlange("1", &m, &n, c__tmp, &m, work);
 
-            residual = norm / (double)m / norm1 / eps;
+            residual = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
             break;
         }
         case COMPLEX:
@@ -173,14 +171,13 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
             copy_matrix(datatype, "full", m, n, c__, ldc__, c__tmp, m);
             create_vector(datatype, &work, m);
 
-            float norm, norm1, eps;
+            float norm, norm1;
 
-            eps = fla_lapack_slamch("P");
             norm1 = fla_lapack_clange("1", &m, &n, c__tmp, &m, work);
             matrix_difference(datatype, m, n, c__tmp, m, out_validate, m);
             norm = fla_lapack_clange("1", &m, &n, c__tmp, &m, work);
 
-            residual = (double)(norm / (float)m / norm1 / eps);
+            residual = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
             break;
         }
         case DOUBLE_COMPLEX:
@@ -214,14 +211,13 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
             copy_matrix(datatype, "full", m, n, c__, ldc__, c__tmp, m);
             create_vector(datatype, &work, m);
 
-            double norm, norm1, eps;
+            double norm, norm1;
 
-            eps = fla_lapack_dlamch("P");
             norm1 = fla_lapack_zlange("1", &m, &n, c__tmp, &m, work);
             matrix_difference(datatype, m, n, c__tmp, m, out_validate, m);
             norm = fla_lapack_zlange("1", &m, &n, c__tmp, &m, work);
 
-            residual = norm / (double)m / norm1 / eps;
+            residual = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
             break;
         }
         default:

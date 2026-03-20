@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b6 = 1.f;
 static real c_b7 = 0.f;
-/* > \brief \b CLACRM multiplies a complex matrix by a square real matrix. */
+/* > \brief \b CLACRM multiplies a scomplex matrix by a square real matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -42,10 +42,10 @@ static real c_b7 = 0.f;
 /* > */
 /* > CLACRM performs a very simple matrix-matrix multiplication: */
 /* > C := A * B, */
-/* > where A is M by N and complex;
+/* > where A is M by N and scomplex;
 B is N by N and real;
 */
-/* > C is M by N and complex. */
+/* > C is M by N and scomplex. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -114,8 +114,25 @@ B is N by N and real;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer *ldb, complex *c__,
-             integer *ldc, real *rwork)
+/** Generated wrapper function */
+void clacrm_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *b, aocl_int_t *ldb,
+             scomplex *c__, aocl_int_t *ldc, real *rwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clacrm(m, n, a, lda, b, ldb, c__, ldc, rwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_clacrm(&m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, rwork);
+#endif
+}
+
+void aocl_lapack_clacrm(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *b,
+                        aocl_int64_t *ldb, scomplex *c__, aocl_int64_t *ldc, real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -130,17 +147,13 @@ void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t b_dim1, b_offset, a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,13 +197,13 @@ void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            rwork[(j - 1) * *m + i__] = a[i__3].r;
+            rwork[(j - 1) * *m + i__] = a[i__3].real;
             /* L10: */
         }
         /* L20: */
     }
     l = *m * *n + 1;
-    sgemm_("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
+    aocl_blas_sgemm("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
@@ -199,8 +212,8 @@ void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer 
         {
             i__3 = i__ + j * c_dim1;
             i__4 = l + (j - 1) * *m + i__ - 1;
-            c__[i__3].r = rwork[i__4];
-            c__[i__3].i = 0.f; // , expr subst
+            c__[i__3].real = rwork[i__4];
+            c__[i__3].imag = 0.f; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -216,7 +229,7 @@ void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer 
         }
         /* L60: */
     }
-    sgemm_("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
+    aocl_blas_sgemm("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
@@ -225,12 +238,12 @@ void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer 
         {
             i__3 = i__ + j * c_dim1;
             i__4 = i__ + j * c_dim1;
-            r__1 = c__[i__4].r;
+            r__1 = c__[i__4].real;
             i__5 = l + (j - 1) * *m + i__ - 1;
-            q__1.r = r__1;
-            q__1.i = rwork[i__5]; // , expr subst
-            c__[i__3].r = q__1.r;
-            c__[i__3].i = q__1.i; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = rwork[i__5]; // , expr subst
+            c__[i__3].real = q__1.real;
+            c__[i__3].imag = q__1.imag; // , expr subst
             /* L70: */
         }
         /* L80: */

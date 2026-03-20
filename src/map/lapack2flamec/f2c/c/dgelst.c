@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b12 = 0.;
-static integer c__2 = 2;
-static integer c__0 = 0;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__0 = 0;
 /* > \brief <b> DGELST solves overdetermined or underdetermined systems for GE matrices using QR or
  * LQ factori zation with compact WY representation of Q.</b> */
 /* =========== DOCUMENTATION =========== */
@@ -204,55 +204,54 @@ the least squares solution could not be */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
-             doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dgelst_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a,
+             aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *work, aocl_int_t *lwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgelst(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgelst(trans, &m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, work, &lwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgelst(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
+                        doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                        doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgelst inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
                       ", lda %" FLA_IS ", ldb %" FLA_IS "",
                       *trans, *m, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j, nb, mn;
+    aocl_int64_t i__, j, nb, mn;
     doublereal anrm, bnrm;
-    integer brow;
+    aocl_int64_t brow;
     logical tpsd;
-    integer iascl, ibscl;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin;
+    aocl_int64_t iascl, ibscl;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin;
     doublereal rwork[1];
-    integer lwopt;
-    extern doublereal dlamch_(char *),
-        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer scllen;
+    aocl_int64_t lwopt;
+    aocl_int64_t scllen;
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        dgelqt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
-                doublereal *, integer *),
-        dgeqrt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
-                doublereal *, integer *);
-    integer mnnrhs;
+    aocl_int64_t mnnrhs;
     doublereal smlnum;
     logical lquery;
-    extern /* Subroutine */
-        void
-        dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                integer *, integer *),
-        dgemlqt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *,
-                 integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                 integer *),
-        dgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *,
-                 integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                 integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -334,7 +333,7 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
         {
             tpsd = FALSE_;
         }
-        nb = ilaenv_(&c__1, "DGELST", " ", m, n, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "DGELST", " ", m, n, &c_n1, &c_n1);
         mnnrhs = fla_max(mn, *nrhs);
         /* Computing MAX */
         i__1 = 1;
@@ -345,7 +344,7 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGELST", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGELST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -360,7 +359,7 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
     if(fla_min(i__1, *nrhs) == 0)
     {
         i__1 = fla_max(*m, *n);
-        dlaset_("Full", &i__1, nrhs, &c_b12, &c_b12, &b[b_offset], ldb);
+        aocl_lapack_dlaset("Full", &i__1, nrhs, &c_b12, &c_b12, &b[b_offset], ldb);
         work[1] = (doublereal)lwopt;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -380,7 +379,7 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
     /* The minimum value of NB, when blocked code is used */
     /* Computing MAX */
     i__1 = 2;
-    i__2 = ilaenv_(&c__2, "DGELST", " ", m, n, &c_n1, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__2, "DGELST", " ", m, n, &c_n1, &c_n1); // , expr subst
     nbmin = fla_max(i__1, i__2);
     if(nb < nbmin)
     {
@@ -390,25 +389,25 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
     smlnum = dlamch_("S") / dlamch_("P");
     bignum = 1. / smlnum;
     /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
-    anrm = dlange_("M", m, n, &a[a_offset], lda, rwork);
+    anrm = aocl_lapack_dlange("M", m, n, &a[a_offset], lda, rwork);
     iascl = 0;
     if(anrm > 0. && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        dlascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
     else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        dlascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
     else if(anrm == 0.)
     {
         /* Matrix all zero. Return zero solution. */
         i__1 = fla_max(*m, *n);
-        dlaset_("Full", &i__1, nrhs, &c_b12, &c_b12, &b[b_offset], ldb);
+        aocl_lapack_dlaset("Full", &i__1, nrhs, &c_b12, &c_b12, &b[b_offset], ldb);
         work[1] = (doublereal)lwopt;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -418,18 +417,18 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
     {
         brow = *n;
     }
-    bnrm = dlange_("M", &brow, nrhs, &b[b_offset], ldb, rwork);
+    bnrm = aocl_lapack_dlange("M", &brow, nrhs, &b[b_offset], ldb, rwork);
     ibscl = 0;
     if(bnrm > 0. && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        dlascl_("G", &c__0, &c__0, &bnrm, &smlnum, &brow, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &bnrm, &smlnum, &brow, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
     else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        dlascl_("G", &c__0, &c__0, &bnrm, &bignum, &brow, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &bnrm, &bignum, &brow, nrhs, &b[b_offset], ldb, info);
         ibscl = 2;
     }
     if(*m >= *n)
@@ -438,7 +437,7 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
         /* Compute the blocked QR factorization of A, */
         /* using the compact WY representation of Q, */
         /* workspace at least N, optimally N*NB. */
-        dgeqrt_(m, n, &nb, &a[a_offset], lda, &work[1], &nb, &work[mn * nb + 1], info);
+        aocl_lapack_dgeqrt(m, n, &nb, &a[a_offset], lda, &work[1], &nb, &work[mn * nb + 1], info);
         if(!tpsd)
         {
             /* M > N, A is not transposed: */
@@ -447,11 +446,11 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
             /* Compute B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
-            dgemqrt_("Left", "Transpose", m, nrhs, n, &nb, &a[a_offset], lda, &work[1], &nb,
-                     &b[b_offset], ldb, &work[mn * nb + 1], info);
+            aocl_lapack_dgemqrt("Left", "Transpose", m, nrhs, n, &nb, &a[a_offset], lda, &work[1],
+                                &nb, &b[b_offset], ldb, &work[mn * nb + 1], info);
             /* Compute B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
-            dtrtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset],
-                    ldb, info);
+            aocl_lapack_dtrtrs("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda,
+                               &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -466,8 +465,8 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
             /* minimum norm solution of A**T * X = B. */
             /* Compute B := inv(R**T) * B in two row blocks of B. */
             /* Block 1: B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS) */
-            dtrtrs_("Upper", "Transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb,
-                    info);
+            aocl_lapack_dtrtrs("Upper", "Transpose", "Non-unit", n, nrhs, &a[a_offset], lda,
+                               &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -487,8 +486,8 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
             /* Compute B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
-            dgemqrt_("Left", "No transpose", m, nrhs, n, &nb, &a[a_offset], lda, &work[1], &nb,
-                     &b[b_offset], ldb, &work[mn * nb + 1], info);
+            aocl_lapack_dgemqrt("Left", "No transpose", m, nrhs, n, &nb, &a[a_offset], lda,
+                                &work[1], &nb, &b[b_offset], ldb, &work[mn * nb + 1], info);
             scllen = *m;
         }
     }
@@ -498,7 +497,7 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
         /* Compute the blocked LQ factorization of A, */
         /* using the compact WY representation of Q, */
         /* workspace at least M, optimally M*NB. */
-        dgelqt_(m, n, &nb, &a[a_offset], lda, &work[1], &nb, &work[mn * nb + 1], info);
+        aocl_lapack_dgelqt(m, n, &nb, &a[a_offset], lda, &work[1], &nb, &work[mn * nb + 1], info);
         if(!tpsd)
         {
             /* M < N, A is not transposed: */
@@ -506,8 +505,8 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
             /* minimum norm solution of A * X = B. */
             /* Compute B := inv(L) * B in two row blocks of B. */
             /* Block 1: B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
-            dtrtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset],
-                    ldb, info);
+            aocl_lapack_dtrtrs("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda,
+                               &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -527,8 +526,8 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
             /* Compute B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
-            dgemlqt_("Left", "Transpose", n, nrhs, m, &nb, &a[a_offset], lda, &work[1], &nb,
-                     &b[b_offset], ldb, &work[mn * nb + 1], info);
+            aocl_lapack_dgemlqt("Left", "Transpose", n, nrhs, m, &nb, &a[a_offset], lda, &work[1],
+                                &nb, &b[b_offset], ldb, &work[mn * nb + 1], info);
             scllen = *n;
         }
         else
@@ -539,11 +538,11 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
             /* Compute B(1:N,1:NRHS) := Q * B(1:N,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
-            dgemlqt_("Left", "No transpose", n, nrhs, m, &nb, &a[a_offset], lda, &work[1], &nb,
-                     &b[b_offset], ldb, &work[mn * nb + 1], info);
+            aocl_lapack_dgemlqt("Left", "No transpose", n, nrhs, m, &nb, &a[a_offset], lda,
+                                &work[1], &nb, &b[b_offset], ldb, &work[mn * nb + 1], info);
             /* Compute B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS) */
-            dtrtrs_("Lower", "Transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb,
-                    info);
+            aocl_lapack_dtrtrs("Lower", "Transpose", "Non-unit", m, nrhs, &a[a_offset], lda,
+                               &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -555,19 +554,23 @@ void dgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, 
     /* Undo scaling */
     if(iascl == 1)
     {
-        dlascl_("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb,
+                           info);
     }
     else if(iascl == 2)
     {
-        dlascl_("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb,
+                           info);
     }
     if(ibscl == 1)
     {
-        dlascl_("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb,
+                           info);
     }
     else if(ibscl == 2)
     {
-        dlascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb,
+                           info);
     }
     work[1] = (doublereal)lwopt;
     AOCL_DTL_TRACE_LOG_EXIT

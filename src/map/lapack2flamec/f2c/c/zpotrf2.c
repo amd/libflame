@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
+static dcomplex c_b1 = {1., 0.};
 static doublereal c_b11 = -1.;
 static doublereal c_b12 = 1.;
 /* > \brief \b ZPOTRF2 */
@@ -101,33 +101,39 @@ static doublereal c_b12 = 1.;
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void zpotrf2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpotrf2(uplo, n, a, lda, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpotrf2(uplo, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpotrf2(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpotrf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer n1, n2;
+    aocl_int64_t n1, n2;
     doublereal ajj;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
-               doublereal *, doublecomplex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *);
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +177,7 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPOTRF2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZPOTRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -186,7 +192,7 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     {
         /* Test for non-positive-definiteness */
         i__1 = a_dim1 + 1;
-        ajj = a[i__1].r;
+        ajj = a[i__1].real;
         if(ajj <= 0. || disnan_(&ajj))
         {
             *info = 1;
@@ -196,8 +202,8 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         /* Factor */
         i__1 = a_dim1 + 1;
         d__1 = sqrt(ajj);
-        a[i__1].r = d__1;
-        a[i__1].i = 0.; // , expr subst
+        a[i__1].real = d__1;
+        a[i__1].imag = 0.; // , expr subst
         /* Use recursive code */
     }
     else
@@ -205,7 +211,7 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         n1 = *n / 2;
         n2 = *n - n1;
         /* Factor A11 */
-        zpotrf2_(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
+        aocl_lapack_zpotrf2(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
         if(iinfo != 0)
         {
             *info = iinfo;
@@ -216,12 +222,12 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         if(upper)
         {
             /* Update and scale A12 */
-            ztrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, &a[a_dim1 + 1], lda,
-                   &a[(n1 + 1) * a_dim1 + 1], lda);
+            aocl_blas_ztrsm("L", "U", "C", "N", &n1, &n2, &c_b1, &a[a_dim1 + 1], lda,
+                            &a[(n1 + 1) * a_dim1 + 1], lda);
             /* Update and factor A22 */
-            zherk_(uplo, "C", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b12,
-                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
-            zpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
+            aocl_blas_zherk(uplo, "C", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b12,
+                            &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            aocl_lapack_zpotrf2(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo + n1;
@@ -233,12 +239,12 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         else
         {
             /* Update and scale A21 */
-            ztrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
-                   lda);
+            aocl_blas_ztrsm("R", "L", "C", "N", &n2, &n1, &c_b1, &a[a_dim1 + 1], lda,
+                            &a[n1 + 1 + a_dim1], lda);
             /* Update and factor A22 */
-            zherk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b12,
-                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
-            zpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
+            aocl_blas_zherk(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b12,
+                            &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            aocl_lapack_zpotrf2(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo + n1;

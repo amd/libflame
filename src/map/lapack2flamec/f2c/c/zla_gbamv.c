@@ -180,9 +180,32 @@
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, doublereal *alpha,
-                doublecomplex *ab, integer *ldab, doublecomplex *x, integer *incx, doublereal *beta,
-                doublereal *y, integer *incy)
+/** Generated wrapper function */
+void zla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
+                doublereal *alpha, dcomplex *ab, aocl_int_t *ldab, dcomplex *x,
+                aocl_int_t *incx, doublereal *beta, doublereal *y, aocl_int_t *incy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zla_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
+#else
+    aocl_int64_t trans_64 = *trans;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_zla_gbamv(&trans_64, &m_64, &n_64, &kl_64, &ku_64, alpha, ab, &ldab_64, x, &incx_64,
+                          beta, y, &incy_64);
+#endif
+}
+
+void aocl_lapack_zla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl,
+                           aocl_int64_t *ku, doublereal *alpha, dcomplex *ab,
+                           aocl_int64_t *ldab, dcomplex *x, aocl_int64_t *incx,
+                           doublereal *beta, doublereal *y, aocl_int64_t *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_gbamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
@@ -190,22 +213,19 @@ void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                       ", incy %" FLA_IS "",
                       *trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *), d_sign(doublereal *, doublereal *);
+    double d_imag(dcomplex *), d_sign(doublereal *, doublereal *);
     /* Local variables */
     extern integer ilatrans_(char *);
-    integer i__, j;
+    aocl_int64_t i__, j;
     logical symb_zero__;
-    integer kd, ke, iy, jx, kx, ky, info;
+    aocl_int64_t kd, ke, iy, jx, kx, ky, info;
     doublereal temp;
-    integer lenx, leny;
+    aocl_int64_t lenx, leny;
     doublereal safe1;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -273,7 +293,7 @@ void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
     }
     if(info != 0)
     {
-        xerbla_("ZLA_GBAMV ", &info, (ftnlen)10);
+        aocl_blas_xerbla("ZLA_GBAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -353,14 +373,14 @@ void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
                         i__2 = kd + i__ - j + j * ab_dim1;
-                        temp = (d__1 = ab[i__2].r, f2c_abs(d__1))
+                        temp = (d__1 = ab[i__2].real, f2c_abs(d__1))
                                + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2));
                         i__2 = j;
                         symb_zero__
-                            = symb_zero__ && (x[i__2].r == 0. && x[i__2].i == 0. || temp == 0.);
+                            = symb_zero__ && (x[i__2].real == 0. && x[i__2].imag == 0. || temp == 0.);
                         i__2 = j;
                         y[iy] += *alpha
-                                 * ((d__1 = x[i__2].r, f2c_abs(d__1))
+                                 * ((d__1 = x[i__2].real, f2c_abs(d__1))
                                     + (d__2 = d_imag(&x[j]), f2c_abs(d__2)))
                                  * temp;
                     }
@@ -401,14 +421,14 @@ void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
                         i__3 = ke - i__ + j + i__ * ab_dim1;
-                        temp = (d__1 = ab[i__3].r, f2c_abs(d__1))
+                        temp = (d__1 = ab[i__3].real, f2c_abs(d__1))
                                + (d__2 = d_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
-                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
+                            = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = j;
                         y[iy] += *alpha
-                                 * ((d__1 = x[i__3].r, f2c_abs(d__1))
+                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
                                     + (d__2 = d_imag(&x[j]), f2c_abs(d__2)))
                                  * temp;
                     }
@@ -453,14 +473,14 @@ void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
                         i__2 = kd + i__ - j + j * ab_dim1;
-                        temp = (d__1 = ab[i__2].r, f2c_abs(d__1))
+                        temp = (d__1 = ab[i__2].real, f2c_abs(d__1))
                                + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2));
                         i__2 = jx;
                         symb_zero__
-                            = symb_zero__ && (x[i__2].r == 0. && x[i__2].i == 0. || temp == 0.);
+                            = symb_zero__ && (x[i__2].real == 0. && x[i__2].imag == 0. || temp == 0.);
                         i__2 = jx;
                         y[iy] += *alpha
-                                 * ((d__1 = x[i__2].r, f2c_abs(d__1))
+                                 * ((d__1 = x[i__2].real, f2c_abs(d__1))
                                     + (d__2 = d_imag(&x[jx]), f2c_abs(d__2)))
                                  * temp;
                         jx += *incx;
@@ -503,14 +523,14 @@ void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
                         i__3 = ke - i__ + j + i__ * ab_dim1;
-                        temp = (d__1 = ab[i__3].r, f2c_abs(d__1))
+                        temp = (d__1 = ab[i__3].real, f2c_abs(d__1))
                                + (d__2 = d_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2));
                         i__3 = jx;
                         symb_zero__
-                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
+                            = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = jx;
                         y[iy] += *alpha
-                                 * ((d__1 = x[i__3].r, f2c_abs(d__1))
+                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
                                     + (d__2 = d_imag(&x[jx]), f2c_abs(d__2)))
                                  * temp;
                         jx += *incx;

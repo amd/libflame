@@ -1,17 +1,17 @@
 /* zhpr2.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy, doublecomplex *ap)
+int zhpr2_(char *uplo, integer *n, dcomplex *alpha, dcomplex *x, integer *incx, dcomplex *y, integer *incy, dcomplex *ap)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     integer info;
-    doublecomplex temp1, temp2;
+    dcomplex temp1, temp2;
     integer i__, j, k;
     extern logical lsame_(char *, char *, integer, integer);
     integer kk, ix, iy, jx, jy, kx, ky;
@@ -123,7 +123,7 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
         return 0;
     }
     /* Quick return if possible. */
-    if (*n == 0 || alpha->r == 0. && alpha->i == 0.)
+    if (*n == 0 || alpha->real == 0. && alpha->imag == 0.)
     {
         return 0;
     }
@@ -165,15 +165,15 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
             {
                 i__2 = j;
                 i__3 = j;
-                if (x[i__2].r != 0. || x[i__2].i != 0. || (y[i__3].r != 0. || y[i__3].i != 0.))
+                if (x[i__2].real != 0. || x[i__2].imag != 0. || (y[i__3].real != 0. || y[i__3].imag != 0.))
                 {
                     d_cnjg(&z__2, &y[j]);
-                    z__1.r = alpha->r * z__2.r - alpha->i * z__2.i, z__1.i = alpha->r * z__2.i + alpha->i * z__2.r;
-                    temp1.r = z__1.r, temp1.i = z__1.i;
+                    z__1.real = alpha->real * z__2.real - alpha->imag * z__2.imag, z__1.imag = alpha->real * z__2.imag + alpha->imag * z__2.real;
+                    temp1.real = z__1.real, temp1.imag = z__1.imag;
                     i__2 = j;
-                    z__2.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, z__2.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r;
+                    z__2.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, z__2.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2] .real;
                     d_cnjg(&z__1, &z__2);
-                    temp2.r = z__1.r, temp2.i = z__1.i;
+                    temp2.real = z__1.real, temp2.imag = z__1.imag;
                     k = kk;
                     i__2 = j - 1;
                     for (i__ = 1;
@@ -183,31 +183,31 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                         i__3 = k;
                         i__4 = k;
                         i__5 = i__;
-                        z__3.r = x[i__5].r * temp1.r - x[i__5].i * temp1.i, z__3.i = x[i__5].r * temp1.i + x[i__5].i * temp1.r;
-                        z__2.r = ap[i__4].r + z__3.r, z__2.i = ap[i__4].i + z__3.i;
+                        z__3.real = x[i__5].real * temp1.real - x[i__5].imag * temp1.imag, z__3.imag = x[i__5].real * temp1.imag + x[i__5].imag * temp1.real;
+                        z__2.real = ap[i__4].real + z__3.real, z__2.imag = ap[i__4].imag + z__3.imag;
                         i__6 = i__;
-                        z__4.r = y[i__6].r * temp2.r - y[i__6].i * temp2.i, z__4.i = y[i__6].r * temp2.i + y[i__6].i * temp2.r;
-                        z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
-                        ap[i__3].r = z__1.r, ap[i__3].i = z__1.i;
+                        z__4.real = y[i__6].real * temp2.real - y[i__6].imag * temp2.imag, z__4.imag = y[i__6].real * temp2.imag + y[i__6].imag * temp2.real;
+                        z__1.real = z__2.real + z__4.real, z__1.imag = z__2.imag + z__4.imag;
+                        ap[i__3].real = z__1.real, ap[i__3].imag = z__1.imag;
                         ++k;
                         /* L10: */
                     }
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
                     i__4 = j;
-                    z__2.r = x[i__4].r * temp1.r - x[i__4].i * temp1.i, z__2.i = x[i__4].r * temp1.i + x[i__4].i * temp1.r;
+                    z__2.real = x[i__4].real * temp1.real - x[i__4].imag * temp1.imag, z__2.imag = x[i__4].real * temp1.imag + x[i__4].imag * temp1.real;
                     i__5 = j;
-                    z__3.r = y[i__5].r * temp2.r - y[i__5].i * temp2.i, z__3.i = y[i__5].r * temp2.i + y[i__5].i * temp2.r;
-                    z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-                    d__1 = ap[i__3].r + z__1.r;
-                    ap[i__2].r = d__1, ap[i__2].i = 0.;
+                    z__3.real = y[i__5].real * temp2.real - y[i__5].imag * temp2.imag, z__3.imag = y[i__5].real * temp2.imag + y[i__5].imag * temp2.real;
+                    z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+                    d__1 = ap[i__3].real + z__1.real;
+                    ap[i__2].real = d__1, ap[i__2].imag = 0.;
                 }
                 else
                 {
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
-                    d__1 = ap[i__3].r;
-                    ap[i__2].r = d__1, ap[i__2].i = 0.;
+                    d__1 = ap[i__3].real;
+                    ap[i__2].real = d__1, ap[i__2].imag = 0.;
                 }
                 kk += j;
                 /* L20: */
@@ -222,15 +222,15 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
             {
                 i__2 = jx;
                 i__3 = jy;
-                if (x[i__2].r != 0. || x[i__2].i != 0. || (y[i__3].r != 0. || y[i__3].i != 0.))
+                if (x[i__2].real != 0. || x[i__2].imag != 0. || (y[i__3].real != 0. || y[i__3].imag != 0.))
                 {
                     d_cnjg(&z__2, &y[jy]);
-                    z__1.r = alpha->r * z__2.r - alpha->i * z__2.i, z__1.i = alpha->r * z__2.i + alpha->i * z__2.r;
-                    temp1.r = z__1.r, temp1.i = z__1.i;
+                    z__1.real = alpha->real * z__2.real - alpha->imag * z__2.imag, z__1.imag = alpha->real * z__2.imag + alpha->imag * z__2.real;
+                    temp1.real = z__1.real, temp1.imag = z__1.imag;
                     i__2 = jx;
-                    z__2.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, z__2.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r;
+                    z__2.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, z__2.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2] .real;
                     d_cnjg(&z__1, &z__2);
-                    temp2.r = z__1.r, temp2.i = z__1.i;
+                    temp2.real = z__1.real, temp2.imag = z__1.imag;
                     ix = kx;
                     iy = ky;
                     i__2 = kk + j - 2;
@@ -241,12 +241,12 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                         i__3 = k;
                         i__4 = k;
                         i__5 = ix;
-                        z__3.r = x[i__5].r * temp1.r - x[i__5].i * temp1.i, z__3.i = x[i__5].r * temp1.i + x[i__5].i * temp1.r;
-                        z__2.r = ap[i__4].r + z__3.r, z__2.i = ap[i__4].i + z__3.i;
+                        z__3.real = x[i__5].real * temp1.real - x[i__5].imag * temp1.imag, z__3.imag = x[i__5].real * temp1.imag + x[i__5].imag * temp1.real;
+                        z__2.real = ap[i__4].real + z__3.real, z__2.imag = ap[i__4].imag + z__3.imag;
                         i__6 = iy;
-                        z__4.r = y[i__6].r * temp2.r - y[i__6].i * temp2.i, z__4.i = y[i__6].r * temp2.i + y[i__6].i * temp2.r;
-                        z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
-                        ap[i__3].r = z__1.r, ap[i__3].i = z__1.i;
+                        z__4.real = y[i__6].real * temp2.real - y[i__6].imag * temp2.imag, z__4.imag = y[i__6].real * temp2.imag + y[i__6].imag * temp2.real;
+                        z__1.real = z__2.real + z__4.real, z__1.imag = z__2.imag + z__4.imag;
+                        ap[i__3].real = z__1.real, ap[i__3].imag = z__1.imag;
                         ix += *incx;
                         iy += *incy;
                         /* L30: */
@@ -254,19 +254,19 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
                     i__4 = jx;
-                    z__2.r = x[i__4].r * temp1.r - x[i__4].i * temp1.i, z__2.i = x[i__4].r * temp1.i + x[i__4].i * temp1.r;
+                    z__2.real = x[i__4].real * temp1.real - x[i__4].imag * temp1.imag, z__2.imag = x[i__4].real * temp1.imag + x[i__4].imag * temp1.real;
                     i__5 = jy;
-                    z__3.r = y[i__5].r * temp2.r - y[i__5].i * temp2.i, z__3.i = y[i__5].r * temp2.i + y[i__5].i * temp2.r;
-                    z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-                    d__1 = ap[i__3].r + z__1.r;
-                    ap[i__2].r = d__1, ap[i__2].i = 0.;
+                    z__3.real = y[i__5].real * temp2.real - y[i__5].imag * temp2.imag, z__3.imag = y[i__5].real * temp2.imag + y[i__5].imag * temp2.real;
+                    z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+                    d__1 = ap[i__3].real + z__1.real;
+                    ap[i__2].real = d__1, ap[i__2].imag = 0.;
                 }
                 else
                 {
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
-                    d__1 = ap[i__3].r;
-                    ap[i__2].r = d__1, ap[i__2].i = 0.;
+                    d__1 = ap[i__3].real;
+                    ap[i__2].real = d__1, ap[i__2].imag = 0.;
                 }
                 jx += *incx;
                 jy += *incy;
@@ -287,24 +287,24 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
             {
                 i__2 = j;
                 i__3 = j;
-                if (x[i__2].r != 0. || x[i__2].i != 0. || (y[i__3].r != 0. || y[i__3].i != 0.))
+                if (x[i__2].real != 0. || x[i__2].imag != 0. || (y[i__3].real != 0. || y[i__3].imag != 0.))
                 {
                     d_cnjg(&z__2, &y[j]);
-                    z__1.r = alpha->r * z__2.r - alpha->i * z__2.i, z__1.i = alpha->r * z__2.i + alpha->i * z__2.r;
-                    temp1.r = z__1.r, temp1.i = z__1.i;
+                    z__1.real = alpha->real * z__2.real - alpha->imag * z__2.imag, z__1.imag = alpha->real * z__2.imag + alpha->imag * z__2.real;
+                    temp1.real = z__1.real, temp1.imag = z__1.imag;
                     i__2 = j;
-                    z__2.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, z__2.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r;
+                    z__2.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, z__2.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2] .real;
                     d_cnjg(&z__1, &z__2);
-                    temp2.r = z__1.r, temp2.i = z__1.i;
+                    temp2.real = z__1.real, temp2.imag = z__1.imag;
                     i__2 = kk;
                     i__3 = kk;
                     i__4 = j;
-                    z__2.r = x[i__4].r * temp1.r - x[i__4].i * temp1.i, z__2.i = x[i__4].r * temp1.i + x[i__4].i * temp1.r;
+                    z__2.real = x[i__4].real * temp1.real - x[i__4].imag * temp1.imag, z__2.imag = x[i__4].real * temp1.imag + x[i__4].imag * temp1.real;
                     i__5 = j;
-                    z__3.r = y[i__5].r * temp2.r - y[i__5].i * temp2.i, z__3.i = y[i__5].r * temp2.i + y[i__5].i * temp2.r;
-                    z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-                    d__1 = ap[i__3].r + z__1.r;
-                    ap[i__2].r = d__1, ap[i__2].i = 0.;
+                    z__3.real = y[i__5].real * temp2.real - y[i__5].imag * temp2.imag, z__3.imag = y[i__5].real * temp2.imag + y[i__5].imag * temp2.real;
+                    z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+                    d__1 = ap[i__3].real + z__1.real;
+                    ap[i__2].real = d__1, ap[i__2].imag = 0.;
                     k = kk + 1;
                     i__2 = *n;
                     for (i__ = j + 1;
@@ -314,12 +314,12 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                         i__3 = k;
                         i__4 = k;
                         i__5 = i__;
-                        z__3.r = x[i__5].r * temp1.r - x[i__5].i * temp1.i, z__3.i = x[i__5].r * temp1.i + x[i__5].i * temp1.r;
-                        z__2.r = ap[i__4].r + z__3.r, z__2.i = ap[i__4].i + z__3.i;
+                        z__3.real = x[i__5].real * temp1.real - x[i__5].imag * temp1.imag, z__3.imag = x[i__5].real * temp1.imag + x[i__5].imag * temp1.real;
+                        z__2.real = ap[i__4].real + z__3.real, z__2.imag = ap[i__4].imag + z__3.imag;
                         i__6 = i__;
-                        z__4.r = y[i__6].r * temp2.r - y[i__6].i * temp2.i, z__4.i = y[i__6].r * temp2.i + y[i__6].i * temp2.r;
-                        z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
-                        ap[i__3].r = z__1.r, ap[i__3].i = z__1.i;
+                        z__4.real = y[i__6].real * temp2.real - y[i__6].imag * temp2.imag, z__4.imag = y[i__6].real * temp2.imag + y[i__6].imag * temp2.real;
+                        z__1.real = z__2.real + z__4.real, z__1.imag = z__2.imag + z__4.imag;
+                        ap[i__3].real = z__1.real, ap[i__3].imag = z__1.imag;
                         ++k;
                         /* L50: */
                     }
@@ -328,8 +328,8 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                 {
                     i__2 = kk;
                     i__3 = kk;
-                    d__1 = ap[i__3].r;
-                    ap[i__2].r = d__1, ap[i__2].i = 0.;
+                    d__1 = ap[i__3].real;
+                    ap[i__2].real = d__1, ap[i__2].imag = 0.;
                 }
                 kk = kk + *n - j + 1;
                 /* L60: */
@@ -344,24 +344,24 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
             {
                 i__2 = jx;
                 i__3 = jy;
-                if (x[i__2].r != 0. || x[i__2].i != 0. || (y[i__3].r != 0. || y[i__3].i != 0.))
+                if (x[i__2].real != 0. || x[i__2].imag != 0. || (y[i__3].real != 0. || y[i__3].imag != 0.))
                 {
                     d_cnjg(&z__2, &y[jy]);
-                    z__1.r = alpha->r * z__2.r - alpha->i * z__2.i, z__1.i = alpha->r * z__2.i + alpha->i * z__2.r;
-                    temp1.r = z__1.r, temp1.i = z__1.i;
+                    z__1.real = alpha->real * z__2.real - alpha->imag * z__2.imag, z__1.imag = alpha->real * z__2.imag + alpha->imag * z__2.real;
+                    temp1.real = z__1.real, temp1.imag = z__1.imag;
                     i__2 = jx;
-                    z__2.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, z__2.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r;
+                    z__2.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, z__2.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2] .real;
                     d_cnjg(&z__1, &z__2);
-                    temp2.r = z__1.r, temp2.i = z__1.i;
+                    temp2.real = z__1.real, temp2.imag = z__1.imag;
                     i__2 = kk;
                     i__3 = kk;
                     i__4 = jx;
-                    z__2.r = x[i__4].r * temp1.r - x[i__4].i * temp1.i, z__2.i = x[i__4].r * temp1.i + x[i__4].i * temp1.r;
+                    z__2.real = x[i__4].real * temp1.real - x[i__4].imag * temp1.imag, z__2.imag = x[i__4].real * temp1.imag + x[i__4].imag * temp1.real;
                     i__5 = jy;
-                    z__3.r = y[i__5].r * temp2.r - y[i__5].i * temp2.i, z__3.i = y[i__5].r * temp2.i + y[i__5].i * temp2.r;
-                    z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-                    d__1 = ap[i__3].r + z__1.r;
-                    ap[i__2].r = d__1, ap[i__2].i = 0.;
+                    z__3.real = y[i__5].real * temp2.real - y[i__5].imag * temp2.imag, z__3.imag = y[i__5].real * temp2.imag + y[i__5].imag * temp2.real;
+                    z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+                    d__1 = ap[i__3].real + z__1.real;
+                    ap[i__2].real = d__1, ap[i__2].imag = 0.;
                     ix = jx;
                     iy = jy;
                     i__2 = kk + *n - j;
@@ -374,12 +374,12 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                         i__3 = k;
                         i__4 = k;
                         i__5 = ix;
-                        z__3.r = x[i__5].r * temp1.r - x[i__5].i * temp1.i, z__3.i = x[i__5].r * temp1.i + x[i__5].i * temp1.r;
-                        z__2.r = ap[i__4].r + z__3.r, z__2.i = ap[i__4].i + z__3.i;
+                        z__3.real = x[i__5].real * temp1.real - x[i__5].imag * temp1.imag, z__3.imag = x[i__5].real * temp1.imag + x[i__5].imag * temp1.real;
+                        z__2.real = ap[i__4].real + z__3.real, z__2.imag = ap[i__4].imag + z__3.imag;
                         i__6 = iy;
-                        z__4.r = y[i__6].r * temp2.r - y[i__6].i * temp2.i, z__4.i = y[i__6].r * temp2.i + y[i__6].i * temp2.r;
-                        z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
-                        ap[i__3].r = z__1.r, ap[i__3].i = z__1.i;
+                        z__4.real = y[i__6].real * temp2.real - y[i__6].imag * temp2.imag, z__4.imag = y[i__6].real * temp2.imag + y[i__6].imag * temp2.real;
+                        z__1.real = z__2.real + z__4.real, z__1.imag = z__2.imag + z__4.imag;
+                        ap[i__3].real = z__1.real, ap[i__3].imag = z__1.imag;
                         /* L70: */
                     }
                 }
@@ -387,8 +387,8 @@ int zhpr2_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
                 {
                     i__2 = kk;
                     i__3 = kk;
-                    d__1 = ap[i__3].r;
-                    ap[i__2].r = d__1, ap[i__2].i = 0.;
+                    d__1 = ap[i__3].real;
+                    ap[i__2].real = d__1, ap[i__2].imag = 0.;
                 }
                 jx += *incx;
                 jy += *incy;

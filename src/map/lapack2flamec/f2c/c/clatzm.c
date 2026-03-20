@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLATZM */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -150,8 +150,23 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void clatzm_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau,
-             complex *c1, complex *c2, integer *ldc, complex *work)
+/** Generated wrapper function */
+void clatzm_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *incv, scomplex *tau, scomplex *c1, scomplex *c2, aocl_int_t *ldc, scomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clatzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incv_64 = *incv;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_clatzm(side, &m_64, &n_64, v, &incv_64, tau, c1, c2, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_clatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v, aocl_int64_t *incv,
+             scomplex *tau, scomplex *c1, scomplex *c2, aocl_int64_t *ldc, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -166,23 +181,10 @@ void clatzm_(char *side, integer *m, integer *n, complex *v, integer *incv, comp
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
-    complex q__1;
+    aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
+    scomplex q__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, integer *),
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
-        clacgv_(integer *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,7 +213,7 @@ void clatzm_(char *side, integer *m, integer *n, complex *v, integer *incv, comp
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if(fla_min(*m, *n) == 0 || tau->r == 0.f && tau->i == 0.f)
+    if(fla_min(*m, *n) == 0 || tau->real == 0.f && tau->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -219,37 +221,37 @@ void clatzm_(char *side, integer *m, integer *n, complex *v, integer *incv, comp
     if(lsame_(side, "L", 1, 1))
     {
         /* w := ( C1 + v**H * C2 )**H */
-        ccopy_(n, &c1[c1_offset], ldc, &work[1], &c__1);
-        clacgv_(n, &work[1], &c__1);
+        aocl_blas_ccopy(n, &c1[c1_offset], ldc, &work[1], &c__1);
+        aocl_lapack_clacgv(n, &work[1], &c__1);
         i__1 = *m - 1;
-        cgemv_("Conjugate transpose", &i__1, n, &c_b1, &c2[c2_offset], ldc, &v[1], incv, &c_b1,
-               &work[1], &c__1);
+        aocl_blas_cgemv("Conjugate transpose", &i__1, n, &c_b1, &c2[c2_offset], ldc, &v[1], incv,
+                        &c_b1, &work[1], &c__1);
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**H */
         /* [ C2 ] [ C2 ] [ v ] */
-        clacgv_(n, &work[1], &c__1);
-        q__1.r = -tau->r;
-        q__1.i = -tau->i; // , expr subst
-        caxpy_(n, &q__1, &work[1], &c__1, &c1[c1_offset], ldc);
+        aocl_lapack_clacgv(n, &work[1], &c__1);
+        q__1.real = -tau->real;
+        q__1.imag = -tau->imag; // , expr subst
+        aocl_blas_caxpy(n, &q__1, &work[1], &c__1, &c1[c1_offset], ldc);
         i__1 = *m - 1;
-        q__1.r = -tau->r;
-        q__1.i = -tau->i; // , expr subst
-        cgeru_(&i__1, n, &q__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
+        q__1.real = -tau->real;
+        q__1.imag = -tau->imag; // , expr subst
+        aocl_blas_cgeru(&i__1, n, &q__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
     else if(lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
-        ccopy_(m, &c1[c1_offset], &c__1, &work[1], &c__1);
+        aocl_blas_ccopy(m, &c1[c1_offset], &c__1, &work[1], &c__1);
         i__1 = *n - 1;
-        cgemv_("No transpose", m, &i__1, &c_b1, &c2[c2_offset], ldc, &v[1], incv, &c_b1, &work[1],
-               &c__1);
+        aocl_blas_cgemv("No transpose", m, &i__1, &c_b1, &c2[c2_offset], ldc, &v[1], incv, &c_b1,
+                        &work[1], &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**H] */
-        q__1.r = -tau->r;
-        q__1.i = -tau->i; // , expr subst
-        caxpy_(m, &q__1, &work[1], &c__1, &c1[c1_offset], &c__1);
+        q__1.real = -tau->real;
+        q__1.imag = -tau->imag; // , expr subst
+        aocl_blas_caxpy(m, &q__1, &work[1], &c__1, &c1[c1_offset], &c__1);
         i__1 = *n - 1;
-        q__1.r = -tau->r;
-        q__1.i = -tau->i; // , expr subst
-        cgerc_(m, &i__1, &q__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
+        q__1.real = -tau->real;
+        q__1.imag = -tau->imag; // , expr subst
+        aocl_blas_cgerc(m, &i__1, &q__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

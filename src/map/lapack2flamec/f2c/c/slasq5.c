@@ -126,18 +126,37 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *sigma, real *dmin__,
-             real *dmin1, real *dmin2, real *dn, real *dnm1, real *dnm2, logical *ieee, real *eps)
+/** Generated wrapper function */
+void slasq5_(aocl_int_t *i0, aocl_int_t *n0, real *z__, aocl_int_t *pp, real *tau, real *sigma,
+             real *dmin__, real *dmin1, real *dmin2, real *dn, real *dnm1, real *dnm2,
+             logical *ieee, real *eps)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasq5(i0, n0, z__, pp, tau, sigma, dmin__, dmin1, dmin2, dn, dnm1, dnm2, ieee,
+                       eps);
+#else
+    aocl_int64_t i0_64 = *i0;
+    aocl_int64_t n0_64 = *n0;
+    aocl_int64_t pp_64 = *pp;
+
+    aocl_lapack_slasq5(&i0_64, &n0_64, z__, &pp_64, tau, sigma, dmin__, dmin1, dmin2, dn, dnm1,
+                       dnm2, ieee, eps);
+#endif
+}
+
+void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int64_t *pp, real *tau,
+                        real *sigma, real *dmin__, real *dmin1, real *dmin2, real *dn, real *dnm1,
+                        real *dnm2, logical *ieee, real *eps)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasq5 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS "", *i0, *n0,
                       *pp);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2;
     /* Local variables */
     real d__;
-    integer j4, j4p2;
+    aocl_int64_t j4, j4p2;
     real emin, temp, dthresh;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

@@ -15,7 +15,7 @@
  * from the left */
 #define FLA_APPLY_GIVENS_LVX(idim, imat, ldi, row, cs, sn)   \
     {                                                        \
-        integer im;                                          \
+        aocl_int64_t im;                                     \
         doublereal tv0, tv1;                                 \
         for(im = 1; im <= *idim; im++)                       \
         {                                                    \
@@ -31,7 +31,7 @@
  * from the right */
 #define FLA_APPLY_GIVENS_RVX(idim, imat, ldi, col, cs, sn)     \
     {                                                          \
-        integer im;                                            \
+        aocl_int64_t im;                                       \
         doublereal tv0, tv1;                                   \
         for(im = 1; im <= *idim; im++)                         \
         {                                                      \
@@ -45,9 +45,9 @@
 
 /* Declaration of local variables for QR Small */
 #define FLA_GEQRF_INIT_DSMALL()                   \
-    integer i, j, k;                              \
-    integer kcnt, slen;                           \
-    integer acols, arows;                         \
+    aocl_int64_t i, j, k;                         \
+    aocl_int64_t kcnt, slen;                      \
+    aocl_int64_t acols, arows;                    \
     doublereal xnorm, vnorm, dtmp;                \
     doublereal fnorm, scale;                      \
     doublereal med_sum, sml_sum, big_sum;         \
@@ -267,7 +267,7 @@
         /* Scale-up the inputs for small norm */                      \
         for(kcnt = 0; (f2c_abs(beta) < safmin && kcnt <= 20); kcnt++) \
         {                                                             \
-            dscal_(&slen, &rsafmin, &v[2], &c__1);                    \
+            aocl_blas_dscal(&slen, &rsafmin, &v[2], &c__1);           \
             beta = beta * rsafmin;                                    \
             alpha = alpha * rsafmin;                                  \
         }                                                             \
@@ -454,7 +454,7 @@
         /* Scale-up the inputs for small norm */                                       \
         for(kcnt = 0; (f2c_abs(beta) < safmin && kcnt <= 20); kcnt++)                  \
         {                                                                              \
-            dscal_(&slen, &rsafmin, &v[2], &c__1);                                     \
+            aocl_blas_dscal(&slen, &rsafmin, &v[2], &c__1);                            \
             beta = beta * rsafmin;                                                     \
             alpha = alpha * rsafmin;                                                   \
         }                                                                              \
@@ -607,41 +607,41 @@
         v[1] = beta;                                                   \
     }
 
-#define FLA_LARF_GEN_DSMALL_ROW(i, m, n, iptr, ldia, tau)           \
-    /* Compute norm2 */                                             \
-    xnorm = dnrm2_(&rlen, &iptr[2 * *ldia], ldia);                  \
-    if(xnorm == 0.)                                                 \
-    {                                                               \
-        tau[i] = 0.;                                                \
-        beta = iptr[*ldia];                                         \
-    }                                                               \
-    else                                                            \
-    {                                                               \
-        knt = 0;                                                    \
-        v = iptr;                                                   \
-        alpha = v[*ldia];                                           \
-        d__1 = dlapy2_(&v[*ldia], &xnorm);                          \
-        beta = -d_sign(&d__1, &alpha);                              \
-        if(f2c_abs(beta) < safmin)                                  \
-        {                                                           \
-            for(knt = 0; f2c_abs(beta) < safmin && knt < 20; knt++) \
-            {                                                       \
-                dscal_(&rlen, &rsafmin, &v[2 * *ldia], ldia);       \
-                beta *= rsafmin;                                    \
-                alpha *= rsafmin;                                   \
-            }                                                       \
-            /* New BETA is at most 1, at least SAFMIN */            \
-            xnorm = dnrm2_(&rlen, &v[2 * *ldia], ldia);             \
-            d__1 = dlapy2_(&alpha, &xnorm);                         \
-            beta = -d_sign(&d__1, &alpha);                          \
-        }                                                           \
-        tau[i] = (beta - alpha) / beta;                             \
-        d__1 = 1. / (alpha - beta);                                 \
-        dscal_(&rlen, &d__1, &v[2 * *ldia], ldia);                  \
-        for(j = 1; j <= knt; ++j)                                   \
-        {                                                           \
-            beta *= safmin;                                         \
-        }                                                           \
+#define FLA_LARF_GEN_DSMALL_ROW(i, m, n, iptr, ldia, tau)              \
+    /* Compute norm2 */                                                \
+    xnorm = aocl_blas_dnrm2(&rlen, &iptr[2 * *ldia], ldia);            \
+    if(xnorm == 0.)                                                    \
+    {                                                                  \
+        tau[i] = 0.;                                                   \
+        beta = iptr[*ldia];                                            \
+    }                                                                  \
+    else                                                               \
+    {                                                                  \
+        knt = 0;                                                       \
+        v = iptr;                                                      \
+        alpha = v[*ldia];                                              \
+        d__1 = dlapy2_(&v[*ldia], &xnorm);                             \
+        beta = -d_sign(&d__1, &alpha);                                 \
+        if(f2c_abs(beta) < safmin)                                     \
+        {                                                              \
+            for(knt = 0; f2c_abs(beta) < safmin && knt < 20; knt++)    \
+            {                                                          \
+                aocl_blas_dscal(&rlen, &rsafmin, &v[2 * *ldia], ldia); \
+                beta *= rsafmin;                                       \
+                alpha *= rsafmin;                                      \
+            }                                                          \
+            /* New BETA is at most 1, at least SAFMIN */               \
+            xnorm = aocl_blas_dnrm2(&rlen, &v[2 * *ldia], ldia);       \
+            d__1 = dlapy2_(&alpha, &xnorm);                            \
+            beta = -d_sign(&d__1, &alpha);                             \
+        }                                                              \
+        tau[i] = (beta - alpha) / beta;                                \
+        d__1 = 1. / (alpha - beta);                                    \
+        aocl_blas_dscal(&rlen, &d__1, &v[2 * *ldia], ldia);            \
+        for(j = 1; j <= knt; ++j)                                      \
+        {                                                              \
+            beta *= safmin;                                            \
+        }                                                              \
     }
 
 #define FLA_LARF_APPLY_DSMALL_ROW(i, m, n, iptr, ldia, tau)                  \

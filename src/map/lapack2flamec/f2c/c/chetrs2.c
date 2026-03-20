@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
+static scomplex c_b1 = {1.f, 0.f};
 /* > \brief \b CHETRS2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static complex c_b1 = {1.f, 0.f};
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHETRS2 solves a system of linear equations A*X = B with a complex */
+/* > CHETRS2 solves a system of linear equations A*X = B with a scomplex */
 /* > Hermitian matrix A using the factorization A = U*D*U**H or */
 /* > A = L*D*L**H computed by CHETRF and converted by CSYCONV. */
 /* > \endverbatim */
@@ -124,8 +124,28 @@ static complex c_b1 = {1.f, 0.f};
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv,
-              complex *b, integer *ldb, complex *work, integer *info)
+/** Generated wrapper function */
+void chetrs2_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
+              aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetrs2(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetrs2(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetrs2(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                         aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb,
+                         scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -140,30 +160,20 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
-    complex q__1, q__2, q__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *), r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real s;
-    complex ak, bk;
-    integer kp;
-    complex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, integer, integer);
-    complex denom;
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *),
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    scomplex ak, bk;
+    aocl_int64_t kp;
+    scomplex akm1, bkm1, akm1k;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    scomplex denom;
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        csyconv_(char *, char *, integer *, complex *, integer *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,7 +229,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRS2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CHETRS2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -230,7 +240,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
         return;
     }
     /* Convert A */
-    csyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
+    aocl_lapack_csyconv(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
     if(upper)
     {
         /* Solve A*X = B, where A = U*D*U**H. */
@@ -245,7 +255,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }
@@ -256,13 +266,13 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                 kp = -ipiv[k];
                 if(kp == -ipiv[k - 1])
                 {
-                    cswap_(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += -2;
             }
         }
         /* Compute (U \P**T * B) -> B [ (U \P**T * B) ] */
-        ctrsm_("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ctrsm("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (U \P**T * B) ] */
         i__ = *n;
         while(i__ >= 1)
@@ -270,55 +280,55 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
             if(ipiv[i__] > 0)
             {
                 i__1 = i__ + i__ * a_dim1;
-                s = 1.f / a[i__1].r;
-                csscal_(nrhs, &s, &b[i__ + b_dim1], ldb);
+                s = 1.f / a[i__1].real;
+                aocl_blas_csscal(nrhs, &s, &b[i__ + b_dim1], ldb);
             }
             else if(i__ > 1)
             {
                 if(ipiv[i__ - 1] == ipiv[i__])
                 {
                     i__1 = i__;
-                    akm1k.r = work[i__1].r;
-                    akm1k.i = work[i__1].i; // , expr subst
+                    akm1k.real = work[i__1].real;
+                    akm1k.imag = work[i__1].imag; // , expr subst
                     c_div(&q__1, &a[i__ - 1 + (i__ - 1) * a_dim1], &akm1k);
-                    akm1.r = q__1.r;
-                    akm1.i = q__1.i; // , expr subst
+                    akm1.real = q__1.real;
+                    akm1.imag = q__1.imag; // , expr subst
                     r_cnjg(&q__2, &akm1k);
                     c_div(&q__1, &a[i__ + i__ * a_dim1], &q__2);
-                    ak.r = q__1.r;
-                    ak.i = q__1.i; // , expr subst
-                    q__2.r = akm1.r * ak.r - akm1.i * ak.i;
-                    q__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-                    q__1.r = q__2.r - 1.f;
-                    q__1.i = q__2.i - 0.f; // , expr subst
-                    denom.r = q__1.r;
-                    denom.i = q__1.i; // , expr subst
+                    ak.real = q__1.real;
+                    ak.imag = q__1.imag; // , expr subst
+                    q__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+                    q__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+                    q__1.real = q__2.real - 1.f;
+                    q__1.imag = q__2.imag - 0.f; // , expr subst
+                    denom.real = q__1.real;
+                    denom.imag = q__1.imag; // , expr subst
                     i__1 = *nrhs;
                     for(j = 1; j <= i__1; ++j)
                     {
                         c_div(&q__1, &b[i__ - 1 + j * b_dim1], &akm1k);
-                        bkm1.r = q__1.r;
-                        bkm1.i = q__1.i; // , expr subst
+                        bkm1.real = q__1.real;
+                        bkm1.imag = q__1.imag; // , expr subst
                         r_cnjg(&q__2, &akm1k);
                         c_div(&q__1, &b[i__ + j * b_dim1], &q__2);
-                        bk.r = q__1.r;
-                        bk.i = q__1.i; // , expr subst
+                        bk.real = q__1.real;
+                        bk.imag = q__1.imag; // , expr subst
                         i__2 = i__ - 1 + j * b_dim1;
-                        q__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                        q__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                        q__2.r = q__3.r - bk.r;
-                        q__2.i = q__3.i - bk.i; // , expr subst
+                        q__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                        q__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                        q__2.real = q__3.real - bk.real;
+                        q__2.imag = q__3.imag - bk.imag; // , expr subst
                         c_div(&q__1, &q__2, &denom);
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                         i__2 = i__ + j * b_dim1;
-                        q__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                        q__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                        q__2.r = q__3.r - bkm1.r;
-                        q__2.i = q__3.i - bkm1.i; // , expr subst
+                        q__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                        q__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                        q__2.real = q__3.real - bkm1.real;
+                        q__2.imag = q__3.imag - bkm1.imag; // , expr subst
                         c_div(&q__1, &q__2, &denom);
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                         /* L15: */
                     }
                     --i__;
@@ -327,7 +337,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
             --i__;
         }
         /* Compute (U**H \ B) -> B [ U**H \ (D \ (U \P**T * B) ) ] */
-        ctrsm_("L", "U", "C", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ctrsm("L", "U", "C", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (U**H \ (D \ (U \P**T * B) )) ] */
         k = 1;
         while(k <= *n)
@@ -339,7 +349,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
@@ -350,7 +360,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                 kp = -ipiv[k];
                 if(k < *n && kp == -ipiv[k + 1])
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += 2;
             }
@@ -370,7 +380,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
@@ -381,13 +391,13 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                 kp = -ipiv[k + 1];
                 if(kp == -ipiv[k])
                 {
-                    cswap_(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += 2;
             }
         }
         /* Compute (L \P**T * B) -> B [ (L \P**T * B) ] */
-        ctrsm_("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ctrsm("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (L \P**T * B) ] */
         i__ = 1;
         while(i__ <= *n)
@@ -395,53 +405,53 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
             if(ipiv[i__] > 0)
             {
                 i__1 = i__ + i__ * a_dim1;
-                s = 1.f / a[i__1].r;
-                csscal_(nrhs, &s, &b[i__ + b_dim1], ldb);
+                s = 1.f / a[i__1].real;
+                aocl_blas_csscal(nrhs, &s, &b[i__ + b_dim1], ldb);
             }
             else
             {
                 i__1 = i__;
-                akm1k.r = work[i__1].r;
-                akm1k.i = work[i__1].i; // , expr subst
+                akm1k.real = work[i__1].real;
+                akm1k.imag = work[i__1].imag; // , expr subst
                 r_cnjg(&q__2, &akm1k);
                 c_div(&q__1, &a[i__ + i__ * a_dim1], &q__2);
-                akm1.r = q__1.r;
-                akm1.i = q__1.i; // , expr subst
+                akm1.real = q__1.real;
+                akm1.imag = q__1.imag; // , expr subst
                 c_div(&q__1, &a[i__ + 1 + (i__ + 1) * a_dim1], &akm1k);
-                ak.r = q__1.r;
-                ak.i = q__1.i; // , expr subst
-                q__2.r = akm1.r * ak.r - akm1.i * ak.i;
-                q__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-                q__1.r = q__2.r - 1.f;
-                q__1.i = q__2.i - 0.f; // , expr subst
-                denom.r = q__1.r;
-                denom.i = q__1.i; // , expr subst
+                ak.real = q__1.real;
+                ak.imag = q__1.imag; // , expr subst
+                q__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+                q__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+                q__1.real = q__2.real - 1.f;
+                q__1.imag = q__2.imag - 0.f; // , expr subst
+                denom.real = q__1.real;
+                denom.imag = q__1.imag; // , expr subst
                 i__1 = *nrhs;
                 for(j = 1; j <= i__1; ++j)
                 {
                     r_cnjg(&q__2, &akm1k);
                     c_div(&q__1, &b[i__ + j * b_dim1], &q__2);
-                    bkm1.r = q__1.r;
-                    bkm1.i = q__1.i; // , expr subst
+                    bkm1.real = q__1.real;
+                    bkm1.imag = q__1.imag; // , expr subst
                     c_div(&q__1, &b[i__ + 1 + j * b_dim1], &akm1k);
-                    bk.r = q__1.r;
-                    bk.i = q__1.i; // , expr subst
+                    bk.real = q__1.real;
+                    bk.imag = q__1.imag; // , expr subst
                     i__2 = i__ + j * b_dim1;
-                    q__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                    q__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                    q__2.r = q__3.r - bk.r;
-                    q__2.i = q__3.i - bk.i; // , expr subst
+                    q__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                    q__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                    q__2.real = q__3.real - bk.real;
+                    q__2.imag = q__3.imag - bk.imag; // , expr subst
                     c_div(&q__1, &q__2, &denom);
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                     i__2 = i__ + 1 + j * b_dim1;
-                    q__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                    q__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                    q__2.r = q__3.r - bkm1.r;
-                    q__2.i = q__3.i - bkm1.i; // , expr subst
+                    q__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                    q__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                    q__2.real = q__3.real - bkm1.real;
+                    q__2.imag = q__3.imag - bkm1.imag; // , expr subst
                     c_div(&q__1, &q__2, &denom);
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                     /* L25: */
                 }
                 ++i__;
@@ -449,7 +459,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
             ++i__;
         }
         /* Compute (L**H \ B) -> B [ L**H \ (D \ (L \P**T * B) ) ] */
-        ctrsm_("L", "L", "C", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ctrsm("L", "L", "C", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (L**H \ (D \ (L \P**T * B) )) ] */
         k = *n;
         while(k >= 1)
@@ -461,7 +471,7 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }
@@ -472,14 +482,14 @@ void chetrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                 kp = -ipiv[k];
                 if(k > 1 && kp == -ipiv[k - 1])
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += -2;
             }
         }
     }
     /* Revert A */
-    csyconv_(uplo, "R", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
+    aocl_lapack_csyconv(uplo, "R", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHETRS2 */

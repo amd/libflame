@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLAT2C converts a double complex triangular matrix to a complex triangular matrix. */
+#include "FLA_f2c.h" /* > \brief \b ZLAT2C converts a double scomplex triangular matrix to a scomplex triangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -108,21 +108,39 @@ if INFO>0, the content of */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa, integer *ldsa,
-             integer *info)
+/** Generated wrapper function */
+void zlat2c_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, scomplex *sa,
+             aocl_int_t *ldsa, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlat2c(uplo, n, a, lda, sa, ldsa, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldsa_64 = *ldsa;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlat2c(uplo, &n_64, a, &lda_64, sa, &ldsa_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        scomplex *sa, aocl_int64_t *ldsa, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlat2c inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",
                       *uplo, *n, *lda, *ldsa);
 
     /* System generated locals */
-    integer sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal rmax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -161,7 +179,7 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                if(a[i__3].r < -rmax || a[i__4].r > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
+                if(a[i__3].real < -rmax || a[i__4].real > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
                    || d_imag(&a[i__ + j * a_dim1]) > rmax)
                 {
                     *info = 1;
@@ -169,8 +187,8 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
                 }
                 i__3 = i__ + j * sa_dim1;
                 i__4 = i__ + j * a_dim1;
-                sa[i__3].r = a[i__4].r;
-                sa[i__3].i = a[i__4].i; // , expr subst
+                sa[i__3].real = a[i__4].real;
+                sa[i__3].imag = a[i__4].imag; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -186,7 +204,7 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                if(a[i__3].r < -rmax || a[i__4].r > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
+                if(a[i__3].real < -rmax || a[i__4].real > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
                    || d_imag(&a[i__ + j * a_dim1]) > rmax)
                 {
                     *info = 1;
@@ -194,8 +212,8 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
                 }
                 i__3 = i__ + j * sa_dim1;
                 i__4 = i__ + j * a_dim1;
-                sa[i__3].r = a[i__4].r;
-                sa[i__3].i = a[i__4].i; // , expr subst
+                sa[i__3].real = a[i__4].real;
+                sa[i__3].imag = a[i__4].imag; // , expr subst
                 /* L30: */
             }
             /* L40: */

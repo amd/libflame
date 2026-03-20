@@ -68,7 +68,7 @@
 /* > \param[in] INFO */
 /* > \verbatim */
 /* > INFO is INTEGER */
-/* > The value of INFO returned from ZHETRF, .i.e., the pivot in */
+/* > The value of INFO returned from ZHETRF, .imag.e., the pivot in */
 /* > column INFO is exactly 0. */
 /* > \endverbatim */
 /* > */
@@ -117,23 +117,41 @@
 /* > \date June 2016 */
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
-doublereal zla_herpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a, integer *lda,
-                         doublecomplex *af, integer *ldaf, integer *ipiv, doublereal *work)
+/** Generated wrapper function */
+doublereal zla_herpvgrw_(char *uplo, aocl_int_t *n, aocl_int_t *info, dcomplex *a,
+                         aocl_int_t *lda, dcomplex *af, aocl_int_t *ldaf, aocl_int_t *ipiv,
+                         doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zla_herpvgrw(uplo, n, info, a, lda, af, ldaf, ipiv, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_zla_herpvgrw(uplo, &n_64, &info_64, a, &lda_64, af, &ldaf_64, ipiv, work);
+#endif
+}
+
+doublereal aocl_lapack_zla_herpvgrw(char *uplo, aocl_int64_t *n, aocl_int64_t *info,
+                                    dcomplex *a, aocl_int64_t *lda, dcomplex *af,
+                                    aocl_int64_t *ldaf, aocl_int_t *ipiv, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_herpvgrw inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS
                       "",
                       *uplo, *n, *lda, *ldaf);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
     doublereal ret_val, d__1, d__2, d__3, d__4;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, k, kp;
+    aocl_int64_t i__, j, k, kp;
     doublereal tmp, amax, umax;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer ncols;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t ncols;
     logical upper;
     doublereal rpvgrw;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -201,13 +219,13 @@ doublereal zla_herpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
-                d__3 = (d__1 = a[i__3].r, f2c_abs(d__1))
+                d__3 = (d__1 = a[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
                 d__4 = work[*n + i__]; // , expr subst
                 work[*n + i__] = fla_max(d__3, d__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
-                d__3 = (d__1 = a[i__3].r, f2c_abs(d__1))
+                d__3 = (d__1 = a[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
                 d__4 = work[*n + j]; // , expr subst
                 work[*n + j] = fla_max(d__3, d__4);
@@ -224,13 +242,13 @@ doublereal zla_herpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
-                d__3 = (d__1 = a[i__3].r, f2c_abs(d__1))
+                d__3 = (d__1 = a[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
                 d__4 = work[*n + i__]; // , expr subst
                 work[*n + i__] = fla_max(d__3, d__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
-                d__3 = (d__1 = a[i__3].r, f2c_abs(d__1))
+                d__3 = (d__1 = a[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
                 d__4 = work[*n + j]; // , expr subst
                 work[*n + j] = fla_max(d__3, d__4);
@@ -262,7 +280,7 @@ doublereal zla_herpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a
                 {
                     /* Computing MAX */
                     i__2 = i__ + k * af_dim1;
-                    d__3 = (d__1 = af[i__2].r, f2c_abs(d__1))
+                    d__3 = (d__1 = af[i__2].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&af[i__ + k * af_dim1]), f2c_abs(d__2));
                     d__4 = work[k]; // , expr subst
                     work[k] = fla_max(d__3, d__4);
@@ -281,20 +299,20 @@ doublereal zla_herpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a
                 {
                     /* Computing MAX */
                     i__2 = i__ + k * af_dim1;
-                    d__3 = (d__1 = af[i__2].r, f2c_abs(d__1))
+                    d__3 = (d__1 = af[i__2].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&af[i__ + k * af_dim1]), f2c_abs(d__2));
                     d__4 = work[k]; // , expr subst
                     work[k] = fla_max(d__3, d__4);
                     /* Computing MAX */
                     i__2 = i__ + (k - 1) * af_dim1;
-                    d__3 = (d__1 = af[i__2].r, f2c_abs(d__1))
+                    d__3 = (d__1 = af[i__2].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&af[i__ + (k - 1) * af_dim1]), f2c_abs(d__2));
                     d__4 = work[k - 1]; // , expr subst
                     work[k - 1] = fla_max(d__3, d__4);
                 }
                 /* Computing MAX */
                 i__1 = k + k * af_dim1;
-                d__3 = (d__1 = af[i__1].r, f2c_abs(d__1))
+                d__3 = (d__1 = af[i__1].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&af[k + k * af_dim1]), f2c_abs(d__2));
                 d__4 = work[k]; // , expr subst
                 work[k] = fla_max(d__3, d__4);
@@ -345,7 +363,7 @@ doublereal zla_herpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a
                 {
                     /* Computing MAX */
                     i__2 = i__ + k * af_dim1;
-                    d__3 = (d__1 = af[i__2].r, f2c_abs(d__1))
+                    d__3 = (d__1 = af[i__2].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&af[i__ + k * af_dim1]), f2c_abs(d__2));
                     d__4 = work[k]; // , expr subst
                     work[k] = fla_max(d__3, d__4);
@@ -364,20 +382,20 @@ doublereal zla_herpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a
                 {
                     /* Computing MAX */
                     i__2 = i__ + k * af_dim1;
-                    d__3 = (d__1 = af[i__2].r, f2c_abs(d__1))
+                    d__3 = (d__1 = af[i__2].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&af[i__ + k * af_dim1]), f2c_abs(d__2));
                     d__4 = work[k]; // , expr subst
                     work[k] = fla_max(d__3, d__4);
                     /* Computing MAX */
                     i__2 = i__ + (k + 1) * af_dim1;
-                    d__3 = (d__1 = af[i__2].r, f2c_abs(d__1))
+                    d__3 = (d__1 = af[i__2].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&af[i__ + (k + 1) * af_dim1]), f2c_abs(d__2));
                     d__4 = work[k + 1]; // , expr subst
                     work[k + 1] = fla_max(d__3, d__4);
                 }
                 /* Computing MAX */
                 i__1 = k + k * af_dim1;
-                d__3 = (d__1 = af[i__1].r, f2c_abs(d__1))
+                d__3 = (d__1 = af[i__1].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&af[k + k * af_dim1]), f2c_abs(d__2));
                 d__4 = work[k]; // , expr subst
                 work[k] = fla_max(d__3, d__4);

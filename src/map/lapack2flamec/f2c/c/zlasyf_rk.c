@@ -5,13 +5,13 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
+ *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-/* > \brief \b ZLASYF_RK computes a partial factorization of a complex symmetric indefinite matrix
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b ZLASYF_RK computes a partial factorization of a scomplex symmetric indefinite matrix
  * using bound ed Bunch-Kaufman (rook) diagonal pivoting method. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > ZLASYF_RK computes a partial factorization of a complex symmetric */
+/* > ZLASYF_RK computes a partial factorization of a scomplex symmetric */
 /* > matrix A using the bounded Bunch-Kaufman (rook) diagonal */
 /* > pivoting method. The partial factorization has the form: */
 /* > */
@@ -267,47 +267,56 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a, integer *lda,
-                doublecomplex *e, integer *ipiv, doublecomplex *w, integer *ldw, integer *info)
+/** Generated wrapper function */
+void zlasyf_rk_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dcomplex *a,
+                aocl_int_t *lda, dcomplex *e, aocl_int_t *ipiv, dcomplex *w,
+                aocl_int_t *ldw, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlasyf_rk(uplo, n, nb, kb, a, lda, e, ipiv, w, ldw, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldw_64 = *ldw;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlasyf_rk(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, e, ipiv, w, &ldw_64, &info_64);
+
+    *kb = (aocl_int_t)kb_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlasyf_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb,
+                           dcomplex *a, aocl_int64_t *lda, dcomplex *e, aocl_int_t *ipiv,
+                           dcomplex *w, aocl_int64_t *ldw, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlasyf_rk inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
                       ", ldw %" FLA_IS "",
                       *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
-    integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer j, k, p;
-    doublecomplex t, r1, d11, d12, d21, d22;
-    integer jb, ii, jj, kk, kp, kw, kkw;
+    aocl_int64_t j, k, p;
+    dcomplex t, r1, d11, d12, d21, d22;
+    aocl_int64_t jb, ii, jj, kk, kp, kw, kkw;
     logical done;
-    integer imax, jmax;
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp, sfmin;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    integer itemp;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer kstep;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    aocl_int64_t itemp;
+    aocl_int64_t kstep;
     extern doublereal dlamch_(char *);
     doublereal absakk, colmax;
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -357,8 +366,8 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         /* for use in updating A11 */
         /* Initialize the first entry of array E, where superdiagonal */
         /* elements of D are stored */
-        e[1].r = 0.;
-        e[1].i = 0.; // , expr subst
+        e[1].real = 0.;
+        e[1].imag = 0.; // , expr subst
         /* K is the main loop index, decreasing from N in steps of 1 or 2 */
         k = *n;
     L10: /* KW is the column of W which corresponds to column K of A */
@@ -371,19 +380,19 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         kstep = 1;
         p = k;
         /* Copy column K of A to column KW of W and update it */
-        zcopy_(&k, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+        aocl_blas_zcopy(&k, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
         if(k < *n)
         {
             i__1 = *n - k;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
-                   &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
+                            &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
         }
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + kw * w_dim1;
-        absakk = (d__1 = w[i__1].r, f2c_dabs(d__1))
+        absakk = (d__1 = w[i__1].real, f2c_dabs(d__1))
                  + (d__2 = d_imag(&w[k + kw * w_dim1]), f2c_dabs(d__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
@@ -391,9 +400,9 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = izamax_(&i__1, &w[kw * w_dim1 + 1], &c__1);
+            imax = aocl_blas_izamax(&i__1, &w[kw * w_dim1 + 1], &c__1);
             i__1 = imax + kw * w_dim1;
-            colmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
+            colmax = (d__1 = w[i__1].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&w[imax + kw * w_dim1]), f2c_dabs(d__2));
         }
         else
@@ -408,13 +417,13 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 *info = k;
             }
             kp = k;
-            zcopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+            aocl_blas_zcopy(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
             /* Set E( K ) to zero */
             if(k > 1)
             {
                 i__1 = k;
-                e[i__1].r = 0.;
-                e[i__1].i = 0.; // , expr subst
+                e[i__1].real = 0.;
+                e[i__1].imag = 0.; // , expr subst
             }
         }
         else
@@ -434,18 +443,19 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* Loop until pivot found */
             L12: /* Begin pivot search loop body */
                 /* Copy column IMAX to column KW-1 of W and update it */
-                zcopy_(&imax, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                aocl_blas_zcopy(&imax, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1],
+                                &c__1);
                 i__1 = k - imax;
-                zcopy_(&i__1, &a[imax + (imax + 1) * a_dim1], lda, &w[imax + 1 + (kw - 1) * w_dim1],
-                       &c__1);
+                aocl_blas_zcopy(&i__1, &a[imax + (imax + 1) * a_dim1], lda,
+                                &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 if(k < *n)
                 {
                     i__1 = *n - k;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
-                           &w[imax + (kw + 1) * w_dim1], ldw, &c_b1, &w[(kw - 1) * w_dim1 + 1],
-                           &c__1);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemv("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
+                                    &w[imax + (kw + 1) * w_dim1], ldw, &c_b1,
+                                    &w[(kw - 1) * w_dim1 + 1], &c__1);
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
@@ -453,9 +463,9 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax != k)
                 {
                     i__1 = k - imax;
-                    jmax = imax + izamax_(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
+                    jmax = imax + aocl_blas_izamax(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                     i__1 = jmax + (kw - 1) * w_dim1;
-                    rowmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
+                    rowmax = (d__1 = w[i__1].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&w[jmax + (kw - 1) * w_dim1]), f2c_dabs(d__2));
                 }
                 else
@@ -465,9 +475,9 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    itemp = izamax_(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                    itemp = aocl_blas_izamax(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
                     i__1 = itemp + (kw - 1) * w_dim1;
-                    dtemp = (d__1 = w[i__1].r, f2c_dabs(d__1))
+                    dtemp = (d__1 = w[i__1].real, f2c_dabs(d__1))
                             + (d__2 = d_imag(&w[itemp + (kw - 1) * w_dim1]), f2c_dabs(d__2));
                     if(dtemp > rowmax)
                     {
@@ -479,7 +489,7 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* CABS1( W( IMAX, KW-1 ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + (kw - 1) * w_dim1;
-                if(!((d__1 = w[i__1].r, f2c_dabs(d__1))
+                if(!((d__1 = w[i__1].real, f2c_dabs(d__1))
                          + (d__2 = d_imag(&w[imax + (kw - 1) * w_dim1]), f2c_dabs(d__2))
                      < alpha * rowmax))
                 {
@@ -487,7 +497,8 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     /* use 1-by-1 pivot block */
                     kp = imax;
                     /* copy column KW-1 of W to column KW of W */
-                    zcopy_(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1],
+                                    &c__1);
                     done = TRUE_;
                     /* Equivalent to testing for ROWMAX.EQ.COLMAX, */
                     /* (used to handle NaN and Inf) */
@@ -507,7 +518,8 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     colmax = rowmax;
                     imax = jmax;
                     /* Copy updated JMAXth (next IMAXth) column to Kth of W */
-                    zcopy_(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1],
+                                    &c__1);
                 }
                 /* End pivot search loop body */
                 if(!done)
@@ -523,14 +535,15 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 /* Copy non-updated column K to column P */
                 i__1 = k - p;
-                zcopy_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1], lda);
-                zcopy_(&p, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1],
+                                lda);
+                aocl_blas_zcopy(&p, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
                 /* Interchange rows K and P in last N-K+1 columns of A */
                 /* and last N-K+2 columns of W */
                 i__1 = *n - k + 1;
-                zswap_(&i__1, &a[k + k * a_dim1], lda, &a[p + k * a_dim1], lda);
+                aocl_blas_zswap(&i__1, &a[k + k * a_dim1], lda, &a[p + k * a_dim1], lda);
                 i__1 = *n - kk + 1;
-                zswap_(&i__1, &w[k + kkw * w_dim1], ldw, &w[p + kkw * w_dim1], ldw);
+                aocl_blas_zswap(&i__1, &w[k + kkw * w_dim1], ldw, &w[p + kkw * w_dim1], ldw);
             }
             /* Updated column KP is already stored in column KKW of W */
             if(kp != kk)
@@ -538,17 +551,18 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* Copy non-updated column KK to column KP */
                 i__1 = kp + k * a_dim1;
                 i__2 = kk + k * a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = k - 1 - kp;
-                zcopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
-                zcopy_(&kp, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1],
+                                lda);
+                aocl_blas_zcopy(&kp, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 /* Interchange rows KK and KP in last N-KK+1 columns */
                 /* of A and W */
                 i__1 = *n - kk + 1;
-                zswap_(&i__1, &a[kk + kk * a_dim1], lda, &a[kp + kk * a_dim1], lda);
+                aocl_blas_zswap(&i__1, &a[kk + kk * a_dim1], lda, &a[kp + kk * a_dim1], lda);
                 i__1 = *n - kk + 1;
-                zswap_(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
+                aocl_blas_zswap(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
             }
             if(kstep == 1)
             {
@@ -556,40 +570,40 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* W(k) = U(k)*D(k) */
                 /* where U(k) is the k-th column of U */
                 /* Store U(k) in column k of A */
-                zcopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zcopy(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 if(k > 1)
                 {
                     i__1 = k + k * a_dim1;
-                    if((d__1 = a[i__1].r, f2c_dabs(d__1))
+                    if((d__1 = a[i__1].real, f2c_dabs(d__1))
                            + (d__2 = d_imag(&a[k + k * a_dim1]), f2c_dabs(d__2))
                        >= sfmin)
                     {
                         z_div(&z__1, &c_b1, &a[k + k * a_dim1]);
-                        r1.r = z__1.r;
-                        r1.i = z__1.i; // , expr subst
+                        r1.real = z__1.real;
+                        r1.imag = z__1.imag; // , expr subst
                         i__1 = k - 1;
-                        zscal_(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
+                        aocl_blas_zscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
                     }
                     else /* if(complicated condition) */
                     {
                         i__1 = k + k * a_dim1;
-                        if(a[i__1].r != 0. || a[i__1].i != 0.)
+                        if(a[i__1].real != 0. || a[i__1].imag != 0.)
                         {
                             i__1 = k - 1;
                             for(ii = 1; ii <= i__1; ++ii)
                             {
                                 i__2 = ii + k * a_dim1;
                                 z_div(&z__1, &a[ii + k * a_dim1], &a[k + k * a_dim1]);
-                                a[i__2].r = z__1.r;
-                                a[i__2].i = z__1.i; // , expr subst
+                                a[i__2].real = z__1.real;
+                                a[i__2].imag = z__1.imag; // , expr subst
                                 /* L14: */
                             }
                         }
                     }
                     /* Store the superdiagonal element of D in array E */
                     i__1 = k;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
             }
             else
@@ -603,48 +617,48 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 {
                     /* Store U(k) and U(k-1) in columns k and k-1 of A */
                     i__1 = k - 1 + kw * w_dim1;
-                    d12.r = w[i__1].r;
-                    d12.i = w[i__1].i; // , expr subst
+                    d12.real = w[i__1].real;
+                    d12.imag = w[i__1].imag; // , expr subst
                     z_div(&z__1, &w[k + kw * w_dim1], &d12);
-                    d11.r = z__1.r;
-                    d11.i = z__1.i; // , expr subst
+                    d11.real = z__1.real;
+                    d11.imag = z__1.imag; // , expr subst
                     z_div(&z__1, &w[k - 1 + (kw - 1) * w_dim1], &d12);
-                    d22.r = z__1.r;
-                    d22.i = z__1.i; // , expr subst
-                    z__3.r = d11.r * d22.r - d11.i * d22.i;
-                    z__3.i = d11.r * d22.i + d11.i * d22.r; // , expr subst
-                    z__2.r = z__3.r - 1.;
-                    z__2.i = z__3.i - 0.; // , expr subst
+                    d22.real = z__1.real;
+                    d22.imag = z__1.imag; // , expr subst
+                    z__3.real = d11.real * d22.real - d11.imag * d22.imag;
+                    z__3.imag = d11.real * d22.imag + d11.imag * d22.real; // , expr subst
+                    z__2.real = z__3.real - 1.;
+                    z__2.imag = z__3.imag - 0.; // , expr subst
                     z_div(&z__1, &c_b1, &z__2);
-                    t.r = z__1.r;
-                    t.i = z__1.i; // , expr subst
+                    t.real = z__1.real;
+                    t.imag = z__1.imag; // , expr subst
                     i__1 = k - 2;
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = j + (k - 1) * a_dim1;
                         i__3 = j + (kw - 1) * w_dim1;
-                        z__4.r = d11.r * w[i__3].r - d11.i * w[i__3].i;
-                        z__4.i = d11.r * w[i__3].i + d11.i * w[i__3].r; // , expr subst
+                        z__4.real = d11.real * w[i__3].real - d11.imag * w[i__3].imag;
+                        z__4.imag = d11.real * w[i__3].imag + d11.imag * w[i__3].real; // , expr subst
                         i__4 = j + kw * w_dim1;
-                        z__3.r = z__4.r - w[i__4].r;
-                        z__3.i = z__4.i - w[i__4].i; // , expr subst
+                        z__3.real = z__4.real - w[i__4].real;
+                        z__3.imag = z__4.imag - w[i__4].imag; // , expr subst
                         z_div(&z__2, &z__3, &d12);
-                        z__1.r = t.r * z__2.r - t.i * z__2.i;
-                        z__1.i = t.r * z__2.i + t.i * z__2.r; // , expr subst
-                        a[i__2].r = z__1.r;
-                        a[i__2].i = z__1.i; // , expr subst
+                        z__1.real = t.real * z__2.real - t.imag * z__2.imag;
+                        z__1.imag = t.real * z__2.imag + t.imag * z__2.real; // , expr subst
+                        a[i__2].real = z__1.real;
+                        a[i__2].imag = z__1.imag; // , expr subst
                         i__2 = j + k * a_dim1;
                         i__3 = j + kw * w_dim1;
-                        z__4.r = d22.r * w[i__3].r - d22.i * w[i__3].i;
-                        z__4.i = d22.r * w[i__3].i + d22.i * w[i__3].r; // , expr subst
+                        z__4.real = d22.real * w[i__3].real - d22.imag * w[i__3].imag;
+                        z__4.imag = d22.real * w[i__3].imag + d22.imag * w[i__3].real; // , expr subst
                         i__4 = j + (kw - 1) * w_dim1;
-                        z__3.r = z__4.r - w[i__4].r;
-                        z__3.i = z__4.i - w[i__4].i; // , expr subst
+                        z__3.real = z__4.real - w[i__4].real;
+                        z__3.imag = z__4.imag - w[i__4].imag; // , expr subst
                         z_div(&z__2, &z__3, &d12);
-                        z__1.r = t.r * z__2.r - t.i * z__2.i;
-                        z__1.i = t.r * z__2.i + t.i * z__2.r; // , expr subst
-                        a[i__2].r = z__1.r;
-                        a[i__2].i = z__1.i; // , expr subst
+                        z__1.real = t.real * z__2.real - t.imag * z__2.imag;
+                        z__1.imag = t.real * z__2.imag + t.imag * z__2.real; // , expr subst
+                        a[i__2].real = z__1.real;
+                        a[i__2].imag = z__1.imag; // , expr subst
                         /* L20: */
                     }
                 }
@@ -653,34 +667,34 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* ZERO out superdiagonal entry of A */
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 i__2 = k - 1 + (kw - 1) * w_dim1;
-                a[i__1].r = w[i__2].r;
-                a[i__1].i = w[i__2].i; // , expr subst
+                a[i__1].real = w[i__2].real;
+                a[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k - 1 + k * a_dim1;
-                a[i__1].r = 0.;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = 0.;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = k + k * a_dim1;
                 i__2 = k + kw * w_dim1;
-                a[i__1].r = w[i__2].r;
-                a[i__1].i = w[i__2].i; // , expr subst
+                a[i__1].real = w[i__2].real;
+                a[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k;
                 i__2 = k - 1 + kw * w_dim1;
-                e[i__1].r = w[i__2].r;
-                e[i__1].i = w[i__2].i; // , expr subst
+                e[i__1].real = w[i__2].real;
+                e[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k - 1;
-                e[i__1].r = 0.;
-                e[i__1].i = 0.; // , expr subst
+                e[i__1].real = 0.;
+                e[i__1].imag = 0.; // , expr subst
             }
             /* End column K is nonsingular */
         }
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -701,10 +715,10 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 i__3 = jj - j + 1;
                 i__4 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__3, &i__4, &z__1, &a[j + (k + 1) * a_dim1], lda,
-                       &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No transpose", &i__3, &i__4, &z__1, &a[j + (k + 1) * a_dim1], lda,
+                                &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
                 /* L40: */
             }
             /* Update the rectangular superdiagonal block */
@@ -712,11 +726,11 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 i__2 = j - 1;
                 i__3 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemm_("No transpose", "Transpose", &i__2, &jb, &i__3, &z__1,
-                       &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1,
-                       &a[j * a_dim1 + 1], lda);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemm("No transpose", "Transpose", &i__2, &jb, &i__3, &z__1,
+                                &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw,
+                                &c_b1, &a[j * a_dim1 + 1], lda);
             }
             /* L50: */
         }
@@ -730,8 +744,8 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         /* for use in updating A22 */
         /* Initialize the unused last entry of the subdiagonal array E. */
         i__1 = *n;
-        e[i__1].r = 0.;
-        e[i__1].i = 0.; // , expr subst
+        e[i__1].real = 0.;
+        e[i__1].imag = 0.; // , expr subst
         /* K is the main loop index, increasing from 1 in steps of 1 or 2 */
         k = 1;
     L70: /* Exit from loop */
@@ -743,20 +757,20 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         p = k;
         /* Copy column K of A to column K of W and update it */
         i__1 = *n - k + 1;
-        zcopy_(&i__1, &a[k + k * a_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+        aocl_blas_zcopy(&i__1, &a[k + k * a_dim1], &c__1, &w[k + k * w_dim1], &c__1);
         if(k > 1)
         {
             i__1 = *n - k + 1;
             i__2 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda, &w[k + w_dim1], ldw,
-                   &c_b1, &w[k + k * w_dim1], &c__1);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda,
+                            &w[k + w_dim1], ldw, &c_b1, &w[k + k * w_dim1], &c__1);
         }
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * w_dim1;
-        absakk = (d__1 = w[i__1].r, f2c_dabs(d__1))
+        absakk = (d__1 = w[i__1].real, f2c_dabs(d__1))
                  + (d__2 = d_imag(&w[k + k * w_dim1]), f2c_dabs(d__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
@@ -764,9 +778,9 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + izamax_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
+            imax = k + aocl_blas_izamax(&i__1, &w[k + 1 + k * w_dim1], &c__1);
             i__1 = imax + k * w_dim1;
-            colmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
+            colmax = (d__1 = w[i__1].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&w[imax + k * w_dim1]), f2c_dabs(d__2));
         }
         else
@@ -782,13 +796,13 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             }
             kp = k;
             i__1 = *n - k + 1;
-            zcopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+            aocl_blas_zcopy(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
             /* Set E( K ) to zero */
             if(k < *n)
             {
                 i__1 = k;
-                e[i__1].r = 0.;
-                e[i__1].i = 0.; // , expr subst
+                e[i__1].real = 0.;
+                e[i__1].imag = 0.; // , expr subst
             }
         }
         else
@@ -809,17 +823,18 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             L72: /* Begin pivot search loop body */
                 /* Copy column IMAX to column K+1 of W and update it */
                 i__1 = imax - k;
-                zcopy_(&i__1, &a[imax + k * a_dim1], lda, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[imax + k * a_dim1], lda, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = *n - imax + 1;
-                zcopy_(&i__1, &a[imax + imax * a_dim1], &c__1, &w[imax + (k + 1) * w_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[imax + imax * a_dim1], &c__1, &w[imax + (k + 1) * w_dim1],
+                                &c__1);
                 if(k > 1)
                 {
                     i__1 = *n - k + 1;
                     i__2 = k - 1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda,
-                           &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda,
+                                    &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
@@ -827,9 +842,9 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax != k)
                 {
                     i__1 = imax - k;
-                    jmax = k - 1 + izamax_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
+                    jmax = k - 1 + aocl_blas_izamax(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                     i__1 = jmax + (k + 1) * w_dim1;
-                    rowmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
+                    rowmax = (d__1 = w[i__1].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&w[jmax + (k + 1) * w_dim1]), f2c_dabs(d__2));
                 }
                 else
@@ -839,9 +854,9 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + izamax_(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
+                    itemp = imax + aocl_blas_izamax(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                     i__1 = itemp + (k + 1) * w_dim1;
-                    dtemp = (d__1 = w[i__1].r, f2c_dabs(d__1))
+                    dtemp = (d__1 = w[i__1].real, f2c_dabs(d__1))
                             + (d__2 = d_imag(&w[itemp + (k + 1) * w_dim1]), f2c_dabs(d__2));
                     if(dtemp > rowmax)
                     {
@@ -853,7 +868,7 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* CABS1( W( IMAX, K+1 ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + (k + 1) * w_dim1;
-                if(!((d__1 = w[i__1].r, f2c_dabs(d__1))
+                if(!((d__1 = w[i__1].real, f2c_dabs(d__1))
                          + (d__2 = d_imag(&w[imax + (k + 1) * w_dim1]), f2c_dabs(d__2))
                      < alpha * rowmax))
                 {
@@ -862,7 +877,8 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     kp = imax;
                     /* copy column K+1 of W to column K of W */
                     i__1 = *n - k + 1;
-                    zcopy_(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+                    aocl_blas_zcopy(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1],
+                                    &c__1);
                     done = TRUE_;
                     /* Equivalent to testing for ROWMAX.EQ.COLMAX, */
                     /* (used to handle NaN and Inf) */
@@ -883,7 +899,8 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     imax = jmax;
                     /* Copy updated JMAXth (next IMAXth) column to Kth of W */
                     i__1 = *n - k + 1;
-                    zcopy_(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+                    aocl_blas_zcopy(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1],
+                                    &c__1);
                 }
                 /* End pivot search loop body */
                 if(!done)
@@ -897,13 +914,13 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 /* Copy non-updated column K to column P */
                 i__1 = p - k;
-                zcopy_(&i__1, &a[k + k * a_dim1], &c__1, &a[p + k * a_dim1], lda);
+                aocl_blas_zcopy(&i__1, &a[k + k * a_dim1], &c__1, &a[p + k * a_dim1], lda);
                 i__1 = *n - p + 1;
-                zcopy_(&i__1, &a[p + k * a_dim1], &c__1, &a[p + p * a_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[p + k * a_dim1], &c__1, &a[p + p * a_dim1], &c__1);
                 /* Interchange rows K and P in first K columns of A */
                 /* and first K+1 columns of W */
-                zswap_(&k, &a[k + a_dim1], lda, &a[p + a_dim1], lda);
-                zswap_(&kk, &w[k + w_dim1], ldw, &w[p + w_dim1], ldw);
+                aocl_blas_zswap(&k, &a[k + a_dim1], lda, &a[p + a_dim1], lda);
+                aocl_blas_zswap(&kk, &w[k + w_dim1], ldw, &w[p + w_dim1], ldw);
             }
             /* Updated column KP is already stored in column KK of W */
             if(kp != kk)
@@ -911,15 +928,16 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* Copy non-updated column KK to column KP */
                 i__1 = kp + k * a_dim1;
                 i__2 = kk + k * a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = kp - k - 1;
-                zcopy_(&i__1, &a[k + 1 + kk * a_dim1], &c__1, &a[kp + (k + 1) * a_dim1], lda);
+                aocl_blas_zcopy(&i__1, &a[k + 1 + kk * a_dim1], &c__1, &a[kp + (k + 1) * a_dim1],
+                                lda);
                 i__1 = *n - kp + 1;
-                zcopy_(&i__1, &a[kp + kk * a_dim1], &c__1, &a[kp + kp * a_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[kp + kk * a_dim1], &c__1, &a[kp + kp * a_dim1], &c__1);
                 /* Interchange rows KK and KP in first KK columns of A and W */
-                zswap_(&kk, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
-                zswap_(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
+                aocl_blas_zswap(&kk, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
+                aocl_blas_zswap(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
             }
             if(kstep == 1)
             {
@@ -928,40 +946,40 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* where L(k) is the k-th column of L */
                 /* Store L(k) in column k of A */
                 i__1 = *n - k + 1;
-                zcopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
                 if(k < *n)
                 {
                     i__1 = k + k * a_dim1;
-                    if((d__1 = a[i__1].r, f2c_dabs(d__1))
+                    if((d__1 = a[i__1].real, f2c_dabs(d__1))
                            + (d__2 = d_imag(&a[k + k * a_dim1]), f2c_dabs(d__2))
                        >= sfmin)
                     {
                         z_div(&z__1, &c_b1, &a[k + k * a_dim1]);
-                        r1.r = z__1.r;
-                        r1.i = z__1.i; // , expr subst
+                        r1.real = z__1.real;
+                        r1.imag = z__1.imag; // , expr subst
                         i__1 = *n - k;
-                        zscal_(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
+                        aocl_blas_zscal(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
                     }
                     else /* if(complicated condition) */
                     {
                         i__1 = k + k * a_dim1;
-                        if(a[i__1].r != 0. || a[i__1].i != 0.)
+                        if(a[i__1].real != 0. || a[i__1].imag != 0.)
                         {
                             i__1 = *n;
                             for(ii = k + 1; ii <= i__1; ++ii)
                             {
                                 i__2 = ii + k * a_dim1;
                                 z_div(&z__1, &a[ii + k * a_dim1], &a[k + k * a_dim1]);
-                                a[i__2].r = z__1.r;
-                                a[i__2].i = z__1.i; // , expr subst
+                                a[i__2].real = z__1.real;
+                                a[i__2].imag = z__1.imag; // , expr subst
                                 /* L74: */
                             }
                         }
                     }
                     /* Store the subdiagonal element of D in array E */
                     i__1 = k;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
             }
             else
@@ -974,48 +992,48 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 {
                     /* Store L(k) and L(k+1) in columns k and k+1 of A */
                     i__1 = k + 1 + k * w_dim1;
-                    d21.r = w[i__1].r;
-                    d21.i = w[i__1].i; // , expr subst
+                    d21.real = w[i__1].real;
+                    d21.imag = w[i__1].imag; // , expr subst
                     z_div(&z__1, &w[k + 1 + (k + 1) * w_dim1], &d21);
-                    d11.r = z__1.r;
-                    d11.i = z__1.i; // , expr subst
+                    d11.real = z__1.real;
+                    d11.imag = z__1.imag; // , expr subst
                     z_div(&z__1, &w[k + k * w_dim1], &d21);
-                    d22.r = z__1.r;
-                    d22.i = z__1.i; // , expr subst
-                    z__3.r = d11.r * d22.r - d11.i * d22.i;
-                    z__3.i = d11.r * d22.i + d11.i * d22.r; // , expr subst
-                    z__2.r = z__3.r - 1.;
-                    z__2.i = z__3.i - 0.; // , expr subst
+                    d22.real = z__1.real;
+                    d22.imag = z__1.imag; // , expr subst
+                    z__3.real = d11.real * d22.real - d11.imag * d22.imag;
+                    z__3.imag = d11.real * d22.imag + d11.imag * d22.real; // , expr subst
+                    z__2.real = z__3.real - 1.;
+                    z__2.imag = z__3.imag - 0.; // , expr subst
                     z_div(&z__1, &c_b1, &z__2);
-                    t.r = z__1.r;
-                    t.i = z__1.i; // , expr subst
+                    t.real = z__1.real;
+                    t.imag = z__1.imag; // , expr subst
                     i__1 = *n;
                     for(j = k + 2; j <= i__1; ++j)
                     {
                         i__2 = j + k * a_dim1;
                         i__3 = j + k * w_dim1;
-                        z__4.r = d11.r * w[i__3].r - d11.i * w[i__3].i;
-                        z__4.i = d11.r * w[i__3].i + d11.i * w[i__3].r; // , expr subst
+                        z__4.real = d11.real * w[i__3].real - d11.imag * w[i__3].imag;
+                        z__4.imag = d11.real * w[i__3].imag + d11.imag * w[i__3].real; // , expr subst
                         i__4 = j + (k + 1) * w_dim1;
-                        z__3.r = z__4.r - w[i__4].r;
-                        z__3.i = z__4.i - w[i__4].i; // , expr subst
+                        z__3.real = z__4.real - w[i__4].real;
+                        z__3.imag = z__4.imag - w[i__4].imag; // , expr subst
                         z_div(&z__2, &z__3, &d21);
-                        z__1.r = t.r * z__2.r - t.i * z__2.i;
-                        z__1.i = t.r * z__2.i + t.i * z__2.r; // , expr subst
-                        a[i__2].r = z__1.r;
-                        a[i__2].i = z__1.i; // , expr subst
+                        z__1.real = t.real * z__2.real - t.imag * z__2.imag;
+                        z__1.imag = t.real * z__2.imag + t.imag * z__2.real; // , expr subst
+                        a[i__2].real = z__1.real;
+                        a[i__2].imag = z__1.imag; // , expr subst
                         i__2 = j + (k + 1) * a_dim1;
                         i__3 = j + (k + 1) * w_dim1;
-                        z__4.r = d22.r * w[i__3].r - d22.i * w[i__3].i;
-                        z__4.i = d22.r * w[i__3].i + d22.i * w[i__3].r; // , expr subst
+                        z__4.real = d22.real * w[i__3].real - d22.imag * w[i__3].imag;
+                        z__4.imag = d22.real * w[i__3].imag + d22.imag * w[i__3].real; // , expr subst
                         i__4 = j + k * w_dim1;
-                        z__3.r = z__4.r - w[i__4].r;
-                        z__3.i = z__4.i - w[i__4].i; // , expr subst
+                        z__3.real = z__4.real - w[i__4].real;
+                        z__3.imag = z__4.imag - w[i__4].imag; // , expr subst
                         z_div(&z__2, &z__3, &d21);
-                        z__1.r = t.r * z__2.r - t.i * z__2.i;
-                        z__1.i = t.r * z__2.i + t.i * z__2.r; // , expr subst
-                        a[i__2].r = z__1.r;
-                        a[i__2].i = z__1.i; // , expr subst
+                        z__1.real = t.real * z__2.real - t.imag * z__2.imag;
+                        z__1.imag = t.real * z__2.imag + t.imag * z__2.real; // , expr subst
+                        a[i__2].real = z__1.real;
+                        a[i__2].imag = z__1.imag; // , expr subst
                         /* L80: */
                     }
                 }
@@ -1024,34 +1042,34 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* ZERO out subdiagonal entry of A */
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * w_dim1;
-                a[i__1].r = w[i__2].r;
-                a[i__1].i = w[i__2].i; // , expr subst
+                a[i__1].real = w[i__2].real;
+                a[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k + 1 + k * a_dim1;
-                a[i__1].r = 0.;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = 0.;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * w_dim1;
-                a[i__1].r = w[i__2].r;
-                a[i__1].i = w[i__2].i; // , expr subst
+                a[i__1].real = w[i__2].real;
+                a[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k;
                 i__2 = k + 1 + k * w_dim1;
-                e[i__1].r = w[i__2].r;
-                e[i__1].i = w[i__2].i; // , expr subst
+                e[i__1].real = w[i__2].real;
+                e[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k + 1;
-                e[i__1].r = 0.;
-                e[i__1].i = 0.; // , expr subst
+                e[i__1].real = 0.;
+                e[i__1].imag = 0.; // , expr subst
             }
             /* End column K is nonsingular */
         }
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;
@@ -1073,10 +1091,10 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda, &w[jj + w_dim1],
-                       ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda,
+                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */
@@ -1084,10 +1102,11 @@ void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 i__3 = *n - j - jb + 1;
                 i__4 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &z__1, &a[j + jb + a_dim1],
-                       lda, &w[j + w_dim1], ldw, &c_b1, &a[j + jb + j * a_dim1], lda);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &z__1,
+                                &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b1,
+                                &a[j + jb + j * a_dim1], lda);
             }
             /* L110: */
         }

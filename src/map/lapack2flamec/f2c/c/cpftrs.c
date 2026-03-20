@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
+static scomplex c_b1 = {1.f, 0.f};
 /* > \brief \b CPFTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -220,8 +220,26 @@ static complex c_b1 = {1.f, 0.f};
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, complex *a, complex *b,
-             integer *ldb, integer *info)
+/** Generated wrapper function */
+void cpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, scomplex *b,
+             aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpftrs(transr, uplo, n, nrhs, a, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpftrs(transr, uplo, &n_64, &nrhs_64, a, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                        scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -236,18 +254,11 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, complex *a, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, i__1;
+    aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctfsm_(char *, char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -300,7 +311,7 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, complex *a, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPFTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPFTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -313,13 +324,13 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, complex *a, co
     /* start execution: there are two triangular solves */
     if(lower)
     {
-        ctfsm_(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
-        ctfsm_(transr, "L", uplo, "C", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
+        aocl_lapack_ctfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
+        aocl_lapack_ctfsm(transr, "L", uplo, "C", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
     }
     else
     {
-        ctfsm_(transr, "L", uplo, "C", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
-        ctfsm_(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
+        aocl_lapack_ctfsm(transr, "L", uplo, "C", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
+        aocl_lapack_ctfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

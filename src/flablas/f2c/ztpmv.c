@@ -1,16 +1,16 @@
 /* ztpmv.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, doublecomplex *x, integer *incx)
+int ztpmv_(char *uplo, char *trans, char *diag, integer *n, dcomplex *ap, dcomplex *x, integer *incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     integer info;
-    doublecomplex temp;
+    dcomplex temp;
     integer i__, j, k;
     extern logical lsame_(char *, char *, integer, integer);
     integer kk, ix, jx, kx;
@@ -153,10 +153,10 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         ++j)
                 {
                     i__2 = j;
-                    if (x[i__2].r != 0. || x[i__2].i != 0.)
+                    if (x[i__2].real != 0. || x[i__2].imag != 0.)
                     {
                         i__2 = j;
-                        temp.r = x[i__2].r, temp.i = x[i__2].i;
+                        temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                         k = kk;
                         i__2 = j - 1;
                         for (i__ = 1;
@@ -166,9 +166,9 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             i__3 = i__;
                             i__4 = i__;
                             i__5 = k;
-                            z__2.r = temp.r * ap[i__5].r - temp.i * ap[i__5] .i, z__2.i = temp.r * ap[i__5].i + temp.i * ap[i__5].r;
-                            z__1.r = x[i__4].r + z__2.r, z__1.i = x[i__4].i + z__2.i;
-                            x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                            z__2.real = temp.real * ap[i__5].real - temp.imag * ap[i__5] .imag, z__2.imag = temp.real * ap[i__5].imag + temp.imag * ap[i__5].real;
+                            z__1.real = x[i__4].real + z__2.real, z__1.imag = x[i__4].imag + z__2.imag;
+                            x[i__3].real = z__1.real, x[i__3].imag = z__1.imag;
                             ++k;
                             /* L10: */
                         }
@@ -177,8 +177,8 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             i__2 = j;
                             i__3 = j;
                             i__4 = kk + j - 1;
-                            z__1.r = x[i__3].r * ap[i__4].r - x[i__3].i * ap[ i__4].i, z__1.i = x[i__3].r * ap[i__4].i + x[i__3].i * ap[i__4].r;
-                            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+                            z__1.real = x[i__3].real * ap[i__4].real - x[i__3].imag * ap[ i__4].imag, z__1.imag = x[i__3].real * ap[i__4].imag + x[i__3].imag * ap[i__4].real;
+                            x[i__2].real = z__1.real, x[i__2].imag = z__1.imag;
                         }
                     }
                     kk += j;
@@ -194,10 +194,10 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         ++j)
                 {
                     i__2 = jx;
-                    if (x[i__2].r != 0. || x[i__2].i != 0.)
+                    if (x[i__2].real != 0. || x[i__2].imag != 0.)
                     {
                         i__2 = jx;
-                        temp.r = x[i__2].r, temp.i = x[i__2].i;
+                        temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                         ix = kx;
                         i__2 = kk + j - 2;
                         for (k = kk;
@@ -207,9 +207,9 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             i__3 = ix;
                             i__4 = ix;
                             i__5 = k;
-                            z__2.r = temp.r * ap[i__5].r - temp.i * ap[i__5] .i, z__2.i = temp.r * ap[i__5].i + temp.i * ap[i__5].r;
-                            z__1.r = x[i__4].r + z__2.r, z__1.i = x[i__4].i + z__2.i;
-                            x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                            z__2.real = temp.real * ap[i__5].real - temp.imag * ap[i__5] .imag, z__2.imag = temp.real * ap[i__5].imag + temp.imag * ap[i__5].real;
+                            z__1.real = x[i__4].real + z__2.real, z__1.imag = x[i__4].imag + z__2.imag;
+                            x[i__3].real = z__1.real, x[i__3].imag = z__1.imag;
                             ix += *incx;
                             /* L30: */
                         }
@@ -218,8 +218,8 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             i__2 = jx;
                             i__3 = jx;
                             i__4 = kk + j - 1;
-                            z__1.r = x[i__3].r * ap[i__4].r - x[i__3].i * ap[ i__4].i, z__1.i = x[i__3].r * ap[i__4].i + x[i__3].i * ap[i__4].r;
-                            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+                            z__1.real = x[i__3].real * ap[i__4].real - x[i__3].imag * ap[ i__4].imag, z__1.imag = x[i__3].real * ap[i__4].imag + x[i__3].imag * ap[i__4].real;
+                            x[i__2].real = z__1.real, x[i__2].imag = z__1.imag;
                         }
                     }
                     jx += *incx;
@@ -238,10 +238,10 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         --j)
                 {
                     i__1 = j;
-                    if (x[i__1].r != 0. || x[i__1].i != 0.)
+                    if (x[i__1].real != 0. || x[i__1].imag != 0.)
                     {
                         i__1 = j;
-                        temp.r = x[i__1].r, temp.i = x[i__1].i;
+                        temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                         k = kk;
                         i__1 = j + 1;
                         for (i__ = *n;
@@ -251,9 +251,9 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             i__2 = i__;
                             i__3 = i__;
                             i__4 = k;
-                            z__2.r = temp.r * ap[i__4].r - temp.i * ap[i__4] .i, z__2.i = temp.r * ap[i__4].i + temp.i * ap[i__4].r;
-                            z__1.r = x[i__3].r + z__2.r, z__1.i = x[i__3].i + z__2.i;
-                            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+                            z__2.real = temp.real * ap[i__4].real - temp.imag * ap[i__4] .imag, z__2.imag = temp.real * ap[i__4].imag + temp.imag * ap[i__4].real;
+                            z__1.real = x[i__3].real + z__2.real, z__1.imag = x[i__3].imag + z__2.imag;
+                            x[i__2].real = z__1.real, x[i__2].imag = z__1.imag;
                             --k;
                             /* L50: */
                         }
@@ -262,8 +262,8 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             i__1 = j;
                             i__2 = j;
                             i__3 = kk - *n + j;
-                            z__1.r = x[i__2].r * ap[i__3].r - x[i__2].i * ap[ i__3].i, z__1.i = x[i__2].r * ap[i__3].i + x[i__2].i * ap[i__3].r;
-                            x[i__1].r = z__1.r, x[i__1].i = z__1.i;
+                            z__1.real = x[i__2].real * ap[i__3].real - x[i__2].imag * ap[ i__3].imag, z__1.imag = x[i__2].real * ap[i__3].imag + x[i__2].imag * ap[i__3].real;
+                            x[i__1].real = z__1.real, x[i__1].imag = z__1.imag;
                         }
                     }
                     kk -= *n - j + 1;
@@ -279,10 +279,10 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         --j)
                 {
                     i__1 = jx;
-                    if (x[i__1].r != 0. || x[i__1].i != 0.)
+                    if (x[i__1].real != 0. || x[i__1].imag != 0.)
                     {
                         i__1 = jx;
-                        temp.r = x[i__1].r, temp.i = x[i__1].i;
+                        temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                         ix = kx;
                         i__1 = kk - (*n - (j + 1));
                         for (k = kk;
@@ -292,9 +292,9 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             i__2 = ix;
                             i__3 = ix;
                             i__4 = k;
-                            z__2.r = temp.r * ap[i__4].r - temp.i * ap[i__4] .i, z__2.i = temp.r * ap[i__4].i + temp.i * ap[i__4].r;
-                            z__1.r = x[i__3].r + z__2.r, z__1.i = x[i__3].i + z__2.i;
-                            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+                            z__2.real = temp.real * ap[i__4].real - temp.imag * ap[i__4] .imag, z__2.imag = temp.real * ap[i__4].imag + temp.imag * ap[i__4].real;
+                            z__1.real = x[i__3].real + z__2.real, z__1.imag = x[i__3].imag + z__2.imag;
+                            x[i__2].real = z__1.real, x[i__2].imag = z__1.imag;
                             ix -= *incx;
                             /* L70: */
                         }
@@ -303,8 +303,8 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             i__1 = jx;
                             i__2 = jx;
                             i__3 = kk - *n + j;
-                            z__1.r = x[i__2].r * ap[i__3].r - x[i__2].i * ap[ i__3].i, z__1.i = x[i__2].r * ap[i__3].i + x[i__2].i * ap[i__3].r;
-                            x[i__1].r = z__1.r, x[i__1].i = z__1.i;
+                            z__1.real = x[i__2].real * ap[i__3].real - x[i__2].imag * ap[ i__3].imag, z__1.imag = x[i__2].real * ap[i__3].imag + x[i__2].imag * ap[i__3].real;
+                            x[i__1].real = z__1.real, x[i__1].imag = z__1.imag;
                         }
                     }
                     jx -= *incx;
@@ -327,15 +327,15 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         --j)
                 {
                     i__1 = j;
-                    temp.r = x[i__1].r, temp.i = x[i__1].i;
+                    temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                     k = kk - 1;
                     if (noconj)
                     {
                         if (nounit)
                         {
                             i__1 = kk;
-                            z__1.r = temp.r * ap[i__1].r - temp.i * ap[i__1] .i, z__1.i = temp.r * ap[i__1].i + temp.i * ap[i__1].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * ap[i__1].real - temp.imag * ap[i__1] .imag, z__1.imag = temp.real * ap[i__1].imag + temp.imag * ap[i__1].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         for (i__ = j - 1;
                                 i__ >= 1;
@@ -343,9 +343,9 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         {
                             i__1 = k;
                             i__2 = i__;
-                            z__2.r = ap[i__1].r * x[i__2].r - ap[i__1].i * x[ i__2].i, z__2.i = ap[i__1].r * x[i__2].i + ap[i__1].i * x[i__2].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = ap[i__1].real * x[i__2].real - ap[i__1].imag * x[ i__2].imag, z__2.imag = ap[i__1].real * x[i__2].imag + ap[i__1].imag * x[i__2].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             --k;
                             /* L90: */
                         }
@@ -355,8 +355,8 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         if (nounit)
                         {
                             d_cnjg(&z__2, &ap[kk]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         for (i__ = j - 1;
                                 i__ >= 1;
@@ -364,15 +364,15 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         {
                             d_cnjg(&z__3, &ap[k]);
                             i__1 = i__;
-                            z__2.r = z__3.r * x[i__1].r - z__3.i * x[i__1].i, z__2.i = z__3.r * x[i__1].i + z__3.i * x[ i__1].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = z__3.real * x[i__1].real - z__3.imag * x[i__1].imag, z__2.imag = z__3.real * x[i__1].imag + z__3.imag * x[ i__1].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             --k;
                             /* L100: */
                         }
                     }
                     i__1 = j;
-                    x[i__1].r = temp.r, x[i__1].i = temp.i;
+                    x[i__1].real = temp.real, x[i__1].imag = temp.imag;
                     kk -= j;
                     /* L110: */
                 }
@@ -385,15 +385,15 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         --j)
                 {
                     i__1 = jx;
-                    temp.r = x[i__1].r, temp.i = x[i__1].i;
+                    temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                     ix = jx;
                     if (noconj)
                     {
                         if (nounit)
                         {
                             i__1 = kk;
-                            z__1.r = temp.r * ap[i__1].r - temp.i * ap[i__1] .i, z__1.i = temp.r * ap[i__1].i + temp.i * ap[i__1].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * ap[i__1].real - temp.imag * ap[i__1] .imag, z__1.imag = temp.real * ap[i__1].imag + temp.imag * ap[i__1].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         i__1 = kk - j + 1;
                         for (k = kk - 1;
@@ -403,9 +403,9 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             ix -= *incx;
                             i__2 = k;
                             i__3 = ix;
-                            z__2.r = ap[i__2].r * x[i__3].r - ap[i__2].i * x[ i__3].i, z__2.i = ap[i__2].r * x[i__3].i + ap[i__2].i * x[i__3].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = ap[i__2].real * x[i__3].real - ap[i__2].imag * x[ i__3].imag, z__2.imag = ap[i__2].real * x[i__3].imag + ap[i__2].imag * x[i__3].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             /* L120: */
                         }
                     }
@@ -414,8 +414,8 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         if (nounit)
                         {
                             d_cnjg(&z__2, &ap[kk]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         i__1 = kk - j + 1;
                         for (k = kk - 1;
@@ -425,14 +425,14 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             ix -= *incx;
                             d_cnjg(&z__3, &ap[k]);
                             i__2 = ix;
-                            z__2.r = z__3.r * x[i__2].r - z__3.i * x[i__2].i, z__2.i = z__3.r * x[i__2].i + z__3.i * x[ i__2].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = z__3.real * x[i__2].real - z__3.imag * x[i__2].imag, z__2.imag = z__3.real * x[i__2].imag + z__3.imag * x[ i__2].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             /* L130: */
                         }
                     }
                     i__1 = jx;
-                    x[i__1].r = temp.r, x[i__1].i = temp.i;
+                    x[i__1].real = temp.real, x[i__1].imag = temp.imag;
                     jx -= *incx;
                     kk -= j;
                     /* L140: */
@@ -450,15 +450,15 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         ++j)
                 {
                     i__2 = j;
-                    temp.r = x[i__2].r, temp.i = x[i__2].i;
+                    temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                     k = kk + 1;
                     if (noconj)
                     {
                         if (nounit)
                         {
                             i__2 = kk;
-                            z__1.r = temp.r * ap[i__2].r - temp.i * ap[i__2] .i, z__1.i = temp.r * ap[i__2].i + temp.i * ap[i__2].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * ap[i__2].real - temp.imag * ap[i__2] .imag, z__1.imag = temp.real * ap[i__2].imag + temp.imag * ap[i__2].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         i__2 = *n;
                         for (i__ = j + 1;
@@ -467,9 +467,9 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         {
                             i__3 = k;
                             i__4 = i__;
-                            z__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[ i__4].i, z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = ap[i__3].real * x[i__4].real - ap[i__3].imag * x[ i__4].imag, z__2.imag = ap[i__3].real * x[i__4].imag + ap[i__3].imag * x[i__4].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             ++k;
                             /* L150: */
                         }
@@ -479,8 +479,8 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         if (nounit)
                         {
                             d_cnjg(&z__2, &ap[kk]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         i__2 = *n;
                         for (i__ = j + 1;
@@ -489,15 +489,15 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         {
                             d_cnjg(&z__3, &ap[k]);
                             i__3 = i__;
-                            z__2.r = z__3.r * x[i__3].r - z__3.i * x[i__3].i, z__2.i = z__3.r * x[i__3].i + z__3.i * x[ i__3].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = z__3.real * x[i__3].real - z__3.imag * x[i__3].imag, z__2.imag = z__3.real * x[i__3].imag + z__3.imag * x[ i__3].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             ++k;
                             /* L160: */
                         }
                     }
                     i__2 = j;
-                    x[i__2].r = temp.r, x[i__2].i = temp.i;
+                    x[i__2].real = temp.real, x[i__2].imag = temp.imag;
                     kk += *n - j + 1;
                     /* L170: */
                 }
@@ -511,15 +511,15 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         ++j)
                 {
                     i__2 = jx;
-                    temp.r = x[i__2].r, temp.i = x[i__2].i;
+                    temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                     ix = jx;
                     if (noconj)
                     {
                         if (nounit)
                         {
                             i__2 = kk;
-                            z__1.r = temp.r * ap[i__2].r - temp.i * ap[i__2] .i, z__1.i = temp.r * ap[i__2].i + temp.i * ap[i__2].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * ap[i__2].real - temp.imag * ap[i__2] .imag, z__1.imag = temp.real * ap[i__2].imag + temp.imag * ap[i__2].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         i__2 = kk + *n - j;
                         for (k = kk + 1;
@@ -529,9 +529,9 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             ix += *incx;
                             i__3 = k;
                             i__4 = ix;
-                            z__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[ i__4].i, z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = ap[i__3].real * x[i__4].real - ap[i__3].imag * x[ i__4].imag, z__2.imag = ap[i__3].real * x[i__4].imag + ap[i__3].imag * x[i__4].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             /* L180: */
                         }
                     }
@@ -540,8 +540,8 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                         if (nounit)
                         {
                             d_cnjg(&z__2, &ap[kk]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         i__2 = kk + *n - j;
                         for (k = kk + 1;
@@ -551,14 +551,14 @@ int ztpmv_(char *uplo, char *trans, char *diag, integer *n, doublecomplex *ap, d
                             ix += *incx;
                             d_cnjg(&z__3, &ap[k]);
                             i__3 = ix;
-                            z__2.r = z__3.r * x[i__3].r - z__3.i * x[i__3].i, z__2.i = z__3.r * x[i__3].i + z__3.i * x[ i__3].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = z__3.real * x[i__3].real - z__3.imag * x[i__3].imag, z__2.imag = z__3.real * x[i__3].imag + z__3.imag * x[ i__3].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             /* L190: */
                         }
                     }
                     i__2 = jx;
-                    x[i__2].r = temp.r, x[i__2].i = temp.i;
+                    x[i__2].real = temp.real, x[i__2].imag = temp.imag;
                     jx += *incx;
                     kk += *n - j + 1;
                     /* L200: */

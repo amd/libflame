@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CPTTRF computes the L*D*L**H factorization of a complex Hermitian */
+/* > CPTTRF computes the L*D*L**H factorization of a scomplex Hermitian */
 /* > positive definite tridiagonal matrix A. The factorization may also */
 /* > be regarded as having the form A = U**H *D*U. */
 /* > \endverbatim */
@@ -88,7 +88,22 @@ if k < N, the factorization could not */
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpttrf_(integer *n, real *d__, complex *e, integer *info)
+/** Generated wrapper function */
+void cpttrf_(aocl_int_t *n, real *d__, scomplex *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpttrf(n, d__, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpttrf(&n_64, d__, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpttrf(aocl_int64_t *n, real *d__, scomplex *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -101,17 +116,14 @@ void cpttrf_(integer *n, real *d__, complex *e, integer *info)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2;
-    complex q__1;
+    aocl_int64_t i__1, i__2;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     real f, g;
-    integer i__, i4;
+    aocl_int64_t i__, i4;
     real eii, eir;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -140,7 +152,7 @@ void cpttrf_(integer *n, real *d__, complex *e, integer *info)
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("CPTTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -161,15 +173,15 @@ void cpttrf_(integer *n, real *d__, complex *e, integer *info)
             goto L20;
         }
         i__2 = i__;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__]);
         f = eir / d__[i__];
         g = eii / d__[i__];
         i__2 = i__;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 1] = d__[i__ + 1] - f * eir - g * eii;
         /* L10: */
     }
@@ -185,15 +197,15 @@ void cpttrf_(integer *n, real *d__, complex *e, integer *info)
         }
         /* Solve for e(i) and d(i+1). */
         i__2 = i__;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__]);
         f = eir / d__[i__];
         g = eii / d__[i__];
         i__2 = i__;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 1] = d__[i__ + 1] - f * eir - g * eii;
         if(d__[i__ + 1] <= 0.f)
         {
@@ -202,15 +214,15 @@ void cpttrf_(integer *n, real *d__, complex *e, integer *info)
         }
         /* Solve for e(i+1) and d(i+2). */
         i__2 = i__ + 1;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__ + 1]);
         f = eir / d__[i__ + 1];
         g = eii / d__[i__ + 1];
         i__2 = i__ + 1;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 2] = d__[i__ + 2] - f * eir - g * eii;
         if(d__[i__ + 2] <= 0.f)
         {
@@ -219,15 +231,15 @@ void cpttrf_(integer *n, real *d__, complex *e, integer *info)
         }
         /* Solve for e(i+2) and d(i+3). */
         i__2 = i__ + 2;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__ + 2]);
         f = eir / d__[i__ + 2];
         g = eii / d__[i__ + 2];
         i__2 = i__ + 2;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 3] = d__[i__ + 3] - f * eir - g * eii;
         if(d__[i__ + 3] <= 0.f)
         {
@@ -236,15 +248,15 @@ void cpttrf_(integer *n, real *d__, complex *e, integer *info)
         }
         /* Solve for e(i+3) and d(i+4). */
         i__2 = i__ + 3;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__ + 3]);
         f = eir / d__[i__ + 3];
         g = eii / d__[i__ + 3];
         i__2 = i__ + 3;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 4] = d__[i__ + 4] - f * eir - g * eii;
         /* L110: */
     }

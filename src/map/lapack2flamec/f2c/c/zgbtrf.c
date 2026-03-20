@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-static integer c__65 = 65;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__65 = 65;
 /* > \brief \b ZGBTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__65 = 65;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGBTRF computes an LU factorization of a complex m-by-n band matrix A */
+/* > ZGBTRF computes an LU factorization of a scomplex m-by-n band matrix A */
 /* > using partial pivoting with row interchanges. */
 /* > */
 /* > This is the blocked version of the algorithm, calling Level 3 BLAS. */
@@ -146,8 +146,28 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab,
-             integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomplex *ab,
+             aocl_int_t *ldab, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgbtrf(m, n, kl, ku, ab, ldab, ipiv, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgbtrf(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        dcomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbtrf inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
@@ -155,38 +175,17 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                       *m, *n, *kl, *ku, *ldab);
 
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublecomplex z__1;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    dcomplex z__1;
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
-    doublecomplex temp;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    doublecomplex work13[4160] /* was [65][64] */
+    aocl_int64_t i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
+    dcomplex temp;
+    dcomplex work13[4160] /* was [65][64] */
         ,
         work31[4160] /* was [65][64] */
         ;
-    extern /* Subroutine */
-        void
-        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        zgbtf2_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *),
-        izamax_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,7 +246,7 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -264,14 +263,14 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
         aocl_fla_progress_ptr = aocl_fla_progress;
 #endif
 #endif
-    /* Determine the block size for this environment */
+        /* Determine the block size for this environment */
 #if FLA_ENABLE_AMD_OPT
-     if(*ku <= 64)
-         nb = 1;
-     else
-         nb = 32;
+    if(*ku <= 64)
+        nb = 1;
+    else
+        nb = 32;
 #else
-    nb = ilaenv_(&c__1, "ZGBTRF", " ", m, n, kl, ku);
+    nb = aocl_lapack_ilaenv(&c__1, "ZGBTRF", " ", m, n, kl, ku);
 #endif
     /* The block size must not exceed the limit set by the size of the */
     /* local arrays WORK13 and WORK31. */
@@ -279,7 +278,7 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
     if(nb <= 1 || nb > *kl)
     {
         /* Use unblocked code */
-        zgbtf2_(m, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
+        aocl_lapack_zgbtf2(m, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
     }
     else
     {
@@ -292,8 +291,8 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * 65 - 66;
-                work13[i__3].r = 0.;
-                work13[i__3].i = 0.; // , expr subst
+                work13[i__3].real = 0.;
+                work13[i__3].imag = 0.; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -306,8 +305,8 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
             for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * 65 - 66;
-                work31[i__3].r = 0.;
-                work31[i__3].i = 0.; // , expr subst
+                work31[i__3].real = 0.;
+                work31[i__3].imag = 0.; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -321,8 +320,8 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
             for(i__ = kv - j + 2; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * ab_dim1;
-                ab[i__3].r = 0.;
-                ab[i__3].i = 0.; // , expr subst
+                ab[i__3].real = 0.;
+                ab[i__3].imag = 0.; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -377,8 +376,8 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                     for(i__ = 1; i__ <= i__4; ++i__)
                     {
                         i__5 = i__ + (jj + kv) * ab_dim1;
-                        ab[i__5].r = 0.;
-                        ab[i__5].i = 0.; // , expr subst
+                        ab[i__5].real = 0.;
+                        ab[i__5].imag = 0.; // , expr subst
                         /* L70: */
                     }
                 }
@@ -389,10 +388,10 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 i__5 = *m - jj; // , expr subst
                 km = fla_min(i__4, i__5);
                 i__4 = km + 1;
-                jp = izamax_(&i__4, &ab[kv + 1 + jj * ab_dim1], &c__1);
-                ipiv[jj] = jp + jj - j;
+                jp = aocl_blas_izamax(&i__4, &ab[kv + 1 + jj * ab_dim1], &c__1);
+                ipiv[jj] = (aocl_int_t)(jp + jj - j);
                 i__4 = kv + jp + jj * ab_dim1;
-                if(ab[i__4].r != 0. || ab[i__4].i != 0.)
+                if(ab[i__4].real != 0. || ab[i__4].imag != 0.)
                 {
                     /* Computing MAX */
                     /* Computing MIN */
@@ -407,8 +406,8 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                         {
                             i__4 = *ldab - 1;
                             i__5 = *ldab - 1;
-                            zswap_(&jb, &ab[kv + 1 + jj - j + j * ab_dim1], &i__4,
-                                   &ab[kv + jp + jj - j + j * ab_dim1], &i__5);
+                            aocl_blas_zswap(&jb, &ab[kv + 1 + jj - j + j * ab_dim1], &i__4,
+                                            &ab[kv + jp + jj - j + j * ab_dim1], &i__5);
                         }
                         else
                         {
@@ -416,18 +415,18 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                             /* which are stored in the work array WORK31 */
                             i__4 = jj - j;
                             i__5 = *ldab - 1;
-                            zswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
-                                   &work31[jp + jj - j - *kl - 1], &c__65);
+                            aocl_blas_zswap(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
+                                            &work31[jp + jj - j - *kl - 1], &c__65);
                             i__4 = j + jb - jj;
                             i__5 = *ldab - 1;
                             i__6 = *ldab - 1;
-                            zswap_(&i__4, &ab[kv + 1 + jj * ab_dim1], &i__5,
-                                   &ab[kv + jp + jj * ab_dim1], &i__6);
+                            aocl_blas_zswap(&i__4, &ab[kv + 1 + jj * ab_dim1], &i__5,
+                                            &ab[kv + jp + jj * ab_dim1], &i__6);
                         }
                     }
                     /* Compute multipliers */
                     z_div(&z__1, &c_b1, &ab[kv + 1 + jj * ab_dim1]);
-                    zscal_(&km, &z__1, &ab[kv + 2 + jj * ab_dim1], &c__1);
+                    aocl_blas_zscal(&km, &z__1, &ab[kv + 2 + jj * ab_dim1], &c__1);
                     /* Update trailing submatrix within the band and within */
                     /* the current block. JM is the index of the last column */
                     /* which needs to be updated. */
@@ -438,13 +437,13 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                     if(jm > jj)
                     {
                         i__4 = jm - jj;
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__5 = *ldab - 1;
                         i__6 = *ldab - 1;
-                        zgeru_(&km, &i__4, &z__1, &ab[kv + 2 + jj * ab_dim1], &c__1,
-                               &ab[kv + (jj + 1) * ab_dim1], &i__5,
-                               &ab[kv + 1 + (jj + 1) * ab_dim1], &i__6);
+                        aocl_blas_zgeru(&km, &i__4, &z__1, &ab[kv + 2 + jj * ab_dim1], &c__1,
+                                        &ab[kv + (jj + 1) * ab_dim1], &i__5,
+                                        &ab[kv + 1 + (jj + 1) * ab_dim1], &i__6);
                     }
                 }
                 else
@@ -462,8 +461,8 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 nw = fla_min(i__4, i3);
                 if(nw > 0)
                 {
-                    zcopy_(&nw, &ab[kv + *kl + 1 - jj + j + jj * ab_dim1], &c__1,
-                           &work31[(jj - j + 1) * 65 - 65], &c__1);
+                    aocl_blas_zcopy(&nw, &ab[kv + *kl + 1 - jj + j + jj * ab_dim1], &c__1,
+                                    &work31[(jj - j + 1) * 65 - 65], &c__1);
                 }
                 /* L80: */
             }
@@ -480,13 +479,13 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 /* Use ZLASWP to apply the row interchanges to A12, A22, and */
                 /* A32. */
                 i__3 = *ldab - 1;
-                zlaswp_(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c__1, &jb, &ipiv[j],
-                        &c__1);
+                aocl_lapack_zlaswp(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c__1, &jb,
+                                   &ipiv[j], &c__1);
                 /* Adjust the pivot indices. */
                 i__3 = j + jb - 1;
                 for(i__ = j; i__ <= i__3; ++i__)
                 {
-                    ipiv[i__] = ipiv[i__] + j - 1;
+                    ipiv[i__] = (aocl_int_t)(ipiv[i__] + j - 1);
                     /* L90: */
                 }
                 /* Apply the row interchanges to A13, A23, and A33 */
@@ -503,15 +502,15 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                         if(ip != ii)
                         {
                             i__5 = kv + 1 + ii - jj + jj * ab_dim1;
-                            temp.r = ab[i__5].r;
-                            temp.i = ab[i__5].i; // , expr subst
+                            temp.real = ab[i__5].real;
+                            temp.imag = ab[i__5].imag; // , expr subst
                             i__5 = kv + 1 + ii - jj + jj * ab_dim1;
                             i__6 = kv + 1 + ip - jj + jj * ab_dim1;
-                            ab[i__5].r = ab[i__6].r;
-                            ab[i__5].i = ab[i__6].i; // , expr subst
+                            ab[i__5].real = ab[i__6].real;
+                            ab[i__5].imag = ab[i__6].imag; // , expr subst
                             i__5 = kv + 1 + ip - jj + jj * ab_dim1;
-                            ab[i__5].r = temp.r;
-                            ab[i__5].i = temp.i; // , expr subst
+                            ab[i__5].real = temp.real;
+                            ab[i__5].imag = temp.imag; // , expr subst
                         }
                         /* L100: */
                     }
@@ -523,32 +522,33 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                     /* Update A12 */
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
-                    ztrsm_("Left", "Lower", "No transpose", "Unit", &jb, &j2, &c_b1,
-                           &ab[kv + 1 + j * ab_dim1], &i__3, &ab[kv + 1 - jb + (j + jb) * ab_dim1],
-                           &i__4);
+                    aocl_blas_ztrsm("Left", "Lower", "No transpose", "Unit", &jb, &j2, &c_b1,
+                                    &ab[kv + 1 + j * ab_dim1], &i__3,
+                                    &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__4);
                     if(i2 > 0)
                     {
                         /* Update A22 */
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
                         i__5 = *ldab - 1;
-                        zgemm_("No transpose", "No transpose", &i2, &j2, &jb, &z__1,
-                               &ab[kv + 1 + jb + j * ab_dim1], &i__3,
-                               &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__4, &c_b1,
-                               &ab[kv + 1 + (j + jb) * ab_dim1], &i__5);
+                        aocl_blas_zgemm("No transpose", "No transpose", &i2, &j2, &jb, &z__1,
+                                        &ab[kv + 1 + jb + j * ab_dim1], &i__3,
+                                        &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__4, &c_b1,
+                                        &ab[kv + 1 + (j + jb) * ab_dim1], &i__5);
                     }
                     if(i3 > 0)
                     {
                         /* Update A32 */
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        zgemm_("No transpose", "No transpose", &i3, &j2, &jb, &z__1, work31, &c__65,
-                               &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c_b1,
-                               &ab[kv + *kl + 1 - jb + (j + jb) * ab_dim1], &i__4);
+                        aocl_blas_zgemm("No transpose", "No transpose", &i3, &j2, &jb, &z__1,
+                                        work31, &c__65, &ab[kv + 1 - jb + (j + jb) * ab_dim1],
+                                        &i__3, &c_b1, &ab[kv + *kl + 1 - jb + (j + jb) * ab_dim1],
+                                        &i__4);
                     }
                 }
                 if(j3 > 0)
@@ -563,35 +563,36 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                         {
                             i__5 = ii + jj * 65 - 66;
                             i__6 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
-                            work13[i__5].r = ab[i__6].r;
-                            work13[i__5].i = ab[i__6].i; // , expr subst
+                            work13[i__5].real = ab[i__6].real;
+                            work13[i__5].imag = ab[i__6].imag; // , expr subst
                             /* L120: */
                         }
                         /* L130: */
                     }
                     /* Update A13 in the work array */
                     i__3 = *ldab - 1;
-                    ztrsm_("Left", "Lower", "No transpose", "Unit", &jb, &j3, &c_b1,
-                           &ab[kv + 1 + j * ab_dim1], &i__3, work13, &c__65);
+                    aocl_blas_ztrsm("Left", "Lower", "No transpose", "Unit", &jb, &j3, &c_b1,
+                                    &ab[kv + 1 + j * ab_dim1], &i__3, work13, &c__65);
                     if(i2 > 0)
                     {
                         /* Update A23 */
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        zgemm_("No transpose", "No transpose", &i2, &j3, &jb, &z__1,
-                               &ab[kv + 1 + jb + j * ab_dim1], &i__3, work13, &c__65, &c_b1,
-                               &ab[jb + 1 + (j + kv) * ab_dim1], &i__4);
+                        aocl_blas_zgemm("No transpose", "No transpose", &i2, &j3, &jb, &z__1,
+                                        &ab[kv + 1 + jb + j * ab_dim1], &i__3, work13, &c__65,
+                                        &c_b1, &ab[jb + 1 + (j + kv) * ab_dim1], &i__4);
                     }
                     if(i3 > 0)
                     {
                         /* Update A33 */
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__3 = *ldab - 1;
-                        zgemm_("No transpose", "No transpose", &i3, &j3, &jb, &z__1, work31, &c__65,
-                               work13, &c__65, &c_b1, &ab[*kl + 1 + (j + kv) * ab_dim1], &i__3);
+                        aocl_blas_zgemm("No transpose", "No transpose", &i3, &j3, &jb, &z__1,
+                                        work31, &c__65, work13, &c__65, &c_b1,
+                                        &ab[*kl + 1 + (j + kv) * ab_dim1], &i__3);
                     }
                     /* Copy the lower triangle of A13 back into place */
                     i__3 = j3;
@@ -602,8 +603,8 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                         {
                             i__5 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
                             i__6 = ii + jj * 65 - 66;
-                            ab[i__5].r = work13[i__6].r;
-                            ab[i__5].i = work13[i__6].i; // , expr subst
+                            ab[i__5].real = work13[i__6].real;
+                            ab[i__5].imag = work13[i__6].imag; // , expr subst
                             /* L140: */
                         }
                         /* L150: */
@@ -616,7 +617,7 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 i__3 = j + jb - 1;
                 for(i__ = j; i__ <= i__3; ++i__)
                 {
-                    ipiv[i__] = ipiv[i__] + j - 1;
+                    ipiv[i__] = (aocl_int_t)(ipiv[i__] + j - 1);
                     /* L160: */
                 }
             }
@@ -636,16 +637,16 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                         i__4 = jj - j;
                         i__5 = *ldab - 1;
                         i__6 = *ldab - 1;
-                        zswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
-                               &ab[kv + jp + jj - j + j * ab_dim1], &i__6);
+                        aocl_blas_zswap(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
+                                        &ab[kv + jp + jj - j + j * ab_dim1], &i__6);
                     }
                     else
                     {
                         /* The interchange does affect A31 */
                         i__4 = jj - j;
                         i__5 = *ldab - 1;
-                        zswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
-                               &work31[jp + jj - j - *kl - 1], &c__65);
+                        aocl_blas_zswap(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
+                                        &work31[jp + jj - j - *kl - 1], &c__65);
                     }
                 }
                 /* Copy the current column of A31 back into place */
@@ -655,8 +656,8 @@ void zgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 nw = fla_min(i__4, i__5);
                 if(nw > 0)
                 {
-                    zcopy_(&nw, &work31[(jj - j + 1) * 65 - 65], &c__1,
-                           &ab[kv + *kl + 1 - jj + j + jj * ab_dim1], &c__1);
+                    aocl_blas_zcopy(&nw, &work31[(jj - j + 1) * 65 - 65], &c__1,
+                                    &ab[kv + *kl + 1 - jj + j + jj * ab_dim1], &c__1);
                 }
                 /* L170: */
             }

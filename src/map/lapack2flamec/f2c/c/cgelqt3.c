@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
+static scomplex c_b1 = {1.f, 0.f};
 /* > \brief \b CGELQT3 */
 /* Definition: */
 /* =========== */
@@ -20,7 +20,7 @@ static complex c_b1 = {1.f, 0.f};
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGELQT3 recursively computes a LQ factorization of a complex M-by-N */
+/* > CGELQT3 recursively computes a LQ factorization of a scomplex M-by-N */
 /* > matrix A, using the compact WY representation of Q. */
 /* > */
 /* > Based on the algorithm of Elmroth and Gustavson, */
@@ -43,7 +43,7 @@ static complex c_b1 = {1.f, 0.f};
 /* > \param[in,out] A */
 /* > \verbatim */
 /* > A is COMPLEX array, dimension (LDA,N) */
-/* > On entry, the complex M-by-N matrix A. On exit, the elements on and */
+/* > On entry, the scomplex M-by-N matrix A. On exit, the elements on and */
 /* > below the diagonal contain the N-by-N lower triangular matrix L;
 the */
 /* > elements above the diagonal are the rows of V. See below for */
@@ -111,8 +111,27 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgelqt3_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *ldt,
-              integer *info)
+/** Generated wrapper function */
+void cgelqt3_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *t,
+              aocl_int_t *ldt, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgelqt3(m, n, a, lda, t, ldt, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgelqt3(&m_64, &n_64, a, &lda_64, t, &ldt_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgelqt3(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                         scomplex *t, aocl_int64_t *ldt, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -125,23 +144,13 @@ void cgelqt3_(integer *m, integer *n, complex *a, integer *lda, complex *t, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, i1, j1, m1, m2;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, i1, j1, m1, m2;
+    aocl_int64_t iinfo;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -185,18 +194,18 @@ void cgelqt3_(integer *m, integer *n, complex *a, integer *lda, complex *t, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGELQT3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CGELQT3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     if(*m == 1)
     {
         /* Compute Householder transform when M=1 */
-        clarfg_(n, &a[a_offset], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_offset]);
+        aocl_lapack_clarfg(n, &a[a_offset], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_offset]);
         i__1 = t_dim1 + 1;
         r_cnjg(&q__1, &t[t_dim1 + 1]);
-        t[i__1].r = q__1.r;
-        t[i__1].i = q__1.i; // , expr subst
+        t[i__1].real = q__1.real;
+        t[i__1].imag = q__1.imag; // , expr subst
     }
     else
     {
@@ -210,7 +219,7 @@ void cgelqt3_(integer *m, integer *n, complex *a, integer *lda, complex *t, inte
         i__1 = *m + 1;
         j1 = fla_min(i__1, *n);
         /* Compute A(1:M1,1:N) <- (Y1,R1,T1), where Q1 = I - Y1 T1 Y1^H */
-        cgelqt3_(&m1, n, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
+        aocl_lapack_cgelqt3(&m1, n, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
         /* Compute A(J1:M,1:N) = A(J1:M,1:N) Q1^H [workspace: T(1:N1,J1:N)] */
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -220,21 +229,24 @@ void cgelqt3_(integer *m, integer *n, complex *a, integer *lda, complex *t, inte
             {
                 i__3 = i__ + m1 + j * t_dim1;
                 i__4 = i__ + m1 + j * a_dim1;
-                t[i__3].r = a[i__4].r;
-                t[i__3].i = a[i__4].i; // , expr subst
+                t[i__3].real = a[i__4].real;
+                t[i__3].imag = a[i__4].imag; // , expr subst
             }
         }
-        ctrmm_("R", "U", "C", "U", &m2, &m1, &c_b1, &a[a_offset], lda, &t[i1 + t_dim1], ldt);
+        aocl_blas_ctrmm("R", "U", "C", "U", &m2, &m1, &c_b1, &a[a_offset], lda, &t[i1 + t_dim1],
+                        ldt);
         i__1 = *n - m1;
-        cgemm_("N", "C", &m2, &m1, &i__1, &c_b1, &a[i1 + i1 * a_dim1], lda, &a[i1 * a_dim1 + 1],
-               lda, &c_b1, &t[i1 + t_dim1], ldt);
-        ctrmm_("R", "U", "N", "N", &m2, &m1, &c_b1, &t[t_offset], ldt, &t[i1 + t_dim1], ldt);
+        aocl_blas_cgemm("N", "C", &m2, &m1, &i__1, &c_b1, &a[i1 + i1 * a_dim1], lda,
+                        &a[i1 * a_dim1 + 1], lda, &c_b1, &t[i1 + t_dim1], ldt);
+        aocl_blas_ctrmm("R", "U", "N", "N", &m2, &m1, &c_b1, &t[t_offset], ldt, &t[i1 + t_dim1],
+                        ldt);
         i__1 = *n - m1;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", &m2, &i__1, &m1, &q__1, &t[i1 + t_dim1], ldt, &a[i1 * a_dim1 + 1], lda,
-               &c_b1, &a[i1 + i1 * a_dim1], lda);
-        ctrmm_("R", "U", "N", "U", &m2, &m1, &c_b1, &a[a_offset], lda, &t[i1 + t_dim1], ldt);
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_cgemm("N", "N", &m2, &i__1, &m1, &q__1, &t[i1 + t_dim1], ldt, &a[i1 * a_dim1 + 1],
+                        lda, &c_b1, &a[i1 + i1 * a_dim1], lda);
+        aocl_blas_ctrmm("R", "U", "N", "U", &m2, &m1, &c_b1, &a[a_offset], lda, &t[i1 + t_dim1],
+                        ldt);
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
@@ -244,18 +256,19 @@ void cgelqt3_(integer *m, integer *n, complex *a, integer *lda, complex *t, inte
                 i__3 = i__ + m1 + j * a_dim1;
                 i__4 = i__ + m1 + j * a_dim1;
                 i__5 = i__ + m1 + j * t_dim1;
-                q__1.r = a[i__4].r - t[i__5].r;
-                q__1.i = a[i__4].i - t[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - t[i__5].real;
+                q__1.imag = a[i__4].imag - t[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 i__3 = i__ + m1 + j * t_dim1;
-                t[i__3].r = 0.f;
-                t[i__3].i = 0.f; // , expr subst
+                t[i__3].real = 0.f;
+                t[i__3].imag = 0.f; // , expr subst
             }
         }
         /* Compute A(J1:M,J1:N) <- (Y2,R2,T2) where Q2 = I - Y2 T2 Y2^H */
         i__1 = *n - m1;
-        cgelqt3_(&m2, &i__1, &a[i1 + i1 * a_dim1], lda, &t[i1 + i1 * t_dim1], ldt, &iinfo);
+        aocl_lapack_cgelqt3(&m2, &i__1, &a[i1 + i1 * a_dim1], lda, &t[i1 + i1 * t_dim1], ldt,
+                            &iinfo);
         /* Compute T3 = T(J1:N1,1:N) = -T1 Y1^H Y2 T2 */
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -265,20 +278,21 @@ void cgelqt3_(integer *m, integer *n, complex *a, integer *lda, complex *t, inte
             {
                 i__3 = j + (i__ + m1) * t_dim1;
                 i__4 = j + (i__ + m1) * a_dim1;
-                t[i__3].r = a[i__4].r;
-                t[i__3].i = a[i__4].i; // , expr subst
+                t[i__3].real = a[i__4].real;
+                t[i__3].imag = a[i__4].imag; // , expr subst
             }
         }
-        ctrmm_("R", "U", "C", "U", &m1, &m2, &c_b1, &a[i1 + i1 * a_dim1], lda, &t[i1 * t_dim1 + 1],
-               ldt);
+        aocl_blas_ctrmm("R", "U", "C", "U", &m1, &m2, &c_b1, &a[i1 + i1 * a_dim1], lda,
+                        &t[i1 * t_dim1 + 1], ldt);
         i__1 = *n - *m;
-        cgemm_("N", "C", &m1, &m2, &i__1, &c_b1, &a[j1 * a_dim1 + 1], lda, &a[i1 + j1 * a_dim1],
-               lda, &c_b1, &t[i1 * t_dim1 + 1], ldt);
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        ctrmm_("L", "U", "N", "N", &m1, &m2, &q__1, &t[t_offset], ldt, &t[i1 * t_dim1 + 1], ldt);
-        ctrmm_("R", "U", "N", "N", &m1, &m2, &c_b1, &t[i1 + i1 * t_dim1], ldt, &t[i1 * t_dim1 + 1],
-               ldt);
+        aocl_blas_cgemm("N", "C", &m1, &m2, &i__1, &c_b1, &a[j1 * a_dim1 + 1], lda,
+                        &a[i1 + j1 * a_dim1], lda, &c_b1, &t[i1 * t_dim1 + 1], ldt);
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_ctrmm("L", "U", "N", "N", &m1, &m2, &q__1, &t[t_offset], ldt, &t[i1 * t_dim1 + 1],
+                        ldt);
+        aocl_blas_ctrmm("R", "U", "N", "N", &m1, &m2, &c_b1, &t[i1 + i1 * t_dim1], ldt,
+                        &t[i1 * t_dim1 + 1], ldt);
         /* Y = (Y1,Y2);
         L = [ L1 0 ];
         T = [T1 T3] */

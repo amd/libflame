@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "ctype.h"
@@ -69,8 +69,8 @@ fla_stat_info_t AVAILABLE_STATS[FLA_NUM_STATS]
 int fla_check_cmd_config_dir(int argc, char **argv);
 
 #if AOCL_FLA_SET_PROGRESS_ENABLE == 1
-int aocl_fla_progress(const char *const api, const integer lenapi, const integer *const progress,
-                      const integer *const current_thread, const integer *const total_threads)
+int aocl_fla_progress(const char *const api, const aocl_int64_t lenapi, const aocl_int64_t *const progress,
+                      const aocl_int64_t *const current_thread, const aocl_int64_t *const total_threads)
 {
     printf("In AOCL FLA  Progress thread  %" FT_IS ", at API  %s, progress  %" FT_IS
            " total threads= %" FT_IS "\n",
@@ -80,8 +80,8 @@ int aocl_fla_progress(const char *const api, const integer lenapi, const integer
 #endif
 
 #if AOCL_FLA_SET_PROGRESS_ENABLE == 2
-int test_progress(const char *const api, const integer lenapi, const integer *const progress,
-                  const integer *const current_thread, const integer *const total_threads)
+int test_progress(const char *const api, const aocl_int64_t lenapi, const aocl_int64_t *const progress,
+                  const aocl_int64_t *const current_thread, const aocl_int64_t *const total_threads)
 {
     printf("In AOCL Progress thread  %" FT_IS ", at API  %s, progress %" FT_IS
            " total threads= %" FT_IS " \n",
@@ -122,6 +122,14 @@ int main(int argc, char **argv)
     params.time_unit = FLA_TIME_UNIT_AUTO;
     params.outlier_multiplier = 0.0;
     params.dump_runtimes_file_name = NULL;
+    params.test_mode = FLA_TEST_MODE_DEFAULT;
+
+    params.sf_min_s = fla_lapack_slamch("S");
+    params.sf_min_d = fla_lapack_dlamch("S");
+    params.eps_s = fla_lapack_slamch("E");
+    params.eps_d = fla_lapack_dlamch("E");
+    params.eps_p_s = fla_lapack_slamch("P");
+    params.eps_p_d = fla_lapack_dlamch("P");
 
     status = fla_parse_cmdline_args(&arg_count, argv, &params);
 
@@ -1203,6 +1211,18 @@ void fla_test_read_svd_params(const char *file_name, test_params_t *params)
     /* svd_threshold */
     READ_CONFIG_PARAM_FLT(params->svd_paramslist[i].svd_threshold);
 
+    /* Parameters for 'bdsqr' API */
+    /* uplo */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].uplo);
+    /* ncvt_bdsqr */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].ncvt_bdsqr);
+    /* nru_bdsqr */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].nru_bdsqr);
+    /* ncc_bdsqr */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].ncc_bdsqr);
+    /* ldc_bdsqr */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].ldc);
+
     fclose(fp);
 }
 
@@ -1496,7 +1516,7 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
         {
             datatype = params->datatype[dt];
             datatype_char = params->datatype_char[dt];
-            /* Skip complex and double complex tests of not supported APIs */
+            /* Skip scomplex and double scomplex tests of not supported APIs */
             if(!FLA_SKIP_TEST(datatype_char, func_str))
             {
                 /* Loop over the requested problem sizes */
@@ -1590,7 +1610,8 @@ integer fla_parse_brt_args(integer argc, char **argv, test_params_t *params)
             /* Checking if BRT value is valid */
             if(errno != 0
                || (!same_char(params->BRT_char, 'G') && !same_char(params->BRT_char, 'V')
-                   && !same_char(params->BRT_char, 'F') && !same_char(params->BRT_char, 'M')))
+                   && !same_char(params->BRT_char, 'F') && !same_char(params->BRT_char, 'M')
+                   && !same_char(params->BRT_char, 'L')))
             {
                 /* Invalid BRT value */
                 printf("\nError: Invalid BRT argument: %s\n", argv[i]);
@@ -1599,6 +1620,7 @@ integer fla_parse_brt_args(integer argc, char **argv, test_params_t *params)
                 printf("       V : CRC - Output verification\n");
                 printf("       F : Complete Output binary generation\n");
                 printf("       M : Complete Output binary verification\n");
+                printf("       L : Print CRC of outputs to the CLI log\n");
                 return -1;
             }
             brt_set = true;
@@ -2057,6 +2079,66 @@ integer fla_parse_dump_runtimes_arg(integer argc, char **argv, test_params_t *pa
     return 0;
 }
 
+/*
+ * This function checks if the argument "--test-mode=<mode>" is present in the command line.
+ * Supported modes:
+ *   - default: API-specific initialization + validation (default)
+ *   - perf: API-specific initialization + no validation
+ *   - random: Random initialization + validation
+ *   - random-perf: Random initialization + no validation
+ *
+ * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ */
+integer fla_parse_test_mode_arg(integer argc, char **argv, test_params_t *params)
+{
+    const char *arg_str = "--test-mode=";
+    integer arg_len = strlen(arg_str);
+    char *mode_str = NULL;
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            mode_str = argv[i] + arg_len;
+
+            /* Parse the mode string */
+            if(strcmp(mode_str, "default") == 0)
+            {
+                params->test_mode = FLA_TEST_MODE_DEFAULT;
+            }
+            else if(strcmp(mode_str, "perf") == 0)
+            {
+                params->test_mode = FLA_TEST_MODE_PERF;
+            }
+            else if(strcmp(mode_str, "random") == 0)
+            {
+                params->test_mode = FLA_TEST_MODE_RANDOM;
+            }
+            else if(strcmp(mode_str, "random-perf") == 0)
+            {
+                params->test_mode = FLA_TEST_MODE_RANDOM_PERF;
+            }
+            else
+            {
+                printf("\nError: Invalid test-mode argument: %s\n", argv[i]);
+                printf("       Available modes are:\n");
+                printf("         default     : API-specific initialization + validation (default)\n");
+                printf("         perf        : API-specific initialization + no validation\n");
+                printf("         random      : Random initialization + validation\n");
+                printf("         random-perf : Random initialization + no validation\n");
+                return -1;
+            }
+
+            return 1;
+        }
+    }
+    return 0;
+}
+
 #define FLA_ARGS_PARSE_RESULT_HANDLER                 \
     if(parse_status < 0)                              \
     {                                                 \
@@ -2091,6 +2173,9 @@ bool fla_parse_cmdline_args(integer *argc, char **argv, test_params_t *params)
     FLA_ARGS_PARSE_RESULT_HANDLER;
 
     parse_status = fla_parse_warmup_arg(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_parse_test_mode_arg(*argc, argv, params);
     FLA_ARGS_PARSE_RESULT_HANDLER;
 
     /* If warmup is not provided and benchmark mode then set
@@ -2275,4 +2360,110 @@ void fla_test_runtime_ctx_free(test_params_t *params)
         params->runtime_ctx.run_times_arr = NULL;
         params->runtime_ctx.run_times_arr_size = 0;
     }
+}
+
+/**
+ * @brief Compute residual for numerical accuracy validation.
+ *
+ * This function computes the normalized residual used in LAPACK-style accuracy tests.
+ * The residual is calculated as: norm / (norm_base * eps * m)
+ * If norm_base <= 0, then residual is 0.
+ *
+ * @param[in] datatype    Data type of the computation (FLOAT, DOUBLE, COMPLEX, or DOUBLE_COMPLEX)
+ * @param[in] eps_type    Type of epsilon to use ('P' or 'p' for precision epsilon, otherwise standard epsilon ('E' or 'e'))
+ * @param[in] norm        The computed norm (e.g., norm of difference between expected and actual)
+ * @param[in] norm_base   The base norm (e.g., norm of original matrix)
+ * @param[in] m           Problem dimension (used as scaling factor)
+ * @param[in] params      Pointer to test parameters structure containing eps and safe_min values
+ *
+ * @return The normalized residual value. Returns 0.0 if m <= 0 or norm_base <= safe_min
+ *
+ * @note This function selects appropriate epsilon and safe minimum values based on datatype
+ * @note For FLOAT/COMPLEX types, uses single precision constants; for DOUBLE/DOUBLE_COMPLEX, uses double precision
+ */
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params)
+{
+    double safe_min, eps;
+
+    /* Early return for invalid dimension */
+    if (m <= 0)
+    {
+        return 0.;
+    }
+
+    if(get_realtype(datatype) == FLOAT)
+    {
+        safe_min = ((test_params_t *)params)->sf_min_s;
+
+        if(eps_type == 'P' || eps_type == 'p')
+        {
+            eps = ((test_params_t *)params)->eps_p_s;
+        }
+        else
+        {
+            eps = ((test_params_t *)params)->eps_s;
+        }
+    }
+    else
+    {
+        safe_min = ((test_params_t *)params)->sf_min_d;
+        if(eps_type == 'P' || eps_type == 'p')
+        {
+            eps = ((test_params_t *)params)->eps_p_d;
+        }
+        else
+        {
+            eps = ((test_params_t *)params)->eps_d;
+        }
+    }
+
+    /* Check if norm_base is valid for division */
+    if (norm_base <= safe_min)
+    {
+        return 0.;
+    }
+    
+    /* Compute residual = norm / (norm_base * eps * m) */
+    return (norm / norm_base) / (eps * m);
+}
+
+
+/**
+ * @brief Compute residual normalized by matrix norm.
+ *
+ * This function computes the residual normalized by the matrix norm.
+ * If the matrix norm is less than or equal to the safe minimum, the residual is set to 0.
+ * Otherwise, the residual is computed as norm / norm_a.
+ *
+ * @param[in] datatype   Data type of the computation (FLOAT, DOUBLE, COMPLEX, or DOUBLE_COMPLEX)
+ * @param[in] norm       The computed norm (e.g., norm of difference)
+ * @param[in] norm_a     The matrix norm (e.g., norm of matrix A)
+ * @param[in] params     Pointer to test parameters structure containing safe_min values
+ *
+ * @return The normalized residual value. Returns 0.0 if norm_a <= safe_min
+ *
+ * @note This function selects appropriate safe minimum value based on datatype
+ * @note For FLOAT/COMPLEX types, uses single precision safe_min; for DOUBLE/DOUBLE_COMPLEX, uses double precision
+ */
+double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params)
+{
+    double safe_min;
+
+    if(get_realtype(datatype) == FLOAT)
+    {
+        safe_min = ((test_params_t *)params)->sf_min_s;
+    }
+    else
+    {
+        safe_min = ((test_params_t *)params)->sf_min_d;
+    }
+
+    /* Check if norm_a is valid for division */
+    if(norm_a <= safe_min)
+    {
+        return 0.0;
+    }
+
+    /* Compute residual = norm / norm_a */
+    return (norm / norm_a);
 }

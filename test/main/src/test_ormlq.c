@@ -133,6 +133,7 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
     char side, trans;
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
+    void *filename = NULL;
 
     double residual, err_thresh;
 
@@ -180,37 +181,43 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C_save, ldc);
     create_vector(datatype, &tau, k);
 
-    init_matrix(datatype, A, k, m_A, lda, g_ext_fptr, params->imatrix_char);
-    init_matrix(datatype, C, m, n, ldc, g_ext_fptr, params->imatrix_char);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        init_matrix(datatype, A, k, m_A, lda, g_ext_fptr, params->imatrix_char);
+        init_matrix(datatype, C, m, n, ldc, g_ext_fptr, params->imatrix_char);
 
-    /* Scaling matrix with values around overflow, underflow for ORMLQ/UNMLQ */
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        scale_matrix_underflow_overflow_ormlq(datatype, m_A, k, A, lda, params->imatrix_char);
-    }
-    /*Generate input matrix A for ormlq, where the i-th row must contain the vector which defines
-    the elementary reflector H(i), for i = 1,2,...,k, as returned by GELQF
-    */
-    if(g_ext_fptr == NULL && !(FLA_EXTREME_CASE_TEST))
-    {
-        create_vector(datatype, &work, i_one);
-        invoke_gelqf(datatype, &k, &m_A, NULL, &lda, NULL, work, &gelqf_lwork, &gelqf_info);
-        if(gelqf_info == 0)
+        /* Scaling matrix with values around overflow, underflow for ORMLQ/UNMLQ */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
-            gelqf_lwork = get_work_value(datatype, work);
+            scale_matrix_underflow_overflow_ormlq(datatype, m_A, k, A, lda, params->imatrix_char);
         }
-        else
+        /*Generate input matrix A for ormlq, where the i-th row must contain the vector which
+        defines the elementary reflector H(i), for i = 1,2,...,k, as returned by GELQF
+        */
+        if(g_ext_fptr == NULL && !(FLA_EXTREME_CASE_TEST))
         {
-            gelqf_lwork = fla_max(m_A, 1);
+            create_vector(datatype, &work, i_one);
+            invoke_gelqf(datatype, &k, &m_A, NULL, &lda, NULL, work, &gelqf_lwork, &gelqf_info);
+            if(gelqf_info == 0)
+            {
+                gelqf_lwork = get_work_value(datatype, work);
+            }
+            else
+            {
+                gelqf_lwork = fla_max(m_A, 1);
+            }
+            free_vector(work);
+            create_vector(datatype, &work, gelqf_lwork);
+            gelqf_info = 0;
+            invoke_gelqf(datatype, &k, &m_A, A, &lda, tau, work, &gelqf_lwork, &gelqf_info);
+            free_vector(work);
         }
-        free_vector(work);
-        create_vector(datatype, &work, gelqf_lwork);
-        gelqf_info = 0;
-        invoke_gelqf(datatype, &k, &m_A, A, &lda, tau, work, &gelqf_lwork, &gelqf_info);
-        free_vector(work);
+        /* Save the original matrix */
+        copy_matrix(datatype, "Full", m, n, C, ldc, C_save, ldc);
     }
-    /* Save the original matrix */
-    copy_matrix(datatype, "Full", m, n, C, ldc, C_save, ldc);
+    FLA_BRT_PROCESS_THREE_INPUT(datatype, m_A, fla_max(m_A, n_A), A, lda, datatype, m, n, C, ldc,
+                                datatype, 1, k, tau, 1, "ccdddddd", side, trans, m, n, k, lda, ldc,
+                                g_lwork)
 
     /* call to API */
     prepare_ormlq_run(datatype, side, trans, m, n, k, A, lda, m_A, n_A, tau, C, ldc, work, &info,
@@ -226,7 +233,12 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     /* Output validataion */
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, C, ldc),
+        validate_ormqr(tst_api, side, trans, m, n, k, A, lda, C, tau, ldc, C_save, datatype,
+                       residual, params->imatrix_char, params),
+        check_reproducibility_base(filename, params, 1, 0, datatype, m, n, C, ldc))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_ormqr(tst_api, side, trans, m, n, k, A, lda, C, tau, ldc, C_save, datatype,
                        residual, params->imatrix_char, params);
@@ -246,6 +258,8 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(C);
     free_matrix(C_save);
@@ -262,7 +276,7 @@ void prepare_ormlq_run(integer datatype, char side, char trans, integer m, integ
     double exe_time;
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C_save, ldc);
 
-    /* Workspace size calculations for complex datatype */
+    /* Workspace size calculations for scomplex datatype */
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */

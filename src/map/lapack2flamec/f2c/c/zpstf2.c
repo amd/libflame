@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-/* > \brief \b ZPSTF2 computes the Cholesky factorization with complete pivoting of a complex
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b ZPSTF2 computes the Cholesky factorization with complete pivoting of a scomplex
  * Hermitian positi ve semidefinite matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -45,7 +45,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZPSTF2 computes the Cholesky factorization with complete */
-/* > pivoting of a complex Hermitian positive semidefinite matrix A. */
+/* > pivoting of a scomplex Hermitian positive semidefinite matrix A. */
 /* > */
 /* > The factorization has the form */
 /* > P**T * A * P = U**H * U , if UPLO = 'U', */
@@ -141,49 +141,51 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv, integer *rank,
-             doublereal *tol, doublereal *work, integer *info)
+/** Generated wrapper function */
+void zpstf2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *piv,
+             aocl_int_t *rank, doublereal *tol, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpstf2(uplo, n, a, lda, piv, rank, tol, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpstf2(uplo, &n_64, a, &lda_64, piv, &rank_64, tol, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpstf2(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *piv, aocl_int64_t *rank, doublereal *tol, doublereal *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", tol %lf", *uplo, *n,
                       *lda, *tol);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal ajj;
-    integer pvt;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t pvt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp;
-    integer itemp;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t itemp;
     doublereal dstop;
     logical upper;
-    doublecomplex ztemp;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    dcomplex ztemp;
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
-    extern integer dmaxloc_(doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,7 +231,7 @@ void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPSTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPSTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -243,7 +245,7 @@ void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        piv[i__] = i__;
+        piv[i__] = (aocl_int_t)(i__);
         /* L100: */
     }
     /* Compute stopping value */
@@ -251,12 +253,12 @@ void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * a_dim1;
-        work[i__] = a[i__2].r;
+        work[i__] = a[i__2].real;
         /* L110: */
     }
-    pvt = dmaxloc_(&work[1], n);
+    pvt = aocl_lapack_dmaxloc(&work[1], n);
     i__1 = pvt + pvt * a_dim1;
-    ajj = a[i__1].r;
+    ajj = a[i__1].real;
     if(ajj <= 0. || disnan_(&ajj))
     {
         *rank = 0;
@@ -295,25 +297,25 @@ void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                 {
                     d_cnjg(&z__2, &a[j - 1 + i__ * a_dim1]);
                     i__3 = j - 1 + i__ * a_dim1;
-                    z__1.r = z__2.r * a[i__3].r - z__2.i * a[i__3].i;
-                    z__1.i = z__2.r * a[i__3].i + z__2.i * a[i__3].r; // , expr subst
-                    work[i__] += z__1.r;
+                    z__1.real = z__2.real * a[i__3].real - z__2.imag * a[i__3].imag;
+                    z__1.imag = z__2.real * a[i__3].imag + z__2.imag * a[i__3].real; // , expr subst
+                    work[i__] += z__1.real;
                 }
                 i__3 = i__ + i__ * a_dim1;
-                work[*n + i__] = a[i__3].r - work[i__];
+                work[*n + i__] = a[i__3].real - work[i__];
                 /* L130: */
             }
             if(j > 1)
             {
                 i__2 = *n - j + 1;
-                itemp = dmaxloc_(&work[*n + j], &i__2);
+                itemp = aocl_lapack_dmaxloc(&work[*n + j], &i__2);
                 pvt = itemp + j - 1;
                 ajj = work[*n + pvt];
                 if(ajj <= dstop || disnan_(&ajj))
                 {
                     i__2 = j + j * a_dim1;
-                    a[i__2].r = ajj;
-                    a[i__2].i = 0.; // , expr subst
+                    a[i__2].real = ajj;
+                    a[i__2].imag = 0.; // , expr subst
                     goto L190;
                 }
             }
@@ -322,63 +324,63 @@ void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                 /* Pivot OK, so can now swap pivot rows and columns */
                 i__2 = pvt + pvt * a_dim1;
                 i__3 = j + j * a_dim1;
-                a[i__2].r = a[i__3].r;
-                a[i__2].i = a[i__3].i; // , expr subst
+                a[i__2].real = a[i__3].real;
+                a[i__2].imag = a[i__3].imag; // , expr subst
                 i__2 = j - 1;
-                zswap_(&i__2, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
+                aocl_blas_zswap(&i__2, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
                 if(pvt < *n)
                 {
                     i__2 = *n - pvt;
-                    zswap_(&i__2, &a[j + (pvt + 1) * a_dim1], lda, &a[pvt + (pvt + 1) * a_dim1],
-                           lda);
+                    aocl_blas_zswap(&i__2, &a[j + (pvt + 1) * a_dim1], lda,
+                                    &a[pvt + (pvt + 1) * a_dim1], lda);
                 }
                 i__2 = pvt - 1;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     d_cnjg(&z__1, &a[j + i__ * a_dim1]);
-                    ztemp.r = z__1.r;
-                    ztemp.i = z__1.i; // , expr subst
+                    ztemp.real = z__1.real;
+                    ztemp.imag = z__1.imag; // , expr subst
                     i__3 = j + i__ * a_dim1;
                     d_cnjg(&z__1, &a[i__ + pvt * a_dim1]);
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     i__3 = i__ + pvt * a_dim1;
-                    a[i__3].r = ztemp.r;
-                    a[i__3].i = ztemp.i; // , expr subst
+                    a[i__3].real = ztemp.real;
+                    a[i__3].imag = ztemp.imag; // , expr subst
                     /* L140: */
                 }
                 i__2 = j + pvt * a_dim1;
                 d_cnjg(&z__1, &a[j + pvt * a_dim1]);
-                a[i__2].r = z__1.r;
-                a[i__2].i = z__1.i; // , expr subst
+                a[i__2].real = z__1.real;
+                a[i__2].imag = z__1.imag; // , expr subst
                 /* Swap dot products and PIV */
                 dtemp = work[j];
                 work[j] = work[pvt];
                 work[pvt] = dtemp;
                 itemp = piv[pvt];
                 piv[pvt] = piv[j];
-                piv[j] = itemp;
+                piv[j] = (aocl_int_t)(itemp);
             }
             ajj = sqrt(ajj);
             i__2 = j + j * a_dim1;
-            a[i__2].r = ajj;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = ajj;
+            a[i__2].imag = 0.; // , expr subst
             /* Compute elements J+1:N of row J */
             if(j < *n)
             {
                 i__2 = j - 1;
-                zlacgv_(&i__2, &a[j * a_dim1 + 1], &c__1);
+                aocl_lapack_zlacgv(&i__2, &a[j * a_dim1 + 1], &c__1);
                 i__2 = j - 1;
                 i__3 = *n - j;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("Trans", &i__2, &i__3, &z__1, &a[(j + 1) * a_dim1 + 1], lda,
-                       &a[j * a_dim1 + 1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1], lda);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("Trans", &i__2, &i__3, &z__1, &a[(j + 1) * a_dim1 + 1], lda,
+                                &a[j * a_dim1 + 1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1], lda);
                 i__2 = j - 1;
-                zlacgv_(&i__2, &a[j * a_dim1 + 1], &c__1);
+                aocl_lapack_zlacgv(&i__2, &a[j * a_dim1 + 1], &c__1);
                 i__2 = *n - j;
                 d__1 = 1. / ajj;
-                zdscal_(&i__2, &d__1, &a[j + (j + 1) * a_dim1], lda);
+                aocl_blas_zdscal(&i__2, &d__1, &a[j + (j + 1) * a_dim1], lda);
             }
             /* L150: */
         }
@@ -399,25 +401,25 @@ void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                 {
                     d_cnjg(&z__2, &a[i__ + (j - 1) * a_dim1]);
                     i__3 = i__ + (j - 1) * a_dim1;
-                    z__1.r = z__2.r * a[i__3].r - z__2.i * a[i__3].i;
-                    z__1.i = z__2.r * a[i__3].i + z__2.i * a[i__3].r; // , expr subst
-                    work[i__] += z__1.r;
+                    z__1.real = z__2.real * a[i__3].real - z__2.imag * a[i__3].imag;
+                    z__1.imag = z__2.real * a[i__3].imag + z__2.imag * a[i__3].real; // , expr subst
+                    work[i__] += z__1.real;
                 }
                 i__3 = i__ + i__ * a_dim1;
-                work[*n + i__] = a[i__3].r - work[i__];
+                work[*n + i__] = a[i__3].real - work[i__];
                 /* L160: */
             }
             if(j > 1)
             {
                 i__2 = *n - j + 1;
-                itemp = dmaxloc_(&work[*n + j], &i__2);
+                itemp = aocl_lapack_dmaxloc(&work[*n + j], &i__2);
                 pvt = itemp + j - 1;
                 ajj = work[*n + pvt];
                 if(ajj <= dstop || disnan_(&ajj))
                 {
                     i__2 = j + j * a_dim1;
-                    a[i__2].r = ajj;
-                    a[i__2].i = 0.; // , expr subst
+                    a[i__2].real = ajj;
+                    a[i__2].imag = 0.; // , expr subst
                     goto L190;
                 }
             }
@@ -426,63 +428,63 @@ void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                 /* Pivot OK, so can now swap pivot rows and columns */
                 i__2 = pvt + pvt * a_dim1;
                 i__3 = j + j * a_dim1;
-                a[i__2].r = a[i__3].r;
-                a[i__2].i = a[i__3].i; // , expr subst
+                a[i__2].real = a[i__3].real;
+                a[i__2].imag = a[i__3].imag; // , expr subst
                 i__2 = j - 1;
-                zswap_(&i__2, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
+                aocl_blas_zswap(&i__2, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
                 if(pvt < *n)
                 {
                     i__2 = *n - pvt;
-                    zswap_(&i__2, &a[pvt + 1 + j * a_dim1], &c__1, &a[pvt + 1 + pvt * a_dim1],
-                           &c__1);
+                    aocl_blas_zswap(&i__2, &a[pvt + 1 + j * a_dim1], &c__1,
+                                    &a[pvt + 1 + pvt * a_dim1], &c__1);
                 }
                 i__2 = pvt - 1;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     d_cnjg(&z__1, &a[i__ + j * a_dim1]);
-                    ztemp.r = z__1.r;
-                    ztemp.i = z__1.i; // , expr subst
+                    ztemp.real = z__1.real;
+                    ztemp.imag = z__1.imag; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     d_cnjg(&z__1, &a[pvt + i__ * a_dim1]);
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     i__3 = pvt + i__ * a_dim1;
-                    a[i__3].r = ztemp.r;
-                    a[i__3].i = ztemp.i; // , expr subst
+                    a[i__3].real = ztemp.real;
+                    a[i__3].imag = ztemp.imag; // , expr subst
                     /* L170: */
                 }
                 i__2 = pvt + j * a_dim1;
                 d_cnjg(&z__1, &a[pvt + j * a_dim1]);
-                a[i__2].r = z__1.r;
-                a[i__2].i = z__1.i; // , expr subst
+                a[i__2].real = z__1.real;
+                a[i__2].imag = z__1.imag; // , expr subst
                 /* Swap dot products and PIV */
                 dtemp = work[j];
                 work[j] = work[pvt];
                 work[pvt] = dtemp;
                 itemp = piv[pvt];
                 piv[pvt] = piv[j];
-                piv[j] = itemp;
+                piv[j] = (aocl_int_t)(itemp);
             }
             ajj = sqrt(ajj);
             i__2 = j + j * a_dim1;
-            a[i__2].r = ajj;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = ajj;
+            a[i__2].imag = 0.; // , expr subst
             /* Compute elements J+1:N of column J */
             if(j < *n)
             {
                 i__2 = j - 1;
-                zlacgv_(&i__2, &a[j + a_dim1], lda);
+                aocl_lapack_zlacgv(&i__2, &a[j + a_dim1], lda);
                 i__2 = *n - j;
                 i__3 = j - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No Trans", &i__2, &i__3, &z__1, &a[j + 1 + a_dim1], lda, &a[j + a_dim1],
-                       lda, &c_b1, &a[j + 1 + j * a_dim1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No Trans", &i__2, &i__3, &z__1, &a[j + 1 + a_dim1], lda,
+                                &a[j + a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1], &c__1);
                 i__2 = j - 1;
-                zlacgv_(&i__2, &a[j + a_dim1], lda);
+                aocl_lapack_zlacgv(&i__2, &a[j + a_dim1], lda);
                 i__2 = *n - j;
                 d__1 = 1. / ajj;
-                zdscal_(&i__2, &d__1, &a[j + 1 + j * a_dim1], &c__1);
+                aocl_blas_zdscal(&i__2, &d__1, &a[j + 1 + j * a_dim1], &c__1);
             }
             /* L180: */
         }

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CUNGBR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -39,8 +39,8 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNGBR generates one of the complex unitary matrices Q or P**H */
-/* > determined by CGEBRD when reducing a complex matrix A to bidiagonal */
+/* > CUNGBR generates one of the scomplex unitary matrices Q or P**H */
+/* > determined by CGEBRD when reducing a scomplex matrix A to bidiagonal */
 /* > form: A = Q * B * P**H. Q and P**H are defined as products of */
 /* > elementary reflectors H(i) or G(i) respectively. */
 /* > */
@@ -158,31 +158,44 @@ the routine */
 /* > \ingroup ungbr */
 /* ===================================================================== */
 /* Subroutine */
-void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
-             complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cungbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a, aocl_int_t *lda,
+             scomplex *tau, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cungbr(vect, m, n, k, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cungbr(vect, &m_64, &n_64, &k_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cungbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a,
+                        aocl_int64_t *lda, scomplex *tau, scomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cungbr inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS "",
                       *vect, *m, *n, *k, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-    integer i__, j, mn;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t i__, j, mn;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical wantq;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cunglq_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *),
-        cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -241,13 +254,13 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
     }
     if(*info == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         if(wantq)
         {
             if(*m >= *k)
             {
-                cungqr_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
+                aocl_lapack_cungqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
@@ -256,8 +269,8 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
                     i__1 = *m - 1;
                     i__2 = *m - 1;
                     i__3 = *m - 1;
-                    cungqr_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &c_n1,
-                            &iinfo);
+                    aocl_lapack_cungqr(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1],
+                                       &c_n1, &iinfo);
                 }
             }
         }
@@ -265,7 +278,7 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
         {
             if(*k < *n)
             {
-                cunglq_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
+                aocl_lapack_cunglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
@@ -274,34 +287,34 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
                     i__1 = *n - 1;
                     i__2 = *n - 1;
                     i__3 = *n - 1;
-                    cunglq_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &c_n1,
-                            &iinfo);
+                    aocl_lapack_cunglq(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1],
+                                       &c_n1, &iinfo);
                 }
             }
         }
-        lwkopt = (integer)work[1].r;
+        lwkopt = (integer)work[1].real;
         lwkopt = fla_max(lwkopt, mn);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGBR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNGBR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        r__1 = sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -312,7 +325,7 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
         if(*m >= *k)
         {
             /* If m >= k, assume m >= n >= k */
-            cungqr_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+            aocl_lapack_cungqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
         }
         else
         {
@@ -323,28 +336,28 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
             for(j = *m; j >= 2; --j)
             {
                 i__1 = j * a_dim1 + 1;
-                a[i__1].r = 0.f;
-                a[i__1].i = 0.f; // , expr subst
+                a[i__1].real = 0.f;
+                a[i__1].imag = 0.f; // , expr subst
                 i__1 = *m;
                 for(i__ = j + 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + j * a_dim1;
                     i__3 = i__ + (j - 1) * a_dim1;
-                    a[i__2].r = a[i__3].r;
-                    a[i__2].i = a[i__3].i; // , expr subst
+                    a[i__2].real = a[i__3].real;
+                    a[i__2].imag = a[i__3].imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
             }
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 1.f;
+            a[i__1].imag = 0.f; // , expr subst
             i__1 = *m;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + a_dim1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L30: */
             }
             if(*m > 1)
@@ -353,8 +366,8 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
                 i__1 = *m - 1;
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                cungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
-                        &iinfo);
+                aocl_lapack_cungqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1],
+                                   &work[1], lwork, &iinfo);
             }
         }
     }
@@ -365,7 +378,7 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
         if(*k < *n)
         {
             /* If k < n, assume k <= m <= n */
-            cunglq_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+            aocl_lapack_cunglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
         }
         else
         {
@@ -374,14 +387,14 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
             /* row downward, and set the first row and column of P**H to */
             /* those of the unit matrix */
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 1.f;
+            a[i__1].imag = 0.f; // , expr subst
             i__1 = *n;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + a_dim1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L40: */
             }
             i__1 = *n;
@@ -391,13 +404,13 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
                 {
                     i__2 = i__ + j * a_dim1;
                     i__3 = i__ - 1 + j * a_dim1;
-                    a[i__2].r = a[i__3].r;
-                    a[i__2].i = a[i__3].i; // , expr subst
+                    a[i__2].real = a[i__3].real;
+                    a[i__2].imag = a[i__3].imag; // , expr subst
                     /* L50: */
                 }
                 i__2 = j * a_dim1 + 1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L60: */
             }
             if(*n > 1)
@@ -406,14 +419,14 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
                 i__1 = *n - 1;
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                cunglq_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
-                        &iinfo);
+                aocl_lapack_cunglq(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1],
+                                   &work[1], lwork, &iinfo);
             }
         }
     }
-    r__1 = sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CUNGBR */

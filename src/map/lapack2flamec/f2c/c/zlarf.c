@@ -10,9 +10,9 @@
  *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARF applies an elementary reflector to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -48,13 +48,13 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARF applies a complex elementary reflector H to a complex M-by-N */
+/* > ZLARF applies a scomplex elementary reflector H to a scomplex M-by-N */
 /* > matrix C, from either the left or the right. H is represented in the */
 /* > form */
 /* > */
 /* > H = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar and v is a complex vector. */
+/* > where tau is a scomplex scalar and v is a scomplex vector. */
 /* > */
 /* > If tau = 0, then H is taken to be the unit matrix. */
 /* > */
@@ -133,8 +133,25 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau,
-            doublecomplex *c__, integer *ldc, doublecomplex *work)
+/** Generated wrapper function */
+void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *incv,
+            dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarf(side, m, n, v, incv, tau, c__, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incv_64 = *incv;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_zlarf(side, &m_64, &n_64, v, &incv_64, tau, c__, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
+                       aocl_int64_t *incv, dcomplex *tau, dcomplex *c__,
+                       aocl_int64_t *ldc, dcomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
@@ -142,26 +159,19 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
                       *side, *m, *n, *incv, *ldc);
 
     /* System generated locals */
-    integer c_dim1, c_offset, i__1;
-    doublecomplex z__1;
+    aocl_int64_t c_dim1, c_offset, i__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     logical applyleft;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lastc;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lastc;
 #if FLA_ENABLE_AMD_OPT
-    void fla_zlarf_left_invc1_opt(integer m, integer n, doublecomplex * a_buff, integer ldr,
-                                  doublecomplex * v, doublecomplex * ntau, doublecomplex * work);
+    void fla_zlarf_left_invc1_opt(aocl_int64_t m, aocl_int64_t n, dcomplex * a_buff,
+                                  aocl_int64_t ldr, dcomplex * v, dcomplex * ntau,
+                                  dcomplex * work);
 #endif
-    extern /* Subroutine */
-        void
-        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, integer *),
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer lastv;
-    extern integer ilazlc_(integer *, integer *, doublecomplex *, integer *),
-        ilazlr_(integer *, integer *, doublecomplex *, integer *);
+    aocl_int64_t lastv;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +200,7 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
     applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
-    if(tau->r != 0. || tau->i != 0.)
+    if(tau->real != 0. || tau->imag != 0.)
     {
         /* Set up variables for scanning V. LASTV begins pointing to the end */
         /* of V. */
@@ -215,7 +225,7 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
         {
             /* while(complicated condition) */
             i__1 = i__;
-            if(!(lastv > 0 && (v[i__1].r == 0. && v[i__1].i == 0.)))
+            if(!(lastv > 0 && (v[i__1].real == 0. && v[i__1].imag == 0.)))
                 break;
             --lastv;
             i__ -= *incv;
@@ -223,12 +233,12 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
-            lastc = ilazlc_(&lastv, n, &c__[c_offset], ldc);
+            lastc = aocl_lapack_ilazlc(&lastv, n, &c__[c_offset], ldc);
         }
         else
         {
             /* Scan for the last non-zero row in C(:,1:lastv). */
-            lastc = ilazlr_(m, &lastv, &c__[c_offset], ldc);
+            lastc = aocl_lapack_ilazlr(m, &lastv, &c__[c_offset], ldc);
         }
     }
     /* Note that lastc.eq.0 renders the BLAS operations null;
@@ -239,8 +249,8 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
         /* Form H * C */
         if(lastv > 0)
         {
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
+            z__1.real = -tau->real;
+            z__1.imag = -tau->imag; // , expr subst
 #ifdef FLA_ENABLE_AMD_OPT
             if(*incv == c__1 /*  && lastc < FLA_ZGEMV_ZGER_SMALL_THRESH_C */)
             {
@@ -252,17 +262,19 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
             {
                 /* Original code */
                 /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
-                zgemv_("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc, &v[1],
-                       incv, &c_b2, &work[1], &c__1);
+                aocl_blas_zgemv("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc,
+                                &v[1], incv, &c_b2, &work[1], &c__1);
                 /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
-                zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+                aocl_blas_zgerc(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
+                                ldc);
             }
 #else
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
-            zgemv_("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc, &v[1], incv,
-                   &c_b2, &work[1], &c__1);
+            aocl_blas_zgemv("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc,
+                            &v[1], incv, &c_b2, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
-            zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+            aocl_blas_zgerc(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
+                            ldc);
 #endif
         }
     }
@@ -272,12 +284,13 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            zgemv_("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv, &c_b2,
-                   &work[1], &c__1);
+            aocl_blas_zgemv("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv,
+                            &c_b2, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H */
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
-            zgerc_(&lastc, &lastv, &z__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
+            z__1.real = -tau->real;
+            z__1.imag = -tau->imag; // , expr subst
+            aocl_blas_zgerc(&lastc, &lastv, &z__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
+                            ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

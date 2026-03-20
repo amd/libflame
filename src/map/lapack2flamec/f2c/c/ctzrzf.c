@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CTZRZF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CTZRZF reduces the M-by-N ( M<=N ) complex upper trapezoidal matrix A */
+/* > CTZRZF reduces the M-by-N ( M<=N ) scomplex upper trapezoidal matrix A */
 /* > to upper triangular form by means of unitary transformations. */
 /* > */
 /* > The upper trapezoidal matrix A is factored as */
@@ -150,8 +150,27 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void ctzrzf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctzrzf(m, n, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctzrzf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctzrzf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -165,25 +184,12 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
     /* Local variables */
-    integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        clarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
-                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
-                integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        clarzt_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        clatrz_(integer *, integer *, integer *, complex *, integer *, complex *, complex *);
-    integer lwkmin, ldwork, lwkopt;
+    aocl_int64_t i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
+    aocl_int64_t lwkmin, ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -236,13 +242,13 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         else
         {
             /* Determine the block size. */
-            nb = ilaenv_(&c__1, "CGERQF", " ", m, n, &c_n1, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CGERQF", " ", m, n, &c_n1, &c_n1);
             lwkopt = *m * nb;
             lwkmin = fla_max(1, *m);
         }
-        r__1 = sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -7;
@@ -251,7 +257,7 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTZRZF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTZRZF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -272,8 +278,8 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            tau[i__2].r = 0.f;
-            tau[i__2].i = 0.f; // , expr subst
+            tau[i__2].real = 0.f;
+            tau[i__2].imag = 0.f; // , expr subst
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -287,7 +293,7 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *m)
         {
@@ -301,7 +307,7 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -329,21 +335,21 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
             /* A(i:i+ib-1,i:n) */
             i__3 = *n - i__ + 1;
             i__4 = *n - *m;
-            clatrz_(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
+            aocl_lapack_clatrz(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
             if(i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *n - *m;
-                clarzt_("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_clarzt("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H to A(1:i-1,i:n) from the right */
                 i__3 = i__ - 1;
                 i__4 = *n - i__ + 1;
                 i__5 = *n - *m;
-                clarzb_("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4, &ib, &i__5,
-                        &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork, &a[i__ * a_dim1 + 1], lda,
-                        &work[ib + 1], &ldwork);
+                aocl_lapack_clarzb("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4,
+                                   &ib, &i__5, &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ * a_dim1 + 1], lda, &work[ib + 1], &ldwork);
             }
             /* L20: */
         }
@@ -357,11 +363,11 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     if(mu > 0)
     {
         i__2 = *n - *m;
-        clatrz_(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
+        aocl_lapack_clatrz(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
-    r__1 = sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CTZRZF */

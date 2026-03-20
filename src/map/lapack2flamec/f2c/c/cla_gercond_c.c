@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLA_GERCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for
  * general mat rices. */
 /* =========== DOCUMENTATION =========== */
@@ -139,9 +139,31 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
-real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *af, integer *ldaf,
-                    integer *ipiv, real *c__, logical *capply, integer *info, complex *work,
-                    real *rwork)
+/** Generated wrapper function */
+real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *af,
+                    aocl_int_t *ldaf, aocl_int_t *ipiv, real *c__, logical *capply,
+                    aocl_int_t *info, scomplex *work, real *rwork)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_cla_gercond_c(trans, n, a, lda, af, ldaf, ipiv, c__, capply, info, work,
+                                     rwork);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t info_64 = *info;
+
+    real ret_val = aocl_lapack_cla_gercond_c(trans, &n_64, a, &lda_64, af, &ldaf_64, ipiv, c__,
+                                             capply, &info_64, work, rwork);
+
+    *info = (aocl_int_t)info_64;
+    return ret_val;
+#endif
+}
+
+real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                               scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv, real *c__,
+                               logical *capply, aocl_int64_t *info, scomplex *work, real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -156,24 +178,18 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
     real ret_val, r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real tmp;
-    integer kase;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t kase;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     real anorm;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
-                integer *);
     real ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -234,7 +250,7 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLA_GERCOND_C", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("CLA_GERCOND_C", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
@@ -252,7 +268,7 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += ((r__1 = a[i__3].real, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
                            / c__[j];
                 }
@@ -263,7 +279,7 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += (r__1 = a[i__3].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                 }
             }
@@ -283,7 +299,7 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += ((r__1 = a[i__3].real, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2)))
                            / c__[j];
                 }
@@ -294,7 +310,7 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += (r__1 = a[i__3].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                 }
             }
@@ -318,7 +334,7 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
     ainvnm = 0.f;
     kase = 0;
 L10:
-    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -330,20 +346,20 @@ L10:
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = i__;
-                q__1.r = rwork[i__4] * work[i__3].r;
-                q__1.i = rwork[i__4] * work[i__3].i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__4] * work[i__3].real;
+                q__1.imag = rwork[i__4] * work[i__3].imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
             if(notrans)
             {
-                cgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                        info);
+                aocl_lapack_cgetrs("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
+                                   &work[1], n, info);
             }
             else
             {
-                cgetrs_("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1],
-                        n, info);
+                aocl_lapack_cgetrs("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
+                                   &work[1], n, info);
             }
             /* Multiply by inv(C). */
             if(*capply)
@@ -354,10 +370,10 @@ L10:
                     i__2 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    q__1.r = c__[i__4] * work[i__3].r;
-                    q__1.i = c__[i__4] * work[i__3].i; // , expr subst
-                    work[i__2].r = q__1.r;
-                    work[i__2].i = q__1.i; // , expr subst
+                    q__1.real = c__[i__4] * work[i__3].real;
+                    q__1.imag = c__[i__4] * work[i__3].imag; // , expr subst
+                    work[i__2].real = q__1.real;
+                    work[i__2].imag = q__1.imag; // , expr subst
                 }
             }
         }
@@ -372,21 +388,21 @@ L10:
                     i__2 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    q__1.r = c__[i__4] * work[i__3].r;
-                    q__1.i = c__[i__4] * work[i__3].i; // , expr subst
-                    work[i__2].r = q__1.r;
-                    work[i__2].i = q__1.i; // , expr subst
+                    q__1.real = c__[i__4] * work[i__3].real;
+                    q__1.imag = c__[i__4] * work[i__3].imag; // , expr subst
+                    work[i__2].real = q__1.real;
+                    work[i__2].imag = q__1.imag; // , expr subst
                 }
             }
             if(notrans)
             {
-                cgetrs_("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1],
-                        n, info);
+                aocl_lapack_cgetrs("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
+                                   &work[1], n, info);
             }
             else
             {
-                cgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                        info);
+                aocl_lapack_cgetrs("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
+                                   &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;
@@ -395,10 +411,10 @@ L10:
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = i__;
-                q__1.r = rwork[i__4] * work[i__3].r;
-                q__1.i = rwork[i__4] * work[i__3].i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__4] * work[i__3].real;
+                q__1.imag = rwork[i__4] * work[i__3].imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
         }
         goto L10;

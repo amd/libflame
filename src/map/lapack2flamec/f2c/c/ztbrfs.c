@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTBRFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -187,45 +187,60 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs,
-             doublecomplex *ab, integer *ldab, doublecomplex *b, integer *ldb, doublecomplex *x,
-             integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work,
-             doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs,
+             dcomplex *ab, aocl_int_t *ldab, dcomplex *b, aocl_int_t *ldb,
+             dcomplex *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr,
+             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztbrfs(uplo, trans, diag, n, kd, nrhs, ab, ldab, b, ldb, x, ldx, ferr, berr, work,
+                       rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztbrfs(uplo, trans, diag, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, b, &ldb_64, x,
+                       &ldx_64, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztbrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, aocl_int64_t *kd,
+                        aocl_int64_t *nrhs, dcomplex *ab, aocl_int64_t *ldab, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *x, aocl_int64_t *ldx, doublereal *ferr,
+                        doublereal *berr, dcomplex *work, doublereal *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztbrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
                       ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
                       *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
     /* System generated locals */
-    integer ab_dim1, ab_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4,
+        i__5;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal s, xk;
-    integer nz;
+    aocl_int64_t nz;
     doublereal eps;
-    integer kase;
+    aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
-    extern /* Subroutine */
-        void
-        ztbmv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-               doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-               doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1], transt[1];
     logical nounit;
@@ -315,7 +330,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTBRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -354,11 +369,11 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     {
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
-        zcopy_(n, &x[j * x_dim1 + 1], &c__1, &work[1], &c__1);
-        ztbmv_(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &work[1], &c__1);
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
-        zaxpy_(n, &z__1, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        aocl_blas_zcopy(n, &x[j * x_dim1 + 1], &c__1, &work[1], &c__1);
+        aocl_blas_ztbmv(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &work[1], &c__1);
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        aocl_blas_zaxpy(n, &z__1, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -369,7 +384,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+            rwork[i__] = (d__1 = b[i__3].real, f2c_dabs(d__1))
                          + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
             /* L20: */
         }
@@ -384,7 +399,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                        xk = (d__1 = x[i__3].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         /* Computing MAX */
                         i__3 = 1;
@@ -393,7 +408,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
                         {
                             i__3 = *kd + 1 + i__ - k + k * ab_dim1;
-                            rwork[i__] += ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                            rwork[i__] += ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                                            + (d__2 = d_imag(&ab[*kd + 1 + i__ - k + k * ab_dim1]),
                                               f2c_dabs(d__2)))
                                           * xk;
@@ -408,7 +423,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__5 = k + j * x_dim1;
-                        xk = (d__1 = x[i__5].r, f2c_dabs(d__1))
+                        xk = (d__1 = x[i__5].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         /* Computing MAX */
                         i__5 = 1;
@@ -417,7 +432,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         for(i__ = fla_max(i__5, i__3); i__ <= i__4; ++i__)
                         {
                             i__5 = *kd + 1 + i__ - k + k * ab_dim1;
-                            rwork[i__] += ((d__1 = ab[i__5].r, f2c_dabs(d__1))
+                            rwork[i__] += ((d__1 = ab[i__5].real, f2c_dabs(d__1))
                                            + (d__2 = d_imag(&ab[*kd + 1 + i__ - k + k * ab_dim1]),
                                               f2c_dabs(d__2)))
                                           * xk;
@@ -436,7 +451,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__4 = k + j * x_dim1;
-                        xk = (d__1 = x[i__4].r, f2c_dabs(d__1))
+                        xk = (d__1 = x[i__4].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         /* Computing MIN */
                         i__5 = *n;
@@ -445,7 +460,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         for(i__ = k; i__ <= i__4; ++i__)
                         {
                             i__5 = i__ + 1 - k + k * ab_dim1;
-                            rwork[i__] += ((d__1 = ab[i__5].r, f2c_dabs(d__1))
+                            rwork[i__] += ((d__1 = ab[i__5].real, f2c_dabs(d__1))
                                            + (d__2 = d_imag(&ab[i__ + 1 - k + k * ab_dim1]),
                                               f2c_dabs(d__2)))
                                           * xk;
@@ -460,7 +475,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__4 = k + j * x_dim1;
-                        xk = (d__1 = x[i__4].r, f2c_dabs(d__1))
+                        xk = (d__1 = x[i__4].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         /* Computing MIN */
                         i__5 = *n;
@@ -469,7 +484,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         for(i__ = k + 1; i__ <= i__4; ++i__)
                         {
                             i__5 = i__ + 1 - k + k * ab_dim1;
-                            rwork[i__] += ((d__1 = ab[i__5].r, f2c_dabs(d__1))
+                            rwork[i__] += ((d__1 = ab[i__5].real, f2c_dabs(d__1))
                                            + (d__2 = d_imag(&ab[i__ + 1 - k + k * ab_dim1]),
                                               f2c_dabs(d__2)))
                                           * xk;
@@ -500,10 +515,10 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         {
                             i__4 = *kd + 1 + i__ - k + k * ab_dim1;
                             i__5 = i__ + j * x_dim1;
-                            s += ((d__1 = ab[i__4].r, f2c_dabs(d__1))
+                            s += ((d__1 = ab[i__4].real, f2c_dabs(d__1))
                                   + (d__2 = d_imag(&ab[*kd + 1 + i__ - k + k * ab_dim1]),
                                      f2c_dabs(d__2)))
-                                 * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                                 * ((d__3 = x[i__5].real, f2c_dabs(d__3))
                                     + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                             /* L110: */
                         }
@@ -517,7 +532,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        s = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                        s = (d__1 = x[i__3].real, f2c_dabs(d__1))
                             + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         /* Computing MAX */
                         i__3 = 1;
@@ -527,10 +542,10 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         {
                             i__3 = *kd + 1 + i__ - k + k * ab_dim1;
                             i__4 = i__ + j * x_dim1;
-                            s += ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                            s += ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                                   + (d__2 = d_imag(&ab[*kd + 1 + i__ - k + k * ab_dim1]),
                                      f2c_dabs(d__2)))
-                                 * ((d__3 = x[i__4].r, f2c_dabs(d__3))
+                                 * ((d__3 = x[i__4].real, f2c_dabs(d__3))
                                     + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                             /* L130: */
                         }
@@ -555,9 +570,9 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         {
                             i__3 = i__ + 1 - k + k * ab_dim1;
                             i__4 = i__ + j * x_dim1;
-                            s += ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                            s += ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                                   + (d__2 = d_imag(&ab[i__ + 1 - k + k * ab_dim1]), f2c_dabs(d__2)))
-                                 * ((d__3 = x[i__4].r, f2c_dabs(d__3))
+                                 * ((d__3 = x[i__4].real, f2c_dabs(d__3))
                                     + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                             /* L150: */
                         }
@@ -571,7 +586,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__5 = k + j * x_dim1;
-                        s = (d__1 = x[i__5].r, f2c_dabs(d__1))
+                        s = (d__1 = x[i__5].real, f2c_dabs(d__1))
                             + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         /* Computing MIN */
                         i__3 = *n;
@@ -581,9 +596,9 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         {
                             i__3 = i__ + 1 - k + k * ab_dim1;
                             i__4 = i__ + j * x_dim1;
-                            s += ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                            s += ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                                   + (d__2 = d_imag(&ab[i__ + 1 - k + k * ab_dim1]), f2c_dabs(d__2)))
-                                 * ((d__3 = x[i__4].r, f2c_dabs(d__3))
+                                 * ((d__3 = x[i__4].real, f2c_dabs(d__3))
                                     + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                             /* L170: */
                         }
@@ -602,7 +617,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                 /* Computing MAX */
                 i__5 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__5].r, f2c_dabs(d__1))
+                d__4 = ((d__1 = work[i__5].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)))
                        / rwork[i__]; // , expr subst
                 s = fla_max(d__3, d__4);
@@ -612,7 +627,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                 /* Computing MAX */
                 i__5 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__5].r, f2c_dabs(d__1))
+                d__4 = ((d__1 = work[i__5].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1)
                        / (rwork[i__] + safe1); // , expr subst
                 s = fla_max(d__3, d__4);
@@ -643,13 +658,13 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
             if(rwork[i__] > safe2)
             {
                 i__5 = i__;
-                rwork[i__] = (d__1 = work[i__5].r, f2c_dabs(d__1))
+                rwork[i__] = (d__1 = work[i__5].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__5 = i__;
-                rwork[i__] = (d__1 = work[i__5].r, f2c_dabs(d__1))
+                rwork[i__] = (d__1 = work[i__5].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__]
                              + safe1;
             }
@@ -657,23 +672,23 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         }
         kase = 0;
     L210:
-        zlacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**H). */
-                ztbsv_(uplo, transt, diag, n, kd, &ab[ab_offset], ldab, &work[1], &c__1);
+                aocl_blas_ztbsv(uplo, transt, diag, n, kd, &ab[ab_offset], ldab, &work[1], &c__1);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__5 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    z__1.r = rwork[i__3] * work[i__4].r;
-                    z__1.i = rwork[i__3] * work[i__4].i; // , expr subst
-                    work[i__5].r = z__1.r;
-                    work[i__5].i = z__1.i; // , expr subst
+                    z__1.real = rwork[i__3] * work[i__4].real;
+                    z__1.imag = rwork[i__3] * work[i__4].imag; // , expr subst
+                    work[i__5].real = z__1.real;
+                    work[i__5].imag = z__1.imag; // , expr subst
                     /* L220: */
                 }
             }
@@ -686,13 +701,13 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     i__5 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    z__1.r = rwork[i__3] * work[i__4].r;
-                    z__1.i = rwork[i__3] * work[i__4].i; // , expr subst
-                    work[i__5].r = z__1.r;
-                    work[i__5].i = z__1.i; // , expr subst
+                    z__1.real = rwork[i__3] * work[i__4].real;
+                    z__1.imag = rwork[i__3] * work[i__4].imag; // , expr subst
+                    work[i__5].real = z__1.real;
+                    work[i__5].imag = z__1.imag; // , expr subst
                     /* L230: */
                 }
-                ztbsv_(uplo, transn, diag, n, kd, &ab[ab_offset], ldab, &work[1], &c__1);
+                aocl_blas_ztbsv(uplo, transn, diag, n, kd, &ab[ab_offset], ldab, &work[1], &c__1);
             }
             goto L210;
         }
@@ -704,7 +719,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
             /* Computing MAX */
             i__5 = i__ + j * x_dim1;
             d__3 = lstres;
-            d__4 = (d__1 = x[i__5].r, f2c_dabs(d__1))
+            d__4 = (d__1 = x[i__5].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
             lstres = fla_max(d__3, d__4);
             /* L240: */

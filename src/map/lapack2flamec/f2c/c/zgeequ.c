@@ -134,25 +134,41 @@
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *r__,
+/** Generated wrapper function */
+void zgeequ_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *r__,
              doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax,
-             integer *info)
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgeequ(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgeequ(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgeequ(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+                        doublereal *amax, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeequ inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal rcmin, rcmax;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -202,7 +218,7 @@ void zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEEQU", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -235,7 +251,7 @@ void zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             d__3 = r__[i__];
-            d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+            d__4 = (d__1 = a[i__3].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
             r__[i__] = fla_max(d__3, d__4);
             /* L20: */
@@ -308,7 +324,7 @@ void zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             d__3 = c__[j];
-            d__4 = ((d__1 = a[i__3].r, f2c_dabs(d__1))
+            d__4 = ((d__1 = a[i__3].real, f2c_dabs(d__1))
                     + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)))
                    * r__[i__]; // , expr subst
             c__[j] = fla_max(d__3, d__4);

@@ -134,7 +134,7 @@ void libfla_test_hessut_experiment( test_params_t params,
 	FLA_Obj      A_save;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur * abs(m_input);
+	if ( m_input < 0 ) m = p_cur * -m_input;
 	else               m = p_cur;
 
 	// Create the matrices for the current operation.

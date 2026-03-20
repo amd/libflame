@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZSTEIN */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -51,9 +51,9 @@ static integer c_n1 = -1;
 /* > The maximum number of iterations allowed for each eigenvector is */
 /* > specified by an internal parameter MAXITS (currently set to 5). */
 /* > */
-/* > Although the eigenvectors are real, they are stored in a complex */
+/* > Although the eigenvectors are real, they are stored in a scomplex */
 /* > array, which may be passed to ZUNMTR or ZUPMTR for back */
-/* > transformation to the eigenvectors of a complex Hermitian matrix */
+/* > transformation to the eigenvectors of a scomplex Hermitian matrix */
 /* > which was reduced to tridiagonal form. */
 /* > */
 /* > \endverbatim */
@@ -180,52 +180,52 @@ IBLOCK(i)=1 if eigenvalue W(i) belongs to */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal *w, integer *iblock,
-             integer *isplit, doublecomplex *z__, integer *ldz, doublereal *work, integer *iwork,
-             integer *ifail, integer *info)
+/** Generated wrapper function */
+void zstein_(aocl_int_t *n, doublereal *d__, doublereal *e, aocl_int_t *m, doublereal *w,
+             aocl_int_t *iblock, aocl_int_t *isplit, dcomplex *z__, aocl_int_t *ldz,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zstein(n, d__, e, m, w, iblock, isplit, z__, ldz, work, iwork, ifail, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zstein(&n_64, d__, e, &m_64, w, iblock, isplit, z__, &ldz_64, work, iwork, ifail,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zstein(aocl_int64_t *n, doublereal *d__, doublereal *e, aocl_int64_t *m,
+                        doublereal *w, aocl_int_t *iblock, aocl_int_t *isplit, dcomplex *z__,
+                        aocl_int64_t *ldz, doublereal *work, aocl_int_t *iwork, aocl_int_t *ifail,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zstein inputs: n %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS "", *n, *m, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4, d__5;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, b1, j1, bn, jr;
+    aocl_int64_t i__, j, b1, j1, bn, jr;
     doublereal xj, scl, eps, sep, nrm, tol;
-    integer its;
+    aocl_int64_t its;
     doublereal xjm, ztr, eps1;
-    integer jblk, nblk, jmax;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    integer iseed[4], gpind, iinfo;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t jblk, nblk, jmax;
+    aocl_int_t iseed[4];
+    aocl_int64_t gpind, iinfo;
     doublereal ortol;
-    integer indrv1, indrv2, indrv3, indrv4, indrv5;
+    aocl_int64_t indrv1, indrv2, indrv3, indrv4, indrv5;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlagtf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dlagts_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, doublereal *, doublereal *, integer *);
-    integer nrmchk;
-    extern /* Subroutine */
-        void
-        dlarnv_(integer *, integer *, integer *, doublereal *);
-    integer blksiz;
+    aocl_int64_t nrmchk;
+    aocl_int64_t blksiz;
     doublereal onenrm, dtpcrt, pertol;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -309,7 +309,7 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSTEIN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSTEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -322,8 +322,8 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
     else if(*n == 1)
     {
         i__1 = z_dim1 + 1;
-        z__[i__1].r = 1.;
-        z__[i__1].i = 0.; // , expr subst
+        z__[i__1].real = 1.;
+        z__[i__1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -414,17 +414,17 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
             its = 0;
             nrmchk = 0;
             /* Get random starting vector. */
-            dlarnv_(&c__2, iseed, &blksiz, &work[indrv1 + 1]);
+            aocl_lapack_dlarnv(&c__2, iseed, &blksiz, &work[indrv1 + 1]);
             /* Copy the matrix T so it won't be destroyed in factorization. */
-            dcopy_(&blksiz, &d__[b1], &c__1, &work[indrv4 + 1], &c__1);
+            aocl_blas_dcopy(&blksiz, &d__[b1], &c__1, &work[indrv4 + 1], &c__1);
             i__3 = blksiz - 1;
-            dcopy_(&i__3, &e[b1], &c__1, &work[indrv2 + 2], &c__1);
+            aocl_blas_dcopy(&i__3, &e[b1], &c__1, &work[indrv2 + 2], &c__1);
             i__3 = blksiz - 1;
-            dcopy_(&i__3, &e[b1], &c__1, &work[indrv3 + 1], &c__1);
+            aocl_blas_dcopy(&i__3, &e[b1], &c__1, &work[indrv3 + 1], &c__1);
             /* Compute LU factors with partial pivoting ( PT = LU ) */
             tol = 0.;
-            dlagtf_(&blksiz, &work[indrv4 + 1], &xj, &work[indrv2 + 2], &work[indrv3 + 1], &tol,
-                    &work[indrv5 + 1], &iwork[1], &iinfo);
+            aocl_lapack_dlagtf(&blksiz, &work[indrv4 + 1], &xj, &work[indrv2 + 2],
+                               &work[indrv3 + 1], &tol, &work[indrv5 + 1], &iwork[1], &iinfo);
             /* Update iteration count. */
         L70:
             ++its;
@@ -433,16 +433,17 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
                 goto L120;
             }
             /* Normalize and scale the righthand side vector Pb. */
-            jmax = idamax_(&blksiz, &work[indrv1 + 1], &c__1);
+            jmax = aocl_blas_idamax(&blksiz, &work[indrv1 + 1], &c__1);
             /* Computing MAX */
             d__3 = eps;
             d__4 = (d__1 = work[indrv4 + blksiz], f2c_abs(d__1)); // , expr subst
             scl = blksiz * onenrm * fla_max(d__3, d__4)
                   / (d__2 = work[indrv1 + jmax], f2c_abs(d__2));
-            dscal_(&blksiz, &scl, &work[indrv1 + 1], &c__1);
+            aocl_blas_dscal(&blksiz, &scl, &work[indrv1 + 1], &c__1);
             /* Solve the system LU = Pb. */
-            dlagts_(&c_n1, &blksiz, &work[indrv4 + 1], &work[indrv2 + 2], &work[indrv3 + 1],
-                    &work[indrv5 + 1], &iwork[1], &work[indrv1 + 1], &tol, &iinfo);
+            aocl_lapack_dlagts(&c_n1, &blksiz, &work[indrv4 + 1], &work[indrv2 + 2],
+                               &work[indrv3 + 1], &work[indrv5 + 1], &iwork[1], &work[indrv1 + 1],
+                               &tol, &iinfo);
             /* Reorthogonalize by modified Gram-Schmidt if eigenvalues are */
             /* close enough. */
             if(jblk == 1)
@@ -463,14 +464,14 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
                     for(jr = 1; jr <= i__4; ++jr)
                     {
                         i__5 = b1 - 1 + jr + i__ * z_dim1;
-                        ztr += work[indrv1 + jr] * z__[i__5].r;
+                        ztr += work[indrv1 + jr] * z__[i__5].real;
                         /* L80: */
                     }
                     i__4 = blksiz;
                     for(jr = 1; jr <= i__4; ++jr)
                     {
                         i__5 = b1 - 1 + jr + i__ * z_dim1;
-                        work[indrv1 + jr] -= ztr * z__[i__5].r;
+                        work[indrv1 + jr] -= ztr * z__[i__5].real;
                         /* L90: */
                     }
                     /* L100: */
@@ -478,7 +479,7 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
             }
             /* Check the infinity norm of the iterate. */
         L110:
-            jmax = idamax_(&blksiz, &work[indrv1 + 1], &c__1);
+            jmax = aocl_blas_idamax(&blksiz, &work[indrv1 + 1], &c__1);
             nrm = (d__1 = work[indrv1 + jmax], f2c_abs(d__1));
             /* Continue for additional iterations after norm reaches */
             /* stopping criterion. */
@@ -496,23 +497,23 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
             /* store eigenvector number in array ifail. */
         L120:
             ++(*info);
-            ifail[*info] = j;
+            ifail[*info] = (aocl_int_t)(j);
             /* Accept iterate as jth eigenvector. */
         L130:
-            scl = 1. / dnrm2_(&blksiz, &work[indrv1 + 1], &c__1);
-            jmax = idamax_(&blksiz, &work[indrv1 + 1], &c__1);
+            scl = 1. / aocl_blas_dnrm2(&blksiz, &work[indrv1 + 1], &c__1);
+            jmax = aocl_blas_idamax(&blksiz, &work[indrv1 + 1], &c__1);
             if(work[indrv1 + jmax] < 0.)
             {
                 scl = -scl;
             }
-            dscal_(&blksiz, &scl, &work[indrv1 + 1], &c__1);
+            aocl_blas_dscal(&blksiz, &scl, &work[indrv1 + 1], &c__1);
         L140:
             i__3 = *n;
             for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * z_dim1;
-                z__[i__4].r = 0.;
-                z__[i__4].i = 0.; // , expr subst
+                z__[i__4].real = 0.;
+                z__[i__4].imag = 0.; // , expr subst
                 /* L150: */
             }
             i__3 = blksiz;
@@ -520,10 +521,10 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
             {
                 i__4 = b1 + i__ - 1 + j * z_dim1;
                 i__5 = indrv1 + i__;
-                z__1.r = work[i__5];
-                z__1.i = 0.; // , expr subst
-                z__[i__4].r = z__1.r;
-                z__[i__4].i = z__1.i; // , expr subst
+                z__1.real = work[i__5];
+                z__1.imag = 0.; // , expr subst
+                z__[i__4].real = z__1.real;
+                z__[i__4].imag = z__1.imag; // , expr subst
                 /* L160: */
             }
             /* Save the shift to check eigenvalue spacing at next */

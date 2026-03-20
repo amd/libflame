@@ -141,8 +141,26 @@
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgeequb_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd,
-              real *colcnd, real *amax, integer *info)
+/** Generated wrapper function */
+void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *r__, real *c__,
+              real *rowcnd, real *colcnd, real *amax, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgeequb(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgeequb(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgeequb(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *r__,
+                         real *c__, real *rowcnd, real *colcnd, real *amax, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -155,17 +173,14 @@ void cgeequb_(integer *m, integer *n, complex *a, integer *lda, real *r__, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3, r__4;
     /* Builtin functions */
-    double log(doublereal), r_imag(complex *), pow_ri(real *, integer *);
+    double log(doublereal), r_imag(scomplex *), pow_ri(real *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real radix, rcmin, rcmax;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,7 +230,7 @@ void cgeequb_(integer *m, integer *n, complex *a, integer *lda, real *r__, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEEQUB", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CGEEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -250,7 +265,7 @@ void cgeequb_(integer *m, integer *n, complex *a, integer *lda, real *r__, real 
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             r__3 = r__[i__];
-            r__4 = (r__1 = a[i__3].r, f2c_abs(r__1))
+            r__4 = (r__1 = a[i__3].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
             r__[i__] = fla_max(r__3, r__4);
             /* L20: */
@@ -332,7 +347,7 @@ void cgeequb_(integer *m, integer *n, complex *a, integer *lda, real *r__, real 
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             r__3 = c__[j];
-            r__4 = ((r__1 = a[i__3].r, f2c_abs(r__1))
+            r__4 = ((r__1 = a[i__3].real, f2c_abs(r__1))
                     + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
                    * r__[i__]; // , expr subst
             c__[j] = fla_max(r__3, r__4);

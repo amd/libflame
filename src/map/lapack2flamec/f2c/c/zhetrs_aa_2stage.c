@@ -4,9 +4,9 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZHETRS_AA_2STAGE */
 /* @generated from SRC/dsytrs_aa_2stage.f, fortran d -> c, Mon Oct 30 11:59:02 2017 */
 /* =========== DOCUMENTATION =========== */
@@ -140,28 +140,43 @@ static integer c_n1 = -1;
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhetrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-                       doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2,
-                       doublecomplex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void zhetrs_aa_2stage_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a,
+                       aocl_int_t *lda, dcomplex *tb, aocl_int_t *ltb, aocl_int_t *ipiv,
+                       aocl_int_t *ipiv2, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetrs_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ltb_64 = *ltb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetrs_aa_2stage(uplo, &n_64, &nrhs_64, a, &lda_64, tb, &ltb_64, ipiv, ipiv2, b,
+                                 &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetrs_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
+                                  aocl_int64_t *lda, dcomplex *tb, aocl_int64_t *ltb,
+                                  aocl_int_t *ipiv, aocl_int_t *ipiv2, dcomplex *b,
+                                  aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrs_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
                       ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %" FLA_IS "",
                       *uplo, *n, *nrhs, *lda, *ltb, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    integer nb, ldtb;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t nb, ldtb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                integer *, doublecomplex *, integer *, integer *),
-        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -221,7 +236,7 @@ void zhetrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRS_AA_2STAGE", &i__1, (ftnlen)16);
+        aocl_blas_xerbla("ZHETRS_AA_2STAGE", &i__1, (ftnlen)16);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -232,7 +247,7 @@ void zhetrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, 
         return;
     }
     /* Read NB and compute LDTB */
-    nb = (integer)tb[1].r;
+    nb = (integer)tb[1].real;
     ldtb = *ltb / *n;
     if(upper)
     {
@@ -241,23 +256,24 @@ void zhetrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, 
         {
             /* Pivot, P**T * B -> B */
             i__1 = nb + 1;
-            zlaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
+            aocl_lapack_zlaswp(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
             /* Compute (U**H \ B) -> B [ (U**H \P**T * B) ] */
             i__1 = *n - nb;
-            ztrsm_("L", "U", "C", "U", &i__1, nrhs, &c_b1, &a[(nb + 1) * a_dim1 + 1], lda,
-                   &b[nb + 1 + b_dim1], ldb);
+            aocl_blas_ztrsm("L", "U", "C", "U", &i__1, nrhs, &c_b1, &a[(nb + 1) * a_dim1 + 1], lda,
+                            &b[nb + 1 + b_dim1], ldb);
         }
         /* Compute T \ B -> B [ T \ (U**H \P**T * B) ] */
-        zgbtrs_("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb, info);
+        aocl_lapack_zgbtrs("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb,
+                           info);
         if(*n > nb)
         {
             /* Compute (U \ B) -> B [ U \ (T \ (U**H \P**T * B) ) ] */
             i__1 = *n - nb;
-            ztrsm_("L", "U", "N", "U", &i__1, nrhs, &c_b1, &a[(nb + 1) * a_dim1 + 1], lda,
-                   &b[nb + 1 + b_dim1], ldb);
+            aocl_blas_ztrsm("L", "U", "N", "U", &i__1, nrhs, &c_b1, &a[(nb + 1) * a_dim1 + 1], lda,
+                            &b[nb + 1 + b_dim1], ldb);
             /* Pivot, P * B -> B [ P * (U \ (T \ (U**H \P**T * B) )) ] */
             i__1 = nb + 1;
-            zlaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
+            aocl_lapack_zlaswp(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
         }
     }
     else
@@ -267,23 +283,24 @@ void zhetrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, 
         {
             /* Pivot, P**T * B -> B */
             i__1 = nb + 1;
-            zlaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
+            aocl_lapack_zlaswp(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
             /* Compute (L \ B) -> B [ (L \P**T * B) ] */
             i__1 = *n - nb;
-            ztrsm_("L", "L", "N", "U", &i__1, nrhs, &c_b1, &a[nb + 1 + a_dim1], lda,
-                   &b[nb + 1 + b_dim1], ldb);
+            aocl_blas_ztrsm("L", "L", "N", "U", &i__1, nrhs, &c_b1, &a[nb + 1 + a_dim1], lda,
+                            &b[nb + 1 + b_dim1], ldb);
         }
         /* Compute T \ B -> B [ T \ (L \P**T * B) ] */
-        zgbtrs_("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb, info);
+        aocl_lapack_zgbtrs("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb,
+                           info);
         if(*n > nb)
         {
             /* Compute (L**H \ B) -> B [ L**H \ (T \ (L \P**T * B) ) ] */
             i__1 = *n - nb;
-            ztrsm_("L", "L", "C", "U", &i__1, nrhs, &c_b1, &a[nb + 1 + a_dim1], lda,
-                   &b[nb + 1 + b_dim1], ldb);
+            aocl_blas_ztrsm("L", "L", "C", "U", &i__1, nrhs, &c_b1, &a[nb + 1 + a_dim1], lda,
+                            &b[nb + 1 + b_dim1], ldb);
             /* Pivot, P * B -> B [ P * (L**H \ (T \ (L \P**T * B) )) ] */
             i__1 = nb + 1;
-            zlaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
+            aocl_lapack_zlaswp(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

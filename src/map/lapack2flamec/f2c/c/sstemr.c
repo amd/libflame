@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b18 = .003f;
 /* > \brief \b SSTEMR */
 /* =========== DOCUMENTATION =========== */
@@ -321,96 +321,92 @@ the */
 /* > Aravindh Krishnamoorthy, FAU, Erlangen, Germany \n */
 /* ===================================================================== */
 /* Subroutine */
-void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu,
-             integer *il, integer *iu, integer *m, real *w, real *z__, integer *ldz, integer *nzc,
-             integer *isuppz, logical *tryrac, real *work, integer *lwork, integer *iwork,
-             integer *liwork, integer *info)
+/** Generated wrapper function */
+void sstemr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *vl, real *vu,
+             aocl_int_t *il, aocl_int_t *iu, aocl_int_t *m, real *w, real *z__, aocl_int_t *ldz,
+             aocl_int_t *nzc, aocl_int_t *isuppz, logical *tryrac, real *work, aocl_int_t *lwork,
+             aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sstemr(jobz, range, n, d__, e, vl, vu, il, iu, m, w, z__, ldz, nzc, isuppz, tryrac,
+                       work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t nzc_64 = *nzc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sstemr(jobz, range, &n_64, d__, e, vl, vu, &il_64, &iu_64, &m_64, w, z__, &ldz_64,
+                       &nzc_64, isuppz, tryrac, work, &lwork_64, iwork, &liwork_64, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sstemr(char *jobz, char *range, aocl_int64_t *n, real *d__, real *e, real *vl,
+                        real *vu, aocl_int64_t *il, aocl_int64_t *iu, aocl_int64_t *m, real *w,
+                        real *z__, aocl_int64_t *ldz, aocl_int64_t *nzc, aocl_int_t *isuppz,
+                        logical *tryrac, real *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                        aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "sstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
-             ", ldz %" FLA_IS ", nzc %" FLA_IS "",
-             *jobz, *range, *n, *il, *iu, *ldz, *nzc);
+    AOCL_DTL_SNPRINTF("sstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
+                      ", ldz %" FLA_IS ", nzc %" FLA_IS "",
+                      *jobz, *range, *n, *il, *iu, *ldz, *nzc);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real r1, r2;
-    integer jj;
+    aocl_int64_t jj;
     real cs;
-    integer in;
+    aocl_int64_t in;
     real sn, wl, wu;
-    integer iil, iiu;
+    aocl_int64_t iil, iiu;
     real eps, tmp;
-    integer indd, iend, jblk, wend;
+    aocl_int64_t indd, iend, jblk, wend;
     real rmin, rmax;
-    integer itmp;
+    aocl_int64_t itmp;
     real tnrm;
-    integer inde2;
+    aocl_int64_t inde2;
     extern /* Subroutine */
         void
         slae2_(real *, real *, real *, real *, real *);
-    integer itmp2;
+    aocl_int64_t itmp2;
     real rtol1, rtol2, scale;
-    integer indgp;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer iindw, ilast, lwmin;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t indgp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t iindw, ilast, lwmin;
     logical wantz;
     extern /* Subroutine */
         void
         slaev2_(real *, real *, real *, real *, real *, real *, real *);
     logical alleig;
-    integer ibegin;
+    aocl_int64_t ibegin;
     logical indeig;
-    integer iindbl;
+    aocl_int64_t iindbl;
     logical valeig;
     extern real slamch_(char *);
-    integer wbegin;
+    aocl_int64_t wbegin;
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    integer inderr, iindwk, indgrs, offset;
-    extern /* Subroutine */
-        void
-        slarrc_(char *, integer *, real *, real *, real *, real *, real *, integer *, integer *,
-                integer *, integer *),
-        slarre_(char *, integer *, real *, real *, integer *, integer *, real *, real *, real *,
-                real *, real *, real *, integer *, integer *, integer *, real *, real *, real *,
-                integer *, integer *, real *, real *, real *, integer *, integer *);
+    aocl_int64_t inderr, iindwk, indgrs, offset;
     real thresh;
-    integer iinspl, indwrk, ifirst, liwmin, nzcmin;
+    aocl_int64_t iinspl, indwrk, ifirst, liwmin, nzcmin;
     real pivmin;
-    extern real slanst_(char *, integer *, real *, real *);
-    extern /* Subroutine */
-        void
-        slarrj_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *,
-                real *, integer *, real *, real *, integer *),
-        slarrr_(integer *, real *, real *, integer *);
-    integer nsplit;
-    extern /* Subroutine */
-        void
-        slarrv_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *,
-                integer *, real *, real *, real *, real *, real *, real *, integer *, integer *,
-                real *, real *, integer *, integer *, real *, integer *, integer *);
+    aocl_int64_t nsplit;
     real smlnum;
-    extern /* Subroutine */
-        void
-        slasrt_(char *, integer *, real *, integer *);
     logical lquery, zquery;
-    extern real sroundup_lwork(integer *);
     logical laeswap;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -535,15 +531,16 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     rmax = fla_min(r__1, r__2);
     if(*info == 0)
     {
-        work[1] = sroundup_lwork(&lwmin);
-        iwork[1] = liwmin;
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+        iwork[1] = (aocl_int_t)(liwmin);
         if(wantz && alleig)
         {
             nzcmin = *n;
         }
         else if(wantz && valeig)
         {
-            slarrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &itmp2, info);
+            aocl_lapack_slarrc("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &itmp2,
+                               info);
         }
         else if(wantz && indeig)
         {
@@ -566,7 +563,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSTEMR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSTEMR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -722,7 +719,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         we expect users' matrices not to be close to the */
         /* RMAX threshold. */
         scale = 1.f;
-        tnrm = slanst_("M", n, &d__[1], &e[1]);
+        tnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
         if(tnrm > 0.f && tnrm < rmin)
         {
             scale = rmin / tnrm;
@@ -733,9 +730,9 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         }
         if(scale != 1.f)
         {
-            sscal_(n, &scale, &d__[1], &c__1);
+            aocl_blas_sscal(n, &scale, &d__[1], &c__1);
             i__1 = *n - 1;
-            sscal_(&i__1, &scale, &e[1], &c__1);
+            aocl_blas_sscal(&i__1, &scale, &e[1], &c__1);
             tnrm *= scale;
             if(valeig)
             {
@@ -755,7 +752,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         if(*tryrac)
         {
             /* Test whether the matrix warrants the more expensive relative approach. */
-            slarrr_(n, &d__[1], &e[1], &iinfo);
+            aocl_lapack_slarrr(n, &d__[1], &e[1], &iinfo);
         }
         else
         {
@@ -776,7 +773,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         if(*tryrac)
         {
             /* Copy original diagonal, needed to guarantee relative accuracy */
-            scopy_(n, &d__[1], &c__1, &work[indd], &c__1);
+            aocl_blas_scopy(n, &d__[1], &c__1, &work[indd], &c__1);
         }
         /* Store the squares of the offdiagonal values of T */
         i__1 = *n - 1;
@@ -809,10 +806,10 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             r__2 = eps * 4.f; // , expr subst
             rtol2 = fla_max(r__1, r__2);
         }
-        slarre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1, &rtol2,
-                &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[inderr], &work[indgp],
-                &iwork[iindbl], &iwork[iindw], &work[indgrs], &pivmin, &work[indwrk],
-                &iwork[iindwk], &iinfo);
+        aocl_lapack_slarre(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1,
+                           &rtol2, &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[inderr],
+                           &work[indgp], &iwork[iindbl], &iwork[iindw], &work[indgrs], &pivmin,
+                           &work[indwrk], &iwork[iindwk], &iinfo);
         if(iinfo != 0)
         {
             *info = f2c_abs(iinfo) + 10;
@@ -826,10 +823,10 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         {
             /* Compute the desired eigenvectors corresponding to the computed */
             /* eigenvalues */
-            slarrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &c__1, m, &c_b18,
-                    &rtol1, &rtol2, &w[1], &work[inderr], &work[indgp], &iwork[iindbl],
-                    &iwork[iindw], &work[indgrs], &z__[z_offset], ldz, &isuppz[1], &work[indwrk],
-                    &iwork[iindwk], &iinfo);
+            aocl_lapack_slarrv(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &c__1, m,
+                               &c_b18, &rtol1, &rtol2, &w[1], &work[inderr], &work[indgp],
+                               &iwork[iindbl], &iwork[iindw], &work[indgrs], &z__[z_offset], ldz,
+                               &isuppz[1], &work[indwrk], &iwork[iindwk], &iinfo);
             if(iinfo != 0)
             {
                 *info = f2c_abs(iinfo) + 20;
@@ -883,9 +880,10 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                 ifirst = iwork[iindw + wbegin - 1];
                 ilast = iwork[iindw + wend - 1];
                 rtol2 = eps * 4.f;
-                slarrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], &ifirst, &ilast,
-                        &rtol2, &offset, &w[wbegin], &work[inderr + wbegin - 1], &work[indwrk],
-                        &iwork[iindwk], &pivmin, &tnrm, &iinfo);
+                aocl_lapack_slarrj(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1],
+                                   &ifirst, &ilast, &rtol2, &offset, &w[wbegin],
+                                   &work[inderr + wbegin - 1], &work[indwrk], &iwork[iindwk],
+                                   &pivmin, &tnrm, &iinfo);
                 ibegin = iend + 1;
                 wbegin = wend + 1;
             L39:;
@@ -895,7 +893,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         if(scale != 1.f)
         {
             r__1 = 1.f / scale;
-            sscal_(m, &r__1, &w[1], &c__1);
+            aocl_blas_sscal(m, &r__1, &w[1], &c__1);
         }
     }
     /* If eigenvalues are not in increasing order, then sort them, */
@@ -904,7 +902,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     {
         if(!wantz)
         {
-            slasrt_("I", m, &w[1], &iinfo);
+            aocl_lapack_slasrt("I", m, &w[1], &iinfo);
             if(iinfo != 0)
             {
                 *info = 3;
@@ -935,21 +933,22 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                     w[j] = tmp;
                     if(wantz)
                     {
-                        sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                        aocl_blas_sswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1],
+                                        &c__1);
                         itmp = isuppz[(i__ << 1) - 1];
                         isuppz[(i__ << 1) - 1] = isuppz[(j << 1) - 1];
-                        isuppz[(j << 1) - 1] = itmp;
+                        isuppz[(j << 1) - 1] = (aocl_int_t)(itmp);
                         itmp = isuppz[i__ * 2];
                         isuppz[i__ * 2] = isuppz[j * 2];
-                        isuppz[j * 2] = itmp;
+                        isuppz[j * 2] = (aocl_int_t)(itmp);
                     }
                 }
                 /* L60: */
             }
         }
     }
-    work[1] = sroundup_lwork(&lwmin);
-    iwork[1] = liwmin;
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSTEMR */

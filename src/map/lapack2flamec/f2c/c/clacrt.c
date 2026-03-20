@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLACRT performs a linear transformation of a pair of complex vectors. */
+#include "FLA_f2c.h" /* > \brief \b CLACRT performs a linear transformation of a pair of scomplex vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -42,7 +42,7 @@
 /* > ( c s )( x ) ==> ( x ) */
 /* > ( -s c )( y ) ( y ) */
 /* > */
-/* > where c and s are complex and the vectors x and y are complex. */
+/* > where c and s are scomplex and the vectors x and y are scomplex. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -100,8 +100,23 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clacrt_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, complex *c__,
-             complex *s)
+/** Generated wrapper function */
+void clacrt_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int_t *incy,
+             scomplex *c__, scomplex *s)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clacrt(n, cx, incx, cy, incy, c__, s);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_clacrt(&n_64, cx, &incx_64, cy, &incy_64, c__, s);
+#endif
+}
+
+void aocl_lapack_clacrt(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx, scomplex *cy,
+                        aocl_int64_t *incy, scomplex *c__, scomplex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -114,11 +129,11 @@ void clacrt_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy,
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3;
+    aocl_int64_t i__1, i__2, i__3, i__4;
+    scomplex q__1, q__2, q__3;
     /* Local variables */
-    integer i__, ix, iy;
-    complex ctemp;
+    aocl_int64_t i__, ix, iy;
+    scomplex ctemp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -159,29 +174,29 @@ void clacrt_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy,
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = ix;
-        q__2.r = c__->r * cx[i__2].r - c__->i * cx[i__2].i;
-        q__2.i = c__->r * cx[i__2].i + c__->i * cx[i__2].r; // , expr subst
+        q__2.real = c__->real * cx[i__2].real - c__->imag * cx[i__2].imag;
+        q__2.imag = c__->real * cx[i__2].imag + c__->imag * cx[i__2].real; // , expr subst
         i__3 = iy;
-        q__3.r = s->r * cy[i__3].r - s->i * cy[i__3].i;
-        q__3.i = s->r * cy[i__3].i + s->i * cy[i__3].r; // , expr subst
-        q__1.r = q__2.r + q__3.r;
-        q__1.i = q__2.i + q__3.i; // , expr subst
-        ctemp.r = q__1.r;
-        ctemp.i = q__1.i; // , expr subst
+        q__3.real = s->real * cy[i__3].real - s->imag * cy[i__3].imag;
+        q__3.imag = s->real * cy[i__3].imag + s->imag * cy[i__3].real; // , expr subst
+        q__1.real = q__2.real + q__3.real;
+        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+        ctemp.real = q__1.real;
+        ctemp.imag = q__1.imag; // , expr subst
         i__2 = iy;
         i__3 = iy;
-        q__2.r = c__->r * cy[i__3].r - c__->i * cy[i__3].i;
-        q__2.i = c__->r * cy[i__3].i + c__->i * cy[i__3].r; // , expr subst
+        q__2.real = c__->real * cy[i__3].real - c__->imag * cy[i__3].imag;
+        q__2.imag = c__->real * cy[i__3].imag + c__->imag * cy[i__3].real; // , expr subst
         i__4 = ix;
-        q__3.r = s->r * cx[i__4].r - s->i * cx[i__4].i;
-        q__3.i = s->r * cx[i__4].i + s->i * cx[i__4].r; // , expr subst
-        q__1.r = q__2.r - q__3.r;
-        q__1.i = q__2.i - q__3.i; // , expr subst
-        cy[i__2].r = q__1.r;
-        cy[i__2].i = q__1.i; // , expr subst
+        q__3.real = s->real * cx[i__4].real - s->imag * cx[i__4].imag;
+        q__3.imag = s->real * cx[i__4].imag + s->imag * cx[i__4].real; // , expr subst
+        q__1.real = q__2.real - q__3.real;
+        q__1.imag = q__2.imag - q__3.imag; // , expr subst
+        cy[i__2].real = q__1.real;
+        cy[i__2].imag = q__1.imag; // , expr subst
         i__2 = ix;
-        cx[i__2].r = ctemp.r;
-        cx[i__2].i = ctemp.i; // , expr subst
+        cx[i__2].real = ctemp.real;
+        cx[i__2].imag = ctemp.imag; // , expr subst
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -194,29 +209,29 @@ L20:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        q__2.r = c__->r * cx[i__2].r - c__->i * cx[i__2].i;
-        q__2.i = c__->r * cx[i__2].i + c__->i * cx[i__2].r; // , expr subst
+        q__2.real = c__->real * cx[i__2].real - c__->imag * cx[i__2].imag;
+        q__2.imag = c__->real * cx[i__2].imag + c__->imag * cx[i__2].real; // , expr subst
         i__3 = i__;
-        q__3.r = s->r * cy[i__3].r - s->i * cy[i__3].i;
-        q__3.i = s->r * cy[i__3].i + s->i * cy[i__3].r; // , expr subst
-        q__1.r = q__2.r + q__3.r;
-        q__1.i = q__2.i + q__3.i; // , expr subst
-        ctemp.r = q__1.r;
-        ctemp.i = q__1.i; // , expr subst
+        q__3.real = s->real * cy[i__3].real - s->imag * cy[i__3].imag;
+        q__3.imag = s->real * cy[i__3].imag + s->imag * cy[i__3].real; // , expr subst
+        q__1.real = q__2.real + q__3.real;
+        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+        ctemp.real = q__1.real;
+        ctemp.imag = q__1.imag; // , expr subst
         i__2 = i__;
         i__3 = i__;
-        q__2.r = c__->r * cy[i__3].r - c__->i * cy[i__3].i;
-        q__2.i = c__->r * cy[i__3].i + c__->i * cy[i__3].r; // , expr subst
+        q__2.real = c__->real * cy[i__3].real - c__->imag * cy[i__3].imag;
+        q__2.imag = c__->real * cy[i__3].imag + c__->imag * cy[i__3].real; // , expr subst
         i__4 = i__;
-        q__3.r = s->r * cx[i__4].r - s->i * cx[i__4].i;
-        q__3.i = s->r * cx[i__4].i + s->i * cx[i__4].r; // , expr subst
-        q__1.r = q__2.r - q__3.r;
-        q__1.i = q__2.i - q__3.i; // , expr subst
-        cy[i__2].r = q__1.r;
-        cy[i__2].i = q__1.i; // , expr subst
+        q__3.real = s->real * cx[i__4].real - s->imag * cx[i__4].imag;
+        q__3.imag = s->real * cx[i__4].imag + s->imag * cx[i__4].real; // , expr subst
+        q__1.real = q__2.real - q__3.real;
+        q__1.imag = q__2.imag - q__3.imag; // , expr subst
+        cy[i__2].real = q__1.real;
+        cy[i__2].imag = q__1.imag; // , expr subst
         i__2 = i__;
-        cx[i__2].r = ctemp.r;
-        cx[i__2].i = ctemp.i; // , expr subst
+        cx[i__2].real = ctemp.real;
+        cx[i__2].imag = ctemp.imag; // , expr subst
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGELQ2 computes an LQ factorization of a complex m by n matrix A: */
+/* > ZGELQ2 computes an LQ factorization of a scomplex m by n matrix A: */
 /* > A = L * Q. */
 /* > \endverbatim */
 /* Arguments: */
@@ -110,7 +110,7 @@ the elements above the diagonal, */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i-1) = 0 and v(i) = 1;
 conjg(v(i+1:n)) is stored on exit in */
 /* > A(i,i+1:n), and tau in TAU(i). */
@@ -118,24 +118,35 @@ conjg(v(i+1:n)) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
-             doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zgelq2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *tau,
+             dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgelq2(m, n, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgelq2(&m_64, &n_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgelq2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        dcomplex *tau, dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgelq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, k;
-    doublecomplex alpha;
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__, k;
+    dcomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,7 +189,7 @@ void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGELQ2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGELQ2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -188,30 +199,30 @@ void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         /* Generate elementary reflector H(i) to annihilate A(i,i+1:n) */
         i__2 = *n - i__ + 1;
-        zlacgv_(&i__2, &a[i__ + i__ * a_dim1], lda);
+        aocl_lapack_zlacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
         i__2 = i__ + i__ * a_dim1;
-        alpha.r = a[i__2].r;
-        alpha.i = a[i__2].i; // , expr subst
+        alpha.real = a[i__2].real;
+        alpha.imag = a[i__2].imag; // , expr subst
         i__2 = *n - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &tau[i__]);
+        aocl_lapack_zlarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &tau[i__]);
         if(i__ < *m)
         {
             /* Apply H(i) to A(i+1:m,i:n) from the right */
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = 1.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 1.;
+            a[i__2].imag = 0.; // , expr subst
             i__2 = *m - i__;
             i__3 = *n - i__ + 1;
-            zlarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+            aocl_lapack_zlarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                              &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
         }
         i__2 = i__ + i__ * a_dim1;
-        a[i__2].r = alpha.r;
-        a[i__2].i = alpha.i; // , expr subst
+        a[i__2].real = alpha.real;
+        a[i__2].imag = alpha.imag; // , expr subst
         i__2 = *n - i__ + 1;
-        zlacgv_(&i__2, &a[i__ + i__ * a_dim1], lda);
+        aocl_lapack_zlacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

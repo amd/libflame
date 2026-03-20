@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLANHF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a Hermitian matrix in RFP format. */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > ZLANHF returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex Hermitian matrix A in RFP format. */
+/* > scomplex Hermitian matrix A in RFP format. */
 /* > \endverbatim */
 /* > */
 /* > \return ZLANHF */
@@ -247,30 +247,40 @@ otherwise, */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
-doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecomplex *a,
+/** Generated wrapper function */
+doublereal zlanhf_(char *norm, char *transr, char *uplo, aocl_int_t *n, dcomplex *a,
                    doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zlanhf(norm, transr, uplo, n, a, work);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_zlanhf(norm, transr, uplo, &n_64, a, work);
+#endif
+}
+
+doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n,
+                              dcomplex *a, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlanhf inputs: norm %c, transr %c, uplo %c, n %" FLA_IS "", *norm, *transr,
                       *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal ret_val, d__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     doublereal s;
-    integer n1;
+    aocl_int64_t n1;
     doublereal aa;
-    integer lda, ifm, noe, ilu;
+    aocl_int64_t lda, ifm, noe, ilu;
     doublereal temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -300,7 +310,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
     }
     else if(*n == 1)
     {
-        ret_val = (d__1 = a[0].r, f2c_abs(d__1));
+        ret_val = (d__1 = a[0].real, f2c_abs(d__1));
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
@@ -359,7 +369,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     j = 0;
                     /* -> L(0,0) */
                     i__1 = j + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -388,7 +398,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j - 1;
                         /* L(k+j,k+j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -396,7 +406,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j;
                         /* -> L(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -430,7 +440,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = k + j - 1;
                         /* -> U(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -439,7 +449,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         /* =k+j;
                         i -> U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -466,7 +476,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* i=n-1 -> U(n-1,n-1) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -495,7 +505,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j;
                         /* L(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -503,7 +513,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j + 1;
                         /* L(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -531,7 +541,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     i__ = k - 1;
                     /* -> L(i,i) is at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -569,7 +579,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     j = k - 1;
                     /* -> U(j,j) is at A(0,j) */
                     i__1 = j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -598,7 +608,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j - k;
                         /* -> U(i,i) at A(i,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -606,7 +616,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j - k + 1;
                         /* U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -636,13 +646,13 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     j = 0;
                     /* -> L(k,k) & j=1 -> L(0,0) */
                     i__1 = j + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
                     i__1 = j + 1 + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -671,7 +681,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j;
                         /* L(k+j,k+j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -679,7 +689,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j + 1;
                         /* -> L(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -713,7 +723,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = k + j;
                         /* -> U(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -722,7 +732,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         /* =k+j+1;
                         i -> U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -749,7 +759,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* i=n-1 -> U(n-1,n-1) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -757,7 +767,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     i__ = *n;
                     /* -> U(k-1,k-1) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -774,7 +784,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     j = 0;
                     /* -> L(k,k) at A(0,0) */
                     i__1 = j + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -803,7 +813,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j - 1;
                         /* L(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -811,7 +821,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j;
                         /* L(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -839,7 +849,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     i__ = k - 1;
                     /* -> L(i,i) is at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -877,7 +887,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     j = k;
                     /* -> U(j,j) is at A(0,j) */
                     i__1 = j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -906,7 +916,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j - k - 1;
                         /* -> U(i,i) at A(i,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -914,7 +924,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         i__ = j - k;
                         /* U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
                         if(value < temp || disnan_(&temp))
                         {
                             value = temp;
@@ -942,7 +952,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     i__ = k - 1;
                     /* U(k,k) at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
                     if(value < temp || disnan_(&temp))
                     {
                         value = temp;
@@ -982,7 +992,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             work[i__] += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* -> A(j+k,j+k) */
                         work[j + k] = s + aa;
                         if(i__ == k + k)
@@ -991,7 +1001,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         }
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* -> A(j,j) */
                         work[j] += aa;
                         s = 0.;
@@ -1042,7 +1052,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         if(j > 0)
                         {
                             i__1 = i__ + j * lda;
-                            aa = (d__1 = a[i__1].r, f2c_abs(d__1));
+                            aa = (d__1 = a[i__1].real, f2c_abs(d__1));
                             /* -> A(j+k,j+k) */
                             s += aa;
                             work[i__ + k] += s;
@@ -1050,7 +1060,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             ++i__;
                         }
                         i__1 = i__ + j * lda;
-                        aa = (d__1 = a[i__1].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__1].real, f2c_abs(d__1));
                         /* -> A(j,j) */
                         work[j] = aa;
                         s = 0.;
@@ -1101,12 +1111,12 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             work[i__] += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* -> A(j+k,j+k) */
                         work[j + k] = s + aa;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* -> A(j,j) */
                         work[j] += aa;
                         s = 0.;
@@ -1152,14 +1162,14 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             work[i__ + k] += aa;
                         }
                         i__1 = i__ + j * lda;
-                        aa = (d__1 = a[i__1].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__1].real, f2c_abs(d__1));
                         /* -> A(j+k,j+k) */
                         s += aa;
                         work[i__ + k] += s;
                         /* i=j */
                         ++i__;
                         i__1 = i__ + j * lda;
-                        aa = (d__1 = a[i__1].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__1].real, f2c_abs(d__1));
                         /* -> A(j,j) */
                         work[j] = aa;
                         s = 0.;
@@ -1222,7 +1232,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* j=n1=k-1 is special */
                     i__1 = j * lda;
-                    s = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    s = (d__1 = a[i__1].real, f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -1247,13 +1257,13 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         }
                         /* i=j-k */
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* A(j-k,j-k) */
                         s += aa;
                         work[j - k] += s;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        s = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        s = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* A(j,j) */
                         i__2 = *n - 1;
                         for(l = j + 1; l <= i__2; ++l)
@@ -1301,7 +1311,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             s += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* i=j so process of A(j,j) */
                         s += aa;
                         work[j] = s;
@@ -1309,7 +1319,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         ++i__;
                         /* i=j process A(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         s = aa;
                         i__2 = *n - 1;
                         for(l = k + j + 1; l <= i__2; ++l)
@@ -1334,7 +1344,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    aa = (d__1 = a[i__1].real, f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] = s;
@@ -1393,7 +1403,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* j=k */
                     i__1 = j * lda;
-                    aa = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    aa = (d__1 = a[i__1].real, f2c_abs(d__1));
                     /* A(k,k) */
                     s = aa;
                     i__1 = k - 1;
@@ -1419,13 +1429,13 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         }
                         /* i=j-1-k */
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* A(j-k-1,j-k-1) */
                         s += aa;
                         work[j - k - 1] += s;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* A(j,j) */
                         s = aa;
                         i__2 = *n - 1;
@@ -1451,7 +1461,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    aa = (d__1 = a[i__1].real, f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] += s;
@@ -1475,7 +1485,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         work[i__] = 0.;
                     }
                     /* j=0 is special :process col A(k:n-1,k) */
-                    s = (d__1 = a[0].r, f2c_abs(d__1));
+                    s = (d__1 = a[0].real, f2c_abs(d__1));
                     /* A(k,k) */
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -1500,7 +1510,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             s += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         /* i=j-1 so process of A(j-1,j-1) */
                         s += aa;
                         work[j - 1] = s;
@@ -1508,7 +1518,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         ++i__;
                         /* i=j process A(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
                         s = aa;
                         i__2 = *n - 1;
                         for(l = k + j + 1; l <= i__2; ++l)
@@ -1533,7 +1543,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    aa = (d__1 = a[i__1].real, f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] = s;
@@ -1586,14 +1596,14 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        zlassq_(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(k,0) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j - 1;
-                        zlassq_(&i__2, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[j * lda], &c__1, &scale, &s);
                         /* trap U at A(0,0) */
                     }
                     s += s;
@@ -1604,7 +1614,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* U(k+i,k+i) */
                         if(aa != 0.)
                         {
@@ -1623,7 +1633,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* U(i,i) */
                         if(aa != 0.)
                         {
@@ -1644,7 +1654,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                         l = l + lda + 1;
                     }
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* U(n-1,n-1) */
                     if(aa != 0.)
                     {
@@ -1670,18 +1680,18 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        zlassq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        zlassq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
-                    aa = a[0].r;
+                    aa = a[0].real;
                     /* L(0,0) at A(0,0) */
                     if(aa != 0.)
                     {
@@ -1705,7 +1715,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(k-1+i,k-1+i) */
                         if(aa != 0.)
                         {
@@ -1724,7 +1734,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(i,i) */
                         if(aa != 0.)
                         {
@@ -1755,20 +1765,20 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     i__1 = k - 2;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        zlassq_(&j, &a[(k + j) * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&j, &a[(k + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        zlassq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        zlassq_(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
                         /* L at A(0,k-1) */
                     }
                     s += s;
@@ -1776,7 +1786,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     l = k * lda - lda;
                     /* -> U(k-1,k-1) at A(0,k-1) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* U(k-1,k-1) */
                     if(aa != 0.)
                     {
@@ -1800,7 +1810,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(j = k; j <= i__1; ++j)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* -> U(j-k,j-k) */
                         if(aa != 0.)
                         {
@@ -1819,7 +1829,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* -> U(j,j) */
                         if(aa != 0.)
                         {
@@ -1846,20 +1856,20 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        zlassq_(&j, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     i__1 = *n - 1;
                     for(j = k; j <= i__1; ++j)
                     {
-                        zlassq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,k) */
                     }
                     i__1 = k - 3;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        zlassq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(1,0) */
                     }
                     s += s;
@@ -1870,7 +1880,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(i,i) */
                         if(aa != 0.)
                         {
@@ -1889,7 +1899,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(k+i,k+i) */
                         if(aa != 0.)
                         {
@@ -1911,7 +1921,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* L-> k-1 + (k-1)*lda or L(k-1,k-1) at A(k-1,k-1) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* L(k-1,k-1) at A(k-1,k-1) */
                     if(aa != 0.)
                     {
@@ -1945,14 +1955,14 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        zlassq_(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(k+1,0) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j;
-                        zlassq_(&i__2, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[j * lda], &c__1, &scale, &s);
                         /* trap U at A(0,0) */
                     }
                     s += s;
@@ -1963,7 +1973,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* U(k+i,k+i) */
                         if(aa != 0.)
                         {
@@ -1982,7 +1992,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* U(i,i) */
                         if(aa != 0.)
                         {
@@ -2010,13 +2020,13 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        zlassq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(1,0) */
                     }
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        zlassq_(&j, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     s += s;
@@ -2027,7 +2037,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(k-1+i,k-1+i) */
                         if(aa != 0.)
                         {
@@ -2046,7 +2056,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(i,i) */
                         if(aa != 0.)
                         {
@@ -2077,20 +2087,20 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        zlassq_(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k+1) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        zlassq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        zlassq_(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
                         /* L at A(0,k) */
                     }
                     s += s;
@@ -2098,7 +2108,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     l = k * lda;
                     /* -> U(k,k) at A(0,k) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* U(k,k) */
                     if(aa != 0.)
                     {
@@ -2122,7 +2132,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(j = k + 1; j <= i__1; ++j)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* -> U(j-k-1,j-k-1) */
                         if(aa != 0.)
                         {
@@ -2141,7 +2151,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* -> U(j,j) */
                         if(aa != 0.)
                         {
@@ -2164,7 +2174,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     /* L=k-1+n*lda */
                     /* -> U(k-1,k-1) at A(k-1,n) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* U(k,k) */
                     if(aa != 0.)
                     {
@@ -2189,20 +2199,20 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        zlassq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     i__1 = *n;
                     for(j = k + 1; j <= i__1; ++j)
                     {
-                        zlassq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,k+1) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        zlassq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_zlassq(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(0,0) */
                     }
                     s += s;
@@ -2210,7 +2220,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     l = 0;
                     /* -> L(k,k) at A(0,0) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* L(k,k) at A(0,0) */
                     if(aa != 0.)
                     {
@@ -2234,7 +2244,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(i,i) */
                         if(aa != 0.)
                         {
@@ -2253,7 +2263,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(k+i+1,k+i+1) */
                         if(aa != 0.)
                         {
@@ -2275,7 +2285,7 @@ doublereal zlanhf_(char *norm, char *transr, char *uplo, integer *n, doublecompl
                     }
                     /* L-> k - 1 + k*lda or L(k-1,k-1) at A(k-1,k) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* L(k-1,k-1) at A(k-1,k) */
                     if(aa != 0.)
                     {

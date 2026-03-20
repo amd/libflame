@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b7 = -1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b23 = 1.f;
 /* > \brief \b SGBTRS */
 /* =========== DOCUMENTATION =========== */
@@ -137,32 +137,42 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab,
-             integer *ldab, integer *ipiv, real *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void sgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, real *ab,
+             aocl_int_t *ldab, aocl_int_t *ipiv, real *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgbtrs(trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgbtrs(trans, &n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, ipiv, b, &ldb_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgbtrs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        aocl_int64_t *nrhs, real *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, real *b,
+                        aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgbtrs inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
                       ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",
                       *trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
     /* System generated locals */
-    integer ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, l, kd, lm;
-    extern /* Subroutine */
-        void
-        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-              integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *);
+    aocl_int64_t i__, j, l, kd, lm;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lnoti;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *),
-        stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -227,7 +237,7 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, r
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGBTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -259,10 +269,10 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, r
                 l = ipiv[j];
                 if(l != j)
                 {
-                    sswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
-                sger_(&lm, nrhs, &c_b7, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1], ldb,
-                      &b[j + 1 + b_dim1], ldb);
+                aocl_blas_sger(&lm, nrhs, &c_b7, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1],
+                               ldb, &b[j + 1 + b_dim1], ldb);
                 /* L10: */
             }
         }
@@ -271,8 +281,8 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, r
         {
             /* Solve U*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            stbsv_("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                   &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_stbsv("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                            &b[i__ * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }
@@ -284,8 +294,8 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, r
         {
             /* Solve U**T*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            stbsv_("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                   &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_stbsv("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                            &b[i__ * b_dim1 + 1], &c__1);
             /* L30: */
         }
         /* Solve L**T*X = B, overwriting B with X. */
@@ -297,12 +307,12 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, r
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
                 lm = fla_min(i__1, i__2);
-                sgemv_("Transpose", &lm, nrhs, &c_b7, &b[j + 1 + b_dim1], ldb,
-                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b23, &b[j + b_dim1], ldb);
+                aocl_blas_sgemv("Transpose", &lm, nrhs, &c_b7, &b[j + 1 + b_dim1], ldb,
+                                &ab[kd + 1 + j * ab_dim1], &c__1, &c_b23, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {
-                    sswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
                 /* L40: */
             }

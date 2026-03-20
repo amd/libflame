@@ -12,7 +12,25 @@
 
 #include "FLA_f2c.h"
 
-/* Subroutine */ int ilaver_(integer *vers_major__, integer *vers_minor__, integer *vers_patch__)
+void ilaver_(aocl_int_t *vers_major__, aocl_int_t *vers_minor__, aocl_int_t *vers_patch__)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_ilaver(vers_major__, vers_minor__, vers_patch__);
+#else
+    aocl_int64_t vers_major___64 = *vers_major__;
+    aocl_int64_t vers_minor___64 = *vers_minor__;
+    aocl_int64_t vers_patch___64 = *vers_patch__;
+
+    aocl_lapack_ilaver(&vers_major___64, &vers_minor___64, &vers_patch___64);
+
+    *vers_major__ = (aocl_int_t)vers_major___64;
+    *vers_minor__ = (aocl_int_t)vers_minor___64;
+    *vers_patch__ = (aocl_int_t)vers_patch___64;
+#endif
+}
+
+
+/* Subroutine */ void aocl_lapack_ilaver(aocl_int64_t *vers_major__, aocl_int64_t *vers_minor__, aocl_int64_t *vers_patch__)
 {
 
     /*  -- LAPACK routine (version 3.4.2) -- */
@@ -43,6 +61,4 @@
     *vers_minor__ = 9;
     *vers_patch__ = 0;
     /*  ===================================================================== */
-
-    return 0;
 } /* ilaver_ */

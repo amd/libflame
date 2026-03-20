@@ -116,7 +116,20 @@
 /* > \ingroup lassq */
 /* ===================================================================== */
 /* Subroutine */
-void classq_(integer *n, complex *x, integer *incx, real *scale, real *sumsq)
+/** Generated wrapper function */
+void classq_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, real *scale, real *sumsq)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_classq(n, x, incx, scale, sumsq);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_classq(&n_64, x, &incx_64, scale, sumsq);
+#endif
+}
+
+void aocl_lapack_classq(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, real *scale, real *sumsq)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -129,14 +142,14 @@ void classq_(integer *n, complex *x, integer *incx, real *scale, real *sumsq)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
-    double r_imag(complex *), sqrt(doublereal);
+    double r_imag(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real ax;
-    integer ix;
+    aocl_int64_t ix;
     real abig, amed, sbig, tbig, asml, ymin, ymax, tsml, ssml;
     logical notbig;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 02:55:34 11/27/24 */
@@ -204,7 +217,7 @@ void classq_(integer *n, complex *x, integer *incx, real *scale, real *sumsq)
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = ix;
-        ax = (r__1 = x[i__2].r, f2c_abs(r__1));
+        ax = (r__1 = x[i__2].real, f2c_abs(r__1));
         if(ax > tbig)
         {
             /* Computing 2nd power */

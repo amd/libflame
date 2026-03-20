@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNBDB3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -197,49 +197,56 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zunbdb3_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *ldx11,
-              doublecomplex *x21, integer *ldx21, doublereal *theta, doublereal *phi,
-              doublecomplex *taup1, doublecomplex *taup2, doublecomplex *tauq1, doublecomplex *work,
-              integer *lwork, integer *info)
+/** Generated wrapper function */
+void zunbdb3_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, dcomplex *x11, aocl_int_t *ldx11,
+              dcomplex *x21, aocl_int_t *ldx21, doublereal *theta, doublereal *phi,
+              dcomplex *taup1, dcomplex *taup2, dcomplex *tauq1, dcomplex *work,
+              aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zunbdb3(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work,
+                        lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t q_64 = *q;
+    aocl_int64_t ldx11_64 = *ldx11;
+    aocl_int64_t ldx21_64 = *ldx21;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zunbdb3(&m_64, &p_64, &q_64, x11, &ldx11_64, x21, &ldx21_64, theta, phi, taup1,
+                        taup2, tauq1, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zunbdb3(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, dcomplex *x11,
+                         aocl_int64_t *ldx11, dcomplex *x21, aocl_int64_t *ldx21,
+                         doublereal *theta, doublereal *phi, dcomplex *taup1,
+                         dcomplex *taup2, dcomplex *tauq1, dcomplex *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunbdb3 inputs: m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS
                       ", ldx21 %" FLA_IS ", lwork %" FLA_IS "",
                       *m, *p, *q, *ldx11, *ldx21, *lwork);
     /* System generated locals */
-    integer x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
     double sqrt(doublereal), atan2(doublereal, doublereal), cos(doublereal), sin(doublereal);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer lworkmin, lworkopt;
+    aocl_int64_t lworkmin, lworkopt;
     doublereal c__;
-    integer i__;
+    aocl_int64_t i__;
     doublereal s;
-    integer childinfo, ilarf, llarf;
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-               doublereal *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t childinfo, ilarf, llarf;
     logical lquery;
-    integer iorbdb5, lorbdb5;
-    extern /* Subroutine */
-        void
-        zunbdb5_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, integer *),
-        zlarfgp_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    aocl_int64_t iorbdb5, lorbdb5;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -319,8 +326,8 @@ void zunbdb3_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *l
         i__2 = iorbdb5 + lorbdb5 - 1; // , expr subst
         lworkopt = fla_max(i__1, i__2);
         lworkmin = lworkopt;
-        work[1].r = (doublereal)lworkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lworkopt;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {
             *info = -14;
@@ -329,7 +336,7 @@ void zunbdb3_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNBDB3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZUNBDB3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -345,88 +352,89 @@ void zunbdb3_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *l
         if(i__ > 1)
         {
             i__2 = *q - i__ + 1;
-            zdrot_(&i__2, &x11[i__ - 1 + i__ * x11_dim1], ldx11, &x21[i__ + i__ * x21_dim1], ldx11,
-                   &c__, &s);
+            aocl_blas_zdrot(&i__2, &x11[i__ - 1 + i__ * x11_dim1], ldx11,
+                            &x21[i__ + i__ * x21_dim1], ldx11, &c__, &s);
         }
         i__2 = *q - i__ + 1;
-        zlacgv_(&i__2, &x21[i__ + i__ * x21_dim1], ldx21);
+        aocl_lapack_zlacgv(&i__2, &x21[i__ + i__ * x21_dim1], ldx21);
         i__2 = *q - i__ + 1;
-        zlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
-                 &tauq1[i__]);
+        aocl_lapack_zlarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1],
+                            ldx21, &tauq1[i__]);
         i__2 = i__ + i__ * x21_dim1;
-        s = x21[i__2].r;
+        s = x21[i__2].real;
         i__2 = i__ + i__ * x21_dim1;
-        x21[i__2].r = 1.;
-        x21[i__2].i = 0.; // , expr subst
+        x21[i__2].real = 1.;
+        x21[i__2].imag = 0.; // , expr subst
         i__2 = *p - i__ + 1;
         i__3 = *q - i__ + 1;
-        zlarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
-               &x11[i__ + i__ * x11_dim1], ldx11, &work[ilarf]);
+        aocl_lapack_zlarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
+                          &x11[i__ + i__ * x11_dim1], ldx11, &work[ilarf]);
         i__2 = *m - *p - i__;
         i__3 = *q - i__ + 1;
-        zlarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
-               &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
+        aocl_lapack_zlarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
+                          &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
         i__2 = *q - i__ + 1;
-        zlacgv_(&i__2, &x21[i__ + i__ * x21_dim1], ldx21);
+        aocl_lapack_zlacgv(&i__2, &x21[i__ + i__ * x21_dim1], ldx21);
         i__2 = *p - i__ + 1;
         /* Computing 2nd power */
-        d__1 = dznrm2_(&i__2, &x11[i__ + i__ * x11_dim1], &c__1);
+        d__1 = aocl_blas_dznrm2(&i__2, &x11[i__ + i__ * x11_dim1], &c__1);
         i__3 = *m - *p - i__;
         /* Computing 2nd power */
-        d__2 = dznrm2_(&i__3, &x21[i__ + 1 + i__ * x21_dim1], &c__1);
+        d__2 = aocl_blas_dznrm2(&i__3, &x21[i__ + 1 + i__ * x21_dim1], &c__1);
         c__ = sqrt(d__1 * d__1 + d__2 * d__2);
         theta[i__] = atan2(s, c__);
         i__2 = *p - i__ + 1;
         i__3 = *m - *p - i__;
         i__4 = *q - i__;
-        zunbdb5_(&i__2, &i__3, &i__4, &x11[i__ + i__ * x11_dim1], &c__1,
-                 &x21[i__ + 1 + i__ * x21_dim1], &c__1, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
-                 &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[iorbdb5], &lorbdb5, &childinfo);
+        aocl_lapack_zunbdb5(&i__2, &i__3, &i__4, &x11[i__ + i__ * x11_dim1], &c__1,
+                            &x21[i__ + 1 + i__ * x21_dim1], &c__1, &x11[i__ + (i__ + 1) * x11_dim1],
+                            ldx11, &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[iorbdb5],
+                            &lorbdb5, &childinfo);
         i__2 = *p - i__ + 1;
-        zlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1], &c__1,
-                 &taup1[i__]);
+        aocl_lapack_zlarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1],
+                            &c__1, &taup1[i__]);
         if(i__ < *m - *p)
         {
             i__2 = *m - *p - i__;
-            zlarfgp_(&i__2, &x21[i__ + 1 + i__ * x21_dim1], &x21[i__ + 2 + i__ * x21_dim1], &c__1,
-                     &taup2[i__]);
-            phi[i__] = atan2((doublereal)x21[i__ + 1 + i__ * x21_dim1].r,
-                             (doublereal)x11[i__ + i__ * x11_dim1].r);
+            aocl_lapack_zlarfgp(&i__2, &x21[i__ + 1 + i__ * x21_dim1],
+                                &x21[i__ + 2 + i__ * x21_dim1], &c__1, &taup2[i__]);
+            phi[i__] = atan2((doublereal)x21[i__ + 1 + i__ * x21_dim1].real,
+                             (doublereal)x11[i__ + i__ * x11_dim1].real);
             c__ = cos(phi[i__]);
             s = sin(phi[i__]);
             i__2 = i__ + 1 + i__ * x21_dim1;
-            x21[i__2].r = 1.;
-            x21[i__2].i = 0.; // , expr subst
+            x21[i__2].real = 1.;
+            x21[i__2].imag = 0.; // , expr subst
             i__2 = *m - *p - i__;
             i__3 = *q - i__;
             d_cnjg(&z__1, &taup2[i__]);
-            zlarf_("L", &i__2, &i__3, &x21[i__ + 1 + i__ * x21_dim1], &c__1, &z__1,
-                   &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
+            aocl_lapack_zlarf("L", &i__2, &i__3, &x21[i__ + 1 + i__ * x21_dim1], &c__1, &z__1,
+                              &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
         }
         i__2 = i__ + i__ * x11_dim1;
-        x11[i__2].r = 1.;
-        x11[i__2].i = 0.; // , expr subst
+        x11[i__2].real = 1.;
+        x11[i__2].imag = 0.; // , expr subst
         i__2 = *p - i__ + 1;
         i__3 = *q - i__;
         d_cnjg(&z__1, &taup1[i__]);
-        zlarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &z__1,
-               &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
+        aocl_lapack_zlarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &z__1,
+                          &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
     }
     /* Reduce the bottom-right portion of X11 to the identity matrix */
     i__1 = *q;
     for(i__ = *m - *p + 1; i__ <= i__1; ++i__)
     {
         i__2 = *p - i__ + 1;
-        zlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1], &c__1,
-                 &taup1[i__]);
+        aocl_lapack_zlarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1],
+                            &c__1, &taup1[i__]);
         i__2 = i__ + i__ * x11_dim1;
-        x11[i__2].r = 1.;
-        x11[i__2].i = 0.; // , expr subst
+        x11[i__2].real = 1.;
+        x11[i__2].imag = 0.; // , expr subst
         i__2 = *p - i__ + 1;
         i__3 = *q - i__;
         d_cnjg(&z__1, &taup1[i__]);
-        zlarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &z__1,
-               &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
+        aocl_lapack_zlarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &z__1,
+                          &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -21,6 +21,7 @@ void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
     char *op_str = "Computes LDLT partial factorization";
     char *front_str = "SPFFRT2";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -103,6 +104,7 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
     integer n, ncolm, pn;
     void *A, *AP, *AP_save;
     double err_thresh;
+    void *filename = NULL;
 
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     ncolm = params->lin_solver_paramslist[pci].ncolm;
@@ -113,18 +115,25 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
     /* Create the matrices for the current operation*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);
     create_vector(datatype, &AP, pn);
-    if(g_ext_fptr != NULL)
+
+    /* Initialize input matrix only when not in BRT verification run mode */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, n, n, n, g_ext_fptr);
+        if(g_ext_fptr != NULL)
+        {
+            init_matrix(datatype, A, n, n, n, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Initialize input matrix with random numbers */
+            rand_sym_matrix(datatype, A, n, n, n);
+        }
+        /* Pack a symmetric matrix in column first order */
+        pack_matrix_lt(datatype, A, AP, n, n);
     }
-    else
-    {
-        /* Initialize input matrix with random numbers */
-        rand_sym_matrix(datatype, A, n, n, n);
-    }
-    /* Pack a symmetric matrix in column first order */
-    pack_matrix_lt(datatype, A, AP, n, n);
+
+    /* BRT macro for processing single packed matrix AP */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, pn, 1, AP, 1, "dd", n, ncolm)
     create_vector(datatype, &AP_save, pn);
     copy_vector(datatype, pn, AP, i_one, AP_save, i_one);
 
@@ -143,13 +152,25 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
               / time_min / FLOPS_PER_UNIT_PERF;
 
     /* output validation */
-    if(ncolm <= n && n > 0 && ncolm > 0)
+    double residual = 0;
+    IF_FLA_BRT_VALIDATION(
+        pn, 1, store_outputs_base(filename, params, 1, 0, datatype, pn, 1, AP, 1),
+        validate_spffrt2(tst_api, n, ncolm, A, AP, datatype, err_thresh, params),
+        check_reproducibility_base(filename, params, 1, 0, datatype, pn, 1, AP, 1))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, err_thresh, err_thresh);
+    }
+    else if((ncolm <= n && n > 0 && ncolm > 0))
     {
         validate_spffrt2(tst_api, n, ncolm, A, AP, datatype, err_thresh, params);
     }
 
     /* Free up the buffers */
     free_vector(AP_save);
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_vector(AP);
 }

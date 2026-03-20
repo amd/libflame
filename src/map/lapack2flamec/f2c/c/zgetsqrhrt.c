@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGETSQRHRT */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZGETSQRHRT computes a NB2-sized column blocked QR-factorization */
-/* > of a complex M-by-N matrix A with M >= N, */
+/* > of a scomplex M-by-N matrix A with M >= N, */
 /* > */
 /* > A = Q * R. */
 /* > */
@@ -175,37 +175,49 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, doublecomplex *a,
-                 integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork,
-                 integer *info)
+/** Generated wrapper function */
+void zgetsqrhrt_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb1, aocl_int_t *nb1, aocl_int_t *nb2,
+                 dcomplex *a, aocl_int_t *lda, dcomplex *t, aocl_int_t *ldt,
+                 dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgetsqrhrt(m, n, mb1, nb1, nb2, a, lda, t, ldt, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb1_64 = *mb1;
+    aocl_int64_t nb1_64 = *nb1;
+    aocl_int64_t nb2_64 = *nb2;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgetsqrhrt(&m_64, &n_64, &mb1_64, &nb1_64, &nb2_64, a, &lda_64, t, &ldt_64, work,
+                           &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1, aocl_int64_t *nb1,
+                            aocl_int64_t *nb2, dcomplex *a, aocl_int64_t *lda,
+                            dcomplex *t, aocl_int64_t *ldt, dcomplex *work,
+                            aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgetsqrhrt inputs: m %" FLA_IS ", n %" FLA_IS ", mb1 %" FLA_IS
                       ", nb1 %" FLA_IS ", nb2 %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",
                       *m, *n, *mb1, *nb1, *nb2, *lda, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Local variables */
-    integer lworkopt, i__, j;
-    extern /* Subroutine */
-        void
-        zunhr_col_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *, doublecomplex *, integer *);
-    integer lw1, lw2, num_all_row_blocks__, lwt, ldwt, iinfo;
-    extern /* Subroutine */
-        void
-        zungtsqr_row_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                      doublecomplex *, integer *, doublecomplex *, integer *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t lworkopt, i__, j;
+    aocl_int64_t lw1, lw2, num_all_row_blocks__, lwt, ldwt, iinfo;
     logical lquery;
-    integer nb1local, nb2local;
-    extern /* Subroutine */
-        void
-        zlatsqr_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                 doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    aocl_int64_t nb1local, nb2local;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -321,49 +333,49 @@ void zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGETSQRHRT", &i__1, (ftnlen)10);
+        aocl_blas_xerbla("ZGETSQRHRT", &i__1, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        z__1.r = (doublereal)lworkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lworkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        z__1.r = (doublereal)lworkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lworkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nb2local = fla_min(*nb2, *n);
     /* (1) Perform TSQR-factorization of the M-by-N matrix A. */
-    zlatsqr_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, &work[lwt + 1], &lw1,
-             &iinfo);
+    aocl_lapack_zlatsqr(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, &work[lwt + 1],
+                        &lw1, &iinfo);
     /* (2) Copy the factor R_tsqr stored in the upper-triangular part */
     /* of A into the square matrix in the work array */
     /* WORK(LWT+1:LWT+N*N) column-by-column. */
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        zcopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[lwt + *n * (j - 1) + 1], &c__1);
+        aocl_blas_zcopy(&j, &a[j * a_dim1 + 1], &c__1, &work[lwt + *n * (j - 1) + 1], &c__1);
     }
     /* (3) Generate a M-by-N matrix Q with orthonormal columns from */
     /* the result stored below the diagonal in the array A in place. */
-    zungtsqr_row_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt,
-                  &work[lwt + *n * *n + 1], &lw2, &iinfo);
+    aocl_lapack_zungtsqr_row(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt,
+                             &work[lwt + *n * *n + 1], &lw2, &iinfo);
     /* (4) Perform the reconstruction of Householder vectors from */
     /* the matrix Q (stored in A) in place. */
-    zunhr_col_(m, n, &nb2local, &a[a_offset], lda, &t[t_offset], ldt, &work[lwt + *n * *n + 1],
-               &iinfo);
+    aocl_lapack_zunhr_col(m, n, &nb2local, &a[a_offset], lda, &t[t_offset], ldt,
+                          &work[lwt + *n * *n + 1], &iinfo);
     /* (5) Copy the factor R_tsqr stored in the square matrix in the */
     /* work array WORK(LWT+1:LWT+N*N) into the upper-triangular */
     /* part of A. */
@@ -379,33 +391,34 @@ void zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = lwt + *n * *n + i__;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
-        if(work[i__2].r == z__1.r && work[i__2].i == z__1.i)
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        if(work[i__2].real == z__1.real && work[i__2].imag == z__1.imag)
         {
             i__2 = *n;
             for(j = i__; j <= i__2; ++j)
             {
                 i__3 = i__ + j * a_dim1;
-                z__2.r = -1.;
-                z__2.i = -0.; // , expr subst
+                z__2.real = -1.;
+                z__2.imag = -0.; // , expr subst
                 i__4 = lwt + *n * (j - 1) + i__;
-                z__1.r = z__2.r * work[i__4].r - z__2.i * work[i__4].i;
-                z__1.i = z__2.r * work[i__4].i + z__2.i * work[i__4].r; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = z__2.real * work[i__4].real - z__2.imag * work[i__4].imag;
+                z__1.imag = z__2.real * work[i__4].imag + z__2.imag * work[i__4].real; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         else
         {
             i__2 = *n - i__ + 1;
-            zcopy_(&i__2, &work[lwt + *n * (i__ - 1) + i__], n, &a[i__ + i__ * a_dim1], lda);
+            aocl_blas_zcopy(&i__2, &work[lwt + *n * (i__ - 1) + i__], n, &a[i__ + i__ * a_dim1],
+                            lda);
         }
     }
-    z__1.r = (doublereal)lworkopt;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = (doublereal)lworkopt;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGETSQRHRT */

@@ -13,32 +13,32 @@ double d_sqrt(doublereal *x)
     return (sqrt(*x));
 }
 #ifdef _WIN32
-void c_sqrt(complex *r, complex *z)
+void c_sqrt(scomplex *r, scomplex *z)
 {
-    _Fcomplex z_ = {z->r, z->i};
+    _Fcomplex z_ = {z->real, z->imag};
     _Fcomplex ret_val = csqrtf(z_);
-    r->r = crealf(ret_val);
-    r->i = cimagf(ret_val);
+    r->real = crealf(ret_val);
+    r->imag = cimagf(ret_val);
 }
-void z_sqrt(doublecomplex *r, doublecomplex *z)
+void z_sqrt(dcomplex *r, dcomplex *z)
 {
-    _Dcomplex z_ = {z->r, z->i};
+    _Dcomplex z_ = {z->real, z->imag};
     _Dcomplex ret_val = csqrt(z_);
-    r->r = creal(ret_val);
-    r->i = cimag(ret_val);
+    r->real = creal(ret_val);
+    r->imag = cimag(ret_val);
 }
 #else
-void c_sqrt(complex *r, complex *z)
+void c_sqrt(scomplex *r, scomplex *z)
 {
-    double _Complex ret_val = csqrt(z->r + I * z->i);
-    r->r = creal(ret_val);
-    r->i = cimag(ret_val);
+    double _Complex ret_val = csqrt(z->real + I * z->imag);
+    r->real = creal(ret_val);
+    r->imag = cimag(ret_val);
 }
-void z_sqrt(doublecomplex *r, doublecomplex *z)
+void z_sqrt(dcomplex *r, dcomplex *z)
 {
-    double _Complex ret_val = csqrt(z->r + I * z->i);
-    r->r = creal(ret_val);
-    r->i = cimag(ret_val);
+    double _Complex ret_val = csqrt(z->real + I * z->imag);
+    r->real = creal(ret_val);
+    r->imag = cimag(ret_val);
 }
 #endif
 

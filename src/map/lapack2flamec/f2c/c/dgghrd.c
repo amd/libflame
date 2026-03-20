@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b10 = 0.;
 static doublereal c_b11 = 1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DGGHRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -213,9 +213,34 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *a,
-             integer *lda, doublereal *b, integer *ldb, doublereal *q, integer *ldq,
-             doublereal *z__, integer *ldz, integer *info)
+/** Generated wrapper function */
+void dgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *q,
+             aocl_int_t *ldq, doublereal *z__, aocl_int_t *ldz, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgghrd(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z__, ldz, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgghrd(compq, compz, &n_64, &ilo_64, &ihi_64, a, &lda_64, b, &ldb_64, q, &ldq_64,
+                       z__, &ldz_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, doublereal *a, aocl_int64_t *lda, doublereal *b,
+                        aocl_int64_t *ldb, doublereal *q, aocl_int64_t *ldq, doublereal *z__,
+                        aocl_int64_t *ldz, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
@@ -223,25 +248,16 @@ void dgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                       ", ldz %" FLA_IS "",
                       *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
     /* Local variables */
     doublereal c__, s;
     logical ilq, ilz;
-    integer jcol;
+    aocl_int64_t jcol;
     doublereal temp;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    integer jrow;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer icompq, icompz;
+    aocl_int64_t jrow;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t icompq, icompz;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -357,18 +373,18 @@ void dgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGGHRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGGHRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z if desired. */
     if(icompq == 3)
     {
-        dlaset_("Full", n, n, &c_b10, &c_b11, &q[q_offset], ldq);
+        aocl_lapack_dlaset("Full", n, n, &c_b10, &c_b11, &q[q_offset], ldq);
     }
     if(icompz == 3)
     {
-        dlaset_("Full", n, n, &c_b10, &c_b11, &z__[z_offset], ldz);
+        aocl_lapack_dlaset("Full", n, n, &c_b10, &c_b11, &z__[z_offset], ldz);
     }
     /* Quick return if possible */
     if(*n <= 1)
@@ -400,28 +416,29 @@ void dgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
             dlartg_(&temp, &a[jrow + jcol * a_dim1], &c__, &s, &a[jrow - 1 + jcol * a_dim1]);
             a[jrow + jcol * a_dim1] = 0.;
             i__3 = *n - jcol;
-            drot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (jcol + 1) * a_dim1],
-                  lda, &c__, &s);
+            aocl_blas_drot(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda,
+                           &a[jrow + (jcol + 1) * a_dim1], lda, &c__, &s);
             i__3 = *n + 2 - jrow;
-            drot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (jrow - 1) * b_dim1],
-                  ldb, &c__, &s);
+            aocl_blas_drot(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb,
+                           &b[jrow + (jrow - 1) * b_dim1], ldb, &c__, &s);
             if(ilq)
             {
-                drot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__,
-                      &s);
+                aocl_blas_drot(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1,
+                               &c__, &s);
             }
             /* Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
             temp = b[jrow + jrow * b_dim1];
             dlartg_(&temp, &b[jrow + (jrow - 1) * b_dim1], &c__, &s, &b[jrow + jrow * b_dim1]);
             b[jrow + (jrow - 1) * b_dim1] = 0.;
-            drot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1, &c__, &s);
+            aocl_blas_drot(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1,
+                           &c__, &s);
             i__3 = jrow - 1;
-            drot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__,
-                  &s);
+            aocl_blas_drot(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1,
+                           &c__, &s);
             if(ilz)
             {
-                drot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__,
-                      &s);
+                aocl_blas_drot(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1],
+                               &c__1, &c__, &s);
             }
             /* L30: */
         }

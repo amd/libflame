@@ -36,14 +36,6 @@ double prepare_lapacke_gbtrs_run(integer datatype, integer matrix_layout, char t
                    params->imatrix_char, NULL, params);                           \
     free_matrix(A);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gbtrs_outputs(void *filename, integer datatype, char trans, integer n, integer kl,
-                         integer ku, integer nrhs, integer ldab, integer ldb, void *X,
-                         void *params);
-integer check_bit_reproducibility_gbtrs(void *filename, integer datatype, char trans, integer n,
-                                        integer kl, integer ku, integer nrhs, integer ldab,
-                                        integer ldb, void *X, void *params);
-
 void fla_test_gbtrs(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Linear solver of banded matrix";
@@ -191,7 +183,7 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
         }
         else
         {
-            if(FLA_EXTREME_CASE_TEST)
+            if((FLA_EXTREME_CASE_TEST) && !(FLA_RANDOM_INIT_MODE))
             {
                 create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);
                 if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
@@ -211,6 +203,8 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
             }
             else
             {
+                /* NOTE: Random matrices may be singular/ill-conditioned causing gbtrf to fail.
+                   Generating random band storage matrix when FLA_RANDOM_INIT_MODE is enabled */
                 /* Initialize & convert random band matrix into band storage as per API need */
                 rand_band_storage_matrix(datatype, n, n, kl, ku, AB, ldab);
                 /* Initialize random B matrix */
@@ -266,10 +260,13 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     IF_FLA_BRT_VALIDATION(
-        n, n, store_gbtrs_outputs(filename, datatype, trans, n, kl, ku, nrhs, ldab, ldb, X, params),
-        VALIDATE_GBTRS,
-        check_bit_reproducibility_gbtrs(filename, datatype, trans, n, kl, ku, nrhs, ldab, ldb, X,
-                                        params))
+        n, n, store_outputs_base(filename, params, 1, 0, datatype, n, nrhs, X, ldb), VALIDATE_GBTRS,
+        check_reproducibility_base(filename, params, 1, 0, datatype, n, nrhs, X, ldb))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         VALIDATE_GBTRS
@@ -431,28 +428,4 @@ void invoke_gbtrs(integer datatype, char *trans, integer *n, integer *kl, intege
             break;
         }
     }
-}
-
-void store_gbtrs_outputs(void *filename, integer datatype, char trans, integer n, integer kl,
-                         integer ku, integer nrhs, integer ldab, integer ldb, void *X, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    FLA_STORE_BRT_MATRIX(datatype, n, nrhs, X, ldb)
-
-    fclose(gt_file);
-}
-
-integer check_bit_reproducibility_gbtrs(void *filename, integer datatype, char trans, integer n,
-                                        integer kl, integer ku, integer nrhs, integer ldab,
-                                        integer ldb, void *X, void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    FLA_VERIFY_BRT_MATRIX(datatype, n, nrhs, X, ldb)
-
-    fclose(gt_file);
-    return 1;
 }

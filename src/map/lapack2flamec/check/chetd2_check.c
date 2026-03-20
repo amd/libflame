@@ -1,11 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int chetd2_check(char *uplo, integer *n, scomplex *a, integer *lda, float *d__, float *e,
-                 scomplex *tau, integer *info)
+int chetd2_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, float *d__, float *e,
+                 scomplex *tau, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
     logical upper;
 
@@ -34,7 +34,7 @@ int chetd2_check(char *uplo, integer *n, scomplex *a, integer *lda, float *d__, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHETD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

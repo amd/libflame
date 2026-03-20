@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CGERFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -183,9 +183,34 @@ for 1<=i<=N, row i of the */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, complex *af,
-             integer *ldaf, integer *ipiv, complex *b, integer *ldb, complex *x, integer *ldx,
-             real *ferr, real *berr, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda, scomplex *af,
+             aocl_int_t *ldaf, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *x,
+             aocl_int_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgerfs(trans, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, ferr, berr, work,
+                       rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgerfs(trans, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, b, &ldb_64, x,
+                       &ldx_64, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                        aocl_int64_t *lda, scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
+                        scomplex *b, aocl_int64_t *ldb, scomplex *x, aocl_int64_t *ldx, real *ferr,
+                        real *berr, scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -201,42 +226,24 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
-        i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real s, xk;
-    integer nz;
+    aocl_int64_t nz;
     real eps;
-    integer kase;
+    aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
-    integer count;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+    aocl_int64_t count;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
-                integer *);
     logical notran;
     char transn[1], transt[1];
     real lstres;
@@ -319,7 +326,7 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGERFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGERFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -361,11 +368,11 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
-        ccopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        cgemv_(trans, n, n, &q__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1],
-               &c__1);
+        aocl_blas_ccopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_cgemv(trans, n, n, &q__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1,
+                        &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
@@ -376,7 +383,7 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+            rwork[i__] = (r__1 = b[i__3].real, f2c_abs(r__1))
                          + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
             /* L30: */
         }
@@ -387,13 +394,13 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
             for(k = 1; k <= i__2; ++k)
             {
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                xk = (r__1 = x[i__3].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 i__3 = *n;
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                    rwork[i__] += ((r__1 = a[i__4].real, f2c_abs(r__1))
                                    + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
                                   * xk;
                     /* L40: */
@@ -412,9 +419,9 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
                 {
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                    s += ((r__1 = a[i__4].real, f2c_abs(r__1))
                           + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
-                         * ((r__3 = x[i__5].r, f2c_abs(r__3))
+                         * ((r__3 = x[i__5].real, f2c_abs(r__3))
                             + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                     /* L60: */
                 }
@@ -431,7 +438,7 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1))
+                r__4 = ((r__1 = work[i__3].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)))
                        / rwork[i__]; // , expr subst
                 s = fla_max(r__3, r__4);
@@ -441,7 +448,7 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1))
+                r__4 = ((r__1 = work[i__3].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1)
                        / (rwork[i__] + safe1); // , expr subst
                 s = fla_max(r__3, r__4);
@@ -457,8 +464,8 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            cgetrs_(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
-            caxpy_(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_cgetrs(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+            aocl_blas_caxpy(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -486,13 +493,13 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
             if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1))
+                rwork[i__] = (r__1 = work[i__3].real, f2c_abs(r__1))
                              + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1))
+                rwork[i__] = (r__1 = work[i__3].real, f2c_abs(r__1))
                              + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
                              + safe1;
             }
@@ -500,23 +507,24 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
         }
         kase = 0;
     L100:
-        clacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**H). */
-                cgetrs_(transt, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+                aocl_lapack_cgetrs(transt, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                                   info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__;
-                    q__1.r = rwork[i__4] * work[i__5].r;
-                    q__1.i = rwork[i__4] * work[i__5].i; // , expr subst
-                    work[i__3].r = q__1.r;
-                    work[i__3].i = q__1.i; // , expr subst
+                    q__1.real = rwork[i__4] * work[i__5].real;
+                    q__1.imag = rwork[i__4] * work[i__5].imag; // , expr subst
+                    work[i__3].real = q__1.real;
+                    work[i__3].imag = q__1.imag; // , expr subst
                     /* L110: */
                 }
             }
@@ -529,13 +537,14 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__;
-                    q__1.r = rwork[i__4] * work[i__5].r;
-                    q__1.i = rwork[i__4] * work[i__5].i; // , expr subst
-                    work[i__3].r = q__1.r;
-                    work[i__3].i = q__1.i; // , expr subst
+                    q__1.real = rwork[i__4] * work[i__5].real;
+                    q__1.imag = rwork[i__4] * work[i__5].imag; // , expr subst
+                    work[i__3].real = q__1.real;
+                    work[i__3].imag = q__1.imag; // , expr subst
                     /* L120: */
                 }
-                cgetrs_(transn, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+                aocl_lapack_cgetrs(transn, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                                   info);
             }
             goto L100;
         }
@@ -547,7 +556,7 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex *a, integer *lda, c
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             r__3 = lstres;
-            r__4 = (r__1 = x[i__3].r, f2c_abs(r__1))
+            r__4 = (r__1 = x[i__3].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
             lstres = fla_max(r__3, r__4);
             /* L130: */

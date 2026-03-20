@@ -4,9 +4,9 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-/* > \brief \b ZLAHEF_RK computes a partial factorization of a complex Hermitian indefinite matrix
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b ZLAHEF_RK computes a partial factorization of a scomplex Hermitian indefinite matrix
  * using bound ed Bunch-Kaufman (rook) diagonal pivoting method. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > ZLAHEF_RK computes a partial factorization of a complex Hermitian */
+/* > ZLAHEF_RK computes a partial factorization of a scomplex Hermitian */
 /* > matrix A using the bounded Bunch-Kaufman (rook) diagonal */
 /* > pivoting method. The partial factorization has the form: */
 /* > */
@@ -262,53 +262,59 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a, integer *lda,
-                doublecomplex *e, integer *ipiv, doublecomplex *w, integer *ldw, integer *info)
+/** Generated wrapper function */
+void zlahef_rk_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dcomplex *a,
+                aocl_int_t *lda, dcomplex *e, aocl_int_t *ipiv, dcomplex *w,
+                aocl_int_t *ldw, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlahef_rk(uplo, n, nb, kb, a, lda, e, ipiv, w, ldw, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldw_64 = *ldw;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlahef_rk(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, e, ipiv, w, &ldw_64, &info_64);
+
+    *kb = (aocl_int_t)kb_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlahef_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb,
+                           dcomplex *a, aocl_int64_t *lda, dcomplex *e, aocl_int_t *ipiv,
+                           dcomplex *w, aocl_int64_t *ldw, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlahef_rk inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
                       ", ldw %" FLA_IS "",
                       *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
-    integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3, z__4, z__5;
+    dcomplex z__1, z__2, z__3, z__4, z__5;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *),
-        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *),
+        z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer j, k, p;
+    aocl_int64_t j, k, p;
     doublereal t, r1;
-    doublecomplex d11, d21, d22;
-    integer jb, ii, jj, kk, kp, kw, kkw;
+    dcomplex d11, d21, d22;
+    aocl_int64_t jb, ii, jj, kk, kp, kw, kkw;
     logical done;
-    integer imax, jmax;
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp, sfmin;
-    integer itemp;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer kstep;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    aocl_int64_t itemp;
+    aocl_int64_t kstep;
     extern doublereal dlamch_(char *);
     doublereal absakk;
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
-    extern /* Subroutine */
-        void
-        zlacgv_(integer *, doublecomplex *, integer *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -358,8 +364,8 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         /* for use in updating A11 (note that conjg(W) is actually stored) */
         /* Initialize the first entry of array E, where superdiagonal */
         /* elements of D are stored */
-        e[1].r = 0.;
-        e[1].i = 0.; // , expr subst
+        e[1].real = 0.;
+        e[1].imag = 0.; // , expr subst
         /* K is the main loop index, decreasing from N in steps of 1 or 2 */
         k = *n;
     L10: /* KW is the column of W which corresponds to column K of A */
@@ -375,39 +381,39 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         if(k > 1)
         {
             i__1 = k - 1;
-            zcopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+            aocl_blas_zcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
         }
         i__1 = k + kw * w_dim1;
         i__2 = k + k * a_dim1;
-        d__1 = a[i__2].r;
-        w[i__1].r = d__1;
-        w[i__1].i = 0.; // , expr subst
+        d__1 = a[i__2].real;
+        w[i__1].real = d__1;
+        w[i__1].imag = 0.; // , expr subst
         if(k < *n)
         {
             i__1 = *n - k;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
-                   &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
+                            &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
             i__1 = k + kw * w_dim1;
             i__2 = k + kw * w_dim1;
-            d__1 = w[i__2].r;
-            w[i__1].r = d__1;
-            w[i__1].i = 0.; // , expr subst
+            d__1 = w[i__2].real;
+            w[i__1].real = d__1;
+            w[i__1].imag = 0.; // , expr subst
         }
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + kw * w_dim1;
-        absakk = (d__1 = w[i__1].r, f2c_dabs(d__1));
+        absakk = (d__1 = w[i__1].real, f2c_dabs(d__1));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = izamax_(&i__1, &w[kw * w_dim1 + 1], &c__1);
+            imax = aocl_blas_izamax(&i__1, &w[kw * w_dim1 + 1], &c__1);
             i__1 = imax + kw * w_dim1;
-            colmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
+            colmax = (d__1 = w[i__1].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&w[imax + kw * w_dim1]), f2c_dabs(d__2));
         }
         else
@@ -424,20 +430,20 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             kp = k;
             i__1 = k + k * a_dim1;
             i__2 = k + kw * w_dim1;
-            d__1 = w[i__2].r;
-            a[i__1].r = d__1;
-            a[i__1].i = 0.; // , expr subst
+            d__1 = w[i__2].real;
+            a[i__1].real = d__1;
+            a[i__1].imag = 0.; // , expr subst
             if(k > 1)
             {
                 i__1 = k - 1;
-                zcopy_(&i__1, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zcopy(&i__1, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
             }
             /* Set E( K ) to zero */
             if(k > 1)
             {
                 i__1 = k;
-                e[i__1].r = 0.;
-                e[i__1].i = 0.; // , expr subst
+                e[i__1].real = 0.;
+                e[i__1].imag = 0.; // , expr subst
             }
         }
         else
@@ -461,31 +467,32 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    zcopy_(&i__1, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(&i__1, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1],
+                                    &c__1);
                 }
                 i__1 = imax + (kw - 1) * w_dim1;
                 i__2 = imax + imax * a_dim1;
-                d__1 = a[i__2].r;
-                w[i__1].r = d__1;
-                w[i__1].i = 0.; // , expr subst
+                d__1 = a[i__2].real;
+                w[i__1].real = d__1;
+                w[i__1].imag = 0.; // , expr subst
                 i__1 = k - imax;
-                zcopy_(&i__1, &a[imax + (imax + 1) * a_dim1], lda, &w[imax + 1 + (kw - 1) * w_dim1],
-                       &c__1);
+                aocl_blas_zcopy(&i__1, &a[imax + (imax + 1) * a_dim1], lda,
+                                &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 i__1 = k - imax;
-                zlacgv_(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 if(k < *n)
                 {
                     i__1 = *n - k;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
-                           &w[imax + (kw + 1) * w_dim1], ldw, &c_b1, &w[(kw - 1) * w_dim1 + 1],
-                           &c__1);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemv("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
+                                    &w[imax + (kw + 1) * w_dim1], ldw, &c_b1,
+                                    &w[(kw - 1) * w_dim1 + 1], &c__1);
                     i__1 = imax + (kw - 1) * w_dim1;
                     i__2 = imax + (kw - 1) * w_dim1;
-                    d__1 = w[i__2].r;
-                    w[i__1].r = d__1;
-                    w[i__1].i = 0.; // , expr subst
+                    d__1 = w[i__2].real;
+                    w[i__1].real = d__1;
+                    w[i__1].imag = 0.; // , expr subst
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
@@ -493,9 +500,9 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax != k)
                 {
                     i__1 = k - imax;
-                    jmax = imax + izamax_(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
+                    jmax = imax + aocl_blas_izamax(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                     i__1 = jmax + (kw - 1) * w_dim1;
-                    rowmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
+                    rowmax = (d__1 = w[i__1].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&w[jmax + (kw - 1) * w_dim1]), f2c_dabs(d__2));
                 }
                 else
@@ -505,9 +512,9 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    itemp = izamax_(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                    itemp = aocl_blas_izamax(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
                     i__1 = itemp + (kw - 1) * w_dim1;
-                    dtemp = (d__1 = w[i__1].r, f2c_dabs(d__1))
+                    dtemp = (d__1 = w[i__1].real, f2c_dabs(d__1))
                             + (d__2 = d_imag(&w[itemp + (kw - 1) * w_dim1]), f2c_dabs(d__2));
                     if(dtemp > rowmax)
                     {
@@ -520,13 +527,14 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + (kw - 1) * w_dim1;
-                if(!((d__1 = w[i__1].r, f2c_dabs(d__1)) < alpha * rowmax))
+                if(!((d__1 = w[i__1].real, f2c_dabs(d__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
                     kp = imax;
                     /* copy column KW-1 of W to column KW of W */
-                    zcopy_(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1],
+                                    &c__1);
                     done = TRUE_;
                     /* Case(3) */
                     /* Equivalent to testing for ROWMAX.EQ.COLMAX, */
@@ -548,7 +556,8 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     colmax = rowmax;
                     imax = jmax;
                     /* Copy updated JMAXth (next IMAXth) column to Kth of W */
-                    zcopy_(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1],
+                                    &c__1);
                 }
                 /* END pivot search loop body */
                 if(!done)
@@ -572,17 +581,18 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* will be later overwritten. */
                 i__1 = p + p * a_dim1;
                 i__2 = k + k * a_dim1;
-                d__1 = a[i__2].r;
-                a[i__1].r = d__1;
-                a[i__1].i = 0.; // , expr subst
+                d__1 = a[i__2].real;
+                a[i__1].real = d__1;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = k - 1 - p;
-                zcopy_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1], lda);
+                aocl_blas_zcopy(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1],
+                                lda);
                 i__1 = k - 1 - p;
-                zlacgv_(&i__1, &a[p + (p + 1) * a_dim1], lda);
+                aocl_lapack_zlacgv(&i__1, &a[p + (p + 1) * a_dim1], lda);
                 if(p > 1)
                 {
                     i__1 = p - 1;
-                    zcopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
                 }
                 /* Interchange rows K and P in the last K+1 to N columns of A */
                 /* (columns K and K-1 of A for 2-by-2 pivot will be */
@@ -591,10 +601,11 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(k < *n)
                 {
                     i__1 = *n - k;
-                    zswap_(&i__1, &a[k + (k + 1) * a_dim1], lda, &a[p + (k + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[k + (k + 1) * a_dim1], lda, &a[p + (k + 1) * a_dim1],
+                                    lda);
                 }
                 i__1 = *n - kk + 1;
-                zswap_(&i__1, &w[k + kkw * w_dim1], ldw, &w[p + kkw * w_dim1], ldw);
+                aocl_blas_zswap(&i__1, &w[k + kkw * w_dim1], ldw, &w[p + kkw * w_dim1], ldw);
             }
             /* Interchange rows and columns KP and KK. */
             /* Updated column KP is already stored in column KKW of W. */
@@ -606,17 +617,18 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* will be later overwritten. */
                 i__1 = kp + kp * a_dim1;
                 i__2 = kk + kk * a_dim1;
-                d__1 = a[i__2].r;
-                a[i__1].r = d__1;
-                a[i__1].i = 0.; // , expr subst
+                d__1 = a[i__2].real;
+                a[i__1].real = d__1;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = kk - 1 - kp;
-                zcopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
+                aocl_blas_zcopy(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1],
+                                lda);
                 i__1 = kk - 1 - kp;
-                zlacgv_(&i__1, &a[kp + (kp + 1) * a_dim1], lda);
+                aocl_lapack_zlacgv(&i__1, &a[kp + (kp + 1) * a_dim1], lda);
                 if(kp > 1)
                 {
                     i__1 = kp - 1;
-                    zcopy_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 }
                 /* Interchange rows KK and KP in last K+1 to N columns of A */
                 /* (columns K (or K and K-1 for 2-by-2 pivot) of A will be */
@@ -625,10 +637,11 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(k < *n)
                 {
                     i__1 = *n - k;
-                    zswap_(&i__1, &a[kk + (k + 1) * a_dim1], lda, &a[kp + (k + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[kk + (k + 1) * a_dim1], lda,
+                                    &a[kp + (k + 1) * a_dim1], lda);
                 }
                 i__1 = *n - kk + 1;
-                zswap_(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
+                aocl_blas_zswap(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
             }
             if(kstep == 1)
             {
@@ -644,7 +657,7 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* (NOTE: No need to use for Hermitian matrix */
                 /* A( K, K ) = REAL( W( K, K) ) to separately copy diagonal */
                 /* element D(k,k) from W (potentially saves only one load)) */
-                zcopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zcopy(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 if(k > 1)
                 {
                     /* (NOTE: No need to check if A(k,k) is NOT ZERO, */
@@ -652,12 +665,12 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     /* case A(k,k) = 0 falls into 2x2 pivot case(3)) */
                     /* Handle division by a small number */
                     i__1 = k + k * a_dim1;
-                    t = a[i__1].r;
+                    t = a[i__1].real;
                     if(f2c_dabs(t) >= sfmin)
                     {
                         r1 = 1. / t;
                         i__1 = k - 1;
-                        zdscal_(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
                     }
                     else
                     {
@@ -666,20 +679,20 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                         {
                             i__2 = ii + k * a_dim1;
                             i__3 = ii + k * a_dim1;
-                            z__1.r = a[i__3].r / t;
-                            z__1.i = a[i__3].i / t; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__1.real = a[i__3].real / t;
+                            z__1.imag = a[i__3].imag / t; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L14: */
                         }
                     }
                     /* (2) Conjugate column W(kw) */
                     i__1 = k - 1;
-                    zlacgv_(&i__1, &w[kw * w_dim1 + 1], &c__1);
+                    aocl_lapack_zlacgv(&i__1, &w[kw * w_dim1 + 1], &c__1);
                     /* Store the superdiagonal element of D in array E */
                     i__1 = k;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
             }
             else
@@ -731,18 +744,18 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     /* (b) (D22*D11 - 1) != 0, since from (a), */
                     /* both |D11| < 1, |D22| < 1, hence |D22*D11| << 1.) */
                     i__1 = k - 1 + kw * w_dim1;
-                    d21.r = w[i__1].r;
-                    d21.i = w[i__1].i; // , expr subst
+                    d21.real = w[i__1].real;
+                    d21.imag = w[i__1].imag; // , expr subst
                     d_cnjg(&z__2, &d21);
                     z_div(&z__1, &w[k + kw * w_dim1], &z__2);
-                    d11.r = z__1.r;
-                    d11.i = z__1.i; // , expr subst
+                    d11.real = z__1.real;
+                    d11.imag = z__1.imag; // , expr subst
                     z_div(&z__1, &w[k - 1 + (kw - 1) * w_dim1], &d21);
-                    d22.r = z__1.r;
-                    d22.i = z__1.i; // , expr subst
-                    z__1.r = d11.r * d22.r - d11.i * d22.i;
-                    z__1.i = d11.r * d22.i + d11.i * d22.r; // , expr subst
-                    t = 1. / (z__1.r - 1.);
+                    d22.real = z__1.real;
+                    d22.imag = z__1.imag; // , expr subst
+                    z__1.real = d11.real * d22.real - d11.imag * d22.imag;
+                    z__1.imag = d11.real * d22.imag + d11.imag * d22.real; // , expr subst
+                    t = 1. / (z__1.real - 1.);
                     /* Update elements in columns A(k-1) and A(k) as */
                     /* dot products of rows of ( W(kw-1) W(kw) ) and columns */
                     /* of D**(-1) */
@@ -751,29 +764,29 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     {
                         i__2 = j + (k - 1) * a_dim1;
                         i__3 = j + (kw - 1) * w_dim1;
-                        z__4.r = d11.r * w[i__3].r - d11.i * w[i__3].i;
-                        z__4.i = d11.r * w[i__3].i + d11.i * w[i__3].r; // , expr subst
+                        z__4.real = d11.real * w[i__3].real - d11.imag * w[i__3].imag;
+                        z__4.imag = d11.real * w[i__3].imag + d11.imag * w[i__3].real; // , expr subst
                         i__4 = j + kw * w_dim1;
-                        z__3.r = z__4.r - w[i__4].r;
-                        z__3.i = z__4.i - w[i__4].i; // , expr subst
+                        z__3.real = z__4.real - w[i__4].real;
+                        z__3.imag = z__4.imag - w[i__4].imag; // , expr subst
                         z_div(&z__2, &z__3, &d21);
-                        z__1.r = t * z__2.r;
-                        z__1.i = t * z__2.i; // , expr subst
-                        a[i__2].r = z__1.r;
-                        a[i__2].i = z__1.i; // , expr subst
+                        z__1.real = t * z__2.real;
+                        z__1.imag = t * z__2.imag; // , expr subst
+                        a[i__2].real = z__1.real;
+                        a[i__2].imag = z__1.imag; // , expr subst
                         i__2 = j + k * a_dim1;
                         i__3 = j + kw * w_dim1;
-                        z__4.r = d22.r * w[i__3].r - d22.i * w[i__3].i;
-                        z__4.i = d22.r * w[i__3].i + d22.i * w[i__3].r; // , expr subst
+                        z__4.real = d22.real * w[i__3].real - d22.imag * w[i__3].imag;
+                        z__4.imag = d22.real * w[i__3].imag + d22.imag * w[i__3].real; // , expr subst
                         i__4 = j + (kw - 1) * w_dim1;
-                        z__3.r = z__4.r - w[i__4].r;
-                        z__3.i = z__4.i - w[i__4].i; // , expr subst
+                        z__3.real = z__4.real - w[i__4].real;
+                        z__3.imag = z__4.imag - w[i__4].imag; // , expr subst
                         d_cnjg(&z__5, &d21);
                         z_div(&z__2, &z__3, &z__5);
-                        z__1.r = t * z__2.r;
-                        z__1.i = t * z__2.i; // , expr subst
-                        a[i__2].r = z__1.r;
-                        a[i__2].i = z__1.i; // , expr subst
+                        z__1.real = t * z__2.real;
+                        z__1.imag = t * z__2.imag; // , expr subst
+                        a[i__2].real = z__1.real;
+                        a[i__2].imag = z__1.imag; // , expr subst
                         /* L20: */
                     }
                 }
@@ -782,39 +795,39 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* ZERO out superdiagonal entry of A */
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 i__2 = k - 1 + (kw - 1) * w_dim1;
-                a[i__1].r = w[i__2].r;
-                a[i__1].i = w[i__2].i; // , expr subst
+                a[i__1].real = w[i__2].real;
+                a[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k - 1 + k * a_dim1;
-                a[i__1].r = 0.;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = 0.;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = k + k * a_dim1;
                 i__2 = k + kw * w_dim1;
-                a[i__1].r = w[i__2].r;
-                a[i__1].i = w[i__2].i; // , expr subst
+                a[i__1].real = w[i__2].real;
+                a[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k;
                 i__2 = k - 1 + kw * w_dim1;
-                e[i__1].r = w[i__2].r;
-                e[i__1].i = w[i__2].i; // , expr subst
+                e[i__1].real = w[i__2].real;
+                e[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k - 1;
-                e[i__1].r = 0.;
-                e[i__1].i = 0.; // , expr subst
+                e[i__1].real = 0.;
+                e[i__1].imag = 0.; // , expr subst
                 /* (2) Conjugate columns W(kw) and W(kw-1) */
                 i__1 = k - 1;
-                zlacgv_(&i__1, &w[kw * w_dim1 + 1], &c__1);
+                aocl_lapack_zlacgv(&i__1, &w[kw * w_dim1 + 1], &c__1);
                 i__1 = k - 2;
-                zlacgv_(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                aocl_lapack_zlacgv(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
             }
             /* End column K is nonsingular */
         }
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -836,20 +849,20 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 i__3 = jj + jj * a_dim1;
                 i__4 = jj + jj * a_dim1;
-                d__1 = a[i__4].r;
-                a[i__3].r = d__1;
-                a[i__3].i = 0.; // , expr subst
+                d__1 = a[i__4].real;
+                a[i__3].real = d__1;
+                a[i__3].imag = 0.; // , expr subst
                 i__3 = jj - j + 1;
                 i__4 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__3, &i__4, &z__1, &a[j + (k + 1) * a_dim1], lda,
-                       &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No transpose", &i__3, &i__4, &z__1, &a[j + (k + 1) * a_dim1], lda,
+                                &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
                 i__3 = jj + jj * a_dim1;
                 i__4 = jj + jj * a_dim1;
-                d__1 = a[i__4].r;
-                a[i__3].r = d__1;
-                a[i__3].i = 0.; // , expr subst
+                d__1 = a[i__4].real;
+                a[i__3].real = d__1;
+                a[i__3].imag = 0.; // , expr subst
                 /* L40: */
             }
             /* Update the rectangular superdiagonal block */
@@ -857,11 +870,11 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 i__2 = j - 1;
                 i__3 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemm_("No transpose", "Transpose", &i__2, &jb, &i__3, &z__1,
-                       &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1,
-                       &a[j * a_dim1 + 1], lda);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemm("No transpose", "Transpose", &i__2, &jb, &i__3, &z__1,
+                                &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw,
+                                &c_b1, &a[j * a_dim1 + 1], lda);
             }
             /* L50: */
         }
@@ -875,8 +888,8 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         /* for use in updating A22 (note that conjg(W) is actually stored) */
         /* Initialize the unused last entry of the subdiagonal array E. */
         i__1 = *n;
-        e[i__1].r = 0.;
-        e[i__1].i = 0.; // , expr subst
+        e[i__1].real = 0.;
+        e[i__1].imag = 0.; // , expr subst
         /* K is the main loop index, increasing from 1 in steps of 1 or 2 */
         k = 1;
     L70: /* Exit from loop */
@@ -889,41 +902,41 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
         /* Copy column K of A to column K of W and update column K of W */
         i__1 = k + k * w_dim1;
         i__2 = k + k * a_dim1;
-        d__1 = a[i__2].r;
-        w[i__1].r = d__1;
-        w[i__1].i = 0.; // , expr subst
+        d__1 = a[i__2].real;
+        w[i__1].real = d__1;
+        w[i__1].imag = 0.; // , expr subst
         if(k < *n)
         {
             i__1 = *n - k;
-            zcopy_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &w[k + 1 + k * w_dim1], &c__1);
+            aocl_blas_zcopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &w[k + 1 + k * w_dim1], &c__1);
         }
         if(k > 1)
         {
             i__1 = *n - k + 1;
             i__2 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda, &w[k + w_dim1], ldw,
-                   &c_b1, &w[k + k * w_dim1], &c__1);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda,
+                            &w[k + w_dim1], ldw, &c_b1, &w[k + k * w_dim1], &c__1);
             i__1 = k + k * w_dim1;
             i__2 = k + k * w_dim1;
-            d__1 = w[i__2].r;
-            w[i__1].r = d__1;
-            w[i__1].i = 0.; // , expr subst
+            d__1 = w[i__2].real;
+            w[i__1].real = d__1;
+            w[i__1].imag = 0.; // , expr subst
         }
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * w_dim1;
-        absakk = (d__1 = w[i__1].r, f2c_dabs(d__1));
+        absakk = (d__1 = w[i__1].real, f2c_dabs(d__1));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + izamax_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
+            imax = k + aocl_blas_izamax(&i__1, &w[k + 1 + k * w_dim1], &c__1);
             i__1 = imax + k * w_dim1;
-            colmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
+            colmax = (d__1 = w[i__1].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&w[imax + k * w_dim1]), f2c_dabs(d__2));
         }
         else
@@ -940,20 +953,21 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             kp = k;
             i__1 = k + k * a_dim1;
             i__2 = k + k * w_dim1;
-            d__1 = w[i__2].r;
-            a[i__1].r = d__1;
-            a[i__1].i = 0.; // , expr subst
+            d__1 = w[i__2].real;
+            a[i__1].real = d__1;
+            a[i__1].imag = 0.; // , expr subst
             if(k < *n)
             {
                 i__1 = *n - k;
-                zcopy_(&i__1, &w[k + 1 + k * w_dim1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &w[k + 1 + k * w_dim1], &c__1, &a[k + 1 + k * a_dim1],
+                                &c__1);
             }
             /* Set E( K ) to zero */
             if(k < *n)
             {
                 i__1 = k;
-                e[i__1].r = 0.;
-                e[i__1].i = 0.; // , expr subst
+                e[i__1].real = 0.;
+                e[i__1].imag = 0.; // , expr subst
             }
         }
         else
@@ -975,33 +989,33 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             L72: /* BEGIN pivot search loop body */
                 /* Copy column IMAX to column k+1 of W and update it */
                 i__1 = imax - k;
-                zcopy_(&i__1, &a[imax + k * a_dim1], lda, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[imax + k * a_dim1], lda, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = imax - k;
-                zlacgv_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = imax + (k + 1) * w_dim1;
                 i__2 = imax + imax * a_dim1;
-                d__1 = a[i__2].r;
-                w[i__1].r = d__1;
-                w[i__1].i = 0.; // , expr subst
+                d__1 = a[i__2].real;
+                w[i__1].real = d__1;
+                w[i__1].imag = 0.; // , expr subst
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    zcopy_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1,
-                           &w[imax + 1 + (k + 1) * w_dim1], &c__1);
+                    aocl_blas_zcopy(&i__1, &a[imax + 1 + imax * a_dim1], &c__1,
+                                    &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                 }
                 if(k > 1)
                 {
                     i__1 = *n - k + 1;
                     i__2 = k - 1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda,
-                           &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda,
+                                    &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
                     i__1 = imax + (k + 1) * w_dim1;
                     i__2 = imax + (k + 1) * w_dim1;
-                    d__1 = w[i__2].r;
-                    w[i__1].r = d__1;
-                    w[i__1].i = 0.; // , expr subst
+                    d__1 = w[i__2].real;
+                    w[i__1].real = d__1;
+                    w[i__1].imag = 0.; // , expr subst
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
@@ -1009,9 +1023,9 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax != k)
                 {
                     i__1 = imax - k;
-                    jmax = k - 1 + izamax_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
+                    jmax = k - 1 + aocl_blas_izamax(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                     i__1 = jmax + (k + 1) * w_dim1;
-                    rowmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
+                    rowmax = (d__1 = w[i__1].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&w[jmax + (k + 1) * w_dim1]), f2c_dabs(d__2));
                 }
                 else
@@ -1021,9 +1035,9 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + izamax_(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
+                    itemp = imax + aocl_blas_izamax(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                     i__1 = itemp + (k + 1) * w_dim1;
-                    dtemp = (d__1 = w[i__1].r, f2c_dabs(d__1))
+                    dtemp = (d__1 = w[i__1].real, f2c_dabs(d__1))
                             + (d__2 = d_imag(&w[itemp + (k + 1) * w_dim1]), f2c_dabs(d__2));
                     if(dtemp > rowmax)
                     {
@@ -1036,14 +1050,15 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* ABS( REAL( W( IMAX,K+1 ) ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + (k + 1) * w_dim1;
-                if(!((d__1 = w[i__1].r, f2c_dabs(d__1)) < alpha * rowmax))
+                if(!((d__1 = w[i__1].real, f2c_dabs(d__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
                     kp = imax;
                     /* copy column K+1 of W to column K of W */
                     i__1 = *n - k + 1;
-                    zcopy_(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+                    aocl_blas_zcopy(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1],
+                                    &c__1);
                     done = TRUE_;
                     /* Case(3) */
                     /* Equivalent to testing for ROWMAX.EQ.COLMAX, */
@@ -1066,7 +1081,8 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     imax = jmax;
                     /* Copy updated JMAXth (next IMAXth) column to Kth of W */
                     i__1 = *n - k + 1;
-                    zcopy_(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+                    aocl_blas_zcopy(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1],
+                                    &c__1);
                 }
                 /* End pivot search loop body */
                 if(!done)
@@ -1088,17 +1104,19 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* will be later overwritten. */
                 i__1 = p + p * a_dim1;
                 i__2 = k + k * a_dim1;
-                d__1 = a[i__2].r;
-                a[i__1].r = d__1;
-                a[i__1].i = 0.; // , expr subst
+                d__1 = a[i__2].real;
+                a[i__1].real = d__1;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = p - k - 1;
-                zcopy_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &a[p + (k + 1) * a_dim1], lda);
+                aocl_blas_zcopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &a[p + (k + 1) * a_dim1],
+                                lda);
                 i__1 = p - k - 1;
-                zlacgv_(&i__1, &a[p + (k + 1) * a_dim1], lda);
+                aocl_lapack_zlacgv(&i__1, &a[p + (k + 1) * a_dim1], lda);
                 if(p < *n)
                 {
                     i__1 = *n - p;
-                    zcopy_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1], &c__1);
+                    aocl_blas_zcopy(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1],
+                                    &c__1);
                 }
                 /* Interchange rows K and P in first K-1 columns of A */
                 /* (columns K and K+1 of A for 2-by-2 pivot will be */
@@ -1107,9 +1125,9 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(k > 1)
                 {
                     i__1 = k - 1;
-                    zswap_(&i__1, &a[k + a_dim1], lda, &a[p + a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[k + a_dim1], lda, &a[p + a_dim1], lda);
                 }
-                zswap_(&kk, &w[k + w_dim1], ldw, &w[p + w_dim1], ldw);
+                aocl_blas_zswap(&kk, &w[k + w_dim1], ldw, &w[p + w_dim1], ldw);
             }
             /* Interchange rows and columns KP and KK. */
             /* Updated column KP is already stored in column KK of W. */
@@ -1121,17 +1139,19 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* will be later overwritten. */
                 i__1 = kp + kp * a_dim1;
                 i__2 = kk + kk * a_dim1;
-                d__1 = a[i__2].r;
-                a[i__1].r = d__1;
-                a[i__1].i = 0.; // , expr subst
+                d__1 = a[i__2].real;
+                a[i__1].real = d__1;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = kp - kk - 1;
-                zcopy_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
+                aocl_blas_zcopy(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1],
+                                lda);
                 i__1 = kp - kk - 1;
-                zlacgv_(&i__1, &a[kp + (kk + 1) * a_dim1], lda);
+                aocl_lapack_zlacgv(&i__1, &a[kp + (kk + 1) * a_dim1], lda);
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    zcopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
+                    aocl_blas_zcopy(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + 1 + kp * a_dim1], &c__1);
                 }
                 /* Interchange rows KK and KP in first K-1 columns of A */
                 /* (column K (or K and K+1 for 2-by-2 pivot) of A will be */
@@ -1140,9 +1160,9 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 if(k > 1)
                 {
                     i__1 = k - 1;
-                    zswap_(&i__1, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
                 }
-                zswap_(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
+                aocl_blas_zswap(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
             }
             if(kstep == 1)
             {
@@ -1159,7 +1179,7 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* A( K, K ) = REAL( W( K, K) ) to separately copy diagonal */
                 /* element D(k,k) from W (potentially saves only one load)) */
                 i__1 = *n - k + 1;
-                zcopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
                 if(k < *n)
                 {
                     /* (NOTE: No need to check if A(k,k) is NOT ZERO, */
@@ -1167,12 +1187,12 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     /* case A(k,k) = 0 falls into 2x2 pivot case(3)) */
                     /* Handle division by a small number */
                     i__1 = k + k * a_dim1;
-                    t = a[i__1].r;
+                    t = a[i__1].real;
                     if(f2c_dabs(t) >= sfmin)
                     {
                         r1 = 1. / t;
                         i__1 = *n - k;
-                        zdscal_(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
+                        aocl_blas_zdscal(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
                     }
                     else
                     {
@@ -1181,20 +1201,20 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                         {
                             i__2 = ii + k * a_dim1;
                             i__3 = ii + k * a_dim1;
-                            z__1.r = a[i__3].r / t;
-                            z__1.i = a[i__3].i / t; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__1.real = a[i__3].real / t;
+                            z__1.imag = a[i__3].imag / t; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L74: */
                         }
                     }
                     /* (2) Conjugate column W(k) */
                     i__1 = *n - k;
-                    zlacgv_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
+                    aocl_lapack_zlacgv(&i__1, &w[k + 1 + k * w_dim1], &c__1);
                     /* Store the subdiagonal element of D in array E */
                     i__1 = k;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
             }
             else
@@ -1246,18 +1266,18 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     /* (b) (D22*D11 - 1) != 0, since from (a), */
                     /* both |D11| < 1, |D22| < 1, hence |D22*D11| << 1.) */
                     i__1 = k + 1 + k * w_dim1;
-                    d21.r = w[i__1].r;
-                    d21.i = w[i__1].i; // , expr subst
+                    d21.real = w[i__1].real;
+                    d21.imag = w[i__1].imag; // , expr subst
                     z_div(&z__1, &w[k + 1 + (k + 1) * w_dim1], &d21);
-                    d11.r = z__1.r;
-                    d11.i = z__1.i; // , expr subst
+                    d11.real = z__1.real;
+                    d11.imag = z__1.imag; // , expr subst
                     d_cnjg(&z__2, &d21);
                     z_div(&z__1, &w[k + k * w_dim1], &z__2);
-                    d22.r = z__1.r;
-                    d22.i = z__1.i; // , expr subst
-                    z__1.r = d11.r * d22.r - d11.i * d22.i;
-                    z__1.i = d11.r * d22.i + d11.i * d22.r; // , expr subst
-                    t = 1. / (z__1.r - 1.);
+                    d22.real = z__1.real;
+                    d22.imag = z__1.imag; // , expr subst
+                    z__1.real = d11.real * d22.real - d11.imag * d22.imag;
+                    z__1.imag = d11.real * d22.imag + d11.imag * d22.real; // , expr subst
+                    t = 1. / (z__1.real - 1.);
                     /* Update elements in columns A(k) and A(k+1) as */
                     /* dot products of rows of ( W(k) W(k+1) ) and columns */
                     /* of D**(-1) */
@@ -1266,29 +1286,29 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                     {
                         i__2 = j + k * a_dim1;
                         i__3 = j + k * w_dim1;
-                        z__4.r = d11.r * w[i__3].r - d11.i * w[i__3].i;
-                        z__4.i = d11.r * w[i__3].i + d11.i * w[i__3].r; // , expr subst
+                        z__4.real = d11.real * w[i__3].real - d11.imag * w[i__3].imag;
+                        z__4.imag = d11.real * w[i__3].imag + d11.imag * w[i__3].real; // , expr subst
                         i__4 = j + (k + 1) * w_dim1;
-                        z__3.r = z__4.r - w[i__4].r;
-                        z__3.i = z__4.i - w[i__4].i; // , expr subst
+                        z__3.real = z__4.real - w[i__4].real;
+                        z__3.imag = z__4.imag - w[i__4].imag; // , expr subst
                         d_cnjg(&z__5, &d21);
                         z_div(&z__2, &z__3, &z__5);
-                        z__1.r = t * z__2.r;
-                        z__1.i = t * z__2.i; // , expr subst
-                        a[i__2].r = z__1.r;
-                        a[i__2].i = z__1.i; // , expr subst
+                        z__1.real = t * z__2.real;
+                        z__1.imag = t * z__2.imag; // , expr subst
+                        a[i__2].real = z__1.real;
+                        a[i__2].imag = z__1.imag; // , expr subst
                         i__2 = j + (k + 1) * a_dim1;
                         i__3 = j + (k + 1) * w_dim1;
-                        z__4.r = d22.r * w[i__3].r - d22.i * w[i__3].i;
-                        z__4.i = d22.r * w[i__3].i + d22.i * w[i__3].r; // , expr subst
+                        z__4.real = d22.real * w[i__3].real - d22.imag * w[i__3].imag;
+                        z__4.imag = d22.real * w[i__3].imag + d22.imag * w[i__3].real; // , expr subst
                         i__4 = j + k * w_dim1;
-                        z__3.r = z__4.r - w[i__4].r;
-                        z__3.i = z__4.i - w[i__4].i; // , expr subst
+                        z__3.real = z__4.real - w[i__4].real;
+                        z__3.imag = z__4.imag - w[i__4].imag; // , expr subst
                         z_div(&z__2, &z__3, &d21);
-                        z__1.r = t * z__2.r;
-                        z__1.i = t * z__2.i; // , expr subst
-                        a[i__2].r = z__1.r;
-                        a[i__2].i = z__1.i; // , expr subst
+                        z__1.real = t * z__2.real;
+                        z__1.imag = t * z__2.imag; // , expr subst
+                        a[i__2].real = z__1.real;
+                        a[i__2].imag = z__1.imag; // , expr subst
                         /* L80: */
                     }
                 }
@@ -1297,39 +1317,39 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
                 /* ZERO out subdiagonal entry of A */
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * w_dim1;
-                a[i__1].r = w[i__2].r;
-                a[i__1].i = w[i__2].i; // , expr subst
+                a[i__1].real = w[i__2].real;
+                a[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k + 1 + k * a_dim1;
-                a[i__1].r = 0.;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = 0.;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * w_dim1;
-                a[i__1].r = w[i__2].r;
-                a[i__1].i = w[i__2].i; // , expr subst
+                a[i__1].real = w[i__2].real;
+                a[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k;
                 i__2 = k + 1 + k * w_dim1;
-                e[i__1].r = w[i__2].r;
-                e[i__1].i = w[i__2].i; // , expr subst
+                e[i__1].real = w[i__2].real;
+                e[i__1].imag = w[i__2].imag; // , expr subst
                 i__1 = k + 1;
-                e[i__1].r = 0.;
-                e[i__1].i = 0.; // , expr subst
+                e[i__1].real = 0.;
+                e[i__1].imag = 0.; // , expr subst
                 /* (2) Conjugate columns W(k) and W(k+1) */
                 i__1 = *n - k;
-                zlacgv_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__1, &w[k + 1 + k * w_dim1], &c__1);
                 i__1 = *n - k - 1;
-                zlacgv_(&i__1, &w[k + 2 + (k + 1) * w_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__1, &w[k + 2 + (k + 1) * w_dim1], &c__1);
             }
             /* End column K is nonsingular */
         }
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;
@@ -1352,20 +1372,20 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 i__4 = jj + jj * a_dim1;
                 i__5 = jj + jj * a_dim1;
-                d__1 = a[i__5].r;
-                a[i__4].r = d__1;
-                a[i__4].i = 0.; // , expr subst
+                d__1 = a[i__5].real;
+                a[i__4].real = d__1;
+                a[i__4].imag = 0.; // , expr subst
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda, &w[jj + w_dim1],
-                       ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda,
+                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 i__4 = jj + jj * a_dim1;
                 i__5 = jj + jj * a_dim1;
-                d__1 = a[i__5].r;
-                a[i__4].r = d__1;
-                a[i__4].i = 0.; // , expr subst
+                d__1 = a[i__5].real;
+                a[i__4].real = d__1;
+                a[i__4].imag = 0.; // , expr subst
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */
@@ -1373,10 +1393,11 @@ void zlahef_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex 
             {
                 i__3 = *n - j - jb + 1;
                 i__4 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &z__1, &a[j + jb + a_dim1],
-                       lda, &w[j + w_dim1], ldw, &c_b1, &a[j + jb + j * a_dim1], lda);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &z__1,
+                                &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b1,
+                                &a[j + jb + j * a_dim1], lda);
             }
             /* L110: */
         }

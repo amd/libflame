@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b ZUNGQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNGQR generates an M-by-N complex matrix Q with orthonormal columns, */
+/* > ZUNGQR generates an M-by-N scomplex matrix Q with orthonormal columns, */
 /* > which is defined as the first N columns of a product of K elementary */
 /* > reflectors of order M */
 /* > */
@@ -129,30 +129,16 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
-                doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
+void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
+                aocl_int64_t *lda, dcomplex *tau, dcomplex *work, aocl_int64_t *lwork,
+                aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        zung2r_fla(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
-    integer ldwork;
-    extern /* Subroutine */
-        void
-        zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *);
-    integer lwkopt;
+    aocl_int64_t i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
+    aocl_int64_t ldwork;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -183,10 +169,10 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "ZUNGQR", " ", m, n, k, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", m, n, k, &c_n1);
     lwkopt = fla_max(1, *n) * nb;
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -211,7 +197,7 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNGQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNGQR", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -221,8 +207,8 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
     /* Quick return if possible */
     if(*n <= 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         return;
     }
     nbmin = 2;
@@ -233,7 +219,7 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "ZUNGQR", " ", m, n, k, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "ZUNGQR", " ", m, n, k, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *k)
         {
@@ -247,7 +233,7 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "ZUNGQR", " ", m, n, k, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "ZUNGQR", " ", m, n, k, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -269,8 +255,8 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.;
-                a[i__3].i = 0.; // , expr subst
+                a[i__3].real = 0.;
+                a[i__3].imag = 0.; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -304,14 +290,14 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__2 = *m - i__ + 1;
-                zlarft_("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_zlarft("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H to A(i:m,i+ib:n) from the left */
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__ - ib + 1;
-                zlarfb_("Left", "No transpose", "Forward", "Columnwise", &i__2, &i__3, &ib,
-                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                        &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_zlarfb("Left", "No transpose", "Forward", "Columnwise", &i__2, &i__3,
+                                   &ib, &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* Apply H to rows i:m of current block */
             i__2 = *m - i__ + 1;
@@ -324,8 +310,8 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
                 for(l = 1; l <= i__3; ++l)
                 {
                     i__4 = l + j * a_dim1;
-                    a[i__4].r = 0.;
-                    a[i__4].i = 0.; // , expr subst
+                    a[i__4].real = 0.;
+                    a[i__4].imag = 0.; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -333,8 +319,8 @@ void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
             /* L50: */
         }
     }
-    work[1].r = (doublereal)iws;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)iws;
+    work[1].imag = 0.; // , expr subst
     return;
     /* End of ZUNGQR */
 }

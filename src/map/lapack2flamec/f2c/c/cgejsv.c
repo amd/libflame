@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c_n1 = -1;
-static integer c__1 = 1;
-static integer c__0 = 0;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
 static real c_b141 = 1.f;
 static logical c_false = FALSE_;
 /* > \brief \b CGEJSV */
@@ -50,7 +50,7 @@ static logical c_false = FALSE_;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGEJSV computes the singular value decomposition (SVD) of a complex M-by-N */
+/* > CGEJSV computes the singular value decomposition (SVD) of a scomplex M-by-N */
 /* > matrix [A], where M >= N. The SVD of [A] is written as */
 /* > */
 /* > [A] = [U] * [SIGMA] * [V]^*, */
@@ -581,10 +581,37 @@ otherwise the length of IWORK is 2*N. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m,
-             integer *n, complex *a, integer *lda, real *sva, complex *u, integer *ldu, complex *v,
-             integer *ldv, complex *cwork, integer *lwork, real *rwork, integer *lrwork,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, aocl_int_t *m,
+             aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *sva, scomplex *u, aocl_int_t *ldu,
+             scomplex *v, aocl_int_t *ldv, scomplex *cwork, aocl_int_t *lwork, real *rwork,
+             aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgejsv(joba, jobu, jobv, jobr, jobt, jobp, m, n, a, lda, sva, u, ldu, v, ldv, cwork,
+                       lwork, rwork, lrwork, iwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgejsv(joba, jobu, jobv, jobr, jobt, jobp, &m_64, &n_64, a, &lda_64, sva, u,
+                       &ldu_64, v, &ldv_64, cwork, &lwork_64, rwork, &lrwork_64, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp,
+                        aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *sva,
+                        scomplex *u, aocl_int64_t *ldu, scomplex *v, aocl_int64_t *ldv,
+                        scomplex *cwork, aocl_int64_t *lwork, real *rwork, aocl_int64_t *lrwork,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -592,125 +619,60 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         ", n %" FLA_IS ", lda %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS "",
         *joba, *jobu, *jobv, *jobr, *jobt, *jobp, *m, *n, *lda, *ldu, *ldv);
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5,
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5,
         i__6, i__7, i__8, i__9, i__10, i__11;
     real r__1, r__2, r__3;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double sqrt(doublereal), c_abs(complex *), log(doublereal);
-    void r_cnjg(complex *, complex *), c_div(complex *, complex *, complex *);
-    integer fla_i_nint(real *);
+    double sqrt(doublereal), c_abs(scomplex *), log(doublereal);
+    void r_cnjg(scomplex *, scomplex *), c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer lwunmqrm, i__, p, q, n1, nr;
+    aocl_int64_t lwunmqrm, i__, p, q, n1, nr;
     real big;
-    integer lwrk_cgeqp3__;
+    aocl_int64_t lwrk_cgeqp3__;
     real xsc, big1;
-    integer lwrk_cgelqf__, lwrk_cgeqrf__, lwrk_cgesvj__, lwrk_cunmlq__, lwrk_cunmqr__;
+    aocl_int64_t lwrk_cgelqf__, lwrk_cgeqrf__, lwrk_cgesvj__, lwrk_cunmlq__, lwrk_cunmqr__;
     logical defr;
     real aapp, aaqq;
     logical kill;
-    integer ierr, lwrk_cgeqp3n__;
+    aocl_int64_t ierr, lwrk_cgeqp3n__;
     real temp1;
-    integer lwrk_cgesvju__, lwrk_cgesvjv__, lwqp3, lwrk_cunmqrm__;
+    aocl_int64_t lwrk_cgesvju__, lwrk_cgesvjv__, lwqp3, lwrk_cunmqrm__;
     logical jracc;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    complex ctemp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    scomplex ctemp;
     real entra, small_val;
-    integer iwoff;
+    aocl_int64_t iwoff;
     real sfmin;
     logical lsvec;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
     real epsln;
     logical rsvec;
-    integer lwcon, lwlqf;
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
-    integer lwqrf;
+    aocl_int64_t lwcon, lwlqf;
+    aocl_int64_t lwqrf;
     logical l2aber;
-    extern /* Subroutine */
-        void
-        cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *,
-                integer *, real *, integer *);
     real condr1, condr2, uscal1, uscal2;
     logical l2kill, l2rank, l2tran;
-    extern real scnrm2_(integer *, complex *, integer *);
     logical l2pert;
-    integer lrwqp3;
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *),
-        cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *);
-    extern integer icamax_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *);
+    aocl_int64_t lrwqp3;
     real scalem, sconda;
     logical goscal;
     real aatmin;
     extern real slamch_(char *);
     real aatmax;
-    extern /* Subroutine */
-        void
-        cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        clapmr_(logical *, integer *, integer *, complex *, integer *, integer *);
     logical noscal;
-    extern /* Subroutine */
-        void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
-    extern integer isamax_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
-                integer *),
-        csscal_(integer *, real *, complex *, integer *),
-        classq_(integer *, complex *, integer *, real *, real *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cgesvj_(char *, char *, char *, integer *, integer *, complex *, integer *, real *,
-                integer *, complex *, integer *, complex *, integer *, real *, integer *,
-                integer *),
-        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     real entrat;
     logical almort;
-    complex cdummy[1];
-    extern /* Subroutine */
-        void
-        cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *);
+    scomplex cdummy[1];
     real maxprj;
-    extern /* Subroutine */
-        void
-        cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
     logical errest;
-    integer lrwcon;
-    extern /* Subroutine */
-        void
-        slassq_(integer *, real *, integer *, real *, real *);
+    aocl_int64_t lrwcon;
     logical transp;
-    integer minwrk, lwsvdj;
-    extern /* Subroutine */
-        void
-        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
+    aocl_int64_t minwrk, lwsvdj;
     real rdummy[1];
     logical lquery, rowpiv;
-    integer optwrk;
+    aocl_int64_t optwrk;
     real cond_ok__;
-    integer warning, numrank, miniwrk, minrwrk, lrwsvdj, lwunmlq, lwsvdjv, lwunmqr;
+    aocl_int64_t warning, numrank, miniwrk, minrwrk, lrwsvdj, lwunmlq, lwsvdjv, lwunmqr;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -844,19 +806,20 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         lrwsvdj = *n;
         if(lquery)
         {
-            cgeqp3_(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy, &ierr);
-            lwrk_cgeqp3__ = (integer)cdummy[0].r;
-            cgeqrf_(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
-            lwrk_cgeqrf__ = (integer)cdummy[0].r;
-            cgelqf_(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
-            lwrk_cgelqf__ = (integer)cdummy[0].r;
+            aocl_lapack_cgeqp3(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy,
+                               &ierr);
+            lwrk_cgeqp3__ = (integer)cdummy[0].real;
+            aocl_lapack_cgeqrf(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
+            lwrk_cgeqrf__ = (integer)cdummy[0].real;
+            aocl_lapack_cgelqf(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
+            lwrk_cgelqf__ = (integer)cdummy[0].real;
         }
         minwrk = 2;
         optwrk = 2;
         miniwrk = *n;
         if(!(lsvec || rsvec))
         {
-            /* .. minimal and optimal sizes of the complex workspace if */
+            /* .. minimal and optimal sizes of the scomplex workspace if */
             /* only the singular values are requested */
             if(errest)
             {
@@ -878,9 +841,9 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             if(lquery)
             {
-                cgesvj_("L", "N", "N", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv,
-                        cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_cgesvj__ = (integer)cdummy[0].r;
+                aocl_lapack_cgesvj("L", "N", "N", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset],
+                                   ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                lwrk_cgesvj__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing fla_max */
@@ -943,7 +906,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         }
         else if(rsvec && !lsvec)
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* singular values and the right singular vectors are requested */
             if(errest)
             {
@@ -967,12 +930,12 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             if(lquery)
             {
-                cgesvj_("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset], lda,
-                        cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_cgesvj__ = (integer)cdummy[0].r;
-                cunmlq_("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset], ldv, cdummy,
-                        &c_n1, &ierr);
-                lwrk_cunmlq__ = (integer)cdummy[0].r;
+                aocl_lapack_cgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset],
+                                   lda, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                lwrk_cgesvj__ = (integer)cdummy[0].real;
+                aocl_lapack_cunmlq("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset], ldv,
+                                   cdummy, &c_n1, &ierr);
+                lwrk_cunmlq__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing fla_max */
@@ -1038,7 +1001,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         }
         else if(lsvec && !rsvec)
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* singular values and the left singular vectors are requested */
             if(errest)
             {
@@ -1058,12 +1021,12 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             if(lquery)
             {
-                cgesvj_("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset], lda,
-                        cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_cgesvj__ = (integer)cdummy[0].r;
-                cunmqr_("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
-                lwrk_cunmqrm__ = (integer)cdummy[0].r;
+                aocl_lapack_cgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset],
+                                   lda, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                lwrk_cgesvj__ = (integer)cdummy[0].real;
+                aocl_lapack_cunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
+                lwrk_cunmqrm__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing fla_max */
@@ -1123,7 +1086,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         }
         else
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* full SVD is requested */
             if(!jracc)
             {
@@ -1243,29 +1206,29 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             if(lquery)
             {
-                cunmqr_("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
-                lwrk_cunmqrm__ = (integer)cdummy[0].r;
-                cunmqr_("L", "N", n, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
-                lwrk_cunmqr__ = (integer)cdummy[0].r;
+                aocl_lapack_cunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
+                lwrk_cunmqrm__ = (integer)cdummy[0].real;
+                aocl_lapack_cunmqr("L", "N", n, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
+                lwrk_cunmqr__ = (integer)cdummy[0].real;
                 if(!jracc)
                 {
-                    cgeqp3_(n, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy,
-                            &ierr);
-                    lwrk_cgeqp3n__ = (integer)cdummy[0].r;
-                    cgesvj_("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                            cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_cgesvj__ = (integer)cdummy[0].r;
-                    cgesvj_("U", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                            cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_cgesvju__ = (integer)cdummy[0].r;
-                    cgesvj_("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                            cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_cgesvjv__ = (integer)cdummy[0].r;
-                    cunmlq_("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset], ldv, cdummy,
-                            &c_n1, &ierr);
-                    lwrk_cunmlq__ = (integer)cdummy[0].r;
+                    aocl_lapack_cgeqp3(n, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1,
+                                       rdummy, &ierr);
+                    lwrk_cgeqp3n__ = (integer)cdummy[0].real;
+                    aocl_lapack_cgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                    lwrk_cgesvj__ = (integer)cdummy[0].real;
+                    aocl_lapack_cgesvj("U", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                    lwrk_cgesvju__ = (integer)cdummy[0].real;
+                    aocl_lapack_cgesvj("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                    lwrk_cgesvjv__ = (integer)cdummy[0].real;
+                    aocl_lapack_cunmlq("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset],
+                                       ldv, cdummy, &c_n1, &ierr);
+                    lwrk_cunmlq__ = (integer)cdummy[0].real;
                     if(errest)
                     {
                         /* Computing fla_max */
@@ -1351,15 +1314,15 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 }
                 else
                 {
-                    cgesvj_("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                            cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_cgesvjv__ = (integer)cdummy[0].r;
-                    cunmqr_("L", "N", n, n, n, cdummy, n, cdummy, &v[v_offset], ldv, cdummy, &c_n1,
-                            &ierr);
-                    lwrk_cunmqr__ = (integer)cdummy[0].r;
-                    cunmqr_("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                            &c_n1, &ierr);
-                    lwrk_cunmqrm__ = (integer)cdummy[0].r;
+                    aocl_lapack_cgesvj("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
+                    lwrk_cgesvjv__ = (integer)cdummy[0].real;
+                    aocl_lapack_cunmqr("L", "N", n, n, n, cdummy, n, cdummy, &v[v_offset], ldv,
+                                       cdummy, &c_n1, &ierr);
+                    lwrk_cunmqr__ = (integer)cdummy[0].real;
+                    aocl_lapack_cunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset],
+                                       ldu, cdummy, &c_n1, &ierr);
+                    lwrk_cunmqrm__ = (integer)cdummy[0].real;
                     if(errest)
                     {
                         /* Computing fla_max */
@@ -1429,16 +1392,16 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         /* #:( */
         i__1 = -(*info);
-        xerbla_("CGEJSV", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEJSV", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        cwork[1].r = (real)optwrk;
-        cwork[1].i = 0.f; // , expr subst
-        cwork[2].r = (real)minwrk;
-        cwork[2].i = 0.f; // , expr subst
+        cwork[1].real = (real)optwrk;
+        cwork[1].imag = 0.f; // , expr subst
+        cwork[2].real = (real)minwrk;
+        cwork[2].imag = 0.f; // , expr subst
         rwork[1] = (real)minrwrk;
         iwork[1] = fla_max(4, miniwrk);
         AOCL_DTL_TRACE_LOG_EXIT
@@ -1487,12 +1450,12 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         aapp = 0.f;
         aaqq = 1.f;
-        classq_(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
+        aocl_lapack_classq(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
         if(aapp > big)
         {
             *info = -9;
             i__2 = -(*info);
-            xerbla_("CGEJSV", &i__2, (ftnlen)6);
+            aocl_blas_xerbla("CGEJSV", &i__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -1509,7 +1472,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 goscal = FALSE_;
                 i__2 = p - 1;
-                sscal_(&i__2, &scalem, &sva[1], &c__1);
+                aocl_blas_sscal(&i__2, &scalem, &sva[1], &c__1);
             }
         }
         /* L1874: */
@@ -1542,11 +1505,11 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         if(lsvec)
         {
-            claset_("G", m, &n1, &c_b1, &c_b2, &u[u_offset], ldu);
+            aocl_lapack_claset("G", m, &n1, &c_b1, &c_b2, &u[u_offset], ldu);
         }
         if(rsvec)
         {
-            claset_("G", n, n, &c_b1, &c_b2, &v[v_offset], ldv);
+            aocl_lapack_claset("G", n, n, &c_b1, &c_b2, &v[v_offset], ldv);
         }
         rwork[1] = 1.f;
         rwork[2] = 1.f;
@@ -1588,23 +1551,26 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         if(lsvec)
         {
-            clascl_("G", &c__0, &c__0, &sva[1], &scalem, m, &c__1, &a[a_dim1 + 1], lda, &ierr);
-            clacpy_("A", m, &c__1, &a[a_offset], lda, &u[u_offset], ldu);
+            aocl_lapack_clascl("G", &c__0, &c__0, &sva[1], &scalem, m, &c__1, &a[a_dim1 + 1], lda,
+                               &ierr);
+            aocl_lapack_clacpy("A", m, &c__1, &a[a_offset], lda, &u[u_offset], ldu);
             /* computing all M left singular vectors of the M x 1 matrix */
             if(n1 != *n)
             {
                 i__1 = *lwork - *n;
-                cgeqrf_(m, n, &u[u_offset], ldu, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
+                aocl_lapack_cgeqrf(m, n, &u[u_offset], ldu, &cwork[1], &cwork[*n + 1], &i__1,
+                                   &ierr);
                 i__1 = *lwork - *n;
-                cungqr_(m, &n1, &c__1, &u[u_offset], ldu, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
-                ccopy_(m, &a[a_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
+                aocl_lapack_cungqr(m, &n1, &c__1, &u[u_offset], ldu, &cwork[1], &cwork[*n + 1],
+                                   &i__1, &ierr);
+                aocl_blas_ccopy(m, &a[a_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
             }
         }
         if(rsvec)
         {
             i__1 = v_dim1 + 1;
-            v[i__1].r = 1.f;
-            v[i__1].i = 0.f; // , expr subst
+            v[i__1].real = 1.f;
+            v[i__1].imag = 0.f; // , expr subst
         }
         if(sva[1] < big * scalem)
         {
@@ -1665,7 +1631,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 xsc = 0.f;
                 temp1 = 1.f;
-                classq_(n, &a[p + a_dim1], lda, &xsc, &temp1);
+                aocl_lapack_classq(n, &a[p + a_dim1], lda, &xsc, &temp1);
                 /* CLASSQ gets both the ell_2 and the ell_infinity norm */
                 /* in one pass through the vector */
                 rwork[*m + p] = xsc * scalem;
@@ -1689,7 +1655,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             i__1 = *m;
             for(p = 1; p <= i__1; ++p)
             {
-                rwork[*m + p] = scalem * c_abs(&a[p + icamax_(n, &a[p + a_dim1], lda) * a_dim1]);
+                rwork[*m + p] = scalem * c_abs(&a[p + aocl_blas_icamax(n, &a[p + a_dim1], lda) * a_dim1]);
                 /* Computing fla_max */
                 r__1 = aatmax;
                 r__2 = rwork[*m + p]; // , expr subst
@@ -1714,7 +1680,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         xsc = 0.f;
         temp1 = 1.f;
-        slassq_(n, &sva[1], &c__1, &xsc, &temp1);
+        aocl_lapack_slassq(n, &sva[1], &c__1, &xsc, &temp1);
         temp1 = 1.f / temp1;
         entra = 0.f;
         i__1 = *n;
@@ -1763,29 +1729,29 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 i__2 = p + p * a_dim1;
                 r_cnjg(&q__1, &a[p + p * a_dim1]);
-                a[i__2].r = q__1.r;
-                a[i__2].i = q__1.i; // , expr subst
+                a[i__2].real = q__1.real;
+                a[i__2].imag = q__1.imag; // , expr subst
                 i__2 = *n;
                 for(q = p + 1; q <= i__2; ++q)
                 {
                     r_cnjg(&q__1, &a[q + p * a_dim1]);
-                    ctemp.r = q__1.r;
-                    ctemp.i = q__1.i; // , expr subst
+                    ctemp.real = q__1.real;
+                    ctemp.imag = q__1.imag; // , expr subst
                     i__3 = q + p * a_dim1;
                     r_cnjg(&q__1, &a[p + q * a_dim1]);
-                    a[i__3].r = q__1.r;
-                    a[i__3].i = q__1.i; // , expr subst
+                    a[i__3].real = q__1.real;
+                    a[i__3].imag = q__1.imag; // , expr subst
                     i__3 = p + q * a_dim1;
-                    a[i__3].r = ctemp.r;
-                    a[i__3].i = ctemp.i; // , expr subst
+                    a[i__3].real = ctemp.real;
+                    a[i__3].imag = ctemp.imag; // , expr subst
                     /* L1116: */
                 }
                 /* L1115: */
             }
             i__1 = *n + *n * a_dim1;
             r_cnjg(&q__1, &a[*n + *n * a_dim1]);
-            a[i__1].r = q__1.r;
-            a[i__1].i = q__1.i; // , expr subst
+            a[i__1].real = q__1.real;
+            a[i__1].imag = q__1.imag; // , expr subst
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
@@ -1828,7 +1794,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* this all other (LAPACK) components must allow such a range. */
     /* TEMP1 = BIG/REAL(N) */
     /* TEMP1 = BIG * EPSLN this should 'almost' work with current LAPACK components */
-    slascl_("G", &c__0, &c__0, &aapp, &temp1, n, &c__1, &sva[1], n, &ierr);
+    aocl_lapack_slascl("G", &c__0, &c__0, &aapp, &temp1, n, &c__1, &sva[1], n, &ierr);
     if(aaqq > aapp * sfmin)
     {
         aaqq = aaqq / aapp * temp1;
@@ -1838,7 +1804,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         aaqq = aaqq * temp1 / aapp;
     }
     temp1 *= scalem;
-    clascl_("G", &c__0, &c__0, &aapp, &temp1, m, n, &a[a_offset], lda, &ierr);
+    aocl_lapack_clascl("G", &c__0, &c__0, &aapp, &temp1, m, n, &a[a_offset], lda, &ierr);
     /* To undo scaling at the end of this procedure, multiply the */
     /* computed singular values with USCAL2 / USCAL1. */
     uscal1 = temp1;
@@ -1873,7 +1839,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         {
             if(sva[p] < xsc)
             {
-                claset_("A", m, &c__1, &c_b1, &c_b1, &a[p * a_dim1 + 1], lda);
+                aocl_lapack_claset("A", m, &c__1, &c_b1, &c_b1, &a[p * a_dim1 + 1], lda);
                 sva[p] = 0.f;
             }
             /* L700: */
@@ -1899,8 +1865,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = *m - p + 1;
-            q = isamax_(&i__2, &rwork[*m + p], &c__1) + p - 1;
-            iwork[iwoff + p] = q;
+            q = aocl_blas_isamax(&i__2, &rwork[*m + p], &c__1) + p - 1;
+            iwork[iwoff + p] = (aocl_int_t)(q);
             if(p != q)
             {
                 temp1 = rwork[*m + p];
@@ -1910,7 +1876,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             /* L1952: */
         }
         i__1 = *m - 1;
-        claswp_(n, &a[a_offset], lda, &c__1, &i__1, &iwork[iwoff + 1], &c__1);
+        aocl_lapack_claswp(n, &a[a_offset], lda, &c__1, &i__1, &iwork[iwoff + 1], &c__1);
     }
     /* End of the preparation phase (scaling, optional sorting and */
     /* transposing, optional flushing of small columns). */
@@ -1932,7 +1898,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         /* L1963: */
     }
     i__1 = *lwork - *n;
-    cgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &cwork[1], &cwork[*n + 1], &i__1, &rwork[1], &ierr);
+    aocl_lapack_cgeqp3(m, n, &a[a_offset], lda, &iwork[1], &cwork[1], &cwork[*n + 1], &i__1,
+                       &rwork[1], &ierr);
     /* The upper triangular matrix R1 from the first QRF is inspected for */
     /* rank deficiency and possibilities for deflation, or possible */
     /* ill-conditioning. Depending on the user specified flag L2RANK, */
@@ -2033,44 +2000,44 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             if(rsvec)
             {
                 /* .. V is available as workspace */
-                clacpy_("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
                     temp1 = sva[iwork[p]];
                     r__1 = 1.f / temp1;
-                    csscal_(&p, &r__1, &v[p * v_dim1 + 1], &c__1);
+                    aocl_blas_csscal(&p, &r__1, &v[p * v_dim1 + 1], &c__1);
                     /* L3053: */
                 }
                 if(lsvec)
                 {
-                    cpocon_("U", n, &v[v_offset], ldv, &c_b141, &temp1, &cwork[*n + 1], &rwork[1],
-                            &ierr);
+                    aocl_lapack_cpocon("U", n, &v[v_offset], ldv, &c_b141, &temp1, &cwork[*n + 1],
+                                       &rwork[1], &ierr);
                 }
                 else
                 {
-                    cpocon_("U", n, &v[v_offset], ldv, &c_b141, &temp1, &cwork[1], &rwork[1],
-                            &ierr);
+                    aocl_lapack_cpocon("U", n, &v[v_offset], ldv, &c_b141, &temp1, &cwork[1],
+                                       &rwork[1], &ierr);
                 }
             }
             else if(lsvec)
             {
                 /* .. U is available as workspace */
-                clacpy_("U", n, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &u[u_offset], ldu);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
                     temp1 = sva[iwork[p]];
                     r__1 = 1.f / temp1;
-                    csscal_(&p, &r__1, &u[p * u_dim1 + 1], &c__1);
+                    aocl_blas_csscal(&p, &r__1, &u[p * u_dim1 + 1], &c__1);
                     /* L3054: */
                 }
-                cpocon_("U", n, &u[u_offset], ldu, &c_b141, &temp1, &cwork[*n + 1], &rwork[1],
-                        &ierr);
+                aocl_lapack_cpocon("U", n, &u[u_offset], ldu, &c_b141, &temp1, &cwork[*n + 1],
+                                   &rwork[1], &ierr);
             }
             else
             {
-                clacpy_("U", n, n, &a[a_offset], lda, &cwork[1], n);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &cwork[1], n);
                 /* [] CALL CLACPY( 'U', N, N, A, LDA, CWORK(N+1), N ) */
                 /* Change: here index shifted by N to the left, CWORK(1:N) */
                 /* not needed for SIGMA only computation */
@@ -2080,14 +2047,14 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     temp1 = sva[iwork[p]];
                     /* [] CALL CSSCAL( p, ONE/TEMP1, CWORK(N+(p-1)*N+1), 1 ) */
                     r__1 = 1.f / temp1;
-                    csscal_(&p, &r__1, &cwork[(p - 1) * *n + 1], &c__1);
+                    aocl_blas_csscal(&p, &r__1, &cwork[(p - 1) * *n + 1], &c__1);
                     /* L3052: */
                 }
                 /* .. the columns of R are scaled to have unit Euclidean lengths. */
                 /* [] CALL CPOCON( 'U', N, CWORK(N+1), N, ONE, TEMP1, */
                 /* [] $ CWORK(N+N*N+1), RWORK, IERR ) */
-                cpocon_("U", n, &cwork[1], n, &c_b141, &temp1, &cwork[*n * *n + 1], &rwork[1],
-                        &ierr);
+                aocl_lapack_cpocon("U", n, &cwork[1], n, &c_b141, &temp1, &cwork[*n * *n + 1],
+                                   &rwork[1], &ierr);
             }
             if(temp1 != 0.f)
             {
@@ -2119,17 +2086,17 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = *n - p;
-            ccopy_(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1], &c__1);
+            aocl_blas_ccopy(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1], &c__1);
             i__2 = *n - p + 1;
-            clacgv_(&i__2, &a[p + p * a_dim1], &c__1);
+            aocl_lapack_clacgv(&i__2, &a[p + p * a_dim1], &c__1);
             /* L1946: */
         }
         if(nr == *n)
         {
             i__1 = *n + *n * a_dim1;
             r_cnjg(&q__1, &a[*n + *n * a_dim1]);
-            a[i__1].r = q__1.r;
-            a[i__1].i = q__1.i; // , expr subst
+            a[i__1].real = q__1.real;
+            a[i__1].imag = q__1.imag; // , expr subst
         }
         /* The following two DO-loops introduce small relative perturbation */
         /* into the strict upper triangle of the lower triangular matrix. */
@@ -2152,18 +2119,18 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 for(q = 1; q <= i__1; ++q)
                 {
                     r__1 = xsc * c_abs(&a[q + q * a_dim1]);
-                    q__1.r = r__1;
-                    q__1.i = 0.f; // , expr subst
-                    ctemp.r = q__1.r;
-                    ctemp.i = q__1.i; // , expr subst
+                    q__1.real = r__1;
+                    q__1.imag = 0.f; // , expr subst
+                    ctemp.real = q__1.real;
+                    ctemp.imag = q__1.imag; // , expr subst
                     i__2 = *n;
                     for(p = 1; p <= i__2; ++p)
                     {
                         if(p > q && c_abs(&a[p + q * a_dim1]) <= temp1 || p < q)
                         {
                             i__3 = p + q * a_dim1;
-                            a[i__3].r = ctemp.r;
-                            a[i__3].i = ctemp.i; // , expr subst
+                            a[i__3].real = ctemp.real;
+                            a[i__3].imag = ctemp.imag; // , expr subst
                         }
                         /* $ A(p,q) = TEMP1 * ( A(p,q) / f2c_abs(A(p,q)) ) */
                         /* L4949: */
@@ -2175,19 +2142,20 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                claset_("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
             }
             /* .. second preconditioning using the QR factorization */
             i__1 = *lwork - *n;
-            cgeqrf_(n, &nr, &a[a_offset], lda, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cgeqrf(n, &nr, &a[a_offset], lda, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
             /* .. and transpose upper to lower triangular */
             i__1 = nr - 1;
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p;
-                ccopy_(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1], &c__1);
+                aocl_blas_ccopy(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1],
+                                &c__1);
                 i__2 = nr - p + 1;
-                clacgv_(&i__2, &a[p + p * a_dim1], &c__1);
+                aocl_lapack_clacgv(&i__2, &a[p + p * a_dim1], &c__1);
                 /* L1948: */
             }
         }
@@ -2202,18 +2170,18 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             for(q = 1; q <= i__1; ++q)
             {
                 r__1 = xsc * c_abs(&a[q + q * a_dim1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
-                ctemp.r = q__1.r;
-                ctemp.i = q__1.i; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
+                ctemp.real = q__1.real;
+                ctemp.imag = q__1.imag; // , expr subst
                 i__2 = nr;
                 for(p = 1; p <= i__2; ++p)
                 {
                     if(p > q && c_abs(&a[p + q * a_dim1]) <= temp1 || p < q)
                     {
                         i__3 = p + q * a_dim1;
-                        a[i__3].r = ctemp.r;
-                        a[i__3].i = ctemp.i; // , expr subst
+                        a[i__3].real = ctemp.real;
+                        a[i__3].imag = ctemp.imag; // , expr subst
                     }
                     /* $ A(p,q) = TEMP1 * ( A(p,q) / f2c_abs(A(p,q)) ) */
                     /* L1949: */
@@ -2225,13 +2193,13 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         {
             i__1 = nr - 1;
             i__2 = nr - 1;
-            claset_("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+            aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
         }
         /* .. and one-sided Jacobi rotations are started on a lower */
         /* triangular matrix (plus perturbation which is ignored in */
         /* the part which destroys triangular form (confusing?!)) */
-        cgesvj_("L", "N", "N", &nr, &nr, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv,
-                &cwork[1], lwork, &rwork[1], lrwork, info);
+        aocl_lapack_cgesvj("L", "N", "N", &nr, &nr, &a[a_offset], lda, &sva[1], n, &v[v_offset],
+                           ldv, &cwork[1], lwork, &rwork[1], lrwork, info);
         scalem = rwork[1];
         numrank = fla_i_nint(&rwork[2]);
     }
@@ -2245,16 +2213,16 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = *n - p + 1;
-                ccopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
+                aocl_blas_ccopy(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
                 i__2 = *n - p + 1;
-                clacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                aocl_lapack_clacgv(&i__2, &v[p + p * v_dim1], &c__1);
                 /* L1998: */
             }
             i__1 = nr - 1;
             i__2 = nr - 1;
-            claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
-            cgesvj_("L", "U", "N", n, &nr, &v[v_offset], ldv, &sva[1], &nr, &a[a_offset], lda,
-                    &cwork[1], lwork, &rwork[1], lrwork, info);
+            aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+            aocl_lapack_cgesvj("L", "U", "N", n, &nr, &v[v_offset], ldv, &sva[1], &nr, &a[a_offset],
+                               lda, &cwork[1], lwork, &rwork[1], lrwork, info);
             scalem = rwork[1];
             numrank = fla_i_nint(&rwork[2]);
         }
@@ -2264,68 +2232,69 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             /* accumulated product of Jacobi rotations, three are perfect ) */
             i__1 = nr - 1;
             i__2 = nr - 1;
-            claset_("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+            aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
             i__1 = *lwork - *n;
-            cgelqf_(&nr, n, &a[a_offset], lda, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
-            clacpy_("L", &nr, &nr, &a[a_offset], lda, &v[v_offset], ldv);
+            aocl_lapack_cgelqf(&nr, n, &a[a_offset], lda, &cwork[1], &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_clacpy("L", &nr, &nr, &a[a_offset], lda, &v[v_offset], ldv);
             i__1 = nr - 1;
             i__2 = nr - 1;
-            claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+            aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
             i__1 = *lwork - (*n << 1);
-            cgeqrf_(&nr, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1,
-                    &ierr);
+            aocl_lapack_cgeqrf(&nr, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1],
+                               &i__1, &ierr);
             i__1 = nr;
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p + 1;
-                ccopy_(&i__2, &v[p + p * v_dim1], ldv, &v[p + p * v_dim1], &c__1);
+                aocl_blas_ccopy(&i__2, &v[p + p * v_dim1], ldv, &v[p + p * v_dim1], &c__1);
                 i__2 = nr - p + 1;
-                clacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                aocl_lapack_clacgv(&i__2, &v[p + p * v_dim1], &c__1);
                 /* L8998: */
             }
             i__1 = nr - 1;
             i__2 = nr - 1;
-            claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+            aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
             i__1 = *lwork - *n;
-            cgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset], ldu,
-                    &cwork[*n + 1], &i__1, &rwork[1], lrwork, info);
+            aocl_lapack_cgesvj("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr,
+                               &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], lrwork, info);
             scalem = rwork[1];
             numrank = fla_i_nint(&rwork[2]);
             if(nr < *n)
             {
                 i__1 = *n - nr;
-                claset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                 i__1 = *n - nr;
-                claset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
                 i__1 = *n - nr;
                 i__2 = *n - nr;
-                claset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
+                                   ldv);
             }
             i__1 = *lwork - *n;
-            cunmlq_("L", "C", n, n, &nr, &a[a_offset], lda, &cwork[1], &v[v_offset], ldv,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cunmlq("L", "C", n, n, &nr, &a[a_offset], lda, &cwork[1], &v[v_offset], ldv,
+                               &cwork[*n + 1], &i__1, &ierr);
         }
         /* .. permute the rows of V */
         /* DO 8991 p = 1, N */
         /* CALL CCOPY( N, V(p,1), LDV, A(IWORK(p),1), LDA ) */
         /* 8991 CONTINUE */
         /* CALL CLACPY( 'All', N, N, A, LDA, V, LDV ) */
-        clapmr_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+        aocl_lapack_clapmr(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
         if(transp)
         {
-            clacpy_("A", n, n, &v[v_offset], ldv, &u[u_offset], ldu);
+            aocl_lapack_clacpy("A", n, n, &v[v_offset], ldv, &u[u_offset], ldu);
         }
     }
     else if(jracc && !lsvec && nr == *n)
     {
         i__1 = *n - 1;
         i__2 = *n - 1;
-        claset_("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
-        cgesvj_("U", "N", "V", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv, &cwork[1],
-                lwork, &rwork[1], lrwork, info);
+        aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+        aocl_lapack_cgesvj("U", "N", "V", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv,
+                           &cwork[1], lwork, &rwork[1], lrwork, info);
         scalem = rwork[1];
         numrank = fla_i_nint(&rwork[2]);
-        clapmr_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+        aocl_lapack_clapmr(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
     }
     else if(lsvec && !rsvec)
     {
@@ -2336,64 +2305,66 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = *n - p + 1;
-            ccopy_(&i__2, &a[p + p * a_dim1], lda, &u[p + p * u_dim1], &c__1);
+            aocl_blas_ccopy(&i__2, &a[p + p * a_dim1], lda, &u[p + p * u_dim1], &c__1);
             i__2 = *n - p + 1;
-            clacgv_(&i__2, &u[p + p * u_dim1], &c__1);
+            aocl_lapack_clacgv(&i__2, &u[p + p * u_dim1], &c__1);
             /* L1965: */
         }
         i__1 = nr - 1;
         i__2 = nr - 1;
-        claset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+        aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
         i__1 = *lwork - (*n << 1);
-        cgeqrf_(n, &nr, &u[u_offset], ldu, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1, &ierr);
+        aocl_lapack_cgeqrf(n, &nr, &u[u_offset], ldu, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1,
+                           &ierr);
         i__1 = nr - 1;
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = nr - p;
-            ccopy_(&i__2, &u[p + (p + 1) * u_dim1], ldu, &u[p + 1 + p * u_dim1], &c__1);
+            aocl_blas_ccopy(&i__2, &u[p + (p + 1) * u_dim1], ldu, &u[p + 1 + p * u_dim1], &c__1);
             i__2 = *n - p + 1;
-            clacgv_(&i__2, &u[p + p * u_dim1], &c__1);
+            aocl_lapack_clacgv(&i__2, &u[p + p * u_dim1], &c__1);
             /* L1967: */
         }
         i__1 = nr - 1;
         i__2 = nr - 1;
-        claset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+        aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
         i__1 = *lwork - *n;
-        cgesvj_("L", "U", "N", &nr, &nr, &u[u_offset], ldu, &sva[1], &nr, &a[a_offset], lda,
-                &cwork[*n + 1], &i__1, &rwork[1], lrwork, info);
+        aocl_lapack_cgesvj("L", "U", "N", &nr, &nr, &u[u_offset], ldu, &sva[1], &nr, &a[a_offset],
+                           lda, &cwork[*n + 1], &i__1, &rwork[1], lrwork, info);
         scalem = rwork[1];
         numrank = fla_i_nint(&rwork[2]);
         if(nr < *m)
         {
             i__1 = *m - nr;
-            claset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+            aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
             if(nr < n1)
             {
                 i__1 = n1 - nr;
-                claset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
                 i__1 = *m - nr;
                 i__2 = n1 - nr;
-                claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1], ldu);
+                aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
+                                   ldu);
             }
         }
         i__1 = *lwork - *n;
-        cunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                &cwork[*n + 1], &i__1, &ierr);
+        aocl_lapack_cunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
+                           &cwork[*n + 1], &i__1, &ierr);
         if(rowpiv)
         {
             i__1 = *m - 1;
-            claswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
+            aocl_lapack_claswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
         }
         i__1 = n1;
         for(p = 1; p <= i__1; ++p)
         {
-            xsc = 1.f / scnrm2_(m, &u[p * u_dim1 + 1], &c__1);
-            csscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
+            xsc = 1.f / aocl_blas_scnrm2(m, &u[p * u_dim1 + 1], &c__1);
+            aocl_blas_csscal(m, &xsc, &u[p * u_dim1 + 1], &c__1);
             /* L1974: */
         }
         if(transp)
         {
-            clacpy_("A", n, n, &u[u_offset], ldu, &v[v_offset], ldv);
+            aocl_lapack_clacpy("A", n, n, &u[u_offset], ldu, &v[v_offset], ldv);
         }
     }
     else
@@ -2413,9 +2384,9 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 for(p = 1; p <= i__1; ++p)
                 {
                     i__2 = *n - p + 1;
-                    ccopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
+                    aocl_blas_ccopy(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
                     i__2 = *n - p + 1;
-                    clacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                    aocl_lapack_clacgv(&i__2, &v[p + p * v_dim1], &c__1);
                     /* L1968: */
                 }
                 /* .. the following two loops perturb small entries to avoid */
@@ -2436,28 +2407,28 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     for(q = 1; q <= i__1; ++q)
                     {
                         r__1 = xsc * c_abs(&v[q + q * v_dim1]);
-                        q__1.r = r__1;
-                        q__1.i = 0.f; // , expr subst
-                        ctemp.r = q__1.r;
-                        ctemp.i = q__1.i; // , expr subst
+                        q__1.real = r__1;
+                        q__1.imag = 0.f; // , expr subst
+                        ctemp.real = q__1.real;
+                        ctemp.imag = q__1.imag; // , expr subst
                         i__2 = *n;
                         for(p = 1; p <= i__2; ++p)
                         {
                             if(p > q && c_abs(&v[p + q * v_dim1]) <= temp1 || p < q)
                             {
                                 i__3 = p + q * v_dim1;
-                                v[i__3].r = ctemp.r;
-                                v[i__3].i = ctemp.i; // , expr subst
+                                v[i__3].real = ctemp.real;
+                                v[i__3].imag = ctemp.imag; // , expr subst
                             }
                             /* $ V(p,q) = TEMP1 * ( V(p,q) / f2c_abs(V(p,q)) ) */
                             if(p < q)
                             {
                                 i__3 = p + q * v_dim1;
                                 i__4 = p + q * v_dim1;
-                                q__1.r = -v[i__4].r;
-                                q__1.i = -v[i__4].i; // , expr subst
-                                v[i__3].r = q__1.r;
-                                v[i__3].i = q__1.i; // , expr subst
+                                q__1.real = -v[i__4].real;
+                                q__1.imag = -v[i__4].imag; // , expr subst
+                                v[i__3].real = q__1.real;
+                                v[i__3].imag = q__1.imag; // , expr subst
                             }
                             /* L2968: */
                         }
@@ -2468,24 +2439,24 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                    aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
                 }
                 /* Estimate the row scaled condition number of R1 */
                 /* (If R1 is rectangular, N > NR, then the condition number */
                 /* of the leading NR x NR submatrix is estimated.) */
-                clacpy_("L", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], &nr);
+                aocl_lapack_clacpy("L", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], &nr);
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
                 {
                     i__2 = nr - p + 1;
-                    temp1 = scnrm2_(&i__2, &cwork[(*n << 1) + (p - 1) * nr + p], &c__1);
+                    temp1 = aocl_blas_scnrm2(&i__2, &cwork[(*n << 1) + (p - 1) * nr + p], &c__1);
                     i__2 = nr - p + 1;
                     r__1 = 1.f / temp1;
-                    csscal_(&i__2, &r__1, &cwork[(*n << 1) + (p - 1) * nr + p], &c__1);
+                    aocl_blas_csscal(&i__2, &r__1, &cwork[(*n << 1) + (p - 1) * nr + p], &c__1);
                     /* L3950: */
                 }
-                cpocon_("L", &nr, &cwork[(*n << 1) + 1], &nr, &c_b141, &temp1,
-                        &cwork[(*n << 1) + nr * nr + 1], &rwork[1], &ierr);
+                aocl_lapack_cpocon("L", &nr, &cwork[(*n << 1) + 1], &nr, &c_b141, &temp1,
+                                   &cwork[(*n << 1) + nr * nr + 1], &rwork[1], &ierr);
                 condr1 = 1.f / sqrt(temp1);
                 /* .. here need a second opinion on the condition number */
                 /* .. then assume worst case scenario */
@@ -2500,8 +2471,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     /* of a lower triangular matrix. */
                     /* R1^* = Q2 * R2 */
                     i__1 = *lwork - (*n << 1);
-                    cgeqrf_(n, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1,
-                            &ierr);
+                    aocl_lapack_cgeqrf(n, &nr, &v[v_offset], ldv, &cwork[*n + 1],
+                                       &cwork[(*n << 1) + 1], &i__1, &ierr);
                     if(l2pert)
                     {
                         xsc = sqrt(small_val) / epsln;
@@ -2515,15 +2486,15 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                                 r__2 = c_abs(&v[p + p * v_dim1]);
                                 r__3 = c_abs(&v[q + q * v_dim1]); // , expr subst
                                 r__1 = xsc * fla_min(r__2, r__3);
-                                q__1.r = r__1;
-                                q__1.i = 0.f; // , expr subst
-                                ctemp.r = q__1.r;
-                                ctemp.i = q__1.i; // , expr subst
+                                q__1.real = r__1;
+                                q__1.imag = 0.f; // , expr subst
+                                ctemp.real = q__1.real;
+                                ctemp.imag = q__1.imag; // , expr subst
                                 if(c_abs(&v[q + p * v_dim1]) <= temp1)
                                 {
                                     i__3 = q + p * v_dim1;
-                                    v[i__3].r = ctemp.r;
-                                    v[i__3].i = ctemp.i; // , expr subst
+                                    v[i__3].real = ctemp.real;
+                                    v[i__3].imag = ctemp.imag; // , expr subst
                                 }
                                 /* $ V(q,p) = TEMP1 * ( V(q,p) / f2c_abs(V(q,p)) ) */
                                 /* L3958: */
@@ -2533,7 +2504,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     }
                     if(nr != *n)
                     {
-                        clacpy_("A", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
+                        aocl_lapack_clacpy("A", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1],
+                                           n);
                     }
                     /* .. save ... */
                     /* .. this transposed copy should be better than naive */
@@ -2541,15 +2513,16 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     for(p = 1; p <= i__1; ++p)
                     {
                         i__2 = nr - p;
-                        ccopy_(&i__2, &v[p + (p + 1) * v_dim1], ldv, &v[p + 1 + p * v_dim1], &c__1);
+                        aocl_blas_ccopy(&i__2, &v[p + (p + 1) * v_dim1], ldv,
+                                        &v[p + 1 + p * v_dim1], &c__1);
                         i__2 = nr - p + 1;
-                        clacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                        aocl_lapack_clacgv(&i__2, &v[p + p * v_dim1], &c__1);
                         /* L1969: */
                     }
                     i__1 = nr + nr * v_dim1;
                     r_cnjg(&q__1, &v[nr + nr * v_dim1]);
-                    v[i__1].r = q__1.r;
-                    v[i__1].i = q__1.i; // , expr subst
+                    v[i__1].real = q__1.real;
+                    v[i__1].imag = q__1.imag; // , expr subst
                     condr2 = condr1;
                 }
                 else
@@ -2568,8 +2541,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         /* L3003: */
                     }
                     i__1 = *lwork - (*n << 1);
-                    cgeqp3_(n, &nr, &v[v_offset], ldv, &iwork[*n + 1], &cwork[*n + 1],
-                            &cwork[(*n << 1) + 1], &i__1, &rwork[1], &ierr);
+                    aocl_lapack_cgeqp3(n, &nr, &v[v_offset], ldv, &iwork[*n + 1], &cwork[*n + 1],
+                                       &cwork[(*n << 1) + 1], &i__1, &rwork[1], &ierr);
                     /* * CALL CGEQRF( N, NR, V, LDV, CWORK(N+1), CWORK(2*N+1), */
                     /* * $ LWORK-2*N, IERR ) */
                     if(l2pert)
@@ -2585,15 +2558,15 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                                 r__2 = c_abs(&v[p + p * v_dim1]);
                                 r__3 = c_abs(&v[q + q * v_dim1]); // , expr subst
                                 r__1 = xsc * fla_min(r__2, r__3);
-                                q__1.r = r__1;
-                                q__1.i = 0.f; // , expr subst
-                                ctemp.r = q__1.r;
-                                ctemp.i = q__1.i; // , expr subst
+                                q__1.real = r__1;
+                                q__1.imag = 0.f; // , expr subst
+                                ctemp.real = q__1.real;
+                                ctemp.imag = q__1.imag; // , expr subst
                                 if(c_abs(&v[q + p * v_dim1]) <= temp1)
                                 {
                                     i__3 = q + p * v_dim1;
-                                    v[i__3].r = ctemp.r;
-                                    v[i__3].i = ctemp.i; // , expr subst
+                                    v[i__3].real = ctemp.real;
+                                    v[i__3].imag = ctemp.imag; // , expr subst
                                 }
                                 /* $ V(q,p) = TEMP1 * ( V(q,p) / f2c_abs(V(q,p)) ) */
                                 /* L3968: */
@@ -2601,7 +2574,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                             /* L3969: */
                         }
                     }
-                    clacpy_("A", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
+                    aocl_lapack_clacpy("A", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
                     if(l2pert)
                     {
                         xsc = sqrt(small_val);
@@ -2615,16 +2588,16 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                                 r__2 = c_abs(&v[p + p * v_dim1]);
                                 r__3 = c_abs(&v[q + q * v_dim1]); // , expr subst
                                 r__1 = xsc * fla_min(r__2, r__3);
-                                q__1.r = r__1;
-                                q__1.i = 0.f; // , expr subst
-                                ctemp.r = q__1.r;
-                                ctemp.i = q__1.i; // , expr subst
+                                q__1.real = r__1;
+                                q__1.imag = 0.f; // , expr subst
+                                ctemp.real = q__1.real;
+                                ctemp.imag = q__1.imag; // , expr subst
                                 /* V(p,q) = - TEMP1*( V(q,p) / f2c_abs(V(q,p)) ) */
                                 i__3 = p + q * v_dim1;
-                                q__1.r = -ctemp.r;
-                                q__1.i = -ctemp.i; // , expr subst
-                                v[i__3].r = q__1.r;
-                                v[i__3].i = q__1.i; // , expr subst
+                                q__1.real = -ctemp.real;
+                                q__1.imag = -ctemp.imag; // , expr subst
+                                v[i__3].real = q__1.real;
+                                v[i__3].imag = q__1.imag; // , expr subst
                                 /* L8971: */
                             }
                             /* L8970: */
@@ -2634,25 +2607,26 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        claset_("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
+                        aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
                     }
                     /* Now, compute R2 = L3 * Q3, the LQ factorization. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    cgelqf_(&nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + 1],
-                            &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    aocl_lapack_cgelqf(&nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + 1],
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     /* .. and estimate the condition number */
-                    clacpy_("L", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1],
-                            &nr);
+                    aocl_lapack_clacpy("L", &nr, &nr, &v[v_offset], ldv,
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &nr);
                     i__1 = nr;
                     for(p = 1; p <= i__1; ++p)
                     {
-                        temp1 = scnrm2_(&p, &cwork[(*n << 1) + *n * nr + nr + p], &nr);
+                        temp1 = aocl_blas_scnrm2(&p, &cwork[(*n << 1) + *n * nr + nr + p], &nr);
                         r__1 = 1.f / temp1;
-                        csscal_(&p, &r__1, &cwork[(*n << 1) + *n * nr + nr + p], &nr);
+                        aocl_blas_csscal(&p, &r__1, &cwork[(*n << 1) + *n * nr + nr + p], &nr);
                         /* L4950: */
                     }
-                    cpocon_("L", &nr, &cwork[(*n << 1) + *n * nr + nr + 1], &nr, &c_b141, &temp1,
-                            &cwork[(*n << 1) + *n * nr + nr + nr * nr + 1], &rwork[1], &ierr);
+                    aocl_lapack_cpocon("L", &nr, &cwork[(*n << 1) + *n * nr + nr + 1], &nr, &c_b141,
+                                       &temp1, &cwork[(*n << 1) + *n * nr + nr + nr * nr + 1],
+                                       &rwork[1], &ierr);
                     condr2 = 1.f / sqrt(temp1);
                     if(condr2 >= cond_ok__)
                     {
@@ -2660,7 +2634,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         /* (this overwrites the copy of R2, as it will not be */
                         /* needed in this branch, but it does not overwritte the */
                         /* Huseholder vectors of Q2.). */
-                        clacpy_("U", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
+                        aocl_lapack_clacpy("U", &nr, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1],
+                                           n);
                         /* .. and the rest of the information on Q3 is in */
                         /* WORK(2*N+N*NR+1:2*N+N*NR+N) */
                     }
@@ -2672,19 +2647,19 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     for(q = 2; q <= i__1; ++q)
                     {
                         i__2 = q + q * v_dim1;
-                        q__1.r = xsc * v[i__2].r;
-                        q__1.i = xsc * v[i__2].i; // , expr subst
-                        ctemp.r = q__1.r;
-                        ctemp.i = q__1.i; // , expr subst
+                        q__1.real = xsc * v[i__2].real;
+                        q__1.imag = xsc * v[i__2].imag; // , expr subst
+                        ctemp.real = q__1.real;
+                        ctemp.imag = q__1.imag; // , expr subst
                         i__2 = q - 1;
                         for(p = 1; p <= i__2; ++p)
                         {
                             /* V(p,q) = - TEMP1*( V(p,q) / f2c_abs(V(p,q)) ) */
                             i__3 = p + q * v_dim1;
-                            q__1.r = -ctemp.r;
-                            q__1.i = -ctemp.i; // , expr subst
-                            v[i__3].r = q__1.r;
-                            v[i__3].i = q__1.i; // , expr subst
+                            q__1.real = -ctemp.real;
+                            q__1.imag = -ctemp.imag; // , expr subst
+                            v[i__3].real = q__1.real;
+                            v[i__3].imag = q__1.imag; // , expr subst
                             /* L4969: */
                         }
                         /* L4968: */
@@ -2694,7 +2669,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                    aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
                 }
                 /* Second preconditioning finished;
                 continue with Jacobi SVD */
@@ -2704,16 +2679,16 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 if(condr1 < cond_ok__)
                 {
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    cgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
-                            ldu, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &rwork[1], lrwork,
-                            info);
+                    aocl_lapack_cgesvj("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr,
+                                       &u[u_offset], ldu, &cwork[(*n << 1) + *n * nr + nr + 1],
+                                       &i__1, &rwork[1], lrwork, info);
                     scalem = rwork[1];
                     numrank = fla_i_nint(&rwork[2]);
                     i__1 = nr;
                     for(p = 1; p <= i__1; ++p)
                     {
-                        ccopy_(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
-                        csscal_(&nr, &sva[p], &v[p * v_dim1 + 1], &c__1);
+                        aocl_blas_ccopy(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_csscal(&nr, &sva[p], &v[p * v_dim1 + 1], &c__1);
                         /* L3970: */
                     }
                     /* .. pick the right matrix equation and solve it */
@@ -2723,8 +2698,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         /* equation is Q2*V2 = the product of the Jacobi rotations */
                         /* used in CGESVJ, premultiplied with the orthogonal matrix */
                         /* from the second QR factorization. */
-                        ctrsm_("L", "U", "N", "N", &nr, &nr, &c_b2, &a[a_offset], lda, &v[v_offset],
-                               ldv);
+                        aocl_blas_ctrsm("L", "U", "N", "N", &nr, &nr, &c_b2, &a[a_offset], lda,
+                                        &v[v_offset], ldv);
                     }
                     else
                     {
@@ -2732,23 +2707,25 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         /* is inverted to get the product of the Jacobi rotations */
                         /* used in CGESVJ. The Q-factor from the second QR */
                         /* factorization is then built in explicitly. */
-                        ctrsm_("L", "U", "C", "N", &nr, &nr, &c_b2, &cwork[(*n << 1) + 1], n,
-                               &v[v_offset], ldv);
+                        aocl_blas_ctrsm("L", "U", "C", "N", &nr, &nr, &c_b2, &cwork[(*n << 1) + 1],
+                                        n, &v[v_offset], ldv);
                         if(nr < *n)
                         {
                             i__1 = *n - nr;
-                            claset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                            aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1],
+                                               ldv);
                             i__1 = *n - nr;
-                            claset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                            aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1,
+                                               &v[(nr + 1) * v_dim1 + 1], ldv);
                             i__1 = *n - nr;
                             i__2 = *n - nr;
-                            claset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
-                                    ldv);
+                            aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                         }
                         i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                        cunmqr_("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1],
-                                &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1,
-                                &ierr);
+                        aocl_lapack_cunmqr("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n,
+                                           &cwork[*n + 1], &v[v_offset], ldv,
+                                           &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     }
                 }
                 else if(condr2 < cond_ok__)
@@ -2758,20 +2735,20 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     /* the lower triangular L3 from the LQ factorization of */
                     /* R2=L3*Q3), pre-multiplied with the transposed Q3. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    cgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
-                            ldu, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &rwork[1], lrwork,
-                            info);
+                    aocl_lapack_cgesvj("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr,
+                                       &u[u_offset], ldu, &cwork[(*n << 1) + *n * nr + nr + 1],
+                                       &i__1, &rwork[1], lrwork, info);
                     scalem = rwork[1];
                     numrank = fla_i_nint(&rwork[2]);
                     i__1 = nr;
                     for(p = 1; p <= i__1; ++p)
                     {
-                        ccopy_(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
-                        csscal_(&nr, &sva[p], &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_ccopy(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_csscal(&nr, &sva[p], &u[p * u_dim1 + 1], &c__1);
                         /* L3870: */
                     }
-                    ctrsm_("L", "U", "N", "N", &nr, &nr, &c_b2, &cwork[(*n << 1) + 1], n,
-                           &u[u_offset], ldu);
+                    aocl_blas_ctrsm("L", "U", "N", "N", &nr, &nr, &c_b2, &cwork[(*n << 1) + 1], n,
+                                    &u[u_offset], ldu);
                     /* .. apply the permutation from the second QR factorization */
                     i__1 = nr;
                     for(q = 1; q <= i__1; ++q)
@@ -2781,8 +2758,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         {
                             i__3 = (*n << 1) + *n * nr + nr + iwork[*n + p];
                             i__4 = p + q * u_dim1;
-                            cwork[i__3].r = u[i__4].r;
-                            cwork[i__3].i = u[i__4].i; // , expr subst
+                            cwork[i__3].real = u[i__4].real;
+                            cwork[i__3].imag = u[i__4].imag; // , expr subst
                             /* L872: */
                         }
                         i__2 = nr;
@@ -2790,8 +2767,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         {
                             i__3 = p + q * u_dim1;
                             i__4 = (*n << 1) + *n * nr + nr + p;
-                            u[i__3].r = cwork[i__4].r;
-                            u[i__3].i = cwork[i__4].i; // , expr subst
+                            u[i__3].real = cwork[i__4].real;
+                            u[i__3].imag = cwork[i__4].imag; // , expr subst
                             /* L874: */
                         }
                         /* L873: */
@@ -2799,17 +2776,19 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     if(nr < *n)
                     {
                         i__1 = *n - nr;
-                        claset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                        aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                         i__1 = *n - nr;
-                        claset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                        aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1],
+                                           ldv);
                         i__1 = *n - nr;
                         i__2 = *n - nr;
-                        claset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
-                                ldv);
+                        aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                     }
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    cunmqr_("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1],
-                            &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    aocl_lapack_cunmqr("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n,
+                                       &cwork[*n + 1], &v[v_offset], ldv,
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                 }
                 else
                 {
@@ -2825,29 +2804,31 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     /* Compute the full SVD of L3 using CGESVJ with explicit */
                     /* accumulation of Jacobi rotations. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    cgesvj_("L", "U", "V", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
-                            ldu, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &rwork[1], lrwork,
-                            info);
+                    aocl_lapack_cgesvj("L", "U", "V", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr,
+                                       &u[u_offset], ldu, &cwork[(*n << 1) + *n * nr + nr + 1],
+                                       &i__1, &rwork[1], lrwork, info);
                     scalem = rwork[1];
                     numrank = fla_i_nint(&rwork[2]);
                     if(nr < *n)
                     {
                         i__1 = *n - nr;
-                        claset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                        aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                         i__1 = *n - nr;
-                        claset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                        aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1],
+                                           ldv);
                         i__1 = *n - nr;
                         i__2 = *n - nr;
-                        claset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
-                                ldv);
+                        aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                     }
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    cunmqr_("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1],
-                            &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    aocl_lapack_cunmqr("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n,
+                                       &cwork[*n + 1], &v[v_offset], ldv,
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    cunmlq_("L", "C", &nr, &nr, &nr, &cwork[(*n << 1) + 1], n,
-                            &cwork[(*n << 1) + *n * nr + 1], &u[u_offset], ldu,
-                            &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    aocl_lapack_cunmlq("L", "C", &nr, &nr, &nr, &cwork[(*n << 1) + 1], n,
+                                       &cwork[(*n << 1) + *n * nr + 1], &u[u_offset], ldu,
+                                       &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     i__1 = nr;
                     for(q = 1; q <= i__1; ++q)
                     {
@@ -2856,8 +2837,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         {
                             i__3 = (*n << 1) + *n * nr + nr + iwork[*n + p];
                             i__4 = p + q * u_dim1;
-                            cwork[i__3].r = u[i__4].r;
-                            cwork[i__3].i = u[i__4].i; // , expr subst
+                            cwork[i__3].real = u[i__4].real;
+                            cwork[i__3].imag = u[i__4].imag; // , expr subst
                             /* L772: */
                         }
                         i__2 = nr;
@@ -2865,8 +2846,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         {
                             i__3 = p + q * u_dim1;
                             i__4 = (*n << 1) + *n * nr + nr + p;
-                            u[i__3].r = cwork[i__4].r;
-                            u[i__3].i = cwork[i__4].i; // , expr subst
+                            u[i__3].real = cwork[i__4].real;
+                            u[i__3].imag = cwork[i__4].imag; // , expr subst
                             /* L774: */
                         }
                         /* L773: */
@@ -2884,8 +2865,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     {
                         i__3 = (*n << 1) + *n * nr + nr + iwork[p];
                         i__4 = p + q * v_dim1;
-                        cwork[i__3].r = v[i__4].r;
-                        cwork[i__3].i = v[i__4].i; // , expr subst
+                        cwork[i__3].real = v[i__4].real;
+                        cwork[i__3].imag = v[i__4].imag; // , expr subst
                         /* L972: */
                     }
                     i__2 = *n;
@@ -2893,14 +2874,14 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     {
                         i__3 = p + q * v_dim1;
                         i__4 = (*n << 1) + *n * nr + nr + p;
-                        v[i__3].r = cwork[i__4].r;
-                        v[i__3].i = cwork[i__4].i; // , expr subst
+                        v[i__3].real = cwork[i__4].real;
+                        v[i__3].imag = cwork[i__4].imag; // , expr subst
                         /* L973: */
                     }
-                    xsc = 1.f / scnrm2_(n, &v[q * v_dim1 + 1], &c__1);
+                    xsc = 1.f / aocl_blas_scnrm2(n, &v[q * v_dim1 + 1], &c__1);
                     if(xsc < 1.f - temp1 || xsc > temp1 + 1.f)
                     {
-                        csscal_(n, &xsc, &v[q * v_dim1 + 1], &c__1);
+                        aocl_blas_csscal(n, &xsc, &v[q * v_dim1 + 1], &c__1);
                     }
                     /* L1972: */
                 }
@@ -2909,31 +2890,32 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 if(nr < *m)
                 {
                     i__1 = *m - nr;
-                    claset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                    aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                     if(nr < n1)
                     {
                         i__1 = n1 - nr;
-                        claset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                        aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1],
+                                           ldu);
                         i__1 = *m - nr;
                         i__2 = n1 - nr;
-                        claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                ldu);
+                        aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                     }
                 }
                 /* The Q matrix from the first QRF is built into the left singular */
                 /* matrix U. This applies to all cases. */
                 i__1 = *lwork - *n;
-                cunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                        &cwork[*n + 1], &i__1, &ierr);
+                aocl_lapack_cunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset],
+                                   ldu, &cwork[*n + 1], &i__1, &ierr);
                 /* The columns of U are normalized. The cost is O(M*N) flops. */
                 temp1 = sqrt((real)(*m)) * epsln;
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    xsc = 1.f / scnrm2_(m, &u[p * u_dim1 + 1], &c__1);
+                    xsc = 1.f / aocl_blas_scnrm2(m, &u[p * u_dim1 + 1], &c__1);
                     if(xsc < 1.f - temp1 || xsc > temp1 + 1.f)
                     {
-                        csscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_csscal(m, &xsc, &u[p * u_dim1 + 1], &c__1);
                     }
                     /* L1973: */
                 }
@@ -2942,14 +2924,15 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 if(rowpiv)
                 {
                     i__1 = *m - 1;
-                    claswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
+                    aocl_lapack_claswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1],
+                                       &c_n1);
                 }
             }
             else
             {
                 /* .. the initial matrix A has almost orthogonal columns and */
                 /* the second QRF is not needed */
-                clacpy_("U", n, n, &a[a_offset], lda, &cwork[*n + 1], n);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &cwork[*n + 1], n);
                 if(l2pert)
                 {
                     xsc = sqrt(small_val);
@@ -2957,20 +2940,20 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                     for(p = 2; p <= i__1; ++p)
                     {
                         i__2 = *n + (p - 1) * *n + p;
-                        q__1.r = xsc * cwork[i__2].r;
-                        q__1.i = xsc * cwork[i__2].i; // , expr subst
-                        ctemp.r = q__1.r;
-                        ctemp.i = q__1.i; // , expr subst
+                        q__1.real = xsc * cwork[i__2].real;
+                        q__1.imag = xsc * cwork[i__2].imag; // , expr subst
+                        ctemp.real = q__1.real;
+                        ctemp.imag = q__1.imag; // , expr subst
                         i__2 = p - 1;
                         for(q = 1; q <= i__2; ++q)
                         {
                             /* CWORK(N+(q-1)*N+p)=-TEMP1 * ( CWORK(N+(p-1)*N+q) / */
                             /* $ f2c_abs(CWORK(N+(p-1)*N+q)) ) */
                             i__3 = *n + (q - 1) * *n + p;
-                            q__1.r = -ctemp.r;
-                            q__1.i = -ctemp.i; // , expr subst
-                            cwork[i__3].r = q__1.r;
-                            cwork[i__3].i = q__1.i; // , expr subst
+                            q__1.real = -ctemp.real;
+                            q__1.imag = -ctemp.imag; // , expr subst
+                            cwork[i__3].real = q__1.real;
+                            cwork[i__3].imag = q__1.imag; // , expr subst
                             /* L5971: */
                         }
                         /* L5970: */
@@ -2980,35 +2963,37 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__1 = *n - 1;
                     i__2 = *n - 1;
-                    claset_("L", &i__1, &i__2, &c_b1, &c_b1, &cwork[*n + 2], n);
+                    aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &cwork[*n + 2], n);
                 }
                 i__1 = *lwork - *n - *n * *n;
-                cgesvj_("U", "U", "N", n, n, &cwork[*n + 1], n, &sva[1], n, &u[u_offset], ldu,
-                        &cwork[*n + *n * *n + 1], &i__1, &rwork[1], lrwork, info);
+                aocl_lapack_cgesvj("U", "U", "N", n, n, &cwork[*n + 1], n, &sva[1], n, &u[u_offset],
+                                   ldu, &cwork[*n + *n * *n + 1], &i__1, &rwork[1], lrwork, info);
                 scalem = rwork[1];
                 numrank = fla_i_nint(&rwork[2]);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    ccopy_(n, &cwork[*n + (p - 1) * *n + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
-                    csscal_(n, &sva[p], &cwork[*n + (p - 1) * *n + 1], &c__1);
+                    aocl_blas_ccopy(n, &cwork[*n + (p - 1) * *n + 1], &c__1, &u[p * u_dim1 + 1],
+                                    &c__1);
+                    aocl_blas_csscal(n, &sva[p], &cwork[*n + (p - 1) * *n + 1], &c__1);
                     /* L6970: */
                 }
-                ctrsm_("L", "U", "N", "N", n, n, &c_b2, &a[a_offset], lda, &cwork[*n + 1], n);
+                aocl_blas_ctrsm("L", "U", "N", "N", n, n, &c_b2, &a[a_offset], lda, &cwork[*n + 1],
+                                n);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    ccopy_(n, &cwork[*n + p], n, &v[iwork[p] + v_dim1], ldv);
+                    aocl_blas_ccopy(n, &cwork[*n + p], n, &v[iwork[p] + v_dim1], ldv);
                     /* L6972: */
                 }
                 temp1 = sqrt((real)(*n)) * epsln;
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    xsc = 1.f / scnrm2_(n, &v[p * v_dim1 + 1], &c__1);
+                    xsc = 1.f / aocl_blas_scnrm2(n, &v[p * v_dim1 + 1], &c__1);
                     if(xsc < 1.f - temp1 || xsc > temp1 + 1.f)
                     {
-                        csscal_(n, &xsc, &v[p * v_dim1 + 1], &c__1);
+                        aocl_blas_csscal(n, &xsc, &v[p * v_dim1 + 1], &c__1);
                     }
                     /* L6971: */
                 }
@@ -3016,35 +3001,37 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 if(*n < *m)
                 {
                     i__1 = *m - *n;
-                    claset_("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
+                    aocl_lapack_claset("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
                     if(*n < n1)
                     {
                         i__1 = n1 - *n;
-                        claset_("A", n, &i__1, &c_b1, &c_b1, &u[(*n + 1) * u_dim1 + 1], ldu);
+                        aocl_lapack_claset("A", n, &i__1, &c_b1, &c_b1, &u[(*n + 1) * u_dim1 + 1],
+                                           ldu);
                         i__1 = *m - *n;
                         i__2 = n1 - *n;
-                        claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[*n + 1 + (*n + 1) * u_dim1],
-                                ldu);
+                        aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &u[*n + 1 + (*n + 1) * u_dim1], ldu);
                     }
                 }
                 i__1 = *lwork - *n;
-                cunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                        &cwork[*n + 1], &i__1, &ierr);
+                aocl_lapack_cunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset],
+                                   ldu, &cwork[*n + 1], &i__1, &ierr);
                 temp1 = sqrt((real)(*m)) * epsln;
                 i__1 = n1;
                 for(p = 1; p <= i__1; ++p)
                 {
-                    xsc = 1.f / scnrm2_(m, &u[p * u_dim1 + 1], &c__1);
+                    xsc = 1.f / aocl_blas_scnrm2(m, &u[p * u_dim1 + 1], &c__1);
                     if(xsc < 1.f - temp1 || xsc > temp1 + 1.f)
                     {
-                        csscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
+                        aocl_blas_csscal(m, &xsc, &u[p * u_dim1 + 1], &c__1);
                     }
                     /* L6973: */
                 }
                 if(rowpiv)
                 {
                     i__1 = *m - 1;
-                    claswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
+                    aocl_lapack_claswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1],
+                                       &c_n1);
                 }
             }
             /* end of the >> almost orthogonal case << in the full SVD */
@@ -3065,9 +3052,9 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = *n - p + 1;
-                ccopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
+                aocl_blas_ccopy(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
                 i__2 = *n - p + 1;
-                clacgv_(&i__2, &v[p + p * v_dim1], &c__1);
+                aocl_lapack_clacgv(&i__2, &v[p + p * v_dim1], &c__1);
                 /* L7968: */
             }
             if(l2pert)
@@ -3077,28 +3064,28 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 for(q = 1; q <= i__1; ++q)
                 {
                     r__1 = xsc * c_abs(&v[q + q * v_dim1]);
-                    q__1.r = r__1;
-                    q__1.i = 0.f; // , expr subst
-                    ctemp.r = q__1.r;
-                    ctemp.i = q__1.i; // , expr subst
+                    q__1.real = r__1;
+                    q__1.imag = 0.f; // , expr subst
+                    ctemp.real = q__1.real;
+                    ctemp.imag = q__1.imag; // , expr subst
                     i__2 = *n;
                     for(p = 1; p <= i__2; ++p)
                     {
                         if(p > q && c_abs(&v[p + q * v_dim1]) <= temp1 || p < q)
                         {
                             i__3 = p + q * v_dim1;
-                            v[i__3].r = ctemp.r;
-                            v[i__3].i = ctemp.i; // , expr subst
+                            v[i__3].real = ctemp.real;
+                            v[i__3].imag = ctemp.imag; // , expr subst
                         }
                         /* $ V(p,q) = TEMP1 * ( V(p,q) / f2c_abs(V(p,q)) ) */
                         if(p < q)
                         {
                             i__3 = p + q * v_dim1;
                             i__4 = p + q * v_dim1;
-                            q__1.r = -v[i__4].r;
-                            q__1.i = -v[i__4].i; // , expr subst
-                            v[i__3].r = q__1.r;
-                            v[i__3].i = q__1.i; // , expr subst
+                            q__1.real = -v[i__4].real;
+                            q__1.imag = -v[i__4].imag; // , expr subst
+                            v[i__3].real = q__1.real;
+                            v[i__3].imag = q__1.imag; // , expr subst
                         }
                         /* L5968: */
                     }
@@ -3109,18 +3096,19 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
             }
             i__1 = *lwork - (*n << 1);
-            cgeqrf_(n, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1], &i__1, &ierr);
-            clacpy_("L", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
+            aocl_lapack_cgeqrf(n, &nr, &v[v_offset], ldv, &cwork[*n + 1], &cwork[(*n << 1) + 1],
+                               &i__1, &ierr);
+            aocl_lapack_clacpy("L", n, &nr, &v[v_offset], ldv, &cwork[(*n << 1) + 1], n);
             i__1 = nr;
             for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p + 1;
-                ccopy_(&i__2, &v[p + p * v_dim1], ldv, &u[p + p * u_dim1], &c__1);
+                aocl_blas_ccopy(&i__2, &v[p + p * v_dim1], ldv, &u[p + p * u_dim1], &c__1);
                 i__2 = nr - p + 1;
-                clacgv_(&i__2, &u[p + p * u_dim1], &c__1);
+                aocl_lapack_clacgv(&i__2, &u[p + p * u_dim1], &c__1);
                 /* L7969: */
             }
             if(l2pert)
@@ -3136,16 +3124,16 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                         r__2 = c_abs(&u[p + p * u_dim1]);
                         r__3 = c_abs(&u[q + q * u_dim1]); // , expr subst
                         r__1 = xsc * fla_min(r__2, r__3);
-                        q__1.r = r__1;
-                        q__1.i = 0.f; // , expr subst
-                        ctemp.r = q__1.r;
-                        ctemp.i = q__1.i; // , expr subst
+                        q__1.real = r__1;
+                        q__1.imag = 0.f; // , expr subst
+                        ctemp.real = q__1.real;
+                        ctemp.imag = q__1.imag; // , expr subst
                         /* U(p,q) = - TEMP1 * ( U(q,p) / f2c_abs(U(q,p)) ) */
                         i__3 = p + q * u_dim1;
-                        q__1.r = -ctemp.r;
-                        q__1.i = -ctemp.i; // , expr subst
-                        u[i__3].r = q__1.r;
-                        u[i__3].i = q__1.i; // , expr subst
+                        q__1.real = -ctemp.real;
+                        q__1.imag = -ctemp.imag; // , expr subst
+                        u[i__3].real = q__1.real;
+                        u[i__3].imag = q__1.imag; // , expr subst
                         /* L9971: */
                     }
                     /* L9970: */
@@ -3155,26 +3143,29 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                claset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+                aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
             }
             i__1 = *lwork - (*n << 1) - *n * nr;
-            cgesvj_("L", "U", "V", &nr, &nr, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
-                    &cwork[(*n << 1) + *n * nr + 1], &i__1, &rwork[1], lrwork, info);
+            aocl_lapack_cgesvj("L", "U", "V", &nr, &nr, &u[u_offset], ldu, &sva[1], n, &v[v_offset],
+                               ldv, &cwork[(*n << 1) + *n * nr + 1], &i__1, &rwork[1], lrwork,
+                               info);
             scalem = rwork[1];
             numrank = fla_i_nint(&rwork[2]);
             if(nr < *n)
             {
                 i__1 = *n - nr;
-                claset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                 i__1 = *n - nr;
-                claset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
                 i__1 = *n - nr;
                 i__2 = *n - nr;
-                claset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1],
+                                   ldv);
             }
             i__1 = *lwork - (*n << 1) - *n * nr - nr;
-            cunmqr_("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1], &v[v_offset],
-                    ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+            aocl_lapack_cunmqr("L", "N", n, n, &nr, &cwork[(*n << 1) + 1], n, &cwork[*n + 1],
+                               &v[v_offset], ldv, &cwork[(*n << 1) + *n * nr + nr + 1], &i__1,
+                               &ierr);
             /* Permute the rows of V using the (column) permutation from the */
             /* first QRF. Also, scale the columns to make them unit in */
             /* Euclidean norm. This applies to all cases. */
@@ -3187,8 +3178,8 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__3 = (*n << 1) + *n * nr + nr + iwork[p];
                     i__4 = p + q * v_dim1;
-                    cwork[i__3].r = v[i__4].r;
-                    cwork[i__3].i = v[i__4].i; // , expr subst
+                    cwork[i__3].real = v[i__4].real;
+                    cwork[i__3].imag = v[i__4].imag; // , expr subst
                     /* L8972: */
                 }
                 i__2 = *n;
@@ -3196,14 +3187,14 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 {
                     i__3 = p + q * v_dim1;
                     i__4 = (*n << 1) + *n * nr + nr + p;
-                    v[i__3].r = cwork[i__4].r;
-                    v[i__3].i = cwork[i__4].i; // , expr subst
+                    v[i__3].real = cwork[i__4].real;
+                    v[i__3].imag = cwork[i__4].imag; // , expr subst
                     /* L8973: */
                 }
-                xsc = 1.f / scnrm2_(n, &v[q * v_dim1 + 1], &c__1);
+                xsc = 1.f / aocl_blas_scnrm2(n, &v[q * v_dim1 + 1], &c__1);
                 if(xsc < 1.f - temp1 || xsc > temp1 + 1.f)
                 {
-                    csscal_(n, &xsc, &v[q * v_dim1 + 1], &c__1);
+                    aocl_blas_csscal(n, &xsc, &v[q * v_dim1 + 1], &c__1);
                 }
                 /* L7972: */
             }
@@ -3212,23 +3203,25 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             if(nr < *m)
             {
                 i__1 = *m - nr;
-                claset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                 if(nr < n1)
                 {
                     i__1 = n1 - nr;
-                    claset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                    aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1],
+                                       ldu);
                     i__1 = *m - nr;
                     i__2 = n1 - nr;
-                    claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1], ldu);
+                    aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                       &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                 }
             }
             i__1 = *lwork - *n;
-            cunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
+                               &cwork[*n + 1], &i__1, &ierr);
             if(rowpiv)
             {
                 i__1 = *m - 1;
-                claswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
+                aocl_lapack_claswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[iwoff + 1], &c_n1);
             }
         }
         if(transp)
@@ -3237,7 +3230,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
-                cswap_(n, &u[p * u_dim1 + 1], &c__1, &v[p * v_dim1 + 1], &c__1);
+                aocl_blas_cswap(n, &u[p * u_dim1 + 1], &c__1, &v[p * v_dim1 + 1], &c__1);
                 /* L6974: */
             }
         }
@@ -3246,7 +3239,7 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* Undo scaling, if necessary (and possible) */
     if(uscal2 <= big / sva[1] * uscal1)
     {
-        slascl_("G", &c__0, &c__0, &uscal1, &uscal2, &nr, &c__1, &sva[1], n, &ierr);
+        aocl_lapack_slascl("G", &c__0, &c__0, &uscal1, &uscal2, &nr, &c__1, &sva[1], n, &ierr);
         uscal1 = 1.f;
         uscal2 = 1.f;
     }
@@ -3275,9 +3268,9 @@ void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         rwork[6] = entra;
         rwork[7] = entrat;
     }
-    iwork[1] = nr;
-    iwork[2] = numrank;
-    iwork[3] = warning;
+    iwork[1] = (aocl_int_t)(nr);
+    iwork[2] = (aocl_int_t)(numrank);
+    iwork[3] = (aocl_int_t)(warning);
     if(transp)
     {
         iwork[4] = 1;

@@ -116,6 +116,7 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
     void *A_copy;
     char range = 'U';
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -140,38 +141,54 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
     /* Create the matrices for the current operation*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
     create_vector(INTEGER, &IPIV, fla_min(m, n));
-    create_realtype_vector(datatype, &s_test, fla_min(m, n));
-
-    /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
-    {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-    }
-    /* If the lda is less than m, then do not initilize the input matrix.
-       The invalid param error should be reported by the API */
-    else if(lda >= m)
-    {
-        /* Generate input matrix with condition number <= 100 */
-        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GETRFNPI_VL, GETRFNPI_VU, i_zero,
-                          i_zero, info);
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_copy, lda);
-        copy_matrix(datatype, "full", m, n, A, lda, A_copy, lda);
-
-        /* Invoke getrf to get the optimial permuation vector */
-        invoke_getrf(datatype, &m, &n, A_copy, &lda, IPIV, &info);
-
-        /* Swap rows of A as per computed permutation matrix
-           to avoid error in LU factorization */
-        swap_rows_with_pivot(datatype, m, n, A, lda, IPIV);
-
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_getrf(datatype, m, n, A, lda, params->imatrix_char);
-        }
-        free_matrix(A_copy);
-    }
-    /* Save the original matrix*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        /* Initialize the test matrices*/
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
+        {
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        /* If the lda is less than m, then do not initilize the input matrix.
+        The invalid param error should be reported by the API */
+        else if(lda >= m)
+        {
+            /* Generate input matrix with condition number <= 100 */
+            create_realtype_vector(datatype, &s_test, fla_min(m, n));
+            create_svd_matrix(datatype, range, m, n, A, lda, s_test, GETRFNPI_VL, GETRFNPI_VU,
+                              i_zero, i_zero, info);
+            free_vector(s_test);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_copy, lda);
+            copy_matrix(datatype, "full", m, n, A, lda, A_copy, lda);
+
+            /* Invoke getrf to get the optimial permuation vector */
+            invoke_getrf(datatype, &m, &n, A_copy, &lda, IPIV, &info);
+
+            /* Swap rows of A as per computed permutation matrix
+            to avoid error in LU factorization */
+            swap_rows_with_pivot(datatype, m, n, A, lda, IPIV);
+
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_getrfnp(datatype, m, n, A, lda, params->imatrix_char);
+            }
+            free_matrix(A_copy);
+        }
+    }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, nfact, lda)
+
+    /* Save the original matrix*/
     /* Copy data if only lda >= m */
     if(lda >= m)
     {
@@ -201,7 +218,25 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, A_test, lda),
+        validate_getrfnpi(tst_api, m, n, nfact, A, A_test, lda, IPIV, datatype, residual,
+                          params->imatrix_char, params),
+        check_reproducibility_base(filename, params, 1, 0, datatype, m, n, A_test, lda))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
+    /* API functionality validation */
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         /* Validate only part of the matrix that has been factored */
         validate_getrfnpi(tst_api, m, n, nfact, A, A_test, lda, IPIV, datatype, residual,
@@ -222,10 +257,11 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
-    free_vector(s_test);
 }
 
 void prepare_getrfnpi_run(integer m_A, integer n_A, integer nfact, void *A, integer lda,

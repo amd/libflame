@@ -69,11 +69,11 @@ typedef double doublereal;
 typedef struct
 {
     real r, i;
-} complex;
+} scomplex;
 typedef struct
 {
     doublereal r, i;
-} doublecomplex;
+} dcomplex;
 typedef integer logical;
 typedef shortint shortlogical;
 typedef integer1 logical1;
@@ -101,14 +101,14 @@ typedef doublereal (*D_fp)(...), (*E_fp)(...);
 typedef /* Complex */ void (*C_fp)(...);
 typedef /* Double Complex */ void (*Z_fp)(...);
 typedef logical (*L_fp)(...);
-typedef logical (*L_fp1)(complex *);
-typedef logical (*L_fp2)(complex *, complex *);
+typedef logical (*L_fp1)(scomplex *);
+typedef logical (*L_fp2)(scomplex *, scomplex *);
 typedef logical (*L_fps2)(real *, real *);
 typedef logical (*L_fps3)(real *, real *, real *);
 typedef logical (*L_fpd2)(doublereal *, doublereal *);
 typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
-typedef logical (*L_fpz1)(doublecomplex *);
-typedef logical (*L_fpz2)(doublecomplex *, doublecomplex *);
+typedef logical (*L_fpz1)(dcomplex *);
+typedef logical (*L_fpz2)(dcomplex *, dcomplex *);
 typedef shortlogical (*K_fp)(...);
 typedef /* Character */ void (*H_fp)(...);
 typedef /* Subroutine */ int (*S_fp)(...);
@@ -121,22 +121,22 @@ typedef doublereal (*D_fp)(), (*E_fp)();
 typedef /* Complex */ void (*C_fp)();
 typedef /* Double Complex */ void (*Z_fp)();
 typedef logical (*L_fp)();
-typedef logical (*L_fp1)(complex *);
-typedef logical (*L_fp2)(complex *, complex *);
+typedef logical (*L_fp1)(scomplex *);
+typedef logical (*L_fp2)(scomplex *, scomplex *);
 typedef logical (*L_fps2)(real *, real *);
 typedef logical (*L_fps3)(real *, real *, real *);
 typedef logical (*L_fpd2)(doublereal *, doublereal *);
 typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
-typedef logical (*L_fpz1)(complex *);
-typedef logical (*L_fpz2)(complex *, complex *);
+typedef logical (*L_fpz1)(scomplex *);
+typedef logical (*L_fpz2)(scomplex *, scomplex *);
 typedef shortlogical (*K_fp)();
 typedef /* Character */ void (*H_fp)();
 typedef /* Subroutine */ int (*S_fp)();
 #endif
 /* E_fp is for real functions when -R is not specified */
-typedef void C_f; /* complex function */
+typedef void C_f; /* scomplex function */
 typedef void H_f; /* character function */
-typedef void Z_f; /* double complex function */
+typedef void Z_f; /* double scomplex function */
 typedef doublereal E_f; /* real function with -R not specified */
 
 #ifdef __cplusplus

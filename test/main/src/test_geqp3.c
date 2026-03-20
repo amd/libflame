@@ -17,41 +17,58 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
-                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
-                       test_params_t *params);
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params, int is_geqpf);
 void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
                   void *tau, void *work, integer *lwork, void *rwork, integer *info);
 double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
-                                 integer lda, integer *jpvt, void *T, integer *info);
-
-/* Helper functions for Bit reproducibility tests */
-void store_geqp3_outputs(void *filename, integer datatype, integer m, integer n, void *A,
-                         integer lda, void *jpvt, void *T, integer g_lwork, void *params);
-integer check_bit_reproducibility_geqp3(void *filename, integer datatype, integer m, integer n,
-                                        void *A, integer lda, void *jpvt, void *T, integer g_lwork,
-                                        void *params);
+                                 integer lda, integer *jpvt, void *T, integer *info, int is_geqpf);
+void invoke_geqpf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
+                  void *tau, void *work, void *rwork, integer *info);
+void fla_test_geqpf(integer argc, char **argv, test_params_t *params);
 
 void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "QR factorization with column pivoting";
     char *front_str = "GEQP3";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    int geqpf_mode = 0;
     params->imatrix_char = '\0';
+
+    /* Detect variant */
+    if(argc > 1 && argv[1] && same_string(argv[1], "geqpf"))
+    {
+        geqpf_mode = 1;
+    }
+
+    /* Store mode into per-test params */
+    params->lin_solver_paramslist[0].geqpf_mode = geqpf_mode;
+
+    if(geqpf_mode)
+    {
+        front_str = "GEQPF";
+        op_str = "QR factorization with column pivoting (deprecated)";
+    }
 
     if(argc == 1)
     {
-        g_lwork = -1;
+        /* GEQPF fixed workspace; GEQP3 triggers query (-1) */
+        g_lwork = geqpf_mode ? 3 : -1;
         g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_geqp3_experiment);
         tests_not_run = 0;
     }
-    if(argc == 9)
+
+    integer max_args = geqpf_mode ? 8 : 9;
+    integer min_args = geqpf_mode ? 7 : 8;
+
+    if(argc == max_args)
     {
-        FLA_TEST_PARSE_LAST_ARG(argv[8]);
+        FLA_TEST_PARSE_LAST_ARG(argv[max_args - 1]);
     }
-    if(argc >= 8 && argc <= 9)
+    if(argc >= min_args && argc <= max_args)
     {
         integer i, num_types, M, N;
         integer datatype, n_repeats;
@@ -72,8 +89,16 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
         {
             params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         }
-        g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        if(geqpf_mode)
+        {
+            g_lwork = 3; // Fixed workspace for GEQPF
+            n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        }
+        else
+        {
+            g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        }
         params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
@@ -107,8 +132,12 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for geqp3\n");
-        printf("./<EXE> geqp3 <precisions - sdcz> <M> <N> <LDA> <LWORK> <repeats>\n");
+        if(geqpf_mode)
+            printf("\nIllegal arguments for geqpf\n./<EXE> geqpf <precisions - sdcz> <M> <N> <LDA> "
+                   "<repeats>\n");
+        else
+            printf("\nIllegal arguments for geqp3\n./<EXE> geqp3 <precisions - sdcz> <M> <N> <LDA> "
+                   "<LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -120,6 +149,34 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
         g_ext_fptr = NULL;
     }
     return;
+}
+
+void fla_test_geqpf(integer argc, char **argv, test_params_t *params)
+{
+    /* Mark this run as GEQPF in per-test params */
+    params->lin_solver_paramslist[0].geqpf_mode = 1;
+
+    /* CONFIG MODE: called from input.global.operations with no CLI args */
+    if(argc == 1)
+    {
+        char *op_str = "QR factorization with column pivoting (deprecated)";
+        char *front_str = "GEQPF";
+
+        /* Fixed workspace for GEQPF */
+        g_lwork = 3;
+        g_config_data = 1;
+
+        fla_test_output_info("--- %s ---\n", op_str);
+        fla_test_output_info("\n");
+
+        /* Use the same experiment as GEQP3, but with front_str = "GEQPF" */
+        fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_geqp3_experiment);
+        return;
+    }
+
+    /* CLI MODE: ./test_lapack.x geqpf <prec> <M> <N> <LDA> <repeats> */
+    argv[1] = (char *)"geqpf";
+    fla_test_geqp3(argc, argv, params);
 }
 
 void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer datatype,
@@ -135,6 +192,22 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
+
+    /* Per-test mode: 0 => GEQP3, 1 => GEQPF */
+    int is_geqpf = params->lin_solver_paramslist[pci].geqpf_mode;
+
+    if(tst_api != NULL)
+    {
+        if(same_string(tst_api, "GEQPF"))
+        {
+            is_geqpf = 1;
+        }
+        else if(same_string(tst_api, "GEQP3"))
+        {
+            is_geqpf = 0;
+        }
+        params->lin_solver_paramslist[pci].geqpf_mode = is_geqpf;
+    }
 
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
@@ -186,7 +259,8 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
     /* Make a copy of input matrix A,required for validation. */
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, &info, interfacetype, layout, params);
+    prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, &info, interfacetype, layout, params,
+                      is_geqpf);
 
     /* performance computation
      * 2mn^2 - (2/3)n^3 flops
@@ -209,12 +283,19 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
      *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
      * compared with the generated output
      *  */
-    IF_FLA_BRT_VALIDATION(
-        m, n, store_geqp3_outputs(filename, datatype, m, n, A_test, lda, jpvt, T, g_lwork, params),
-        validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
-                       params->imatrix_char, params),
-        check_bit_reproducibility_geqp3(filename, datatype, m, n, A_test, lda, jpvt, T, g_lwork,
-                                        params))
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_outputs_base(filename, params, 1, 2, datatype, m, n, A_test, lda,
+                                             datatype, fla_min(m, n), T, INTEGER, n, jpvt),
+                          validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
+                                         params->imatrix_char, params),
+                          check_reproducibility_base(filename, params, 1, 2, datatype, m, n, A_test,
+                                                     lda, datatype, fla_min(m, n), T, INTEGER, n,
+                                                     jpvt))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
@@ -245,7 +326,7 @@ free_buffers:
 
 void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
                        integer datatype, integer *info, integer interfacetype, int layout,
-                       test_params_t *params)
+                       test_params_t *params, int is_geqpf)
 {
     integer min_A;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
@@ -263,48 +344,60 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
     /* Make a workspace query the first time. This will provide us with
        and ideal workspace size based on internal block size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
-       && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST))
     {
-        lwork = -1;
-        create_vector(datatype, &work, 1);
-
-        /* call to  geqp3 API */
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST)
+        if(is_geqpf)
         {
-            invoke_cpp_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork,
+            if(datatype == FLOAT || datatype == DOUBLE)
+                lwork = 3 * n_A;
+            else
+                lwork = 2 * n_A; // COMPLEX geqpf
+        }
+        else if(g_lwork <= 0)
+        {
+            lwork = -1;
+            create_vector(datatype, &work, 1);
+#if ENABLE_CPP_TEST
+            if(interfacetype == LAPACK_CPP_TEST)
+                invoke_cpp_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork,
+                                 info);
+            else
+#endif
+                invoke_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork,
                              info);
+            if(*info == 0)
+                lwork = get_work_value(datatype, work);
+            free_vector(work);
         }
         else
-#endif
         {
-            invoke_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork, info);
+            lwork = g_lwork;
         }
-        if(*info == 0)
-        {
-            /* Get work size */
-            lwork = get_work_value(datatype, work);
-        }
-
-        /* Output buffers will be freshly allocated for each iterations, free up
-        the current output buffers. */
-        free_vector(work);
     }
     else
     {
-        lwork = g_lwork;
+        /* LAPACKE interfaces ignore manual lwork; still need fixed sizes for GEQPF */
+        if(is_geqpf)
+        {
+            if(datatype == FLOAT || datatype == DOUBLE)
+                lwork = 3 * n_A;
+            else
+                lwork = 2 * n_A;
+        }
+        else
+        {
+            lwork = g_lwork;
+        }
     }
 
-    /* rwork for complex types */
-    if(datatype >= COMPLEX)
-        create_realtype_vector(datatype, &rwork, 2 * n_A);
+    /* rwork is now allocated per-iteration in the loop below to avoid unnecessary memory allocation
+     * for non-complex types or LAPACKE interfaces. */
 
     *info = 0;
     FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
-           for each iteration */
+         for each iteration */
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
 
         /* Reset pivot buffer */
@@ -316,28 +409,44 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         /* Create work buffer */
         create_vector(datatype, &work, lwork);
 
-        /* Check if LAPACKE interface is enabled */
+        /* Allocate rwork only when needed (native / cpp, complex) */
+        void *rwork_iter = NULL;
+        if(datatype >= COMPLEX && (interfacetype != LAPACKE_COLUMN_TEST)
+           && (interfacetype != LAPACKE_ROW_TEST))
+        {
+            integer rws = 2 * n_A;
+            create_realtype_vector(datatype, &rwork_iter, rws);
+        }
+
         if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
-            exe_time
-                = prepare_lapacke_geqp3_run(datatype, layout, m_A, n_A, A, lda, jpvt, T_test, info);
+            exe_time = prepare_lapacke_geqp3_run(datatype, layout, m_A, n_A, A, lda, jpvt, T_test,
+                                                 info, is_geqpf);
         }
 #if ENABLE_CPP_TEST
         else if(interfacetype == LAPACK_CPP_TEST)
         {
             exe_time = fla_test_clock();
-            /* Call CPP geqp3 API */
-            invoke_cpp_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork, rwork,
-                             info);
+            if(is_geqpf)
+                /* Call CPP geqpf API */
+                invoke_cpp_geqpf(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, info);
+            else
+                /* Call CPP geqp3 API */
+                invoke_cpp_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork,
+                                 rwork_iter, info);
             exe_time = fla_test_clock() - exe_time;
         }
 #endif
         else
         {
             exe_time = fla_test_clock();
-            /* Call LAPACK geqp3 API */
-            invoke_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork, rwork, info);
-
+            if(is_geqpf)
+                /* Call LAPACK geqpf API */
+                invoke_geqpf(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, rwork_iter, info);
+            else
+                /* Call LAPACK geqp3 API */
+                invoke_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork, rwork_iter,
+                             info);
             exe_time = fla_test_clock() - exe_time;
         }
 
@@ -350,15 +459,15 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         /* Free up the output buffers */
         free_vector(work);
         free_vector(T_test);
+        if(rwork_iter)
+            free_vector(rwork_iter);
     }
 
     free_matrix(A_save);
-    if(datatype >= COMPLEX)
-        free_vector(rwork);
 }
 
 double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
-                                 integer lda, integer *jpvt, void *T, integer *info)
+                                 integer lda, integer *jpvt, void *T, integer *info, int is_geqpf)
 {
     double exe_time;
     integer lda_t = lda;
@@ -367,6 +476,10 @@ double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, inte
     SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_geqp3_lda, lda_t);
 
     A_t = A;
+
+    /* GEQPF requires jpvt to be initialized to 0 for LAPACKE */
+    if(is_geqpf)
+        reset_vector(INTEGER, jpvt, n_A, 0);
 
     /* Configure leading dimensions as per the input matrix layout */
     if(layout == LAPACK_ROW_MAJOR)
@@ -378,8 +491,13 @@ double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, inte
 
     exe_time = fla_test_clock();
 
-    /* Call to LAPACKE geqp3 API */
-    *info = invoke_lapacke_geqp3(datatype, layout, m_A, n_A, A_t, lda_t, jpvt, T);
+    /* Call to LAPACKE geqp3 or geqpf API based on mode */
+    if(is_geqpf)
+        /* Call to LAPACKE geqpf API */
+        *info = invoke_lapacke_geqpf(datatype, layout, m_A, n_A, A_t, lda_t, jpvt, T);
+    else
+        /* Call to LAPACKE geqp3 API */
+        *info = invoke_lapacke_geqp3(datatype, layout, m_A, n_A, A_t, lda_t, jpvt, T);
 
     exe_time = fla_test_clock() - exe_time;
 
@@ -426,32 +544,22 @@ void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *ld
     }
 }
 
-void store_geqp3_outputs(void *filename, integer datatype, integer m, integer n, void *A,
-                         integer lda, void *jpvt, void *T, integer g_lwork, void *params)
+void invoke_geqpf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
+                  void *tau, void *work, void *rwork, integer *info)
 {
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    /* Store the ground truth data */
-    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
-    FLA_STORE_BRT_VECTOR(datatype, fla_min(m, n), T)
-    FLA_STORE_BRT_VECTOR(INTEGER, n, jpvt)
-
-    fclose(gt_file);
-}
-
-integer check_bit_reproducibility_geqp3(void *filename, integer datatype, integer m, integer n,
-                                        void *A, integer lda, void *jpvt, void *T, integer g_lwork,
-                                        void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    /* Load stored GT and verify with current API outputs */
-    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
-    FLA_VERIFY_BRT_VECTOR(datatype, fla_min(m, n), T)
-    FLA_VERIFY_BRT_VECTOR(INTEGER, n, jpvt)
-
-    fclose(gt_file);
-    return 1;
+    switch(datatype)
+    {
+        case FLOAT:
+            fla_lapack_sgeqpf(m, n, a, lda, jpvt, tau, work, info);
+            break;
+        case DOUBLE:
+            fla_lapack_dgeqpf(m, n, a, lda, jpvt, tau, work, info);
+            break;
+        case COMPLEX:
+            fla_lapack_cgeqpf(m, n, a, lda, jpvt, tau, work, rwork, info);
+            break;
+        case DOUBLE_COMPLEX:
+            fla_lapack_zgeqpf(m, n, a, lda, jpvt, tau, work, rwork, info);
+            break;
+    }
 }

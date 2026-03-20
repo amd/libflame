@@ -14,9 +14,11 @@
 
 extern void dlartg_(doublereal *da, doublereal *db, doublereal *c__, doublereal *s, doublereal *r);
 
-void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer *n, integer *ncu, doublereal *a,
-                                integer *lda, doublereal *s, doublereal *u, integer *ldu,
-                                doublereal *vt, integer *ldvt, doublereal *work, integer *info)
+void fla_dgesvd_xx_small10_avx2(aocl_int64_t wntu, aocl_int64_t wntv, aocl_int64_t *m,
+                                aocl_int64_t *n, aocl_int64_t *ncu, doublereal *a,
+                                aocl_int64_t *lda, doublereal *s, doublereal *u, aocl_int64_t *ldu,
+                                doublereal *vt, aocl_int64_t *ldvt, doublereal *work,
+                                aocl_int64_t *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
@@ -27,12 +29,12 @@ void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer 
     doublereal stau;
     doublereal cosu = 0., sinu = 0.;
 
-    integer ncvt, nru;
-    integer c__1 = 1;
+    aocl_int64_t ncvt, nru;
+    aocl_int64_t c__1 = 1;
 
-    integer ie;
-    integer itauq, itaup;
-    integer rlen, knt;
+    aocl_int64_t ie;
+    aocl_int64_t itauq, itaup;
+    aocl_int64_t rlen, knt;
 
     /* indices for partitioning work buffer */
     ie = 1;

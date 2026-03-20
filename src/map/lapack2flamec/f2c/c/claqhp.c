@@ -121,7 +121,20 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqhp_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *amax, char *equed)
+/** Generated wrapper function */
+void claqhp_(char *uplo, aocl_int_t *n, scomplex *ap, real *s, real *scond, real *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqhp(uplo, n, ap, s, scond, amax, equed);
+#else
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_claqhp(uplo, &n_64, ap, s, scond, amax, equed);
+#endif
+}
+
+void aocl_lapack_claqhp(char *uplo, aocl_int64_t *n, scomplex *ap, real *s, real *scond, real *amax,
+                        char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -134,13 +147,13 @@ void claqhp_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
+    aocl_int64_t i__1, i__2, i__3, i__4;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, jc;
+    aocl_int64_t i__, j, jc;
     real cj, large;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -197,17 +210,17 @@ void claqhp_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
                     i__3 = jc + i__ - 1;
                     r__1 = cj * s[i__];
                     i__4 = jc + i__ - 1;
-                    q__1.r = r__1 * ap[i__4].r;
-                    q__1.i = r__1 * ap[i__4].i; // , expr subst
-                    ap[i__3].r = q__1.r;
-                    ap[i__3].i = q__1.i; // , expr subst
+                    q__1.real = r__1 * ap[i__4].real;
+                    q__1.imag = r__1 * ap[i__4].imag; // , expr subst
+                    ap[i__3].real = q__1.real;
+                    ap[i__3].imag = q__1.imag; // , expr subst
                     /* L10: */
                 }
                 i__2 = jc + j - 1;
                 i__3 = jc + j - 1;
-                r__1 = cj * cj * ap[i__3].r;
-                ap[i__2].r = r__1;
-                ap[i__2].i = 0.f; // , expr subst
+                r__1 = cj * cj * ap[i__3].real;
+                ap[i__2].real = r__1;
+                ap[i__2].imag = 0.f; // , expr subst
                 jc += j;
                 /* L20: */
             }
@@ -222,19 +235,19 @@ void claqhp_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
                 cj = s[j];
                 i__2 = jc;
                 i__3 = jc;
-                r__1 = cj * cj * ap[i__3].r;
-                ap[i__2].r = r__1;
-                ap[i__2].i = 0.f; // , expr subst
+                r__1 = cj * cj * ap[i__3].real;
+                ap[i__2].real = r__1;
+                ap[i__2].imag = 0.f; // , expr subst
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = jc + i__ - j;
                     r__1 = cj * s[i__];
                     i__4 = jc + i__ - j;
-                    q__1.r = r__1 * ap[i__4].r;
-                    q__1.i = r__1 * ap[i__4].i; // , expr subst
-                    ap[i__3].r = q__1.r;
-                    ap[i__3].i = q__1.i; // , expr subst
+                    q__1.real = r__1 * ap[i__4].real;
+                    q__1.imag = r__1 * ap[i__4].imag; // , expr subst
+                    ap[i__3].real = q__1.real;
+                    ap[i__3].imag = q__1.imag; // , expr subst
                     /* L30: */
                 }
                 jc = jc + *n - j + 1;

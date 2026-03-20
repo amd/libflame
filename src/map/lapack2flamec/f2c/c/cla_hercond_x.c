@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLA_HERCOND_X computes the infinity norm condition number of op(A)*diag(x) for
  * Hermitian indefi nite matrices. */
 /* =========== DOCUMENTATION =========== */
@@ -128,8 +128,30 @@ static integer c__1 = 1;
 /* > \date September 2012 */
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
-real cla_hercond_x_(char *uplo, integer *n, complex *a, integer *lda, complex *af, integer *ldaf,
-                    integer *ipiv, complex *x, integer *info, complex *work, real *rwork)
+/** Generated wrapper function */
+real cla_hercond_x_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *af,
+                    aocl_int_t *ldaf, aocl_int_t *ipiv, scomplex *x, aocl_int_t *info, scomplex *work,
+                    real *rwork)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_cla_hercond_x(uplo, n, a, lda, af, ldaf, ipiv, x, info, work, rwork);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t info_64 = *info;
+
+    real ret_val = aocl_lapack_cla_hercond_x(uplo, &n_64, a, &lda_64, af, &ldaf_64, ipiv, x,
+                                             &info_64, work, rwork);
+
+    *info = (aocl_int_t)info_64;
+    return ret_val;
+#endif
+}
+
+real aocl_lapack_cla_hercond_x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                               scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv, scomplex *x,
+                               aocl_int64_t *info, scomplex *work, real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -144,30 +166,22 @@ real cla_hercond_x_(char *uplo, integer *n, complex *a, integer *lda, complex *a
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
     real ret_val, r__1, r__2;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *);
-    void c_div(complex *, complex *, complex *);
+    double r_imag(scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     logical up;
     real tmp;
-    integer kase;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t kase;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     real anorm;
     logical upper;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
-    extern /* Subroutine */
-        void
-        chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
-                integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -226,7 +240,7 @@ real cla_hercond_x_(char *uplo, integer *n, complex *a, integer *lda, complex *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLA_HERCOND_X", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("CLA_HERCOND_X", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
@@ -248,22 +262,22 @@ real cla_hercond_x_(char *uplo, integer *n, complex *a, integer *lda, complex *a
             {
                 i__3 = j + i__ * a_dim1;
                 i__4 = j;
-                q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                tmp += (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
+                q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                tmp += (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
             }
             i__2 = *n;
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = j;
-                q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                tmp += (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
+                q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                tmp += (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
             }
             rwork[i__] = tmp;
             anorm = fla_max(anorm, tmp);
@@ -280,22 +294,22 @@ real cla_hercond_x_(char *uplo, integer *n, complex *a, integer *lda, complex *a
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = j;
-                q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                tmp += (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
+                q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                tmp += (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
             }
             i__2 = *n;
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 i__3 = j + i__ * a_dim1;
                 i__4 = j;
-                q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                tmp += (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
+                q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                tmp += (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
             }
             rwork[i__] = tmp;
             anorm = fla_max(anorm, tmp);
@@ -317,7 +331,7 @@ real cla_hercond_x_(char *uplo, integer *n, complex *a, integer *lda, complex *a
     ainvnm = 0.f;
     kase = 0;
 L10:
-    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -329,18 +343,20 @@ L10:
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = i__;
-                q__1.r = rwork[i__4] * work[i__3].r;
-                q__1.i = rwork[i__4] * work[i__3].i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__4] * work[i__3].real;
+                q__1.imag = rwork[i__4] * work[i__3].imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
             if(up)
             {
-                chetrs_("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+                aocl_lapack_chetrs("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                                   info);
             }
             else
             {
-                chetrs_("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+                aocl_lapack_chetrs("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                                   info);
             }
             /* Multiply by inv(X). */
             i__1 = *n;
@@ -348,8 +364,8 @@ L10:
             {
                 i__2 = i__;
                 c_div(&q__1, &work[i__], &x[i__]);
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
         }
         else
@@ -360,16 +376,18 @@ L10:
             {
                 i__2 = i__;
                 c_div(&q__1, &work[i__], &x[i__]);
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
             if(up)
             {
-                chetrs_("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+                aocl_lapack_chetrs("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                                   info);
             }
             else
             {
-                chetrs_("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+                aocl_lapack_chetrs("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                                   info);
             }
             /* Multiply by R. */
             i__1 = *n;
@@ -378,10 +396,10 @@ L10:
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = i__;
-                q__1.r = rwork[i__4] * work[i__3].r;
-                q__1.i = rwork[i__4] * work[i__3].i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__4] * work[i__3].real;
+                q__1.imag = rwork[i__4] * work[i__3].imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
         }
         goto L10;

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked
  * algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -39,7 +39,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGEHD2 reduces a complex general matrix A to upper Hessenberg form H */
+/* > ZGEHD2 reduces a scomplex general matrix A to upper Hessenberg form H */
 /* > by a unitary similarity transformation: Q**H * A * Q = H . */
 /* > \endverbatim */
 /* Arguments: */
@@ -124,7 +124,7 @@ otherwise they should be */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i) = 0, v(i+1) = 1 and v(ihi+1:n) = 0;
 v(i+2:ihi) is stored on */
 /* > exit in A(i+2:ihi,i), and tau in TAU(i). */
@@ -149,27 +149,41 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgehd2_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *lda,
-             doublecomplex *tau, doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, dcomplex *a, aocl_int_t *lda,
+             dcomplex *tau, dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgehd2(n, ilo, ihi, a, lda, tau, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgehd2(&n_64, &ilo_64, &ihi_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS
                       "",
                       *n, *ilo, *ihi, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__;
-    doublecomplex alpha;
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    aocl_int64_t i__;
+    dcomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -216,7 +230,7 @@ void zgehd2_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEHD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEHD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -225,28 +239,28 @@ void zgehd2_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *
     {
         /* Compute elementary reflector H(i) to annihilate A(i+2:ihi,i) */
         i__2 = i__ + 1 + i__ * a_dim1;
-        alpha.r = a[i__2].r;
-        alpha.i = a[i__2].i; // , expr subst
+        alpha.real = a[i__2].real;
+        alpha.imag = a[i__2].imag; // , expr subst
         i__2 = *ihi - i__;
         /* Computing MIN */
         i__3 = i__ + 2;
-        zlarfg_(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
+        aocl_lapack_zlarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
         i__2 = i__ + 1 + i__ * a_dim1;
-        a[i__2].r = 1.;
-        a[i__2].i = 0.; // , expr subst
+        a[i__2].real = 1.;
+        a[i__2].imag = 0.; // , expr subst
         /* Apply H(i) to A(1:ihi,i+1:ihi) from the right */
         i__2 = *ihi - i__;
-        zlarf_("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
-               &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
+        aocl_lapack_zlarf("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+                          &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
         /* Apply H(i)**H to A(i+1:ihi,i+1:n) from the left */
         i__2 = *ihi - i__;
         i__3 = *n - i__;
         d_cnjg(&z__1, &tau[i__]);
-        zlarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
-               &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+        aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
+                          &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
         i__2 = i__ + 1 + i__ * a_dim1;
-        a[i__2].r = alpha.r;
-        a[i__2].i = alpha.i; // , expr subst
+        a[i__2].real = alpha.real;
+        a[i__2].imag = alpha.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

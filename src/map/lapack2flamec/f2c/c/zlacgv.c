@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLACGV conjugates a complex vector. */
+#include "FLA_f2c.h" /* > \brief \b ZLACGV conjugates a scomplex vector. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLACGV conjugates a complex vector of length N. */
+/* > ZLACGV conjugates a scomplex vector of length N. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -69,17 +69,30 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlacgv_(integer *n, doublecomplex *x, integer *incx)
+/** Generated wrapper function */
+void zlacgv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlacgv(n, x, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_zlacgv(&n_64, x, &incx_64);
+#endif
+}
+
+void aocl_lapack_zlacgv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacgv inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
-    integer i__1, i__2;
-    doublecomplex z__1;
+    aocl_int64_t i__1, i__2;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, ioff;
+    aocl_int64_t i__, ioff;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -104,8 +117,8 @@ void zlacgv_(integer *n, doublecomplex *x, integer *incx)
         {
             i__2 = i__;
             d_cnjg(&z__1, &x[i__]);
-            x[i__2].r = z__1.r;
-            x[i__2].i = z__1.i; // , expr subst
+            x[i__2].real = z__1.real;
+            x[i__2].imag = z__1.imag; // , expr subst
             /* L10: */
         }
     }
@@ -121,8 +134,8 @@ void zlacgv_(integer *n, doublecomplex *x, integer *incx)
         {
             i__2 = ioff;
             d_cnjg(&z__1, &x[ioff]);
-            x[i__2].r = z__1.r;
-            x[i__2].i = z__1.i; // , expr subst
+            x[i__2].real = z__1.real;
+            x[i__2].imag = z__1.imag; // , expr subst
             ioff += *incx;
             /* L20: */
         }

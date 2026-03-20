@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b18 = .001;
 /* > \brief \b ZSTEMR */
 /* =========== DOCUMENTATION =========== */
@@ -97,11 +97,11 @@ static doublereal c_b18 = .001;
 /* > This permits the use of efficient inner loops avoiding a check for */
 /* > zero divisors. */
 /* > */
-/* > 2. LAPACK routines can be used to reduce a complex Hermitean matrix to */
+/* > 2. LAPACK routines can be used to reduce a scomplex Hermitean matrix to */
 /* > real symmetric tridiagonal form. */
 /* > */
-/* > (Any complex Hermitean tridiagonal matrix has real values on its diagonal */
-/* > and potentially complex numbers on its off-diagonals. By applying a */
+/* > (Any scomplex Hermitean tridiagonal matrix has real values on its diagonal */
+/* > and potentially scomplex numbers on its off-diagonals. By applying a */
 /* > similarity transform with an appropriate diagonal matrix */
 /* > diag(1,e^{
 i \phy_1}
@@ -109,15 +109,15 @@ i \phy_1}
 i \phy_{
 n-1}
 }
-), the complex Hermitean */
-/* > matrix can be transformed into a real symmetric matrix and complex */
+), the scomplex Hermitean */
+/* > matrix can be transformed into a real symmetric matrix and scomplex */
 /* > arithmetic can be entirely avoided.) */
 /* > */
 /* > While the eigenvectors of the real symmetric tridiagonal matrix are real, */
-/* > the eigenvectors of original complex Hermitean matrix have complex entries */
+/* > the eigenvectors of original scomplex Hermitean matrix have scomplex entries */
 /* > in general. */
 /* > Since LAPACK drivers overwrite the matrix data with the eigenvectors, */
-/* > ZSTEMR accepts complex workspace to facilitate interoperability */
+/* > ZSTEMR accepts scomplex workspace to facilitate interoperability */
 /* > with ZUNMTR or ZUPMTR. */
 /* > \endverbatim */
 /* Arguments: */
@@ -344,10 +344,41 @@ the */
 /* > Aravindh Krishnamoorthy, FAU, Erlangen, Germany \n */
 /* ===================================================================== */
 /* Subroutine */
-void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e, doublereal *vl,
-             doublereal *vu, integer *il, integer *iu, integer *m, doublereal *w,
-             doublecomplex *z__, integer *ldz, integer *nzc, integer *isuppz, logical *tryrac,
-             doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void zstemr_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *vl,
+             doublereal *vu, aocl_int_t *il, aocl_int_t *iu, aocl_int_t *m, doublereal *w,
+             dcomplex *z__, aocl_int_t *ldz, aocl_int_t *nzc, aocl_int_t *isuppz,
+             logical *tryrac, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork,
+             aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zstemr(jobz, range, n, d__, e, vl, vu, il, iu, m, w, z__, ldz, nzc, isuppz, tryrac,
+                       work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t nzc_64 = *nzc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zstemr(jobz, range, &n_64, d__, e, vl, vu, &il_64, &iu_64, &m_64, w, z__, &ldz_64,
+                       &nzc_64, isuppz, tryrac, work, &lwork_64, iwork, &liwork_64, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zstemr(char *jobz, char *range, aocl_int64_t *n, doublereal *d__, doublereal *e,
+                        doublereal *vl, doublereal *vu, aocl_int64_t *il, aocl_int64_t *iu,
+                        aocl_int64_t *m, doublereal *w, dcomplex *z__, aocl_int64_t *ldz,
+                        aocl_int64_t *nzc, aocl_int_t *isuppz, logical *tryrac, doublereal *work,
+                        aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *liwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
@@ -355,86 +386,51 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
                       ", liwork %" FLA_IS "",
                       *jobz, *range, *n, *il, *iu, *m, *ldz, *nzc, *lwork, *liwork);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal r1, r2;
-    integer jj;
+    aocl_int64_t jj;
     doublereal cs;
-    integer in;
+    aocl_int64_t in;
     doublereal sn, wl, wu;
-    integer iil, iiu;
+    aocl_int64_t iil, iiu;
     doublereal eps, tmp;
-    integer indd, iend, jblk, wend;
+    aocl_int64_t indd, iend, jblk, wend;
     doublereal rmin, rmax;
-    integer itmp;
+    aocl_int64_t itmp;
     doublereal tnrm;
     extern /* Subroutine */
         void
         dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    integer inde2, itmp2;
+    aocl_int64_t inde2, itmp2;
     doublereal rtol1, rtol2;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal scale;
-    integer indgp;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo, iindw, ilast;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer lwmin;
+    aocl_int64_t indgp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo, iindw, ilast;
+    aocl_int64_t lwmin;
     logical wantz;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *);
+    extern void dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+              doublereal *);
     extern doublereal dlamch_(char *);
     logical alleig;
-    integer ibegin;
+    aocl_int64_t ibegin;
     logical indeig;
-    integer iindbl;
+    aocl_int64_t iindbl;
     logical valeig;
-    extern /* Subroutine */
-        void
-        dlarrc_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *, integer *, integer *, integer *),
-        dlarre_(char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
-                integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
-    integer wbegin;
+    aocl_int64_t wbegin;
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        dlarrj_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    integer inderr, iindwk, indgrs, offset;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlarrr_(integer *, doublereal *, doublereal *, integer *),
-        dlasrt_(char *, integer *, doublereal *, integer *);
+    aocl_int64_t inderr, iindwk, indgrs, offset;
     doublereal thresh;
-    integer iinspl, indwrk, ifirst, liwmin, nzcmin;
+    aocl_int64_t iinspl, indwrk, ifirst, liwmin, nzcmin;
     doublereal pivmin;
-    integer nsplit;
+    aocl_int64_t nsplit;
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zlarrv_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, doublecomplex *, integer *, integer *, doublereal *, integer *,
-                integer *);
     logical lquery, zquery, laeswap;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -560,14 +556,15 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     if(*info == 0)
     {
         work[1] = (doublereal)lwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(wantz && alleig)
         {
             nzcmin = *n;
         }
         else if(wantz && valeig)
         {
-            dlarrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &itmp2, info);
+            aocl_lapack_dlarrc("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &itmp2,
+                               info);
         }
         else if(wantz && indeig)
         {
@@ -581,8 +578,8 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         if(zquery && *info == 0)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = (doublereal)nzcmin;
-            z__[i__1].i = 0.; // , expr subst
+            z__[i__1].real = (doublereal)nzcmin;
+            z__[i__1].imag = 0.; // , expr subst
         }
         else if(*nzc < nzcmin && !zquery)
         {
@@ -592,7 +589,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSTEMR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSTEMR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -626,8 +623,8 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         if(wantz && !zquery)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.;
-            z__[i__1].i = 0.; // , expr subst
+            z__[i__1].real = 1.;
+            z__[i__1].imag = 0.; // , expr subst
             isuppz[1] = 1;
             isuppz[2] = 1;
         }
@@ -663,21 +660,21 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
                 if(laeswap)
                 {
                     i__1 = *m * z_dim1 + 1;
-                    z__[i__1].r = cs;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = cs;
+                    z__[i__1].imag = 0.; // , expr subst
                     i__1 = *m * z_dim1 + 2;
-                    z__[i__1].r = sn;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = sn;
+                    z__[i__1].imag = 0.; // , expr subst
                 }
                 else
                 {
                     i__1 = *m * z_dim1 + 1;
                     d__1 = -sn;
-                    z__[i__1].r = d__1;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = d__1;
+                    z__[i__1].imag = 0.; // , expr subst
                     i__1 = *m * z_dim1 + 2;
-                    z__[i__1].r = cs;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = cs;
+                    z__[i__1].imag = 0.; // , expr subst
                 }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.)
@@ -710,20 +707,20 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
                 {
                     i__1 = *m * z_dim1 + 1;
                     d__1 = -sn;
-                    z__[i__1].r = d__1;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = d__1;
+                    z__[i__1].imag = 0.; // , expr subst
                     i__1 = *m * z_dim1 + 2;
-                    z__[i__1].r = cs;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = cs;
+                    z__[i__1].imag = 0.; // , expr subst
                 }
                 else
                 {
                     i__1 = *m * z_dim1 + 1;
-                    z__[i__1].r = cs;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = cs;
+                    z__[i__1].imag = 0.; // , expr subst
                     i__1 = *m * z_dim1 + 2;
-                    z__[i__1].r = sn;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = sn;
+                    z__[i__1].imag = 0.; // , expr subst
                 }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.)
@@ -768,7 +765,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         we expect users' matrices not to be close to the */
         /* RMAX threshold. */
         scale = 1.;
-        tnrm = dlanst_("M", n, &d__[1], &e[1]);
+        tnrm = aocl_lapack_dlanst("M", n, &d__[1], &e[1]);
         if(tnrm > 0. && tnrm < rmin)
         {
             scale = rmin / tnrm;
@@ -779,9 +776,9 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         }
         if(scale != 1.)
         {
-            dscal_(n, &scale, &d__[1], &c__1);
+            aocl_blas_dscal(n, &scale, &d__[1], &c__1);
             i__1 = *n - 1;
-            dscal_(&i__1, &scale, &e[1], &c__1);
+            aocl_blas_dscal(&i__1, &scale, &e[1], &c__1);
             tnrm *= scale;
             if(valeig)
             {
@@ -801,7 +798,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         if(*tryrac)
         {
             /* Test whether the matrix warrants the more expensive relative approach. */
-            dlarrr_(n, &d__[1], &e[1], &iinfo);
+            aocl_lapack_dlarrr(n, &d__[1], &e[1], &iinfo);
         }
         else
         {
@@ -822,7 +819,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         if(*tryrac)
         {
             /* Copy original diagonal, needed to guarantee relative accuracy */
-            dcopy_(n, &d__[1], &c__1, &work[indd], &c__1);
+            aocl_blas_dcopy(n, &d__[1], &c__1, &work[indd], &c__1);
         }
         /* Store the squares of the offdiagonal values of T */
         i__1 = *n - 1;
@@ -852,10 +849,10 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
             d__2 = eps * 4.; // , expr subst
             rtol2 = fla_max(d__1, d__2);
         }
-        dlarre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1, &rtol2,
-                &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[inderr], &work[indgp],
-                &iwork[iindbl], &iwork[iindw], &work[indgrs], &pivmin, &work[indwrk],
-                &iwork[iindwk], &iinfo);
+        aocl_lapack_dlarre(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1,
+                           &rtol2, &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[inderr],
+                           &work[indgp], &iwork[iindbl], &iwork[iindw], &work[indgrs], &pivmin,
+                           &work[indwrk], &iwork[iindwk], &iinfo);
         if(iinfo != 0)
         {
             *info = f2c_abs(iinfo) + 10;
@@ -869,10 +866,10 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         {
             /* Compute the desired eigenvectors corresponding to the computed */
             /* eigenvalues */
-            zlarrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &c__1, m, &c_b18,
-                    &rtol1, &rtol2, &w[1], &work[inderr], &work[indgp], &iwork[iindbl],
-                    &iwork[iindw], &work[indgrs], &z__[z_offset], ldz, &isuppz[1], &work[indwrk],
-                    &iwork[iindwk], &iinfo);
+            aocl_lapack_zlarrv(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &c__1, m,
+                               &c_b18, &rtol1, &rtol2, &w[1], &work[inderr], &work[indgp],
+                               &iwork[iindbl], &iwork[iindw], &work[indgrs], &z__[z_offset], ldz,
+                               &isuppz[1], &work[indwrk], &iwork[iindwk], &iinfo);
             if(iinfo != 0)
             {
                 *info = f2c_abs(iinfo) + 20;
@@ -926,9 +923,10 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
                 ifirst = iwork[iindw + wbegin - 1];
                 ilast = iwork[iindw + wend - 1];
                 rtol2 = eps * 4.;
-                dlarrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], &ifirst, &ilast,
-                        &rtol2, &offset, &w[wbegin], &work[inderr + wbegin - 1], &work[indwrk],
-                        &iwork[iindwk], &pivmin, &tnrm, &iinfo);
+                aocl_lapack_dlarrj(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1],
+                                   &ifirst, &ilast, &rtol2, &offset, &w[wbegin],
+                                   &work[inderr + wbegin - 1], &work[indwrk], &iwork[iindwk],
+                                   &pivmin, &tnrm, &iinfo);
                 ibegin = iend + 1;
                 wbegin = wend + 1;
             L39:;
@@ -938,7 +936,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         if(scale != 1.)
         {
             d__1 = 1. / scale;
-            dscal_(m, &d__1, &w[1], &c__1);
+            aocl_blas_dscal(m, &d__1, &w[1], &c__1);
         }
     }
     /* If eigenvalues are not in increasing order, then sort them, */
@@ -947,7 +945,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     {
         if(!wantz)
         {
-            dlasrt_("I", m, &w[1], &iinfo);
+            aocl_lapack_dlasrt("I", m, &w[1], &iinfo);
             if(iinfo != 0)
             {
                 *info = 3;
@@ -978,13 +976,14 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
                     w[j] = tmp;
                     if(wantz)
                     {
-                        zswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                        aocl_blas_zswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1],
+                                        &c__1);
                         itmp = isuppz[(i__ << 1) - 1];
                         isuppz[(i__ << 1) - 1] = isuppz[(j << 1) - 1];
-                        isuppz[(j << 1) - 1] = itmp;
+                        isuppz[(j << 1) - 1] = (aocl_int_t)(itmp);
                         itmp = isuppz[i__ * 2];
                         isuppz[i__ * 2] = isuppz[j * 2];
-                        isuppz[j * 2] = itmp;
+                        isuppz[j * 2] = (aocl_int_t)(itmp);
                     }
                 }
                 /* L60: */
@@ -992,7 +991,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         }
     }
     work[1] = (doublereal)lwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZSTEMR */

@@ -50,7 +50,7 @@
 /* > \verbatim */
 /* > */
 /* > ZGESVXX uses the LU factorization to compute the solution to a */
-/* > complex*16 system of linear equations A * X = B, where A is an */
+/* > scomplex*16 system of linear equations A * X = B, where A is an */
 /* > N-by-N matrix and X and B are N-by-NRHS matrices. */
 /* > */
 /* > If requested, both normwise and maximum componentwise error bounds */
@@ -545,12 +545,12 @@ defaults */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-              doublecomplex *af, integer *ldaf, integer *ipiv, char *equed, doublereal *r__,
-              doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx,
+void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, dcomplex *a, integer *lda,
+              dcomplex *af, integer *ldaf, integer *ipiv, char *equed, doublereal *r__,
+              doublereal *c__, dcomplex *b, integer *ldb, dcomplex *x, integer *ldx,
               doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer *n_err_bnds__,
               doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams,
-              doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
+              doublereal *params, dcomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesvxx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS
@@ -565,8 +565,8 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex 
     /* Local variables */
     integer j;
     doublereal amax;
-    extern doublereal zla_gerpvgrw_(integer *, integer *, doublecomplex *, integer *,
-                                    doublecomplex *, integer *);
+    extern doublereal zla_gerpvgrw_(integer *, integer *, dcomplex *, integer *,
+                                    dcomplex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax;
     logical equil;
@@ -579,7 +579,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex 
     doublereal bignum;
     extern /* Subroutine */
         void
-        zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+        zlaqge_(integer *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
                 doublereal *, doublereal *, doublereal *, char *);
     integer infequ;
     logical colequ;
@@ -587,24 +587,24 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex 
     logical notran;
     extern /* Subroutine */
         void
-        zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+        zgetrf_(integer *, integer *, dcomplex *, integer *, integer *, integer *),
+        zlacpy_(char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
                 integer *);
     doublereal smlnum;
     extern /* Subroutine */
         void
-        zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
-                doublecomplex *, integer *, integer *);
+        zgetrs_(char *, integer *, integer *, dcomplex *, integer *, integer *,
+                dcomplex *, integer *, integer *);
     logical rowequ;
     extern /* Subroutine */
         void
-        zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *),
-        zgeequb_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+        zlascl2_(integer *, integer *, doublereal *, dcomplex *, integer *),
+        zgeequb_(integer *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
                  doublereal *, doublereal *, doublereal *, integer *),
-        zgerfsx_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
-                 doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-                 doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer *);
+        zgerfsx_(char *, char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
+                 integer *, integer *, doublereal *, doublereal *, dcomplex *, integer *,
+                 dcomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+                 doublereal *, integer *, doublereal *, dcomplex *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

@@ -95,9 +95,9 @@ void libfla_test_apcaqutinc_experiment( test_params_t params,
 	double       time;
 	unsigned int i;
 	uinteger m, n;
-	uinteger p;
-	integer   m_input;
-	integer   n_input;
+	uinteger p = 4;  // Default panel size, will be set based on storev
+	integer   m_input;  // Will be set based on storev
+	integer   n_input;  // Will be set based on storev
 	FLA_Side     side;
 	FLA_Trans    trans;
 	FLA_Direct   direct;
@@ -118,6 +118,10 @@ void libfla_test_apcaqutinc_experiment( test_params_t params,
 	// matrices. So we use m > n when testing with column-wise storage (via
 	// QR factorization) and m < n when testing with row-wise storage (via
 	// LQ factorization).
+	// NOTE: Currently only FLA_COLUMNWISE is tested (since pc_str is initialized above as { "lhfc" }),
+	// but we keep the conditional structure for future rowwise implementation when pc_str includes other values.
+	// The compiler may suggest removing this 'if' since the condition is always true with the current pc_str,
+	// but keeping it maintains the designed flexibility for when rowwise is enabled in the future.
 	if ( storev == FLA_COLUMNWISE )
 	{
 		m_input = -8;
@@ -126,15 +130,16 @@ void libfla_test_apcaqutinc_experiment( test_params_t params,
 		//m_input = -1;
 		//n_input = -1;
 	}
-	else // if ( storev == FLA_ROWWISE )
+	else /* storev == FLA_ROWWISE */
 	{
+		m_input = -1;
+		n_input = -8;
+		p       = 4;  // p <= abs(n_input) must hold! (for LQ case)
 	}
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur * abs(m_input);
-	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur * abs(n_input);
-	else               n = p_cur;
+	if ( m_input < 0 ) m = p_cur * -m_input; else m = p_cur;
+	if ( n_input < 0 ) n = p_cur * -n_input; else n = p_cur;
 
 	// Create the matrices for the current operation.
 	libfla_test_obj_create( datatype, FLA_NO_TRANSPOSE, sc_str[0], m, n, &A );
@@ -150,8 +155,15 @@ void libfla_test_apcaqutinc_experiment( test_params_t params,
 	if ( storev == FLA_COLUMNWISE )
 		FLASH_CAQR_UT_inc_create_hier_matrices( p, A, 1, &b_flash, b_alg_hier,
 		                                        &A_test, &ATW_test, &R_test, &RTW_test );
-	//else // if ( storev == FLA_ROWWISE )
-	//  FLA_Check_error_code( FLA_NOT_YET_IMPLEMENTED );
+	else // if ( storev == FLA_ROWWISE )
+	{
+		// FLA_Check_error_code( FLA_NOT_YET_IMPLEMENTED );
+		// For now, create placeholder objects to avoid uninitialized variable warnings
+		FLASH_Obj_create_hier_copy_of_flat( A, 1, &b_flash, &A_test );
+		FLASH_Obj_create_hier_copy_of_flat( A, 1, &b_flash, &ATW_test );  // placeholder
+		FLASH_Obj_create_hier_copy_of_flat( A, 1, &b_flash, &R_test );    // placeholder
+		FLASH_Obj_create_hier_copy_of_flat( A, 1, &b_flash, &RTW_test );  // placeholder
+	}
 	FLASH_Obj_create_hier_copy_of_flat( B, 1, &b_flash, &B_test );
 	FLASH_Obj_create_hier_copy_of_flat( X, 1, &b_flash, &X_test );
 	FLASH_Apply_CAQ_UT_inc_create_workspace( p, RTW_test, B_test, &W_test );

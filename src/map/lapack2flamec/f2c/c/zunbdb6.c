@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {-1., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static doublecomplex c_b3 = {0., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {-1., 0.};
+static dcomplex c_b2 = {1., 0.};
+static dcomplex c_b3 = {0., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNBDB6 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -157,9 +157,37 @@ static integer c__1 = 1;
 /* > \ingroup unbdb6 */
 /* ===================================================================== */
 /* Subroutine */
-void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *incx1,
-              doublecomplex *x2, integer *incx2, doublecomplex *q1, integer *ldq1,
-              doublecomplex *q2, integer *ldq2, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, dcomplex *x1, aocl_int_t *incx1,
+              dcomplex *x2, aocl_int_t *incx2, dcomplex *q1, aocl_int_t *ldq1,
+              dcomplex *q2, aocl_int_t *ldq2, dcomplex *work, aocl_int_t *lwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zunbdb6(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
+#else
+    aocl_int64_t m1_64 = *m1;
+    aocl_int64_t m2_64 = *m2;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx1_64 = *incx1;
+    aocl_int64_t incx2_64 = *incx2;
+    aocl_int64_t ldq1_64 = *ldq1;
+    aocl_int64_t ldq2_64 = *ldq2;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zunbdb6(&m1_64, &m2_64, &n_64, x1, &incx1_64, x2, &incx2_64, q1, &ldq1_64, q2,
+                        &ldq2_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zunbdb6(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dcomplex *x1,
+                         aocl_int64_t *incx1, dcomplex *x2, aocl_int64_t *incx2,
+                         dcomplex *q1, aocl_int64_t *ldq1, dcomplex *q2,
+                         aocl_int64_t *ldq2, dcomplex *work, aocl_int64_t *lwork,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS
@@ -167,22 +195,14 @@ void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
                       ", lwork %" FLA_IS "",
                       *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
     /* System generated locals */
-    integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2, i__3;
+    aocl_int64_t q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2, i__3;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal norm_new__;
-    integer i__, ix;
+    aocl_int64_t i__, ix;
     doublereal scl, eps, ssq, norm;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -250,7 +270,7 @@ void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNBDB6", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZUNBDB6", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -258,8 +278,8 @@ void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
     /* Compute the Euclidean norm of X */
     scl = 0.;
     ssq = 0.;
-    zlassq_(m1, &x1[1], incx1, &scl, &ssq);
-    zlassq_(m2, &x2[1], incx2, &scl, &ssq);
+    aocl_lapack_zlassq(m1, &x1[1], incx1, &scl, &ssq);
+    aocl_lapack_zlassq(m2, &x2[1], incx2, &scl, &ssq);
     norm = scl * sqrt(ssq);
     /* First, project X onto the orthogonal complement of Q's column */
     /* space */
@@ -269,21 +289,22 @@ void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            work[i__2].r = 0.;
-            work[i__2].i = 0.; // , expr subst
+            work[i__2].real = 0.;
+            work[i__2].imag = 0.; // , expr subst
         }
     }
     else
     {
-        zgemv_("C", m1, n, &c_b2, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b3, &work[1], &c__1);
+        aocl_blas_zgemv("C", m1, n, &c_b2, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b3, &work[1],
+                        &c__1);
     }
-    zgemv_("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, &work[1], &c__1);
-    zgemv_("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, &x1[1], incx1);
-    zgemv_("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, &x2[1], incx2);
+    aocl_blas_zgemv("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, &work[1], &c__1);
+    aocl_blas_zgemv("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, &x1[1], incx1);
+    aocl_blas_zgemv("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, &x2[1], incx2);
     scl = 0.;
     ssq = 0.;
-    zlassq_(m1, &x1[1], incx1, &scl, &ssq);
-    zlassq_(m2, &x2[1], incx2, &scl, &ssq);
+    aocl_lapack_zlassq(m1, &x1[1], incx1, &scl, &ssq);
+    aocl_lapack_zlassq(m2, &x2[1], incx2, &scl, &ssq);
     norm_new__ = scl * sqrt(ssq);
     /* If projection is sufficiently large in norm, then stop. */
     /* If projection is zero, then stop. */
@@ -300,16 +321,16 @@ void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
         for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
         {
             i__3 = ix;
-            x1[i__3].r = 0.;
-            x1[i__3].i = 0.; // , expr subst
+            x1[i__3].real = 0.;
+            x1[i__3].imag = 0.; // , expr subst
         }
         i__2 = (*m2 - 1) * *incx2 + 1;
         i__1 = *incx2;
         for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
         {
             i__3 = ix;
-            x2[i__3].r = 0.;
-            x2[i__3].i = 0.; // , expr subst
+            x2[i__3].real = 0.;
+            x2[i__3].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -319,8 +340,8 @@ void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        work[i__2].r = 0.;
-        work[i__2].i = 0.; // , expr subst
+        work[i__2].real = 0.;
+        work[i__2].imag = 0.; // , expr subst
     }
     if(*m1 == 0)
     {
@@ -328,21 +349,22 @@ void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            work[i__2].r = 0.;
-            work[i__2].i = 0.; // , expr subst
+            work[i__2].real = 0.;
+            work[i__2].imag = 0.; // , expr subst
         }
     }
     else
     {
-        zgemv_("C", m1, n, &c_b2, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b3, &work[1], &c__1);
+        aocl_blas_zgemv("C", m1, n, &c_b2, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b3, &work[1],
+                        &c__1);
     }
-    zgemv_("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, &work[1], &c__1);
-    zgemv_("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, &x1[1], incx1);
-    zgemv_("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, &x2[1], incx2);
+    aocl_blas_zgemv("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, &work[1], &c__1);
+    aocl_blas_zgemv("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, &x1[1], incx1);
+    aocl_blas_zgemv("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, &x2[1], incx2);
     scl = 0.;
     ssq = 0.;
-    zlassq_(m1, &x1[1], incx1, &scl, &ssq);
-    zlassq_(m2, &x2[1], incx2, &scl, &ssq);
+    aocl_lapack_zlassq(m1, &x1[1], incx1, &scl, &ssq);
+    aocl_lapack_zlassq(m2, &x2[1], incx2, &scl, &ssq);
     norm_new__ = scl * sqrt(ssq);
     /* If second projection is sufficiently large in norm, then do */
     /* nothing more. Alternatively, if it shrunk significantly, then */
@@ -354,16 +376,16 @@ void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
         for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
         {
             i__3 = ix;
-            x1[i__3].r = 0.;
-            x1[i__3].i = 0.; // , expr subst
+            x1[i__3].real = 0.;
+            x1[i__3].imag = 0.; // , expr subst
         }
         i__2 = (*m2 - 1) * *incx2 + 1;
         i__1 = *incx2;
         for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
         {
             i__3 = ix;
-            x2[i__3].r = 0.;
-            x2[i__3].i = 0.; // , expr subst
+            x2[i__3].real = 0.;
+            x2[i__3].imag = 0.; // , expr subst
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

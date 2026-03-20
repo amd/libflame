@@ -47,7 +47,7 @@ static logical c_true = TRUE_;
 /* > \verbatim */
 /* > */
 /* > CHSEIN uses inverse iteration to find specified right and/or left */
-/* > eigenvectors of a complex upper Hessenberg matrix H. */
+/* > eigenvectors of a scomplex upper Hessenberg matrix H. */
 /* > */
 /* > The right eigenvector x and the left eigenvector y of the matrix H */
 /* > corresponding to an eigenvalue w are defined by: */
@@ -247,16 +247,43 @@ see IFAILL and IFAILR for further */
 /* > */
 /* > Each eigenvector is normalized so that the element of largest */
 /* > magnitude has magnitude 1;
-here the magnitude of a complex number */
+here the magnitude of a scomplex number */
 /* > (x,y) is taken to be |x|+|y|. */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, complex *h__,
-             integer *ldh, complex *w, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
-             integer *mm, integer *m, complex *work, real *rwork, integer *ifaill, integer *ifailr,
-             integer *info)
+/** Generated wrapper function */
+void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t *n, scomplex *h__,
+             aocl_int_t *ldh, scomplex *w, scomplex *vl, aocl_int_t *ldvl, scomplex *vr,
+             aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, scomplex *work, real *rwork,
+             aocl_int_t *ifaill, aocl_int_t *ifailr, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chsein(side, eigsrc, initv, select, n, h__, ldh, w, vl, ldvl, vr, ldvr, mm, m, work,
+                       rwork, ifaill, ifailr, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chsein(side, eigsrc, initv, select, &n_64, h__, &ldh_64, w, vl, &ldvl_64, vr,
+                       &ldvr_64, &mm_64, &m_64, work, rwork, ifaill, ifailr, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, aocl_int64_t *n,
+                        scomplex *h__, aocl_int64_t *ldh, scomplex *w, scomplex *vl,
+                        aocl_int64_t *ldvl, scomplex *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
+                        aocl_int64_t *m, scomplex *work, real *rwork, aocl_int_t *ifaill,
+                        aocl_int_t *ifailr, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -274,31 +301,23 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
+    aocl_int64_t h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     real r__1, r__2;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, k, kl, kr, ks;
-    complex wk;
-    integer kln;
+    aocl_int64_t i__, k, kl, kr, ks;
+    scomplex wk;
+    aocl_int64_t kln;
     real ulp, eps3, unfl;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical leftv, bothv;
     real hnorm;
-    extern /* Subroutine */
-        void
-        claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *,
-                complex *, integer *, real *, real *, real *, integer *);
-    extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     logical noinit;
-    integer ldwork;
+    aocl_int64_t ldwork;
     logical rightv, fromqr;
     real smlnum;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -397,7 +416,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHSEIN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -443,7 +462,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 for(i__ = k; i__ >= i__2; --i__)
                 {
                     i__3 = i__ + (i__ - 1) * h_dim1;
-                    if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
+                    if(h__[i__3].real == 0.f && h__[i__3].imag == 0.f)
                     {
                         goto L30;
                     }
@@ -457,7 +476,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                     for(i__ = k; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + 1 + i__ * h_dim1;
-                        if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
+                        if(h__[i__3].real == 0.f && h__[i__3].imag == 0.f)
                         {
                             goto L50;
                         }
@@ -473,7 +492,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = clanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
+                hnorm = aocl_lapack_clanhs("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
                 if(sisnan_(&hnorm))
                 {
                     *info = -6;
@@ -493,42 +512,42 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
             /* selected eigenvalues affiliated to the submatrix */
             /* H(KL:KR,KL:KR). Close roots are modified by EPS3. */
             i__2 = k;
-            wk.r = w[i__2].r;
-            wk.i = w[i__2].i; // , expr subst
+            wk.real = w[i__2].real;
+            wk.imag = w[i__2].imag; // , expr subst
         L60:
             i__2 = kl;
             for(i__ = k - 1; i__ >= i__2; --i__)
             {
                 i__3 = i__;
-                q__2.r = w[i__3].r - wk.r;
-                q__2.i = w[i__3].i - wk.i; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
+                q__2.real = w[i__3].real - wk.real;
+                q__2.imag = w[i__3].imag - wk.imag; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
                 if(select[i__]
-                   && (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
+                   && (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
                 {
-                    q__1.r = wk.r + eps3;
-                    q__1.i = wk.i; // , expr subst
-                    wk.r = q__1.r;
-                    wk.i = q__1.i; // , expr subst
+                    q__1.real = wk.real + eps3;
+                    q__1.imag = wk.imag; // , expr subst
+                    wk.real = q__1.real;
+                    wk.imag = q__1.imag; // , expr subst
                     goto L60;
                 }
                 /* L70: */
             }
             i__2 = k;
-            w[i__2].r = wk.r;
-            w[i__2].i = wk.i; // , expr subst
+            w[i__2].real = wk.real;
+            w[i__2].imag = wk.imag; // , expr subst
             if(leftv)
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                claein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
-                        &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3, &smlnum,
-                        &iinfo);
+                aocl_lapack_claein(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
+                                   &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3,
+                                   &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);
-                    ifaill[ks] = k;
+                    ifaill[ks] = (aocl_int_t)(k);
                 }
                 else
                 {
@@ -538,20 +557,21 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + ks * vl_dim1;
-                    vl[i__3].r = 0.f;
-                    vl[i__3].i = 0.f; // , expr subst
+                    vl[i__3].real = 0.f;
+                    vl[i__3].imag = 0.f; // , expr subst
                     /* L80: */
                 }
             }
             if(rightv)
             {
                 /* Compute right eigenvector. */
-                claein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk, &vr[ks * vr_dim1 + 1],
-                        &work[1], &ldwork, &rwork[1], &eps3, &smlnum, &iinfo);
+                aocl_lapack_claein(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk,
+                                   &vr[ks * vr_dim1 + 1], &work[1], &ldwork, &rwork[1], &eps3,
+                                   &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);
-                    ifailr[ks] = k;
+                    ifailr[ks] = (aocl_int_t)(k);
                 }
                 else
                 {
@@ -561,8 +581,8 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 for(i__ = kr + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + ks * vr_dim1;
-                    vr[i__3].r = 0.f;
-                    vr[i__3].i = 0.f; // , expr subst
+                    vr[i__3].real = 0.f;
+                    vr[i__3].imag = 0.f; // , expr subst
                     /* L90: */
                 }
             }

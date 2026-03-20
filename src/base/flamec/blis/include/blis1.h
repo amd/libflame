@@ -69,6 +69,7 @@ extern "C" {
    #include "blis_prototypes_cblas.h"
 #else
   #include "blis_prototypes_blas.h"
+  #include "aocl_blas.h"
 #endif
 
 // End extern "C" construct block.

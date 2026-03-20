@@ -112,11 +112,13 @@ fi
 ulimit -s unlimited
 
 FORTRAN_FLAGS="gfortran -fopenmp"
+C_FLAGS="-O2"
 TESTLAPACKLIB="$PWD/liblapack.a $AOCLUTILS_LIB_PATH/$AOCLUTILS_LIB"
 
 if [[ $ILP64 =~ ("1"|"ON") ]]
 then
 	FORTRAN_FLAGS="gfortran -fopenmp -fdefault-integer-8"
+	C_FLAGS="${C_FLAGS} -DINT_64BIT"
 fi
 
 if [[ $DTL = "1" ]]
@@ -130,7 +132,7 @@ then
 	GCOV_FLAGS="-lgcov --coverage"
 fi
 
-OMP_NUM_THREADS=1 make FC="$FORTRAN_FLAGS" LDFLAGS+="-lstdc++ -lpthread -fopenmp $GCOV_FLAGS" LAPACKLIB="$TESTLAPACKLIB" -j
+OMP_NUM_THREADS=1 make FC="$FORTRAN_FLAGS" CFLAGS="$C_FLAGS" LDFLAGS+="-lstdc++ -lpthread -fopenmp $GCOV_FLAGS" LAPACKLIB="$TESTLAPACKLIB" -j
 
 if [[ $AOCL_LAPACK_SUMMARY = "1" ]]
 then

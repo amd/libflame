@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZGBSVX computes the solution to system of linear equations A * X = B for GB
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGBSVX uses the LU factorization to compute the solution to a complex */
+/* > ZGBSVX uses the LU factorization to compute the solution to a scomplex */
 /* > system of linear equations A * X = B, A**T * X = B, or A**H * X = B, */
 /* > where A is a band matrix of order N with KL subdiagonals and KU */
 /* > superdiagonals, and X and B are N-by-NRHS matrices. */
@@ -373,11 +373,43 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complex16GBsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
-             doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv,
-             char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb,
-             doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
-             doublecomplex *work, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
+             aocl_int_t *nrhs, dcomplex *ab, aocl_int_t *ldab, dcomplex *afb,
+             aocl_int_t *ldafb, aocl_int_t *ipiv, char *equed, doublereal *r__, doublereal *c__,
+             dcomplex *b, aocl_int_t *ldb, dcomplex *x, aocl_int_t *ldx,
+             doublereal *rcond, doublereal *ferr, doublereal *berr, dcomplex *work,
+             doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r__, c__, b,
+                       ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgbsvx(fact, trans, &n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64,
+                       ipiv, equed, r__, c__, b, &ldb_64, x, &ldx_64, rcond, ferr, berr, work,
+                       rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *kl,
+                        aocl_int64_t *ku, aocl_int64_t *nrhs, dcomplex *ab, aocl_int64_t *ldab,
+                        dcomplex *afb, aocl_int64_t *ldafb, aocl_int_t *ipiv, char *equed,
+                        doublereal *r__, doublereal *c__, dcomplex *b, aocl_int64_t *ldb,
+                        dcomplex *x, aocl_int64_t *ldx, doublereal *rcond, doublereal *ferr,
+                        doublereal *berr, dcomplex *work, doublereal *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbsvx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
@@ -386,63 +418,28 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                       *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
 
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    integer i__, j, j1, j2;
+    aocl_int64_t i__, j, j1, j2;
     doublereal amax;
     char norm[1];
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal rcmin, rcmax, anorm;
     logical equil;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal colcnd;
     logical nofact;
-    extern doublereal zlangb_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlaqgb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
-                doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
-    integer infequ;
+    aocl_int64_t infequ;
     logical colequ;
-    extern doublereal zlantb_(char *, char *, char *, integer *, integer *, doublecomplex *,
-                              integer *, doublereal *);
     doublereal rowcnd;
-    extern /* Subroutine */
-        void
-        zgbequ_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *),
-        zgbrfs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *),
-        zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
-                integer *);
     logical notran;
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                integer *, doublecomplex *, integer *, integer *);
     logical rowequ;
     doublereal rpvgrw;
     /* -- LAPACK driver routine (version 3.4.1) -- */
@@ -622,20 +619,20 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        zgbequ_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                &infequ);
+        aocl_lapack_zgbequ(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd,
+                           &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            zlaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                    equed);
+            aocl_lapack_zlaqgb(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd,
+                               &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -654,10 +651,10 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * b_dim1;
-                    z__1.r = r__[i__4] * b[i__5].r;
-                    z__1.i = r__[i__4] * b[i__5].i; // , expr subst
-                    b[i__3].r = z__1.r;
-                    b[i__3].i = z__1.i; // , expr subst
+                    z__1.real = r__[i__4] * b[i__5].real;
+                    z__1.imag = r__[i__4] * b[i__5].imag; // , expr subst
+                    b[i__3].real = z__1.real;
+                    b[i__3].imag = z__1.imag; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -675,10 +672,10 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * b_dim1;
-                z__1.r = c__[i__4] * b[i__5].r;
-                z__1.i = c__[i__4] * b[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = c__[i__4] * b[i__5].real;
+                z__1.imag = c__[i__4] * b[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -697,11 +694,11 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             i__2 = j + *kl;
             j2 = fla_min(i__2, *n);
             i__2 = j2 - j1 + 1;
-            zcopy_(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
-                   &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
+            aocl_blas_zcopy(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
+                            &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
             /* L70: */
         }
-        zgbtrf_(n, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], info);
+        aocl_lapack_zgbtrf(n, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -734,8 +731,8 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             /* Computing MAX */
             i__4 = 1;
             i__5 = *kl + *ku + 2 - *info; // , expr subst
-            rpvgrw = zlantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4, i__5) + afb_dim1],
-                             ldafb, &rwork[1]);
+            rpvgrw = aocl_lapack_zlantb("M", "U", "N", info, &i__1,
+                                        &afb[fla_max(i__4, i__5) + afb_dim1], ldafb, &rwork[1]);
             if(rpvgrw == 0.)
             {
                 rpvgrw = 1.;
@@ -760,27 +757,29 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     {
         *(unsigned char *)norm = 'I';
     }
-    anorm = zlangb_(norm, n, kl, ku, &ab[ab_offset], ldab, &rwork[1]);
+    anorm = aocl_lapack_zlangb(norm, n, kl, ku, &ab[ab_offset], ldab, &rwork[1]);
     i__1 = *kl + *ku;
-    rpvgrw = zlantb_("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &rwork[1]);
+    rpvgrw = aocl_lapack_zlantb("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &rwork[1]);
     if(rpvgrw == 0.)
     {
         rpvgrw = 1.;
     }
     else
     {
-        rpvgrw = zlangb_("M", n, kl, ku, &ab[ab_offset], ldab, &rwork[1]) / rpvgrw;
+        rpvgrw = aocl_lapack_zlangb("M", n, kl, ku, &ab[ab_offset], ldab, &rwork[1]) / rpvgrw;
     }
     /* Compute the reciprocal of the condition number of A. */
-    zgbcon_(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1], &rwork[1],
-            info);
+    aocl_lapack_zgbcon(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1],
+                       &rwork[1], info);
     /* Compute the solution matrix X. */
-    zlacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    zgbtrs_(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx, info);
+    aocl_lapack_zlacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_zgbtrs(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx,
+                       info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    zgbrfs_(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1],
-            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_zgbrfs(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
+                       &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
+                       &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(notran)
@@ -796,10 +795,10 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                     i__2 = i__ + j * x_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * x_dim1;
-                    z__1.r = c__[i__4] * x[i__5].r;
-                    z__1.i = c__[i__4] * x[i__5].i; // , expr subst
-                    x[i__2].r = z__1.r;
-                    x[i__2].i = z__1.i; // , expr subst
+                    z__1.real = c__[i__4] * x[i__5].real;
+                    z__1.imag = c__[i__4] * x[i__5].imag; // , expr subst
+                    x[i__2].real = z__1.real;
+                    x[i__2].imag = z__1.imag; // , expr subst
                     /* L100: */
                 }
                 /* L110: */
@@ -823,10 +822,10 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 i__2 = i__ + j * x_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * x_dim1;
-                z__1.r = r__[i__4] * x[i__5].r;
-                z__1.i = r__[i__4] * x[i__5].i; // , expr subst
-                x[i__2].r = z__1.r;
-                x[i__2].i = z__1.i; // , expr subst
+                z__1.real = r__[i__4] * x[i__5].real;
+                z__1.imag = r__[i__4] * x[i__5].imag; // , expr subst
+                x[i__2].real = z__1.real;
+                x[i__2].imag = z__1.imag; // , expr subst
                 /* L130: */
             }
             /* L140: */

@@ -200,22 +200,36 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
-                    doublecomplex *e, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zsyconvf_rook_(char *uplo, char *way, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+                    dcomplex *e, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsyconvf_rook(uplo, way, n, a, lda, e, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsyconvf_rook(uplo, way, &n_64, a, &lda_64, e, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsyconvf_rook(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
+                               aocl_int64_t *lda, dcomplex *e, aocl_int_t *ipiv,
+                               aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsyconvf_rook inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "",
                       *uplo, *way, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, ip, ip2;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, ip, ip2;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -262,7 +276,7 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYCONVF_ROOK", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("ZSYCONVF_ROOK", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -282,29 +296,29 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
             /* Assign superdiagonal entries of D to array E and zero out */
             /* corresponding entries in input storage A */
             i__ = *n;
-            e[1].r = 0.;
-            e[1].i = 0.; // , expr subst
+            e[1].real = 0.;
+            e[1].imag = 0.; // , expr subst
             while(i__ > 1)
             {
                 if(ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ - 1 + i__ * a_dim1;
-                    e[i__1].r = a[i__2].r;
-                    e[i__1].i = a[i__2].i; // , expr subst
+                    e[i__1].real = a[i__2].real;
+                    e[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = i__ - 1;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                     i__1 = i__ - 1 + i__ * a_dim1;
-                    a[i__1].r = 0.;
-                    a[i__1].i = 0.; // , expr subst
+                    a[i__1].real = 0.;
+                    a[i__1].imag = 0.; // , expr subst
                     --i__;
                 }
                 else
                 {
                     i__1 = i__;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
                 --i__;
             }
@@ -324,8 +338,8 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            zswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
-                                   &a[ip + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
+                                            &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -341,14 +355,14 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            zswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
-                                   &a[ip + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
+                                            &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                         if(ip2 != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            zswap_(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda,
-                                   &a[ip2 + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda,
+                                            &a[ip2 + (i__ + 1) * a_dim1], lda);
                         }
                     }
                     --i__;
@@ -375,8 +389,8 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            zswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
-                                   &a[i__ + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                            &a[i__ + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -393,14 +407,14 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                         if(ip2 != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            zswap_(&i__1, &a[ip2 + (i__ + 1) * a_dim1], lda,
-                                   &a[i__ - 1 + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[ip2 + (i__ + 1) * a_dim1], lda,
+                                            &a[i__ - 1 + (i__ + 1) * a_dim1], lda);
                         }
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            zswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
-                                   &a[i__ + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                            &a[i__ + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -416,8 +430,8 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                 {
                     i__1 = i__ - 1 + i__ * a_dim1;
                     i__2 = i__;
-                    a[i__1].r = e[i__2].r;
-                    a[i__1].i = e[i__2].i; // , expr subst
+                    a[i__1].real = e[i__2].real;
+                    a[i__1].imag = e[i__2].imag; // , expr subst
                     --i__;
                 }
                 --i__;
@@ -436,29 +450,29 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
             /* corresponding entries in input storage A */
             i__ = 1;
             i__1 = *n;
-            e[i__1].r = 0.;
-            e[i__1].i = 0.; // , expr subst
+            e[i__1].real = 0.;
+            e[i__1].imag = 0.; // , expr subst
             while(i__ <= *n)
             {
                 if(i__ < *n && ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ + 1 + i__ * a_dim1;
-                    e[i__1].r = a[i__2].r;
-                    e[i__1].i = a[i__2].i; // , expr subst
+                    e[i__1].real = a[i__2].real;
+                    e[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = i__ + 1;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                     i__1 = i__ + 1 + i__ * a_dim1;
-                    a[i__1].r = 0.;
-                    a[i__1].i = 0.; // , expr subst
+                    a[i__1].real = 0.;
+                    a[i__1].imag = 0.; // , expr subst
                     ++i__;
                 }
                 else
                 {
                     i__1 = i__;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
                 ++i__;
             }
@@ -478,7 +492,7 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            zswap_(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
                         }
                     }
                 }
@@ -494,12 +508,13 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            zswap_(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
                         }
                         if(ip2 != i__ + 1)
                         {
                             i__1 = i__ - 1;
-                            zswap_(&i__1, &a[i__ + 1 + a_dim1], lda, &a[ip2 + a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[i__ + 1 + a_dim1], lda, &a[ip2 + a_dim1],
+                                            lda);
                         }
                     }
                     ++i__;
@@ -526,7 +541,7 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            zswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
                         }
                     }
                 }
@@ -543,12 +558,13 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                         if(ip2 != i__ + 1)
                         {
                             i__1 = i__ - 1;
-                            zswap_(&i__1, &a[ip2 + a_dim1], lda, &a[i__ + 1 + a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[ip2 + a_dim1], lda, &a[i__ + 1 + a_dim1],
+                                            lda);
                         }
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            zswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
+                            aocl_blas_zswap(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
                         }
                     }
                 }
@@ -564,8 +580,8 @@ void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer
                 {
                     i__1 = i__ + 1 + i__ * a_dim1;
                     i__2 = i__;
-                    a[i__1].r = e[i__2].r;
-                    a[i__1].i = e[i__2].i; // , expr subst
+                    a[i__1].real = e[i__2].real;
+                    a[i__1].imag = e[i__2].imag; // , expr subst
                     ++i__;
                 }
                 ++i__;

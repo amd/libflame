@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c__12 = 12;
-static integer c__49 = 49;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__12 = 12;
+static aocl_int64_t c__49 = 49;
 /* > \brief \b CHSEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -298,44 +298,54 @@ static integer c__49 = 49;
 /* > of Matrix Analysis, volume 23, pages 948--973, 2002. */
 /* ===================================================================== */
 /* Subroutine */
-void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, complex *h__,
-             integer *ldh, complex *w, complex *z__, integer *ldz, complex *work, integer *lwork,
-             integer *info)
+/** Generated wrapper function */
+void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *h__,
+             aocl_int_t *ldh, scomplex *w, scomplex *z__, aocl_int_t *ldz, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chseqr(job, compz, n, ilo, ihi, h__, ldh, w, z__, ldz, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chseqr(job, compz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, w, z__, &ldz_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, scomplex *h__, aocl_int64_t *ldh, scomplex *w,
+                        scomplex *z__, aocl_int64_t *ldz, scomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
                       ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS "",
                       *job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2;
     real r__1, r__2, r__3;
-    complex q__1;
+    scomplex q__1;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    complex hl[2401] /* was [49][49] */
+    scomplex hl[2401] /* was [49][49] */
         ;
-    integer kbot, nmin;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
+    aocl_int64_t kbot, nmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical initz;
-    complex workl[49];
+    scomplex workl[49];
     logical wantt, wantz;
-    extern /* Subroutine */
-        void
-        claqr0_(logical *, logical *, integer *, integer *, integer *, complex *, integer *,
-                complex *, integer *, integer *, complex *, integer *, complex *, integer *,
-                integer *),
-        clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *,
-                complex *, integer *, integer *, complex *, integer *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -382,10 +392,10 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
     initz = lsame_(compz, "I", 1, 1);
     wantz = initz || lsame_(compz, "V", 1, 1);
     r__1 = (real)fla_max(1, *n);
-    q__1.r = r__1;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = r__1;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     lquery = *lwork == -1;
     *info = 0;
     if(!lsame_(job, "E", 1, 1) && !wantt)
@@ -424,7 +434,7 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
     {
         /* ==== Quick return in case of invalid argument. ==== */
         i__1 = -(*info);
-        xerbla_("CHSEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHSEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -438,18 +448,18 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
     else if(lquery)
     {
         /* ==== Quick return in case of a workspace query ==== */
-        claqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi, &z__[z_offset],
-                ldz, &work[1], lwork, info);
+        aocl_lapack_claqr0(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                           &z__[z_offset], ldz, &work[1], lwork, info);
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
-        r__2 = work[1].r;
+        r__2 = work[1].real;
         r__3 = (real)fla_max(1, *n); // , expr subst
         r__1 = fla_max(r__2, r__3);
-        q__1.r = r__1;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = r__1;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -460,44 +470,45 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
         {
             i__1 = *ilo - 1;
             i__2 = *ldh + 1;
-            ccopy_(&i__1, &h__[h_offset], &i__2, &w[1], &c__1);
+            aocl_blas_ccopy(&i__1, &h__[h_offset], &i__2, &w[1], &c__1);
         }
         if(*ihi < *n)
         {
             i__1 = *n - *ihi;
             i__2 = *ldh + 1;
-            ccopy_(&i__1, &h__[*ihi + 1 + (*ihi + 1) * h_dim1], &i__2, &w[*ihi + 1], &c__1);
+            aocl_blas_ccopy(&i__1, &h__[*ihi + 1 + (*ihi + 1) * h_dim1], &i__2, &w[*ihi + 1],
+                            &c__1);
         }
         /* ==== Initialize Z, if requested ==== */
         if(initz)
         {
-            claset_("A", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
+            aocl_lapack_claset("A", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
         }
         /* ==== Quick return if possible ==== */
         if(*ilo == *ihi)
         {
             i__1 = *ilo;
             i__2 = *ilo + *ilo * h_dim1;
-            w[i__1].r = h__[i__2].r;
-            w[i__1].i = h__[i__2].i; // , expr subst
+            w[i__1].real = h__[i__2].real;
+            w[i__1].imag = h__[i__2].imag; // , expr subst
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
-        nmin = ilaenv_(&c__12, "CHSEQR", ch__1, n, ilo, ihi, lwork);
+        nmin = aocl_lapack_ilaenv(&c__12, "CHSEQR", ch__1, n, ilo, ihi, lwork);
         nmin = fla_max(15, nmin);
         /* ==== CLAQR0 for big matrices;
         CLAHQR for small ones ==== */
         if(*n > nmin)
         {
-            claqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
-                    &z__[z_offset], ldz, &work[1], lwork, info);
+            aocl_lapack_claqr0(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                               &z__[z_offset], ldz, &work[1], lwork, info);
         }
         else
         {
             /* ==== Small matrix ==== */
-            clahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
-                    &z__[z_offset], ldz, info);
+            aocl_lapack_clahqr(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                               &z__[z_offset], ldz, info);
             if(*info > 0)
             {
                 /* ==== A rare CLAHQR failure! CLAQR0 sometimes succeeds */
@@ -507,8 +518,8 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
                 {
                     /* ==== Larger matrices have enough subdiagonal scratch */
                     /* . space to call CLAQR0 directly. ==== */
-                    claqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &w[1], ilo, ihi,
-                            &z__[z_offset], ldz, &work[1], lwork, info);
+                    aocl_lapack_claqr0(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &w[1],
+                                       ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
                 }
                 else
                 {
@@ -516,17 +527,18 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
                     /* . scratch space to benefit from CLAQR0. Hence, */
                     /* . tiny matrices must be copied into a larger */
                     /* . array before calling CLAQR0. ==== */
-                    clacpy_("A", n, n, &h__[h_offset], ldh, hl, &c__49);
+                    aocl_lapack_clacpy("A", n, n, &h__[h_offset], ldh, hl, &c__49);
                     i__1 = *n + 1 + *n * 49 - 50;
-                    hl[i__1].r = 0.f;
-                    hl[i__1].i = 0.f; // , expr subst
+                    hl[i__1].real = 0.f;
+                    hl[i__1].imag = 0.f; // , expr subst
                     i__1 = 49 - *n;
-                    claset_("A", &c__49, &i__1, &c_b1, &c_b1, &hl[(*n + 1) * 49 - 49], &c__49);
-                    claqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &w[1], ilo, ihi,
-                            &z__[z_offset], ldz, workl, &c__49, info);
+                    aocl_lapack_claset("A", &c__49, &i__1, &c_b1, &c_b1, &hl[(*n + 1) * 49 - 49],
+                                       &c__49);
+                    aocl_lapack_claqr0(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &w[1], ilo,
+                                       ihi, &z__[z_offset], ldz, workl, &c__49, info);
                     if(wantt || *info != 0)
                     {
-                        clacpy_("A", n, n, hl, &c__49, &h__[h_offset], ldh);
+                        aocl_lapack_clacpy("A", n, n, hl, &c__49, &h__[h_offset], ldh);
                     }
                 }
             }
@@ -536,18 +548,18 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
         {
             i__1 = *n - 2;
             i__2 = *n - 2;
-            claset_("L", &i__1, &i__2, &c_b1, &c_b1, &h__[h_dim1 + 3], ldh);
+            aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &h__[h_dim1 + 3], ldh);
         }
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
         r__2 = (real)fla_max(1, *n);
-        r__3 = work[1].r; // , expr subst
+        r__3 = work[1].real; // , expr subst
         r__1 = fla_max(r__2, r__3);
-        q__1.r = r__1;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = r__1;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
     }
     /* ==== End of CHSEQR ==== */
     AOCL_DTL_TRACE_LOG_EXIT

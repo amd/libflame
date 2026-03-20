@@ -1,12 +1,12 @@
 /* scnrm2.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-real scnrm2_(integer *n, complex *x, integer *incx)
+real scnrm2_(integer *n, scomplex *x, integer *incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     real ret_val, r__1;
     /* Builtin functions */
-    double r_imag(complex *), sqrt(doublereal);
+    double r_imag(scomplex *), sqrt(doublereal);
     /* Local variables */
     real temp, norm, scale;
     integer ix;
@@ -46,10 +46,10 @@ real scnrm2_(integer *n, complex *x, integer *incx)
                 ix += i__2)
         {
             i__3 = ix;
-            if (x[i__3].r != 0.f)
+            if (x[i__3].real != 0.f)
             {
                 i__3 = ix;
-                temp = (r__1 = x[i__3].r, f2c_abs(r__1));
+                temp = (r__1 = x[i__3].real, f2c_abs(r__1));
                 if (scale < temp)
                 {
                     /* Computing 2nd power */

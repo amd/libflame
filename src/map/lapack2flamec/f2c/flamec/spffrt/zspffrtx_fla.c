@@ -4,16 +4,14 @@
 
 #include "FLA_f2c.h"
 
-extern void zspr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
-extern void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-extern void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+extern void z_div(dcomplex *, dcomplex *, dcomplex *);
 
 /*! @brief Partial LDL' factorization without pivoting
     *
     * @details
     * \b Purpose:
     * \verbatim
-        ZSPFFRTX computes the partial factorization of a complex symmetric matrix A
+        ZSPFFRTX computes the partial factorization of a scomplex symmetric matrix A
         stored in packed format.
         The factorization has the form
             A = L*D*L**T
@@ -70,14 +68,14 @@ extern void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     \endverbatim
     *  */
 
-void zspffrtx_fla(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work,
-                  doublecomplex *work2)
+void zspffrtx_fla(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcomplex *work,
+                  dcomplex *work2)
 {
-    doublecomplex z__1;
-    integer i__1, k, kc;
-    doublecomplex r1;
-    doublecomplex c_b1 = {1., 0.};
-    integer c__1 = 1;
+    dcomplex z__1;
+    aocl_int64_t i__1, k, kc;
+    dcomplex r1;
+    dcomplex c_b1 = {1., 0.};
+    aocl_int64_t c__1 = 1;
 
     --ap;
     /* Factorize A as L*D*L**T using the lower triangle of A */
@@ -90,23 +88,23 @@ void zspffrtx_fla(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *
         /* where L(k) is the k-th column of L */
 
         /* Skip trailing matrix update if zero diagonal element is encountered */
-        if(ap[kc].r == 0 && ap[kc].i == 0)
+        if(ap[kc].real == 0 && ap[kc].imag == 0)
         {
-            z__1.r = 0;
-            z__1.i = 0;
+            z__1.real = 0;
+            z__1.imag = 0;
         }
         else
         {
             z_div(&z__1, &c_b1, &ap[kc]);
         }
-        r1.r = -z__1.r;
-        r1.i = -z__1.i;
+        r1.real = -z__1.real;
+        r1.imag = -z__1.imag;
 
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
         /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
         i__1 = *n - k;
-        zspr_("Lower", &i__1, &r1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
-        zscal_(&i__1, &z__1, &ap[kc + 1], &c__1);
+        aocl_lapack_zspr("Lower", &i__1, &r1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
+        aocl_blas_zscal(&i__1, &z__1, &ap[kc + 1], &c__1);
 
         kc = kc + *n - k + 1;
     }

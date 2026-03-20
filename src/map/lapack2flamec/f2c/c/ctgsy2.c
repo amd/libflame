@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c__1 = 1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTGSY2 solves the generalized Sylvester equation (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -254,10 +254,39 @@ static integer c__1 = 1;
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, integer *lda,
-             complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd,
-             complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *rdsum,
-             real *rdscal, integer *info)
+/** Generated wrapper function */
+void ctgsy2_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, scomplex *a,
+             aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *c__, aocl_int_t *ldc,
+             scomplex *d__, aocl_int_t *ldd, scomplex *e, aocl_int_t *lde, scomplex *f,
+             aocl_int_t *ldf, real *scale, real *rdsum, real *rdscal, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctgsy2(trans, ijob, m, n, a, lda, b, ldb, c__, ldc, d__, ldd, e, lde, f, ldf, scale,
+                       rdsum, rdscal, info);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t ldd_64 = *ldd;
+    aocl_int64_t lde_64 = *lde;
+    aocl_int64_t ldf_64 = *ldf;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctgsy2(trans, &ijob_64, &m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, d__,
+                       &ldd_64, e, &lde_64, f, &ldf_64, scale, rdsum, rdscal, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_int64_t *n,
+                        scomplex *a, aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *c__,
+                        aocl_int64_t *ldc, scomplex *d__, aocl_int64_t *ldd, scomplex *e,
+                        aocl_int64_t *lde, scomplex *f, aocl_int64_t *ldf, real *scale, real *rdsum,
+                        real *rdscal, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -276,33 +305,21 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
         e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3, q__4, q__5, q__6;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k;
-    complex z__[4] /* was [2][2] */
+    aocl_int64_t i__, j, k;
+    scomplex z__[4] /* was [2][2] */
         ,
         rhs[2];
-    integer ierr, ipiv[2], jpiv[2];
-    complex alpha;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
-        cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *),
-        cgetc2_(integer *, complex *, integer *, integer *, integer *, integer *),
-        clatdf_(integer *, integer *, complex *, integer *, complex *, real *, real *, integer *,
-                integer *);
+    aocl_int64_t ierr;
+    aocl_int_t ipiv[2], jpiv[2];
+    scomplex alpha;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real scaloc;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -399,7 +416,7 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTGSY2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTGSY2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -419,48 +436,48 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
             {
                 /* Build 2 by 2 system */
                 i__2 = i__ + i__ * a_dim1;
-                z__[0].r = a[i__2].r;
-                z__[0].i = a[i__2].i; // , expr subst
+                z__[0].real = a[i__2].real;
+                z__[0].imag = a[i__2].imag; // , expr subst
                 i__2 = i__ + i__ * d_dim1;
-                z__[1].r = d__[i__2].r;
-                z__[1].i = d__[i__2].i; // , expr subst
+                z__[1].real = d__[i__2].real;
+                z__[1].imag = d__[i__2].imag; // , expr subst
                 i__2 = j + j * b_dim1;
-                q__1.r = -b[i__2].r;
-                q__1.i = -b[i__2].i; // , expr subst
-                z__[2].r = q__1.r;
-                z__[2].i = q__1.i; // , expr subst
+                q__1.real = -b[i__2].real;
+                q__1.imag = -b[i__2].imag; // , expr subst
+                z__[2].real = q__1.real;
+                z__[2].imag = q__1.imag; // , expr subst
                 i__2 = j + j * e_dim1;
-                q__1.r = -e[i__2].r;
-                q__1.i = -e[i__2].i; // , expr subst
-                z__[3].r = q__1.r;
-                z__[3].i = q__1.i; // , expr subst
+                q__1.real = -e[i__2].real;
+                q__1.imag = -e[i__2].imag; // , expr subst
+                z__[3].real = q__1.real;
+                z__[3].imag = q__1.imag; // , expr subst
                 /* Set up right hand side(s) */
                 i__2 = i__ + j * c_dim1;
-                rhs[0].r = c__[i__2].r;
-                rhs[0].i = c__[i__2].i; // , expr subst
+                rhs[0].real = c__[i__2].real;
+                rhs[0].imag = c__[i__2].imag; // , expr subst
                 i__2 = i__ + j * f_dim1;
-                rhs[1].r = f[i__2].r;
-                rhs[1].i = f[i__2].i; // , expr subst
+                rhs[1].real = f[i__2].real;
+                rhs[1].imag = f[i__2].imag; // , expr subst
                 /* Solve Z * x = RHS */
-                cgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
+                aocl_lapack_cgetc2(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
                 if(ierr > 0)
                 {
                     *info = ierr;
                 }
                 if(*ijob == 0)
                 {
-                    cgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
+                    aocl_lapack_cgesc2(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
                     if(scaloc != 1.f)
                     {
                         i__2 = *n;
                         for(k = 1; k <= i__2; ++k)
                         {
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
-                            cscal_(m, &q__1, &c__[k * c_dim1 + 1], &c__1);
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
-                            cscal_(m, &q__1, &f[k * f_dim1 + 1], &c__1);
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
+                            aocl_blas_cscal(m, &q__1, &c__[k * c_dim1 + 1], &c__1);
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
+                            aocl_blas_cscal(m, &q__1, &f[k * f_dim1 + 1], &c__1);
                             /* L10: */
                         }
                         *scale *= scaloc;
@@ -468,35 +485,37 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
                 }
                 else
                 {
-                    clatdf_(ijob, &c__2, z__, &c__2, rhs, rdsum, rdscal, ipiv, jpiv);
+                    aocl_lapack_clatdf(ijob, &c__2, z__, &c__2, rhs, rdsum, rdscal, ipiv, jpiv);
                 }
                 /* Unpack solution vector(s) */
                 i__2 = i__ + j * c_dim1;
-                c__[i__2].r = rhs[0].r;
-                c__[i__2].i = rhs[0].i; // , expr subst
+                c__[i__2].real = rhs[0].real;
+                c__[i__2].imag = rhs[0].imag; // , expr subst
                 i__2 = i__ + j * f_dim1;
-                f[i__2].r = rhs[1].r;
-                f[i__2].i = rhs[1].i; // , expr subst
+                f[i__2].real = rhs[1].real;
+                f[i__2].imag = rhs[1].imag; // , expr subst
                 /* Substitute R(I, J) and L(I, J) into remaining equation. */
                 if(i__ > 1)
                 {
-                    q__1.r = -rhs[0].r;
-                    q__1.i = -rhs[0].i; // , expr subst
-                    alpha.r = q__1.r;
-                    alpha.i = q__1.i; // , expr subst
+                    q__1.real = -rhs[0].real;
+                    q__1.imag = -rhs[0].imag; // , expr subst
+                    alpha.real = q__1.real;
+                    alpha.imag = q__1.imag; // , expr subst
                     i__2 = i__ - 1;
-                    caxpy_(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &c__[j * c_dim1 + 1], &c__1);
+                    aocl_blas_caxpy(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1,
+                                    &c__[j * c_dim1 + 1], &c__1);
                     i__2 = i__ - 1;
-                    caxpy_(&i__2, &alpha, &d__[i__ * d_dim1 + 1], &c__1, &f[j * f_dim1 + 1], &c__1);
+                    aocl_blas_caxpy(&i__2, &alpha, &d__[i__ * d_dim1 + 1], &c__1,
+                                    &f[j * f_dim1 + 1], &c__1);
                 }
                 if(j < *n)
                 {
                     i__2 = *n - j;
-                    caxpy_(&i__2, &rhs[1], &b[j + (j + 1) * b_dim1], ldb,
-                           &c__[i__ + (j + 1) * c_dim1], ldc);
+                    aocl_blas_caxpy(&i__2, &rhs[1], &b[j + (j + 1) * b_dim1], ldb,
+                                    &c__[i__ + (j + 1) * c_dim1], ldc);
                     i__2 = *n - j;
-                    caxpy_(&i__2, &rhs[1], &e[j + (j + 1) * e_dim1], lde,
-                           &f[i__ + (j + 1) * f_dim1], ldf);
+                    aocl_blas_caxpy(&i__2, &rhs[1], &e[j + (j + 1) * e_dim1], lde,
+                                    &f[i__ + (j + 1) * f_dim1], ldf);
                 }
                 /* L20: */
             }
@@ -518,57 +537,57 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
             {
                 /* Build 2 by 2 system Z**H */
                 r_cnjg(&q__1, &a[i__ + i__ * a_dim1]);
-                z__[0].r = q__1.r;
-                z__[0].i = q__1.i; // , expr subst
+                z__[0].real = q__1.real;
+                z__[0].imag = q__1.imag; // , expr subst
                 r_cnjg(&q__2, &b[j + j * b_dim1]);
-                q__1.r = -q__2.r;
-                q__1.i = -q__2.i; // , expr subst
-                z__[1].r = q__1.r;
-                z__[1].i = q__1.i; // , expr subst
+                q__1.real = -q__2.real;
+                q__1.imag = -q__2.imag; // , expr subst
+                z__[1].real = q__1.real;
+                z__[1].imag = q__1.imag; // , expr subst
                 r_cnjg(&q__1, &d__[i__ + i__ * d_dim1]);
-                z__[2].r = q__1.r;
-                z__[2].i = q__1.i; // , expr subst
+                z__[2].real = q__1.real;
+                z__[2].imag = q__1.imag; // , expr subst
                 r_cnjg(&q__2, &e[j + j * e_dim1]);
-                q__1.r = -q__2.r;
-                q__1.i = -q__2.i; // , expr subst
-                z__[3].r = q__1.r;
-                z__[3].i = q__1.i; // , expr subst
+                q__1.real = -q__2.real;
+                q__1.imag = -q__2.imag; // , expr subst
+                z__[3].real = q__1.real;
+                z__[3].imag = q__1.imag; // , expr subst
                 /* Set up right hand side(s) */
                 i__2 = i__ + j * c_dim1;
-                rhs[0].r = c__[i__2].r;
-                rhs[0].i = c__[i__2].i; // , expr subst
+                rhs[0].real = c__[i__2].real;
+                rhs[0].imag = c__[i__2].imag; // , expr subst
                 i__2 = i__ + j * f_dim1;
-                rhs[1].r = f[i__2].r;
-                rhs[1].i = f[i__2].i; // , expr subst
+                rhs[1].real = f[i__2].real;
+                rhs[1].imag = f[i__2].imag; // , expr subst
                 /* Solve Z**H * x = RHS */
-                cgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
+                aocl_lapack_cgetc2(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
                 if(ierr > 0)
                 {
                     *info = ierr;
                 }
-                cgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
+                aocl_lapack_cgesc2(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
                 if(scaloc != 1.f)
                 {
                     i__2 = *n;
                     for(k = 1; k <= i__2; ++k)
                     {
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
-                        cscal_(m, &q__1, &c__[k * c_dim1 + 1], &c__1);
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
-                        cscal_(m, &q__1, &f[k * f_dim1 + 1], &c__1);
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
+                        aocl_blas_cscal(m, &q__1, &c__[k * c_dim1 + 1], &c__1);
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
+                        aocl_blas_cscal(m, &q__1, &f[k * f_dim1 + 1], &c__1);
                         /* L40: */
                     }
                     *scale *= scaloc;
                 }
                 /* Unpack solution vector(s) */
                 i__2 = i__ + j * c_dim1;
-                c__[i__2].r = rhs[0].r;
-                c__[i__2].i = rhs[0].i; // , expr subst
+                c__[i__2].real = rhs[0].real;
+                c__[i__2].imag = rhs[0].imag; // , expr subst
                 i__2 = i__ + j * f_dim1;
-                f[i__2].r = rhs[1].r;
-                f[i__2].i = rhs[1].i; // , expr subst
+                f[i__2].real = rhs[1].real;
+                f[i__2].imag = rhs[1].imag; // , expr subst
                 /* Substitute R(I, J) and L(I, J) into remaining equation. */
                 i__2 = j - 1;
                 for(k = 1; k <= i__2; ++k)
@@ -576,17 +595,17 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
                     i__3 = i__ + k * f_dim1;
                     i__4 = i__ + k * f_dim1;
                     r_cnjg(&q__4, &b[k + j * b_dim1]);
-                    q__3.r = rhs[0].r * q__4.r - rhs[0].i * q__4.i;
-                    q__3.i = rhs[0].r * q__4.i + rhs[0].i * q__4.r; // , expr subst
-                    q__2.r = f[i__4].r + q__3.r;
-                    q__2.i = f[i__4].i + q__3.i; // , expr subst
+                    q__3.real = rhs[0].real * q__4.real - rhs[0].imag * q__4.imag;
+                    q__3.imag = rhs[0].real * q__4.imag + rhs[0].imag * q__4.real; // , expr subst
+                    q__2.real = f[i__4].real + q__3.real;
+                    q__2.imag = f[i__4].imag + q__3.imag; // , expr subst
                     r_cnjg(&q__6, &e[k + j * e_dim1]);
-                    q__5.r = rhs[1].r * q__6.r - rhs[1].i * q__6.i;
-                    q__5.i = rhs[1].r * q__6.i + rhs[1].i * q__6.r; // , expr subst
-                    q__1.r = q__2.r + q__5.r;
-                    q__1.i = q__2.i + q__5.i; // , expr subst
-                    f[i__3].r = q__1.r;
-                    f[i__3].i = q__1.i; // , expr subst
+                    q__5.real = rhs[1].real * q__6.real - rhs[1].imag * q__6.imag;
+                    q__5.imag = rhs[1].real * q__6.imag + rhs[1].imag * q__6.real; // , expr subst
+                    q__1.real = q__2.real + q__5.real;
+                    q__1.imag = q__2.imag + q__5.imag; // , expr subst
+                    f[i__3].real = q__1.real;
+                    f[i__3].imag = q__1.imag; // , expr subst
                     /* L50: */
                 }
                 i__2 = *m;
@@ -595,17 +614,17 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
                     i__3 = k + j * c_dim1;
                     i__4 = k + j * c_dim1;
                     r_cnjg(&q__4, &a[i__ + k * a_dim1]);
-                    q__3.r = q__4.r * rhs[0].r - q__4.i * rhs[0].i;
-                    q__3.i = q__4.r * rhs[0].i + q__4.i * rhs[0].r; // , expr subst
-                    q__2.r = c__[i__4].r - q__3.r;
-                    q__2.i = c__[i__4].i - q__3.i; // , expr subst
+                    q__3.real = q__4.real * rhs[0].real - q__4.imag * rhs[0].imag;
+                    q__3.imag = q__4.real * rhs[0].imag + q__4.imag * rhs[0].real; // , expr subst
+                    q__2.real = c__[i__4].real - q__3.real;
+                    q__2.imag = c__[i__4].imag - q__3.imag; // , expr subst
                     r_cnjg(&q__6, &d__[i__ + k * d_dim1]);
-                    q__5.r = q__6.r * rhs[1].r - q__6.i * rhs[1].i;
-                    q__5.i = q__6.r * rhs[1].i + q__6.i * rhs[1].r; // , expr subst
-                    q__1.r = q__2.r - q__5.r;
-                    q__1.i = q__2.i - q__5.i; // , expr subst
-                    c__[i__3].r = q__1.r;
-                    c__[i__3].i = q__1.i; // , expr subst
+                    q__5.real = q__6.real * rhs[1].real - q__6.imag * rhs[1].imag;
+                    q__5.imag = q__6.real * rhs[1].imag + q__6.imag * rhs[1].real; // , expr subst
+                    q__1.real = q__2.real - q__5.real;
+                    q__1.imag = q__2.imag - q__5.imag; // , expr subst
+                    c__[i__3].real = q__1.real;
+                    c__[i__3].imag = q__1.imag; // , expr subst
                     /* L60: */
                 }
                 /* L70: */

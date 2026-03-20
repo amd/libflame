@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLACP2 copies all or part of a real two-dimensional array to a complex array. */
+#include "FLA_f2c.h" /* > \brief \b CLACP2 copies all or part of a real two-dimensional array to a scomplex array. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -39,7 +39,7 @@
 /* > \verbatim */
 /* > */
 /* > CLACP2 copies all or part of a real two-dimensional matrix A to a */
-/* > complex matrix B. */
+/* > scomplex matrix B. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -100,7 +100,24 @@ if UPLO = 'L', only the lower trapezium is */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clacp2_(char *uplo, integer *m, integer *n, real *a, integer *lda, complex *b, integer *ldb)
+/** Generated wrapper function */
+void clacp2_(char *uplo, aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, scomplex *b,
+             aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clacp2(uplo, m, n, a, lda, b, ldb);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_clacp2(uplo, &m_64, &n_64, a, &lda_64, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_clacp2(char *uplo, aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                        scomplex *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -115,10 +132,10 @@ void clacp2_(char *uplo, integer *m, integer *n, real *a, integer *lda, complex 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -153,8 +170,8 @@ void clacp2_(char *uplo, integer *m, integer *n, real *a, integer *lda, complex 
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4];
-                b[i__3].i = 0.f; // , expr subst
+                b[i__3].real = a[i__4];
+                b[i__3].imag = 0.f; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -170,8 +187,8 @@ void clacp2_(char *uplo, integer *m, integer *n, real *a, integer *lda, complex 
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4];
-                b[i__3].i = 0.f; // , expr subst
+                b[i__3].real = a[i__4];
+                b[i__3].imag = 0.f; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -187,8 +204,8 @@ void clacp2_(char *uplo, integer *m, integer *n, real *a, integer *lda, complex 
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4];
-                b[i__3].i = 0.f; // , expr subst
+                b[i__3].real = a[i__4];
+                b[i__3].imag = 0.f; // , expr subst
                 /* L50: */
             }
             /* L60: */

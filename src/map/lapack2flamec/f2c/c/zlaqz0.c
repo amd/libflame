@@ -4,15 +4,15 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__12 = 12;
-static integer c__13 = 13;
-static integer c__14 = 14;
-static integer c__15 = 15;
-static integer c__17 = 17;
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
+static aocl_int64_t c__12 = 12;
+static aocl_int64_t c__13 = 13;
+static aocl_int64_t c__14 = 14;
+static aocl_int64_t c__15 = 15;
+static aocl_int64_t c__17 = 17;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAQZ0 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -82,7 +82,7 @@ static integer c__1 = 1;
 /* > */
 /* > To avoid overflow, eigenvalues of the matrix pair (H,T) (equivalently, */
 /* > of (A,B)) are computed as a pair of values (alpha,beta), where alpha is */
-/* > complex and beta real. */
+/* > scomplex and beta real. */
 /* > If beta is nonzero, lambda = alpha / beta is an eigenvalue of the */
 /* > generalized nonsymmetric eigenvalue problem (GNEP) */
 /* > A*x = lambda*B*x */
@@ -293,10 +293,42 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, integer *ihi,
-             doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *alpha,
-             doublecomplex *beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz,
-             doublecomplex *work, integer *lwork, doublereal *rwork, integer *rec, integer *info)
+/** Generated wrapper function */
+void zlaqz0_(char *wants, char *wantq, char *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb,
+             dcomplex *alpha, dcomplex *beta, dcomplex *q, aocl_int_t *ldq,
+             dcomplex *z__, aocl_int_t *ldz, dcomplex *work, aocl_int_t *lwork,
+             doublereal *rwork, aocl_int_t *rec, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqz0(wants, wantq, wantz, n, ilo, ihi, a, lda, b, ldb, alpha, beta, q, ldq, z__,
+                       ldz, work, lwork, rwork, rec, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t rec_64 = *rec;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlaqz0(wants, wantq, wantz, &n_64, &ilo_64, &ihi_64, a, &lda_64, b, &ldb_64, alpha,
+                       beta, q, &ldq_64, z__, &ldz_64, work, &lwork_64, rwork, &rec_64, &info_64);
+
+    *lwork = (aocl_int_t)lwork_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlaqz0(char *wants, char *wantq, char *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *alpha, dcomplex *beta,
+                        dcomplex *q, aocl_int64_t *ldq, dcomplex *z__, aocl_int64_t *ldz,
+                        dcomplex *work, aocl_int64_t *lwork, doublereal *rwork,
+                        aocl_int64_t *rec, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqz0 inputs: wants %c, wantq %c, wantz %c, n %" FLA_IS ", ilo %" FLA_IS
@@ -304,77 +336,46 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
                       ", ldz %" FLA_IS ", lwork %" FLA_IS ", rec %" FLA_IS "",
                       *wants, *wantq, *wantz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork, *rec);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4, i__5;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double sqrt(doublereal), z_abs(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *),
-        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), z_abs(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *),
+        z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer aed_info__;
-    integer shiftpos, lworkreq, k;
+    aocl_int64_t aed_info__;
+    aocl_int64_t shiftpos, lworkreq, k;
     doublereal c1;
-    integer k2;
-    doublecomplex s1;
-    integer norm_info__, ld, ns, n_deflated__, nw, sweep_info__, nbr;
+    aocl_int64_t k2;
+    dcomplex s1;
+    aocl_int64_t norm_info__, ld, ns, n_deflated__, nw, sweep_info__, nbr;
     logical ilq, ilz;
     doublereal ulp;
-    integer nsr, nwr;
+    aocl_int64_t nsr, nwr;
     doublereal btol;
-    integer nmin;
-    doublecomplex temp;
-    integer n_undeflated__;
-    extern /* Subroutine */
-        void
-        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-              doublecomplex *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iiter;
+    aocl_int64_t nmin;
+    dcomplex temp;
+    aocl_int64_t n_undeflated__;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iiter;
     doublereal bnorm;
-    integer maxit, rcost, istop, itemp1, itemp2;
-    extern /* Subroutine */
-        void
-        zlaqz2_(logical *, logical *, logical *, integer *, integer *, integer *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublereal *, integer *, integer *),
-        zlaqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *,
-                integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                integer *);
+    aocl_int64_t maxit, rcost, istop, itemp1, itemp2;
     extern doublereal dlamch_(char *);
-    integer nibble, nblock;
+    aocl_int64_t nibble, nblock;
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    doublecomplex eshift;
+    dcomplex eshift;
     char jbcmpz[3];
-    extern doublereal zlanhs_(char *, integer *, doublecomplex *, integer *, doublereal *);
+    aocl_int64_t iwantq;
     extern /* Subroutine */
         void
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
-    integer iwantq;
-    extern /* Subroutine */
-        void
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
-    integer iwants, istart;
-    extern /* Subroutine */
-        void
-        zhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                integer *);
+        zlartg_(dcomplex *, dcomplex *, doublereal *, dcomplex *, dcomplex *);
+    aocl_int64_t iwants, istart;
     doublereal smlnum;
-    integer istopm, iwantz, istart2;
+    aocl_int64_t istopm, iwantz, istart2;
     logical ilschur;
-    integer nshifts, istartm;
+    aocl_int64_t nshifts, istartm;
     /* Arguments */
     /* Parameters */
     /* Local scalars */
@@ -398,8 +399,8 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     --work;
     --rwork;
     /* Function Body */
-    eshift.r = 0.;
-    eshift.i = 0.;
+    eshift.real = 0.;
+    eshift.imag = 0.;
     if(lsame_(wants, "E", 1, 1))
     {
         ilschur = FALSE_;
@@ -497,15 +498,15 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLAQZ0", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZLAQZ0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -513,16 +514,16 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     *(unsigned char *)jbcmpz = *(unsigned char *)wants;
     *(unsigned char *)&jbcmpz[1] = *(unsigned char *)wantq;
     *(unsigned char *)&jbcmpz[2] = *(unsigned char *)wantz;
-    nmin = ilaenv_(&c__12, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
-    nwr = ilaenv_(&c__13, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
+    nmin = aocl_lapack_ilaenv(&c__12, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
+    nwr = aocl_lapack_ilaenv(&c__13, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
     nwr = fla_max(2, nwr);
     /* Computing MIN */
     i__1 = *ihi - *ilo + 1;
     i__2 = (*n - 1) / 3;
     i__1 = fla_min(i__1, i__2); // ; expr subst
     nwr = fla_min(i__1, nwr);
-    nibble = ilaenv_(&c__14, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
-    nsr = ilaenv_(&c__15, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
+    nibble = aocl_lapack_ilaenv(&c__14, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
+    nsr = aocl_lapack_ilaenv(&c__15, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
     /* Computing MIN */
     i__1 = nsr, i__2 = (*n + 6) / 9;
     i__1 = fla_min(i__1, i__2);
@@ -532,29 +533,31 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     i__1 = 2;
     i__2 = nsr - nsr % 2; // , expr subst
     nsr = fla_max(i__1, i__2);
-    rcost = ilaenv_(&c__17, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
+    rcost = aocl_lapack_ilaenv(&c__17, "ZLAQZ0", jbcmpz, n, ilo, ihi, lwork);
     itemp1 = (integer)(nsr / sqrt((nsr << 1) / ((doublereal)rcost / 100 * *n) + 1));
     itemp1 = ((itemp1 - 1) / 4 << 2) + 4;
     nbr = nsr + itemp1;
     if(*n < nmin || *rec >= 2)
     {
-        zhgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
-                &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, &rwork[1], info);
+        aocl_lapack_zhgeqz(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                           &alpha[1], &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1],
+                           lwork, &rwork[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Find out required workspace */
     /* Workspace query to ZLAQZ2 */
     nw = fla_max(nwr, nmin);
-    zlaqz2_(&ilschur, &ilq, &ilz, n, ilo, ihi, &nw, &a[a_offset], lda, &b[b_offset], ldb,
-            &q[q_offset], ldq, &z__[z_offset], ldz, &n_undeflated__, &n_deflated__, &alpha[1],
-            &beta[1], &work[1], &nw, &work[1], &nw, &work[1], &c_n1, &rwork[1], rec, &aed_info__);
-    itemp1 = (integer)work[1].r;
+    aocl_lapack_zlaqz2(&ilschur, &ilq, &ilz, n, ilo, ihi, &nw, &a[a_offset], lda, &b[b_offset], ldb,
+                       &q[q_offset], ldq, &z__[z_offset], ldz, &n_undeflated__, &n_deflated__,
+                       &alpha[1], &beta[1], &work[1], &nw, &work[1], &nw, &work[1], &c_n1,
+                       &rwork[1], rec, &aed_info__);
+    itemp1 = (integer)work[1].real;
     /* Workspace query to ZLAQZ3 */
-    zlaqz3_(&ilschur, &ilq, &ilz, n, ilo, ihi, &nsr, &nbr, &alpha[1], &beta[1], &a[a_offset], lda,
-            &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], &nbr, &work[1],
-            &nbr, &work[1], &c_n1, &sweep_info__);
-    itemp2 = (integer)work[1].r;
+    aocl_lapack_zlaqz3(&ilschur, &ilq, &ilz, n, ilo, ihi, &nsr, &nbr, &alpha[1], &beta[1],
+                       &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz,
+                       &work[1], &nbr, &work[1], &nbr, &work[1], &c_n1, &sweep_info__);
+    itemp2 = (integer)work[1].real;
     /* Computing MAX */
     /* Computing 2nd power */
     i__3 = nw;
@@ -566,8 +569,8 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     if(*lwork == -1)
     {
         d__1 = (doublereal)lworkreq;
-        work[1].r = d__1;
-        work[1].i = 0.; // , expr subst
+        work[1].real = d__1;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -577,25 +580,25 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     }
     if(*info != 0)
     {
-        xerbla_("ZLAQZ0", info, (ftnlen)6);
+        aocl_blas_xerbla("ZLAQZ0", info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z */
     if(iwantq == 3)
     {
-        zlaset_("FULL", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
+        aocl_lapack_zlaset("FULL", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
     }
     if(iwantz == 3)
     {
-        zlaset_("FULL", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
+        aocl_lapack_zlaset("FULL", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
     /* Get machine constants */
     safmin = dlamch_("SAFE MINIMUM");
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     i__1 = *ihi - *ilo + 1;
-    bnorm = zlanhs_("F", &i__1, &b[*ilo + *ilo * b_dim1], ldb, &rwork[1]);
+    bnorm = aocl_lapack_zlanhs("F", &i__1, &b[*ilo + *ilo * b_dim1], ldb, &rwork[1]);
     /* Computing MAX */
     d__1 = safmin;
     d__2 = ulp * bnorm; // , expr subst
@@ -626,12 +629,12 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         if(z_abs(&a[istop + (istop - 1) * a_dim1]) <= fla_max(d__1, d__2))
         {
             i__2 = istop + (istop - 1) * a_dim1;
-            a[i__2].r = 0.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 0.;
+            a[i__2].imag = 0.; // , expr subst
             --istop;
             ld = 0;
-            eshift.r = 0.;
-            eshift.i = 0.; // , expr subst
+            eshift.real = 0.;
+            eshift.imag = 0.; // , expr subst
         }
         /* Check deflations at the start */
         /* Computing MAX */
@@ -642,12 +645,12 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         if(z_abs(&a[istart + 1 + istart * a_dim1]) <= fla_max(d__1, d__2))
         {
             i__2 = istart + 1 + istart * a_dim1;
-            a[i__2].r = 0.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 0.;
+            a[i__2].imag = 0.; // , expr subst
             ++istart;
             ld = 0;
-            eshift.r = 0.;
-            eshift.i = 0.; // , expr subst
+            eshift.real = 0.;
+            eshift.imag = 0.; // , expr subst
         }
         if(istart + 1 >= istop)
         {
@@ -666,8 +669,8 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
             if(z_abs(&a[k + (k - 1) * a_dim1]) <= fla_max(d__1, d__2))
             {
                 i__3 = k + (k - 1) * a_dim1;
-                a[i__3].r = 0.;
-                a[i__3].i = 0.; // , expr subst
+                a[i__3].real = 0.;
+                a[i__3].imag = 0.; // , expr subst
                 istart2 = k;
                 break;
             }
@@ -698,45 +701,45 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
                     zlartg_(&b[k2 - 1 + k2 * b_dim1], &b[k2 - 1 + (k2 - 1) * b_dim1], &c1, &s1,
                             &temp);
                     i__3 = k2 - 1 + k2 * b_dim1;
-                    b[i__3].r = temp.r;
-                    b[i__3].i = temp.i; // , expr subst
+                    b[i__3].real = temp.real;
+                    b[i__3].imag = temp.imag; // , expr subst
                     i__3 = k2 - 1 + (k2 - 1) * b_dim1;
-                    b[i__3].r = 0.;
-                    b[i__3].i = 0.; // , expr subst
+                    b[i__3].real = 0.;
+                    b[i__3].imag = 0.; // , expr subst
                     i__3 = k2 - 2 - istartm + 1;
-                    zrot_(&i__3, &b[istartm + k2 * b_dim1], &c__1, &b[istartm + (k2 - 1) * b_dim1],
-                          &c__1, &c1, &s1);
+                    aocl_lapack_zrot(&i__3, &b[istartm + k2 * b_dim1], &c__1,
+                                     &b[istartm + (k2 - 1) * b_dim1], &c__1, &c1, &s1);
                     /* Computing MIN */
                     i__4 = k2 + 1;
                     i__3 = fla_min(i__4, istop) - istartm + 1;
-                    zrot_(&i__3, &a[istartm + k2 * a_dim1], &c__1, &a[istartm + (k2 - 1) * a_dim1],
-                          &c__1, &c1, &s1);
+                    aocl_lapack_zrot(&i__3, &a[istartm + k2 * a_dim1], &c__1,
+                                     &a[istartm + (k2 - 1) * a_dim1], &c__1, &c1, &s1);
                     if(ilz)
                     {
-                        zrot_(n, &z__[k2 * z_dim1 + 1], &c__1, &z__[(k2 - 1) * z_dim1 + 1], &c__1,
-                              &c1, &s1);
+                        aocl_lapack_zrot(n, &z__[k2 * z_dim1 + 1], &c__1,
+                                         &z__[(k2 - 1) * z_dim1 + 1], &c__1, &c1, &s1);
                     }
                     if(k2 < istop)
                     {
                         zlartg_(&a[k2 + (k2 - 1) * a_dim1], &a[k2 + 1 + (k2 - 1) * a_dim1], &c1,
                                 &s1, &temp);
                         i__3 = k2 + (k2 - 1) * a_dim1;
-                        a[i__3].r = temp.r;
-                        a[i__3].i = temp.i; // , expr subst
+                        a[i__3].real = temp.real;
+                        a[i__3].imag = temp.imag; // , expr subst
                         i__3 = k2 + 1 + (k2 - 1) * a_dim1;
-                        a[i__3].r = 0.;
-                        a[i__3].i = 0.; // , expr subst
+                        a[i__3].real = 0.;
+                        a[i__3].imag = 0.; // , expr subst
                         i__3 = istopm - k2 + 1;
-                        zrot_(&i__3, &a[k2 + k2 * a_dim1], lda, &a[k2 + 1 + k2 * a_dim1], lda, &c1,
-                              &s1);
+                        aocl_lapack_zrot(&i__3, &a[k2 + k2 * a_dim1], lda, &a[k2 + 1 + k2 * a_dim1],
+                                         lda, &c1, &s1);
                         i__3 = istopm - k2 + 1;
-                        zrot_(&i__3, &b[k2 + k2 * b_dim1], ldb, &b[k2 + 1 + k2 * b_dim1], ldb, &c1,
-                              &s1);
+                        aocl_lapack_zrot(&i__3, &b[k2 + k2 * b_dim1], ldb, &b[k2 + 1 + k2 * b_dim1],
+                                         ldb, &c1, &s1);
                         if(ilq)
                         {
                             d_cnjg(&z__1, &s1);
-                            zrot_(n, &q[k2 * q_dim1 + 1], &c__1, &q[(k2 + 1) * q_dim1 + 1], &c__1,
-                                  &c1, &z__1);
+                            aocl_lapack_zrot(n, &q[k2 * q_dim1 + 1], &c__1,
+                                             &q[(k2 + 1) * q_dim1 + 1], &c__1, &c1, &z__1);
                         }
                     }
                 }
@@ -745,22 +748,22 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
                     zlartg_(&a[istart2 + istart2 * a_dim1], &a[istart2 + 1 + istart2 * a_dim1], &c1,
                             &s1, &temp);
                     i__2 = istart2 + istart2 * a_dim1;
-                    a[i__2].r = temp.r;
-                    a[i__2].i = temp.i; // , expr subst
+                    a[i__2].real = temp.real;
+                    a[i__2].imag = temp.imag; // , expr subst
                     i__2 = istart2 + 1 + istart2 * a_dim1;
-                    a[i__2].r = 0.;
-                    a[i__2].i = 0.; // , expr subst
+                    a[i__2].real = 0.;
+                    a[i__2].imag = 0.; // , expr subst
                     i__2 = istopm - (istart2 + 1) + 1;
-                    zrot_(&i__2, &a[istart2 + (istart2 + 1) * a_dim1], lda,
-                          &a[istart2 + 1 + (istart2 + 1) * a_dim1], lda, &c1, &s1);
+                    aocl_lapack_zrot(&i__2, &a[istart2 + (istart2 + 1) * a_dim1], lda,
+                                     &a[istart2 + 1 + (istart2 + 1) * a_dim1], lda, &c1, &s1);
                     i__2 = istopm - (istart2 + 1) + 1;
-                    zrot_(&i__2, &b[istart2 + (istart2 + 1) * b_dim1], ldb,
-                          &b[istart2 + 1 + (istart2 + 1) * b_dim1], ldb, &c1, &s1);
+                    aocl_lapack_zrot(&i__2, &b[istart2 + (istart2 + 1) * b_dim1], ldb,
+                                     &b[istart2 + 1 + (istart2 + 1) * b_dim1], ldb, &c1, &s1);
                     if(ilq)
                     {
                         d_cnjg(&z__1, &s1);
-                        zrot_(n, &q[istart2 * q_dim1 + 1], &c__1, &q[(istart2 + 1) * q_dim1 + 1],
-                              &c__1, &c1, &z__1);
+                        aocl_lapack_zrot(n, &q[istart2 * q_dim1 + 1], &c__1,
+                                         &q[(istart2 + 1) * q_dim1 + 1], &c__1, &c1, &z__1);
                     }
                 }
                 ++istart2;
@@ -773,8 +776,8 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         {
             istop = istart2 - 1;
             ld = 0;
-            eshift.r = 0.;
-            eshift.i = 0.; // , expr subst
+            eshift.real = 0.;
+            eshift.imag = 0.; // , expr subst
             continue;
         }
         nw = nwr;
@@ -803,16 +806,17 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         /* Computing 2nd power */
         i__5 = nw;
         i__4 = *lwork - (i__5 * i__5 << 1);
-        zlaqz2_(&ilschur, &ilq, &ilz, n, &istart2, &istop, &nw, &a[a_offset], lda, &b[b_offset],
-                ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &n_undeflated__, &n_deflated__,
-                &alpha[1], &beta[1], &work[1], &nw, &work[i__2 * i__2 + 1], &nw,
-                &work[(i__3 * i__3 << 1) + 1], &i__4, &rwork[1], rec, &aed_info__);
+        aocl_lapack_zlaqz2(&ilschur, &ilq, &ilz, n, &istart2, &istop, &nw, &a[a_offset], lda,
+                           &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz,
+                           &n_undeflated__, &n_deflated__, &alpha[1], &beta[1], &work[1], &nw,
+                           &work[i__2 * i__2 + 1], &nw, &work[(i__3 * i__3 << 1) + 1], &i__4,
+                           &rwork[1], rec, &aed_info__);
         if(n_deflated__ > 0)
         {
             istop -= n_deflated__;
             ld = 0;
-            eshift.r = 0.;
-            eshift.i = 0.; // , expr subst
+            eshift.real = 0.;
+            eshift.imag = 0.; // , expr subst
         }
         if(n_deflated__ * 100 > nibble * (n_deflated__ + n_undeflated__)
            || istop - istart2 + 1 < nmin)
@@ -836,25 +840,25 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
             {
                 z_div(&z__1, &a[istop + (istop - 1) * a_dim1],
                       &b[istop - 1 + (istop - 1) * b_dim1]);
-                eshift.r = z__1.r;
-                eshift.i = z__1.i; // , expr subst
+                eshift.real = z__1.real;
+                eshift.imag = z__1.imag; // , expr subst
             }
             else
             {
                 d__1 = safmin * (doublereal)maxit;
-                z__2.r = 1. / d__1;
-                z__2.i = 0. / d__1; // , expr subst
-                z__1.r = eshift.r + z__2.r;
-                z__1.i = eshift.i + z__2.i; // , expr subst
-                eshift.r = z__1.r;
-                eshift.i = z__1.i; // , expr subst
+                z__2.real = 1. / d__1;
+                z__2.imag = 0. / d__1; // , expr subst
+                z__1.real = eshift.real + z__2.real;
+                z__1.imag = eshift.imag + z__2.imag; // , expr subst
+                eshift.real = z__1.real;
+                eshift.imag = z__1.imag; // , expr subst
             }
             i__2 = shiftpos;
-            alpha[i__2].r = 1.;
-            alpha[i__2].i = 0.; // , expr subst
+            alpha[i__2].real = 1.;
+            alpha[i__2].imag = 0.; // , expr subst
             i__2 = shiftpos;
-            beta[i__2].r = eshift.r;
-            beta[i__2].i = eshift.i; // , expr subst
+            beta[i__2].real = eshift.real;
+            beta[i__2].imag = eshift.imag; // , expr subst
             ns = 1;
         }
         /* Time for a QZ sweep */
@@ -865,19 +869,20 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         /* Computing 2nd power */
         i__5 = nblock;
         i__4 = *lwork - (i__5 * i__5 << 1);
-        zlaqz3_(&ilschur, &ilq, &ilz, n, &istart2, &istop, &ns, &nblock, &alpha[shiftpos],
-                &beta[shiftpos], &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
-                &z__[z_offset], ldz, &work[1], &nblock, &work[i__2 * i__2 + 1], &nblock,
-                &work[(i__3 * i__3 << 1) + 1], &i__4, &sweep_info__);
+        aocl_lapack_zlaqz3(&ilschur, &ilq, &ilz, n, &istart2, &istop, &ns, &nblock,
+                           &alpha[shiftpos], &beta[shiftpos], &a[a_offset], lda, &b[b_offset], ldb,
+                           &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], &nblock,
+                           &work[i__2 * i__2 + 1], &nblock, &work[(i__3 * i__3 << 1) + 1], &i__4,
+                           &sweep_info__);
     }
     /* Call ZHGEQZ to normalize the eigenvalue blocks and set the eigenvalues */
     /* If all the eigenvalues have been found, ZHGEQZ will not do any iterations */
     /* and only normalize the blocks. In case of a rare convergence failure, */
     /* the single shift might perform better. */
 L80:
-    zhgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
-            &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, &rwork[1],
-            &norm_info__);
+    aocl_lapack_zhgeqz(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                       &alpha[1], &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork,
+                       &rwork[1], &norm_info__);
     *info = norm_info__;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

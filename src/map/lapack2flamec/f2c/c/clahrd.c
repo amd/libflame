@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAHRD reduces the first nb columns of a general rectangular matrix A so that
  * elements below th e k-th subdiagonal are zero, and returns auxiliary matrices which are needed to
  * apply the transformati on to the unreduced part of A. */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLAHRD reduces the first NB columns of a complex general n-by-(n-k+1) */
+/* > CLAHRD reduces the first NB columns of a scomplex general n-by-(n-k+1) */
 /* > matrix A so that elements below the k-th subdiagonal are zero. The */
 /* > reduction is performed by a unitary similarity transformation */
 /* > Q**H * A * Q. The routine returns the matrices V and T which determine */
@@ -144,7 +144,7 @@ the elements below the k-th */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i+k-1) = 0, v(i+k) = 1;
 v(i+k+1:n) is stored on exit in */
 /* > A(i+k+1:n,i), and tau in TAU(i). */
@@ -172,8 +172,25 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, complex *tau,
-             complex *t, integer *ldt, complex *y, integer *ldy)
+/** Generated wrapper function */
+void clahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *t, aocl_int_t *ldt, scomplex *y, aocl_int_t *ldy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldy_64 = *ldy;
+
+    aocl_lapack_clahrd(&n_64, &k_64, &nb_64, a, &lda_64, tau, t, &ldt_64, y, &ldy_64);
+#endif
+}
+
+void aocl_lapack_clahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scomplex *a, aocl_int64_t *lda,
+             scomplex *tau, scomplex *t, aocl_int64_t *ldt, scomplex *y, aocl_int64_t *ldy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -188,21 +205,11 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Local variables */
-    integer i__;
-    complex ei;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
-        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        clacgv_(integer *, complex *, integer *);
+    aocl_int64_t i__;
+    scomplex ei;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,14 +254,14 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
             /* Update A(1:n,i) */
             /* Compute i-th column of A - Y * V**H */
             i__2 = i__ - 1;
-            clacgv_(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
+            aocl_lapack_clacgv(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
             i__2 = i__ - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", n, &i__2, &q__1, &y[y_offset], ldy, &a[*k + i__ - 1 + a_dim1],
-                   lda, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
+            aocl_blas_cgemv("No transpose", n, &i__2, &q__1, &y[y_offset], ldy,
+                            &a[*k + i__ - 1 + a_dim1], lda, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            clacgv_(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
+            aocl_lapack_clacgv(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
             /* Apply I - V * T**H * V**H to this column (call it b) from the */
             /* left, using the last column of T as workspace */
             /* Let V = ( V1 ) and b = ( b1 ) (first I-1 rows) */
@@ -262,82 +269,83 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
             /* where V1 is unit lower triangular */
             /* w := V1**H * b1 */
             i__2 = i__ - 1;
-            ccopy_(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_ccopy(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            ctrmv_("Lower", "Conjugate transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_ctrmv("Lower", "Conjugate transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1);
             /* w := w + V2**H *b2 */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
-                   &a[*k + i__ + i__ * a_dim1], &c__1, &c_b2, &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
+                            &a[*k + i__ + i__ * a_dim1], &c__1, &c_b2, &t[*nb * t_dim1 + 1], &c__1);
             /* w := T**H *w */
             i__2 = i__ - 1;
-            ctrmv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &t[t_offset], ldt,
-                   &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_ctrmv("Upper", "Conjugate transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                            &t[*nb * t_dim1 + 1], &c__1);
             /* b2 := b2 - V2*w */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", &i__2, &i__3, &q__1, &a[*k + i__ + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
+            aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &a[*k + i__ + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
             i__2 = i__ - 1;
-            ctrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_ctrmv("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
-            caxpy_(&i__2, &q__1, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1], &c__1);
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
+            aocl_blas_caxpy(&i__2, &q__1, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1],
+                            &c__1);
             i__2 = *k + i__ - 1 + (i__ - 1) * a_dim1;
-            a[i__2].r = ei.r;
-            a[i__2].i = ei.i; // , expr subst
+            a[i__2].real = ei.real;
+            a[i__2].imag = ei.imag; // , expr subst
         }
         /* Generate the elementary reflector H(i) to annihilate */
         /* A(k+i+1:n,i) */
         i__2 = *k + i__ + i__ * a_dim1;
-        ei.r = a[i__2].r;
-        ei.i = a[i__2].i; // , expr subst
+        ei.real = a[i__2].real;
+        ei.imag = a[i__2].imag; // , expr subst
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        clarfg_(&i__2, &ei, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
+        aocl_lapack_clarfg(&i__2, &ei, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
         i__2 = *k + i__ + i__ * a_dim1;
-        a[i__2].r = 1.f;
-        a[i__2].i = 0.f; // , expr subst
+        a[i__2].real = 1.f;
+        a[i__2].imag = 0.f; // , expr subst
         /* Compute Y(1:n,i) */
         i__2 = *n - *k - i__ + 1;
-        cgemv_("No transpose", n, &i__2, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda,
-               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
+        aocl_blas_cgemv("No transpose", n, &i__2, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda,
+                        &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
         i__2 = *n - *k - i__ + 1;
         i__3 = i__ - 1;
-        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
-               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
+                        &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        cgemv_("No transpose", n, &i__2, &q__1, &y[y_offset], ldy, &t[i__ * t_dim1 + 1], &c__1,
-               &c_b2, &y[i__ * y_dim1 + 1], &c__1);
-        cscal_(n, &tau[i__], &y[i__ * y_dim1 + 1], &c__1);
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_cgemv("No transpose", n, &i__2, &q__1, &y[y_offset], ldy, &t[i__ * t_dim1 + 1],
+                        &c__1, &c_b2, &y[i__ * y_dim1 + 1], &c__1);
+        aocl_blas_cscal(n, &tau[i__], &y[i__ * y_dim1 + 1], &c__1);
         /* Compute T(1:i,i) */
         i__2 = i__ - 1;
         i__3 = i__;
-        q__1.r = -tau[i__3].r;
-        q__1.i = -tau[i__3].i; // , expr subst
-        cscal_(&i__2, &q__1, &t[i__ * t_dim1 + 1], &c__1);
+        q__1.real = -tau[i__3].real;
+        q__1.imag = -tau[i__3].imag; // , expr subst
+        aocl_blas_cscal(&i__2, &q__1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        ctrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1],
-               &c__1);
+        aocl_blas_ctrmv("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                        &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ + i__ * t_dim1;
         i__3 = i__;
-        t[i__2].r = tau[i__3].r;
-        t[i__2].i = tau[i__3].i; // , expr subst
+        t[i__2].real = tau[i__3].real;
+        t[i__2].imag = tau[i__3].imag; // , expr subst
         /* L10: */
     }
     i__1 = *k + *nb + *nb * a_dim1;
-    a[i__1].r = ei.r;
-    a[i__1].i = ei.i; // , expr subst
+    a[i__1].real = ei.real;
+    a[i__1].imag = ei.imag; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CLAHRD */

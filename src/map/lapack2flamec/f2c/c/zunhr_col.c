@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNHR_COL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -39,7 +39,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNHR_COL takes an M-by-N complex matrix Q_in with orthonormal columns */
+/* > ZUNHR_COL takes an M-by-N scomplex matrix Q_in with orthonormal columns */
 /* > as input, stored in A, and performs Householder Reconstruction (HR), */
 /* > i.e. reconstructs Householder vectors V(i) implicitly representing */
 /* > another M-by-N matrix Q_out, with the property that Q_in = Q_out*S, */
@@ -268,8 +268,29 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda,
-                doublecomplex *t, integer *ldt, doublecomplex *d__, integer *info)
+/** Generated wrapper function */
+void zunhr_col_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nb, dcomplex *a, aocl_int_t *lda,
+                dcomplex *t, aocl_int_t *ldt, dcomplex *d__, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zunhr_col(m, n, nb, a, lda, t, ldt, d__, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zunhr_col(&m_64, &n_64, &nb_64, a, &lda_64, t, &ldt_64, d__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zunhr_col(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, dcomplex *a,
+                           aocl_int64_t *lda, dcomplex *t, aocl_int64_t *ldt,
+                           dcomplex *d__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunhr_col inputs : m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS
@@ -277,23 +298,12 @@ void zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                       *m, *n, *nb, *lda, *ldt);
 
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
+    dcomplex z__1;
     /* Local variables */
-    integer nplusone, i__, j, jb, jnb;
-    extern /* Subroutine */
-        void
-        zlaunhr_col_getrfnp_(integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                             integer *);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer jbtemp1, jbtemp2;
+    aocl_int64_t nplusone, i__, j, jb, jnb;
+    aocl_int64_t iinfo;
+    aocl_int64_t jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -353,7 +363,7 @@ void zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNHR_COL", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("ZUNHR_COL", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -371,12 +381,13 @@ void zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
     /* ( 0 ) ( V2 ) */
     /* where 0 is an (M-N)-by-N zero matrix. */
     /* (1-1) Factor V1 and U. */
-    zlaunhr_col_getrfnp_(n, n, &a[a_offset], lda, &d__[1], &iinfo);
+    aocl_lapack_zlaunhr_col_getrfnp(n, n, &a[a_offset], lda, &d__[1], &iinfo);
     /* (1-2) Solve for V2. */
     if(*m > *n)
     {
         i__1 = *m - *n;
-        ztrsm_("R", "U", "N", "N", &i__1, n, &c_b1, &a[a_offset], lda, &a[*n + 1 + a_dim1], lda);
+        aocl_blas_ztrsm("R", "U", "N", "N", &i__1, n, &c_b1, &a[a_offset], lda, &a[*n + 1 + a_dim1],
+                        lda);
     }
     /* (2) Reconstruct the block reflector T stored in T(1:NB, 1:N) */
     /* as a sequence of upper-triangular blocks with NB-size column */
@@ -403,7 +414,7 @@ void zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
         for(j = jb; j <= i__3; ++j)
         {
             i__4 = j - jbtemp1;
-            zcopy_(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], &c__1);
+            aocl_blas_zcopy(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], &c__1);
         }
         /* (2-2) Perform on the upper-triangular part of the current */
         /* JNB-by-JNB diagonal block U(JB) (of the N-by-N matrix U) stored */
@@ -419,12 +430,12 @@ void zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
         for(j = jb; j <= i__3; ++j)
         {
             i__4 = j;
-            if(d__[i__4].r == 1. && d__[i__4].i == 0.)
+            if(d__[i__4].real == 1. && d__[i__4].imag == 0.)
             {
                 i__4 = j - jbtemp1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zscal_(&i__4, &z__1, &t[j * t_dim1 + 1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zscal(&i__4, &z__1, &t[j * t_dim1 + 1], &c__1);
             }
         }
         /* (2-3) Perform the triangular solve for the current block */
@@ -464,13 +475,13 @@ void zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
             for(i__ = j - jbtemp2; i__ <= i__4; ++i__)
             {
                 i__5 = i__ + j * t_dim1;
-                t[i__5].r = 0.;
-                t[i__5].i = 0.; // , expr subst
+                t[i__5].real = 0.;
+                t[i__5].imag = 0.; // , expr subst
             }
         }
         /* (2-3b) Perform the triangular solve. */
-        ztrsm_("R", "L", "C", "U", &jnb, &jnb, &c_b1, &a[jb + jb * a_dim1], lda,
-               &t[jb * t_dim1 + 1], ldt);
+        aocl_blas_ztrsm("R", "L", "C", "U", &jnb, &jnb, &c_b1, &a[jb + jb * a_dim1], lda,
+                        &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

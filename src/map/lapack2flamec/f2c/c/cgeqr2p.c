@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CGEQR2P computes the QR factorization of a general rectangular matrix with
  * non-negative diagona l elements using an unblocked algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -39,7 +39,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGEQR2P computes a QR factorization of a complex m by n matrix A: */
+/* > CGEQR2P computes a QR factorization of a scomplex m by n matrix A: */
 /* > A = Q * R. */
 /* > \endverbatim */
 /* Arguments: */
@@ -113,7 +113,7 @@ the elements below the diagonal, */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i-1) = 0 and v(i) = 1;
 v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > and tau in TAU(i). */
@@ -121,8 +121,26 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgeqr2p_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
-              integer *info)
+/** Generated wrapper function */
+void cgeqr2p_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau,
+              scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgeqr2p(m, n, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgeqr2p(&m_64, &n_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgeqr2p(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                         scomplex *tau, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -135,19 +153,13 @@ void cgeqr2p_(integer *m, integer *n, complex *a, integer *lda, complex *tau, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, k;
-    complex alpha;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        clarfgp_(integer *, complex *, complex *, integer *, complex *);
+    aocl_int64_t i__, k;
+    scomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +202,7 @@ void cgeqr2p_(integer *m, integer *n, complex *a, integer *lda, complex *tau, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEQR2P", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CGEQR2P", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -202,25 +214,25 @@ void cgeqr2p_(integer *m, integer *n, complex *a, integer *lda, complex *tau, co
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        clarfgp_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
-                 &tau[i__]);
+        aocl_lapack_clarfgp(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
+                            &c__1, &tau[i__]);
         if(i__ < *n)
         {
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             i__2 = i__ + i__ * a_dim1;
-            alpha.r = a[i__2].r;
-            alpha.i = a[i__2].i; // , expr subst
+            alpha.real = a[i__2].real;
+            alpha.imag = a[i__2].imag; // , expr subst
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = 1.f;
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = 1.f;
+            a[i__2].imag = 0.f; // , expr subst
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
             r_cnjg(&q__1, &tau[i__]);
-            clarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
-                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
+                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = alpha.r;
-            a[i__2].i = alpha.i; // , expr subst
+            a[i__2].real = alpha.real;
+            a[i__2].imag = alpha.imag; // , expr subst
         }
         /* L10: */
     }

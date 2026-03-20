@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNHR_COL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -39,7 +39,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNHR_COL takes an M-by-N complex matrix Q_in with orthonormal columns */
+/* > CUNHR_COL takes an M-by-N scomplex matrix Q_in with orthonormal columns */
 /* > as input, stored in A, and performs Householder Reconstruction (HR), */
 /* > i.e. reconstructs Householder vectors V(i) implicitly representing */
 /* > another M-by-N matrix Q_out, with the property that Q_in = Q_out*S, */
@@ -268,8 +268,29 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, complex *t,
-                integer *ldt, complex *d__, integer *info)
+/** Generated wrapper function */
+void cunhr_col_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nb, scomplex *a, aocl_int_t *lda,
+                scomplex *t, aocl_int_t *ldt, scomplex *d__, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cunhr_col(m, n, nb, a, lda, t, ldt, d__, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cunhr_col(&m_64, &n_64, &nb_64, a, &lda_64, t, &ldt_64, d__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cunhr_col(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
+                           aocl_int64_t *lda, scomplex *t, aocl_int64_t *ldt, scomplex *d__,
+                           aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -281,22 +302,12 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1;
     /* Local variables */
-    integer nplusone, i__, j, jb, jnb;
-    extern /* Subroutine */
-        void
-        claunhr_col_getrfnp_(integer *, integer *, complex *, integer *, complex *, integer *),
-        cscal_(integer *, complex *, complex *, integer *);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer jbtemp1, jbtemp2;
+    aocl_int64_t nplusone, i__, j, jb, jnb;
+    aocl_int64_t iinfo;
+    aocl_int64_t jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -356,7 +367,7 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNHR_COL", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("CUNHR_COL", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -374,12 +385,13 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
     /* ( 0 ) ( V2 ) */
     /* where 0 is an (M-N)-by-N zero matrix. */
     /* (1-1) Factor V1 and U. */
-    claunhr_col_getrfnp_(n, n, &a[a_offset], lda, &d__[1], &iinfo);
+    aocl_lapack_claunhr_col_getrfnp(n, n, &a[a_offset], lda, &d__[1], &iinfo);
     /* (1-2) Solve for V2. */
     if(*m > *n)
     {
         i__1 = *m - *n;
-        ctrsm_("R", "U", "N", "N", &i__1, n, &c_b1, &a[a_offset], lda, &a[*n + 1 + a_dim1], lda);
+        aocl_blas_ctrsm("R", "U", "N", "N", &i__1, n, &c_b1, &a[a_offset], lda, &a[*n + 1 + a_dim1],
+                        lda);
     }
     /* (2) Reconstruct the block reflector T stored in T(1:NB, 1:N) */
     /* as a sequence of upper-triangular blocks with NB-size column */
@@ -406,7 +418,7 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
         for(j = jb; j <= i__3; ++j)
         {
             i__4 = j - jbtemp1;
-            ccopy_(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], &c__1);
+            aocl_blas_ccopy(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], &c__1);
         }
         /* (2-2) Perform on the upper-triangular part of the current */
         /* JNB-by-JNB diagonal block U(JB) (of the N-by-N matrix U) stored */
@@ -422,12 +434,12 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
         for(j = jb; j <= i__3; ++j)
         {
             i__4 = j;
-            if(d__[i__4].r == 1.f && d__[i__4].i == 0.f)
+            if(d__[i__4].real == 1.f && d__[i__4].imag == 0.f)
             {
                 i__4 = j - jbtemp1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
-                cscal_(&i__4, &q__1, &t[j * t_dim1 + 1], &c__1);
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
+                aocl_blas_cscal(&i__4, &q__1, &t[j * t_dim1 + 1], &c__1);
             }
         }
         /* (2-3) Perform the triangular solve for the current block */
@@ -467,13 +479,13 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
             for(i__ = j - jbtemp2; i__ <= i__4; ++i__)
             {
                 i__5 = i__ + j * t_dim1;
-                t[i__5].r = 0.f;
-                t[i__5].i = 0.f; // , expr subst
+                t[i__5].real = 0.f;
+                t[i__5].imag = 0.f; // , expr subst
             }
         }
         /* (2-3b) Perform the triangular solve. */
-        ctrsm_("R", "L", "C", "U", &jnb, &jnb, &c_b1, &a[jb + jb * a_dim1], lda,
-               &t[jb * t_dim1 + 1], ldt);
+        aocl_blas_ctrsm("R", "L", "C", "U", &jnb, &jnb, &c_b1, &a[jb + jb * a_dim1], lda,
+                        &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

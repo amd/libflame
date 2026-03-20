@@ -18,14 +18,14 @@
 char* pc_str[N_PARAM_COMBOS] = { "nn", "nt", "tn", "tt" };
 
 void time_Sylv(
-                integer param_combo, integer type, integer nrepeats, integer m, integer n,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                 FLA_Obj isgn, FLA_Obj A, FLA_Obj B, FLA_Obj C, FLA_Obj C_ref, FLA_Obj scale,
                 double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     datatype,
     nb_alg,
     n_threads,
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     i, j,
     n_param_combos = N_PARAM_COMBOS;
 
-  integer sign;
+  aocl_int64_t sign;
   
   char *colors = "brkgmcbrkg";
   char *ticks  = "o+*xso+*xs";

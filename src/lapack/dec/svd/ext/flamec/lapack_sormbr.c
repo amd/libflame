@@ -1,21 +1,28 @@
-/* ../netlib/sormbr.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+/* ../netlib/sormbr.f -- translated by f2c (version 20000121). You must link the resulting object
+ * file with the libraries: -lf2c -lm (in that order) */
 /*
  *  Copyright (c) 2022-2023 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b SORMBR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORMBR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormbr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormbr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormbr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormbr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormbr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormbr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -57,12 +64,12 @@ static integer c_n1 = -1;
 /* > */
 /* > If VECT = 'Q', A is assumed to have been an NQ-by-K matrix: */
 /* > if nq >= k, Q = H(1) H(2) . . . H(k);
-*/
+ */
 /* > if nq < k, Q = H(1) H(2) . . . H(nq-1). */
 /* > */
 /* > If VECT = 'P', A is assumed to have been a K-by-NQ matrix: */
 /* > if k < nq, P = G(1) G(2) . . . G(k);
-*/
+ */
 /* > if k >= nq, P = G(1) G(2) . . . G(nq-1). */
 /* > \endverbatim */
 /* Arguments: */
@@ -71,7 +78,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > VECT is CHARACTER*1 */
 /* > = 'Q': apply Q or Q**T;
-*/
+ */
 /* > = 'P': apply P or P**T. */
 /* > \endverbatim */
 /* > */
@@ -79,7 +86,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q, Q**T, P or P**T from the Left;
-*/
+ */
 /* > = 'R': apply Q, Q**T, P or P**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -87,7 +94,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q or P;
-*/
+ */
 /* > = 'T': Transpose, apply Q**T or P**T. */
 /* > \endverbatim */
 /* > */
@@ -128,7 +135,7 @@ static integer c_n1 = -1;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If VECT = 'Q', LDA >= fla_max(1,nq);
-*/
+ */
 /* > if VECT = 'P', LDA >= fla_max(1,fla_min(nq,K)). */
 /* > \endverbatim */
 /* > */
@@ -165,7 +172,7 @@ static integer c_n1 = -1;
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -193,30 +200,34 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+int lapack_sormbr(char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                  aocl_int64_t *k, real *a, aocl_int64_t *lda, real *tau, real *c__,
+                  aocl_int64_t *ldc, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo, i1, i2, nb, mi, ni, nq, nw;
-    extern /* Subroutine */
-    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo, i1, i2, nb, mi, ni, nq, nw;
     logical notran, applyq;
     char transt[1];
     extern /* Subroutine */
-    int lapack_sormlq(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
-    integer lwkopt;
+        int
+        lapack_sormlq(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *,
+                      aocl_int64_t *, real *, real *, aocl_int64_t *, real *, aocl_int64_t *,
+                      aocl_int64_t *);
+    aocl_int64_t lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int lapack_sormqr(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
-    extern real sroundup_lwork(integer *);
+        int
+        lapack_sormqr(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *,
+                      aocl_int64_t *, real *, real *, aocl_int64_t *, real *, aocl_int64_t *,
+                      aocl_int64_t *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -251,37 +262,37 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q or P and NW is the minimum dimension of WORK */
-    if (left)
+    if(left)
     {
         nq = *m;
-        nw = fla_max(1,*n);
+        nw = fla_max(1, *n);
     }
     else
     {
         nq = *n;
-        nw = fla_max(1,*m);
+        nw = fla_max(1, *m);
     }
-    if (! applyq && ! lsame_(vect, "P", 1, 1))
+    if(!applyq && !lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
-    else if (! left && ! lsame_(side, "R", 1, 1))
+    else if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*k < 0)
+    else if(*k < 0)
     {
         *info = -6;
     }
@@ -289,83 +300,84 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(nq,*k); // , expr subst
-        if (applyq && *lda < fla_max(1,nq) || ! applyq && *lda < fla_max(i__1,i__2))
+        i__2 = fla_min(nq, *k); // , expr subst
+        if(applyq && *lda < fla_max(1, nq) || !applyq && *lda < fla_max(i__1, i__2))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -11;
         }
-        else if (*lwork < nw && ! lquery)
+        else if(*lwork < nw && !lquery)
         {
             *info = -13;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (applyq)
+        if(applyq)
         {
-            if (left)
+            if(left)
             {
                 i__1 = *m - 1;
                 i__2 = *m - 1;
-                nb = ilaenv_(&c__1, "SORMQR", ch__1, &i__1, n, &i__2, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, &i__1, n, &i__2, &c_n1);
             }
             else
             {
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                nb = ilaenv_(&c__1, "SORMQR", ch__1, m, &i__1, &i__2, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, m, &i__1, &i__2, &c_n1);
             }
         }
         else
         {
-            if (left)
+            if(left)
             {
                 i__1 = *m - 1;
                 i__2 = *m - 1;
-                nb = ilaenv_(&c__1, "SORMLQ", ch__1, &i__1, n, &i__2, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "SORMLQ", ch__1, &i__1, n, &i__2, &c_n1);
             }
             else
             {
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                nb = ilaenv_(&c__1, "SORMLQ", ch__1, m, &i__1, &i__2, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "SORMLQ", ch__1, m, &i__1, &i__2, &c_n1);
             }
         }
         lwkopt = nw * nb;
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORMBR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORMBR", &i__1, (ftnlen)6);
         return 0;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return 0;
     }
     /* Quick return if possible */
     work[1] = 1.f;
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         return 0;
     }
-    if (applyq)
+    if(applyq)
     {
         /* Apply Q */
-        if (nq >= *k)
+        if(nq >= *k)
         {
             /* Q was determined by a call to SGEBRD with nq >= k */
-            lapack_sormqr(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[ c_offset], ldc, &work[1], lwork, &iinfo);
+            lapack_sormqr(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc,
+                          &work[1], lwork, &iinfo);
         }
-        else if (nq > 1)
+        else if(nq > 1)
         {
             /* Q was determined by a call to SGEBRD with nq < k */
-            if (left)
+            if(left)
             {
                 mi = *m - 1;
                 ni = *n;
@@ -380,13 +392,14 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
                 i2 = 2;
             }
             i__1 = nq - 1;
-            lapack_sormqr(side, trans, &mi, &ni, &i__1, &a[a_dim1 + 2], lda, &tau[1], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+            lapack_sormqr(side, trans, &mi, &ni, &i__1, &a[a_dim1 + 2], lda, &tau[1],
+                          &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
         }
     }
     else
     {
         /* Apply P */
-        if (notran)
+        if(notran)
         {
             *(unsigned char *)transt = 'T';
         }
@@ -394,15 +407,16 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
         {
             *(unsigned char *)transt = 'N';
         }
-        if (nq > *k)
+        if(nq > *k)
         {
             /* P was determined by a call to SGEBRD with nq > k */
-            lapack_sormlq(side, transt, m, n, k, &a[a_offset], lda, &tau[1], &c__[ c_offset], ldc, &work[1], lwork, &iinfo);
+            lapack_sormlq(side, transt, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc,
+                          &work[1], lwork, &iinfo);
         }
-        else if (nq > 1)
+        else if(nq > 1)
         {
             /* P was determined by a call to SGEBRD with nq <= k */
-            if (left)
+            if(left)
             {
                 mi = *m - 1;
                 ni = *n;
@@ -417,10 +431,11 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
                 i2 = 2;
             }
             i__1 = nq - 1;
-            lapack_sormlq(side, transt, &mi, &ni, &i__1, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, & iinfo);
+            lapack_sormlq(side, transt, &mi, &ni, &i__1, &a[(a_dim1 << 1) + 1], lda, &tau[1],
+                          &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
         }
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     return 0;
     /* End of SORMBR */
 }

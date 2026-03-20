@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__0 = 0;
-static integer c__1 = 1;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CPTEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -147,8 +147,25 @@ static integer c__1 = 1;
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work,
-             integer *info)
+/** Generated wrapper function */
+void cpteqr_(char *compz, aocl_int_t *n, real *d__, real *e, scomplex *z__, aocl_int_t *ldz,
+             real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpteqr(compz, n, d__, e, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpteqr(char *compz, aocl_int64_t *n, real *d__, real *e, scomplex *z__,
+                        aocl_int64_t *ldz, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -161,27 +178,18 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    complex c__[1] /* was [1][1] */
+    scomplex c__[1] /* was [1][1] */
         ;
-    integer i__;
-    complex vt[1] /* was [1][1] */
+    aocl_int64_t i__;
+    scomplex vt[1] /* was [1][1] */
         ;
-    integer nru;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *,
-                integer *, complex *, integer *, complex *, integer *, real *, integer *);
-    integer icompz;
-    extern /* Subroutine */
-        void
-        spttrf_(integer *, real *, real *, integer *);
+    aocl_int64_t nru;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t icompz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,7 +253,7 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPTEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -260,18 +268,18 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         if(icompz > 0)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     if(icompz == 2)
     {
-        claset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
+        aocl_lapack_claset("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
     /* Call SPTTRF to factor the matrix. */
-    spttrf_(n, &d__[1], &e[1], info);
+    aocl_lapack_spttrf(n, &d__[1], &e[1], info);
     if(*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -299,8 +307,8 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     {
         nru = 0;
     }
-    cbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
-            &c__1, &work[1], info);
+    aocl_lapack_cbdsqr("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset],
+                       ldz, c__, &c__1, &work[1], info);
     /* Square the singular values. */
     if(*info == 0)
     {

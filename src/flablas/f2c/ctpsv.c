@@ -1,16 +1,16 @@
 /* ctpsv.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex *x, integer *incx)
+int ctpsv_(char *uplo, char *trans, char *diag, integer *n, scomplex *ap, scomplex *x, integer *incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *), r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
-    complex temp;
+    scomplex temp;
     integer i__, j, k;
     extern logical lsame_(char *, char *, integer, integer);
     integer kk, ix, jx, kx;
@@ -154,16 +154,16 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         --j)
                 {
                     i__1 = j;
-                    if (x[i__1].r != 0.f || x[i__1].i != 0.f)
+                    if (x[i__1].real != 0.f || x[i__1].imag != 0.f)
                     {
                         if (nounit)
                         {
                             i__1 = j;
                             c_div(&q__1, &x[j], &ap[kk]);
-                            x[i__1].r = q__1.r, x[i__1].i = q__1.i;
+                            x[i__1].real = q__1.real, x[i__1].imag = q__1.imag;
                         }
                         i__1 = j;
-                        temp.r = x[i__1].r, temp.i = x[i__1].i;
+                        temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                         k = kk - 1;
                         for (i__ = j - 1;
                                 i__ >= 1;
@@ -172,9 +172,9 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                             i__1 = i__;
                             i__2 = i__;
                             i__3 = k;
-                            q__2.r = temp.r * ap[i__3].r - temp.i * ap[i__3] .i, q__2.i = temp.r * ap[i__3].i + temp.i * ap[i__3].r;
-                            q__1.r = x[i__2].r - q__2.r, q__1.i = x[i__2].i - q__2.i;
-                            x[i__1].r = q__1.r, x[i__1].i = q__1.i;
+                            q__2.real = temp.real * ap[i__3].real - temp.imag * ap[i__3] .imag, q__2.imag = temp.real * ap[i__3].imag + temp.imag * ap[i__3].real;
+                            q__1.real = x[i__2].real - q__2.real, q__1.imag = x[i__2].imag - q__2.imag;
+                            x[i__1].real = q__1.real, x[i__1].imag = q__1.imag;
                             --k;
                             /* L10: */
                         }
@@ -191,16 +191,16 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         --j)
                 {
                     i__1 = jx;
-                    if (x[i__1].r != 0.f || x[i__1].i != 0.f)
+                    if (x[i__1].real != 0.f || x[i__1].imag != 0.f)
                     {
                         if (nounit)
                         {
                             i__1 = jx;
                             c_div(&q__1, &x[jx], &ap[kk]);
-                            x[i__1].r = q__1.r, x[i__1].i = q__1.i;
+                            x[i__1].real = q__1.real, x[i__1].imag = q__1.imag;
                         }
                         i__1 = jx;
-                        temp.r = x[i__1].r, temp.i = x[i__1].i;
+                        temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                         ix = jx;
                         i__1 = kk - j + 1;
                         for (k = kk - 1;
@@ -211,9 +211,9 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                             i__2 = ix;
                             i__3 = ix;
                             i__4 = k;
-                            q__2.r = temp.r * ap[i__4].r - temp.i * ap[i__4] .i, q__2.i = temp.r * ap[i__4].i + temp.i * ap[i__4].r;
-                            q__1.r = x[i__3].r - q__2.r, q__1.i = x[i__3].i - q__2.i;
-                            x[i__2].r = q__1.r, x[i__2].i = q__1.i;
+                            q__2.real = temp.real * ap[i__4].real - temp.imag * ap[i__4] .imag, q__2.imag = temp.real * ap[i__4].imag + temp.imag * ap[i__4].real;
+                            q__1.real = x[i__3].real - q__2.real, q__1.imag = x[i__3].imag - q__2.imag;
+                            x[i__2].real = q__1.real, x[i__2].imag = q__1.imag;
                             /* L30: */
                         }
                     }
@@ -234,16 +234,16 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         ++j)
                 {
                     i__2 = j;
-                    if (x[i__2].r != 0.f || x[i__2].i != 0.f)
+                    if (x[i__2].real != 0.f || x[i__2].imag != 0.f)
                     {
                         if (nounit)
                         {
                             i__2 = j;
                             c_div(&q__1, &x[j], &ap[kk]);
-                            x[i__2].r = q__1.r, x[i__2].i = q__1.i;
+                            x[i__2].real = q__1.real, x[i__2].imag = q__1.imag;
                         }
                         i__2 = j;
-                        temp.r = x[i__2].r, temp.i = x[i__2].i;
+                        temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                         k = kk + 1;
                         i__2 = *n;
                         for (i__ = j + 1;
@@ -253,9 +253,9 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                             i__3 = i__;
                             i__4 = i__;
                             i__5 = k;
-                            q__2.r = temp.r * ap[i__5].r - temp.i * ap[i__5] .i, q__2.i = temp.r * ap[i__5].i + temp.i * ap[i__5].r;
-                            q__1.r = x[i__4].r - q__2.r, q__1.i = x[i__4].i - q__2.i;
-                            x[i__3].r = q__1.r, x[i__3].i = q__1.i;
+                            q__2.real = temp.real * ap[i__5].real - temp.imag * ap[i__5] .imag, q__2.imag = temp.real * ap[i__5].imag + temp.imag * ap[i__5].real;
+                            q__1.real = x[i__4].real - q__2.real, q__1.imag = x[i__4].imag - q__2.imag;
+                            x[i__3].real = q__1.real, x[i__3].imag = q__1.imag;
                             ++k;
                             /* L50: */
                         }
@@ -273,16 +273,16 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         ++j)
                 {
                     i__2 = jx;
-                    if (x[i__2].r != 0.f || x[i__2].i != 0.f)
+                    if (x[i__2].real != 0.f || x[i__2].imag != 0.f)
                     {
                         if (nounit)
                         {
                             i__2 = jx;
                             c_div(&q__1, &x[jx], &ap[kk]);
-                            x[i__2].r = q__1.r, x[i__2].i = q__1.i;
+                            x[i__2].real = q__1.real, x[i__2].imag = q__1.imag;
                         }
                         i__2 = jx;
-                        temp.r = x[i__2].r, temp.i = x[i__2].i;
+                        temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                         ix = jx;
                         i__2 = kk + *n - j;
                         for (k = kk + 1;
@@ -293,9 +293,9 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                             i__3 = ix;
                             i__4 = ix;
                             i__5 = k;
-                            q__2.r = temp.r * ap[i__5].r - temp.i * ap[i__5] .i, q__2.i = temp.r * ap[i__5].i + temp.i * ap[i__5].r;
-                            q__1.r = x[i__4].r - q__2.r, q__1.i = x[i__4].i - q__2.i;
-                            x[i__3].r = q__1.r, x[i__3].i = q__1.i;
+                            q__2.real = temp.real * ap[i__5].real - temp.imag * ap[i__5] .imag, q__2.imag = temp.real * ap[i__5].imag + temp.imag * ap[i__5].real;
+                            q__1.real = x[i__4].real - q__2.real, q__1.imag = x[i__4].imag - q__2.imag;
+                            x[i__3].real = q__1.real, x[i__3].imag = q__1.imag;
                             /* L70: */
                         }
                     }
@@ -320,7 +320,7 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         ++j)
                 {
                     i__2 = j;
-                    temp.r = x[i__2].r, temp.i = x[i__2].i;
+                    temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                     k = kk;
                     if (noconj)
                     {
@@ -331,16 +331,16 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             i__3 = k;
                             i__4 = i__;
-                            q__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[ i__4].i, q__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r;
-                            q__1.r = temp.r - q__2.r, q__1.i = temp.i - q__2.i;
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            q__2.real = ap[i__3].real * x[i__4].real - ap[i__3].imag * x[ i__4].imag, q__2.imag = ap[i__3].real * x[i__4].imag + ap[i__3].imag * x[i__4].real;
+                            q__1.real = temp.real - q__2.real, q__1.imag = temp.imag - q__2.imag;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                             ++k;
                             /* L90: */
                         }
                         if (nounit)
                         {
                             c_div(&q__1, &temp, &ap[kk + j - 1]);
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                         }
                     }
                     else
@@ -352,9 +352,9 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             r_cnjg(&q__3, &ap[k]);
                             i__3 = i__;
-                            q__2.r = q__3.r * x[i__3].r - q__3.i * x[i__3].i, q__2.i = q__3.r * x[i__3].i + q__3.i * x[ i__3].r;
-                            q__1.r = temp.r - q__2.r, q__1.i = temp.i - q__2.i;
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            q__2.real = q__3.real * x[i__3].real - q__3.imag * x[i__3].imag, q__2.imag = q__3.real * x[i__3].imag + q__3.imag * x[ i__3].real;
+                            q__1.real = temp.real - q__2.real, q__1.imag = temp.imag - q__2.imag;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                             ++k;
                             /* L100: */
                         }
@@ -362,11 +362,11 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             r_cnjg(&q__2, &ap[kk + j - 1]);
                             c_div(&q__1, &temp, &q__2);
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                         }
                     }
                     i__2 = j;
-                    x[i__2].r = temp.r, x[i__2].i = temp.i;
+                    x[i__2].real = temp.real, x[i__2].imag = temp.imag;
                     kk += j;
                     /* L110: */
                 }
@@ -380,7 +380,7 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         ++j)
                 {
                     i__2 = jx;
-                    temp.r = x[i__2].r, temp.i = x[i__2].i;
+                    temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                     ix = kx;
                     if (noconj)
                     {
@@ -391,16 +391,16 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             i__3 = k;
                             i__4 = ix;
-                            q__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[ i__4].i, q__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r;
-                            q__1.r = temp.r - q__2.r, q__1.i = temp.i - q__2.i;
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            q__2.real = ap[i__3].real * x[i__4].real - ap[i__3].imag * x[ i__4].imag, q__2.imag = ap[i__3].real * x[i__4].imag + ap[i__3].imag * x[i__4].real;
+                            q__1.real = temp.real - q__2.real, q__1.imag = temp.imag - q__2.imag;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                             ix += *incx;
                             /* L120: */
                         }
                         if (nounit)
                         {
                             c_div(&q__1, &temp, &ap[kk + j - 1]);
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                         }
                     }
                     else
@@ -412,9 +412,9 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             r_cnjg(&q__3, &ap[k]);
                             i__3 = ix;
-                            q__2.r = q__3.r * x[i__3].r - q__3.i * x[i__3].i, q__2.i = q__3.r * x[i__3].i + q__3.i * x[ i__3].r;
-                            q__1.r = temp.r - q__2.r, q__1.i = temp.i - q__2.i;
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            q__2.real = q__3.real * x[i__3].real - q__3.imag * x[i__3].imag, q__2.imag = q__3.real * x[i__3].imag + q__3.imag * x[ i__3].real;
+                            q__1.real = temp.real - q__2.real, q__1.imag = temp.imag - q__2.imag;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                             ix += *incx;
                             /* L130: */
                         }
@@ -422,11 +422,11 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             r_cnjg(&q__2, &ap[kk + j - 1]);
                             c_div(&q__1, &temp, &q__2);
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                         }
                     }
                     i__2 = jx;
-                    x[i__2].r = temp.r, x[i__2].i = temp.i;
+                    x[i__2].real = temp.real, x[i__2].imag = temp.imag;
                     jx += *incx;
                     kk += j;
                     /* L140: */
@@ -443,7 +443,7 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         --j)
                 {
                     i__1 = j;
-                    temp.r = x[i__1].r, temp.i = x[i__1].i;
+                    temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                     k = kk;
                     if (noconj)
                     {
@@ -454,16 +454,16 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             i__2 = k;
                             i__3 = i__;
-                            q__2.r = ap[i__2].r * x[i__3].r - ap[i__2].i * x[ i__3].i, q__2.i = ap[i__2].r * x[i__3].i + ap[i__2].i * x[i__3].r;
-                            q__1.r = temp.r - q__2.r, q__1.i = temp.i - q__2.i;
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            q__2.real = ap[i__2].real * x[i__3].real - ap[i__2].imag * x[ i__3].imag, q__2.imag = ap[i__2].real * x[i__3].imag + ap[i__2].imag * x[i__3].real;
+                            q__1.real = temp.real - q__2.real, q__1.imag = temp.imag - q__2.imag;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                             --k;
                             /* L150: */
                         }
                         if (nounit)
                         {
                             c_div(&q__1, &temp, &ap[kk - *n + j]);
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                         }
                     }
                     else
@@ -475,9 +475,9 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             r_cnjg(&q__3, &ap[k]);
                             i__2 = i__;
-                            q__2.r = q__3.r * x[i__2].r - q__3.i * x[i__2].i, q__2.i = q__3.r * x[i__2].i + q__3.i * x[ i__2].r;
-                            q__1.r = temp.r - q__2.r, q__1.i = temp.i - q__2.i;
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            q__2.real = q__3.real * x[i__2].real - q__3.imag * x[i__2].imag, q__2.imag = q__3.real * x[i__2].imag + q__3.imag * x[ i__2].real;
+                            q__1.real = temp.real - q__2.real, q__1.imag = temp.imag - q__2.imag;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                             --k;
                             /* L160: */
                         }
@@ -485,11 +485,11 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             r_cnjg(&q__2, &ap[kk - *n + j]);
                             c_div(&q__1, &temp, &q__2);
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                         }
                     }
                     i__1 = j;
-                    x[i__1].r = temp.r, x[i__1].i = temp.i;
+                    x[i__1].real = temp.real, x[i__1].imag = temp.imag;
                     kk -= *n - j + 1;
                     /* L170: */
                 }
@@ -503,7 +503,7 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         --j)
                 {
                     i__1 = jx;
-                    temp.r = x[i__1].r, temp.i = x[i__1].i;
+                    temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                     ix = kx;
                     if (noconj)
                     {
@@ -514,16 +514,16 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             i__2 = k;
                             i__3 = ix;
-                            q__2.r = ap[i__2].r * x[i__3].r - ap[i__2].i * x[ i__3].i, q__2.i = ap[i__2].r * x[i__3].i + ap[i__2].i * x[i__3].r;
-                            q__1.r = temp.r - q__2.r, q__1.i = temp.i - q__2.i;
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            q__2.real = ap[i__2].real * x[i__3].real - ap[i__2].imag * x[ i__3].imag, q__2.imag = ap[i__2].real * x[i__3].imag + ap[i__2].imag * x[i__3].real;
+                            q__1.real = temp.real - q__2.real, q__1.imag = temp.imag - q__2.imag;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                             ix -= *incx;
                             /* L180: */
                         }
                         if (nounit)
                         {
                             c_div(&q__1, &temp, &ap[kk - *n + j]);
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                         }
                     }
                     else
@@ -535,9 +535,9 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             r_cnjg(&q__3, &ap[k]);
                             i__2 = ix;
-                            q__2.r = q__3.r * x[i__2].r - q__3.i * x[i__2].i, q__2.i = q__3.r * x[i__2].i + q__3.i * x[ i__2].r;
-                            q__1.r = temp.r - q__2.r, q__1.i = temp.i - q__2.i;
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            q__2.real = q__3.real * x[i__2].real - q__3.imag * x[i__2].imag, q__2.imag = q__3.real * x[i__2].imag + q__3.imag * x[ i__2].real;
+                            q__1.real = temp.real - q__2.real, q__1.imag = temp.imag - q__2.imag;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                             ix -= *incx;
                             /* L190: */
                         }
@@ -545,11 +545,11 @@ int ctpsv_(char *uplo, char *trans, char *diag, integer *n, complex *ap, complex
                         {
                             r_cnjg(&q__2, &ap[kk - *n + j]);
                             c_div(&q__1, &temp, &q__2);
-                            temp.r = q__1.r, temp.i = q__1.i;
+                            temp.real = q__1.real, temp.imag = q__1.imag;
                         }
                     }
                     i__1 = jx;
-                    x[i__1].r = temp.r, x[i__1].i = temp.i;
+                    x[i__1].real = temp.real, x[i__1].imag = temp.imag;
                     jx -= *incx;
                     kk -= *n - j + 1;
                     /* L200: */

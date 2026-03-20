@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CPPCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CPPCON estimates the reciprocal of the condition number (in the */
-/* > 1-norm) of a complex Hermitian positive definite packed matrix using */
+/* > 1-norm) of a scomplex Hermitian positive definite packed matrix using */
 /* > the Cholesky factorization A = U**H*U or A = L*L**H computed by */
 /* > CPPTRF. */
 /* > */
@@ -117,8 +117,24 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, complex *work,
-             real *rwork, integer *info)
+/** Generated wrapper function */
+void cppcon_(char *uplo, aocl_int_t *n, scomplex *ap, real *anorm, real *rcond, scomplex *work,
+             real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cppcon(uplo, n, ap, anorm, rcond, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cppcon(uplo, &n_64, ap, anorm, rcond, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cppcon(char *uplo, aocl_int64_t *n, scomplex *ap, real *anorm, real *rcond,
+                        scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -131,34 +147,20 @@ void cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, comp
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer ix, kase;
+    aocl_int64_t ix, kase;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
     real scalel;
     extern real slamch_(char *);
     real scaleu;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        clatps_(char *, char *, char *, char *, integer *, complex *, complex *, real *, real *,
-                integer *);
     real ainvnm;
-    extern /* Subroutine */
-        void
-        csrscl_(integer *, real *, complex *, integer *);
     char normin[1];
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -210,7 +212,7 @@ void cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, comp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPPCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -232,43 +234,43 @@ void cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, comp
     kase = 0;
     *(unsigned char *)normin = 'N';
 L10:
-    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(upper)
         {
             /* Multiply by inv(U**H). */
-            clatps_("Upper", "Conjugate transpose", "Non-unit", normin, n, &ap[1], &work[1],
-                    &scalel, &rwork[1], info);
+            aocl_lapack_clatps("Upper", "Conjugate transpose", "Non-unit", normin, n, &ap[1],
+                               &work[1], &scalel, &rwork[1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            clatps_("Upper", "No transpose", "Non-unit", normin, n, &ap[1], &work[1], &scaleu,
-                    &rwork[1], info);
+            aocl_lapack_clatps("Upper", "No transpose", "Non-unit", normin, n, &ap[1], &work[1],
+                               &scaleu, &rwork[1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            clatps_("Lower", "No transpose", "Non-unit", normin, n, &ap[1], &work[1], &scalel,
-                    &rwork[1], info);
+            aocl_lapack_clatps("Lower", "No transpose", "Non-unit", normin, n, &ap[1], &work[1],
+                               &scalel, &rwork[1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**H). */
-            clatps_("Lower", "Conjugate transpose", "Non-unit", normin, n, &ap[1], &work[1],
-                    &scaleu, &rwork[1], info);
+            aocl_lapack_clatps("Lower", "Conjugate transpose", "Non-unit", normin, n, &ap[1],
+                               &work[1], &scaleu, &rwork[1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;
         if(scale != 1.f)
         {
-            ix = icamax_(n, &work[1], &c__1);
+            ix = aocl_blas_icamax(n, &work[1], &c__1);
             i__1 = ix;
-            if(scale < ((r__1 = work[i__1].r, f2c_abs(r__1))
+            if(scale < ((r__1 = work[i__1].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[ix]), f2c_abs(r__2)))
                            * smlnum
                || scale == 0.f)
             {
                 goto L20;
             }
-            csrscl_(n, &scale, &work[1], &c__1);
+            aocl_lapack_csrscl(n, &scale, &work[1], &c__1);
         }
         goto L10;
     }

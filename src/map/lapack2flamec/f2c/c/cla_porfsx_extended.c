@@ -6,8 +6,8 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static complex c_b11 = {-1.f, 0.f};
-static complex c_b12 = {1.f, 0.f};
+static scomplex c_b11 = {-1.f, 0.f};
+static scomplex c_b12 = {1.f, 0.f};
 static real c_b34 = 1.f;
 /* > \brief \b CLA_PORFSX_EXTENDED improves the computed solution to a system of linear equations
  * for symmetri c or Hermitian positive-definite matrices by performing extra-precise iterative
@@ -395,11 +395,11 @@ i+1}
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, complex *a,
-                          integer *lda, complex *af, integer *ldaf, logical *colequ, real *c__,
-                          complex *b, integer *ldb, complex *y, integer *ldy, real *berr_out__,
+void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, scomplex *a,
+                          integer *lda, scomplex *af, integer *ldaf, logical *colequ, real *c__,
+                          scomplex *b, integer *ldb, scomplex *y, integer *ldy, real *berr_out__,
                           integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__,
-                          complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond,
+                          scomplex *res, real *ayb, scomplex *dy, scomplex *y_tail__, real *rcond,
                           integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
                           integer *info)
 {
@@ -425,51 +425,51 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         i__2, i__3, i__4;
     real r__1, r__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     real dxratmax, dzratmax;
     integer i__, j;
     extern /* Subroutine */
         void
-        cla_heamv_(integer *, integer *, real *, complex *, integer *, complex *, integer *, real *,
+        cla_heamv_(integer *, integer *, real *, scomplex *, integer *, scomplex *, integer *, real *,
                    real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
         void
-        cla_wwaddw_(integer *, complex *, complex *, complex *);
+        cla_wwaddw_(integer *, scomplex *, scomplex *, scomplex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
         void
-        cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+        cla_lin_berr_(integer *, integer *, integer *, scomplex *, real *, real *);
     real ymin;
     extern /* Subroutine */
         int
-        blas_chemv_x_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-                      complex *, complex *, integer *, integer *);
+        blas_chemv_x_(integer *, integer *, scomplex *, scomplex *, integer *, scomplex *, integer *,
+                      scomplex *, scomplex *, integer *, integer *);
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
         int
-        blas_chemv2_x_(integer *, integer *, complex *, complex *, integer *, complex *, complex *,
-                       integer *, complex *, complex *, integer *, integer *);
+        blas_chemv2_x_(integer *, integer *, scomplex *, scomplex *, integer *, scomplex *, scomplex *,
+                       integer *, scomplex *, scomplex *, integer *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         void
-        chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
+        chemv_(char *, integer *, scomplex *, scomplex *, integer *, scomplex *, integer *, scomplex *,
+               scomplex *, integer *),
+        ccopy_(integer *, scomplex *, integer *, scomplex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
         void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        caxpy_(integer *, scomplex *, scomplex *, integer *, scomplex *, integer *);
     real normx, normy;
     extern real slamch_(char *);
     real normdx;
     extern /* Subroutine */
         void
-        cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
+        cpotrs_(char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *,
                 integer *);
     real hugeval;
     extern integer ilauplo_(char *);
@@ -553,8 +553,8 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__;
-                y_tail__[i__3].r = 0.f;
-                y_tail__[i__3].i = 0.f; // , expr subst
+                y_tail__[i__3].real = 0.f;
+                y_tail__[i__3].imag = 0.f; // , expr subst
             }
         }
         dxrat = 0.f;
@@ -604,10 +604,10 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * y_dim1;
-                yk = (r__1 = y[i__4].r, f2c_abs(r__1))
+                yk = (r__1 = y[i__4].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&y[i__ + j * y_dim1]), f2c_abs(r__2));
                 i__4 = i__;
-                dyk = (r__1 = dy[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&dy[i__]), f2c_abs(r__2));
+                dyk = (r__1 = dy[i__4].real, f2c_abs(r__1)) + (r__2 = r_imag(&dy[i__]), f2c_abs(r__2));
                 if(yk != 0.f)
                 {
                     /* Computing MAX */
@@ -745,8 +745,8 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__;
-                    y_tail__[i__4].r = 0.f;
-                    y_tail__[i__4].i = 0.f; // , expr subst
+                    y_tail__[i__4].real = 0.f;
+                    y_tail__[i__4].imag = 0.f; // , expr subst
                 }
             }
             prevnormdx = normdx;
@@ -793,7 +793,7 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            ayb[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+            ayb[i__] = (r__1 = b[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
         }
         /* Compute f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). */

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b8 = -1.f;
 static real c_b9 = 1.f;
 static real c_b16 = 0.f;
@@ -175,44 +175,52 @@ static real c_b16 = 0.f;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void slaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, real *a,
-             integer *lda, integer *jpvt, real *tau, real *vn1, real *vn2, real *auxv, real *f,
-             integer *ldf)
+/** Generated wrapper function */
+void slaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, aocl_int_t *kb,
+             real *a, aocl_int_t *lda, aocl_int_t *jpvt, real *tau, real *vn1, real *vn2,
+             real *auxv, real *f, aocl_int_t *ldf)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldf_64 = *ldf;
+
+    aocl_lapack_slaqps(&m_64, &n_64, &offset_64, &nb_64, &kb_64, a, &lda_64, jpvt, tau, vn1, vn2,
+                       auxv, f, &ldf_64);
+
+    *kb = (aocl_int_t)kb_64;
+#endif
+}
+
+void aocl_lapack_slaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, aocl_int64_t *nb,
+                        aocl_int64_t *kb, real *a, aocl_int64_t *lda, aocl_int_t *jpvt, real *tau,
+                        real *vn1, real *vn2, real *auxv, real *f, aocl_int64_t *ldf)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqps inputs: m %" FLA_IS ",n %" FLA_IS ",offset %" FLA_IS ",nb %" FLA_IS
                       ",lda %" FLA_IS ",ldf %" FLA_IS "",
                       *m, *n, *offset, *nb, *lda, *ldf);
     /* System generated locals */
-    integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
-    integer fla_i_nint(real *);
     /* Local variables */
-    integer j, k, rk;
+    aocl_int64_t j, k, rk;
     real akk;
-    integer pvt;
+    aocl_int64_t pvt;
     real temp, temp2;
-    extern real snrm2_(integer *, real *, integer *);
     real tol3z;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
-    integer itemp;
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        slarfg_(integer *, real *, real *, integer *, real *);
-    integer lsticc;
-    extern integer isamax_(integer *, real *, integer *);
-    integer lastrk;
+    aocl_int64_t lsticc;
+    aocl_int64_t lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -261,15 +269,15 @@ L10:
         rk = *offset + k;
         /* Determine ith pivot column and swap if necessary */
         i__1 = *n - k + 1;
-        pvt = k - 1 + isamax_(&i__1, &vn1[k], &c__1);
+        pvt = k - 1 + aocl_blas_isamax(&i__1, &vn1[k], &c__1);
         if(pvt != k)
         {
-            sswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+            aocl_blas_sswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = k - 1;
-            sswap_(&i__1, &f[pvt + f_dim1], ldf, &f[k + f_dim1], ldf);
+            aocl_blas_sswap(&i__1, &f[pvt + f_dim1], ldf, &f[k + f_dim1], ldf);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[k];
-            jpvt[k] = itemp;
+            jpvt[k] = (aocl_int_t)(itemp);
             vn1[pvt] = vn1[k];
             vn2[pvt] = vn2[k];
         }
@@ -279,18 +287,18 @@ L10:
         {
             i__1 = *m - rk + 1;
             i__2 = k - 1;
-            sgemv_("No transpose", &i__1, &i__2, &c_b8, &a[rk + a_dim1], lda, &f[k + f_dim1], ldf,
-                   &c_b9, &a[rk + k * a_dim1], &c__1);
+            aocl_blas_sgemv("No transpose", &i__1, &i__2, &c_b8, &a[rk + a_dim1], lda,
+                            &f[k + f_dim1], ldf, &c_b9, &a[rk + k * a_dim1], &c__1);
         }
         /* Generate elementary reflector H(k). */
         if(rk < *m)
         {
             i__1 = *m - rk + 1;
-            slarfg_(&i__1, &a[rk + k * a_dim1], &a[rk + 1 + k * a_dim1], &c__1, &tau[k]);
+            aocl_lapack_slarfg(&i__1, &a[rk + k * a_dim1], &a[rk + 1 + k * a_dim1], &c__1, &tau[k]);
         }
         else
         {
-            slarfg_(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
+            aocl_lapack_slarfg(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
         }
         akk = a[rk + k * a_dim1];
         a[rk + k * a_dim1] = 1.f;
@@ -300,8 +308,8 @@ L10:
         {
             i__1 = *m - rk + 1;
             i__2 = *n - k;
-            sgemv_("Transpose", &i__1, &i__2, &tau[k], &a[rk + (k + 1) * a_dim1], lda,
-                   &a[rk + k * a_dim1], &c__1, &c_b16, &f[k + 1 + k * f_dim1], &c__1);
+            aocl_blas_sgemv("Transpose", &i__1, &i__2, &tau[k], &a[rk + (k + 1) * a_dim1], lda,
+                            &a[rk + k * a_dim1], &c__1, &c_b16, &f[k + 1 + k * f_dim1], &c__1);
         }
         /* Padding F(1:K,K) with zeros. */
         i__1 = k;
@@ -318,19 +326,19 @@ L10:
             i__1 = *m - rk + 1;
             i__2 = k - 1;
             r__1 = -tau[k];
-            sgemv_("Transpose", &i__1, &i__2, &r__1, &a[rk + a_dim1], lda, &a[rk + k * a_dim1],
-                   &c__1, &c_b16, &auxv[1], &c__1);
+            aocl_blas_sgemv("Transpose", &i__1, &i__2, &r__1, &a[rk + a_dim1], lda,
+                            &a[rk + k * a_dim1], &c__1, &c_b16, &auxv[1], &c__1);
             i__1 = k - 1;
-            sgemv_("No transpose", n, &i__1, &c_b9, &f[f_dim1 + 1], ldf, &auxv[1], &c__1, &c_b9,
-                   &f[k * f_dim1 + 1], &c__1);
+            aocl_blas_sgemv("No transpose", n, &i__1, &c_b9, &f[f_dim1 + 1], ldf, &auxv[1], &c__1,
+                            &c_b9, &f[k * f_dim1 + 1], &c__1);
         }
         /* Update the current row of A: */
         /* A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**T. */
         if(k < *n)
         {
             i__1 = *n - k;
-            sgemv_("No transpose", &i__1, &k, &c_b8, &f[k + 1 + f_dim1], ldf, &a[rk + a_dim1], lda,
-                   &c_b9, &a[rk + (k + 1) * a_dim1], lda);
+            aocl_blas_sgemv("No transpose", &i__1, &k, &c_b8, &f[k + 1 + f_dim1], ldf,
+                            &a[rk + a_dim1], lda, &c_b9, &a[rk + (k + 1) * a_dim1], lda);
         }
         /* Update partial column norms. */
         if(rk < lastrk)
@@ -379,8 +387,9 @@ L10:
     {
         i__1 = *m - rk;
         i__2 = *n - *kb;
-        sgemm_("No transpose", "Transpose", &i__1, &i__2, kb, &c_b8, &a[rk + 1 + a_dim1], lda,
-               &f[*kb + 1 + f_dim1], ldf, &c_b9, &a[rk + 1 + (*kb + 1) * a_dim1], lda);
+        aocl_blas_sgemm("No transpose", "Transpose", &i__1, &i__2, kb, &c_b8, &a[rk + 1 + a_dim1],
+                        lda, &f[*kb + 1 + f_dim1], ldf, &c_b9, &a[rk + 1 + (*kb + 1) * a_dim1],
+                        lda);
     }
     /* Recomputation of difficult columns. */
 L40:
@@ -388,7 +397,7 @@ L40:
     {
         itemp = fla_i_nint(&vn2[lsticc]);
         i__1 = *m - rk;
-        vn1[lsticc] = snrm2_(&i__1, &a[rk + 1 + lsticc * a_dim1], &c__1);
+        vn1[lsticc] = aocl_blas_snrm2(&i__1, &a[rk + 1 + lsticc * a_dim1], &c__1);
         /* NOTE: The computation of VN1( LSTICC ) relies on the fact that */
         /* SNRM2 does not fail on vectors with norm below the value of */
         /* SQRT(DLAMCH('S')) */

@@ -21,12 +21,6 @@ double prepare_lapacke_gecon_run(integer datatype, integer layout, char norm, in
 void invoke_gecon(integer datatype, char *norm, integer *n, void *A, integer *lda, void *anorm,
                   void *rcond, void *work, void *lrwork, integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gecon_outputs(void *filename, integer datatype, char norm, integer n, integer lda,
-                         void *rcond, void *params);
-integer check_bit_reproducibility_gecon(void *filename, integer datatype, char norm, integer n,
-                                        integer lda, void *rcond, void *params);
-
 void fla_test_gecon(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Estimates the reciprocal of the condition number of a general matrix A";
@@ -158,7 +152,6 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
         create_vector(DOUBLE, &lrwork, 2 * n);
     create_realtype_vector(datatype, &rcond, 1);
     create_realtype_vector(datatype, &anorm, 1);
-    create_realtype_vector(datatype, &s_test_in, n);
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
@@ -170,6 +163,7 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
         }
         else
         { /*Generating specific input matrix */
+            create_realtype_vector(datatype, &s_test_in, n);
             create_svd_matrix(datatype, 'U', n, n, A, lda, s_test_in, 0.1, 100, i_zero, i_zero,
                               getrfinfo);
             compute_matrix_norm(datatype, norm, n, n, A, lda, anorm, norm, work);
@@ -181,6 +175,7 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
             getrfinfo = 0;
             invoke_getrf(datatype, &n, &n, A, &lda, ipiv, &getrfinfo);
             copy_matrix(datatype, "Full", n, n, A, lda, A_save, lda);
+            free_vector(ipiv);
         }
     }
 
@@ -207,10 +202,15 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
     /* Output validataion */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     IF_FLA_BRT_VALIDATION(
-        n, n, store_gecon_outputs(filename, datatype, norm, n, lda, rcond, params),
+        n, n, store_outputs_base(filename, params, 0, 1, get_realtype(datatype), 1, rcond),
         validate_gecon(tst_api, datatype, norm, n, A, A_save, lda, residual, params->imatrix_char,
                        params),
-        check_bit_reproducibility_gecon(filename, datatype, norm, n, lda, rcond, params))
+        check_reproducibility_base(filename, params, 0, 1, get_realtype(datatype), 1, rcond))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gecon(tst_api, datatype, norm, n, A, A_save, lda, residual, params->imatrix_char,
@@ -231,13 +231,15 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_vector(s_test_in);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_save);
-    free_vector(ipiv);
     free_vector(work);
-    free_vector(s_test_in);
     free_vector(anorm);
     free_vector(rcond);
     free_vector(lrwork);
@@ -253,7 +255,7 @@ void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
-    /* Workspace size calculations for complex datatype */
+    /* Workspace size calculations for scomplex datatype */
     if(datatype == COMPLEX && datatype == DOUBLE_COMPLEX)
     {
         lwork = 2 * n;
@@ -378,27 +380,4 @@ void invoke_gecon(integer datatype, char *norm, integer *n, void *A, integer *ld
             break;
         }
     }
-}
-
-void store_gecon_outputs(void *filename, integer datatype, char norm, integer n, integer lda,
-                         void *rcond, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    FLA_STORE_BRT_VECTOR(get_realtype(datatype), 1, rcond)
-
-    fclose(gt_file);
-}
-
-integer check_bit_reproducibility_gecon(void *filename, integer datatype, char norm, integer n,
-                                        integer lda, void *rcond, void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), 1, rcond)
-
-    fclose(gt_file);
-    return 1;
 }

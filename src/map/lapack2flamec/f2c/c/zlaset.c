@@ -102,18 +102,33 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecomplex *beta,
-             doublecomplex *a, integer *lda)
+/** Generated wrapper function */
+void zlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *alpha, dcomplex *beta,
+             dcomplex *a, aocl_int_t *lda)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaset(uplo, m, n, alpha, beta, a, lda);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zlaset(uplo, &m_64, &n_64, alpha, beta, a, &lda_64);
+#endif
+}
+
+void aocl_lapack_zlaset(char *uplo, aocl_int64_t *m, aocl_int64_t *n, dcomplex *alpha,
+                        dcomplex *beta, dcomplex *a, aocl_int64_t *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaset inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
                       *uplo, *m, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -148,8 +163,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = alpha->r;
-                a[i__3].i = alpha->i; // , expr subst
+                a[i__3].real = alpha->real;
+                a[i__3].imag = alpha->imag; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -158,8 +173,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = beta->r;
-            a[i__2].i = beta->i; // , expr subst
+            a[i__2].real = beta->real;
+            a[i__2].imag = beta->imag; // , expr subst
             /* L30: */
         }
     }
@@ -174,8 +189,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
             for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = alpha->r;
-                a[i__3].i = alpha->i; // , expr subst
+                a[i__3].real = alpha->real;
+                a[i__3].imag = alpha->imag; // , expr subst
                 /* L40: */
             }
             /* L50: */
@@ -184,8 +199,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = beta->r;
-            a[i__2].i = beta->i; // , expr subst
+            a[i__2].real = beta->real;
+            a[i__2].imag = beta->imag; // , expr subst
             /* L60: */
         }
     }
@@ -200,8 +215,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = alpha->r;
-                a[i__3].i = alpha->i; // , expr subst
+                a[i__3].real = alpha->real;
+                a[i__3].imag = alpha->imag; // , expr subst
                 /* L70: */
             }
             /* L80: */
@@ -210,8 +225,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = beta->r;
-            a[i__2].i = beta->i; // , expr subst
+            a[i__2].real = beta->real;
+            a[i__2].imag = beta->imag; // , expr subst
             /* L90: */
         }
     }

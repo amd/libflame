@@ -44,7 +44,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGESVX uses the LU factorization to compute the solution to a complex */
+/* > CGESVX uses the LU factorization to compute the solution to a scomplex */
 /* > system of linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N matrix and X and B are N-by-NRHS matrices. */
@@ -350,10 +350,36 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complexGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, integer *lda,
-             complex *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__,
-             complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr,
-             real *berr, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
+             scomplex *af, aocl_int_t *ldaf, aocl_int_t *ipiv, char *equed, real *r__, real *c__,
+             scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr,
+             real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgesvx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r__, c__, b, ldb, x,
+                       ldx, rcond, ferr, berr, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgesvx(fact, trans, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, equed, r__,
+                       c__, b, &ldb_64, x, &ldx_64, rcond, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                        aocl_int64_t *lda, scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
+                        char *equed, real *r__, real *c__, scomplex *b, aocl_int64_t *ldb,
+                        scomplex *x, aocl_int64_t *ldx, real *rcond, real *ferr, real *berr,
+                        scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -371,47 +397,23 @@ void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
-        i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2, i__3, i__4, i__5;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real amax;
     char norm[1];
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real rcmin, rcmax, anorm;
     logical equil;
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        claqge_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *,
-                char *),
-        cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
-                integer *);
     real colcnd;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        cgeequ_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *,
-                integer *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        cgerfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *,
-                complex *, integer *, complex *, integer *, real *, real *, complex *, real *,
-                integer *),
-        cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern real clantr_(char *, char *, char *, integer *, integer *, complex *, integer *, real *);
-    integer infequ;
+    aocl_int64_t infequ;
     logical colequ;
-    extern /* Subroutine */
-        void
-        cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
-                integer *);
     real rowcnd;
     logical notran;
     real smlnum;
@@ -583,18 +585,20 @@ void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGESVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGESVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        cgeequ_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, &infequ);
+        aocl_lapack_cgeequ(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                           &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            claqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
+            aocl_lapack_claqge(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                               equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -613,10 +617,10 @@ void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, int
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * b_dim1;
-                    q__1.r = r__[i__4] * b[i__5].r;
-                    q__1.i = r__[i__4] * b[i__5].i; // , expr subst
-                    b[i__3].r = q__1.r;
-                    b[i__3].i = q__1.i; // , expr subst
+                    q__1.real = r__[i__4] * b[i__5].real;
+                    q__1.imag = r__[i__4] * b[i__5].imag; // , expr subst
+                    b[i__3].real = q__1.real;
+                    b[i__3].imag = q__1.imag; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -634,10 +638,10 @@ void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, int
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * b_dim1;
-                q__1.r = c__[i__4] * b[i__5].r;
-                q__1.i = c__[i__4] * b[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = c__[i__4] * b[i__5].real;
+                q__1.imag = c__[i__4] * b[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -646,21 +650,21 @@ void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, int
     if(nofact || equil)
     {
         /* Compute the LU factorization of A. */
-        clacpy_("Full", n, n, &a[a_offset], lda, &af[af_offset], ldaf);
-        cgetrf_(n, n, &af[af_offset], ldaf, &ipiv[1], info);
+        aocl_lapack_clacpy("Full", n, n, &a[a_offset], lda, &af[af_offset], ldaf);
+        aocl_lapack_cgetrf(n, n, &af[af_offset], ldaf, &ipiv[1], info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            rpvgrw = clantr_("M", "U", "N", info, info, &af[af_offset], ldaf, &rwork[1]);
+            rpvgrw = aocl_lapack_clantr("M", "U", "N", info, info, &af[af_offset], ldaf, &rwork[1]);
             if(rpvgrw == 0.f)
             {
                 rpvgrw = 1.f;
             }
             else
             {
-                rpvgrw = clange_("M", n, info, &a[a_offset], lda, &rwork[1]) / rpvgrw;
+                rpvgrw = aocl_lapack_clange("M", n, info, &a[a_offset], lda, &rwork[1]) / rpvgrw;
             }
             rwork[1] = rpvgrw;
             *rcond = 0.f;
@@ -678,25 +682,26 @@ void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, int
     {
         *(unsigned char *)norm = 'I';
     }
-    anorm = clange_(norm, n, n, &a[a_offset], lda, &rwork[1]);
-    rpvgrw = clantr_("M", "U", "N", n, n, &af[af_offset], ldaf, &rwork[1]);
+    anorm = aocl_lapack_clange(norm, n, n, &a[a_offset], lda, &rwork[1]);
+    rpvgrw = aocl_lapack_clantr("M", "U", "N", n, n, &af[af_offset], ldaf, &rwork[1]);
     if(rpvgrw == 0.f)
     {
         rpvgrw = 1.f;
     }
     else
     {
-        rpvgrw = clange_("M", n, n, &a[a_offset], lda, &rwork[1]) / rpvgrw;
+        rpvgrw = aocl_lapack_clange("M", n, n, &a[a_offset], lda, &rwork[1]) / rpvgrw;
     }
     /* Compute the reciprocal of the condition number of A. */
-    cgecon_(norm, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &rwork[1], info);
+    aocl_lapack_cgecon(norm, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &rwork[1], info);
     /* Compute the solution matrix X. */
-    clacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    cgetrs_(trans, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
+    aocl_lapack_clacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_cgetrs(trans, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    cgerfs_(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
-            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_cgerfs(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
+                       &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(notran)
@@ -712,10 +717,10 @@ void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, int
                     i__3 = i__ + j * x_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * x_dim1;
-                    q__1.r = c__[i__4] * x[i__5].r;
-                    q__1.i = c__[i__4] * x[i__5].i; // , expr subst
-                    x[i__3].r = q__1.r;
-                    x[i__3].i = q__1.i; // , expr subst
+                    q__1.real = c__[i__4] * x[i__5].real;
+                    q__1.imag = c__[i__4] * x[i__5].imag; // , expr subst
+                    x[i__3].real = q__1.real;
+                    x[i__3].imag = q__1.imag; // , expr subst
                     /* L70: */
                 }
                 /* L80: */
@@ -739,10 +744,10 @@ void cgesvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, int
                 i__3 = i__ + j * x_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * x_dim1;
-                q__1.r = r__[i__4] * x[i__5].r;
-                q__1.i = r__[i__4] * x[i__5].i; // , expr subst
-                x[i__3].r = q__1.r;
-                x[i__3].i = q__1.i; // , expr subst
+                q__1.real = r__[i__4] * x[i__5].real;
+                q__1.imag = r__[i__4] * x[i__5].imag; // , expr subst
+                x[i__3].real = q__1.real;
+                x[i__3].imag = q__1.imag; // , expr subst
                 /* L100: */
             }
             /* L110: */

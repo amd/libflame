@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZSYMV computes a matrix-vector product for a complex symmetric matrix. */
+#include "FLA_f2c.h" /* > \brief \b ZSYMV computes a matrix-vector product for a scomplex symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -152,8 +152,26 @@
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integer *lda,
-            doublecomplex *x, integer *incx, doublecomplex *beta, doublecomplex *y, integer *incy)
+/** Generated wrapper function */
+void zsymv_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *a, aocl_int_t *lda,
+            dcomplex *x, aocl_int_t *incx, dcomplex *beta, dcomplex *y,
+            aocl_int_t *incy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsymv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_zsymv(uplo, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y, &incy_64);
+#endif
+}
+
+void aocl_lapack_zsymv(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *a,
+                       aocl_int64_t *lda, dcomplex *x, aocl_int64_t *incx, dcomplex *beta,
+                       dcomplex *y, aocl_int64_t *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsymv inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS
@@ -161,15 +179,12 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
                       *uplo, *n, *lda, *incx, *incy);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2, z__3, z__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Local variables */
-    integer i__, j, ix, iy, jx, jy, kx, ky, info;
-    doublecomplex temp1, temp2;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, ix, iy, jx, jy, kx, ky, info;
+    dcomplex temp1, temp2;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -221,12 +236,12 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
     }
     if(info != 0)
     {
-        xerbla_("ZSYMV ", &info, (ftnlen)6);
+        aocl_blas_xerbla("ZSYMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
-    if(*n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 1. && beta->i == 0.))
+    if(*n == 0 || alpha->real == 0. && alpha->imag == 0. && (beta->real == 1. && beta->imag == 0.))
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -252,18 +267,18 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
     /* accessed sequentially with one pass through the triangular part */
     /* of A. */
     /* First form y := beta*y. */
-    if(beta->r != 1. || beta->i != 0.)
+    if(beta->real != 1. || beta->imag != 0.)
     {
         if(*incy == 1)
         {
-            if(beta->r == 0. && beta->i == 0.)
+            if(beta->real == 0. && beta->imag == 0.)
             {
                 i__1 = *n;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
-                    y[i__2].r = 0.;
-                    y[i__2].i = 0.; // , expr subst
+                    y[i__2].real = 0.;
+                    y[i__2].imag = 0.; // , expr subst
                     /* L10: */
                 }
             }
@@ -274,10 +289,10 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
                 {
                     i__2 = i__;
                     i__3 = i__;
-                    z__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
-                    y[i__2].r = z__1.r;
-                    y[i__2].i = z__1.i; // , expr subst
+                    z__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag;
+                    z__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3].real; // , expr subst
+                    y[i__2].real = z__1.real;
+                    y[i__2].imag = z__1.imag; // , expr subst
                     /* L20: */
                 }
             }
@@ -285,14 +300,14 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
         else
         {
             iy = ky;
-            if(beta->r == 0. && beta->i == 0.)
+            if(beta->real == 0. && beta->imag == 0.)
             {
                 i__1 = *n;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = iy;
-                    y[i__2].r = 0.;
-                    y[i__2].i = 0.; // , expr subst
+                    y[i__2].real = 0.;
+                    y[i__2].imag = 0.; // , expr subst
                     iy += *incy;
                     /* L30: */
                 }
@@ -304,17 +319,17 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
                 {
                     i__2 = iy;
                     i__3 = iy;
-                    z__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
-                    y[i__2].r = z__1.r;
-                    y[i__2].i = z__1.i; // , expr subst
+                    z__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag;
+                    z__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3].real; // , expr subst
+                    y[i__2].real = z__1.real;
+                    y[i__2].imag = z__1.imag; // , expr subst
                     iy += *incy;
                     /* L40: */
                 }
             }
         }
     }
-    if(alpha->r == 0. && alpha->i == 0.)
+    if(alpha->real == 0. && alpha->imag == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -328,47 +343,47 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                temp1.r = z__1.r;
-                temp1.i = z__1.i; // , expr subst
-                temp2.r = 0.;
-                temp2.i = 0.; // , expr subst
+                z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                temp1.real = z__1.real;
+                temp1.imag = z__1.imag; // , expr subst
+                temp2.real = 0.;
+                temp2.imag = 0.; // , expr subst
                 i__2 = j - 1;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    z__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
-                    z__1.r = y[i__4].r + z__2.r;
-                    z__1.i = y[i__4].i + z__2.i; // , expr subst
-                    y[i__3].r = z__1.r;
-                    y[i__3].i = z__1.i; // , expr subst
+                    z__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag;
+                    z__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5].real; // , expr subst
+                    z__1.real = y[i__4].real + z__2.real;
+                    z__1.imag = y[i__4].imag + z__2.imag; // , expr subst
+                    y[i__3].real = z__1.real;
+                    y[i__3].imag = z__1.imag; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__;
-                    z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                    z__1.r = temp2.r + z__2.r;
-                    z__1.i = temp2.i + z__2.i; // , expr subst
-                    temp2.r = z__1.r;
-                    temp2.i = z__1.i; // , expr subst
+                    z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                    z__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                    z__1.real = temp2.real + z__2.real;
+                    z__1.imag = temp2.imag + z__2.imag; // , expr subst
+                    temp2.real = z__1.real;
+                    temp2.imag = z__1.imag; // , expr subst
                     /* L50: */
                 }
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                z__3.r = temp1.r * a[i__4].r - temp1.i * a[i__4].i;
-                z__3.i = temp1.r * a[i__4].i + temp1.i * a[i__4].r; // , expr subst
-                z__2.r = y[i__3].r + z__3.r;
-                z__2.i = y[i__3].i + z__3.i; // , expr subst
-                z__4.r = alpha->r * temp2.r - alpha->i * temp2.i;
-                z__4.i = alpha->r * temp2.i + alpha->i * temp2.r; // , expr subst
-                z__1.r = z__2.r + z__4.r;
-                z__1.i = z__2.i + z__4.i; // , expr subst
-                y[i__2].r = z__1.r;
-                y[i__2].i = z__1.i; // , expr subst
+                z__3.real = temp1.real * a[i__4].real - temp1.imag * a[i__4].imag;
+                z__3.imag = temp1.real * a[i__4].imag + temp1.imag * a[i__4].real; // , expr subst
+                z__2.real = y[i__3].real + z__3.real;
+                z__2.imag = y[i__3].imag + z__3.imag; // , expr subst
+                z__4.real = alpha->real * temp2.real - alpha->imag * temp2.imag;
+                z__4.imag = alpha->real * temp2.imag + alpha->imag * temp2.real; // , expr subst
+                z__1.real = z__2.real + z__4.real;
+                z__1.imag = z__2.imag + z__4.imag; // , expr subst
+                y[i__2].real = z__1.real;
+                y[i__2].imag = z__1.imag; // , expr subst
                 /* L60: */
             }
         }
@@ -380,12 +395,12 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                temp1.r = z__1.r;
-                temp1.i = z__1.i; // , expr subst
-                temp2.r = 0.;
-                temp2.i = 0.; // , expr subst
+                z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                temp1.real = z__1.real;
+                temp1.imag = z__1.imag; // , expr subst
+                temp2.real = 0.;
+                temp2.imag = 0.; // , expr subst
                 ix = kx;
                 iy = ky;
                 i__2 = j - 1;
@@ -394,20 +409,20 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
-                    z__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
-                    z__1.r = y[i__4].r + z__2.r;
-                    z__1.i = y[i__4].i + z__2.i; // , expr subst
-                    y[i__3].r = z__1.r;
-                    y[i__3].i = z__1.i; // , expr subst
+                    z__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag;
+                    z__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5].real; // , expr subst
+                    z__1.real = y[i__4].real + z__2.real;
+                    z__1.imag = y[i__4].imag + z__2.imag; // , expr subst
+                    y[i__3].real = z__1.real;
+                    y[i__3].imag = z__1.imag; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     i__4 = ix;
-                    z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                    z__1.r = temp2.r + z__2.r;
-                    z__1.i = temp2.i + z__2.i; // , expr subst
-                    temp2.r = z__1.r;
-                    temp2.i = z__1.i; // , expr subst
+                    z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                    z__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                    z__1.real = temp2.real + z__2.real;
+                    z__1.imag = temp2.imag + z__2.imag; // , expr subst
+                    temp2.real = z__1.real;
+                    temp2.imag = z__1.imag; // , expr subst
                     ix += *incx;
                     iy += *incy;
                     /* L70: */
@@ -415,16 +430,16 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
                 i__2 = jy;
                 i__3 = jy;
                 i__4 = j + j * a_dim1;
-                z__3.r = temp1.r * a[i__4].r - temp1.i * a[i__4].i;
-                z__3.i = temp1.r * a[i__4].i + temp1.i * a[i__4].r; // , expr subst
-                z__2.r = y[i__3].r + z__3.r;
-                z__2.i = y[i__3].i + z__3.i; // , expr subst
-                z__4.r = alpha->r * temp2.r - alpha->i * temp2.i;
-                z__4.i = alpha->r * temp2.i + alpha->i * temp2.r; // , expr subst
-                z__1.r = z__2.r + z__4.r;
-                z__1.i = z__2.i + z__4.i; // , expr subst
-                y[i__2].r = z__1.r;
-                y[i__2].i = z__1.i; // , expr subst
+                z__3.real = temp1.real * a[i__4].real - temp1.imag * a[i__4].imag;
+                z__3.imag = temp1.real * a[i__4].imag + temp1.imag * a[i__4].real; // , expr subst
+                z__2.real = y[i__3].real + z__3.real;
+                z__2.imag = y[i__3].imag + z__3.imag; // , expr subst
+                z__4.real = alpha->real * temp2.real - alpha->imag * temp2.imag;
+                z__4.imag = alpha->real * temp2.imag + alpha->imag * temp2.real; // , expr subst
+                z__1.real = z__2.real + z__4.real;
+                z__1.imag = z__2.imag + z__4.imag; // , expr subst
+                y[i__2].real = z__1.real;
+                y[i__2].imag = z__1.imag; // , expr subst
                 jx += *incx;
                 jy += *incy;
                 /* L80: */
@@ -440,51 +455,51 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                temp1.r = z__1.r;
-                temp1.i = z__1.i; // , expr subst
-                temp2.r = 0.;
-                temp2.i = 0.; // , expr subst
+                z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                temp1.real = z__1.real;
+                temp1.imag = z__1.imag; // , expr subst
+                temp2.real = 0.;
+                temp2.imag = 0.; // , expr subst
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                z__2.r = temp1.r * a[i__4].r - temp1.i * a[i__4].i;
-                z__2.i = temp1.r * a[i__4].i + temp1.i * a[i__4].r; // , expr subst
-                z__1.r = y[i__3].r + z__2.r;
-                z__1.i = y[i__3].i + z__2.i; // , expr subst
-                y[i__2].r = z__1.r;
-                y[i__2].i = z__1.i; // , expr subst
+                z__2.real = temp1.real * a[i__4].real - temp1.imag * a[i__4].imag;
+                z__2.imag = temp1.real * a[i__4].imag + temp1.imag * a[i__4].real; // , expr subst
+                z__1.real = y[i__3].real + z__2.real;
+                z__1.imag = y[i__3].imag + z__2.imag; // , expr subst
+                y[i__2].real = z__1.real;
+                y[i__2].imag = z__1.imag; // , expr subst
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    z__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
-                    z__1.r = y[i__4].r + z__2.r;
-                    z__1.i = y[i__4].i + z__2.i; // , expr subst
-                    y[i__3].r = z__1.r;
-                    y[i__3].i = z__1.i; // , expr subst
+                    z__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag;
+                    z__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5].real; // , expr subst
+                    z__1.real = y[i__4].real + z__2.real;
+                    z__1.imag = y[i__4].imag + z__2.imag; // , expr subst
+                    y[i__3].real = z__1.real;
+                    y[i__3].imag = z__1.imag; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__;
-                    z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                    z__1.r = temp2.r + z__2.r;
-                    z__1.i = temp2.i + z__2.i; // , expr subst
-                    temp2.r = z__1.r;
-                    temp2.i = z__1.i; // , expr subst
+                    z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                    z__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                    z__1.real = temp2.real + z__2.real;
+                    z__1.imag = temp2.imag + z__2.imag; // , expr subst
+                    temp2.real = z__1.real;
+                    temp2.imag = z__1.imag; // , expr subst
                     /* L90: */
                 }
                 i__2 = j;
                 i__3 = j;
-                z__2.r = alpha->r * temp2.r - alpha->i * temp2.i;
-                z__2.i = alpha->r * temp2.i + alpha->i * temp2.r; // , expr subst
-                z__1.r = y[i__3].r + z__2.r;
-                z__1.i = y[i__3].i + z__2.i; // , expr subst
-                y[i__2].r = z__1.r;
-                y[i__2].i = z__1.i; // , expr subst
+                z__2.real = alpha->real * temp2.real - alpha->imag * temp2.imag;
+                z__2.imag = alpha->real * temp2.imag + alpha->imag * temp2.real; // , expr subst
+                z__1.real = y[i__3].real + z__2.real;
+                z__1.imag = y[i__3].imag + z__2.imag; // , expr subst
+                y[i__2].real = z__1.real;
+                y[i__2].imag = z__1.imag; // , expr subst
                 /* L100: */
             }
         }
@@ -496,21 +511,21 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                temp1.r = z__1.r;
-                temp1.i = z__1.i; // , expr subst
-                temp2.r = 0.;
-                temp2.i = 0.; // , expr subst
+                z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                temp1.real = z__1.real;
+                temp1.imag = z__1.imag; // , expr subst
+                temp2.real = 0.;
+                temp2.imag = 0.; // , expr subst
                 i__2 = jy;
                 i__3 = jy;
                 i__4 = j + j * a_dim1;
-                z__2.r = temp1.r * a[i__4].r - temp1.i * a[i__4].i;
-                z__2.i = temp1.r * a[i__4].i + temp1.i * a[i__4].r; // , expr subst
-                z__1.r = y[i__3].r + z__2.r;
-                z__1.i = y[i__3].i + z__2.i; // , expr subst
-                y[i__2].r = z__1.r;
-                y[i__2].i = z__1.i; // , expr subst
+                z__2.real = temp1.real * a[i__4].real - temp1.imag * a[i__4].imag;
+                z__2.imag = temp1.real * a[i__4].imag + temp1.imag * a[i__4].real; // , expr subst
+                z__1.real = y[i__3].real + z__2.real;
+                z__1.imag = y[i__3].imag + z__2.imag; // , expr subst
+                y[i__2].real = z__1.real;
+                y[i__2].imag = z__1.imag; // , expr subst
                 ix = jx;
                 iy = jy;
                 i__2 = *n;
@@ -521,30 +536,30 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
-                    z__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
-                    z__1.r = y[i__4].r + z__2.r;
-                    z__1.i = y[i__4].i + z__2.i; // , expr subst
-                    y[i__3].r = z__1.r;
-                    y[i__3].i = z__1.i; // , expr subst
+                    z__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag;
+                    z__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5].real; // , expr subst
+                    z__1.real = y[i__4].real + z__2.real;
+                    z__1.imag = y[i__4].imag + z__2.imag; // , expr subst
+                    y[i__3].real = z__1.real;
+                    y[i__3].imag = z__1.imag; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     i__4 = ix;
-                    z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                    z__1.r = temp2.r + z__2.r;
-                    z__1.i = temp2.i + z__2.i; // , expr subst
-                    temp2.r = z__1.r;
-                    temp2.i = z__1.i; // , expr subst
+                    z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                    z__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                    z__1.real = temp2.real + z__2.real;
+                    z__1.imag = temp2.imag + z__2.imag; // , expr subst
+                    temp2.real = z__1.real;
+                    temp2.imag = z__1.imag; // , expr subst
                     /* L110: */
                 }
                 i__2 = jy;
                 i__3 = jy;
-                z__2.r = alpha->r * temp2.r - alpha->i * temp2.i;
-                z__2.i = alpha->r * temp2.i + alpha->i * temp2.r; // , expr subst
-                z__1.r = y[i__3].r + z__2.r;
-                z__1.i = y[i__3].i + z__2.i; // , expr subst
-                y[i__2].r = z__1.r;
-                y[i__2].i = z__1.i; // , expr subst
+                z__2.real = alpha->real * temp2.real - alpha->imag * temp2.imag;
+                z__2.imag = alpha->real * temp2.imag + alpha->imag * temp2.real; // , expr subst
+                z__1.real = y[i__3].real + z__2.real;
+                z__1.imag = y[i__3].imag + z__2.imag; // , expr subst
+                y[i__2].real = z__1.real;
+                y[i__2].imag = z__1.imag; // , expr subst
                 jx += *incx;
                 jy += *incy;
                 /* L120: */

@@ -102,16 +102,32 @@ if UPLO = 'L', only the lower */
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlacpy_(char *uplo, integer *m, integer *n, doublereal *a, integer *lda, doublereal *b,
-             integer *ldb)
+/** Generated wrapper function */
+void dlacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
+             doublereal *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlacpy(uplo, m, n, a, lda, b, ldb);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_dlacpy(uplo, &m_64, &n_64, a, &lda_64, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_dlacpy(char *uplo, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
+                        aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *uplo, *m, *n, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -147,7 +163,7 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal *a, integer *lda, do
     if(lsame_(uplo, "U", 1, 1))
     {
         /* Upper triangular part */
-        for(integer i = 1; i <= *n; i++)
+        for(aocl_int64_t i = 1; i <= *n; i++)
         {
             memcpy(b + (i * b_dim1) + 1, a + (i * a_dim1) + 1, fla_min(i, *m) * sizeof(double));
         }
@@ -155,7 +171,7 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal *a, integer *lda, do
     else if(lsame_(uplo, "L", 1, 1))
     {
         /* Lower triangular part */
-        for(integer i = 1; i <= *n && i <= *m; i++)
+        for(aocl_int64_t i = 1; i <= *n && i <= *m; i++)
         {
             memcpy(b + (i * b_dim1 + i), a + (i * a_dim1 + i), (*m - i + 1) * sizeof(double));
         }
@@ -172,14 +188,14 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal *a, integer *lda, do
         else
         {
             /* Otherwise, we need to copy the matrix column by column. */
-            for(integer i = 1; i <= *n; i++)
+            for(aocl_int64_t i = 1; i <= *n; i++)
             {
                 memcpy(b + (i * b_dim1) + 1, a + (i * a_dim1) + 1, *m * sizeof(double));
             }
         }
     }
 #else
-    integer i__1, i__2, i__, j;
+    aocl_int64_t i__1, i__2, i__, j;
     if(lsame_(uplo, "U", 1, 1))
     {
         i__1 = *n;

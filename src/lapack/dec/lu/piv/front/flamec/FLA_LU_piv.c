@@ -34,7 +34,7 @@ FLA_Error FLA_LU_piv( FLA_Obj A, FLA_Obj p )
 }
 
 
-void FLA_get_optimum_params_getrf(integer m, integer n, integer *nb, int *n_threads)
+void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads)
 {
     int available_n_threads = fla_thread_get_num_threads();
 

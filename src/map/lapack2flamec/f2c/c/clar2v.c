@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLAR2V applies a vector of plane rotations with real cosines and complex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices. */
+#include "FLA_f2c.h" /* > \brief \b CLAR2V applies a vector of plane rotations with real cosines and scomplex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -37,8 +37,8 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLAR2V applies a vector of complex plane rotations with real cosines */
-/* > from both sides to a sequence of 2-by-2 complex Hermitian matrices, */
+/* > CLAR2V applies a vector of scomplex plane rotations with real cosines */
+/* > from both sides to a sequence of 2-by-2 scomplex Hermitian matrices, */
 /* > defined by the elements of the vectors x, y and z. For i = 1,2,...,n */
 /* > */
 /* > ( x(i) z(i) ) := */
@@ -108,8 +108,23 @@ the elements of y are assumed to be real. */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clar2v_(integer *n, complex *x, complex *y, complex *z__, integer *incx, real *c__, complex *s,
-             integer *incc)
+/** Generated wrapper function */
+void clar2v_(aocl_int_t *n, scomplex *x, scomplex *y, scomplex *z__, aocl_int_t *incx, real *c__,
+             scomplex *s, aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clar2v(n, x, y, z__, incx, c__, s, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_clar2v(&n_64, x, y, z__, &incx_64, c__, s, &incc_64);
+#endif
+}
+
+void aocl_lapack_clar2v(aocl_int64_t *n, scomplex *x, scomplex *y, scomplex *z__, aocl_int64_t *incx,
+                        real *c__, scomplex *s, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -122,22 +137,22 @@ void clar2v_(integer *n, complex *x, complex *y, complex *z__, integer *incx, re
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real r__1;
-    complex q__1, q__2, q__3, q__4, q__5;
+    scomplex q__1, q__2, q__3, q__4, q__5;
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__;
-    complex t2, t3, t4;
+    aocl_int64_t i__;
+    scomplex t2, t3, t4;
     real t5, t6;
-    integer ic;
+    aocl_int64_t ic;
     real ci;
-    complex si;
-    integer ix;
+    scomplex si;
+    aocl_int64_t ix;
     real xi, yi;
-    complex zi;
+    scomplex zi;
     real t1i, t1r, sii, zii, sir, zir;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -166,62 +181,62 @@ void clar2v_(integer *n, complex *x, complex *y, complex *z__, integer *incx, re
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = ix;
-        xi = x[i__2].r;
+        xi = x[i__2].real;
         i__2 = ix;
-        yi = y[i__2].r;
+        yi = y[i__2].real;
         i__2 = ix;
-        zi.r = z__[i__2].r;
-        zi.i = z__[i__2].i; // , expr subst
-        zir = zi.r;
+        zi.real = z__[i__2].real;
+        zi.imag = z__[i__2].imag; // , expr subst
+        zir = zi.real;
         zii = r_imag(&zi);
         ci = c__[ic];
         i__2 = ic;
-        si.r = s[i__2].r;
-        si.i = s[i__2].i; // , expr subst
-        sir = si.r;
+        si.real = s[i__2].real;
+        si.imag = s[i__2].imag; // , expr subst
+        sir = si.real;
         sii = r_imag(&si);
         t1r = sir * zir - sii * zii;
         t1i = sir * zii + sii * zir;
-        q__1.r = ci * zi.r;
-        q__1.i = ci * zi.i; // , expr subst
-        t2.r = q__1.r;
-        t2.i = q__1.i; // , expr subst
+        q__1.real = ci * zi.real;
+        q__1.imag = ci * zi.imag; // , expr subst
+        t2.real = q__1.real;
+        t2.imag = q__1.imag; // , expr subst
         r_cnjg(&q__3, &si);
-        q__2.r = xi * q__3.r;
-        q__2.i = xi * q__3.i; // , expr subst
-        q__1.r = t2.r - q__2.r;
-        q__1.i = t2.i - q__2.i; // , expr subst
-        t3.r = q__1.r;
-        t3.i = q__1.i; // , expr subst
+        q__2.real = xi * q__3.real;
+        q__2.imag = xi * q__3.imag; // , expr subst
+        q__1.real = t2.real - q__2.real;
+        q__1.imag = t2.imag - q__2.imag; // , expr subst
+        t3.real = q__1.real;
+        t3.imag = q__1.imag; // , expr subst
         r_cnjg(&q__2, &t2);
-        q__3.r = yi * si.r;
-        q__3.i = yi * si.i; // , expr subst
-        q__1.r = q__2.r + q__3.r;
-        q__1.i = q__2.i + q__3.i; // , expr subst
-        t4.r = q__1.r;
-        t4.i = q__1.i; // , expr subst
+        q__3.real = yi * si.real;
+        q__3.imag = yi * si.imag; // , expr subst
+        q__1.real = q__2.real + q__3.real;
+        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+        t4.real = q__1.real;
+        t4.imag = q__1.imag; // , expr subst
         t5 = ci * xi + t1r;
         t6 = ci * yi - t1r;
         i__2 = ix;
-        r__1 = ci * t5 + (sir * t4.r + sii * r_imag(&t4));
-        x[i__2].r = r__1;
-        x[i__2].i = 0.f; // , expr subst
+        r__1 = ci * t5 + (sir * t4.real + sii * r_imag(&t4));
+        x[i__2].real = r__1;
+        x[i__2].imag = 0.f; // , expr subst
         i__2 = ix;
-        r__1 = ci * t6 - (sir * t3.r - sii * r_imag(&t3));
-        y[i__2].r = r__1;
-        y[i__2].i = 0.f; // , expr subst
+        r__1 = ci * t6 - (sir * t3.real - sii * r_imag(&t3));
+        y[i__2].real = r__1;
+        y[i__2].imag = 0.f; // , expr subst
         i__2 = ix;
-        q__2.r = ci * t3.r;
-        q__2.i = ci * t3.i; // , expr subst
+        q__2.real = ci * t3.real;
+        q__2.imag = ci * t3.imag; // , expr subst
         r_cnjg(&q__4, &si);
-        q__5.r = t6;
-        q__5.i = t1i; // , expr subst
-        q__3.r = q__4.r * q__5.r - q__4.i * q__5.i;
-        q__3.i = q__4.r * q__5.i + q__4.i * q__5.r; // , expr subst
-        q__1.r = q__2.r + q__3.r;
-        q__1.i = q__2.i + q__3.i; // , expr subst
-        z__[i__2].r = q__1.r;
-        z__[i__2].i = q__1.i; // , expr subst
+        q__5.real = t6;
+        q__5.imag = t1i; // , expr subst
+        q__3.real = q__4.real * q__5.real - q__4.imag * q__5.imag;
+        q__3.imag = q__4.real * q__5.imag + q__4.imag * q__5.real; // , expr subst
+        q__1.real = q__2.real + q__3.real;
+        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+        z__[i__2].real = q__1.real;
+        z__[i__2].imag = q__1.imag; // , expr subst
         ix += *incx;
         ic += *incc;
         /* L10: */

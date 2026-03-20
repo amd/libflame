@@ -34,6 +34,38 @@ double prepare_lapacke_hgeqz_run(integer datatype, int matrix_layout, char *job,
                                  void *alphai, void *beta, void *q, integer ldq, void *z,
                                  integer ldz, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_hgeqz_outputs(void *filename, integer datatype, char job, char compq, char compz,
+                         integer n, integer ilo, integer ihi, void *h, integer ldh, void *t,
+                         integer ldt, void *alpha, void *alphar, void *alphai, void *beta, void *q,
+                         integer ldq, void *z, integer ldz, void *params);
+integer check_bit_reproducibility_hgeqz(void *filename, integer datatype, char job, char compq,
+                                        char compz, integer n, integer ilo, integer ihi, void *h,
+                                        integer ldh, void *t, integer ldt, void *alpha,
+                                        void *alphar, void *alphai, void *beta, void *q,
+                                        integer ldq, void *z, integer ldz, void *params);
+
+#define VALIDATE_HGEQZ                                                                            \
+    /* If job=E, validate eigen values from the first and second api calls */                     \
+    if(same_char(job, 'E'))                                                                       \
+    {                                                                                             \
+        validate_hgeqz_eigen_values(tst_api, datatype, n, alpha, alphar, alphai, beta, alphae,    \
+                                    alphaer, alphaei, betae, residual, params);                   \
+    }                                                                                             \
+    /* If compq=N or compz=N, validate eigen values from the first and second api                 \
+        calls. Then validate H_test and T_test matrices */                                        \
+    else if(same_char(compq, 'N') || same_char(compz, 'N'))                                       \
+    {                                                                                             \
+        validate_hgeqz_comp_n(tst_api, datatype, n, H_test, H_ntest, ldh, T_test, T_ntest, ldt,   \
+                              alpha, alphar, alphai, beta, alphan, alphanr, alphani, betan,       \
+                              residual, params);                                                  \
+    }                                                                                             \
+    else                                                                                          \
+    {                                                                                             \
+        validate_hgeqz(tst_api, &job, &compq, &compz, n, H, H_test, A, ldh, T, T_test, B, ldt, Q, \
+                       Q_test, Q_A, ldq, Z, Z_test, Z_A, ldz, datatype, residual,                 \
+                       params->imatrix_char, params);                                             \
+    }
 void fla_test_hgeqz(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Computing Eigen value of a real matrix pair (H,T)";
@@ -151,6 +183,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     void *H_ntest = NULL, *T_ntest = NULL;
     void *alphan = NULL, *alphanr = NULL, *alphani = NULL, *betan = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
@@ -228,67 +261,98 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     }
     create_vector(datatype, &beta, n);
 
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix_from_file(datatype, H, n, n, ldh, g_ext_fptr);
-        init_matrix_from_file(datatype, T, n, n, ldt, g_ext_fptr);
-        init_matrix_from_file(datatype, Q, n, n, ldq, g_ext_fptr);
-        init_matrix_from_file(datatype, Z, n, n, ldz, g_ext_fptr);
-    }
-    else
-    {
-        /* Convert matrix according to ILO and IHI values */
-        get_generic_triangular_matrix(datatype, n, A, ldh, ilo, ihi, false);
-        /* Initialize matrix with random values */
-        rand_matrix(datatype, B, n, n, ldt);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        if(g_ext_fptr != NULL)
         {
-            create_realtype_vector(datatype, &scal_A, n);
-            create_realtype_vector(datatype, &scal_B, n);
-            scale_matrix_overflow_underflow_hgeqz_A(datatype, n, A, ldh, params->imatrix_char,
-                                                    scal_A);
-            scale_matrix_overflow_underflow_hgeqz_B(datatype, n, B, ldt, params->imatrix_char,
-                                                    scal_B);
-        }
-        /* Decompose matrix B in to QR and store orthogonal matrix in Q and R in B */
-        if(same_char(compq, 'N'))
-        {
-            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_temp, ldt);
-            get_orthogonal_matrix_from_QR(datatype, n, B, ldt, Q_temp, ldt, &info);
-            free_matrix(Q_temp);
+            init_matrix_from_file(datatype, H, n, n, ldh, g_ext_fptr);
+            init_matrix_from_file(datatype, T, n, n, ldt, g_ext_fptr);
+            init_matrix_from_file(datatype, Q, n, n, ldq, g_ext_fptr);
+            init_matrix_from_file(datatype, Z, n, n, ldz, g_ext_fptr);
         }
         else
         {
-            get_orthogonal_matrix_from_QR(datatype, n, B, ldt, Q, ldq, &info);
-        }
+            /* NOTE: HGEQZ requires structured input;
+               Random matrix initialization is incompatible */
+            /* Convert matrix according to ILO and IHI values */
+            get_generic_triangular_matrix(datatype, n, A, ldh, ilo, ihi, false);
+            /* Initialize matrix with random values */
+            rand_matrix(datatype, B, n, n, ldt);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                create_realtype_vector(datatype, &scal_A, n);
+                create_realtype_vector(datatype, &scal_B, n);
+                scale_matrix_overflow_underflow_hgeqz_A(datatype, n, A, ldh, params->imatrix_char,
+                                                        scal_A);
+                scale_matrix_overflow_underflow_hgeqz_B(datatype, n, B, ldt, params->imatrix_char,
+                                                        scal_B);
+                free_vector(scal_A);
+                free_vector(scal_B);
+            }
+            /* Decompose matrix B in to QR and store orthogonal matrix in Q and R in B */
+            if(same_char(compq, 'N'))
+            {
+                create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_temp, ldt);
+                get_orthogonal_matrix_from_QR(datatype, n, B, ldt, Q_temp, ldt, &info);
+                free_matrix(Q_temp);
+            }
+            else
+            {
+                get_orthogonal_matrix_from_QR(datatype, n, B, ldt, Q, ldq, &info);
+            }
 
-        /* Create the orthogonal Z matrix */
-        if(same_char(compz, 'V'))
-        {
-            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &tmp, n);
-            rand_matrix(datatype, tmp, n, n, n);
-            get_orthogonal_matrix_from_QR(datatype, n, tmp, n, Z, ldz, &info);
-            free_matrix(tmp);
-        }
+            /* Create the orthogonal Z matrix */
+            if(same_char(compz, 'V'))
+            {
+                create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &tmp, n);
+                rand_matrix(datatype, tmp, n, n, n);
+                get_orthogonal_matrix_from_QR(datatype, n, tmp, n, Z, ldz, &info);
+                free_matrix(tmp);
+            }
 
-        info = 0;
-        /* Make copy of matrix A and B. This is required to validate the API functionality */
-        copy_matrix(datatype, "full", n, n, A, ldh, H, ldh);
-        copy_matrix(datatype, "full", n, n, B, ldt, T, ldt);
-        if(same_char(compq, 'I'))
-            set_identity_matrix(datatype, n, n, Q, ldq);
-        if(same_char(compz, 'I'))
-            set_identity_matrix(datatype, n, n, Z, ldz);
-        /* Make copy of matrix Q and Z. This is required to validate the API functionality */
-        copy_matrix(datatype, "full", n, n, Q, ldq, Q_A, ldq);
-        copy_matrix(datatype, "full", n, n, Z, ldz, Z_A, ldz);
-        /* Call to GGHRD API */
-        invoke_gghrd(datatype, &compq, &compz, &n, &ilo, &ihi, H, &ldh, T, &ldt, Q, &ldq, Z, &ldz,
-                     &info);
-        if(same_char(compq, 'I'))
-            set_identity_matrix(datatype, n, n, Q, ldq);
-        if(same_char(compz, 'I'))
-            set_identity_matrix(datatype, n, n, Z, ldz);
+            info = 0;
+            /* Make copy of matrix A and B. This is required to validate the API functionality */
+            copy_matrix(datatype, "full", n, n, A, ldh, H, ldh);
+            copy_matrix(datatype, "full", n, n, B, ldt, T, ldt);
+            if(same_char(compq, 'I'))
+                set_identity_matrix(datatype, n, n, Q, ldq);
+            if(same_char(compz, 'I'))
+                set_identity_matrix(datatype, n, n, Z, ldz);
+            /* Make copy of matrix Q and Z. This is required to validate the API functionality */
+            copy_matrix(datatype, "full", n, n, Q, ldq, Q_A, ldq);
+            copy_matrix(datatype, "full", n, n, Z, ldz, Z_A, ldz);
+            /* Call to GGHRD API */
+            invoke_gghrd(datatype, &compq, &compz, &n, &ilo, &ihi, H, &ldh, T, &ldt, Q, &ldq, Z,
+                         &ldz, &info);
+            if(same_char(compq, 'I'))
+                set_identity_matrix(datatype, n, n, Q, ldq);
+            if(same_char(compz, 'I'))
+                set_identity_matrix(datatype, n, n, Z, ldz);
+        }
+    }
+
+    if(same_char(compq, 'N') && same_char(compz, 'N'))
+    {
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, H, ldh, datatype, n, n, T, ldt, "cccdddddddd",
+                                  job, compq, compz, n, ilo, ihi, ldh, ldt, ldq, ldz, g_lwork);
+    }
+    else if(same_char(compq, 'N'))
+    {
+        FLA_BRT_PROCESS_THREE_INPUT(datatype, n, n, H, ldh, datatype, n, n, T, ldt, datatype, n, n,
+                                    Z, ldz, "cccdddddddd", job, compq, compz, n, ilo, ihi, ldh, ldt,
+                                    ldq, ldz, g_lwork);
+    }
+    else if(same_char(compz, 'N'))
+    {
+        FLA_BRT_PROCESS_THREE_INPUT(datatype, n, n, H, ldh, datatype, n, n, T, ldt, datatype, n, n,
+                                    Q, ldq, "cccdddddddd", job, compq, compz, n, ilo, ihi, ldh, ldt,
+                                    ldq, ldz, g_lwork);
+    }
+    else
+    {
+        FLA_BRT_PROCESS_FOUR_INPUT(datatype, n, n, H, ldh, datatype, n, n, T, ldt, datatype, n, n,
+                                   Q, ldq, datatype, n, n, Z, ldz, "cccdddddddd", job, compq, compz,
+                                   n, ilo, ihi, ldh, ldt, ldq, ldz, g_lwork);
     }
 
     /* Make copy of matrix H,T,Q and Z. This is required to validate the API functionality */
@@ -374,11 +438,11 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Performance computation
     (7)n^3 flops for eigen vectors for real
-    (25)n^3 flops for eigen vectors for complex
+    (25)n^3 flops for eigen vectors for scomplex
     (10)n^3 flops for Schur form is computed for real
-    (35)n^3 flops for Schur form is computed for complex
+    (35)n^3 flops for Schur form is computed for scomplex
     (20)n^3 flops full Schur factorization is computed for real
-    (70)n^3 flops full Schur factorization is computed for complex */
+    (70)n^3 flops full Schur factorization is computed for scomplex */
 
     if(same_char(compz, 'N'))
     {
@@ -404,7 +468,20 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output Validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_hgeqz_outputs(filename, datatype, job, compq, compz, n, ilo, ihi, H_test, ldh, T_test,
+                            ldt, alpha, alphar, alphai, beta, Q_test, ldq, Z_test, ldz, params),
+        VALIDATE_HGEQZ,
+        check_bit_reproducibility_hgeqz(filename, datatype, job, compq, compz, n, ilo, ihi, H_test,
+                                        ldh, T_test, ldt, alpha, alphar, alphai, beta, Q_test, ldq,
+                                        Z_test, ldz, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         /* If job=E, validate eigen values from the first and second api calls */
         if(same_char(job, 'E'))
@@ -433,23 +510,12 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
-    free_vector(beta);
-    free_matrix(H);
-    free_matrix(T);
-    free_matrix(Q);
-    free_matrix(Z);
     free_matrix(H_test);
     free_matrix(T_test);
     free_matrix(Q_test);
     free_matrix(Z_test);
-    free_matrix(A);
-    free_matrix(B);
-    free_matrix(Q_A);
-    free_matrix(Z_A);
     if(datatype == FLOAT || datatype == DOUBLE)
     {
-        free_vector(alphar);
-        free_vector(alphai);
         if(same_char(job, 'E'))
         {
             free_vector(alphaer);
@@ -464,18 +530,11 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     }
     else
     {
-        free_vector(alpha);
         if(same_char(job, 'E'))
             free_vector(alphae);
         if(same_char(compq, 'N') || same_char(compz, 'N'))
             free_vector(alphan);
     }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal_A);
-        free_vector(scal_B);
-    }
-
     if(same_char(job, 'E'))
         free_vector(betae);
     if(same_char(compq, 'N') || same_char(compz, 'N'))
@@ -483,6 +542,26 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         free_vector(betan);
         free_matrix(H_ntest);
         free_matrix(T_ntest);
+    }
+free_buffers:
+    FLA_FREE_FILENAME(filename)
+    free_vector(beta);
+    free_matrix(H);
+    free_matrix(T);
+    free_matrix(Q);
+    free_matrix(Z);
+    free_matrix(A);
+    free_matrix(B);
+    free_matrix(Q_A);
+    free_matrix(Z_A);
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        free_vector(alphar);
+        free_vector(alphai);
+    }
+    else
+    {
+        free_vector(alpha);
     }
 }
 
@@ -707,4 +786,71 @@ void invoke_hgeqz(integer datatype, char *job, char *compq, char *compz, integer
             break;
         }
     }
+}
+
+void store_hgeqz_outputs(void *filename, integer datatype, char job, char compq, char compz,
+                         integer n, integer ilo, integer ihi, void *h, integer ldh, void *t,
+                         integer ldt, void *alpha, void *alphar, void *alphai, void *beta, void *q,
+                         integer ldq, void *z, integer ldz, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Store the output matrices in the file */
+    FLA_STORE_BRT_MATRIX(datatype, n, n, h, ldh)
+    FLA_STORE_BRT_MATRIX(datatype, n, n, t, ldt)
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        FLA_STORE_BRT_VECTOR(datatype, n, alphar)
+        FLA_STORE_BRT_VECTOR(datatype, n, alphai)
+    }
+    else
+    {
+        FLA_STORE_BRT_VECTOR(datatype, n, alpha)
+    }
+    FLA_STORE_BRT_VECTOR(datatype, n, beta)
+    if(!same_char(compq, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, q, ldq)
+    }
+    if(!same_char(compz, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, z, ldz)
+    }
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+
+integer check_bit_reproducibility_hgeqz(void *filename, integer datatype, char job, char compq,
+                                        char compz, integer n, integer ilo, integer ihi, void *h,
+                                        integer ldh, void *t, integer ldt, void *alpha,
+                                        void *alphar, void *alphai, void *beta, void *q,
+                                        integer ldq, void *z, integer ldz, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, h, ldh)
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, t, ldt)
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, n, alphar)
+        FLA_VERIFY_BRT_VECTOR(datatype, n, alphai)
+    }
+    else
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, n, alpha)
+    }
+    FLA_VERIFY_BRT_VECTOR(datatype, n, beta)
+    if(!same_char(compq, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, q, ldq)
+    }
+    if(!same_char(compz, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, z, ldz)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZPTTRF computes the L*D*L**H factorization of a complex Hermitian */
+/* > ZPTTRF computes the L*D*L**H factorization of a scomplex Hermitian */
 /* > positive definite tridiagonal matrix A. The factorization may also */
 /* > be regarded as having the form A = U**H *D*U. */
 /* > \endverbatim */
@@ -88,23 +88,35 @@ if k < N, the factorization could not */
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
+/** Generated wrapper function */
+void zpttrf_(aocl_int_t *n, doublereal *d__, dcomplex *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpttrf(n, d__, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpttrf(&n_64, d__, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpttrf(aocl_int64_t *n, doublereal *d__, dcomplex *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpttrf inputs: n %" FLA_IS "", *n);
 
     /* System generated locals */
-    integer i__1, i__2;
-    doublecomplex z__1;
+    aocl_int64_t i__1, i__2;
+    dcomplex z__1;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
     doublereal f, g;
-    integer i__, i4;
+    aocl_int64_t i__, i4;
     doublereal eii, eir;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -133,7 +145,7 @@ void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("ZPTTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -154,15 +166,15 @@ void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
             goto L30;
         }
         i__2 = i__;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = d_imag(&e[i__]);
         f = eir / d__[i__];
         g = eii / d__[i__];
         i__2 = i__;
-        z__1.r = f;
-        z__1.i = g; // , expr subst
-        e[i__2].r = z__1.r;
-        e[i__2].i = z__1.i; // , expr subst
+        z__1.real = f;
+        z__1.imag = g; // , expr subst
+        e[i__2].real = z__1.real;
+        e[i__2].imag = z__1.imag; // , expr subst
         d__[i__ + 1] = d__[i__ + 1] - f * eir - g * eii;
         /* L10: */
     }
@@ -178,15 +190,15 @@ void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
         }
         /* Solve for e(i) and d(i+1). */
         i__2 = i__;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = d_imag(&e[i__]);
         f = eir / d__[i__];
         g = eii / d__[i__];
         i__2 = i__;
-        z__1.r = f;
-        z__1.i = g; // , expr subst
-        e[i__2].r = z__1.r;
-        e[i__2].i = z__1.i; // , expr subst
+        z__1.real = f;
+        z__1.imag = g; // , expr subst
+        e[i__2].real = z__1.real;
+        e[i__2].imag = z__1.imag; // , expr subst
         d__[i__ + 1] = d__[i__ + 1] - f * eir - g * eii;
         if(d__[i__ + 1] <= 0.)
         {
@@ -195,15 +207,15 @@ void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
         }
         /* Solve for e(i+1) and d(i+2). */
         i__2 = i__ + 1;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = d_imag(&e[i__ + 1]);
         f = eir / d__[i__ + 1];
         g = eii / d__[i__ + 1];
         i__2 = i__ + 1;
-        z__1.r = f;
-        z__1.i = g; // , expr subst
-        e[i__2].r = z__1.r;
-        e[i__2].i = z__1.i; // , expr subst
+        z__1.real = f;
+        z__1.imag = g; // , expr subst
+        e[i__2].real = z__1.real;
+        e[i__2].imag = z__1.imag; // , expr subst
         d__[i__ + 2] = d__[i__ + 2] - f * eir - g * eii;
         if(d__[i__ + 2] <= 0.)
         {
@@ -212,15 +224,15 @@ void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
         }
         /* Solve for e(i+2) and d(i+3). */
         i__2 = i__ + 2;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = d_imag(&e[i__ + 2]);
         f = eir / d__[i__ + 2];
         g = eii / d__[i__ + 2];
         i__2 = i__ + 2;
-        z__1.r = f;
-        z__1.i = g; // , expr subst
-        e[i__2].r = z__1.r;
-        e[i__2].i = z__1.i; // , expr subst
+        z__1.real = f;
+        z__1.imag = g; // , expr subst
+        e[i__2].real = z__1.real;
+        e[i__2].imag = z__1.imag; // , expr subst
         d__[i__ + 3] = d__[i__ + 3] - f * eir - g * eii;
         if(d__[i__ + 3] <= 0.)
         {
@@ -229,15 +241,15 @@ void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
         }
         /* Solve for e(i+3) and d(i+4). */
         i__2 = i__ + 3;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = d_imag(&e[i__ + 3]);
         f = eir / d__[i__ + 3];
         g = eii / d__[i__ + 3];
         i__2 = i__ + 3;
-        z__1.r = f;
-        z__1.i = g; // , expr subst
-        e[i__2].r = z__1.r;
-        e[i__2].i = z__1.i; // , expr subst
+        z__1.real = f;
+        z__1.imag = g; // , expr subst
+        e[i__2].real = z__1.real;
+        e[i__2].imag = z__1.imag; // , expr subst
         d__[i__ + 4] = d__[i__ + 4] - f * eir - g * eii;
         /* L20: */
     }

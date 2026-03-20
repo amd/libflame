@@ -127,6 +127,7 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
     void *IPIV = NULL, *A = NULL, *A_test = NULL, *s_test = NULL;
     char range = 'U';
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -149,26 +150,41 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
     /* Create the matrices for the current operation*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_vector(INTEGER, &IPIV, n);
-    create_realtype_vector(datatype, &s_test, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
 
-    /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-    }
-    else
-    {
-        /* Generate input matrix with condition number <= 10 */
-        create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRI_VL, GETRI_VU, i_zero, i_zero,
-                          info);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        /* Initialize the test matrices*/
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            scale_matrix_underflow_overflow_getri(datatype, n, n, A, lda, params->imatrix_char);
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Generate input matrix with condition number <= 10 */
+            create_realtype_vector(datatype, &s_test, n);
+            create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRI_VL, GETRI_VU, i_zero,
+                              i_zero, info);
+            free_vector(s_test);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_getri(datatype, n, n, A, lda, params->imatrix_char);
+            }
         }
     }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, A, lda, "ddd", n, lda, g_lwork)
 
     /* Save the original matrix*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
     /* call to API */
@@ -182,7 +198,25 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(
+        n, n, store_outputs_base(filename, params, 1, 0, datatype, n, n, A_test, lda),
+        validate_getri(tst_api, n, n, A, A_test, lda, IPIV, datatype, residual,
+                       params->imatrix_char, params),
+        check_reproducibility_base(filename, params, 1, 0, datatype, n, n, A_test, lda))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
+    /* API functionality validation */
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_getri(tst_api, n, n, A, A_test, lda, IPIV, datatype, residual,
                        params->imatrix_char, params);
@@ -202,10 +236,11 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
-    free_vector(s_test);
 }
 
 void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer datatype,

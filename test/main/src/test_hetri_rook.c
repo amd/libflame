@@ -120,6 +120,7 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
     double residual, err_thresh;
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major, lwork;
+    void *filename = NULL;
 
     /* Determine the dimensions */
     n = p_cur;
@@ -143,46 +144,52 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_original, lda);
 
-    /* Initialize the test matrices */
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        for(integer i = 0; i < n; i++)
+        /* Initialize the test matrices */
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
         {
-            ((integer *)ipiv)[i] = i + 1;
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            for(integer i = 0; i < n; i++)
+            {
+                ((integer *)ipiv)[i] = i + 1;
+            }
+            if(params->imatrix_char != '\0')
+            {
+                form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
+            }
         }
-        if(params->imatrix_char != '\0')
+        else
         {
+            /* Create input matrix (hermitian) */
+            create_realtype_vector(datatype, &L, n);
+            generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, HETRI_ROOK_VL, HETRI_ROOK_VU,
+                                     USE_SIGNED_EIGEN_VALUES);
+            /* Oveflow or underflow test initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_overflow_underflow_hetri_rook(datatype, n, A, lda,
+                                                           params->imatrix_char);
+            }
             form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
+            copy_matrix(datatype, "full", lda, n, A, lda, A_original, lda);
+            free_vector(L);
+            create_vector(datatype, &work, 1);
+            lwork = -1;
+            invoke_hetrf_rook(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, &info);
+            if(info == 0)
+            {
+                lwork = get_work_value(datatype, work);
+            }
+            free_vector(work);
+            info = 0;
+            create_vector(datatype, &work, lwork);
+            invoke_hetrf_rook(datatype, &uplo, &n, A, &lda, ipiv, work, &lwork, &info);
+            free_vector(work);
         }
     }
-    else
-    {
-        /* Create input matrix (hermitian) */
-        create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, HETRI_ROOK_VL, HETRI_ROOK_VU,
-                                 USE_SIGNED_EIGEN_VALUES);
-        /* Oveflow or underflow test initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_overflow_underflow_hetri_rook(datatype, n, A, lda, params->imatrix_char);
-        }
-        form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
-        copy_matrix(datatype, "full", lda, n, A, lda, A_original, lda);
-        free_vector(L);
-        create_vector(datatype, &work, 1);
-        lwork = -1;
-        invoke_hetrf_rook(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, &info);
-        if(info == 0)
-        {
-            lwork = get_work_value(datatype, work);
-        }
-        free_vector(work);
-        info = 0;
-        create_vector(datatype, &work, lwork);
-        invoke_hetrf_rook(datatype, &uplo, &n, A, &lda, ipiv, work, &lwork, &info);
-        free_vector(work);
-    }
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, INTEGER, n, 1, ipiv, n, "cdd", uplo, n, lda)
+
     /* Save the original matrix */
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
 
@@ -196,7 +203,14 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
 
     /* Output validataion */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_outputs_base(filename, params, 1, 1, datatype, n, n, A_test, lda, INTEGER, n, ipiv),
+        validate_hetri_rook(tst_api, uplo, n, A_original, A_test, lda, ipiv, datatype, residual,
+                            params->imatrix_char, params),
+        check_reproducibility_base(filename, params, 1, 1, datatype, n, n, A_test, lda, INTEGER, n,
+                                   ipiv))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_hetri_rook(tst_api, uplo, n, A_original, A_test, lda, ipiv, datatype, residual,
                             params->imatrix_char, params);
@@ -215,6 +229,8 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
     }
 
     /* Free up buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_vector(ipiv);
     free_matrix(A);
     free_matrix(A_test);
@@ -276,7 +292,7 @@ void prepare_hetri_rook_run(integer datatype, integer n, void *A, char uplo, int
 
 /*
 HETRI_ROOK_API calls LAPACK interface for factorization
-of a complex hermitian matrix A using the bounded
+of a scomplex hermitian matrix A using the bounded
 Bunch-Kaufman("rook") diagonal pivoting method
 (A = L*D*L**H or A = U*D*U**H)
 */

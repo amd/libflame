@@ -47,7 +47,7 @@ static logical c_true = TRUE_;
 /* > \verbatim */
 /* > */
 /* > ZHSEIN uses inverse iteration to find specified right and/or left */
-/* > eigenvectors of a complex upper Hessenberg matrix H. */
+/* > eigenvectors of a scomplex upper Hessenberg matrix H. */
 /* > */
 /* > The right eigenvector x and the left eigenvector y of the matrix H */
 /* > corresponding to an eigenvalue w are defined by: */
@@ -247,49 +247,68 @@ see IFAILL and IFAILR for further */
 /* > */
 /* > Each eigenvector is normalized so that the element of largest */
 /* > magnitude has magnitude 1;
-here the magnitude of a complex number */
+here the magnitude of a scomplex number */
 /* > (x,y) is taken to be |x|+|y|. */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, doublecomplex *h__,
-             integer *ldh, doublecomplex *w, doublecomplex *vl, integer *ldvl, doublecomplex *vr,
-             integer *ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork,
-             integer *ifaill, integer *ifailr, integer *info)
+/** Generated wrapper function */
+void zhsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t *n,
+             dcomplex *h__, aocl_int_t *ldh, dcomplex *w, dcomplex *vl,
+             aocl_int_t *ldvl, dcomplex *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m,
+             dcomplex *work, doublereal *rwork, aocl_int_t *ifaill, aocl_int_t *ifailr,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhsein(side, eigsrc, initv, select, n, h__, ldh, w, vl, ldvl, vr, ldvr, mm, m, work,
+                       rwork, ifaill, ifailr, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhsein(side, eigsrc, initv, select, &n_64, h__, &ldh_64, w, vl, &ldvl_64, vr,
+                       &ldvr_64, &mm_64, &m_64, work, rwork, ifaill, ifailr, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhsein(char *side, char *eigsrc, char *initv, logical *select, aocl_int64_t *n,
+                        dcomplex *h__, aocl_int64_t *ldh, dcomplex *w, dcomplex *vl,
+                        aocl_int64_t *ldvl, dcomplex *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
+                        aocl_int64_t *m, dcomplex *work, doublereal *rwork, aocl_int_t *ifaill,
+                        aocl_int_t *ifailr, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS
                       ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
                       *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
     /* System generated locals */
-    integer h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
+    aocl_int64_t h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, k, kl, kr, ks;
-    doublecomplex wk;
-    integer kln;
+    aocl_int64_t i__, k, kl, kr, ks;
+    dcomplex wk;
+    aocl_int64_t kln;
     doublereal ulp, eps3, unfl;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical leftv, bothv;
     doublereal hnorm;
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlaein_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *);
-    extern doublereal zlanhs_(char *, integer *, doublecomplex *, integer *, doublereal *);
     logical noinit;
-    integer ldwork;
+    aocl_int64_t ldwork;
     logical rightv, fromqr;
     doublereal smlnum;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -387,7 +406,7 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHSEIN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -433,7 +452,7 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 for(i__ = k; i__ >= i__2; --i__)
                 {
                     i__3 = i__ + (i__ - 1) * h_dim1;
-                    if(h__[i__3].r == 0. && h__[i__3].i == 0.)
+                    if(h__[i__3].real == 0. && h__[i__3].imag == 0.)
                     {
                         goto L30;
                     }
@@ -447,7 +466,7 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                     for(i__ = k; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + 1 + i__ * h_dim1;
-                        if(h__[i__3].r == 0. && h__[i__3].i == 0.)
+                        if(h__[i__3].real == 0. && h__[i__3].imag == 0.)
                         {
                             goto L50;
                         }
@@ -463,7 +482,7 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = zlanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
+                hnorm = aocl_lapack_zlanhs("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
                 if(disnan_(&hnorm))
                 {
                     *info = -6;
@@ -483,43 +502,43 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
             /* selected eigenvalues affiliated to the submatrix */
             /* H(KL:KR,KL:KR). Close roots are modified by EPS3. */
             i__2 = k;
-            wk.r = w[i__2].r;
-            wk.i = w[i__2].i; // , expr subst
+            wk.real = w[i__2].real;
+            wk.imag = w[i__2].imag; // , expr subst
         L60:
             i__2 = kl;
             for(i__ = k - 1; i__ >= i__2; --i__)
             {
                 i__3 = i__;
-                z__2.r = w[i__3].r - wk.r;
-                z__2.i = w[i__3].i - wk.i; // , expr subst
-                z__1.r = z__2.r;
-                z__1.i = z__2.i; // , expr subst
+                z__2.real = w[i__3].real - wk.real;
+                z__2.imag = w[i__3].imag - wk.imag; // , expr subst
+                z__1.real = z__2.real;
+                z__1.imag = z__2.imag; // , expr subst
                 if(select[i__]
-                   && (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2))
+                   && (d__1 = z__1.real, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2))
                           < eps3)
                 {
-                    z__1.r = wk.r + eps3;
-                    z__1.i = wk.i; // , expr subst
-                    wk.r = z__1.r;
-                    wk.i = z__1.i; // , expr subst
+                    z__1.real = wk.real + eps3;
+                    z__1.imag = wk.imag; // , expr subst
+                    wk.real = z__1.real;
+                    wk.imag = z__1.imag; // , expr subst
                     goto L60;
                 }
                 /* L70: */
             }
             i__2 = k;
-            w[i__2].r = wk.r;
-            w[i__2].i = wk.i; // , expr subst
+            w[i__2].real = wk.real;
+            w[i__2].imag = wk.imag; // , expr subst
             if(leftv)
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                zlaein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
-                        &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3, &smlnum,
-                        &iinfo);
+                aocl_lapack_zlaein(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
+                                   &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3,
+                                   &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);
-                    ifaill[ks] = k;
+                    ifaill[ks] = (aocl_int_t)(k);
                 }
                 else
                 {
@@ -529,20 +548,21 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + ks * vl_dim1;
-                    vl[i__3].r = 0.;
-                    vl[i__3].i = 0.; // , expr subst
+                    vl[i__3].real = 0.;
+                    vl[i__3].imag = 0.; // , expr subst
                     /* L80: */
                 }
             }
             if(rightv)
             {
                 /* Compute right eigenvector. */
-                zlaein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk, &vr[ks * vr_dim1 + 1],
-                        &work[1], &ldwork, &rwork[1], &eps3, &smlnum, &iinfo);
+                aocl_lapack_zlaein(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk,
+                                   &vr[ks * vr_dim1 + 1], &work[1], &ldwork, &rwork[1], &eps3,
+                                   &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);
-                    ifailr[ks] = k;
+                    ifailr[ks] = (aocl_int_t)(k);
                 }
                 else
                 {
@@ -552,8 +572,8 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 for(i__ = kr + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + ks * vr_dim1;
-                    vr[i__3].r = 0.;
-                    vr[i__3].i = 0.; // , expr subst
+                    vr[i__3].real = 0.;
+                    vr[i__3].imag = 0.; // , expr subst
                     /* L90: */
                 }
             }

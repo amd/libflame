@@ -23,13 +23,6 @@ double prepare_lapacke_gbtrf_run(integer datatype, integer matrix_layout, intege
                                  integer kl, integer ku, void *ab, integer ldab, integer *ipiv,
                                  integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gbtrf_outputs(void *filename, integer datatype, integer m, integer n, integer kl,
-                         integer ku, void *AB_test, integer ldab, void *IPIV, void *params);
-integer check_bit_reproducibility_gbtrf(void *filename, integer datatype, integer m, integer n,
-                                        integer kl, integer ku, void *AB, integer ldab, void *IPIV,
-                                        void *params);
-
 void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "LU factorization of banded matrix";
@@ -216,10 +209,17 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     IF_FLA_BRT_VALIDATION(
-        m, n, store_gbtrf_outputs(filename, datatype, m, n, kl, ku, AB_test, ldab, IPIV, params),
+        m, n,
+        store_outputs_base(filename, params, 1, 1, datatype, m, n, AB_test, ldab, INTEGER,
+                           fla_min(m, n), IPIV),
         validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params),
-        check_bit_reproducibility_gbtrf(filename, datatype, m, n, kl, ku, AB_test, ldab, IPIV,
-                                        params))
+        check_reproducibility_base(filename, params, 1, 1, datatype, m, n, AB_test, ldab, INTEGER,
+                                   fla_min(m, n), IPIV))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params);
@@ -367,30 +367,4 @@ void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer
             break;
         }
     }
-}
-
-void store_gbtrf_outputs(void *filename, integer datatype, integer m, integer n, integer kl,
-                         integer ku, void *AB_test, integer ldab, void *IPIV, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    FLA_STORE_BRT_MATRIX(datatype, m, n, AB_test, ldab)
-    FLA_STORE_BRT_VECTOR(INTEGER, fla_min(m, n), IPIV)
-
-    fclose(gt_file);
-}
-
-integer check_bit_reproducibility_gbtrf(void *filename, integer datatype, integer m, integer n,
-                                        integer kl, integer ku, void *AB, integer ldab, void *IPIV,
-                                        void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    FLA_VERIFY_BRT_MATRIX(datatype, m, n, AB, ldab)
-    FLA_VERIFY_BRT_VECTOR(INTEGER, fla_min(m, n), IPIV)
-
-    fclose(gt_file);
-    return 1;
 }

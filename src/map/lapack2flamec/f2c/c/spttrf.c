@@ -87,18 +87,30 @@ if k < N, the factorization could not */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spttrf_(integer *n, real *d__, real *e, integer *info)
+/** Generated wrapper function */
+void spttrf_(aocl_int_t *n, real *d__, real *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spttrf(n, d__, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spttrf(&n_64, d__, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_spttrf(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spttrf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Local variables */
-    integer i__, i4;
+    aocl_int64_t i__, i4;
     real ei;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -127,7 +139,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("SPTTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

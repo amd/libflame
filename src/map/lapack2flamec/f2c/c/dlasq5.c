@@ -139,19 +139,38 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *tau,
+/** Generated wrapper function */
+void dlasq5_(aocl_int_t *i0, aocl_int_t *n0, doublereal *z__, aocl_int_t *pp, doublereal *tau,
              doublereal *sigma, doublereal *dmin__, doublereal *dmin1, doublereal *dmin2,
              doublereal *dn, doublereal *dnm1, doublereal *dnm2, logical *ieee, doublereal *eps)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasq5(i0, n0, z__, pp, tau, sigma, dmin__, dmin1, dmin2, dn, dnm1, dnm2, ieee,
+                       eps);
+#else
+    aocl_int64_t i0_64 = *i0;
+    aocl_int64_t n0_64 = *n0;
+    aocl_int64_t pp_64 = *pp;
+
+    aocl_lapack_dlasq5(&i0_64, &n0_64, z__, &pp_64, tau, sigma, dmin__, dmin1, dmin2, dn, dnm1,
+                       dnm2, ieee, eps);
+#endif
+}
+
+void aocl_lapack_dlasq5(aocl_int64_t *i0, aocl_int64_t *n0, doublereal *z__, aocl_int64_t *pp,
+                        doublereal *tau, doublereal *sigma, doublereal *dmin__, doublereal *dmin1,
+                        doublereal *dmin2, doublereal *dn, doublereal *dnm1, doublereal *dnm2,
+                        logical *ieee, doublereal *eps)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq5 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS "", *i0, *n0,
                       *pp);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Local variables */
     doublereal d__;
-    integer j4, j4p2;
+    aocl_int64_t j4, j4p2;
     doublereal emin, temp, dthresh;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

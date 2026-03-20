@@ -40,7 +40,7 @@ void FLA_Error_messages_init( void )
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_TRANS),
              "Invalid trans parameter value." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_TRANS_GIVEN_DATATYPE),
-	         "Invalid trans value (FLA_CONJ_TRANSPOSE|FLA_CONJ_NO_TRANSPOSE) for given non-complex object datatype" );
+	         "Invalid trans value (FLA_CONJ_TRANSPOSE|FLA_CONJ_NO_TRANSPOSE) for given non-scomplex object datatype" );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_CONJ),
              "Invalid conjugate parameter value." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_DIRECT),
@@ -54,13 +54,13 @@ void FLA_Error_messages_init( void )
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_REAL_DATATYPE),
              "Invalid real datatype value." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_COMPLEX_DATATYPE),
-             "Invalid complex datatype value." );
+             "Invalid scomplex datatype value." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_INTEGER),
              "Expected integer object." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_REAL),
              "Expected real object." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_COMPLEX),
-             "Expected complex object." );
+             "Expected scomplex object." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_SQUARE),
              "Expected square matrix object." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_SCALAR),
@@ -94,9 +94,9 @@ void FLA_Error_messages_init( void )
 	sprintf( FLA_Error_string_for_code(FLA_OBJECTS_NOT_HORIZONTALLY_ALIGNED),
              "Object partitions not horizontally aligned." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_FLOATING_DATATYPE),
-             "Expected single or double-precision real or complex datatype value." );
+             "Expected single or double-precision real or scomplex datatype value." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_FLOATING_POINT),
-             "Expected single or double-precision real or complex object." );
+             "Expected single or double-precision real or scomplex object." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_BLOCKSIZE_VALUE),
              "Detected blocksize value less than or equal to zero." );
 	sprintf( FLA_Error_string_for_code(FLA_OPEN_RETURNED_ERROR),
@@ -152,9 +152,9 @@ void FLA_Error_messages_init( void )
 	sprintf( FLA_Error_string_for_code(FLA_ENCOUNTERED_NON_POSITIVE_NTHREADS),
              "Encountered non-positive (zero) value for number of threads." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_CONJ_GIVEN_DATATYPE),
-	         "Invalid conj value (FLA_CONJUGATE) for given non-complex object datatype" );
+	         "Invalid conj value (FLA_CONJUGATE) for given non-scomplex object datatype" );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_COMPLEX_TRANS),
-	         "Invalid complex trans parameter value" );
+	         "Invalid scomplex trans parameter value" );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_REAL_TRANS),
 	         "Invalid real trans parameter value" );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_BLAS_TRANS),

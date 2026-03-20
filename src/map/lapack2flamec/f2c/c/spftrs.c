@@ -198,24 +198,37 @@ static real c_b10 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void spftrs_(char *transr, char *uplo, integer *n, integer *nrhs, real *a, real *b, integer *ldb,
-             integer *info)
+/** Generated wrapper function */
+void spftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, real *b,
+             aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spftrs(transr, uplo, n, nrhs, a, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spftrs(transr, uplo, &n_64, &nrhs_64, a, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                        real *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spftrs inputs: transr %c ,uplo %c ,n %" FLA_IS ",nrhs %" FLA_IS
                       ",ldb %" FLA_IS "",
                       *transr, *uplo, *n, *nrhs, *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, i__1;
+    aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        stfsm_(char *, char *, char *, char *, char *, integer *, integer *, real *, real *, real *,
-               integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -268,7 +281,7 @@ void spftrs_(char *transr, char *uplo, integer *n, integer *nrhs, real *a, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPFTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPFTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -281,13 +294,13 @@ void spftrs_(char *transr, char *uplo, integer *n, integer *nrhs, real *a, real 
     /* start execution: there are two triangular solves */
     if(lower)
     {
-        stfsm_(transr, "L", uplo, "N", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
-        stfsm_(transr, "L", uplo, "T", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
+        aocl_lapack_stfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
+        aocl_lapack_stfsm(transr, "L", uplo, "T", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
     }
     else
     {
-        stfsm_(transr, "L", uplo, "T", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
-        stfsm_(transr, "L", uplo, "N", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
+        aocl_lapack_stfsm(transr, "L", uplo, "T", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
+        aocl_lapack_stfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

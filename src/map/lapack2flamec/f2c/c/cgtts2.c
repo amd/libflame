@@ -125,8 +125,25 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d__, complex *du,
-             complex *du2, integer *ipiv, complex *b, integer *ldb)
+/** Generated wrapper function */
+void cgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__,
+             scomplex *du, scomplex *du2, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgtts2(itrans, n, nrhs, dl, d__, du, du2, ipiv, b, ldb);
+#else
+    aocl_int64_t itrans_64 = *itrans;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_cgtts2(&itrans_64, &n_64, &nrhs_64, dl, d__, du, du2, ipiv, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_cgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl,
+                        scomplex *d__, scomplex *du, scomplex *du2, aocl_int_t *ipiv, scomplex *b,
+                        aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -141,13 +158,13 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *), r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
-    complex temp;
+    aocl_int64_t i__, j;
+    scomplex temp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,52 +212,52 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                     i__3 = i__ + 1 + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * b_dim1;
-                    q__2.r = dl[i__4].r * b[i__5].r - dl[i__4].i * b[i__5].i;
-                    q__2.i = dl[i__4].r * b[i__5].i + dl[i__4].i * b[i__5].r; // , expr subst
-                    q__1.r = b[i__3].r - q__2.r;
-                    q__1.i = b[i__3].i - q__2.i; // , expr subst
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    q__2.real = dl[i__4].real * b[i__5].real - dl[i__4].imag * b[i__5].imag;
+                    q__2.imag = dl[i__4].real * b[i__5].imag + dl[i__4].imag * b[i__5].real; // , expr subst
+                    q__1.real = b[i__3].real - q__2.real;
+                    q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                 }
                 else
                 {
                     i__2 = i__ + j * b_dim1;
-                    temp.r = b[i__2].r;
-                    temp.i = b[i__2].i; // , expr subst
+                    temp.real = b[i__2].real;
+                    temp.imag = b[i__2].imag; // , expr subst
                     i__2 = i__ + j * b_dim1;
                     i__3 = i__ + 1 + j * b_dim1;
-                    b[i__2].r = b[i__3].r;
-                    b[i__2].i = b[i__3].i; // , expr subst
+                    b[i__2].real = b[i__3].real;
+                    b[i__2].imag = b[i__3].imag; // , expr subst
                     i__2 = i__ + 1 + j * b_dim1;
                     i__3 = i__;
                     i__4 = i__ + j * b_dim1;
-                    q__2.r = dl[i__3].r * b[i__4].r - dl[i__3].i * b[i__4].i;
-                    q__2.i = dl[i__3].r * b[i__4].i + dl[i__3].i * b[i__4].r; // , expr subst
-                    q__1.r = temp.r - q__2.r;
-                    q__1.i = temp.i - q__2.i; // , expr subst
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    q__2.real = dl[i__3].real * b[i__4].real - dl[i__3].imag * b[i__4].imag;
+                    q__2.imag = dl[i__3].real * b[i__4].imag + dl[i__3].imag * b[i__4].real; // , expr subst
+                    q__1.real = temp.real - q__2.real;
+                    q__1.imag = temp.imag - q__2.imag; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                 }
                 /* L20: */
             }
             /* Solve U*x = b. */
             i__1 = *n + j * b_dim1;
             c_div(&q__1, &b[*n + j * b_dim1], &d__[*n]);
-            b[i__1].r = q__1.r;
-            b[i__1].i = q__1.i; // , expr subst
+            b[i__1].real = q__1.real;
+            b[i__1].imag = q__1.imag; // , expr subst
             if(*n > 1)
             {
                 i__1 = *n - 1 + j * b_dim1;
                 i__2 = *n - 1 + j * b_dim1;
                 i__3 = *n - 1;
                 i__4 = *n + j * b_dim1;
-                q__3.r = du[i__3].r * b[i__4].r - du[i__3].i * b[i__4].i;
-                q__3.i = du[i__3].r * b[i__4].i + du[i__3].i * b[i__4].r; // , expr subst
-                q__2.r = b[i__2].r - q__3.r;
-                q__2.i = b[i__2].i - q__3.i; // , expr subst
+                q__3.real = du[i__3].real * b[i__4].real - du[i__3].imag * b[i__4].imag;
+                q__3.imag = du[i__3].real * b[i__4].imag + du[i__3].imag * b[i__4].real; // , expr subst
+                q__2.real = b[i__2].real - q__3.real;
+                q__2.imag = b[i__2].imag - q__3.imag; // , expr subst
                 c_div(&q__1, &q__2, &d__[*n - 1]);
-                b[i__1].r = q__1.r;
-                b[i__1].i = q__1.i; // , expr subst
+                b[i__1].real = q__1.real;
+                b[i__1].imag = q__1.imag; // , expr subst
             }
             for(i__ = *n - 2; i__ >= 1; --i__)
             {
@@ -248,19 +265,19 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                 i__2 = i__ + j * b_dim1;
                 i__3 = i__;
                 i__4 = i__ + 1 + j * b_dim1;
-                q__4.r = du[i__3].r * b[i__4].r - du[i__3].i * b[i__4].i;
-                q__4.i = du[i__3].r * b[i__4].i + du[i__3].i * b[i__4].r; // , expr subst
-                q__3.r = b[i__2].r - q__4.r;
-                q__3.i = b[i__2].i - q__4.i; // , expr subst
+                q__4.real = du[i__3].real * b[i__4].real - du[i__3].imag * b[i__4].imag;
+                q__4.imag = du[i__3].real * b[i__4].imag + du[i__3].imag * b[i__4].real; // , expr subst
+                q__3.real = b[i__2].real - q__4.real;
+                q__3.imag = b[i__2].imag - q__4.imag; // , expr subst
                 i__5 = i__;
                 i__6 = i__ + 2 + j * b_dim1;
-                q__5.r = du2[i__5].r * b[i__6].r - du2[i__5].i * b[i__6].i;
-                q__5.i = du2[i__5].r * b[i__6].i + du2[i__5].i * b[i__6].r; // , expr subst
-                q__2.r = q__3.r - q__5.r;
-                q__2.i = q__3.i - q__5.i; // , expr subst
+                q__5.real = du2[i__5].real * b[i__6].real - du2[i__5].imag * b[i__6].imag;
+                q__5.imag = du2[i__5].real * b[i__6].imag + du2[i__5].imag * b[i__6].real; // , expr subst
+                q__2.real = q__3.real - q__5.real;
+                q__2.imag = q__3.imag - q__5.imag; // , expr subst
                 c_div(&q__1, &q__2, &d__[i__]);
-                b[i__1].r = q__1.r;
-                b[i__1].i = q__1.i; // , expr subst
+                b[i__1].real = q__1.real;
+                b[i__1].imag = q__1.imag; // , expr subst
                 /* L30: */
             }
             if(j < *nrhs)
@@ -284,52 +301,52 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                         i__4 = i__ + 1 + j * b_dim1;
                         i__5 = i__;
                         i__6 = i__ + j * b_dim1;
-                        q__2.r = dl[i__5].r * b[i__6].r - dl[i__5].i * b[i__6].i;
-                        q__2.i = dl[i__5].r * b[i__6].i + dl[i__5].i * b[i__6].r; // , expr subst
-                        q__1.r = b[i__4].r - q__2.r;
-                        q__1.i = b[i__4].i - q__2.i; // , expr subst
-                        b[i__3].r = q__1.r;
-                        b[i__3].i = q__1.i; // , expr subst
+                        q__2.real = dl[i__5].real * b[i__6].real - dl[i__5].imag * b[i__6].imag;
+                        q__2.imag = dl[i__5].real * b[i__6].imag + dl[i__5].imag * b[i__6].real; // , expr subst
+                        q__1.real = b[i__4].real - q__2.real;
+                        q__1.imag = b[i__4].imag - q__2.imag; // , expr subst
+                        b[i__3].real = q__1.real;
+                        b[i__3].imag = q__1.imag; // , expr subst
                     }
                     else
                     {
                         i__3 = i__ + j * b_dim1;
-                        temp.r = b[i__3].r;
-                        temp.i = b[i__3].i; // , expr subst
+                        temp.real = b[i__3].real;
+                        temp.imag = b[i__3].imag; // , expr subst
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__ + 1 + j * b_dim1;
-                        b[i__3].r = b[i__4].r;
-                        b[i__3].i = b[i__4].i; // , expr subst
+                        b[i__3].real = b[i__4].real;
+                        b[i__3].imag = b[i__4].imag; // , expr subst
                         i__3 = i__ + 1 + j * b_dim1;
                         i__4 = i__;
                         i__5 = i__ + j * b_dim1;
-                        q__2.r = dl[i__4].r * b[i__5].r - dl[i__4].i * b[i__5].i;
-                        q__2.i = dl[i__4].r * b[i__5].i + dl[i__4].i * b[i__5].r; // , expr subst
-                        q__1.r = temp.r - q__2.r;
-                        q__1.i = temp.i - q__2.i; // , expr subst
-                        b[i__3].r = q__1.r;
-                        b[i__3].i = q__1.i; // , expr subst
+                        q__2.real = dl[i__4].real * b[i__5].real - dl[i__4].imag * b[i__5].imag;
+                        q__2.imag = dl[i__4].real * b[i__5].imag + dl[i__4].imag * b[i__5].real; // , expr subst
+                        q__1.real = temp.real - q__2.real;
+                        q__1.imag = temp.imag - q__2.imag; // , expr subst
+                        b[i__3].real = q__1.real;
+                        b[i__3].imag = q__1.imag; // , expr subst
                     }
                     /* L40: */
                 }
                 /* Solve U*x = b. */
                 i__2 = *n + j * b_dim1;
                 c_div(&q__1, &b[*n + j * b_dim1], &d__[*n]);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 if(*n > 1)
                 {
                     i__2 = *n - 1 + j * b_dim1;
                     i__3 = *n - 1 + j * b_dim1;
                     i__4 = *n - 1;
                     i__5 = *n + j * b_dim1;
-                    q__3.r = du[i__4].r * b[i__5].r - du[i__4].i * b[i__5].i;
-                    q__3.i = du[i__4].r * b[i__5].i + du[i__4].i * b[i__5].r; // , expr subst
-                    q__2.r = b[i__3].r - q__3.r;
-                    q__2.i = b[i__3].i - q__3.i; // , expr subst
+                    q__3.real = du[i__4].real * b[i__5].real - du[i__4].imag * b[i__5].imag;
+                    q__3.imag = du[i__4].real * b[i__5].imag + du[i__4].imag * b[i__5].real; // , expr subst
+                    q__2.real = b[i__3].real - q__3.real;
+                    q__2.imag = b[i__3].imag - q__3.imag; // , expr subst
                     c_div(&q__1, &q__2, &d__[*n - 1]);
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                 }
                 for(i__ = *n - 2; i__ >= 1; --i__)
                 {
@@ -337,19 +354,19 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + 1 + j * b_dim1;
-                    q__4.r = du[i__4].r * b[i__5].r - du[i__4].i * b[i__5].i;
-                    q__4.i = du[i__4].r * b[i__5].i + du[i__4].i * b[i__5].r; // , expr subst
-                    q__3.r = b[i__3].r - q__4.r;
-                    q__3.i = b[i__3].i - q__4.i; // , expr subst
+                    q__4.real = du[i__4].real * b[i__5].real - du[i__4].imag * b[i__5].imag;
+                    q__4.imag = du[i__4].real * b[i__5].imag + du[i__4].imag * b[i__5].real; // , expr subst
+                    q__3.real = b[i__3].real - q__4.real;
+                    q__3.imag = b[i__3].imag - q__4.imag; // , expr subst
                     i__6 = i__;
                     i__7 = i__ + 2 + j * b_dim1;
-                    q__5.r = du2[i__6].r * b[i__7].r - du2[i__6].i * b[i__7].i;
-                    q__5.i = du2[i__6].r * b[i__7].i + du2[i__6].i * b[i__7].r; // , expr subst
-                    q__2.r = q__3.r - q__5.r;
-                    q__2.i = q__3.i - q__5.i; // , expr subst
+                    q__5.real = du2[i__6].real * b[i__7].real - du2[i__6].imag * b[i__7].imag;
+                    q__5.imag = du2[i__6].real * b[i__7].imag + du2[i__6].imag * b[i__7].real; // , expr subst
+                    q__2.real = q__3.real - q__5.real;
+                    q__2.imag = q__3.imag - q__5.imag; // , expr subst
                     c_div(&q__1, &q__2, &d__[i__]);
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                     /* L50: */
                 }
                 /* L60: */
@@ -365,20 +382,20 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
         L70: /* Solve U**T * x = b. */
             i__1 = j * b_dim1 + 1;
             c_div(&q__1, &b[j * b_dim1 + 1], &d__[1]);
-            b[i__1].r = q__1.r;
-            b[i__1].i = q__1.i; // , expr subst
+            b[i__1].real = q__1.real;
+            b[i__1].imag = q__1.imag; // , expr subst
             if(*n > 1)
             {
                 i__1 = j * b_dim1 + 2;
                 i__2 = j * b_dim1 + 2;
                 i__3 = j * b_dim1 + 1;
-                q__3.r = du[1].r * b[i__3].r - du[1].i * b[i__3].i;
-                q__3.i = du[1].r * b[i__3].i + du[1].i * b[i__3].r; // , expr subst
-                q__2.r = b[i__2].r - q__3.r;
-                q__2.i = b[i__2].i - q__3.i; // , expr subst
+                q__3.real = du[1].real * b[i__3].real - du[1].imag * b[i__3].imag;
+                q__3.imag = du[1].real * b[i__3].imag + du[1].imag * b[i__3].real; // , expr subst
+                q__2.real = b[i__2].real - q__3.real;
+                q__2.imag = b[i__2].imag - q__3.imag; // , expr subst
                 c_div(&q__1, &q__2, &d__[2]);
-                b[i__1].r = q__1.r;
-                b[i__1].i = q__1.i; // , expr subst
+                b[i__1].real = q__1.real;
+                b[i__1].imag = q__1.imag; // , expr subst
             }
             i__1 = *n;
             for(i__ = 3; i__ <= i__1; ++i__)
@@ -387,19 +404,19 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ - 1;
                 i__5 = i__ - 1 + j * b_dim1;
-                q__4.r = du[i__4].r * b[i__5].r - du[i__4].i * b[i__5].i;
-                q__4.i = du[i__4].r * b[i__5].i + du[i__4].i * b[i__5].r; // , expr subst
-                q__3.r = b[i__3].r - q__4.r;
-                q__3.i = b[i__3].i - q__4.i; // , expr subst
+                q__4.real = du[i__4].real * b[i__5].real - du[i__4].imag * b[i__5].imag;
+                q__4.imag = du[i__4].real * b[i__5].imag + du[i__4].imag * b[i__5].real; // , expr subst
+                q__3.real = b[i__3].real - q__4.real;
+                q__3.imag = b[i__3].imag - q__4.imag; // , expr subst
                 i__6 = i__ - 2;
                 i__7 = i__ - 2 + j * b_dim1;
-                q__5.r = du2[i__6].r * b[i__7].r - du2[i__6].i * b[i__7].i;
-                q__5.i = du2[i__6].r * b[i__7].i + du2[i__6].i * b[i__7].r; // , expr subst
-                q__2.r = q__3.r - q__5.r;
-                q__2.i = q__3.i - q__5.i; // , expr subst
+                q__5.real = du2[i__6].real * b[i__7].real - du2[i__6].imag * b[i__7].imag;
+                q__5.imag = du2[i__6].real * b[i__7].imag + du2[i__6].imag * b[i__7].real; // , expr subst
+                q__2.real = q__3.real - q__5.real;
+                q__2.imag = q__3.imag - q__5.imag; // , expr subst
                 c_div(&q__1, &q__2, &d__[i__]);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 /* L80: */
             }
             /* Solve L**T * x = b. */
@@ -411,30 +428,30 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                     i__2 = i__ + j * b_dim1;
                     i__3 = i__;
                     i__4 = i__ + 1 + j * b_dim1;
-                    q__2.r = dl[i__3].r * b[i__4].r - dl[i__3].i * b[i__4].i;
-                    q__2.i = dl[i__3].r * b[i__4].i + dl[i__3].i * b[i__4].r; // , expr subst
-                    q__1.r = b[i__2].r - q__2.r;
-                    q__1.i = b[i__2].i - q__2.i; // , expr subst
-                    b[i__1].r = q__1.r;
-                    b[i__1].i = q__1.i; // , expr subst
+                    q__2.real = dl[i__3].real * b[i__4].real - dl[i__3].imag * b[i__4].imag;
+                    q__2.imag = dl[i__3].real * b[i__4].imag + dl[i__3].imag * b[i__4].real; // , expr subst
+                    q__1.real = b[i__2].real - q__2.real;
+                    q__1.imag = b[i__2].imag - q__2.imag; // , expr subst
+                    b[i__1].real = q__1.real;
+                    b[i__1].imag = q__1.imag; // , expr subst
                 }
                 else
                 {
                     i__1 = i__ + 1 + j * b_dim1;
-                    temp.r = b[i__1].r;
-                    temp.i = b[i__1].i; // , expr subst
+                    temp.real = b[i__1].real;
+                    temp.imag = b[i__1].imag; // , expr subst
                     i__1 = i__ + 1 + j * b_dim1;
                     i__2 = i__ + j * b_dim1;
                     i__3 = i__;
-                    q__2.r = dl[i__3].r * temp.r - dl[i__3].i * temp.i;
-                    q__2.i = dl[i__3].r * temp.i + dl[i__3].i * temp.r; // , expr subst
-                    q__1.r = b[i__2].r - q__2.r;
-                    q__1.i = b[i__2].i - q__2.i; // , expr subst
-                    b[i__1].r = q__1.r;
-                    b[i__1].i = q__1.i; // , expr subst
+                    q__2.real = dl[i__3].real * temp.real - dl[i__3].imag * temp.imag;
+                    q__2.imag = dl[i__3].real * temp.imag + dl[i__3].imag * temp.real; // , expr subst
+                    q__1.real = b[i__2].real - q__2.real;
+                    q__1.imag = b[i__2].imag - q__2.imag; // , expr subst
+                    b[i__1].real = q__1.real;
+                    b[i__1].imag = q__1.imag; // , expr subst
                     i__1 = i__ + j * b_dim1;
-                    b[i__1].r = temp.r;
-                    b[i__1].i = temp.i; // , expr subst
+                    b[i__1].real = temp.real;
+                    b[i__1].imag = temp.imag; // , expr subst
                 }
                 /* L90: */
             }
@@ -452,20 +469,20 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                 /* Solve U**T * x = b. */
                 i__2 = j * b_dim1 + 1;
                 c_div(&q__1, &b[j * b_dim1 + 1], &d__[1]);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 if(*n > 1)
                 {
                     i__2 = j * b_dim1 + 2;
                     i__3 = j * b_dim1 + 2;
                     i__4 = j * b_dim1 + 1;
-                    q__3.r = du[1].r * b[i__4].r - du[1].i * b[i__4].i;
-                    q__3.i = du[1].r * b[i__4].i + du[1].i * b[i__4].r; // , expr subst
-                    q__2.r = b[i__3].r - q__3.r;
-                    q__2.i = b[i__3].i - q__3.i; // , expr subst
+                    q__3.real = du[1].real * b[i__4].real - du[1].imag * b[i__4].imag;
+                    q__3.imag = du[1].real * b[i__4].imag + du[1].imag * b[i__4].real; // , expr subst
+                    q__2.real = b[i__3].real - q__3.real;
+                    q__2.imag = b[i__3].imag - q__3.imag; // , expr subst
                     c_div(&q__1, &q__2, &d__[2]);
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                 }
                 i__2 = *n;
                 for(i__ = 3; i__ <= i__2; ++i__)
@@ -474,19 +491,19 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                     i__4 = i__ + j * b_dim1;
                     i__5 = i__ - 1;
                     i__6 = i__ - 1 + j * b_dim1;
-                    q__4.r = du[i__5].r * b[i__6].r - du[i__5].i * b[i__6].i;
-                    q__4.i = du[i__5].r * b[i__6].i + du[i__5].i * b[i__6].r; // , expr subst
-                    q__3.r = b[i__4].r - q__4.r;
-                    q__3.i = b[i__4].i - q__4.i; // , expr subst
+                    q__4.real = du[i__5].real * b[i__6].real - du[i__5].imag * b[i__6].imag;
+                    q__4.imag = du[i__5].real * b[i__6].imag + du[i__5].imag * b[i__6].real; // , expr subst
+                    q__3.real = b[i__4].real - q__4.real;
+                    q__3.imag = b[i__4].imag - q__4.imag; // , expr subst
                     i__7 = i__ - 2;
                     i__8 = i__ - 2 + j * b_dim1;
-                    q__5.r = du2[i__7].r * b[i__8].r - du2[i__7].i * b[i__8].i;
-                    q__5.i = du2[i__7].r * b[i__8].i + du2[i__7].i * b[i__8].r; // , expr subst
-                    q__2.r = q__3.r - q__5.r;
-                    q__2.i = q__3.i - q__5.i; // , expr subst
+                    q__5.real = du2[i__7].real * b[i__8].real - du2[i__7].imag * b[i__8].imag;
+                    q__5.imag = du2[i__7].real * b[i__8].imag + du2[i__7].imag * b[i__8].real; // , expr subst
+                    q__2.real = q__3.real - q__5.real;
+                    q__2.imag = q__3.imag - q__5.imag; // , expr subst
                     c_div(&q__1, &q__2, &d__[i__]);
-                    b[i__3].r = q__1.r;
-                    b[i__3].i = q__1.i; // , expr subst
+                    b[i__3].real = q__1.real;
+                    b[i__3].imag = q__1.imag; // , expr subst
                     /* L100: */
                 }
                 /* Solve L**T * x = b. */
@@ -498,30 +515,30 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__;
                         i__5 = i__ + 1 + j * b_dim1;
-                        q__2.r = dl[i__4].r * b[i__5].r - dl[i__4].i * b[i__5].i;
-                        q__2.i = dl[i__4].r * b[i__5].i + dl[i__4].i * b[i__5].r; // , expr subst
-                        q__1.r = b[i__3].r - q__2.r;
-                        q__1.i = b[i__3].i - q__2.i; // , expr subst
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        q__2.real = dl[i__4].real * b[i__5].real - dl[i__4].imag * b[i__5].imag;
+                        q__2.imag = dl[i__4].real * b[i__5].imag + dl[i__4].imag * b[i__5].real; // , expr subst
+                        q__1.real = b[i__3].real - q__2.real;
+                        q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                     }
                     else
                     {
                         i__2 = i__ + 1 + j * b_dim1;
-                        temp.r = b[i__2].r;
-                        temp.i = b[i__2].i; // , expr subst
+                        temp.real = b[i__2].real;
+                        temp.imag = b[i__2].imag; // , expr subst
                         i__2 = i__ + 1 + j * b_dim1;
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__;
-                        q__2.r = dl[i__4].r * temp.r - dl[i__4].i * temp.i;
-                        q__2.i = dl[i__4].r * temp.i + dl[i__4].i * temp.r; // , expr subst
-                        q__1.r = b[i__3].r - q__2.r;
-                        q__1.i = b[i__3].i - q__2.i; // , expr subst
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        q__2.real = dl[i__4].real * temp.real - dl[i__4].imag * temp.imag;
+                        q__2.imag = dl[i__4].real * temp.imag + dl[i__4].imag * temp.real; // , expr subst
+                        q__1.real = b[i__3].real - q__2.real;
+                        q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                         i__2 = i__ + j * b_dim1;
-                        b[i__2].r = temp.r;
-                        b[i__2].i = temp.i; // , expr subst
+                        b[i__2].real = temp.real;
+                        b[i__2].imag = temp.imag; // , expr subst
                     }
                     /* L110: */
                 }
@@ -539,22 +556,22 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
             i__1 = j * b_dim1 + 1;
             r_cnjg(&q__2, &d__[1]);
             c_div(&q__1, &b[j * b_dim1 + 1], &q__2);
-            b[i__1].r = q__1.r;
-            b[i__1].i = q__1.i; // , expr subst
+            b[i__1].real = q__1.real;
+            b[i__1].imag = q__1.imag; // , expr subst
             if(*n > 1)
             {
                 i__1 = j * b_dim1 + 2;
                 i__2 = j * b_dim1 + 2;
                 r_cnjg(&q__4, &du[1]);
                 i__3 = j * b_dim1 + 1;
-                q__3.r = q__4.r * b[i__3].r - q__4.i * b[i__3].i;
-                q__3.i = q__4.r * b[i__3].i + q__4.i * b[i__3].r; // , expr subst
-                q__2.r = b[i__2].r - q__3.r;
-                q__2.i = b[i__2].i - q__3.i; // , expr subst
+                q__3.real = q__4.real * b[i__3].real - q__4.imag * b[i__3].imag;
+                q__3.imag = q__4.real * b[i__3].imag + q__4.imag * b[i__3].real; // , expr subst
+                q__2.real = b[i__2].real - q__3.real;
+                q__2.imag = b[i__2].imag - q__3.imag; // , expr subst
                 r_cnjg(&q__5, &d__[2]);
                 c_div(&q__1, &q__2, &q__5);
-                b[i__1].r = q__1.r;
-                b[i__1].i = q__1.i; // , expr subst
+                b[i__1].real = q__1.real;
+                b[i__1].imag = q__1.imag; // , expr subst
             }
             i__1 = *n;
             for(i__ = 3; i__ <= i__1; ++i__)
@@ -563,20 +580,20 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                 i__3 = i__ + j * b_dim1;
                 r_cnjg(&q__5, &du[i__ - 1]);
                 i__4 = i__ - 1 + j * b_dim1;
-                q__4.r = q__5.r * b[i__4].r - q__5.i * b[i__4].i;
-                q__4.i = q__5.r * b[i__4].i + q__5.i * b[i__4].r; // , expr subst
-                q__3.r = b[i__3].r - q__4.r;
-                q__3.i = b[i__3].i - q__4.i; // , expr subst
+                q__4.real = q__5.real * b[i__4].real - q__5.imag * b[i__4].imag;
+                q__4.imag = q__5.real * b[i__4].imag + q__5.imag * b[i__4].real; // , expr subst
+                q__3.real = b[i__3].real - q__4.real;
+                q__3.imag = b[i__3].imag - q__4.imag; // , expr subst
                 r_cnjg(&q__7, &du2[i__ - 2]);
                 i__5 = i__ - 2 + j * b_dim1;
-                q__6.r = q__7.r * b[i__5].r - q__7.i * b[i__5].i;
-                q__6.i = q__7.r * b[i__5].i + q__7.i * b[i__5].r; // , expr subst
-                q__2.r = q__3.r - q__6.r;
-                q__2.i = q__3.i - q__6.i; // , expr subst
+                q__6.real = q__7.real * b[i__5].real - q__7.imag * b[i__5].imag;
+                q__6.imag = q__7.real * b[i__5].imag + q__7.imag * b[i__5].real; // , expr subst
+                q__2.real = q__3.real - q__6.real;
+                q__2.imag = q__3.imag - q__6.imag; // , expr subst
                 r_cnjg(&q__8, &d__[i__]);
                 c_div(&q__1, &q__2, &q__8);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 /* L140: */
             }
             /* Solve L**H * x = b. */
@@ -588,30 +605,30 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                     i__2 = i__ + j * b_dim1;
                     r_cnjg(&q__3, &dl[i__]);
                     i__3 = i__ + 1 + j * b_dim1;
-                    q__2.r = q__3.r * b[i__3].r - q__3.i * b[i__3].i;
-                    q__2.i = q__3.r * b[i__3].i + q__3.i * b[i__3].r; // , expr subst
-                    q__1.r = b[i__2].r - q__2.r;
-                    q__1.i = b[i__2].i - q__2.i; // , expr subst
-                    b[i__1].r = q__1.r;
-                    b[i__1].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * b[i__3].real - q__3.imag * b[i__3].imag;
+                    q__2.imag = q__3.real * b[i__3].imag + q__3.imag * b[i__3].real; // , expr subst
+                    q__1.real = b[i__2].real - q__2.real;
+                    q__1.imag = b[i__2].imag - q__2.imag; // , expr subst
+                    b[i__1].real = q__1.real;
+                    b[i__1].imag = q__1.imag; // , expr subst
                 }
                 else
                 {
                     i__1 = i__ + 1 + j * b_dim1;
-                    temp.r = b[i__1].r;
-                    temp.i = b[i__1].i; // , expr subst
+                    temp.real = b[i__1].real;
+                    temp.imag = b[i__1].imag; // , expr subst
                     i__1 = i__ + 1 + j * b_dim1;
                     i__2 = i__ + j * b_dim1;
                     r_cnjg(&q__3, &dl[i__]);
-                    q__2.r = q__3.r * temp.r - q__3.i * temp.i;
-                    q__2.i = q__3.r * temp.i + q__3.i * temp.r; // , expr subst
-                    q__1.r = b[i__2].r - q__2.r;
-                    q__1.i = b[i__2].i - q__2.i; // , expr subst
-                    b[i__1].r = q__1.r;
-                    b[i__1].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * temp.real - q__3.imag * temp.imag;
+                    q__2.imag = q__3.real * temp.imag + q__3.imag * temp.real; // , expr subst
+                    q__1.real = b[i__2].real - q__2.real;
+                    q__1.imag = b[i__2].imag - q__2.imag; // , expr subst
+                    b[i__1].real = q__1.real;
+                    b[i__1].imag = q__1.imag; // , expr subst
                     i__1 = i__ + j * b_dim1;
-                    b[i__1].r = temp.r;
-                    b[i__1].i = temp.i; // , expr subst
+                    b[i__1].real = temp.real;
+                    b[i__1].imag = temp.imag; // , expr subst
                 }
                 /* L150: */
             }
@@ -630,22 +647,22 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                 i__2 = j * b_dim1 + 1;
                 r_cnjg(&q__2, &d__[1]);
                 c_div(&q__1, &b[j * b_dim1 + 1], &q__2);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 if(*n > 1)
                 {
                     i__2 = j * b_dim1 + 2;
                     i__3 = j * b_dim1 + 2;
                     r_cnjg(&q__4, &du[1]);
                     i__4 = j * b_dim1 + 1;
-                    q__3.r = q__4.r * b[i__4].r - q__4.i * b[i__4].i;
-                    q__3.i = q__4.r * b[i__4].i + q__4.i * b[i__4].r; // , expr subst
-                    q__2.r = b[i__3].r - q__3.r;
-                    q__2.i = b[i__3].i - q__3.i; // , expr subst
+                    q__3.real = q__4.real * b[i__4].real - q__4.imag * b[i__4].imag;
+                    q__3.imag = q__4.real * b[i__4].imag + q__4.imag * b[i__4].real; // , expr subst
+                    q__2.real = b[i__3].real - q__3.real;
+                    q__2.imag = b[i__3].imag - q__3.imag; // , expr subst
                     r_cnjg(&q__5, &d__[2]);
                     c_div(&q__1, &q__2, &q__5);
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                 }
                 i__2 = *n;
                 for(i__ = 3; i__ <= i__2; ++i__)
@@ -654,20 +671,20 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                     i__4 = i__ + j * b_dim1;
                     r_cnjg(&q__5, &du[i__ - 1]);
                     i__5 = i__ - 1 + j * b_dim1;
-                    q__4.r = q__5.r * b[i__5].r - q__5.i * b[i__5].i;
-                    q__4.i = q__5.r * b[i__5].i + q__5.i * b[i__5].r; // , expr subst
-                    q__3.r = b[i__4].r - q__4.r;
-                    q__3.i = b[i__4].i - q__4.i; // , expr subst
+                    q__4.real = q__5.real * b[i__5].real - q__5.imag * b[i__5].imag;
+                    q__4.imag = q__5.real * b[i__5].imag + q__5.imag * b[i__5].real; // , expr subst
+                    q__3.real = b[i__4].real - q__4.real;
+                    q__3.imag = b[i__4].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &du2[i__ - 2]);
                     i__6 = i__ - 2 + j * b_dim1;
-                    q__6.r = q__7.r * b[i__6].r - q__7.i * b[i__6].i;
-                    q__6.i = q__7.r * b[i__6].i + q__7.i * b[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * b[i__6].real - q__7.imag * b[i__6].imag;
+                    q__6.imag = q__7.real * b[i__6].imag + q__7.imag * b[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     r_cnjg(&q__8, &d__[i__]);
                     c_div(&q__1, &q__2, &q__8);
-                    b[i__3].r = q__1.r;
-                    b[i__3].i = q__1.i; // , expr subst
+                    b[i__3].real = q__1.real;
+                    b[i__3].imag = q__1.imag; // , expr subst
                     /* L160: */
                 }
                 /* Solve L**H * x = b. */
@@ -679,30 +696,30 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
                         i__3 = i__ + j * b_dim1;
                         r_cnjg(&q__3, &dl[i__]);
                         i__4 = i__ + 1 + j * b_dim1;
-                        q__2.r = q__3.r * b[i__4].r - q__3.i * b[i__4].i;
-                        q__2.i = q__3.r * b[i__4].i + q__3.i * b[i__4].r; // , expr subst
-                        q__1.r = b[i__3].r - q__2.r;
-                        q__1.i = b[i__3].i - q__2.i; // , expr subst
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        q__2.real = q__3.real * b[i__4].real - q__3.imag * b[i__4].imag;
+                        q__2.imag = q__3.real * b[i__4].imag + q__3.imag * b[i__4].real; // , expr subst
+                        q__1.real = b[i__3].real - q__2.real;
+                        q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                     }
                     else
                     {
                         i__2 = i__ + 1 + j * b_dim1;
-                        temp.r = b[i__2].r;
-                        temp.i = b[i__2].i; // , expr subst
+                        temp.real = b[i__2].real;
+                        temp.imag = b[i__2].imag; // , expr subst
                         i__2 = i__ + 1 + j * b_dim1;
                         i__3 = i__ + j * b_dim1;
                         r_cnjg(&q__3, &dl[i__]);
-                        q__2.r = q__3.r * temp.r - q__3.i * temp.i;
-                        q__2.i = q__3.r * temp.i + q__3.i * temp.r; // , expr subst
-                        q__1.r = b[i__3].r - q__2.r;
-                        q__1.i = b[i__3].i - q__2.i; // , expr subst
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        q__2.real = q__3.real * temp.real - q__3.imag * temp.imag;
+                        q__2.imag = q__3.real * temp.imag + q__3.imag * temp.real; // , expr subst
+                        q__1.real = b[i__3].real - q__2.real;
+                        q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                         i__2 = i__ + j * b_dim1;
-                        b[i__2].r = temp.r;
-                        b[i__2].i = temp.i; // , expr subst
+                        b[i__2].real = temp.real;
+                        b[i__2].imag = temp.imag; // , expr subst
                     }
                     /* L170: */
                 }

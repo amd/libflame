@@ -7,7 +7,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNG2R */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNG2R generates an m by n complex matrix Q with orthonormal columns, */
+/* > ZUNG2R generates an m by n scomplex matrix Q with orthonormal columns, */
 /* > which is defined as the first n columns of a product of k elementary */
 /* > reflectors of order m */
 /* > */
@@ -114,24 +114,38 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zung2r_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau,
-             doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zung2r_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a, aocl_int_t *lda,
+             dcomplex *tau, dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zung2r(m, n, k, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zung2r(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zung2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zung2r inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
                       *m, *n, *k, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern int fla_zscal(integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t i__, j, l;
+    extern int fla_zscal(aocl_int64_t *, dcomplex *, dcomplex *, aocl_int64_t *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,7 +196,7 @@ void zung2r_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNG2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNG2R", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -200,13 +214,13 @@ void zung2r_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
         for(l = 1; l <= i__2; ++l)
         {
             i__3 = l + j * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L10: */
         }
         i__2 = j + j * a_dim1;
-        a[i__2].r = 1.;
-        a[i__2].i = 0.; // , expr subst
+        a[i__2].real = 1.;
+        a[i__2].imag = 0.; // , expr subst
         /* L20: */
     }
     for(i__ = *k; i__ >= 1; --i__)
@@ -215,19 +229,19 @@ void zung2r_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
         if(i__ < *n)
         {
             i__1 = i__ + i__ * a_dim1;
-            a[i__1].r = 1.;
-            a[i__1].i = 0.; // , expr subst
+            a[i__1].real = 1.;
+            a[i__1].imag = 0.; // , expr subst
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            zlarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_zlarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
         if(i__ < *m)
         {
             i__1 = *m - i__;
             i__2 = i__;
-            z__1.r = -tau[i__2].r;
-            z__1.i = -tau[i__2].i; // , expr subst
+            z__1.real = -tau[i__2].real;
+            z__1.imag = -tau[i__2].imag; // , expr subst
 #ifdef FLA_ENABLE_AMD_OPT
             if(i__1 <= FLA_ZSCAL_INLINE_SMALL)
             {
@@ -236,25 +250,25 @@ void zung2r_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
             }
             else
             {
-                zscal_(&i__1, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+                aocl_blas_zscal(&i__1, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
             }
 #else
-            zscal_(&i__1, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+            aocl_blas_zscal(&i__1, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
 #endif
         }
         i__1 = i__ + i__ * a_dim1;
         i__2 = i__;
-        z__1.r = 1. - tau[i__2].r;
-        z__1.i = 0. - tau[i__2].i; // , expr subst
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        z__1.real = 1. - tau[i__2].real;
+        z__1.imag = 0. - tau[i__2].imag; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
         /* Set A(1:i-1,i) to zero */
         i__1 = i__ - 1;
         for(l = 1; l <= i__1; ++l)
         {
             i__2 = l + i__ * a_dim1;
-            a[i__2].r = 0.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 0.;
+            a[i__2].imag = 0.; // , expr subst
             /* L30: */
         }
         /* L40: */

@@ -108,20 +108,14 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorgl2_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau,
-                doublereal *work, integer *info)
+void dorgl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
+                doublereal *tau, doublereal *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *),
-        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -168,7 +162,7 @@ void dorgl2_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORGL2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DORGL2", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -205,12 +199,12 @@ void dorgl2_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
                 a[i__ + i__ * a_dim1] = 1.;
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
-                dlarf_("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                aocl_lapack_dlarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             d__1 = -tau[i__];
-            dscal_(&i__1, &d__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_blas_dscal(&i__1, &d__1, &a[i__ + (i__ + 1) * a_dim1], lda);
         }
         a[i__ + i__ * a_dim1] = 1. - tau[i__];
         /* Set A(i,1:i-1) to zero */

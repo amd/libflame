@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLANHP returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
- * or the ele ment of largest absolute value of a complex Hermitian matrix supplied in packed form.
+ * or the ele ment of largest absolute value of a scomplex Hermitian matrix supplied in packed form.
  */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -44,7 +44,7 @@ static integer c__1 = 1;
 /* > */
 /* > ZLANHP returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex hermitian matrix A, supplied in packed form. */
+/* > scomplex hermitian matrix A, supplied in packed form. */
 /* > \endverbatim */
 /* > */
 /* > \return ZLANHP */
@@ -116,24 +116,34 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
-doublereal zlanhp_(char *norm, char *uplo, integer *n, doublecomplex *ap, doublereal *work)
+/** Generated wrapper function */
+doublereal zlanhp_(char *norm, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zlanhp(norm, uplo, n, ap, work);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_zlanhp(norm, uplo, &n_64, ap, work);
+#endif
+}
+
+doublereal aocl_lapack_zlanhp(char *norm, char *uplo, aocl_int64_t *n, dcomplex *ap,
+                              doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlanhp inputs: norm %c, uplo %c, n %" FLA_IS "", *norm, *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal ret_val, d__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal sum, absa, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,7 +194,7 @@ doublereal zlanhp_(char *norm, char *uplo, integer *n, doublecomplex *ap, double
                 }
                 k += j;
                 i__2 = k;
-                sum = (d__1 = ap[i__2].r, f2c_abs(d__1));
+                sum = (d__1 = ap[i__2].real, f2c_abs(d__1));
                 if(value < sum || disnan_(&sum))
                 {
                     value = sum;
@@ -199,7 +209,7 @@ doublereal zlanhp_(char *norm, char *uplo, integer *n, doublecomplex *ap, double
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = k;
-                sum = (d__1 = ap[i__2].r, f2c_abs(d__1));
+                sum = (d__1 = ap[i__2].real, f2c_abs(d__1));
                 if(value < sum || disnan_(&sum))
                 {
                     value = sum;
@@ -240,7 +250,7 @@ doublereal zlanhp_(char *norm, char *uplo, integer *n, doublecomplex *ap, double
                     /* L50: */
                 }
                 i__2 = k;
-                work[j] = sum + (d__1 = ap[i__2].r, f2c_abs(d__1));
+                work[j] = sum + (d__1 = ap[i__2].real, f2c_abs(d__1));
                 ++k;
                 /* L60: */
             }
@@ -267,7 +277,7 @@ doublereal zlanhp_(char *norm, char *uplo, integer *n, doublecomplex *ap, double
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = k;
-                sum = work[j] + (d__1 = ap[i__2].r, f2c_abs(d__1));
+                sum = work[j] + (d__1 = ap[i__2].real, f2c_abs(d__1));
                 ++k;
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -298,7 +308,7 @@ doublereal zlanhp_(char *norm, char *uplo, integer *n, doublecomplex *ap, double
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                zlassq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                aocl_lapack_zlassq(&i__2, &ap[k], &c__1, &scale, &sum);
                 k += j;
                 /* L110: */
             }
@@ -309,7 +319,7 @@ doublereal zlanhp_(char *norm, char *uplo, integer *n, doublecomplex *ap, double
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                zlassq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                aocl_lapack_zlassq(&i__2, &ap[k], &c__1, &scale, &sum);
                 k = k + *n - j + 1;
                 /* L120: */
             }
@@ -320,10 +330,10 @@ doublereal zlanhp_(char *norm, char *uplo, integer *n, doublecomplex *ap, double
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = k;
-            if(ap[i__2].r != 0.)
+            if(ap[i__2].real != 0.)
             {
                 i__2 = k;
-                absa = (d__1 = ap[i__2].r, f2c_abs(d__1));
+                absa = (d__1 = ap[i__2].real, f2c_abs(d__1));
                 if(scale < absa)
                 {
                     /* Computing 2nd power */

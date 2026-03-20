@@ -32,19 +32,97 @@
   if SIDE = 'R'.
 */
 
-extern void dormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a,
-                       integer *lda, doublereal *tau, doublereal *c__, integer *ldc,
-                       doublereal *work, integer *lwork, integer *info);
-extern void sormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a,
-                       integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork,
-                       integer *info);
+extern void dormqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a,
+                       aocl_int64_t *lda, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
+                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void sormqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
+                       aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *lwork,
+                       aocl_int64_t *info);
+
+/** Generated wrapper function */
+void sormqr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_B, aocl_int_t *ldim_B, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sormqr(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sormqr(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dormqr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_B, aocl_int_t *ldim_B, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dormqr(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dormqr(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sorm2r_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_B, aocl_int_t *ldim_B, real *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorm2r(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorm2r(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dorm2r_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_B, aocl_int_t *ldim_B, doublereal *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorm2r(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorm2r(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
 
 #define LAPACK_ormqr(prefix, name)                                                      \
-    void F77_##prefix##name##qr(                                                        \
-        char *side, char *trans, integer *m, integer *n, integer *k,                    \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A,                       \
+    void aocl_lapack_##prefix##name##qr(                                                        \
+        char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,                    \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,                       \
         PREFIX2LAPACK_TYPEDEF(prefix) * buff_t, PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, \
-        integer * ldim_B, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+        aocl_int64_t * ldim_B, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 #define LAPACK_ormqr_body(prefix)                                                     \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                            \
@@ -210,11 +288,11 @@ LAPACK_ormqr(z, unm)
 #endif
 
 #define LAPACK_orm2r(prefix, name)                                                           \
-    void F77_##prefix##name##2r(char *side, char *trans, integer *m, integer *n, integer *k, \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A,    \
+    void aocl_lapack_##prefix##name##2r(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, \
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,    \
                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                      \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, integer * ldim_B,    \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, aocl_int64_t * ldim_B,    \
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
 
 LAPACK_orm2r(s, orm)
 {
@@ -222,9 +300,9 @@ LAPACK_orm2r(s, orm)
     AOCL_DTL_SNPRINTF("sorm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
-    extern void sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a,
-                           integer *lda, real *tau, real *c__, integer *ldc, real *work,
-                           integer *info);
+    extern void sorm2r_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
+                           aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
+                           aocl_int64_t *info);
 
 #if !FLA_ENABLE_AMD_OPT
     int fla_error = LAPACK_SUCCESS;
@@ -257,9 +335,9 @@ LAPACK_orm2r(d, orm)
     AOCL_DTL_SNPRINTF("dorm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
-    extern void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k,
-                           doublereal *a, integer *lda, doublereal *tau, doublereal *c__,
-                           integer *ldc, doublereal *work, integer *info);
+    extern void dorm2r_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                           doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
+                           aocl_int64_t *ldc, doublereal *work, aocl_int64_t *info);
 
 #if !FLA_ENABLE_AMD_OPT
     int fla_error = LAPACK_SUCCESS;

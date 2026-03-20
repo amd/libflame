@@ -1,16 +1,16 @@
 /* ztrmm.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer *n, doublecomplex *alpha, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb)
+int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer *n, dcomplex *alpha, dcomplex *a, integer *lda, dcomplex *b, integer *ldb)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     integer info;
-    doublecomplex temp;
+    dcomplex temp;
     integer i__, j, k;
     logical lside;
     extern logical lsame_(char *, char *, integer, integer);
@@ -176,7 +176,7 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
         return 0;
     }
     /* And when alpha.eq.zero. */
-    if (alpha->r == 0. && alpha->i == 0.)
+    if (alpha->real == 0. && alpha->imag == 0.)
     {
         i__1 = *n;
         for (j = 1;
@@ -189,7 +189,7 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                     ++i__)
             {
                 i__3 = i__ + j * b_dim1;
-                b[i__3].r = 0., b[i__3].i = 0.;
+                b[i__3].real = 0., b[i__3].imag = 0.;
                 /* L10: */
             }
             /* L20: */
@@ -215,11 +215,11 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             ++k)
                     {
                         i__3 = k + j * b_dim1;
-                        if (b[i__3].r != 0. || b[i__3].i != 0.)
+                        if (b[i__3].real != 0. || b[i__3].imag != 0.)
                         {
                             i__3 = k + j * b_dim1;
-                            z__1.r = alpha->r * b[i__3].r - alpha->i * b[i__3] .i, z__1.i = alpha->r * b[i__3].i + alpha->i * b[i__3].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = alpha->real * b[i__3].real - alpha->imag * b[i__3] .imag, z__1.imag = alpha->real * b[i__3].imag + alpha->imag * b[i__3].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             i__3 = k - 1;
                             for (i__ = 1;
                                     i__ <= i__3;
@@ -228,19 +228,19 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                                 i__4 = i__ + j * b_dim1;
                                 i__5 = i__ + j * b_dim1;
                                 i__6 = i__ + k * a_dim1;
-                                z__2.r = temp.r * a[i__6].r - temp.i * a[i__6] .i, z__2.i = temp.r * a[i__6].i + temp.i * a[i__6].r;
-                                z__1.r = b[i__5].r + z__2.r, z__1.i = b[i__5] .i + z__2.i;
-                                b[i__4].r = z__1.r, b[i__4].i = z__1.i;
+                                z__2.real = temp.real * a[i__6].real - temp.imag * a[i__6] .imag, z__2.imag = temp.real * a[i__6].imag + temp.imag * a[i__6].real;
+                                z__1.real = b[i__5].real + z__2.real, z__1.imag = b[i__5] .imag + z__2.imag;
+                                b[i__4].real = z__1.real, b[i__4].imag = z__1.imag;
                                 /* L30: */
                             }
                             if (nounit)
                             {
                                 i__3 = k + k * a_dim1;
-                                z__1.r = temp.r * a[i__3].r - temp.i * a[i__3] .i, z__1.i = temp.r * a[i__3].i + temp.i * a[i__3].r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = temp.real * a[i__3].real - temp.imag * a[i__3] .imag, z__1.imag = temp.real * a[i__3].imag + temp.imag * a[i__3].real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             i__3 = k + j * b_dim1;
-                            b[i__3].r = temp.r, b[i__3].i = temp.i;
+                            b[i__3].real = temp.real, b[i__3].imag = temp.imag;
                         }
                         /* L40: */
                     }
@@ -259,20 +259,20 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             --k)
                     {
                         i__2 = k + j * b_dim1;
-                        if (b[i__2].r != 0. || b[i__2].i != 0.)
+                        if (b[i__2].real != 0. || b[i__2].imag != 0.)
                         {
                             i__2 = k + j * b_dim1;
-                            z__1.r = alpha->r * b[i__2].r - alpha->i * b[i__2] .i, z__1.i = alpha->r * b[i__2].i + alpha->i * b[i__2].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = alpha->real * b[i__2].real - alpha->imag * b[i__2] .imag, z__1.imag = alpha->real * b[i__2].imag + alpha->imag * b[i__2].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             i__2 = k + j * b_dim1;
-                            b[i__2].r = temp.r, b[i__2].i = temp.i;
+                            b[i__2].real = temp.real, b[i__2].imag = temp.imag;
                             if (nounit)
                             {
                                 i__2 = k + j * b_dim1;
                                 i__3 = k + j * b_dim1;
                                 i__4 = k + k * a_dim1;
-                                z__1.r = b[i__3].r * a[i__4].r - b[i__3].i * a[i__4].i, z__1.i = b[i__3].r * a[ i__4].i + b[i__3].i * a[i__4].r;
-                                b[i__2].r = z__1.r, b[i__2].i = z__1.i;
+                                z__1.real = b[i__3].real * a[i__4].real - b[i__3].imag * a[i__4].imag, z__1.imag = b[i__3].real * a[ i__4].imag + b[i__3].imag * a[i__4].real;
+                                b[i__2].real = z__1.real, b[i__2].imag = z__1.imag;
                             }
                             i__2 = *m;
                             for (i__ = k + 1;
@@ -282,9 +282,9 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                                 i__3 = i__ + j * b_dim1;
                                 i__4 = i__ + j * b_dim1;
                                 i__5 = i__ + k * a_dim1;
-                                z__2.r = temp.r * a[i__5].r - temp.i * a[i__5] .i, z__2.i = temp.r * a[i__5].i + temp.i * a[i__5].r;
-                                z__1.r = b[i__4].r + z__2.r, z__1.i = b[i__4] .i + z__2.i;
-                                b[i__3].r = z__1.r, b[i__3].i = z__1.i;
+                                z__2.real = temp.real * a[i__5].real - temp.imag * a[i__5] .imag, z__2.imag = temp.real * a[i__5].imag + temp.imag * a[i__5].real;
+                                z__1.real = b[i__4].real + z__2.real, z__1.imag = b[i__4] .imag + z__2.imag;
+                                b[i__3].real = z__1.real, b[i__3].imag = z__1.imag;
                                 /* L60: */
                             }
                         }
@@ -309,14 +309,14 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             --i__)
                     {
                         i__2 = i__ + j * b_dim1;
-                        temp.r = b[i__2].r, temp.i = b[i__2].i;
+                        temp.real = b[i__2].real, temp.imag = b[i__2].imag;
                         if (noconj)
                         {
                             if (nounit)
                             {
                                 i__2 = i__ + i__ * a_dim1;
-                                z__1.r = temp.r * a[i__2].r - temp.i * a[i__2] .i, z__1.i = temp.r * a[i__2].i + temp.i * a[i__2].r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = temp.real * a[i__2].real - temp.imag * a[i__2] .imag, z__1.imag = temp.real * a[i__2].imag + temp.imag * a[i__2].real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             i__2 = i__ - 1;
                             for (k = 1;
@@ -325,9 +325,9 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             {
                                 i__3 = k + i__ * a_dim1;
                                 i__4 = k + j * b_dim1;
-                                z__2.r = a[i__3].r * b[i__4].r - a[i__3].i * b[i__4].i, z__2.i = a[i__3].r * b[ i__4].i + a[i__3].i * b[i__4].r;
-                                z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__2.real = a[i__3].real * b[i__4].real - a[i__3].imag * b[i__4].imag, z__2.imag = a[i__3].real * b[ i__4].imag + a[i__3].imag * b[i__4].real;
+                                z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                                 /* L90: */
                             }
                         }
@@ -336,8 +336,8 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             if (nounit)
                             {
                                 d_cnjg(&z__2, &a[i__ + i__ * a_dim1]);
-                                z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             i__2 = i__ - 1;
                             for (k = 1;
@@ -346,15 +346,15 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             {
                                 d_cnjg(&z__3, &a[k + i__ * a_dim1]);
                                 i__3 = k + j * b_dim1;
-                                z__2.r = z__3.r * b[i__3].r - z__3.i * b[i__3] .i, z__2.i = z__3.r * b[i__3].i + z__3.i * b[i__3].r;
-                                z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__2.real = z__3.real * b[i__3].real - z__3.imag * b[i__3] .imag, z__2.imag = z__3.real * b[i__3].imag + z__3.imag * b[i__3].real;
+                                z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                                 /* L100: */
                             }
                         }
                         i__2 = i__ + j * b_dim1;
-                        z__1.r = alpha->r * temp.r - alpha->i * temp.i, z__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        b[i__2].r = z__1.r, b[i__2].i = z__1.i;
+                        z__1.real = alpha->real * temp.real - alpha->imag * temp.imag, z__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        b[i__2].real = z__1.real, b[i__2].imag = z__1.imag;
                         /* L110: */
                     }
                     /* L120: */
@@ -373,14 +373,14 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             ++i__)
                     {
                         i__3 = i__ + j * b_dim1;
-                        temp.r = b[i__3].r, temp.i = b[i__3].i;
+                        temp.real = b[i__3].real, temp.imag = b[i__3].imag;
                         if (noconj)
                         {
                             if (nounit)
                             {
                                 i__3 = i__ + i__ * a_dim1;
-                                z__1.r = temp.r * a[i__3].r - temp.i * a[i__3] .i, z__1.i = temp.r * a[i__3].i + temp.i * a[i__3].r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = temp.real * a[i__3].real - temp.imag * a[i__3] .imag, z__1.imag = temp.real * a[i__3].imag + temp.imag * a[i__3].real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             i__3 = *m;
                             for (k = i__ + 1;
@@ -389,9 +389,9 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             {
                                 i__4 = k + i__ * a_dim1;
                                 i__5 = k + j * b_dim1;
-                                z__2.r = a[i__4].r * b[i__5].r - a[i__4].i * b[i__5].i, z__2.i = a[i__4].r * b[ i__5].i + a[i__4].i * b[i__5].r;
-                                z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__2.real = a[i__4].real * b[i__5].real - a[i__4].imag * b[i__5].imag, z__2.imag = a[i__4].real * b[ i__5].imag + a[i__4].imag * b[i__5].real;
+                                z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                                 /* L130: */
                             }
                         }
@@ -400,8 +400,8 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             if (nounit)
                             {
                                 d_cnjg(&z__2, &a[i__ + i__ * a_dim1]);
-                                z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             i__3 = *m;
                             for (k = i__ + 1;
@@ -410,15 +410,15 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             {
                                 d_cnjg(&z__3, &a[k + i__ * a_dim1]);
                                 i__4 = k + j * b_dim1;
-                                z__2.r = z__3.r * b[i__4].r - z__3.i * b[i__4] .i, z__2.i = z__3.r * b[i__4].i + z__3.i * b[i__4].r;
-                                z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__2.real = z__3.real * b[i__4].real - z__3.imag * b[i__4] .imag, z__2.imag = z__3.real * b[i__4].imag + z__3.imag * b[i__4].real;
+                                z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                                 /* L140: */
                             }
                         }
                         i__3 = i__ + j * b_dim1;
-                        z__1.r = alpha->r * temp.r - alpha->i * temp.i, z__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        b[i__3].r = z__1.r, b[i__3].i = z__1.i;
+                        z__1.real = alpha->real * temp.real - alpha->imag * temp.imag, z__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        b[i__3].real = z__1.real, b[i__3].imag = z__1.imag;
                         /* L150: */
                     }
                     /* L160: */
@@ -437,12 +437,12 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                         j >= 1;
                         --j)
                 {
-                    temp.r = alpha->r, temp.i = alpha->i;
+                    temp.real = alpha->real, temp.imag = alpha->imag;
                     if (nounit)
                     {
                         i__1 = j + j * a_dim1;
-                        z__1.r = temp.r * a[i__1].r - temp.i * a[i__1].i, z__1.i = temp.r * a[i__1].i + temp.i * a[i__1] .r;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__1.real = temp.real * a[i__1].real - temp.imag * a[i__1].imag, z__1.imag = temp.real * a[i__1].imag + temp.imag * a[i__1] .real;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                     }
                     i__1 = *m;
                     for (i__ = 1;
@@ -451,8 +451,8 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                     {
                         i__2 = i__ + j * b_dim1;
                         i__3 = i__ + j * b_dim1;
-                        z__1.r = temp.r * b[i__3].r - temp.i * b[i__3].i, z__1.i = temp.r * b[i__3].i + temp.i * b[i__3] .r;
-                        b[i__2].r = z__1.r, b[i__2].i = z__1.i;
+                        z__1.real = temp.real * b[i__3].real - temp.imag * b[i__3].imag, z__1.imag = temp.real * b[i__3].imag + temp.imag * b[i__3] .real;
+                        b[i__2].real = z__1.real, b[i__2].imag = z__1.imag;
                         /* L170: */
                     }
                     i__1 = j - 1;
@@ -461,11 +461,11 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             ++k)
                     {
                         i__2 = k + j * a_dim1;
-                        if (a[i__2].r != 0. || a[i__2].i != 0.)
+                        if (a[i__2].real != 0. || a[i__2].imag != 0.)
                         {
                             i__2 = k + j * a_dim1;
-                            z__1.r = alpha->r * a[i__2].r - alpha->i * a[i__2] .i, z__1.i = alpha->r * a[i__2].i + alpha->i * a[i__2].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = alpha->real * a[i__2].real - alpha->imag * a[i__2] .imag, z__1.imag = alpha->real * a[i__2].imag + alpha->imag * a[i__2].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             i__2 = *m;
                             for (i__ = 1;
                                     i__ <= i__2;
@@ -474,9 +474,9 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                                 i__3 = i__ + j * b_dim1;
                                 i__4 = i__ + j * b_dim1;
                                 i__5 = i__ + k * b_dim1;
-                                z__2.r = temp.r * b[i__5].r - temp.i * b[i__5] .i, z__2.i = temp.r * b[i__5].i + temp.i * b[i__5].r;
-                                z__1.r = b[i__4].r + z__2.r, z__1.i = b[i__4] .i + z__2.i;
-                                b[i__3].r = z__1.r, b[i__3].i = z__1.i;
+                                z__2.real = temp.real * b[i__5].real - temp.imag * b[i__5] .imag, z__2.imag = temp.real * b[i__5].imag + temp.imag * b[i__5].real;
+                                z__1.real = b[i__4].real + z__2.real, z__1.imag = b[i__4] .imag + z__2.imag;
+                                b[i__3].real = z__1.real, b[i__3].imag = z__1.imag;
                                 /* L180: */
                             }
                         }
@@ -492,12 +492,12 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                         j <= i__1;
                         ++j)
                 {
-                    temp.r = alpha->r, temp.i = alpha->i;
+                    temp.real = alpha->real, temp.imag = alpha->imag;
                     if (nounit)
                     {
                         i__2 = j + j * a_dim1;
-                        z__1.r = temp.r * a[i__2].r - temp.i * a[i__2].i, z__1.i = temp.r * a[i__2].i + temp.i * a[i__2] .r;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__1.real = temp.real * a[i__2].real - temp.imag * a[i__2].imag, z__1.imag = temp.real * a[i__2].imag + temp.imag * a[i__2] .real;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                     }
                     i__2 = *m;
                     for (i__ = 1;
@@ -506,8 +506,8 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                     {
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__ + j * b_dim1;
-                        z__1.r = temp.r * b[i__4].r - temp.i * b[i__4].i, z__1.i = temp.r * b[i__4].i + temp.i * b[i__4] .r;
-                        b[i__3].r = z__1.r, b[i__3].i = z__1.i;
+                        z__1.real = temp.real * b[i__4].real - temp.imag * b[i__4].imag, z__1.imag = temp.real * b[i__4].imag + temp.imag * b[i__4] .real;
+                        b[i__3].real = z__1.real, b[i__3].imag = z__1.imag;
                         /* L210: */
                     }
                     i__2 = *n;
@@ -516,11 +516,11 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             ++k)
                     {
                         i__3 = k + j * a_dim1;
-                        if (a[i__3].r != 0. || a[i__3].i != 0.)
+                        if (a[i__3].real != 0. || a[i__3].imag != 0.)
                         {
                             i__3 = k + j * a_dim1;
-                            z__1.r = alpha->r * a[i__3].r - alpha->i * a[i__3] .i, z__1.i = alpha->r * a[i__3].i + alpha->i * a[i__3].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = alpha->real * a[i__3].real - alpha->imag * a[i__3] .imag, z__1.imag = alpha->real * a[i__3].imag + alpha->imag * a[i__3].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             i__3 = *m;
                             for (i__ = 1;
                                     i__ <= i__3;
@@ -529,9 +529,9 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                                 i__4 = i__ + j * b_dim1;
                                 i__5 = i__ + j * b_dim1;
                                 i__6 = i__ + k * b_dim1;
-                                z__2.r = temp.r * b[i__6].r - temp.i * b[i__6] .i, z__2.i = temp.r * b[i__6].i + temp.i * b[i__6].r;
-                                z__1.r = b[i__5].r + z__2.r, z__1.i = b[i__5] .i + z__2.i;
-                                b[i__4].r = z__1.r, b[i__4].i = z__1.i;
+                                z__2.real = temp.real * b[i__6].real - temp.imag * b[i__6] .imag, z__2.imag = temp.real * b[i__6].imag + temp.imag * b[i__6].real;
+                                z__1.real = b[i__5].real + z__2.real, z__1.imag = b[i__5] .imag + z__2.imag;
+                                b[i__4].real = z__1.real, b[i__4].imag = z__1.imag;
                                 /* L220: */
                             }
                         }
@@ -557,19 +557,19 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             ++j)
                     {
                         i__3 = j + k * a_dim1;
-                        if (a[i__3].r != 0. || a[i__3].i != 0.)
+                        if (a[i__3].real != 0. || a[i__3].imag != 0.)
                         {
                             if (noconj)
                             {
                                 i__3 = j + k * a_dim1;
-                                z__1.r = alpha->r * a[i__3].r - alpha->i * a[ i__3].i, z__1.i = alpha->r * a[i__3] .i + alpha->i * a[i__3].r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = alpha->real * a[i__3].real - alpha->imag * a[ i__3].imag, z__1.imag = alpha->real * a[i__3] .imag + alpha->imag * a[i__3].real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             else
                             {
                                 d_cnjg(&z__2, &a[j + k * a_dim1]);
-                                z__1.r = alpha->r * z__2.r - alpha->i * z__2.i, z__1.i = alpha->r * z__2.i + alpha->i * z__2.r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = alpha->real * z__2.real - alpha->imag * z__2.imag, z__1.imag = alpha->real * z__2.imag + alpha->imag * z__2.real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             i__3 = *m;
                             for (i__ = 1;
@@ -579,31 +579,31 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                                 i__4 = i__ + j * b_dim1;
                                 i__5 = i__ + j * b_dim1;
                                 i__6 = i__ + k * b_dim1;
-                                z__2.r = temp.r * b[i__6].r - temp.i * b[i__6] .i, z__2.i = temp.r * b[i__6].i + temp.i * b[i__6].r;
-                                z__1.r = b[i__5].r + z__2.r, z__1.i = b[i__5] .i + z__2.i;
-                                b[i__4].r = z__1.r, b[i__4].i = z__1.i;
+                                z__2.real = temp.real * b[i__6].real - temp.imag * b[i__6] .imag, z__2.imag = temp.real * b[i__6].imag + temp.imag * b[i__6].real;
+                                z__1.real = b[i__5].real + z__2.real, z__1.imag = b[i__5] .imag + z__2.imag;
+                                b[i__4].real = z__1.real, b[i__4].imag = z__1.imag;
                                 /* L250: */
                             }
                         }
                         /* L260: */
                     }
-                    temp.r = alpha->r, temp.i = alpha->i;
+                    temp.real = alpha->real, temp.imag = alpha->imag;
                     if (nounit)
                     {
                         if (noconj)
                         {
                             i__2 = k + k * a_dim1;
-                            z__1.r = temp.r * a[i__2].r - temp.i * a[i__2].i, z__1.i = temp.r * a[i__2].i + temp.i * a[ i__2].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * a[i__2].real - temp.imag * a[i__2].imag, z__1.imag = temp.real * a[i__2].imag + temp.imag * a[ i__2].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         else
                         {
                             d_cnjg(&z__2, &a[k + k * a_dim1]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                     }
-                    if (temp.r != 1. || temp.i != 0.)
+                    if (temp.real != 1. || temp.imag != 0.)
                     {
                         i__2 = *m;
                         for (i__ = 1;
@@ -612,8 +612,8 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                         {
                             i__3 = i__ + k * b_dim1;
                             i__4 = i__ + k * b_dim1;
-                            z__1.r = temp.r * b[i__4].r - temp.i * b[i__4].i, z__1.i = temp.r * b[i__4].i + temp.i * b[ i__4].r;
-                            b[i__3].r = z__1.r, b[i__3].i = z__1.i;
+                            z__1.real = temp.real * b[i__4].real - temp.imag * b[i__4].imag, z__1.imag = temp.real * b[i__4].imag + temp.imag * b[ i__4].real;
+                            b[i__3].real = z__1.real, b[i__3].imag = z__1.imag;
                             /* L270: */
                         }
                     }
@@ -632,19 +632,19 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                             ++j)
                     {
                         i__2 = j + k * a_dim1;
-                        if (a[i__2].r != 0. || a[i__2].i != 0.)
+                        if (a[i__2].real != 0. || a[i__2].imag != 0.)
                         {
                             if (noconj)
                             {
                                 i__2 = j + k * a_dim1;
-                                z__1.r = alpha->r * a[i__2].r - alpha->i * a[ i__2].i, z__1.i = alpha->r * a[i__2] .i + alpha->i * a[i__2].r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = alpha->real * a[i__2].real - alpha->imag * a[ i__2].imag, z__1.imag = alpha->real * a[i__2] .imag + alpha->imag * a[i__2].real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             else
                             {
                                 d_cnjg(&z__2, &a[j + k * a_dim1]);
-                                z__1.r = alpha->r * z__2.r - alpha->i * z__2.i, z__1.i = alpha->r * z__2.i + alpha->i * z__2.r;
-                                temp.r = z__1.r, temp.i = z__1.i;
+                                z__1.real = alpha->real * z__2.real - alpha->imag * z__2.imag, z__1.imag = alpha->real * z__2.imag + alpha->imag * z__2.real;
+                                temp.real = z__1.real, temp.imag = z__1.imag;
                             }
                             i__2 = *m;
                             for (i__ = 1;
@@ -654,31 +654,31 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                                 i__3 = i__ + j * b_dim1;
                                 i__4 = i__ + j * b_dim1;
                                 i__5 = i__ + k * b_dim1;
-                                z__2.r = temp.r * b[i__5].r - temp.i * b[i__5] .i, z__2.i = temp.r * b[i__5].i + temp.i * b[i__5].r;
-                                z__1.r = b[i__4].r + z__2.r, z__1.i = b[i__4] .i + z__2.i;
-                                b[i__3].r = z__1.r, b[i__3].i = z__1.i;
+                                z__2.real = temp.real * b[i__5].real - temp.imag * b[i__5] .imag, z__2.imag = temp.real * b[i__5].imag + temp.imag * b[i__5].real;
+                                z__1.real = b[i__4].real + z__2.real, z__1.imag = b[i__4] .imag + z__2.imag;
+                                b[i__3].real = z__1.real, b[i__3].imag = z__1.imag;
                                 /* L290: */
                             }
                         }
                         /* L300: */
                     }
-                    temp.r = alpha->r, temp.i = alpha->i;
+                    temp.real = alpha->real, temp.imag = alpha->imag;
                     if (nounit)
                     {
                         if (noconj)
                         {
                             i__1 = k + k * a_dim1;
-                            z__1.r = temp.r * a[i__1].r - temp.i * a[i__1].i, z__1.i = temp.r * a[i__1].i + temp.i * a[ i__1].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * a[i__1].real - temp.imag * a[i__1].imag, z__1.imag = temp.real * a[i__1].imag + temp.imag * a[ i__1].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         else
                         {
                             d_cnjg(&z__2, &a[k + k * a_dim1]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                     }
-                    if (temp.r != 1. || temp.i != 0.)
+                    if (temp.real != 1. || temp.imag != 0.)
                     {
                         i__1 = *m;
                         for (i__ = 1;
@@ -687,8 +687,8 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
                         {
                             i__2 = i__ + k * b_dim1;
                             i__3 = i__ + k * b_dim1;
-                            z__1.r = temp.r * b[i__3].r - temp.i * b[i__3].i, z__1.i = temp.r * b[i__3].i + temp.i * b[ i__3].r;
-                            b[i__2].r = z__1.r, b[i__2].i = z__1.i;
+                            z__1.real = temp.real * b[i__3].real - temp.imag * b[i__3].imag, z__1.imag = temp.real * b[i__3].imag + temp.imag * b[ i__3].real;
+                            b[i__2].real = z__1.real, b[i__2].imag = z__1.imag;
                             /* L310: */
                         }
                     }

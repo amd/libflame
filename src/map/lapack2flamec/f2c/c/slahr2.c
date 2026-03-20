@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b4 = -1.f;
 static real c_b5 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b38 = 0.f;
 /* > \brief \b SLAHR2 reduces the specified number of first columns of a general rectangular matrix
  * A so that elements below the specified subdiagonal are zero, and returns auxiliary matrices which
@@ -185,33 +185,38 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *tau, real *t,
-             integer *ldt, real *y, integer *ldy)
+/** Generated wrapper function */
+void slahr2_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, real *a, aocl_int_t *lda, real *tau,
+             real *t, aocl_int_t *ldt, real *y, aocl_int_t *ldy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slahr2(n, k, nb, a, lda, tau, t, ldt, y, ldy);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldy_64 = *ldy;
+
+    aocl_lapack_slahr2(&n_64, &k_64, &nb_64, a, &lda_64, tau, t, &ldt_64, y, &ldy_64);
+#endif
+}
+
+void aocl_lapack_slahr2(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real *a,
+                        aocl_int64_t *lda, real *tau, real *t, aocl_int64_t *ldt, real *y,
+                        aocl_int64_t *ldy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slahr2 inputs: n %" FLA_IS ",k %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
                       ",ldt %" FLA_IS ",ldy %" FLA_IS "",
                       *n, *k, *nb, *lda, *ldt, *ldy);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real ei;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *),
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *),
-        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
-        slarfg_(integer *, real *, real *, integer *, real *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,8 +263,9 @@ void slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *t
             /* Update I-th column of A - Y * V**T */
             i__2 = *n - *k;
             i__3 = i__ - 1;
-            sgemv_("NO TRANSPOSE", &i__2, &i__3, &c_b4, &y[*k + 1 + y_dim1], ldy,
-                   &a[*k + i__ - 1 + a_dim1], lda, &c_b5, &a[*k + 1 + i__ * a_dim1], &c__1);
+            aocl_blas_sgemv("NO TRANSPOSE", &i__2, &i__3, &c_b4, &y[*k + 1 + y_dim1], ldy,
+                            &a[*k + i__ - 1 + a_dim1], lda, &c_b5, &a[*k + 1 + i__ * a_dim1],
+                            &c__1);
             /* Apply I - V * T**T * V**T to this column (call it b) from the */
             /* left, using the last column of T as workspace */
             /* Let V = ( V1 ) and b = ( b1 ) (first I-1 rows) */
@@ -267,30 +273,31 @@ void slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *t
             /* where V1 is unit lower triangular */
             /* w := V1**T * b1 */
             i__2 = i__ - 1;
-            scopy_(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_scopy(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            strmv_("Lower", "Transpose", "UNIT", &i__2, &a[*k + 1 + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_strmv("Lower", "Transpose", "UNIT", &i__2, &a[*k + 1 + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1);
             /* w := w + V2**T * b2 */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            sgemv_("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
-                   &a[*k + i__ + i__ * a_dim1], &c__1, &c_b5, &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
+                            &a[*k + i__ + i__ * a_dim1], &c__1, &c_b5, &t[*nb * t_dim1 + 1], &c__1);
             /* w := T**T * w */
             i__2 = i__ - 1;
-            strmv_("Upper", "Transpose", "NON-UNIT", &i__2, &t[t_offset], ldt, &t[*nb * t_dim1 + 1],
-                   &c__1);
+            aocl_blas_strmv("Upper", "Transpose", "NON-UNIT", &i__2, &t[t_offset], ldt,
+                            &t[*nb * t_dim1 + 1], &c__1);
             /* b2 := b2 - V2*w */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            sgemv_("NO TRANSPOSE", &i__2, &i__3, &c_b4, &a[*k + i__ + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1, &c_b5, &a[*k + i__ + i__ * a_dim1], &c__1);
+            aocl_blas_sgemv("NO TRANSPOSE", &i__2, &i__3, &c_b4, &a[*k + i__ + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1, &c_b5, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
             i__2 = i__ - 1;
-            strmv_("Lower", "NO TRANSPOSE", "UNIT", &i__2, &a[*k + 1 + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_strmv("Lower", "NO TRANSPOSE", "UNIT", &i__2, &a[*k + 1 + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            saxpy_(&i__2, &c_b4, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1], &c__1);
+            aocl_blas_saxpy(&i__2, &c_b4, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1],
+                            &c__1);
             a[*k + i__ - 1 + (i__ - 1) * a_dim1] = ei;
         }
         /* Generate the elementary reflector H(I) to annihilate */
@@ -298,48 +305,50 @@ void slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *t
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        slarfg_(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1,
-                &tau[i__]);
+        aocl_lapack_slarfg(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
+                           &c__1, &tau[i__]);
         ei = a[*k + i__ + i__ * a_dim1];
         a[*k + i__ + i__ * a_dim1] = 1.f;
         /* Compute Y(K+1:N,I) */
         i__2 = *n - *k;
         i__3 = *n - *k - i__ + 1;
-        sgemv_("NO TRANSPOSE", &i__2, &i__3, &c_b5, &a[*k + 1 + (i__ + 1) * a_dim1], lda,
-               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &y[*k + 1 + i__ * y_dim1], &c__1);
+        aocl_blas_sgemv("NO TRANSPOSE", &i__2, &i__3, &c_b5, &a[*k + 1 + (i__ + 1) * a_dim1], lda,
+                        &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &y[*k + 1 + i__ * y_dim1],
+                        &c__1);
         i__2 = *n - *k - i__ + 1;
         i__3 = i__ - 1;
-        sgemv_("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
-               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
+                        &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = *n - *k;
         i__3 = i__ - 1;
-        sgemv_("NO TRANSPOSE", &i__2, &i__3, &c_b4, &y[*k + 1 + y_dim1], ldy, &t[i__ * t_dim1 + 1],
-               &c__1, &c_b5, &y[*k + 1 + i__ * y_dim1], &c__1);
+        aocl_blas_sgemv("NO TRANSPOSE", &i__2, &i__3, &c_b4, &y[*k + 1 + y_dim1], ldy,
+                        &t[i__ * t_dim1 + 1], &c__1, &c_b5, &y[*k + 1 + i__ * y_dim1], &c__1);
         i__2 = *n - *k;
-        sscal_(&i__2, &tau[i__], &y[*k + 1 + i__ * y_dim1], &c__1);
+        aocl_blas_sscal(&i__2, &tau[i__], &y[*k + 1 + i__ * y_dim1], &c__1);
         /* Compute T(1:I,I) */
         i__2 = i__ - 1;
         r__1 = -tau[i__];
-        sscal_(&i__2, &r__1, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_sscal(&i__2, &r__1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        strmv_("Upper", "No Transpose", "NON-UNIT", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1],
-               &c__1);
+        aocl_blas_strmv("Upper", "No Transpose", "NON-UNIT", &i__2, &t[t_offset], ldt,
+                        &t[i__ * t_dim1 + 1], &c__1);
         t[i__ + i__ * t_dim1] = tau[i__];
         /* L10: */
     }
     a[*k + *nb + *nb * a_dim1] = ei;
     /* Compute Y(1:K,1:NB) */
-    slacpy_("ALL", k, nb, &a[(a_dim1 << 1) + 1], lda, &y[y_offset], ldy);
-    strmm_("RIGHT", "Lower", "NO TRANSPOSE", "UNIT", k, nb, &c_b5, &a[*k + 1 + a_dim1], lda,
-           &y[y_offset], ldy);
+    aocl_lapack_slacpy("ALL", k, nb, &a[(a_dim1 << 1) + 1], lda, &y[y_offset], ldy);
+    aocl_blas_strmm("RIGHT", "Lower", "NO TRANSPOSE", "UNIT", k, nb, &c_b5, &a[*k + 1 + a_dim1],
+                    lda, &y[y_offset], ldy);
     if(*n > *k + *nb)
     {
         i__1 = *n - *k - *nb;
-        sgemm_("NO TRANSPOSE", "NO TRANSPOSE", k, nb, &i__1, &c_b5, &a[(*nb + 2) * a_dim1 + 1], lda,
-               &a[*k + 1 + *nb + a_dim1], lda, &c_b5, &y[y_offset], ldy);
+        aocl_blas_sgemm("NO TRANSPOSE", "NO TRANSPOSE", k, nb, &i__1, &c_b5,
+                        &a[(*nb + 2) * a_dim1 + 1], lda, &a[*k + 1 + *nb + a_dim1], lda, &c_b5,
+                        &y[y_offset], ldy);
     }
-    strmm_("RIGHT", "Upper", "NO TRANSPOSE", "NON-UNIT", k, nb, &c_b5, &t[t_offset], ldt,
-           &y[y_offset], ldy);
+    aocl_blas_strmm("RIGHT", "Upper", "NO TRANSPOSE", "NON-UNIT", k, nb, &c_b5, &t[t_offset], ldt,
+                    &y[y_offset], ldy);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAHR2 */

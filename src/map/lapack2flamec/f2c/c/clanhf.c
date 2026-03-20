@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANHF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a Hermitian matrix in RFP format. */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > CLANHF returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex Hermitian matrix A in RFP format. */
+/* > scomplex Hermitian matrix A in RFP format. */
 /* > \endverbatim */
 /* > */
 /* > \return CLANHF */
@@ -247,7 +247,20 @@ otherwise, */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
-real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real *work)
+/** Generated wrapper function */
+real clanhf_(char *norm, char *transr, char *uplo, aocl_int_t *n, scomplex *a, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_clanhf(norm, transr, uplo, n, a, work);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_clanhf(norm, transr, uplo, &n_64, a, work);
+#endif
+}
+
+real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, scomplex *a,
+                        real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -262,22 +275,19 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_abs(complex *), sqrt(doublereal);
+    double c_abs(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     real s;
-    integer n1;
+    aocl_int64_t n1;
     real aa;
-    integer lda, ifm, noe, ilu;
+    aocl_int64_t lda, ifm, noe, ilu;
     real temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -307,7 +317,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
     }
     else if(*n == 1)
     {
-        ret_val = (r__1 = a[0].r, f2c_abs(r__1));
+        ret_val = (r__1 = a[0].real, f2c_abs(r__1));
         return ret_val;
     }
     /* set noe = 1 if n is odd. if n is even set noe=0 */
@@ -365,7 +375,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     j = 0;
                     /* -> L(0,0) */
                     i__1 = j + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -394,7 +404,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j - 1;
                         /* L(k+j,k+j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -402,7 +412,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j;
                         /* -> L(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -436,7 +446,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = k + j - 1;
                         /* -> U(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -445,7 +455,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         /* =k+j;
                         i -> U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -472,7 +482,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* i=n-1 -> U(n-1,n-1) */
                     i__1 = i__ + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -501,7 +511,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j;
                         /* L(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -509,7 +519,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j + 1;
                         /* L(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -537,7 +547,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__ = k - 1;
                     /* -> L(i,i) is at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -575,7 +585,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     j = k - 1;
                     /* -> U(j,j) is at A(0,j) */
                     i__1 = j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -604,7 +614,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j - k;
                         /* -> U(i,i) at A(i,j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -612,7 +622,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j - k + 1;
                         /* U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -642,13 +652,13 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     j = 0;
                     /* -> L(k,k) & j=1 -> L(0,0) */
                     i__1 = j + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
                     }
                     i__1 = j + 1 + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -677,7 +687,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j;
                         /* L(k+j,k+j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -685,7 +695,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j + 1;
                         /* -> L(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -719,7 +729,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = k + j;
                         /* -> U(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -728,7 +738,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         /* =k+j+1;
                         i -> U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -755,7 +765,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* i=n-1 -> U(n-1,n-1) */
                     i__1 = i__ + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -763,7 +773,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__ = *n;
                     /* -> U(k-1,k-1) */
                     i__1 = i__ + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -780,7 +790,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     j = 0;
                     /* -> L(k,k) at A(0,0) */
                     i__1 = j + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -809,7 +819,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j - 1;
                         /* L(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -817,7 +827,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j;
                         /* L(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -845,7 +855,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__ = k - 1;
                     /* -> L(i,i) is at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -883,7 +893,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     j = k;
                     /* -> U(j,j) is at A(0,j) */
                     i__1 = j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -912,7 +922,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j - k - 1;
                         /* -> U(i,i) at A(i,j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -920,7 +930,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         i__ = j - k;
                         /* U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        temp = (r__1 = a[i__2].real, f2c_abs(r__1));
                         if(value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -948,7 +958,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__ = k - 1;
                     /* U(k,k) at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    temp = (r__1 = a[i__1].real, f2c_abs(r__1));
                     if(value < temp || sisnan_(&temp))
                     {
                         value = temp;
@@ -988,7 +998,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             work[i__] += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* -> A(j+k,j+k) */
                         work[j + k] = s + aa;
                         if(i__ == k + k)
@@ -997,7 +1007,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         }
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* -> A(j,j) */
                         work[j] += aa;
                         s = 0.f;
@@ -1048,7 +1058,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         if(j > 0)
                         {
                             i__1 = i__ + j * lda;
-                            aa = (r__1 = a[i__1].r, f2c_abs(r__1));
+                            aa = (r__1 = a[i__1].real, f2c_abs(r__1));
                             /* -> A(j+k,j+k) */
                             s += aa;
                             work[i__ + k] += s;
@@ -1056,7 +1066,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             ++i__;
                         }
                         i__1 = i__ + j * lda;
-                        aa = (r__1 = a[i__1].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__1].real, f2c_abs(r__1));
                         /* -> A(j,j) */
                         work[j] = aa;
                         s = 0.f;
@@ -1107,12 +1117,12 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             work[i__] += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* -> A(j+k,j+k) */
                         work[j + k] = s + aa;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* -> A(j,j) */
                         work[j] += aa;
                         s = 0.f;
@@ -1158,14 +1168,14 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             work[i__ + k] += aa;
                         }
                         i__1 = i__ + j * lda;
-                        aa = (r__1 = a[i__1].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__1].real, f2c_abs(r__1));
                         /* -> A(j+k,j+k) */
                         s += aa;
                         work[i__ + k] += s;
                         /* i=j */
                         ++i__;
                         i__1 = i__ + j * lda;
-                        aa = (r__1 = a[i__1].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__1].real, f2c_abs(r__1));
                         /* -> A(j,j) */
                         work[j] = aa;
                         s = 0.f;
@@ -1228,7 +1238,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* j=n1=k-1 is special */
                     i__1 = j * lda;
-                    s = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    s = (r__1 = a[i__1].real, f2c_abs(r__1));
                     /* A(k-1,k-1) */
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -1253,13 +1263,13 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         }
                         /* i=j-k */
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* A(j-k,j-k) */
                         s += aa;
                         work[j - k] += s;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        s = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        s = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* A(j,j) */
                         i__2 = *n - 1;
                         for(l = j + 1; l <= i__2; ++l)
@@ -1307,7 +1317,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             s += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* i=j so process of A(j,j) */
                         s += aa;
                         work[j] = s;
@@ -1315,7 +1325,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         ++i__;
                         /* i=j process A(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         s = aa;
                         i__2 = *n - 1;
                         for(l = k + j + 1; l <= i__2; ++l)
@@ -1340,7 +1350,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    aa = (r__1 = a[i__1].real, f2c_abs(r__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] = s;
@@ -1399,7 +1409,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* j=k */
                     i__1 = j * lda;
-                    aa = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    aa = (r__1 = a[i__1].real, f2c_abs(r__1));
                     /* A(k,k) */
                     s = aa;
                     i__1 = k - 1;
@@ -1425,13 +1435,13 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         }
                         /* i=j-1-k */
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* A(j-k-1,j-k-1) */
                         s += aa;
                         work[j - k - 1] += s;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* A(j,j) */
                         s = aa;
                         i__2 = *n - 1;
@@ -1457,7 +1467,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    aa = (r__1 = a[i__1].real, f2c_abs(r__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] += s;
@@ -1481,7 +1491,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         work[i__] = 0.f;
                     }
                     /* j=0 is special :process col A(k:n-1,k) */
-                    s = (r__1 = a[0].r, f2c_abs(r__1));
+                    s = (r__1 = a[0].real, f2c_abs(r__1));
                     /* A(k,k) */
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -1506,7 +1516,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             s += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         /* i=j-1 so process of A(j-1,j-1) */
                         s += aa;
                         work[j - 1] = s;
@@ -1514,7 +1524,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         ++i__;
                         /* i=j process A(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        aa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                        aa = (r__1 = a[i__2].real, f2c_abs(r__1));
                         s = aa;
                         i__2 = *n - 1;
                         for(l = k + j + 1; l <= i__2; ++l)
@@ -1539,7 +1549,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (r__1 = a[i__1].r, f2c_abs(r__1));
+                    aa = (r__1 = a[i__1].real, f2c_abs(r__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] = s;
@@ -1592,14 +1602,14 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        classq_(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(k,0) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j - 1;
-                        classq_(&i__2, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j * lda], &c__1, &scale, &s);
                         /* trap U at A(0,0) */
                     }
                     s += s;
@@ -1610,7 +1620,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* U(k+i,k+i) */
                         if(aa != 0.f)
                         {
@@ -1629,7 +1639,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* U(i,i) */
                         if(aa != 0.f)
                         {
@@ -1650,7 +1660,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                         l = l + lda + 1;
                     }
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* U(n-1,n-1) */
                     if(aa != 0.f)
                     {
@@ -1676,18 +1686,18 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        classq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
-                    aa = a[0].r;
+                    aa = a[0].real;
                     /* L(0,0) at A(0,0) */
                     if(aa != 0.f)
                     {
@@ -1711,7 +1721,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(k-1+i,k-1+i) */
                         if(aa != 0.f)
                         {
@@ -1730,7 +1740,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(i,i) */
                         if(aa != 0.f)
                         {
@@ -1761,20 +1771,20 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__1 = k - 2;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[(k + j) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[(k + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        classq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        classq_(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
                         /* L at A(0,k-1) */
                     }
                     s += s;
@@ -1782,7 +1792,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     l = k * lda - lda;
                     /* -> U(k-1,k-1) at A(0,k-1) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* U(k-1,k-1) */
                     if(aa != 0.f)
                     {
@@ -1806,7 +1816,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = k; j <= i__1; ++j)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* -> U(j-k,j-k) */
                         if(aa != 0.f)
                         {
@@ -1825,7 +1835,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* -> U(j,j) */
                         if(aa != 0.f)
                         {
@@ -1852,20 +1862,20 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     i__1 = *n - 1;
                     for(j = k; j <= i__1; ++j)
                     {
-                        classq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,k) */
                     }
                     i__1 = k - 3;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        classq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(1,0) */
                     }
                     s += s;
@@ -1876,7 +1886,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(i,i) */
                         if(aa != 0.f)
                         {
@@ -1895,7 +1905,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(k+i,k+i) */
                         if(aa != 0.f)
                         {
@@ -1917,7 +1927,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* L-> k-1 + (k-1)*lda or L(k-1,k-1) at A(k-1,k-1) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* L(k-1,k-1) at A(k-1,k-1) */
                     if(aa != 0.f)
                     {
@@ -1951,14 +1961,14 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        classq_(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(k+1,0) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j;
-                        classq_(&i__2, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j * lda], &c__1, &scale, &s);
                         /* trap U at A(0,0) */
                     }
                     s += s;
@@ -1969,7 +1979,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* U(k+i,k+i) */
                         if(aa != 0.f)
                         {
@@ -1988,7 +1998,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* U(i,i) */
                         if(aa != 0.f)
                         {
@@ -2016,13 +2026,13 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        classq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(1,0) */
                     }
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     s += s;
@@ -2033,7 +2043,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(k-1+i,k-1+i) */
                         if(aa != 0.f)
                         {
@@ -2052,7 +2062,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(i,i) */
                         if(aa != 0.f)
                         {
@@ -2083,20 +2093,20 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k+1) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        classq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        classq_(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
                         /* L at A(0,k) */
                     }
                     s += s;
@@ -2104,7 +2114,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     l = k * lda;
                     /* -> U(k,k) at A(0,k) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* U(k,k) */
                     if(aa != 0.f)
                     {
@@ -2128,7 +2138,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = k + 1; j <= i__1; ++j)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* -> U(j-k-1,j-k-1) */
                         if(aa != 0.f)
                         {
@@ -2147,7 +2157,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* -> U(j,j) */
                         if(aa != 0.f)
                         {
@@ -2170,7 +2180,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     /* L=k-1+n*lda */
                     /* -> U(k-1,k-1) at A(k-1,n) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* U(k,k) */
                     if(aa != 0.f)
                     {
@@ -2195,20 +2205,20 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     i__1 = *n;
                     for(j = k + 1; j <= i__1; ++j)
                     {
-                        classq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,k+1) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        classq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(0,0) */
                     }
                     s += s;
@@ -2216,7 +2226,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     l = 0;
                     /* -> L(k,k) at A(0,0) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* L(k,k) at A(0,0) */
                     if(aa != 0.f)
                     {
@@ -2240,7 +2250,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         i__2 = l;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(i,i) */
                         if(aa != 0.f)
                         {
@@ -2259,7 +2269,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                             }
                         }
                         i__2 = l + 1;
-                        aa = a[i__2].r;
+                        aa = a[i__2].real;
                         /* L(k+i+1,k+i+1) */
                         if(aa != 0.f)
                         {
@@ -2281,7 +2291,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     }
                     /* L-> k - 1 + k*lda or L(k-1,k-1) at A(k-1,k) */
                     i__1 = l;
-                    aa = a[i__1].r;
+                    aa = a[i__1].real;
                     /* L(k-1,k-1) at A(k-1,k) */
                     if(aa != 0.f)
                     {

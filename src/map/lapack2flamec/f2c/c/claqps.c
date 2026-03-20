@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAQPS computes a step of QR factorization with column pivoting of a real m-by-n
  * matrix A by us ing BLAS level 3. */
 /* =========== DOCUMENTATION =========== */
@@ -45,7 +45,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CLAQPS computes a step of QR factorization with column pivoting */
-/* > of a complex M-by-N matrix A by using Blas-3. It tries to factorize */
+/* > of a scomplex M-by-N matrix A by using Blas-3. It tries to factorize */
 /* > NB columns from A starting from the row OFFSET+1, and updates all */
 /* > of the matrix with Blas-3 xGEMM. */
 /* > */
@@ -174,9 +174,33 @@ static integer c__1 = 1;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void claqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, complex *a,
-             integer *lda, integer *jpvt, complex *tau, real *vn1, real *vn2, complex *auxv,
-             complex *f, integer *ldf)
+/** Generated wrapper function */
+void claqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, aocl_int_t *kb,
+             scomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2,
+             scomplex *auxv, scomplex *f, aocl_int_t *ldf)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldf_64 = *ldf;
+
+    aocl_lapack_claqps(&m_64, &n_64, &offset_64, &nb_64, &kb_64, a, &lda_64, jpvt, tau, vn1, vn2,
+                       auxv, f, &ldf_64);
+
+    *kb = (aocl_int_t)kb_64;
+#endif
+}
+
+void aocl_lapack_claqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, aocl_int64_t *nb,
+                        aocl_int64_t *kb, scomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt,
+                        scomplex *tau, real *vn1, real *vn2, scomplex *auxv, scomplex *f,
+                        aocl_int64_t *ldf)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -191,35 +215,22 @@ void claqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, f_dim1, f_offset, i__1, i__2, i__3;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
     double sqrt(doublereal);
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
-    integer fla_i_nint(real *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer j, k, rk;
-    complex akk;
-    integer pvt;
+    aocl_int64_t j, k, rk;
+    scomplex akk;
+    aocl_int64_t pvt;
     real temp, temp2, tol3z;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *),
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp;
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    integer lsticc;
-    extern integer isamax_(integer *, real *, integer *);
-    integer lastrk;
+    aocl_int64_t lsticc;
+    aocl_int64_t lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -268,15 +279,15 @@ L10:
         rk = *offset + k;
         /* Determine ith pivot column and swap if necessary */
         i__1 = *n - k + 1;
-        pvt = k - 1 + isamax_(&i__1, &vn1[k], &c__1);
+        pvt = k - 1 + aocl_blas_isamax(&i__1, &vn1[k], &c__1);
         if(pvt != k)
         {
-            cswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+            aocl_blas_cswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = k - 1;
-            cswap_(&i__1, &f[pvt + f_dim1], ldf, &f[k + f_dim1], ldf);
+            aocl_blas_cswap(&i__1, &f[pvt + f_dim1], ldf, &f[k + f_dim1], ldf);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[k];
-            jpvt[k] = itemp;
+            jpvt[k] = (aocl_int_t)(itemp);
             vn1[pvt] = vn1[k];
             vn2[pvt] = vn2[k];
         }
@@ -289,23 +300,23 @@ L10:
             {
                 i__2 = k + j * f_dim1;
                 r_cnjg(&q__1, &f[k + j * f_dim1]);
-                f[i__2].r = q__1.r;
-                f[i__2].i = q__1.i; // , expr subst
+                f[i__2].real = q__1.real;
+                f[i__2].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             i__1 = *m - rk + 1;
             i__2 = k - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", &i__1, &i__2, &q__1, &a[rk + a_dim1], lda, &f[k + f_dim1], ldf,
-                   &c_b2, &a[rk + k * a_dim1], &c__1);
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
+            aocl_blas_cgemv("No transpose", &i__1, &i__2, &q__1, &a[rk + a_dim1], lda,
+                            &f[k + f_dim1], ldf, &c_b2, &a[rk + k * a_dim1], &c__1);
             i__1 = k - 1;
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = k + j * f_dim1;
                 r_cnjg(&q__1, &f[k + j * f_dim1]);
-                f[i__2].r = q__1.r;
-                f[i__2].i = q__1.i; // , expr subst
+                f[i__2].real = q__1.real;
+                f[i__2].imag = q__1.imag; // , expr subst
                 /* L30: */
             }
         }
@@ -313,34 +324,34 @@ L10:
         if(rk < *m)
         {
             i__1 = *m - rk + 1;
-            clarfg_(&i__1, &a[rk + k * a_dim1], &a[rk + 1 + k * a_dim1], &c__1, &tau[k]);
+            aocl_lapack_clarfg(&i__1, &a[rk + k * a_dim1], &a[rk + 1 + k * a_dim1], &c__1, &tau[k]);
         }
         else
         {
-            clarfg_(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
+            aocl_lapack_clarfg(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
         }
         i__1 = rk + k * a_dim1;
-        akk.r = a[i__1].r;
-        akk.i = a[i__1].i; // , expr subst
+        akk.real = a[i__1].real;
+        akk.imag = a[i__1].imag; // , expr subst
         i__1 = rk + k * a_dim1;
-        a[i__1].r = 1.f;
-        a[i__1].i = 0.f; // , expr subst
+        a[i__1].real = 1.f;
+        a[i__1].imag = 0.f; // , expr subst
         /* Compute Kth column of F: */
         /* Compute F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)**H*A(RK:M,K). */
         if(k < *n)
         {
             i__1 = *m - rk + 1;
             i__2 = *n - k;
-            cgemv_("Conjugate transpose", &i__1, &i__2, &tau[k], &a[rk + (k + 1) * a_dim1], lda,
-                   &a[rk + k * a_dim1], &c__1, &c_b1, &f[k + 1 + k * f_dim1], &c__1);
+            aocl_blas_cgemv("Conjugate transpose", &i__1, &i__2, &tau[k], &a[rk + (k + 1) * a_dim1],
+                            lda, &a[rk + k * a_dim1], &c__1, &c_b1, &f[k + 1 + k * f_dim1], &c__1);
         }
         /* Padding F(1:K,K) with zeros. */
         i__1 = k;
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + k * f_dim1;
-            f[i__2].r = 0.f;
-            f[i__2].i = 0.f; // , expr subst
+            f[i__2].real = 0.f;
+            f[i__2].imag = 0.f; // , expr subst
             /* L40: */
         }
         /* Incremental updating of F: */
@@ -351,23 +362,24 @@ L10:
             i__1 = *m - rk + 1;
             i__2 = k - 1;
             i__3 = k;
-            q__1.r = -tau[i__3].r;
-            q__1.i = -tau[i__3].i; // , expr subst
-            cgemv_("Conjugate transpose", &i__1, &i__2, &q__1, &a[rk + a_dim1], lda,
-                   &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
+            q__1.real = -tau[i__3].real;
+            q__1.imag = -tau[i__3].imag; // , expr subst
+            aocl_blas_cgemv("Conjugate transpose", &i__1, &i__2, &q__1, &a[rk + a_dim1], lda,
+                            &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
             i__1 = k - 1;
-            cgemv_("No transpose", n, &i__1, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1], &c__1, &c_b2,
-                   &f[k * f_dim1 + 1], &c__1);
+            aocl_blas_cgemv("No transpose", n, &i__1, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1], &c__1,
+                            &c_b2, &f[k * f_dim1 + 1], &c__1);
         }
         /* Update the current row of A: */
         /* A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**H. */
         if(k < *n)
         {
             i__1 = *n - k;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &q__1, &a[rk + a_dim1],
-                   lda, &f[k + 1 + f_dim1], ldf, &c_b2, &a[rk + (k + 1) * a_dim1], lda);
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
+            aocl_blas_cgemm("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &q__1,
+                            &a[rk + a_dim1], lda, &f[k + 1 + f_dim1], ldf, &c_b2,
+                            &a[rk + (k + 1) * a_dim1], lda);
         }
         /* Update partial column norms. */
         if(rk < lastrk)
@@ -401,8 +413,8 @@ L10:
             }
         }
         i__1 = rk + k * a_dim1;
-        a[i__1].r = akk.r;
-        a[i__1].i = akk.i; // , expr subst
+        a[i__1].real = akk.real;
+        a[i__1].imag = akk.imag; // , expr subst
         /* End of while loop. */
         goto L10;
     }
@@ -418,10 +430,11 @@ L10:
     {
         i__1 = *m - rk;
         i__2 = *n - *kb;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        cgemm_("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &q__1, &a[rk + 1 + a_dim1],
-               lda, &f[*kb + 1 + f_dim1], ldf, &c_b2, &a[rk + 1 + (*kb + 1) * a_dim1], lda);
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &q__1,
+                        &a[rk + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
+                        &a[rk + 1 + (*kb + 1) * a_dim1], lda);
     }
     /* Recomputation of difficult columns. */
 L60:
@@ -429,7 +442,7 @@ L60:
     {
         itemp = fla_i_nint(&vn2[lsticc]);
         i__1 = *m - rk;
-        vn1[lsticc] = scnrm2_(&i__1, &a[rk + 1 + lsticc * a_dim1], &c__1);
+        vn1[lsticc] = aocl_blas_scnrm2(&i__1, &a[rk + 1 + lsticc * a_dim1], &c__1);
         /* NOTE: The computation of VN1( LSTICC ) relies on the fact that */
         /* SNRM2 does not fail on vectors with norm below the value of */
         /* SQRT(DLAMCH('S')) */

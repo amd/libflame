@@ -153,8 +153,28 @@
 /* > \ingroup complexGBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
-             real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
+/** Generated wrapper function */
+void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomplex *ab,
+             aocl_int_t *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax,
+             char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqgb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, equed);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+
+    aocl_lapack_claqgb(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
+                       equed);
+#endif
+}
+
+void aocl_lapack_claqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        scomplex *ab, aocl_int64_t *ldab, real *r__, real *c__, real *rowcnd,
+                        real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -169,11 +189,11 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real cj, large, small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -237,10 +257,10 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 {
                     i__2 = *ku + 1 + i__ - j + j * ab_dim1;
                     i__3 = *ku + 1 + i__ - j + j * ab_dim1;
-                    q__1.r = cj * ab[i__3].r;
-                    q__1.i = cj * ab[i__3].i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__1.real = cj * ab[i__3].real;
+                    q__1.imag = cj * ab[i__3].imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -266,10 +286,10 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
                 i__2 = i__;
                 i__5 = *ku + 1 + i__ - j + j * ab_dim1;
-                q__1.r = r__[i__2] * ab[i__5].r;
-                q__1.i = r__[i__2] * ab[i__5].i; // , expr subst
-                ab[i__4].r = q__1.r;
-                ab[i__4].i = q__1.i; // , expr subst
+                q__1.real = r__[i__2] * ab[i__5].real;
+                q__1.imag = r__[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__4].real = q__1.real;
+                ab[i__4].imag = q__1.imag; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -295,10 +315,10 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 i__3 = *ku + 1 + i__ - j + j * ab_dim1;
                 r__1 = cj * r__[i__];
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
-                q__1.r = r__1 * ab[i__4].r;
-                q__1.i = r__1 * ab[i__4].i; // , expr subst
-                ab[i__3].r = q__1.r;
-                ab[i__3].i = q__1.i; // , expr subst
+                q__1.real = r__1 * ab[i__4].real;
+                q__1.imag = r__1 * ab[i__4].imag; // , expr subst
+                ab[i__3].real = q__1.real;
+                ab[i__3].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */

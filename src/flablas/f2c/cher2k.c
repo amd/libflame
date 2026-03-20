@@ -1,17 +1,17 @@
 /* cher2k.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, complex *a, integer *lda, complex *b, integer *ldb, real *beta, complex *c__, integer *ldc)
+int cher2k_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, scomplex *a, integer *lda, scomplex *b, integer *ldb, real *beta, scomplex *c__, integer *ldc)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     real r__1;
-    complex q__1, q__2, q__3, q__4, q__5, q__6;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
-    complex temp1, temp2;
+    scomplex temp1, temp2;
     integer i__, j, l;
     extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;
@@ -185,12 +185,12 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
         return 0;
     }
     /* Quick return if possible. */
-    if (*n == 0 || (alpha->r == 0.f && alpha->i == 0.f || *k == 0) && *beta == 1.f)
+    if (*n == 0 || (alpha->real == 0.f && alpha->imag == 0.f || *k == 0) && *beta == 1.f)
     {
         return 0;
     }
     /* And when alpha.eq.zero. */
-    if (alpha->r == 0.f && alpha->i == 0.f)
+    if (alpha->real == 0.f && alpha->imag == 0.f)
     {
         if (upper)
         {
@@ -207,7 +207,7 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L10: */
                     }
                     /* L20: */
@@ -227,14 +227,14 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = *beta * c__[i__4].r, q__1.i = *beta * c__[ i__4].i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = *beta * c__[i__4].real, q__1.imag = *beta * c__[ i__4].imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L30: */
                     }
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    r__1 = *beta * c__[i__3].r;
-                    c__[i__2].r = r__1, c__[i__2].i = 0.f;
+                    r__1 = *beta * c__[i__3].real;
+                    c__[i__2].real = r__1, c__[i__2].imag = 0.f;
                     /* L40: */
                 }
             }
@@ -254,7 +254,7 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L50: */
                     }
                     /* L60: */
@@ -269,8 +269,8 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    r__1 = *beta * c__[i__3].r;
-                    c__[i__2].r = r__1, c__[i__2].i = 0.f;
+                    r__1 = *beta * c__[i__3].real;
+                    c__[i__2].real = r__1, c__[i__2].imag = 0.f;
                     i__2 = *n;
                     for (i__ = j + 1;
                             i__ <= i__2;
@@ -278,8 +278,8 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = *beta * c__[i__4].r, q__1.i = *beta * c__[ i__4].i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = *beta * c__[i__4].real, q__1.imag = *beta * c__[ i__4].imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L70: */
                     }
                     /* L80: */
@@ -308,7 +308,7 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L90: */
                     }
                 }
@@ -321,21 +321,21 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = *beta * c__[i__4].r, q__1.i = *beta * c__[ i__4].i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = *beta * c__[i__4].real, q__1.imag = *beta * c__[ i__4].imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L100: */
                     }
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    r__1 = *beta * c__[i__3].r;
-                    c__[i__2].r = r__1, c__[i__2].i = 0.f;
+                    r__1 = *beta * c__[i__3].real;
+                    c__[i__2].real = r__1, c__[i__2].imag = 0.f;
                 }
                 else
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    r__1 = c__[i__3].r;
-                    c__[i__2].r = r__1, c__[i__2].i = 0.f;
+                    r__1 = c__[i__3].real;
+                    c__[i__2].real = r__1, c__[i__2].imag = 0.f;
                 }
                 i__2 = *k;
                 for (l = 1;
@@ -344,15 +344,15 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                 {
                     i__3 = j + l * a_dim1;
                     i__4 = j + l * b_dim1;
-                    if (a[i__3].r != 0.f || a[i__3].i != 0.f || (b[i__4].r != 0.f || b[i__4].i != 0.f))
+                    if (a[i__3].real != 0.f || a[i__3].imag != 0.f || (b[i__4].real != 0.f || b[i__4].imag != 0.f))
                     {
                         r_cnjg(&q__2, &b[j + l * b_dim1]);
-                        q__1.r = alpha->r * q__2.r - alpha->i * q__2.i, q__1.i = alpha->r * q__2.i + alpha->i * q__2.r;
-                        temp1.r = q__1.r, temp1.i = q__1.i;
+                        q__1.real = alpha->real * q__2.real - alpha->imag * q__2.imag, q__1.imag = alpha->real * q__2.imag + alpha->imag * q__2.real;
+                        temp1.real = q__1.real, temp1.imag = q__1.imag;
                         i__3 = j + l * a_dim1;
-                        q__2.r = alpha->r * a[i__3].r - alpha->i * a[i__3].i, q__2.i = alpha->r * a[i__3].i + alpha->i * a[ i__3].r;
+                        q__2.real = alpha->real * a[i__3].real - alpha->imag * a[i__3].imag, q__2.imag = alpha->real * a[i__3].imag + alpha->imag * a[ i__3].real;
                         r_cnjg(&q__1, &q__2);
-                        temp2.r = q__1.r, temp2.i = q__1.i;
+                        temp2.real = q__1.real, temp2.imag = q__1.imag;
                         i__3 = j - 1;
                         for (i__ = 1;
                                 i__ <= i__3;
@@ -361,23 +361,23 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            q__3.r = a[i__6].r * temp1.r - a[i__6].i * temp1.i, q__3.i = a[i__6].r * temp1.i + a[ i__6].i * temp1.r;
-                            q__2.r = c__[i__5].r + q__3.r, q__2.i = c__[i__5] .i + q__3.i;
+                            q__3.real = a[i__6].real * temp1.real - a[i__6].imag * temp1.imag, q__3.imag = a[i__6].real * temp1.imag + a[ i__6].imag * temp1.real;
+                            q__2.real = c__[i__5].real + q__3.real, q__2.imag = c__[i__5] .imag + q__3.imag;
                             i__7 = i__ + l * b_dim1;
-                            q__4.r = b[i__7].r * temp2.r - b[i__7].i * temp2.i, q__4.i = b[i__7].r * temp2.i + b[ i__7].i * temp2.r;
-                            q__1.r = q__2.r + q__4.r, q__1.i = q__2.i + q__4.i;
-                            c__[i__4].r = q__1.r, c__[i__4].i = q__1.i;
+                            q__4.real = b[i__7].real * temp2.real - b[i__7].imag * temp2.imag, q__4.imag = b[i__7].real * temp2.imag + b[ i__7].imag * temp2.real;
+                            q__1.real = q__2.real + q__4.real, q__1.imag = q__2.imag + q__4.imag;
+                            c__[i__4].real = q__1.real, c__[i__4].imag = q__1.imag;
                             /* L110: */
                         }
                         i__3 = j + j * c_dim1;
                         i__4 = j + j * c_dim1;
                         i__5 = j + l * a_dim1;
-                        q__2.r = a[i__5].r * temp1.r - a[i__5].i * temp1.i, q__2.i = a[i__5].r * temp1.i + a[i__5].i * temp1.r;
+                        q__2.real = a[i__5].real * temp1.real - a[i__5].imag * temp1.imag, q__2.imag = a[i__5].real * temp1.imag + a[i__5].imag * temp1.real;
                         i__6 = j + l * b_dim1;
-                        q__3.r = b[i__6].r * temp2.r - b[i__6].i * temp2.i, q__3.i = b[i__6].r * temp2.i + b[i__6].i * temp2.r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        r__1 = c__[i__4].r + q__1.r;
-                        c__[i__3].r = r__1, c__[i__3].i = 0.f;
+                        q__3.real = b[i__6].real * temp2.real - b[i__6].imag * temp2.imag, q__3.imag = b[i__6].real * temp2.imag + b[i__6].imag * temp2.real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        r__1 = c__[i__4].real + q__1.real;
+                        c__[i__3].real = r__1, c__[i__3].imag = 0.f;
                     }
                     /* L120: */
                 }
@@ -399,7 +399,7 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L140: */
                     }
                 }
@@ -412,21 +412,21 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = *beta * c__[i__4].r, q__1.i = *beta * c__[ i__4].i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = *beta * c__[i__4].real, q__1.imag = *beta * c__[ i__4].imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L150: */
                     }
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    r__1 = *beta * c__[i__3].r;
-                    c__[i__2].r = r__1, c__[i__2].i = 0.f;
+                    r__1 = *beta * c__[i__3].real;
+                    c__[i__2].real = r__1, c__[i__2].imag = 0.f;
                 }
                 else
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    r__1 = c__[i__3].r;
-                    c__[i__2].r = r__1, c__[i__2].i = 0.f;
+                    r__1 = c__[i__3].real;
+                    c__[i__2].real = r__1, c__[i__2].imag = 0.f;
                 }
                 i__2 = *k;
                 for (l = 1;
@@ -435,15 +435,15 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                 {
                     i__3 = j + l * a_dim1;
                     i__4 = j + l * b_dim1;
-                    if (a[i__3].r != 0.f || a[i__3].i != 0.f || (b[i__4].r != 0.f || b[i__4].i != 0.f))
+                    if (a[i__3].real != 0.f || a[i__3].imag != 0.f || (b[i__4].real != 0.f || b[i__4].imag != 0.f))
                     {
                         r_cnjg(&q__2, &b[j + l * b_dim1]);
-                        q__1.r = alpha->r * q__2.r - alpha->i * q__2.i, q__1.i = alpha->r * q__2.i + alpha->i * q__2.r;
-                        temp1.r = q__1.r, temp1.i = q__1.i;
+                        q__1.real = alpha->real * q__2.real - alpha->imag * q__2.imag, q__1.imag = alpha->real * q__2.imag + alpha->imag * q__2.real;
+                        temp1.real = q__1.real, temp1.imag = q__1.imag;
                         i__3 = j + l * a_dim1;
-                        q__2.r = alpha->r * a[i__3].r - alpha->i * a[i__3].i, q__2.i = alpha->r * a[i__3].i + alpha->i * a[ i__3].r;
+                        q__2.real = alpha->real * a[i__3].real - alpha->imag * a[i__3].imag, q__2.imag = alpha->real * a[i__3].imag + alpha->imag * a[ i__3].real;
                         r_cnjg(&q__1, &q__2);
-                        temp2.r = q__1.r, temp2.i = q__1.i;
+                        temp2.real = q__1.real, temp2.imag = q__1.imag;
                         i__3 = *n;
                         for (i__ = j + 1;
                                 i__ <= i__3;
@@ -452,23 +452,23 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            q__3.r = a[i__6].r * temp1.r - a[i__6].i * temp1.i, q__3.i = a[i__6].r * temp1.i + a[ i__6].i * temp1.r;
-                            q__2.r = c__[i__5].r + q__3.r, q__2.i = c__[i__5] .i + q__3.i;
+                            q__3.real = a[i__6].real * temp1.real - a[i__6].imag * temp1.imag, q__3.imag = a[i__6].real * temp1.imag + a[ i__6].imag * temp1.real;
+                            q__2.real = c__[i__5].real + q__3.real, q__2.imag = c__[i__5] .imag + q__3.imag;
                             i__7 = i__ + l * b_dim1;
-                            q__4.r = b[i__7].r * temp2.r - b[i__7].i * temp2.i, q__4.i = b[i__7].r * temp2.i + b[ i__7].i * temp2.r;
-                            q__1.r = q__2.r + q__4.r, q__1.i = q__2.i + q__4.i;
-                            c__[i__4].r = q__1.r, c__[i__4].i = q__1.i;
+                            q__4.real = b[i__7].real * temp2.real - b[i__7].imag * temp2.imag, q__4.imag = b[i__7].real * temp2.imag + b[ i__7].imag * temp2.real;
+                            q__1.real = q__2.real + q__4.real, q__1.imag = q__2.imag + q__4.imag;
+                            c__[i__4].real = q__1.real, c__[i__4].imag = q__1.imag;
                             /* L160: */
                         }
                         i__3 = j + j * c_dim1;
                         i__4 = j + j * c_dim1;
                         i__5 = j + l * a_dim1;
-                        q__2.r = a[i__5].r * temp1.r - a[i__5].i * temp1.i, q__2.i = a[i__5].r * temp1.i + a[i__5].i * temp1.r;
+                        q__2.real = a[i__5].real * temp1.real - a[i__5].imag * temp1.imag, q__2.imag = a[i__5].real * temp1.imag + a[i__5].imag * temp1.real;
                         i__6 = j + l * b_dim1;
-                        q__3.r = b[i__6].r * temp2.r - b[i__6].i * temp2.i, q__3.i = b[i__6].r * temp2.i + b[i__6].i * temp2.r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        r__1 = c__[i__4].r + q__1.r;
-                        c__[i__3].r = r__1, c__[i__3].i = 0.f;
+                        q__3.real = b[i__6].real * temp2.real - b[i__6].imag * temp2.imag, q__3.imag = b[i__6].real * temp2.imag + b[i__6].imag * temp2.real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        r__1 = c__[i__4].real + q__1.real;
+                        c__[i__3].real = r__1, c__[i__3].imag = 0.f;
                     }
                     /* L170: */
                 }
@@ -492,8 +492,8 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp1.r = 0.f, temp1.i = 0.f;
-                    temp2.r = 0.f, temp2.i = 0.f;
+                    temp1.real = 0.f, temp1.imag = 0.f;
+                    temp2.real = 0.f, temp2.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -501,14 +501,14 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                     {
                         r_cnjg(&q__3, &a[l + i__ * a_dim1]);
                         i__4 = l + j * b_dim1;
-                        q__2.r = q__3.r * b[i__4].r - q__3.i * b[i__4].i, q__2.i = q__3.r * b[i__4].i + q__3.i * b[i__4] .r;
-                        q__1.r = temp1.r + q__2.r, q__1.i = temp1.i + q__2.i;
-                        temp1.r = q__1.r, temp1.i = q__1.i;
+                        q__2.real = q__3.real * b[i__4].real - q__3.imag * b[i__4].imag, q__2.imag = q__3.real * b[i__4].imag + q__3.imag * b[i__4] .real;
+                        q__1.real = temp1.real + q__2.real, q__1.imag = temp1.imag + q__2.imag;
+                        temp1.real = q__1.real, temp1.imag = q__1.imag;
                         r_cnjg(&q__3, &b[l + i__ * b_dim1]);
                         i__4 = l + j * a_dim1;
-                        q__2.r = q__3.r * a[i__4].r - q__3.i * a[i__4].i, q__2.i = q__3.r * a[i__4].i + q__3.i * a[i__4] .r;
-                        q__1.r = temp2.r + q__2.r, q__1.i = temp2.i + q__2.i;
-                        temp2.r = q__1.r, temp2.i = q__1.i;
+                        q__2.real = q__3.real * a[i__4].real - q__3.imag * a[i__4].imag, q__2.imag = q__3.real * a[i__4].imag + q__3.imag * a[i__4] .real;
+                        q__1.real = temp2.real + q__2.real, q__1.imag = temp2.imag + q__2.imag;
+                        temp2.real = q__1.real, temp2.imag = q__1.imag;
                         /* L190: */
                     }
                     if (i__ == j)
@@ -516,23 +516,23 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                         if (*beta == 0.f)
                         {
                             i__3 = j + j * c_dim1;
-                            q__2.r = alpha->r * temp1.r - alpha->i * temp1.i, q__2.i = alpha->r * temp1.i + alpha->i * temp1.r;
+                            q__2.real = alpha->real * temp1.real - alpha->imag * temp1.imag, q__2.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
                             r_cnjg(&q__4, alpha);
-                            q__3.r = q__4.r * temp2.r - q__4.i * temp2.i, q__3.i = q__4.r * temp2.i + q__4.i * temp2.r;
-                            q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                            r__1 = q__1.r;
-                            c__[i__3].r = r__1, c__[i__3].i = 0.f;
+                            q__3.real = q__4.real * temp2.real - q__4.imag * temp2.imag, q__3.imag = q__4.real * temp2.imag + q__4.imag * temp2.real;
+                            q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                            r__1 = q__1.real;
+                            c__[i__3].real = r__1, c__[i__3].imag = 0.f;
                         }
                         else
                         {
                             i__3 = j + j * c_dim1;
                             i__4 = j + j * c_dim1;
-                            q__2.r = alpha->r * temp1.r - alpha->i * temp1.i, q__2.i = alpha->r * temp1.i + alpha->i * temp1.r;
+                            q__2.real = alpha->real * temp1.real - alpha->imag * temp1.imag, q__2.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
                             r_cnjg(&q__4, alpha);
-                            q__3.r = q__4.r * temp2.r - q__4.i * temp2.i, q__3.i = q__4.r * temp2.i + q__4.i * temp2.r;
-                            q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                            r__1 = *beta * c__[i__4].r + q__1.r;
-                            c__[i__3].r = r__1, c__[i__3].i = 0.f;
+                            q__3.real = q__4.real * temp2.real - q__4.imag * temp2.imag, q__3.imag = q__4.real * temp2.imag + q__4.imag * temp2.real;
+                            q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                            r__1 = *beta * c__[i__4].real + q__1.real;
+                            c__[i__3].real = r__1, c__[i__3].imag = 0.f;
                         }
                     }
                     else
@@ -540,23 +540,23 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                         if (*beta == 0.f)
                         {
                             i__3 = i__ + j * c_dim1;
-                            q__2.r = alpha->r * temp1.r - alpha->i * temp1.i, q__2.i = alpha->r * temp1.i + alpha->i * temp1.r;
+                            q__2.real = alpha->real * temp1.real - alpha->imag * temp1.imag, q__2.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
                             r_cnjg(&q__4, alpha);
-                            q__3.r = q__4.r * temp2.r - q__4.i * temp2.i, q__3.i = q__4.r * temp2.i + q__4.i * temp2.r;
-                            q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                            c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                            q__3.real = q__4.real * temp2.real - q__4.imag * temp2.imag, q__3.imag = q__4.real * temp2.imag + q__4.imag * temp2.real;
+                            q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                            c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         }
                         else
                         {
                             i__3 = i__ + j * c_dim1;
                             i__4 = i__ + j * c_dim1;
-                            q__3.r = *beta * c__[i__4].r, q__3.i = *beta * c__[i__4].i;
-                            q__4.r = alpha->r * temp1.r - alpha->i * temp1.i, q__4.i = alpha->r * temp1.i + alpha->i * temp1.r;
-                            q__2.r = q__3.r + q__4.r, q__2.i = q__3.i + q__4.i;
+                            q__3.real = *beta * c__[i__4].real, q__3.imag = *beta * c__[i__4].imag;
+                            q__4.real = alpha->real * temp1.real - alpha->imag * temp1.imag, q__4.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
+                            q__2.real = q__3.real + q__4.real, q__2.imag = q__3.imag + q__4.imag;
                             r_cnjg(&q__6, alpha);
-                            q__5.r = q__6.r * temp2.r - q__6.i * temp2.i, q__5.i = q__6.r * temp2.i + q__6.i * temp2.r;
-                            q__1.r = q__2.r + q__5.r, q__1.i = q__2.i + q__5.i;
-                            c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                            q__5.real = q__6.real * temp2.real - q__6.imag * temp2.imag, q__5.imag = q__6.real * temp2.imag + q__6.imag * temp2.real;
+                            q__1.real = q__2.real + q__5.real, q__1.imag = q__2.imag + q__5.imag;
+                            c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         }
                     }
                     /* L200: */
@@ -576,8 +576,8 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp1.r = 0.f, temp1.i = 0.f;
-                    temp2.r = 0.f, temp2.i = 0.f;
+                    temp1.real = 0.f, temp1.imag = 0.f;
+                    temp2.real = 0.f, temp2.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -585,14 +585,14 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                     {
                         r_cnjg(&q__3, &a[l + i__ * a_dim1]);
                         i__4 = l + j * b_dim1;
-                        q__2.r = q__3.r * b[i__4].r - q__3.i * b[i__4].i, q__2.i = q__3.r * b[i__4].i + q__3.i * b[i__4] .r;
-                        q__1.r = temp1.r + q__2.r, q__1.i = temp1.i + q__2.i;
-                        temp1.r = q__1.r, temp1.i = q__1.i;
+                        q__2.real = q__3.real * b[i__4].real - q__3.imag * b[i__4].imag, q__2.imag = q__3.real * b[i__4].imag + q__3.imag * b[i__4] .real;
+                        q__1.real = temp1.real + q__2.real, q__1.imag = temp1.imag + q__2.imag;
+                        temp1.real = q__1.real, temp1.imag = q__1.imag;
                         r_cnjg(&q__3, &b[l + i__ * b_dim1]);
                         i__4 = l + j * a_dim1;
-                        q__2.r = q__3.r * a[i__4].r - q__3.i * a[i__4].i, q__2.i = q__3.r * a[i__4].i + q__3.i * a[i__4] .r;
-                        q__1.r = temp2.r + q__2.r, q__1.i = temp2.i + q__2.i;
-                        temp2.r = q__1.r, temp2.i = q__1.i;
+                        q__2.real = q__3.real * a[i__4].real - q__3.imag * a[i__4].imag, q__2.imag = q__3.real * a[i__4].imag + q__3.imag * a[i__4] .real;
+                        q__1.real = temp2.real + q__2.real, q__1.imag = temp2.imag + q__2.imag;
+                        temp2.real = q__1.real, temp2.imag = q__1.imag;
                         /* L220: */
                     }
                     if (i__ == j)
@@ -600,23 +600,23 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                         if (*beta == 0.f)
                         {
                             i__3 = j + j * c_dim1;
-                            q__2.r = alpha->r * temp1.r - alpha->i * temp1.i, q__2.i = alpha->r * temp1.i + alpha->i * temp1.r;
+                            q__2.real = alpha->real * temp1.real - alpha->imag * temp1.imag, q__2.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
                             r_cnjg(&q__4, alpha);
-                            q__3.r = q__4.r * temp2.r - q__4.i * temp2.i, q__3.i = q__4.r * temp2.i + q__4.i * temp2.r;
-                            q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                            r__1 = q__1.r;
-                            c__[i__3].r = r__1, c__[i__3].i = 0.f;
+                            q__3.real = q__4.real * temp2.real - q__4.imag * temp2.imag, q__3.imag = q__4.real * temp2.imag + q__4.imag * temp2.real;
+                            q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                            r__1 = q__1.real;
+                            c__[i__3].real = r__1, c__[i__3].imag = 0.f;
                         }
                         else
                         {
                             i__3 = j + j * c_dim1;
                             i__4 = j + j * c_dim1;
-                            q__2.r = alpha->r * temp1.r - alpha->i * temp1.i, q__2.i = alpha->r * temp1.i + alpha->i * temp1.r;
+                            q__2.real = alpha->real * temp1.real - alpha->imag * temp1.imag, q__2.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
                             r_cnjg(&q__4, alpha);
-                            q__3.r = q__4.r * temp2.r - q__4.i * temp2.i, q__3.i = q__4.r * temp2.i + q__4.i * temp2.r;
-                            q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                            r__1 = *beta * c__[i__4].r + q__1.r;
-                            c__[i__3].r = r__1, c__[i__3].i = 0.f;
+                            q__3.real = q__4.real * temp2.real - q__4.imag * temp2.imag, q__3.imag = q__4.real * temp2.imag + q__4.imag * temp2.real;
+                            q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                            r__1 = *beta * c__[i__4].real + q__1.real;
+                            c__[i__3].real = r__1, c__[i__3].imag = 0.f;
                         }
                     }
                     else
@@ -624,23 +624,23 @@ int cher2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
                         if (*beta == 0.f)
                         {
                             i__3 = i__ + j * c_dim1;
-                            q__2.r = alpha->r * temp1.r - alpha->i * temp1.i, q__2.i = alpha->r * temp1.i + alpha->i * temp1.r;
+                            q__2.real = alpha->real * temp1.real - alpha->imag * temp1.imag, q__2.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
                             r_cnjg(&q__4, alpha);
-                            q__3.r = q__4.r * temp2.r - q__4.i * temp2.i, q__3.i = q__4.r * temp2.i + q__4.i * temp2.r;
-                            q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                            c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                            q__3.real = q__4.real * temp2.real - q__4.imag * temp2.imag, q__3.imag = q__4.real * temp2.imag + q__4.imag * temp2.real;
+                            q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                            c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         }
                         else
                         {
                             i__3 = i__ + j * c_dim1;
                             i__4 = i__ + j * c_dim1;
-                            q__3.r = *beta * c__[i__4].r, q__3.i = *beta * c__[i__4].i;
-                            q__4.r = alpha->r * temp1.r - alpha->i * temp1.i, q__4.i = alpha->r * temp1.i + alpha->i * temp1.r;
-                            q__2.r = q__3.r + q__4.r, q__2.i = q__3.i + q__4.i;
+                            q__3.real = *beta * c__[i__4].real, q__3.imag = *beta * c__[i__4].imag;
+                            q__4.real = alpha->real * temp1.real - alpha->imag * temp1.imag, q__4.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
+                            q__2.real = q__3.real + q__4.real, q__2.imag = q__3.imag + q__4.imag;
                             r_cnjg(&q__6, alpha);
-                            q__5.r = q__6.r * temp2.r - q__6.i * temp2.i, q__5.i = q__6.r * temp2.i + q__6.i * temp2.r;
-                            q__1.r = q__2.r + q__5.r, q__1.i = q__2.i + q__5.i;
-                            c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                            q__5.real = q__6.real * temp2.real - q__6.imag * temp2.imag, q__5.imag = q__6.real * temp2.imag + q__6.imag * temp2.real;
+                            q__1.real = q__2.real + q__5.real, q__1.imag = q__2.imag + q__5.imag;
+                            c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         }
                     }
                     /* L230: */

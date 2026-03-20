@@ -149,9 +149,37 @@
 /* > \ingroup unbdb5 */
 /* ===================================================================== */
 /* Subroutine */
-void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *incx1,
-              doublecomplex *x2, integer *incx2, doublecomplex *q1, integer *ldq1,
-              doublecomplex *q2, integer *ldq2, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, dcomplex *x1, aocl_int_t *incx1,
+              dcomplex *x2, aocl_int_t *incx2, dcomplex *q1, aocl_int_t *ldq1,
+              dcomplex *q2, aocl_int_t *ldq2, dcomplex *work, aocl_int_t *lwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zunbdb5(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
+#else
+    aocl_int64_t m1_64 = *m1;
+    aocl_int64_t m2_64 = *m2;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx1_64 = *incx1;
+    aocl_int64_t incx2_64 = *incx2;
+    aocl_int64_t ldq1_64 = *ldq1;
+    aocl_int64_t ldq2_64 = *ldq2;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zunbdb5(&m1_64, &m2_64, &n_64, x1, &incx1_64, x2, &incx2_64, q1, &ldq1_64, q2,
+                        &ldq2_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zunbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dcomplex *x1,
+                         aocl_int64_t *incx1, dcomplex *x2, aocl_int64_t *incx2,
+                         dcomplex *q1, aocl_int64_t *ldq1, dcomplex *q2,
+                         aocl_int64_t *ldq2, dcomplex *work, aocl_int64_t *lwork,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunbdb5 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS
@@ -159,24 +187,14 @@ void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
                       ", lwork %" FLA_IS "",
                       *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
     /* System generated locals */
-    integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, childinfo;
+    aocl_int64_t i__, j, childinfo;
     doublereal scl, eps, ssq, norm;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *),
-        zunbdb6_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, integer *);
+    extern doublereal dlamch_(char *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -244,7 +262,7 @@ void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNBDB5", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZUNBDB5", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -252,8 +270,8 @@ void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
     /* Project X onto the orthogonal complement of Q if X is nonzero */
     scl = 0.;
     ssq = 0.;
-    zlassq_(m1, &x1[1], incx1, &scl, &ssq);
-    zlassq_(m2, &x2[1], incx2, &scl, &ssq);
+    aocl_lapack_zlassq(m1, &x1[1], incx1, &scl, &ssq);
+    aocl_lapack_zlassq(m2, &x2[1], incx2, &scl, &ssq);
     norm = scl * sqrt(ssq);
     if(norm > *n * eps)
     {
@@ -262,16 +280,16 @@ void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
         /* * xLASCL cannot be used because of the vector increments and */
         /* * the round-off error has a negligible impact on */
         /* orthogonalization. */
-        z__1.r = 1. / norm;
-        z__1.i = 0. / norm; // , expr subst
-        zscal_(m1, &z__1, &x1[1], incx1);
-        z__1.r = 1. / norm;
-        z__1.i = 0. / norm; // , expr subst
-        zscal_(m2, &z__1, &x2[1], incx2);
-        zunbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
-                 ldq2, &work[1], lwork, &childinfo);
+        z__1.real = 1. / norm;
+        z__1.imag = 0. / norm; // , expr subst
+        aocl_blas_zscal(m1, &z__1, &x1[1], incx1);
+        z__1.real = 1. / norm;
+        z__1.imag = 0. / norm; // , expr subst
+        aocl_blas_zscal(m2, &z__1, &x2[1], incx2);
+        aocl_lapack_zunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
+                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
         /* If the projection is nonzero, then return */
-        if(dznrm2_(m1, &x1[1], incx1) != 0. || dznrm2_(m2, &x2[1], incx2) != 0.)
+        if(aocl_blas_dznrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dznrm2(m2, &x2[1], incx2) != 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -286,22 +304,22 @@ void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x1[i__3].r = 0.;
-            x1[i__3].i = 0.; // , expr subst
+            x1[i__3].real = 0.;
+            x1[i__3].imag = 0.; // , expr subst
         }
         i__2 = i__;
-        x1[i__2].r = 1.;
-        x1[i__2].i = 0.; // , expr subst
+        x1[i__2].real = 1.;
+        x1[i__2].imag = 0.; // , expr subst
         i__2 = *m2;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x2[i__3].r = 0.;
-            x2[i__3].i = 0.; // , expr subst
+            x2[i__3].real = 0.;
+            x2[i__3].imag = 0.; // , expr subst
         }
-        zunbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
-                 ldq2, &work[1], lwork, &childinfo);
-        if(dznrm2_(m1, &x1[1], incx1) != 0. || dznrm2_(m2, &x2[1], incx2) != 0.)
+        aocl_lapack_zunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
+                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
+        if(aocl_blas_dznrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dznrm2(m2, &x2[1], incx2) != 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -316,22 +334,22 @@ void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x1[i__3].r = 0.;
-            x1[i__3].i = 0.; // , expr subst
+            x1[i__3].real = 0.;
+            x1[i__3].imag = 0.; // , expr subst
         }
         i__2 = *m2;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x2[i__3].r = 0.;
-            x2[i__3].i = 0.; // , expr subst
+            x2[i__3].real = 0.;
+            x2[i__3].imag = 0.; // , expr subst
         }
         i__2 = i__;
-        x2[i__2].r = 1.;
-        x2[i__2].i = 0.; // , expr subst
-        zunbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
-                 ldq2, &work[1], lwork, &childinfo);
-        if(dznrm2_(m1, &x1[1], incx1) != 0. || dznrm2_(m2, &x2[1], incx2) != 0.)
+        x2[i__2].real = 1.;
+        x2[i__2].imag = 0.; // , expr subst
+        aocl_lapack_zunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
+                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
+        if(aocl_blas_dznrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dznrm2(m2, &x2[1], incx2) != 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;

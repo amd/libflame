@@ -72,12 +72,27 @@
 /* > \date September 2012 */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
-integer ilazlc_(integer *m, integer *n, doublecomplex *a, integer *lda)
+/** Generated wrapper function */
+aocl_int_t ilazlc_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_ilazlc(m, n, a, lda);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_ilazlc(&m_64, &n_64, a, &lda_64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_ilazlc(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
+                                aocl_int64_t *lda)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, ret_val, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, ret_val, i__1, i__2;
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -113,7 +128,7 @@ integer ilazlc_(integer *m, integer *n, doublecomplex *a, integer *lda)
     {
         i__1 = *n * a_dim1 + 1;
         i__2 = *m + *n * a_dim1;
-        if(a[i__1].r != 0. || a[i__1].i != 0. || (a[i__2].r != 0. || a[i__2].i != 0.))
+        if(a[i__1].real != 0. || a[i__1].imag != 0. || (a[i__2].real != 0. || a[i__2].imag != 0.))
         {
             ret_val = *n;
         }
@@ -126,7 +141,7 @@ integer ilazlc_(integer *m, integer *n, doublecomplex *a, integer *lda)
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + ret_val * a_dim1;
-                    if(a[i__2].r != 0. || a[i__2].i != 0.)
+                    if(a[i__2].real != 0. || a[i__2].imag != 0.)
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                         return ret_val;

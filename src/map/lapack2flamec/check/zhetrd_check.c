@@ -1,17 +1,17 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int zhetrd_check(char *uplo, integer *n, dcomplex *a, integer *lda, double *d__, double *e,
-                 dcomplex *tau, dcomplex *work, integer *lwork, integer *info)
+int zhetrd_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, double *d__, double *e,
+                 dcomplex *tau, dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer nb;
+    aocl_int64_t nb;
     logical upper;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -45,7 +45,7 @@ int zhetrd_check(char *uplo, integer *n, dcomplex *a, integer *lda, double *d__,
     if(*info == 0)
     {
         /* Determine the block size. */
-        nb = ilaenv_(&c__1, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
         work[1].real = (double)lwkopt;
         work[1].imag = 0.; // , expr subst
@@ -53,7 +53,7 @@ int zhetrd_check(char *uplo, integer *n, dcomplex *a, integer *lda, double *d__,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHETRD", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

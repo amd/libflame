@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 /* > \brief \b ZHEGV_2STAGE */
 /* @precisions fortran z -> c */
 /* =========== DOCUMENTATION =========== */
@@ -49,7 +49,7 @@ static integer c__4 = 4;
 /* > \verbatim */
 /* > */
 /* > ZHEGV_2STAGE computes all the eigenvalues, and optionally, the eigenvectors */
-/* > of a complex generalized Hermitian-definite eigenproblem, of the form */
+/* > of a scomplex generalized Hermitian-definite eigenproblem, of the form */
 /* > A*x=(lambda)*B*x, A*Bx=(lambda)*x, or B*A*x=(lambda)*x. */
 /* > Here A and B are assumed to be Hermitian and B is also */
 /* > positive definite. */
@@ -236,43 +236,48 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a,
-                   integer *lda, doublecomplex *b, integer *ldb, doublereal *w, doublecomplex *work,
-                   integer *lwork, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zhegv_2stage_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex *a,
+                   aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, doublereal *w,
+                   dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhegv_2stage(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, rwork, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhegv_2stage(&itype_64, jobz, uplo, &n_64, a, &lda_64, b, &ldb_64, w, work,
+                             &lwork_64, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhegv_2stage(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n,
+                              dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                              aocl_int64_t *ldb, doublereal *w, dcomplex *work,
+                              aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhegv_2stage inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
                       ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",
                       *itype, *jobz, *uplo, *n, *lda, *ldb, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    integer ib, kd, neig;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
-    extern /* Subroutine */
-        void
-        zheev_2stage_(char *, char *, integer *, doublecomplex *, integer *, doublereal *,
-                      doublecomplex *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lhtrd, lwmin;
+    aocl_int64_t ib, kd, neig;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lhtrd, lwmin;
     char trans[1];
     logical upper;
-    integer lwtrd;
+    aocl_int64_t lwtrd;
     logical wantz;
-    extern /* Subroutine */
-        void
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, integer *);
     logical lquery;
-    extern /* Subroutine */
-        void
-        zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -334,13 +339,13 @@ void zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecom
     }
     if(*info == 0)
     {
-        kd = ilaenv2stage_(&c__1, "ZHETRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
-        ib = ilaenv2stage_(&c__2, "ZHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
-        lhtrd = ilaenv2stage_(&c__3, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
-        lwtrd = ilaenv2stage_(&c__4, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+        kd = aocl_lapack_ilaenv2stage(&c__1, "ZHETRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
+        ib = aocl_lapack_ilaenv2stage(&c__2, "ZHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
+        lhtrd = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+        lwtrd = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = *n + lhtrd + lwtrd;
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -349,7 +354,7 @@ void zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecom
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHEGV_2STAGE", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("ZHEGV_2STAGE", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -365,7 +370,7 @@ void zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecom
         return;
     }
     /* Form a Cholesky factorization of B. */
-    zpotrf_(uplo, n, &b[b_offset], ldb, info);
+    aocl_lapack_zpotrf(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -373,8 +378,9 @@ void zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecom
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    zhegst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    zheev_2stage_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1], info);
+    aocl_lapack_zhegst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    aocl_lapack_zheev_2stage(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1],
+                             info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -396,8 +402,8 @@ void zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecom
             {
                 *(unsigned char *)trans = 'C';
             }
-            ztrsm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
-                   &a[a_offset], lda);
+            aocl_blas_ztrsm("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
+                            &a[a_offset], lda);
         }
         else if(*itype == 3)
         {
@@ -412,12 +418,12 @@ void zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecom
             {
                 *(unsigned char *)trans = 'N';
             }
-            ztrmm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
-                   &a[a_offset], lda);
+            aocl_blas_ztrmm("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
+                            &a[a_offset], lda);
         }
     }
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHEGV_2STAGE */

@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGTTRF computes an LU factorization of a complex tridiagonal matrix A */
+/* > ZGTTRF computes an LU factorization of a scomplex tridiagonal matrix A */
 /* > using elimination with partial pivoting and row interchanges. */
 /* > */
 /* > The factorization has the form */
@@ -121,25 +121,38 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *du,
-             doublecomplex *du2, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zgttrf_(aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
+             dcomplex *du2, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgttrf(n, dl, d__, du, du2, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgttrf(&n_64, dl, d__, du, du2, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
+                        dcomplex *du2, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgttrf inputs: n %" FLA_IS "", *n);
 
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
+    aocl_int64_t i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double d_imag(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__;
-    doublecomplex fact, temp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__;
+    dcomplex fact, temp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +187,7 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("ZGTTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -188,15 +201,15 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        ipiv[i__] = i__;
+        ipiv[i__] = (aocl_int_t)(i__);
         /* L10: */
     }
     i__1 = *n - 2;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        du2[i__2].r = 0.;
-        du2[i__2].i = 0.; // , expr subst
+        du2[i__2].real = 0.;
+        du2[i__2].imag = 0.; // , expr subst
         /* L20: */
     }
     i__1 = *n - 2;
@@ -204,72 +217,72 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
     {
         i__2 = i__;
         i__3 = i__;
-        if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
-           >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
+        if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+           >= (d__3 = dl[i__3].real, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
         {
             /* No row interchange required, eliminate DL(I) */
             i__2 = i__;
-            if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+            if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
                != 0.)
             {
                 z_div(&z__1, &dl[i__], &d__[i__]);
-                fact.r = z__1.r;
-                fact.i = z__1.i; // , expr subst
+                fact.real = z__1.real;
+                fact.imag = z__1.imag; // , expr subst
                 i__2 = i__;
-                dl[i__2].r = fact.r;
-                dl[i__2].i = fact.i; // , expr subst
+                dl[i__2].real = fact.real;
+                dl[i__2].imag = fact.imag; // , expr subst
                 i__2 = i__ + 1;
                 i__3 = i__ + 1;
                 i__4 = i__;
-                z__2.r = fact.r * du[i__4].r - fact.i * du[i__4].i;
-                z__2.i = fact.r * du[i__4].i + fact.i * du[i__4].r; // , expr subst
-                z__1.r = d__[i__3].r - z__2.r;
-                z__1.i = d__[i__3].i - z__2.i; // , expr subst
-                d__[i__2].r = z__1.r;
-                d__[i__2].i = z__1.i; // , expr subst
+                z__2.real = fact.real * du[i__4].real - fact.imag * du[i__4].imag;
+                z__2.imag = fact.real * du[i__4].imag + fact.imag * du[i__4].real; // , expr subst
+                z__1.real = d__[i__3].real - z__2.real;
+                z__1.imag = d__[i__3].imag - z__2.imag; // , expr subst
+                d__[i__2].real = z__1.real;
+                d__[i__2].imag = z__1.imag; // , expr subst
             }
         }
         else
         {
             /* Interchange rows I and I+1, eliminate DL(I) */
             z_div(&z__1, &d__[i__], &dl[i__]);
-            fact.r = z__1.r;
-            fact.i = z__1.i; // , expr subst
+            fact.real = z__1.real;
+            fact.imag = z__1.imag; // , expr subst
             i__2 = i__;
             i__3 = i__;
-            d__[i__2].r = dl[i__3].r;
-            d__[i__2].i = dl[i__3].i; // , expr subst
+            d__[i__2].real = dl[i__3].real;
+            d__[i__2].imag = dl[i__3].imag; // , expr subst
             i__2 = i__;
-            dl[i__2].r = fact.r;
-            dl[i__2].i = fact.i; // , expr subst
+            dl[i__2].real = fact.real;
+            dl[i__2].imag = fact.imag; // , expr subst
             i__2 = i__;
-            temp.r = du[i__2].r;
-            temp.i = du[i__2].i; // , expr subst
+            temp.real = du[i__2].real;
+            temp.imag = du[i__2].imag; // , expr subst
             i__2 = i__;
             i__3 = i__ + 1;
-            du[i__2].r = d__[i__3].r;
-            du[i__2].i = d__[i__3].i; // , expr subst
+            du[i__2].real = d__[i__3].real;
+            du[i__2].imag = d__[i__3].imag; // , expr subst
             i__2 = i__ + 1;
             i__3 = i__ + 1;
-            z__2.r = fact.r * d__[i__3].r - fact.i * d__[i__3].i;
-            z__2.i = fact.r * d__[i__3].i + fact.i * d__[i__3].r; // , expr subst
-            z__1.r = temp.r - z__2.r;
-            z__1.i = temp.i - z__2.i; // , expr subst
-            d__[i__2].r = z__1.r;
-            d__[i__2].i = z__1.i; // , expr subst
+            z__2.real = fact.real * d__[i__3].real - fact.imag * d__[i__3].imag;
+            z__2.imag = fact.real * d__[i__3].imag + fact.imag * d__[i__3].real; // , expr subst
+            z__1.real = temp.real - z__2.real;
+            z__1.imag = temp.imag - z__2.imag; // , expr subst
+            d__[i__2].real = z__1.real;
+            d__[i__2].imag = z__1.imag; // , expr subst
             i__2 = i__;
             i__3 = i__ + 1;
-            du2[i__2].r = du[i__3].r;
-            du2[i__2].i = du[i__3].i; // , expr subst
+            du2[i__2].real = du[i__3].real;
+            du2[i__2].imag = du[i__3].imag; // , expr subst
             i__2 = i__ + 1;
-            z__2.r = -fact.r;
-            z__2.i = -fact.i; // , expr subst
+            z__2.real = -fact.real;
+            z__2.imag = -fact.imag; // , expr subst
             i__3 = i__ + 1;
-            z__1.r = z__2.r * du[i__3].r - z__2.i * du[i__3].i;
-            z__1.i = z__2.r * du[i__3].i + z__2.i * du[i__3].r; // , expr subst
-            du[i__2].r = z__1.r;
-            du[i__2].i = z__1.i; // , expr subst
-            ipiv[i__] = i__ + 1;
+            z__1.real = z__2.real * du[i__3].real - z__2.imag * du[i__3].imag;
+            z__1.imag = z__2.real * du[i__3].imag + z__2.imag * du[i__3].real; // , expr subst
+            du[i__2].real = z__1.real;
+            du[i__2].imag = z__1.imag; // , expr subst
+            ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
         /* L30: */
     }
@@ -278,58 +291,58 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
         i__ = *n - 1;
         i__1 = i__;
         i__2 = i__;
-        if((d__1 = d__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
-           >= (d__3 = dl[i__2].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
+        if((d__1 = d__[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+           >= (d__3 = dl[i__2].real, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
         {
             i__1 = i__;
-            if((d__1 = d__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+            if((d__1 = d__[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
                != 0.)
             {
                 z_div(&z__1, &dl[i__], &d__[i__]);
-                fact.r = z__1.r;
-                fact.i = z__1.i; // , expr subst
+                fact.real = z__1.real;
+                fact.imag = z__1.imag; // , expr subst
                 i__1 = i__;
-                dl[i__1].r = fact.r;
-                dl[i__1].i = fact.i; // , expr subst
+                dl[i__1].real = fact.real;
+                dl[i__1].imag = fact.imag; // , expr subst
                 i__1 = i__ + 1;
                 i__2 = i__ + 1;
                 i__3 = i__;
-                z__2.r = fact.r * du[i__3].r - fact.i * du[i__3].i;
-                z__2.i = fact.r * du[i__3].i + fact.i * du[i__3].r; // , expr subst
-                z__1.r = d__[i__2].r - z__2.r;
-                z__1.i = d__[i__2].i - z__2.i; // , expr subst
-                d__[i__1].r = z__1.r;
-                d__[i__1].i = z__1.i; // , expr subst
+                z__2.real = fact.real * du[i__3].real - fact.imag * du[i__3].imag;
+                z__2.imag = fact.real * du[i__3].imag + fact.imag * du[i__3].real; // , expr subst
+                z__1.real = d__[i__2].real - z__2.real;
+                z__1.imag = d__[i__2].imag - z__2.imag; // , expr subst
+                d__[i__1].real = z__1.real;
+                d__[i__1].imag = z__1.imag; // , expr subst
             }
         }
         else
         {
             z_div(&z__1, &d__[i__], &dl[i__]);
-            fact.r = z__1.r;
-            fact.i = z__1.i; // , expr subst
+            fact.real = z__1.real;
+            fact.imag = z__1.imag; // , expr subst
             i__1 = i__;
             i__2 = i__;
-            d__[i__1].r = dl[i__2].r;
-            d__[i__1].i = dl[i__2].i; // , expr subst
+            d__[i__1].real = dl[i__2].real;
+            d__[i__1].imag = dl[i__2].imag; // , expr subst
             i__1 = i__;
-            dl[i__1].r = fact.r;
-            dl[i__1].i = fact.i; // , expr subst
+            dl[i__1].real = fact.real;
+            dl[i__1].imag = fact.imag; // , expr subst
             i__1 = i__;
-            temp.r = du[i__1].r;
-            temp.i = du[i__1].i; // , expr subst
+            temp.real = du[i__1].real;
+            temp.imag = du[i__1].imag; // , expr subst
             i__1 = i__;
             i__2 = i__ + 1;
-            du[i__1].r = d__[i__2].r;
-            du[i__1].i = d__[i__2].i; // , expr subst
+            du[i__1].real = d__[i__2].real;
+            du[i__1].imag = d__[i__2].imag; // , expr subst
             i__1 = i__ + 1;
             i__2 = i__ + 1;
-            z__2.r = fact.r * d__[i__2].r - fact.i * d__[i__2].i;
-            z__2.i = fact.r * d__[i__2].i + fact.i * d__[i__2].r; // , expr subst
-            z__1.r = temp.r - z__2.r;
-            z__1.i = temp.i - z__2.i; // , expr subst
-            d__[i__1].r = z__1.r;
-            d__[i__1].i = z__1.i; // , expr subst
-            ipiv[i__] = i__ + 1;
+            z__2.real = fact.real * d__[i__2].real - fact.imag * d__[i__2].imag;
+            z__2.imag = fact.real * d__[i__2].imag + fact.imag * d__[i__2].real; // , expr subst
+            z__1.real = temp.real - z__2.real;
+            z__1.imag = temp.imag - z__2.imag; // , expr subst
+            d__[i__1].real = z__1.real;
+            d__[i__1].imag = z__1.imag; // , expr subst
+            ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
     }
     /* Check for a zero on the diagonal of U. */
@@ -337,7 +350,7 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2)) == 0.)
+        if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2)) == 0.)
         {
             *info = i__;
             goto L50;

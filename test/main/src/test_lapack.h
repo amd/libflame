@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_LAPACK_H
@@ -102,6 +102,15 @@ typedef enum
     FLA_TIME_UNIT_MILLISEC,
     FLA_TIME_UNIT_SEC
 } fla_time_unit;
+
+/* Test mode enumeration */
+typedef enum
+{
+    FLA_TEST_MODE_DEFAULT = 0,       /* API-specific init + validation */
+    FLA_TEST_MODE_PERF = 1,         /* API-specific init + no validation */
+    FLA_TEST_MODE_RANDOM = 2,       /* Random init + validation */
+    FLA_TEST_MODE_RANDOM_PERF = 3   /* Random init + no validation */
+} fla_test_mode_t;
 
 // API categories
 #define LIN (1)
@@ -220,12 +229,21 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
 #define FLA_OVERFLOW_UNDERFLOW_TEST \
     (same_char(params->imatrix_char, 'O') || same_char(params->imatrix_char, 'U'))
 
-#define FLA_BIT_REPRODUCIBILITY_TEST                                      \
-    (same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'V') \
-     || same_char(params->BRT_char, 'M') || same_char(params->BRT_char, 'F'))
+#define FLA_BIT_REPRODUCIBILITY_TEST                                         \
+    (same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'V')    \
+     || same_char(params->BRT_char, 'M') || same_char(params->BRT_char, 'F') \
+     || same_char(params->BRT_char, 'L'))
 
 #define FLA_BRT_VERIFICATION_RUN \
     (same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))
+
+#define FLA_RANDOM_INIT_MODE \
+    (params->test_mode == FLA_TEST_MODE_RANDOM || \
+     params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
+
+#define FLA_SKIP_VALIDATION_MODE \
+    (params->test_mode == FLA_TEST_MODE_PERF || \
+     params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
 
 /* Macro to check if a LAPACK API have different names for its
    (precision)variants and modify API display string
@@ -258,7 +276,7 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
             func_str = "UNMLQ";                               \
     }
 
-/* Macro to skip complex and double complex tests of not supported APIs */
+/* Macro to skip scomplex and double scomplex tests of not supported APIs */
 #define FLA_SKIP_TEST(datatype_char, func_str)                                      \
     ((((same_char(datatype_char, 'c') || same_char(datatype_char, 'z'))             \
        && strcmp(func_str, "STEVD") == 0)                                           \
@@ -419,6 +437,10 @@ typedef struct Lin_solver_paramlist_t
     char equed_porfsx; // Must be 'N', 'Y'.
     char norm_gbcon; // norm param for gbcon API
     char side; // Left 'L' or Right 'R'
+
+    // GEQP3/GEQPF mode flag (per-test) ---
+    // 0 => GEQP3, 1 => GEQPF (deprecated)
+    int geqpf_mode;
 } Lin_solver_paramlist;
 
 /* struct to hold eigen parameters */
@@ -590,6 +612,13 @@ typedef struct SVD_paramlist_t
     /* Parameters for 'gesvdx' API  */
     integer il, iu; // the indices of the smallest and largest singular values.
 
+    /* Parameters for 'bdsqr' API  */
+    integer ncvt_bdsqr; // The number of columns of the matrix VT. NCVT >= 0.
+    integer nru_bdsqr; // The number of rows of the matrix U. NRU >= 0.
+    integer ncc_bdsqr; // The number of columns of the matrix C. NCC >= 0.
+    integer ldc; // The leading dimension of the array C. LDC >= max(1,N) if NCC > 0; LDC >=1
+                       // if NCC = 0.
+
     char data_types_char[MAX_NUM_DATATYPES];
     char jobu; // Must be 'U' or 'N'.
     char jobv; // Must be 'V' or 'N'.
@@ -618,6 +647,9 @@ typedef struct SVD_paramlist_t
     char joba_gesvdq; //  Must be 'A', 'H', 'M' , 'E'
     char jobu_gesvdq; // Must be 'A', 'S', 'R' , 'N'
     char jobv_gesvdq; // Must be 'A', 'V', 'R' , 'N'.
+
+    /* Parameters for 'bdsqr' API  */
+    char uplo; // Must be 'U' or 'L'.
 } SVD_paramlist;
 
 /* struct to hold AUX parameters */
@@ -709,6 +741,8 @@ typedef struct
     run.  The actual repeats are calculated as follows:
         max(ceil(bench_duration/time_per_call), n_repeats) */
     double bench_duration;
+    /* Test mode that controls both initialization and validation behavior */
+    fla_test_mode_t test_mode;
     double warmup_repeats;
     fla_stat_t stats_out[MAX_NUM_STATS];
     /* Values greater then outlier_multiplier*stddev + mean are
@@ -738,6 +772,14 @@ typedef struct
     char BRT_char;
     int seed;
 
+    /* Safe min and eps for residual calculation */
+    double sf_min_s;
+    double sf_min_d;
+    double eps_s;
+    double eps_d;
+    /* eps*base */
+    double eps_p_s;
+    double eps_p_d;
 } test_params_t;
 
 typedef struct
@@ -817,4 +859,6 @@ double fla_stat_get_val(test_params_t *test_params, fla_stat_t *stat_desc);
 void fla_test_runtime_ctx_init(test_params_t *params);
 void fla_test_runtime_ctx_reset(test_params_t *params);
 void fla_test_runtime_ctx_free(test_params_t *params);
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params);
+double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params);
 #endif // TEST_LAPACK_H

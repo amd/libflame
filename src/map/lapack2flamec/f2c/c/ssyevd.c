@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__0 = 0;
 static real c_b17 = 1.f;
 /* > \brief <b> SSYEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for SY mat rices</b> */
@@ -181,64 +181,58 @@ i off-diagonal elements of an intermediate */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work,
-             integer *lwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void ssyevd_(char *jobz, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *w, real *work,
+             aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssyevd(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssyevd(jobz, uplo, &n_64, a, &lda_64, w, work, &lwork_64, iwork, &liwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssyevd(char *jobz, char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                        real *w, real *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                        aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssyevd inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
                       ", lwork %" FLA_IS "",
                       *jobz, *uplo, *n, *lda, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real eps;
-    integer inde;
+    aocl_int64_t inde;
     real anrm, rmin, rmax;
-    integer lopt;
+    aocl_int64_t lopt;
     real sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer lwmin, liopt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t lwmin, liopt;
     logical lower, wantz;
-    integer indwk2, llwrk2, iscale;
+    aocl_int64_t indwk2, llwrk2, iscale;
     extern real slamch_(char *);
     real safmin;
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    integer indtau;
-    extern /* Subroutine */
-        void
-        sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *,
-                integer *, integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    integer indwrk, liwmin;
-    extern /* Subroutine */
-        void
-        ssterf_(integer *, real *, real *, integer *);
-    extern real slansy_(char *, char *, integer *, real *, integer *, real *);
-    integer llwork;
+    aocl_int64_t indtau;
+    aocl_int64_t indwrk, liwmin;
+    aocl_int64_t llwork;
     real smlnum;
     logical lquery;
-    extern /* Subroutine */
-        void
-        sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *),
-        ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *,
-                integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -313,12 +307,14 @@ void ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w,
             /* Computing MAX */
             i__1 = lwmin;
             i__2 = (*n << 1)
-                   + *n * ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+                   + *n
+                         * aocl_lapack_ilaenv(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1,
+                                              &c_n1); // , expr subst
             lopt = fla_max(i__1, i__2);
             liopt = liwmin;
         }
-        work[1] = sroundup_lwork(&lopt);
-        iwork[1] = liopt;
+        work[1] = aocl_lapack_sroundup_lwork(&lopt);
+        iwork[1] = (aocl_int_t)(liopt);
         if(*lwork < lwmin && !lquery)
         {
             *info = -8;
@@ -331,7 +327,7 @@ void ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYEVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -364,7 +360,7 @@ void ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w,
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = slansy_("M", uplo, n, &a[a_offset], lda, &work[1]);
+    anrm = aocl_lapack_slansy("M", uplo, n, &a[a_offset], lda, &work[1]);
     iscale = 0;
     if(anrm > 0.f && anrm < rmin)
     {
@@ -378,7 +374,7 @@ void ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w,
     }
     if(iscale == 1)
     {
-        slascl_(uplo, &c__0, &c__0, &c_b17, &sigma, n, n, &a[a_offset], lda, info);
+        aocl_lapack_slascl(uplo, &c__0, &c__0, &c_b17, &sigma, n, n, &a[a_offset], lda, info);
     }
     /* Call SSYTRD to reduce symmetric matrix to tridiagonal form. */
     inde = 1;
@@ -387,32 +383,32 @@ void ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w,
     llwork = *lwork - indwrk + 1;
     indwk2 = indwrk + *n * *n;
     llwrk2 = *lwork - indwk2 + 1;
-    ssytrd_(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk], &llwork,
-            &iinfo);
+    aocl_lapack_ssytrd(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk],
+                       &llwork, &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, first call */
     /* SSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the */
     /* tridiagonal matrix, then call SORMTR to multiply it by the */
     /* Householder transformations stored in A. */
     if(!wantz)
     {
-        ssterf_(n, &w[1], &work[inde], info);
+        aocl_lapack_ssterf(n, &w[1], &work[inde], info);
     }
     else
     {
-        sstedc_("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2, &iwork[1],
-                liwork, info);
-        sormtr_("L", uplo, "N", n, n, &a[a_offset], lda, &work[indtau], &work[indwrk], n,
-                &work[indwk2], &llwrk2, &iinfo);
-        slacpy_("A", n, n, &work[indwrk], n, &a[a_offset], lda);
+        aocl_lapack_sstedc("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2,
+                           &iwork[1], liwork, info);
+        aocl_lapack_sormtr("L", uplo, "N", n, n, &a[a_offset], lda, &work[indtau], &work[indwrk], n,
+                           &work[indwk2], &llwrk2, &iinfo);
+        aocl_lapack_slacpy("A", n, n, &work[indwrk], n, &a[a_offset], lda);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
     {
         r__1 = 1.f / sigma;
-        sscal_(n, &r__1, &w[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &w[1], &c__1);
     }
-    work[1] = sroundup_lwork(&lopt);
-    iwork[1] = liopt;
+    work[1] = aocl_lapack_sroundup_lwork(&lopt);
+    iwork[1] = (aocl_int_t)(liopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYEVD */

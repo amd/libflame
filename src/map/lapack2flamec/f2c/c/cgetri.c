@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CGETRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -116,8 +116,26 @@ the matrix is */
 /* > \ingroup getri */
 /* ===================================================================== */
 /* Subroutine */
-void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *lwork,
-             integer *info)
+/** Generated wrapper function */
+void cgetri_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgetri(n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgetri(&n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                        scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -130,34 +148,15 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, jb, nb, jj, jp, nn, iws;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *),
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    integer nbmin;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *),
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer ldwork;
-    extern /* Subroutine */
-        void
-        ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t i__, j, jb, nb, jj, jp, nn, iws;
+    aocl_int64_t nbmin;
+    aocl_int64_t ldwork;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -186,11 +185,11 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "CGETRI", " ", n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "CGETRI", " ", n, &c_n1, &c_n1, &c_n1);
     lwkopt = *n * nb;
-    r__1 = sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*n < 0)
     {
@@ -207,7 +206,7 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGETRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -224,7 +223,7 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
     }
     /* Form inv(U). If INFO > 0 from CTRTRI, then U is singular, */
     /* and the inverse is not computed. */
-    ctrtri_("Upper", "Non-unit", n, &a[a_offset], lda, info);
+    aocl_lapack_ctrtri("Upper", "Non-unit", n, &a[a_offset], lda, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -242,7 +241,7 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
             nb = *lwork / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "CGETRI", " ", n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__2, "CGETRI", " ", n, &c_n1, &c_n1, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -262,21 +261,21 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
             {
                 i__2 = i__;
                 i__3 = i__ + j * a_dim1;
-                work[i__2].r = a[i__3].r;
-                work[i__2].i = a[i__3].i; // , expr subst
+                work[i__2].real = a[i__3].real;
+                work[i__2].imag = a[i__3].imag; // , expr subst
                 i__2 = i__ + j * a_dim1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L10: */
             }
             /* Compute current column of inv(A). */
             if(j < *n)
             {
                 i__1 = *n - j;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", n, &i__1, &q__1, &a[(j + 1) * a_dim1 + 1], lda, &work[j + 1],
-                       &c__1, &c_b2, &a[j * a_dim1 + 1], &c__1);
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
+                aocl_blas_cgemv("No transpose", n, &i__1, &q__1, &a[(j + 1) * a_dim1 + 1], lda,
+                                &work[j + 1], &c__1, &c_b2, &a[j * a_dim1 + 1], &c__1);
             }
             /* L20: */
         }
@@ -302,11 +301,11 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
                 {
                     i__4 = i__ + (jj - j) * ldwork;
                     i__5 = i__ + jj * a_dim1;
-                    work[i__4].r = a[i__5].r;
-                    work[i__4].i = a[i__5].i; // , expr subst
+                    work[i__4].real = a[i__5].real;
+                    work[i__4].imag = a[i__5].imag; // , expr subst
                     i__4 = i__ + jj * a_dim1;
-                    a[i__4].r = 0.f;
-                    a[i__4].i = 0.f; // , expr subst
+                    a[i__4].real = 0.f;
+                    a[i__4].imag = 0.f; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -315,14 +314,14 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
             if(j + jb <= *n)
             {
                 i__2 = *n - j - jb + 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
-                cgemm_("No transpose", "No transpose", n, &jb, &i__2, &q__1,
-                       &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b2,
-                       &a[j * a_dim1 + 1], lda);
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
+                aocl_blas_cgemm("No transpose", "No transpose", n, &jb, &i__2, &q__1,
+                                &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b2,
+                                &a[j * a_dim1 + 1], lda);
             }
-            ctrsm_("Right", "Lower", "No transpose", "Unit", n, &jb, &c_b2, &work[j], &ldwork,
-                   &a[j * a_dim1 + 1], lda);
+            aocl_blas_ctrsm("Right", "Lower", "No transpose", "Unit", n, &jb, &c_b2, &work[j],
+                            &ldwork, &a[j * a_dim1 + 1], lda);
             /* L50: */
         }
     }
@@ -332,13 +331,13 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
         jp = ipiv[j];
         if(jp != j)
         {
-            cswap_(n, &a[j * a_dim1 + 1], &c__1, &a[jp * a_dim1 + 1], &c__1);
+            aocl_blas_cswap(n, &a[j * a_dim1 + 1], &c__1, &a[jp * a_dim1 + 1], &c__1);
         }
         /* L60: */
     }
-    r__1 = sroundup_lwork(&iws);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&iws);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGETRI */

@@ -153,20 +153,39 @@
 /* > \ingroup complex16GBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab,
-             doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
-             doublereal *amax, char *equed)
+/** Generated wrapper function */
+void zlaqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomplex *ab,
+             aocl_int_t *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd,
+             doublereal *colcnd, doublereal *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqgb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, equed);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+
+    aocl_lapack_zlaqgb(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
+                       equed);
+#endif
+}
+
+void aocl_lapack_zlaqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        dcomplex *ab, aocl_int64_t *ldab, doublereal *r__, doublereal *c__,
+                        doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqgb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
                       ", ldab %" FLA_IS "",
                       *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal cj, large, small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -230,10 +249,10 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 {
                     i__2 = *ku + 1 + i__ - j + j * ab_dim1;
                     i__3 = *ku + 1 + i__ - j + j * ab_dim1;
-                    z__1.r = cj * ab[i__3].r;
-                    z__1.i = cj * ab[i__3].i; // , expr subst
-                    ab[i__2].r = z__1.r;
-                    ab[i__2].i = z__1.i; // , expr subst
+                    z__1.real = cj * ab[i__3].real;
+                    z__1.imag = cj * ab[i__3].imag; // , expr subst
+                    ab[i__2].real = z__1.real;
+                    ab[i__2].imag = z__1.imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -259,10 +278,10 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
                 i__2 = i__;
                 i__5 = *ku + 1 + i__ - j + j * ab_dim1;
-                z__1.r = r__[i__2] * ab[i__5].r;
-                z__1.i = r__[i__2] * ab[i__5].i; // , expr subst
-                ab[i__4].r = z__1.r;
-                ab[i__4].i = z__1.i; // , expr subst
+                z__1.real = r__[i__2] * ab[i__5].real;
+                z__1.imag = r__[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__4].real = z__1.real;
+                ab[i__4].imag = z__1.imag; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -288,10 +307,10 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 i__3 = *ku + 1 + i__ - j + j * ab_dim1;
                 d__1 = cj * r__[i__];
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
-                z__1.r = d__1 * ab[i__4].r;
-                z__1.i = d__1 * ab[i__4].i; // , expr subst
-                ab[i__3].r = z__1.r;
-                ab[i__3].i = z__1.i; // , expr subst
+                z__1.real = d__1 * ab[i__4].real;
+                z__1.imag = d__1 * ab[i__4].imag; // , expr subst
+                ab[i__3].real = z__1.real;
+                ab[i__3].imag = z__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */

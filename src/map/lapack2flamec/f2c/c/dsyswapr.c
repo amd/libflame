@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DSYSWAPR applies an elementary permutation on the rows and columns of a symmetric
  * matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -99,20 +99,34 @@ if UPLO = 'L', the interchanges are applied to */
 /* > \ingroup doubleSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1, integer *i2)
+/** Generated wrapper function */
+void dsyswapr_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *i1,
+               aocl_int_t *i2)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsyswapr(uplo, n, a, lda, i1, i2);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t i1_64 = *i1;
+    aocl_int64_t i2_64 = *i2;
+
+    aocl_lapack_dsyswapr(uplo, &n_64, a, &lda_64, &i1_64, &i2_64);
+#endif
+}
+
+void aocl_lapack_dsyswapr(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                          aocl_int64_t *i1, aocl_int64_t *i2)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS
                       ", i2 %" FLA_IS "",
                       *uplo, *n, *lda, *i1, *i2);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
     doublereal tmp;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -140,7 +154,7 @@ void dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1,
         /* first swap */
         /* - swap column I1 and I2 from I1 to I1-1 */
         i__1 = *i1 - 1;
-        dswap_(&i__1, &a[*i1 * a_dim1 + 1], &c__1, &a[*i2 * a_dim1 + 1], &c__1);
+        aocl_blas_dswap(&i__1, &a[*i1 * a_dim1 + 1], &c__1, &a[*i2 * a_dim1 + 1], &c__1);
         /* second swap : */
         /* - swap A(I1,I1) and A(I2,I2) */
         /* - swap row I1 from I1+1 to I2-1 with col I2 from I1+1 to I2-1 */
@@ -148,13 +162,15 @@ void dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1,
         a[*i1 + *i1 * a_dim1] = a[*i2 + *i2 * a_dim1];
         a[*i2 + *i2 * a_dim1] = tmp;
         i__1 = *i2 - *i1 - 1;
-        dswap_(&i__1, &a[*i1 + (*i1 + 1) * a_dim1], lda, &a[*i1 + 1 + *i2 * a_dim1], &c__1);
+        aocl_blas_dswap(&i__1, &a[*i1 + (*i1 + 1) * a_dim1], lda, &a[*i1 + 1 + *i2 * a_dim1],
+                        &c__1);
         /* third swap */
         /* - swap row I1 and I2 from I2+1 to N */
         if(*i2 < *n)
         {
             i__1 = *n - *i2;
-            dswap_(&i__1, &a[*i1 + (*i2 + 1) * a_dim1], lda, &a[*i2 + (*i2 + 1) * a_dim1], lda);
+            aocl_blas_dswap(&i__1, &a[*i1 + (*i2 + 1) * a_dim1], lda, &a[*i2 + (*i2 + 1) * a_dim1],
+                            lda);
         }
     }
     else
@@ -163,7 +179,7 @@ void dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1,
         /* first swap */
         /* - swap row I1 and I2 from I1 to I1-1 */
         i__1 = *i1 - 1;
-        dswap_(&i__1, &a[*i1 + a_dim1], lda, &a[*i2 + a_dim1], lda);
+        aocl_blas_dswap(&i__1, &a[*i1 + a_dim1], lda, &a[*i2 + a_dim1], lda);
         /* second swap : */
         /* - swap A(I1,I1) and A(I2,I2) */
         /* - swap col I1 from I1+1 to I2-1 with row I2 from I1+1 to I2-1 */
@@ -171,13 +187,15 @@ void dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1,
         a[*i1 + *i1 * a_dim1] = a[*i2 + *i2 * a_dim1];
         a[*i2 + *i2 * a_dim1] = tmp;
         i__1 = *i2 - *i1 - 1;
-        dswap_(&i__1, &a[*i1 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + (*i1 + 1) * a_dim1], lda);
+        aocl_blas_dswap(&i__1, &a[*i1 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + (*i1 + 1) * a_dim1],
+                        lda);
         /* third swap */
         /* - swap col I1 and I2 from I2+1 to N */
         if(*i2 < *n)
         {
             i__1 = *n - *i2;
-            dswap_(&i__1, &a[*i2 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + 1 + *i2 * a_dim1], &c__1);
+            aocl_blas_dswap(&i__1, &a[*i2 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + 1 + *i2 * a_dim1],
+                            &c__1);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

@@ -14,7 +14,7 @@
 // This block of code is enabled by the preprocessor macro FLA_ENABLE_GOTO_INTERFACES.
 // It assumes that libgoto provides the BLAS implementation, which includes special
 // symbols that are assigned upon calling blas_set_parameter(). These symbols are
-// integer variables that hold the ideal blocksizes for each of the four datatypes
+// fla_dim_t variables that hold the ideal blocksizes for each of the four datatypes
 // for the host architecture.
 #ifdef FLA_ENABLE_GOTO_INTERFACES
 
@@ -164,8 +164,8 @@ fla_dim_t FLA_Query_blocksize( FLA_Datatype dt, FLA_Dimension dim )
 
 #ifdef FLA_ENABLE_GOTO_INTERFACES
 
-	integer dt_index;
-	integer dim_index;
+	fla_dim_t dt_index;
+	fla_dim_t dim_index;
 
 	if ( first_time )
 	{

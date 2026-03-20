@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b6 = 1.;
 static doublereal c_b7 = 0.;
-/* > \brief \b ZLARCM copies all or part of a real two-dimensional array to a complex array. */
+/* > \brief \b ZLARCM copies all or part of a real two-dimensional array to a scomplex array. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -43,9 +43,9 @@ static doublereal c_b7 = 0.;
 /* > ZLARCM performs a very simple matrix-matrix multiplication: */
 /* > C := A * B, */
 /* > where A is M by M and real;
-B is M by N and complex;
+B is M by N and scomplex;
 */
-/* > C is M by N and complex. */
+/* > C is M by N and scomplex. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -114,25 +114,39 @@ B is M by N and complex;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlarcm_(integer *m, integer *n, doublereal *a, integer *lda, doublecomplex *b, integer *ldb,
-             doublecomplex *c__, integer *ldc, doublereal *rwork)
+/** Generated wrapper function */
+void zlarcm_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, dcomplex *b,
+             aocl_int_t *ldb, dcomplex *c__, aocl_int_t *ldc, doublereal *rwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarcm(m, n, a, lda, b, ldb, c__, ldc, rwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_zlarcm(&m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, rwork);
+#endif
+}
+
+void aocl_lapack_zlarcm(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        dcomplex *b, aocl_int64_t *ldb, dcomplex *c__, aocl_int64_t *ldc,
+                        doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarcm inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
                       ", ldc %" FLA_IS "",
                       *m, *n, *lda, *ldb, *ldc);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -176,13 +190,13 @@ void zlarcm_(integer *m, integer *n, doublereal *a, integer *lda, doublecomplex 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[(j - 1) * *m + i__] = b[i__3].r;
+            rwork[(j - 1) * *m + i__] = b[i__3].real;
             /* L10: */
         }
         /* L20: */
     }
     l = *m * *n + 1;
-    dgemm_("N", "N", m, n, m, &c_b6, &a[a_offset], lda, &rwork[1], m, &c_b7, &rwork[l], m);
+    aocl_blas_dgemm("N", "N", m, n, m, &c_b6, &a[a_offset], lda, &rwork[1], m, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
@@ -191,8 +205,8 @@ void zlarcm_(integer *m, integer *n, doublereal *a, integer *lda, doublecomplex 
         {
             i__3 = i__ + j * c_dim1;
             i__4 = l + (j - 1) * *m + i__ - 1;
-            c__[i__3].r = rwork[i__4];
-            c__[i__3].i = 0.; // , expr subst
+            c__[i__3].real = rwork[i__4];
+            c__[i__3].imag = 0.; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -208,7 +222,7 @@ void zlarcm_(integer *m, integer *n, doublereal *a, integer *lda, doublecomplex 
         }
         /* L60: */
     }
-    dgemm_("N", "N", m, n, m, &c_b6, &a[a_offset], lda, &rwork[1], m, &c_b7, &rwork[l], m);
+    aocl_blas_dgemm("N", "N", m, n, m, &c_b6, &a[a_offset], lda, &rwork[1], m, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
@@ -217,12 +231,12 @@ void zlarcm_(integer *m, integer *n, doublereal *a, integer *lda, doublecomplex 
         {
             i__3 = i__ + j * c_dim1;
             i__4 = i__ + j * c_dim1;
-            d__1 = c__[i__4].r;
+            d__1 = c__[i__4].real;
             i__5 = l + (j - 1) * *m + i__ - 1;
-            z__1.r = d__1;
-            z__1.i = rwork[i__5]; // , expr subst
-            c__[i__3].r = z__1.r;
-            c__[i__3].i = z__1.i; // , expr subst
+            z__1.real = d__1;
+            z__1.imag = rwork[i__5]; // , expr subst
+            c__[i__3].real = z__1.real;
+            c__[i__3].imag = z__1.imag; // , expr subst
             /* L70: */
         }
         /* L80: */

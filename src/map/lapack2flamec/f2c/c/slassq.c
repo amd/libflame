@@ -116,20 +116,33 @@
 /* > \ingroup lassq */
 /* ===================================================================== */
 /* Subroutine */
-void slassq_(integer *n, real *x, integer *incx, real *scale, real *sumsq)
+/** Generated wrapper function */
+void slassq_(aocl_int_t *n, real *x, aocl_int_t *incx, real *scale, real *sumsq)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slassq(n, x, incx, scale, sumsq);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_slassq(&n_64, x, &incx_64, scale, sumsq);
+#endif
+}
+
+void aocl_lapack_slassq(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *scale, real *sumsq)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slassq inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real ax;
-    integer ix;
-    real  abig, amed, sbig, tbig, asml, ymin, ymax, tsml, ssml;
+    aocl_int64_t ix;
+    real abig, amed, sbig, tbig, asml, ymin, ymax, tsml, ssml;
     logical notbig;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 09:17:33 8/30/21 */
     /* .. Scalar Arguments .. */

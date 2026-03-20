@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b6 = {1., 0.};
+static dcomplex c_b6 = {1., 0.};
 /* > \brief \b ZLARFGP generates an elementary reflector (Householder matrix) with non-negative
  * beta. */
 /* =========== DOCUMENTATION =========== */
@@ -40,19 +40,19 @@ static doublecomplex c_b6 = {1., 0.};
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARFGP generates a complex elementary reflector H of order n, such */
+/* > ZLARFGP generates a scomplex elementary reflector H of order n, such */
 /* > that */
 /* > */
 /* > H**H * ( alpha ) = ( beta ), H**H * H = I. */
 /* > ( x ) ( 0 ) */
 /* > */
 /* > where alpha and beta are scalars, beta is real and non-negative, and */
-/* > x is an (n-1)-element complex vector. H is represented in the form */
+/* > x is an (n-1)-element scomplex vector. H is represented in the form */
 /* > */
 /* > H = I - tau * ( 1 ) * ( 1 v**H ) , */
 /* > ( v ) */
 /* > */
-/* > where tau is a complex scalar and v is a complex (n-1)-element */
+/* > where tau is a scomplex scalar and v is a scomplex (n-1)-element */
 /* > vector. Note that H is not hermitian. */
 /* > */
 /* > If the elements of x are all zero and alpha is real, then tau = 0 */
@@ -101,36 +101,43 @@ static doublecomplex c_b6 = {1., 0.};
 /* > \ingroup larfgp */
 /* ===================================================================== */
 /* Subroutine */
-void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *tau)
+/** Generated wrapper function */
+void zlarfgp_(aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *incx,
+              dcomplex *tau)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarfgp(n, alpha, x, incx, tau);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_zlarfgp(&n_64, alpha, x, &incx_64, tau);
+#endif
+}
+
+void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
+                         aocl_int64_t *incx, dcomplex *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfgp inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *), z_abs(doublecomplex *), d_sign(doublereal *, doublereal *);
+    double d_imag(dcomplex *), z_abs(dcomplex *), d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer j;
-    doublecomplex savealpha;
+    aocl_int64_t j;
+    dcomplex savealpha;
     doublereal eps;
-    integer knt;
+    aocl_int64_t knt;
     doublereal beta, alphi, alphr;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     doublereal xnorm;
-    extern doublereal dlapy2_(doublereal *, doublereal *),
-        dlapy3_(doublereal *, doublereal *, doublereal *),
-        dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    extern doublereal dlamch_(char *);
     doublereal bignum;
     extern /* Double Complex */
         void
-        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
     doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -156,14 +163,14 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
     /* Function Body */
     if(*n <= 0)
     {
-        tau->r = 0., tau->i = 0.;
+        tau->real = 0., tau->imag = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = dlamch_("Precision");
     i__1 = *n - 1;
-    xnorm = dznrm2_(&i__1, &x[1], incx);
-    alphr = alpha->r;
+    xnorm = aocl_blas_dznrm2(&i__1, &x[1], incx);
+    alphr = alpha->real;
     alphi = d_imag(alpha);
     if(xnorm <= eps * z_abs(alpha))
     {
@@ -176,23 +183,23 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
                 /* When TAU.eq.ZERO, the vector is special-cased to be */
                 /* all zeros in the application routines. We do not need */
                 /* to clear it. */
-                tau->r = 0., tau->i = 0.;
+                tau->real = 0., tau->imag = 0.;
             }
             else
             {
                 /* However, the application routines rely on explicit */
                 /* zero checks when TAU.ne.ZERO, and we must clear X. */
-                tau->r = 2., tau->i = 0.;
+                tau->real = 2., tau->imag = 0.;
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
-                    x[i__2].r = 0.;
-                    x[i__2].i = 0.; // , expr subst
+                    x[i__2].real = 0.;
+                    x[i__2].imag = 0.; // , expr subst
                 }
-                z__1.r = -alpha->r;
-                z__1.i = -alpha->i; // , expr subst
-                alpha->r = z__1.r, alpha->i = z__1.i;
+                z__1.real = -alpha->real;
+                z__1.imag = -alpha->imag; // , expr subst
+                alpha->real = z__1.real, alpha->imag = z__1.imag;
             }
         }
         else
@@ -201,17 +208,17 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
             xnorm = dlapy2_(&alphr, &alphi);
             d__1 = 1. - alphr / xnorm;
             d__2 = -alphi / xnorm;
-            z__1.r = d__1;
-            z__1.i = d__2; // , expr subst
-            tau->r = z__1.r, tau->i = z__1.i;
+            z__1.real = d__1;
+            z__1.imag = d__2; // , expr subst
+            tau->real = z__1.real, tau->imag = z__1.imag;
             i__1 = *n - 1;
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = (j - 1) * *incx + 1;
-                x[i__2].r = 0.;
-                x[i__2].i = 0.; // , expr subst
+                x[i__2].real = 0.;
+                x[i__2].imag = 0.; // , expr subst
             }
-            alpha->r = xnorm, alpha->i = 0.;
+            alpha->real = xnorm, alpha->imag = 0.;
         }
     }
     else
@@ -229,7 +236,7 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
         L10:
             ++knt;
             i__1 = *n - 1;
-            zdscal_(&i__1, &bignum, &x[1], incx);
+            aocl_blas_zdscal(&i__1, &bignum, &x[1], incx);
             beta *= bignum;
             alphi *= bignum;
             alphr *= bignum;
@@ -239,43 +246,43 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
             }
             /* New BETA is at most 1, at least SMLNUM */
             i__1 = *n - 1;
-            xnorm = dznrm2_(&i__1, &x[1], incx);
-            z__1.r = alphr;
-            z__1.i = alphi; // , expr subst
-            alpha->r = z__1.r, alpha->i = z__1.i;
+            xnorm = aocl_blas_dznrm2(&i__1, &x[1], incx);
+            z__1.real = alphr;
+            z__1.imag = alphi; // , expr subst
+            alpha->real = z__1.real, alpha->imag = z__1.imag;
             d__1 = dlapy3_(&alphr, &alphi, &xnorm);
             beta = d_sign(&d__1, &alphr);
         }
-        savealpha.r = alpha->r;
-        savealpha.i = alpha->i; // , expr subst
-        z__1.r = alpha->r + beta;
-        z__1.i = alpha->i; // , expr subst
-        alpha->r = z__1.r, alpha->i = z__1.i;
+        savealpha.real = alpha->real;
+        savealpha.imag = alpha->imag; // , expr subst
+        z__1.real = alpha->real + beta;
+        z__1.imag = alpha->imag; // , expr subst
+        alpha->real = z__1.real, alpha->imag = z__1.imag;
         if(beta < 0.)
         {
             beta = -beta;
-            z__2.r = -alpha->r;
-            z__2.i = -alpha->i; // , expr subst
-            z__1.r = z__2.r / beta;
-            z__1.i = z__2.i / beta; // , expr subst
-            tau->r = z__1.r, tau->i = z__1.i;
+            z__2.real = -alpha->real;
+            z__2.imag = -alpha->imag; // , expr subst
+            z__1.real = z__2.real / beta;
+            z__1.imag = z__2.imag / beta; // , expr subst
+            tau->real = z__1.real, tau->imag = z__1.imag;
         }
         else
         {
-            alphr = alphi * (alphi / alpha->r);
-            alphr += xnorm * (xnorm / alpha->r);
+            alphr = alphi * (alphi / alpha->real);
+            alphr += xnorm * (xnorm / alpha->real);
             d__1 = alphr / beta;
             d__2 = -alphi / beta;
-            z__1.r = d__1;
-            z__1.i = d__2; // , expr subst
-            tau->r = z__1.r, tau->i = z__1.i;
+            z__1.real = d__1;
+            z__1.imag = d__2; // , expr subst
+            tau->real = z__1.real, tau->imag = z__1.imag;
             d__1 = -alphr;
-            z__1.r = d__1;
-            z__1.i = alphi; // , expr subst
-            alpha->r = z__1.r, alpha->i = z__1.i;
+            z__1.real = d__1;
+            z__1.imag = alphi; // , expr subst
+            alpha->real = z__1.real, alpha->imag = z__1.imag;
         }
         zladiv_f2c_(&z__1, &c_b6, alpha);
-        alpha->r = z__1.r, alpha->i = z__1.i;
+        alpha->real = z__1.real, alpha->imag = z__1.imag;
         if(z_abs(tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
@@ -283,27 +290,27 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
             /* to ZERO (or TWO or whatever makes a nonnegative real number for BETA). */
             /* (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.) */
             /* (Thanks Pat. Thanks MathWorks.) */
-            alphr = savealpha.r;
+            alphr = savealpha.real;
             alphi = d_imag(&savealpha);
             if(alphi == 0.)
             {
                 if(alphr >= 0.)
                 {
-                    tau->r = 0., tau->i = 0.;
+                    tau->real = 0., tau->imag = 0.;
                 }
                 else
                 {
-                    tau->r = 2., tau->i = 0.;
+                    tau->real = 2., tau->imag = 0.;
                     i__1 = *n - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = (j - 1) * *incx + 1;
-                        x[i__2].r = 0.;
-                        x[i__2].i = 0.; // , expr subst
+                        x[i__2].real = 0.;
+                        x[i__2].imag = 0.; // , expr subst
                     }
-                    z__1.r = -savealpha.r;
-                    z__1.i = -savealpha.i; // , expr subst
-                    beta = z__1.r;
+                    z__1.real = -savealpha.real;
+                    z__1.imag = -savealpha.imag; // , expr subst
+                    beta = z__1.real;
                 }
             }
             else
@@ -311,15 +318,15 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
                 xnorm = dlapy2_(&alphr, &alphi);
                 d__1 = 1. - alphr / xnorm;
                 d__2 = -alphi / xnorm;
-                z__1.r = d__1;
-                z__1.i = d__2; // , expr subst
-                tau->r = z__1.r, tau->i = z__1.i;
+                z__1.real = d__1;
+                z__1.imag = d__2; // , expr subst
+                tau->real = z__1.real, tau->imag = z__1.imag;
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
-                    x[i__2].r = 0.;
-                    x[i__2].i = 0.; // , expr subst
+                    x[i__2].real = 0.;
+                    x[i__2].imag = 0.; // , expr subst
                 }
                 beta = xnorm;
             }
@@ -328,7 +335,7 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
         {
             /* This is the general case. */
             i__1 = *n - 1;
-            zscal_(&i__1, alpha, &x[1], incx);
+            aocl_blas_zscal(&i__1, alpha, &x[1], incx);
         }
         /* If BETA is subnormal, it may lose relative accuracy */
         i__1 = knt;
@@ -337,7 +344,7 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
             beta *= smlnum;
             /* L20: */
         }
-        alpha->r = beta, alpha->i = 0.;
+        alpha->real = beta, alpha->imag = 0.;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

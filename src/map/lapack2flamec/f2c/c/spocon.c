@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SPOCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -118,39 +118,42 @@ static integer c__1 = 1;
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *rcond, real *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void spocon_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *anorm, real *rcond,
+             real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spocon(uplo, n, a, lda, anorm, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spocon(uplo, &n_64, a, &lda_64, anorm, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_spocon(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *anorm,
+                        real *rcond, real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spocon inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     real r__1;
     /* Local variables */
-    integer ix, kase;
+    aocl_int64_t ix, kase;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        srscl_(integer *, real *, real *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     real scalel;
     extern real slamch_(char *);
     real scaleu;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     char normin[1];
-    extern /* Subroutine */
-        void
-        slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *,
-                real *, integer *);
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -203,7 +206,7 @@ void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *r
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPOCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPOCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -225,39 +228,39 @@ void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *r
     kase = 0;
     *(unsigned char *)normin = 'N';
 L10:
-    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(upper)
         {
             /* Multiply by inv(U**T). */
-            slatrs_("Upper", "Transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
-                    &scalel, &work[(*n << 1) + 1], info);
+            aocl_lapack_slatrs("Upper", "Transpose", "Non-unit", normin, n, &a[a_offset], lda,
+                               &work[1], &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            slatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
-                    &scaleu, &work[(*n << 1) + 1], info);
+            aocl_lapack_slatrs("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda,
+                               &work[1], &scaleu, &work[(*n << 1) + 1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            slatrs_("Lower", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
-                    &scalel, &work[(*n << 1) + 1], info);
+            aocl_lapack_slatrs("Lower", "No transpose", "Non-unit", normin, n, &a[a_offset], lda,
+                               &work[1], &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**T). */
-            slatrs_("Lower", "Transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
-                    &scaleu, &work[(*n << 1) + 1], info);
+            aocl_lapack_slatrs("Lower", "Transpose", "Non-unit", normin, n, &a[a_offset], lda,
+                               &work[1], &scaleu, &work[(*n << 1) + 1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;
         if(scale != 1.f)
         {
-            ix = isamax_(n, &work[1], &c__1);
+            ix = aocl_blas_isamax(n, &work[1], &c__1);
             if(scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
             {
                 goto L20;
             }
-            srscl_(n, &scale, &work[1], &c__1);
+            aocl_lapack_srscl(n, &scale, &work[1], &c__1);
         }
         goto L10;
     }

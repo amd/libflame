@@ -25,6 +25,7 @@ void invoke_gebrd(integer datatype, integer *m, integer *n, void *a, integer *ld
 double prepare_lapacke_gebrd_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
                                  integer lda, void *d, void *e, void *tauq, void *taup,
                                  integer *info);
+
 /*
  * Test driver for the GEBRD (bidiagonal reduction) routine.
  * This function parses command-line/config arguments, sets up the test,
@@ -126,6 +127,8 @@ void fla_test_gebrd_experiment(char *tst_api, test_params_t *params, integer dat
     integer m, n, lda, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *d = NULL, *e = NULL, *tauq = NULL, *taup = NULL, *work = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
+
     integer interfacetype = params->interfacetype;
     double time_min_local = 0.0;
     integer realtype = get_realtype(datatype);
@@ -143,12 +146,28 @@ void fla_test_gebrd_experiment(char *tst_api, test_params_t *params, integer dat
     create_realtype_vector(datatype, &e, fla_min(m, n) - 1);
     create_vector(datatype, &tauq, fla_min(m, n));
     create_vector(datatype, &taup, fla_min(m, n));
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
 
-    /* Initialize input matrix with random or file-based values */
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        /* initialize input matrix */
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, lda, g_lwork)
+
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
         scale_matrix_underflow_overflow_labrd(datatype, m, n, A, lda, params->imatrix_char);
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     /* Workspace query: call GEBRD with lwork=-1 to get optimal size if g_lwork <= 0 */
@@ -198,7 +217,32 @@ void fla_test_gebrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(
+        m, n,
+        store_outputs_base(filename, params, 1, 4, datatype, m, n, A_test, lda,
+                           get_realtype(datatype), fla_min(m, n), d, get_realtype(datatype),
+                           (fla_min(m, n) - 1), e, datatype, fla_min(m, n), tauq, datatype,
+                           fla_min(m, n), taup),
+        validate_gebrd(datatype, tst_api, m, n, A, lda, A_test, lda, d, e, tauq, taup, residual,
+                       params),
+        check_reproducibility_base(filename, params, 1, 4, datatype, m, n, A_test, lda,
+                                   get_realtype(datatype), fla_min(m, n), d, get_realtype(datatype),
+                                   (fla_min(m, n) - 1), e, datatype, fla_min(m, n), tauq, datatype,
+                                   fla_min(m, n), taup))
+    /* API functionality validation */
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         /* Validate the GEBRD result */
         validate_gebrd(datatype, tst_api, m, n, A, lda, A_test, lda, d, e, tauq, taup, residual,
@@ -229,13 +273,15 @@ void fla_test_gebrd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free all allocated memory */
+    free_vector(work);
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(d);
     free_vector(e);
     free_vector(tauq);
     free_vector(taup);
-    free_vector(work);
 }
 
 /*
@@ -386,4 +432,3 @@ void invoke_gebrd(integer datatype, integer *m, integer *n, void *a, integer *ld
         }
     }
 }
-

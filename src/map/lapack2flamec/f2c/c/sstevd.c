@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> SSTEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -157,44 +157,49 @@ i */
 /* > \ingroup stevd */
 /* ===================================================================== */
 /* Subroutine */
-void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work,
-             integer *lwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void sstevd_(char *jobz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int_t *ldz, real *work,
+             aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sstevd(jobz, n, d__, e, z__, ldz, work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sstevd(jobz, &n_64, d__, e, z__, &ldz_64, work, &lwork_64, iwork, &liwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sstevd(char *jobz, aocl_int64_t *n, real *d__, real *e, real *z__,
+                        aocl_int64_t *ldz, real *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                        aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sstevd inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz, *n,
-             *ldz);
+    AOCL_DTL_SNPRINTF("sstevd inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz, *n, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real eps, rmin, rmax, tnrm, sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwmin;
     logical wantz;
-    integer iscale;
+    aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern /* Subroutine */
-        void
-        sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *,
-                integer *, integer *);
-    integer liwmin;
-    extern real slanst_(char *, integer *, real *, real *);
-    extern /* Subroutine */
-        void
-        ssterf_(integer *, real *, real *, integer *);
+    aocl_int64_t liwmin;
     real smlnum;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -250,8 +255,8 @@ void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz
     }
     if(*info == 0)
     {
-        work[1] = sroundup_lwork(&lwmin);
-        iwork[1] = liwmin;
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -8;
@@ -264,7 +269,7 @@ void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSTEVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSTEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -297,7 +302,7 @@ void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
-    tnrm = slanst_("M", n, &d__[1], &e[1]);
+    tnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
     if(tnrm > 0.f && tnrm < rmin)
     {
         iscale = 1;
@@ -310,29 +315,29 @@ void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz
     }
     if(iscale == 1)
     {
-        sscal_(n, &sigma, &d__[1], &c__1);
+        aocl_blas_sscal(n, &sigma, &d__[1], &c__1);
         i__1 = *n - 1;
-        sscal_(&i__1, &sigma, &e[1], &c__1);
+        aocl_blas_sscal(&i__1, &sigma, &e[1], &c__1);
     }
     /* For eigenvalues only, call SSTERF. For eigenvalues and */
     /* eigenvectors, call SSTEDC. */
     if(!wantz)
     {
-        ssterf_(n, &d__[1], &e[1], info);
+        aocl_lapack_ssterf(n, &d__[1], &e[1], info);
     }
     else
     {
-        sstedc_("I", n, &d__[1], &e[1], &z__[z_offset], ldz, &work[1], lwork, &iwork[1], liwork,
-                info);
+        aocl_lapack_sstedc("I", n, &d__[1], &e[1], &z__[z_offset], ldz, &work[1], lwork, &iwork[1],
+                           liwork, info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
     {
         r__1 = 1.f / sigma;
-        sscal_(n, &r__1, &d__[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &d__[1], &c__1);
     }
-    work[1] = sroundup_lwork(&lwmin);
-    iwork[1] = liwmin;
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSTEVD */

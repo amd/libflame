@@ -1,16 +1,16 @@
 /* ztbmv.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx)
+int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, dcomplex *a, integer *lda, dcomplex *x, integer *incx)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     integer info;
-    doublecomplex temp;
+    dcomplex temp;
     integer i__, j, l;
     extern logical lsame_(char *, char *, integer, integer);
     integer kplus1, ix, jx, kx;
@@ -197,10 +197,10 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         ++j)
                 {
                     i__2 = j;
-                    if (x[i__2].r != 0. || x[i__2].i != 0.)
+                    if (x[i__2].real != 0. || x[i__2].imag != 0.)
                     {
                         i__2 = j;
-                        temp.r = x[i__2].r, temp.i = x[i__2].i;
+                        temp.real = x[i__2].real, temp.imag = x[i__2].imag;
                         l = kplus1 - j;
                         /* Computing MAX */
                         i__2 = 1, i__3 = j - *k;
@@ -212,9 +212,9 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                             i__2 = i__;
                             i__3 = i__;
                             i__5 = l + i__ + j * a_dim1;
-                            z__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, z__2.i = temp.r * a[i__5].i + temp.i * a[ i__5].r;
-                            z__1.r = x[i__3].r + z__2.r, z__1.i = x[i__3].i + z__2.i;
-                            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+                            z__2.real = temp.real * a[i__5].real - temp.imag * a[i__5].imag, z__2.imag = temp.real * a[i__5].imag + temp.imag * a[ i__5].real;
+                            z__1.real = x[i__3].real + z__2.real, z__1.imag = x[i__3].imag + z__2.imag;
+                            x[i__2].real = z__1.real, x[i__2].imag = z__1.imag;
                             /* L10: */
                         }
                         if (nounit)
@@ -222,8 +222,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                             i__4 = j;
                             i__2 = j;
                             i__3 = kplus1 + j * a_dim1;
-                            z__1.r = x[i__2].r * a[i__3].r - x[i__2].i * a[ i__3].i, z__1.i = x[i__2].r * a[i__3].i + x[i__2].i * a[i__3].r;
-                            x[i__4].r = z__1.r, x[i__4].i = z__1.i;
+                            z__1.real = x[i__2].real * a[i__3].real - x[i__2].imag * a[ i__3].imag, z__1.imag = x[i__2].real * a[i__3].imag + x[i__2].imag * a[i__3].real;
+                            x[i__4].real = z__1.real, x[i__4].imag = z__1.imag;
                         }
                     }
                     /* L20: */
@@ -238,10 +238,10 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         ++j)
                 {
                     i__4 = jx;
-                    if (x[i__4].r != 0. || x[i__4].i != 0.)
+                    if (x[i__4].real != 0. || x[i__4].imag != 0.)
                     {
                         i__4 = jx;
-                        temp.r = x[i__4].r, temp.i = x[i__4].i;
+                        temp.real = x[i__4].real, temp.imag = x[i__4].imag;
                         ix = kx;
                         l = kplus1 - j;
                         /* Computing MAX */
@@ -254,9 +254,9 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                             i__4 = ix;
                             i__2 = ix;
                             i__5 = l + i__ + j * a_dim1;
-                            z__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, z__2.i = temp.r * a[i__5].i + temp.i * a[ i__5].r;
-                            z__1.r = x[i__2].r + z__2.r, z__1.i = x[i__2].i + z__2.i;
-                            x[i__4].r = z__1.r, x[i__4].i = z__1.i;
+                            z__2.real = temp.real * a[i__5].real - temp.imag * a[i__5].imag, z__2.imag = temp.real * a[i__5].imag + temp.imag * a[ i__5].real;
+                            z__1.real = x[i__2].real + z__2.real, z__1.imag = x[i__2].imag + z__2.imag;
+                            x[i__4].real = z__1.real, x[i__4].imag = z__1.imag;
                             ix += *incx;
                             /* L30: */
                         }
@@ -265,8 +265,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                             i__3 = jx;
                             i__4 = jx;
                             i__2 = kplus1 + j * a_dim1;
-                            z__1.r = x[i__4].r * a[i__2].r - x[i__4].i * a[ i__2].i, z__1.i = x[i__4].r * a[i__2].i + x[i__4].i * a[i__2].r;
-                            x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                            z__1.real = x[i__4].real * a[i__2].real - x[i__4].imag * a[ i__2].imag, z__1.imag = x[i__4].real * a[i__2].imag + x[i__4].imag * a[i__2].real;
+                            x[i__3].real = z__1.real, x[i__3].imag = z__1.imag;
                         }
                     }
                     jx += *incx;
@@ -287,10 +287,10 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         --j)
                 {
                     i__1 = j;
-                    if (x[i__1].r != 0. || x[i__1].i != 0.)
+                    if (x[i__1].real != 0. || x[i__1].imag != 0.)
                     {
                         i__1 = j;
-                        temp.r = x[i__1].r, temp.i = x[i__1].i;
+                        temp.real = x[i__1].real, temp.imag = x[i__1].imag;
                         l = 1 - j;
                         /* Computing MIN */
                         i__1 = *n, i__3 = j + *k;
@@ -302,9 +302,9 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                             i__1 = i__;
                             i__3 = i__;
                             i__2 = l + i__ + j * a_dim1;
-                            z__2.r = temp.r * a[i__2].r - temp.i * a[i__2].i, z__2.i = temp.r * a[i__2].i + temp.i * a[ i__2].r;
-                            z__1.r = x[i__3].r + z__2.r, z__1.i = x[i__3].i + z__2.i;
-                            x[i__1].r = z__1.r, x[i__1].i = z__1.i;
+                            z__2.real = temp.real * a[i__2].real - temp.imag * a[i__2].imag, z__2.imag = temp.real * a[i__2].imag + temp.imag * a[ i__2].real;
+                            z__1.real = x[i__3].real + z__2.real, z__1.imag = x[i__3].imag + z__2.imag;
+                            x[i__1].real = z__1.real, x[i__1].imag = z__1.imag;
                             /* L50: */
                         }
                         if (nounit)
@@ -312,8 +312,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                             i__4 = j;
                             i__1 = j;
                             i__3 = j * a_dim1 + 1;
-                            z__1.r = x[i__1].r * a[i__3].r - x[i__1].i * a[ i__3].i, z__1.i = x[i__1].r * a[i__3].i + x[i__1].i * a[i__3].r;
-                            x[i__4].r = z__1.r, x[i__4].i = z__1.i;
+                            z__1.real = x[i__1].real * a[i__3].real - x[i__1].imag * a[ i__3].imag, z__1.imag = x[i__1].real * a[i__3].imag + x[i__1].imag * a[i__3].real;
+                            x[i__4].real = z__1.real, x[i__4].imag = z__1.imag;
                         }
                     }
                     /* L60: */
@@ -328,10 +328,10 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         --j)
                 {
                     i__4 = jx;
-                    if (x[i__4].r != 0. || x[i__4].i != 0.)
+                    if (x[i__4].real != 0. || x[i__4].imag != 0.)
                     {
                         i__4 = jx;
-                        temp.r = x[i__4].r, temp.i = x[i__4].i;
+                        temp.real = x[i__4].real, temp.imag = x[i__4].imag;
                         ix = kx;
                         l = 1 - j;
                         /* Computing MIN */
@@ -344,9 +344,9 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                             i__4 = ix;
                             i__1 = ix;
                             i__2 = l + i__ + j * a_dim1;
-                            z__2.r = temp.r * a[i__2].r - temp.i * a[i__2].i, z__2.i = temp.r * a[i__2].i + temp.i * a[ i__2].r;
-                            z__1.r = x[i__1].r + z__2.r, z__1.i = x[i__1].i + z__2.i;
-                            x[i__4].r = z__1.r, x[i__4].i = z__1.i;
+                            z__2.real = temp.real * a[i__2].real - temp.imag * a[i__2].imag, z__2.imag = temp.real * a[i__2].imag + temp.imag * a[ i__2].real;
+                            z__1.real = x[i__1].real + z__2.real, z__1.imag = x[i__1].imag + z__2.imag;
+                            x[i__4].real = z__1.real, x[i__4].imag = z__1.imag;
                             ix -= *incx;
                             /* L70: */
                         }
@@ -355,8 +355,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                             i__3 = jx;
                             i__4 = jx;
                             i__1 = j * a_dim1 + 1;
-                            z__1.r = x[i__4].r * a[i__1].r - x[i__4].i * a[ i__1].i, z__1.i = x[i__4].r * a[i__1].i + x[i__4].i * a[i__1].r;
-                            x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                            z__1.real = x[i__4].real * a[i__1].real - x[i__4].imag * a[ i__1].imag, z__1.imag = x[i__4].real * a[i__1].imag + x[i__4].imag * a[i__1].real;
+                            x[i__3].real = z__1.real, x[i__3].imag = z__1.imag;
                         }
                     }
                     jx -= *incx;
@@ -382,15 +382,15 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         --j)
                 {
                     i__3 = j;
-                    temp.r = x[i__3].r, temp.i = x[i__3].i;
+                    temp.real = x[i__3].real, temp.imag = x[i__3].imag;
                     l = kplus1 - j;
                     if (noconj)
                     {
                         if (nounit)
                         {
                             i__3 = kplus1 + j * a_dim1;
-                            z__1.r = temp.r * a[i__3].r - temp.i * a[i__3].i, z__1.i = temp.r * a[i__3].i + temp.i * a[ i__3].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * a[i__3].real - temp.imag * a[i__3].imag, z__1.imag = temp.real * a[i__3].imag + temp.imag * a[ i__3].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         /* Computing MAX */
                         i__4 = 1, i__1 = j - *k;
@@ -401,9 +401,9 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         {
                             i__4 = l + i__ + j * a_dim1;
                             i__1 = i__;
-                            z__2.r = a[i__4].r * x[i__1].r - a[i__4].i * x[ i__1].i, z__2.i = a[i__4].r * x[i__1].i + a[i__4].i * x[i__1].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = a[i__4].real * x[i__1].real - a[i__4].imag * x[ i__1].imag, z__2.imag = a[i__4].real * x[i__1].imag + a[i__4].imag * x[i__1].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             /* L90: */
                         }
                     }
@@ -412,8 +412,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         if (nounit)
                         {
                             d_cnjg(&z__2, &a[kplus1 + j * a_dim1]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         /* Computing MAX */
                         i__4 = 1, i__1 = j - *k;
@@ -424,14 +424,14 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         {
                             d_cnjg(&z__3, &a[l + i__ + j * a_dim1]);
                             i__4 = i__;
-                            z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i, z__2.i = z__3.r * x[i__4].i + z__3.i * x[ i__4].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = z__3.real * x[i__4].real - z__3.imag * x[i__4].imag, z__2.imag = z__3.real * x[i__4].imag + z__3.imag * x[ i__4].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             /* L100: */
                         }
                     }
                     i__3 = j;
-                    x[i__3].r = temp.r, x[i__3].i = temp.i;
+                    x[i__3].real = temp.real, x[i__3].imag = temp.imag;
                     /* L110: */
                 }
             }
@@ -444,7 +444,7 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         --j)
                 {
                     i__3 = jx;
-                    temp.r = x[i__3].r, temp.i = x[i__3].i;
+                    temp.real = x[i__3].real, temp.imag = x[i__3].imag;
                     kx -= *incx;
                     ix = kx;
                     l = kplus1 - j;
@@ -453,8 +453,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         if (nounit)
                         {
                             i__3 = kplus1 + j * a_dim1;
-                            z__1.r = temp.r * a[i__3].r - temp.i * a[i__3].i, z__1.i = temp.r * a[i__3].i + temp.i * a[ i__3].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * a[i__3].real - temp.imag * a[i__3].imag, z__1.imag = temp.real * a[i__3].imag + temp.imag * a[ i__3].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         /* Computing MAX */
                         i__4 = 1, i__1 = j - *k;
@@ -465,9 +465,9 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         {
                             i__4 = l + i__ + j * a_dim1;
                             i__1 = ix;
-                            z__2.r = a[i__4].r * x[i__1].r - a[i__4].i * x[ i__1].i, z__2.i = a[i__4].r * x[i__1].i + a[i__4].i * x[i__1].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = a[i__4].real * x[i__1].real - a[i__4].imag * x[ i__1].imag, z__2.imag = a[i__4].real * x[i__1].imag + a[i__4].imag * x[i__1].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             ix -= *incx;
                             /* L120: */
                         }
@@ -477,8 +477,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         if (nounit)
                         {
                             d_cnjg(&z__2, &a[kplus1 + j * a_dim1]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         /* Computing MAX */
                         i__4 = 1, i__1 = j - *k;
@@ -489,15 +489,15 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         {
                             d_cnjg(&z__3, &a[l + i__ + j * a_dim1]);
                             i__4 = ix;
-                            z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i, z__2.i = z__3.r * x[i__4].i + z__3.i * x[ i__4].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = z__3.real * x[i__4].real - z__3.imag * x[i__4].imag, z__2.imag = z__3.real * x[i__4].imag + z__3.imag * x[ i__4].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             ix -= *incx;
                             /* L130: */
                         }
                     }
                     i__3 = jx;
-                    x[i__3].r = temp.r, x[i__3].i = temp.i;
+                    x[i__3].real = temp.real, x[i__3].imag = temp.imag;
                     jx -= *incx;
                     /* L140: */
                 }
@@ -513,15 +513,15 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         ++j)
                 {
                     i__4 = j;
-                    temp.r = x[i__4].r, temp.i = x[i__4].i;
+                    temp.real = x[i__4].real, temp.imag = x[i__4].imag;
                     l = 1 - j;
                     if (noconj)
                     {
                         if (nounit)
                         {
                             i__4 = j * a_dim1 + 1;
-                            z__1.r = temp.r * a[i__4].r - temp.i * a[i__4].i, z__1.i = temp.r * a[i__4].i + temp.i * a[ i__4].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * a[i__4].real - temp.imag * a[i__4].imag, z__1.imag = temp.real * a[i__4].imag + temp.imag * a[ i__4].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         /* Computing MIN */
                         i__1 = *n, i__2 = j + *k;
@@ -532,9 +532,9 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         {
                             i__1 = l + i__ + j * a_dim1;
                             i__2 = i__;
-                            z__2.r = a[i__1].r * x[i__2].r - a[i__1].i * x[ i__2].i, z__2.i = a[i__1].r * x[i__2].i + a[i__1].i * x[i__2].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = a[i__1].real * x[i__2].real - a[i__1].imag * x[ i__2].imag, z__2.imag = a[i__1].real * x[i__2].imag + a[i__1].imag * x[i__2].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             /* L150: */
                         }
                     }
@@ -543,8 +543,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         if (nounit)
                         {
                             d_cnjg(&z__2, &a[j * a_dim1 + 1]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         /* Computing MIN */
                         i__1 = *n, i__2 = j + *k;
@@ -555,14 +555,14 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         {
                             d_cnjg(&z__3, &a[l + i__ + j * a_dim1]);
                             i__1 = i__;
-                            z__2.r = z__3.r * x[i__1].r - z__3.i * x[i__1].i, z__2.i = z__3.r * x[i__1].i + z__3.i * x[ i__1].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = z__3.real * x[i__1].real - z__3.imag * x[i__1].imag, z__2.imag = z__3.real * x[i__1].imag + z__3.imag * x[ i__1].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             /* L160: */
                         }
                     }
                     i__4 = j;
-                    x[i__4].r = temp.r, x[i__4].i = temp.i;
+                    x[i__4].real = temp.real, x[i__4].imag = temp.imag;
                     /* L170: */
                 }
             }
@@ -575,7 +575,7 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         ++j)
                 {
                     i__4 = jx;
-                    temp.r = x[i__4].r, temp.i = x[i__4].i;
+                    temp.real = x[i__4].real, temp.imag = x[i__4].imag;
                     kx += *incx;
                     ix = kx;
                     l = 1 - j;
@@ -584,8 +584,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         if (nounit)
                         {
                             i__4 = j * a_dim1 + 1;
-                            z__1.r = temp.r * a[i__4].r - temp.i * a[i__4].i, z__1.i = temp.r * a[i__4].i + temp.i * a[ i__4].r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * a[i__4].real - temp.imag * a[i__4].imag, z__1.imag = temp.real * a[i__4].imag + temp.imag * a[ i__4].real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         /* Computing MIN */
                         i__1 = *n, i__2 = j + *k;
@@ -596,9 +596,9 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         {
                             i__1 = l + i__ + j * a_dim1;
                             i__2 = ix;
-                            z__2.r = a[i__1].r * x[i__2].r - a[i__1].i * x[ i__2].i, z__2.i = a[i__1].r * x[i__2].i + a[i__1].i * x[i__2].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = a[i__1].real * x[i__2].real - a[i__1].imag * x[ i__2].imag, z__2.imag = a[i__1].real * x[i__2].imag + a[i__1].imag * x[i__2].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             ix += *incx;
                             /* L180: */
                         }
@@ -608,8 +608,8 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         if (nounit)
                         {
                             d_cnjg(&z__2, &a[j * a_dim1 + 1]);
-                            z__1.r = temp.r * z__2.r - temp.i * z__2.i, z__1.i = temp.r * z__2.i + temp.i * z__2.r;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__1.real = temp.real * z__2.real - temp.imag * z__2.imag, z__1.imag = temp.real * z__2.imag + temp.imag * z__2.real;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                         }
                         /* Computing MIN */
                         i__1 = *n, i__2 = j + *k;
@@ -620,15 +620,15 @@ int ztbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, doubleco
                         {
                             d_cnjg(&z__3, &a[l + i__ + j * a_dim1]);
                             i__1 = ix;
-                            z__2.r = z__3.r * x[i__1].r - z__3.i * x[i__1].i, z__2.i = z__3.r * x[i__1].i + z__3.i * x[ i__1].r;
-                            z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                            temp.r = z__1.r, temp.i = z__1.i;
+                            z__2.real = z__3.real * x[i__1].real - z__3.imag * x[i__1].imag, z__2.imag = z__3.real * x[i__1].imag + z__3.imag * x[ i__1].real;
+                            z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                            temp.real = z__1.real, temp.imag = z__1.imag;
                             ix += *incx;
                             /* L190: */
                         }
                     }
                     i__4 = jx;
-                    x[i__4].r = temp.r, x[i__4].i = temp.i;
+                    x[i__4].real = temp.real, x[i__4].imag = temp.imag;
                     jx += *incx;
                     /* L200: */
                 }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
+static scomplex c_b1 = {1.f, 0.f};
 static real c_b15 = -1.f;
 static real c_b16 = 1.f;
 /* > \brief \b CPFTRF */
@@ -40,7 +40,7 @@ static real c_b16 = 1.f;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CPFTRF computes the Cholesky factorization of a complex Hermitian */
+/* > CPFTRF computes the Cholesky factorization of a scomplex Hermitian */
 /* > positive definite matrix A. */
 /* > */
 /* > The factorization has the form */
@@ -215,7 +215,22 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
+/** Generated wrapper function */
+void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpftrf(transr, uplo, n, a, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpftrf(transr, uplo, &n_64, a, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpftrf(char *transr, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -228,25 +243,13 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer k, n1, n2;
+    aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern /* Subroutine */
-        void
-        cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *,
-               complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
-    extern /* Subroutine */
-        void
-        cpotrf_(char *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -285,7 +288,7 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPFTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPFTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -329,15 +332,15 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:n1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(n1) */
-                cpotrf_("L", &n1, a, n, info);
+                aocl_lapack_cpotrf("L", &n1, a, n, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
-                ctrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, a, n, &a[n1], n);
-                cherk_("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b16, &a[*n], n);
-                cpotrf_("U", &n2, &a[*n], n, info);
+                aocl_blas_ctrsm("R", "L", "C", "N", &n2, &n1, &c_b1, a, n, &a[n1], n);
+                aocl_blas_cherk("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b16, &a[*n], n);
+                aocl_lapack_cpotrf("U", &n2, &a[*n], n, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -348,15 +351,15 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* SRPA for UPPER, NORMAL and N is odd ( a(0:n-1,0:n2-1) */
                 /* T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0) */
                 /* T1 -> a(n2), T2 -> a(n1), S -> a(0) */
-                cpotrf_("L", &n1, &a[n2], n, info);
+                aocl_lapack_cpotrf("L", &n1, &a[n2], n, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
-                ctrsm_("L", "L", "N", "N", &n1, &n2, &c_b1, &a[n2], n, a, n);
-                cherk_("U", "C", &n2, &n1, &c_b15, a, n, &c_b16, &a[n1], n);
-                cpotrf_("U", &n2, &a[n1], n, info);
+                aocl_blas_ctrsm("L", "L", "N", "N", &n1, &n2, &c_b1, &a[n2], n, a, n);
+                aocl_blas_cherk("U", "C", &n2, &n1, &c_b15, a, n, &c_b16, &a[n1], n);
+                aocl_lapack_cpotrf("U", &n2, &a[n1], n, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -372,15 +375,15 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* T1 -> A(0,0) , T2 -> A(1,0) , S -> A(0,n1) */
                 /* T1 -> a(0+0) , T2 -> a(1+0) , S -> a(0+n1*n1);
                 lda=n1 */
-                cpotrf_("U", &n1, a, &n1, info);
+                aocl_lapack_cpotrf("U", &n1, a, &n1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
-                ctrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, a, &n1, &a[n1 * n1], &n1);
-                cherk_("L", "C", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b16, &a[1], &n1);
-                cpotrf_("L", &n2, &a[1], &n1, info);
+                aocl_blas_ctrsm("L", "U", "C", "N", &n1, &n2, &c_b1, a, &n1, &a[n1 * n1], &n1);
+                aocl_blas_cherk("L", "C", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b16, &a[1], &n1);
+                aocl_lapack_cpotrf("L", &n2, &a[1], &n1, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -392,15 +395,15 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* T1 -> A(0,n1+1), T2 -> A(0,n1), S -> A(0,0) */
                 /* T1 -> a(n2*n2), T2 -> a(n1*n2), S -> a(0);
                 lda = n2 */
-                cpotrf_("U", &n1, &a[n2 * n2], &n2, info);
+                aocl_lapack_cpotrf("U", &n1, &a[n2 * n2], &n2, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
-                ctrsm_("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
-                cherk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
-                cpotrf_("L", &n2, &a[n1 * n2], &n2, info);
+                aocl_blas_ctrsm("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
+                aocl_blas_cherk("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
+                aocl_lapack_cpotrf("L", &n2, &a[n1 * n2], &n2, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -420,7 +423,7 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
                 /* T1 -> a(1), T2 -> a(0), S -> a(k+1) */
                 i__1 = *n + 1;
-                cpotrf_("L", &k, &a[1], &i__1, info);
+                aocl_lapack_cpotrf("L", &k, &a[1], &i__1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -428,12 +431,12 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ctrsm_("R", "L", "C", "N", &k, &k, &c_b1, &a[1], &i__1, &a[k + 1], &i__2);
+                aocl_blas_ctrsm("R", "L", "C", "N", &k, &k, &c_b1, &a[1], &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                cherk_("U", "N", &k, &k, &c_b15, &a[k + 1], &i__1, &c_b16, a, &i__2);
+                aocl_blas_cherk("U", "N", &k, &k, &c_b15, &a[k + 1], &i__1, &c_b16, a, &i__2);
                 i__1 = *n + 1;
-                cpotrf_("U", &k, a, &i__1, info);
+                aocl_lapack_cpotrf("U", &k, a, &i__1, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -445,7 +448,7 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* T1 -> a(k+1,0) , T2 -> a(k,0), S -> a(0,0) */
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 i__1 = *n + 1;
-                cpotrf_("L", &k, &a[k + 1], &i__1, info);
+                aocl_lapack_cpotrf("L", &k, &a[k + 1], &i__1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -453,12 +456,12 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ctrsm_("L", "L", "N", "N", &k, &k, &c_b1, &a[k + 1], &i__1, a, &i__2);
+                aocl_blas_ctrsm("L", "L", "N", "N", &k, &k, &c_b1, &a[k + 1], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                cherk_("U", "C", &k, &k, &c_b15, a, &i__1, &c_b16, &a[k], &i__2);
+                aocl_blas_cherk("U", "C", &k, &k, &c_b15, a, &i__1, &c_b16, &a[k], &i__2);
                 i__1 = *n + 1;
-                cpotrf_("U", &k, &a[k], &i__1, info);
+                aocl_lapack_cpotrf("U", &k, &a[k], &i__1, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -474,15 +477,15 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1) */
                 /* T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1));
                 lda=k */
-                cpotrf_("U", &k, &a[k], &k, info);
+                aocl_lapack_cpotrf("U", &k, &a[k], &k, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
-                ctrsm_("L", "U", "C", "N", &k, &k, &c_b1, &a[k], &n1, &a[k * (k + 1)], &k);
-                cherk_("L", "C", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b16, a, &k);
-                cpotrf_("L", &k, a, &k, info);
+                aocl_blas_ctrsm("L", "U", "C", "N", &k, &k, &c_b1, &a[k], &n1, &a[k * (k + 1)], &k);
+                aocl_blas_cherk("L", "C", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b16, a, &k);
+                aocl_lapack_cpotrf("L", &k, a, &k, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -494,15 +497,15 @@ void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0) */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                cpotrf_("U", &k, &a[k * (k + 1)], &k, info);
+                aocl_lapack_cpotrf("U", &k, &a[k * (k + 1)], &k, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
-                ctrsm_("R", "U", "N", "N", &k, &k, &c_b1, &a[k * (k + 1)], &k, a, &k);
-                cherk_("L", "N", &k, &k, &c_b15, a, &k, &c_b16, &a[k * k], &k);
-                cpotrf_("L", &k, &a[k * k], &k, info);
+                aocl_blas_ctrsm("R", "U", "N", "N", &k, &k, &c_b1, &a[k * (k + 1)], &k, a, &k);
+                aocl_blas_cherk("L", "N", &k, &k, &c_b15, a, &k, &c_b16, &a[k * k], &k);
+                aocl_lapack_cpotrf("L", &k, &a[k * k], &k, info);
                 if(*info > 0)
                 {
                     *info += k;

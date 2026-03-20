@@ -4,9 +4,9 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b ZGEQR */
 /* Definition: */
 /* =========== */
@@ -23,7 +23,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGEQR computes a QR factorization of a complex M-by-N matrix A: */
+/* > ZGEQR computes a QR factorization of a scomplex M-by-N matrix A: */
 /* > */
 /* > A = Q * ( R ), */
 /* > ( 0 ) */
@@ -172,34 +172,43 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t,
-            integer *tsize, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zgeqr_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *t,
+            aocl_int_t *tsize, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgeqr(m, n, a, lda, t, tsize, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t tsize_64 = *tsize;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgeqr(&m_64, &n_64, a, &lda_64, t, &tsize_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                       dcomplex *t, aocl_int64_t *tsize, dcomplex *work,
+                       aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqr inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS
                       ", lwork %" FLA_IS "",
                       *m, *n, *lda, *tsize, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer mb, nb;
+    aocl_int64_t mb, nb;
     logical mint, minw;
-    integer nblcks;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    aocl_int64_t nblcks;
     logical lminws;
-    extern /* Subroutine */
-        void
-        zgeqrt_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *);
     logical lquery;
-    integer mintsz;
-    extern /* Subroutine */
-        void
-        zlatsqr_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                 doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    aocl_int64_t mintsz;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -247,8 +256,8 @@ void zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomple
     /* Determine the block size */
     if(fla_min(*m, *n) > 0)
     {
-        mb = ilaenv_(&c__1, "ZGEQR ", " ", m, n, &c__1, &c_n1);
-        nb = ilaenv_(&c__1, "ZGEQR ", " ", m, n, &c__2, &c_n1);
+        mb = aocl_lapack_ilaenv(&c__1, "ZGEQR ", " ", m, n, &c__1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "ZGEQR ", " ", m, n, &c__2, &c_n1);
     }
     else
     {
@@ -338,24 +347,24 @@ void zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomple
     {
         if(mint)
         {
-            t[1].r = (doublereal)mintsz;
-            t[1].i = 0.; // , expr subst
+            t[1].real = (doublereal)mintsz;
+            t[1].imag = 0.; // , expr subst
         }
         else
         {
             i__1 = nb * *n * nblcks + 5;
-            t[1].r = (doublereal)i__1;
-            t[1].i = 0.; // , expr subst
+            t[1].real = (doublereal)i__1;
+            t[1].imag = 0.; // , expr subst
         }
-        t[2].r = (doublereal)mb;
-        t[2].i = 0.; // , expr subst
-        t[3].r = (doublereal)nb;
-        t[3].i = 0.; // , expr subst
+        t[2].real = (doublereal)mb;
+        t[2].imag = 0.; // , expr subst
+        t[3].real = (doublereal)nb;
+        t[3].imag = 0.; // , expr subst
         if(minw)
         {
             i__1 = fla_max(1, *n);
-            work[1].r = (doublereal)i__1;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)i__1;
+            work[1].imag = 0.; // , expr subst
         }
         else
         {
@@ -363,14 +372,14 @@ void zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomple
             i__2 = 1;
             i__3 = nb * *n; // , expr subst
             i__1 = fla_max(i__2, i__3);
-            work[1].r = (doublereal)i__1;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)i__1;
+            work[1].imag = 0.; // , expr subst
         }
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEQR", &i__1, (ftnlen)5);
+        aocl_blas_xerbla("ZGEQR", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -388,18 +397,18 @@ void zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomple
     /* The QR Decomposition */
     if(*m <= *n || mb <= *n || mb >= *m)
     {
-        zgeqrt_(m, n, &nb, &a[a_offset], lda, &t[6], &nb, &work[1], info);
+        aocl_lapack_zgeqrt(m, n, &nb, &a[a_offset], lda, &t[6], &nb, &work[1], info);
     }
     else
     {
-        zlatsqr_(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &work[1], lwork, info);
+        aocl_lapack_zlatsqr(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &work[1], lwork, info);
     }
     /* Computing MAX */
     i__2 = 1;
     i__3 = nb * *n; // , expr subst
     i__1 = fla_max(i__2, i__3);
-    work[1].r = (doublereal)i__1;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)i__1;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEQR */

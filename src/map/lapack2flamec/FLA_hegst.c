@@ -16,25 +16,169 @@
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
 
-extern void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda,
-                       doublecomplex *b, integer *ldb, integer *info);
-extern void chegst_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda, complex *b,
-                       integer *ldb, integer *info);
-extern void chegs2_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda, complex *b,
-                       integer *ldb, integer *info);
-extern void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda,
-                       doublecomplex *b, integer *ldb, integer *info);
+/** Generated wrapper function */
+void ssygst_(aocl_int_t *itype, char *uplo, aocl_int_t *m, real *buff_A, aocl_int_t *ldim_A, real *buff_B, aocl_int_t *ldim_B, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssygst(itype, uplo, m, buff_A, ldim_A, buff_B, ldim_B, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssygst(&itype_64, uplo, &m_64, buff_A, &ldim_A_64, buff_B, &ldim_B_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dsygst_(aocl_int_t *itype, char *uplo, aocl_int_t *m, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_B, aocl_int_t *ldim_B, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsygst(itype, uplo, m, buff_A, ldim_A, buff_B, ldim_B, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsygst(&itype_64, uplo, &m_64, buff_A, &ldim_A_64, buff_B, &ldim_B_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void chegst_(aocl_int_t *itype, char *uplo, aocl_int_t *m, scomplex *buff_A, aocl_int_t *ldim_A, scomplex *buff_B, aocl_int_t *ldim_B, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chegst(itype, uplo, m, buff_A, ldim_A, buff_B, ldim_B, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chegst(&itype_64, uplo, &m_64, buff_A, &ldim_A_64, buff_B, &ldim_B_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zhegst_(aocl_int_t *itype, char *uplo, aocl_int_t *m, dcomplex *buff_A, aocl_int_t *ldim_A, dcomplex *buff_B, aocl_int_t *ldim_B, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhegst(itype, uplo, m, buff_A, ldim_A, buff_B, ldim_B, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhegst(&itype_64, uplo, &m_64, buff_A, &ldim_A_64, buff_B, &ldim_B_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void ssygs2_(aocl_int_t *itype, char *uplo, aocl_int_t *m, real *buff_A, aocl_int_t *ldim_A, real *buff_B, aocl_int_t *ldim_B, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssygs2(itype, uplo, m, buff_A, ldim_A, buff_B, ldim_B, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssygs2(&itype_64, uplo, &m_64, buff_A, &ldim_A_64, buff_B, &ldim_B_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dsygs2_(aocl_int_t *itype, char *uplo, aocl_int_t *m, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_B, aocl_int_t *ldim_B, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsygs2(itype, uplo, m, buff_A, ldim_A, buff_B, ldim_B, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsygs2(&itype_64, uplo, &m_64, buff_A, &ldim_A_64, buff_B, &ldim_B_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void chegs2_(aocl_int_t *itype, char *uplo, aocl_int_t *m, scomplex *buff_A, aocl_int_t *ldim_A, scomplex *buff_B, aocl_int_t *ldim_B, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chegs2(itype, uplo, m, buff_A, ldim_A, buff_B, ldim_B, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chegs2(&itype_64, uplo, &m_64, buff_A, &ldim_A_64, buff_B, &ldim_B_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zhegs2_(aocl_int_t *itype, char *uplo, aocl_int_t *m, dcomplex *buff_A, aocl_int_t *ldim_A, dcomplex *buff_B, aocl_int_t *ldim_B, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhegs2(itype, uplo, m, buff_A, ldim_A, buff_B, ldim_B, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhegs2(&itype_64, uplo, &m_64, buff_A, &ldim_A_64, buff_B, &ldim_B_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+extern void zhegst_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                       dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info);
+extern void chegst_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
+                       aocl_int64_t *ldb, aocl_int64_t *info);
+extern void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
+                       aocl_int64_t *ldb, aocl_int64_t *info);
+extern void zhegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                       dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info);
 
 /*
-  ZHEGST reduces a complex Hermitian-definite generalized
+  ZHEGST reduces a scomplex Hermitian-definite generalized
   eigenproblem to standard form.
 */
 
 #define LAPACK_hegst(prefix, name)                                                         \
-    void F77_##prefix##name##gst(integer *itype, char *uplo, integer *m,                   \
-                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
-                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, integer * ldim_B, \
-                                 integer * info)
+    void aocl_lapack_##prefix##name##gst(aocl_int64_t *itype, char *uplo, aocl_int64_t *m,                   \
+                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
+                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, aocl_int64_t * ldim_B, \
+                                 aocl_int64_t * info)
 
 #define LAPACK_hegst_body(prefix)                              \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);     \
@@ -128,7 +272,7 @@ LAPACK_hegst(c, he)
     return;
 #else
     {
-        chegst_fla(itype, uplo, m, (complex *)buff_A, ldim_A, (complex *)buff_B, ldim_B, info);
+        chegst_fla(itype, uplo, m, (scomplex *)buff_A, ldim_A, (scomplex *)buff_B, ldim_B, info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -157,7 +301,7 @@ LAPACK_hegst(z, he)
     return;
 #else
     {
-        zhegst_fla(itype, uplo, m, (doublecomplex *)buff_A, ldim_A, (doublecomplex *)buff_B, ldim_B,
+        zhegst_fla(itype, uplo, m, (dcomplex *)buff_A, ldim_A, (dcomplex *)buff_B, ldim_B,
                    info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -166,10 +310,10 @@ LAPACK_hegst(z, he)
 }
 
 #define LAPACK_hegs2(prefix, name)                                                         \
-    void F77_##prefix##name##gs2(integer *itype, char *uplo, integer *m,                   \
-                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
-                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, integer * ldim_B, \
-                                 integer * info)
+    void aocl_lapack_##prefix##name##gs2(aocl_int64_t *itype, char *uplo, aocl_int64_t *m,                   \
+                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
+                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, aocl_int64_t * ldim_B, \
+                                 aocl_int64_t * info)
 
 LAPACK_hegs2(s, sy)
 {
@@ -236,7 +380,7 @@ LAPACK_hegs2(c, he)
     return;
 #else
     {
-        chegs2_fla(itype, uplo, m, (complex *)buff_A, ldim_A, (complex *)buff_B, ldim_B, info);
+        chegs2_fla(itype, uplo, m, (scomplex *)buff_A, ldim_A, (scomplex *)buff_B, ldim_B, info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -265,7 +409,7 @@ LAPACK_hegs2(z, he)
     return;
 #else
     {
-        zhegs2_fla(itype, uplo, m, (doublecomplex *)buff_A, ldim_A, (doublecomplex *)buff_B, ldim_B,
+        zhegs2_fla(itype, uplo, m, (dcomplex *)buff_A, ldim_A, (dcomplex *)buff_B, ldim_B,
                    info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;

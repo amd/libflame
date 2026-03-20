@@ -148,9 +148,32 @@
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab,
-             doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
-             doublereal *amax, integer *info)
+/** Generated wrapper function */
+void zgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomplex *ab,
+             aocl_int_t *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd,
+             doublereal *colcnd, doublereal *amax, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgbequ(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgbequ(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        dcomplex *ab, aocl_int64_t *ldab, doublereal *r__, doublereal *c__,
+                        doublereal *rowcnd, doublereal *colcnd, doublereal *amax,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbequ inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
@@ -158,17 +181,14 @@ void zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                       *m, *n, *kl, *ku, *ldab);
 
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, kd;
+    aocl_int64_t i__, j, kd;
     doublereal rcmin, rcmax;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -226,7 +246,7 @@ void zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBEQU", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGBEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -264,7 +284,7 @@ void zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
             /* Computing MAX */
             i__2 = kd + i__ - j + j * ab_dim1;
             d__3 = r__[i__];
-            d__4 = (d__1 = ab[i__2].r, f2c_dabs(d__1))
+            d__4 = (d__1 = ab[i__2].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]),
                       f2c_dabs(d__2)); // , expr subst
             r__[i__] = fla_max(d__3, d__4);
@@ -343,7 +363,7 @@ void zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
             /* Computing MAX */
             i__3 = kd + i__ - j + j * ab_dim1;
             d__3 = c__[j];
-            d__4 = ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+            d__4 = ((d__1 = ab[i__3].real, f2c_dabs(d__1))
                     + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_dabs(d__2)))
                    * r__[i__]; // , expr subst
             c__[j] = fla_max(d__3, d__4);

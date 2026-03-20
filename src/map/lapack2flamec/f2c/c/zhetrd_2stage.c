@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 /* > \brief \b ZHETRD_2STAGE */
 /* @precisions fortran z -> s d c */
 /* =========== DOCUMENTATION =========== */
@@ -48,7 +48,7 @@ static integer c__4 = 4;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZHETRD_2STAGE reduces a complex Hermitian matrix A to real symmetric */
+/* > ZHETRD_2STAGE reduces a scomplex Hermitian matrix A to real symmetric */
 /* > tridiagonal form T by a unitary similarity transformation: */
 /* > Q1**H Q2**H* A * Q2 * Q1 = T. */
 /* > \endverbatim */
@@ -227,36 +227,44 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, integer *lda,
-                    doublereal *d__, doublereal *e, doublecomplex *tau, doublecomplex *hous2,
-                    integer *lhous2, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zhetrd_2stage_(char *vect, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+                    doublereal *d__, doublereal *e, dcomplex *tau, dcomplex *hous2,
+                    aocl_int_t *lhous2, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetrd_2stage(vect, uplo, n, a, lda, d__, e, tau, hous2, lhous2, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lhous2_64 = *lhous2;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetrd_2stage(vect, uplo, &n_64, a, &lda_64, d__, e, tau, hous2, &lhous2_64, work,
+                              &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, dcomplex *a,
+                               aocl_int64_t *lda, doublereal *d__, doublereal *e,
+                               dcomplex *tau, dcomplex *hous2, aocl_int64_t *lhous2,
+                               dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrd inputs: vect %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
                       ", lhous2 %" FLA_IS "",
                       *vect, *uplo, *n, *lda, *lhous2);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer ib, kd, ldab;
-    extern /* Subroutine */
-        void
-        zhetrd_he2hb_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                      integer *, doublecomplex *, doublecomplex *, integer *, integer *);
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
-    extern /* Subroutine */
-        void
-        zhetrd_hb2st_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-                      doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *,
-                      integer *, integer *);
-    integer lwrk, wpos;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer abpos, lhmin, lwmin;
+    aocl_int64_t ib, kd, ldab;
+    aocl_int64_t lwrk, wpos;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t abpos, lhmin, lwmin;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -289,10 +297,10 @@ void zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, intege
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *lhous2 == -1;
     /* Determine the block size, the workspace size and the hous size. */
-    kd = ilaenv2stage_(&c__1, "ZHETRD_2STAGE", vect, n, &c_n1, &c_n1, &c_n1);
-    ib = ilaenv2stage_(&c__2, "ZHETRD_2STAGE", vect, n, &kd, &c_n1, &c_n1);
-    lhmin = ilaenv2stage_(&c__3, "ZHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
-    lwmin = ilaenv2stage_(&c__4, "ZHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+    kd = aocl_lapack_ilaenv2stage(&c__1, "ZHETRD_2STAGE", vect, n, &c_n1, &c_n1, &c_n1);
+    ib = aocl_lapack_ilaenv2stage(&c__2, "ZHETRD_2STAGE", vect, n, &kd, &c_n1, &c_n1);
+    lhmin = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+    lwmin = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
     /* WRITE(*,*),'ZHETRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO, */
     /* $ LHMIN, LWMIN */
     if(!lsame_(vect, "N", 1, 1))
@@ -321,15 +329,15 @@ void zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, intege
     }
     if(*info == 0)
     {
-        hous2[1].r = (doublereal)lhmin;
-        hous2[1].i = 0.; // , expr subst
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        hous2[1].real = (doublereal)lhmin;
+        hous2[1].imag = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRD_2STAGE", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("ZHETRD_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -341,8 +349,8 @@ void zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, intege
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -351,28 +359,28 @@ void zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, intege
     lwrk = *lwork - ldab * *n;
     abpos = 1;
     wpos = abpos + ldab * *n;
-    zhetrd_he2hb_(uplo, n, &kd, &a[a_offset], lda, &work[abpos], &ldab, &tau[1], &work[wpos], &lwrk,
-                  info);
+    aocl_lapack_zhetrd_he2hb(uplo, n, &kd, &a[a_offset], lda, &work[abpos], &ldab, &tau[1],
+                             &work[wpos], &lwrk, info);
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRD_HE2HB", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("ZHETRD_HE2HB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    zhetrd_hb2st_("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[1], &hous2[1], lhous2,
+    aocl_lapack_zhetrd_hb2st("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[1], &hous2[1], lhous2,
                   &work[wpos], &lwrk, info);
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRD_HB2ST", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("ZHETRD_HB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    hous2[1].r = (doublereal)lhmin;
-    hous2[1].i = 0.; // , expr subst
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    hous2[1].real = (doublereal)lhmin;
+    hous2[1].imag = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHETRD_2STAGE */

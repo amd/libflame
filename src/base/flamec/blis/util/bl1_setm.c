@@ -16,10 +16,10 @@
 #include "blis.h"
 #endif
 
-void bl1_isetm( integer m, integer n, integer* sigma, integer* a, integer a_rs, integer a_cs )
+void bl1_isetm( fla_dim_t m, fla_dim_t n, fla_dim_t* sigma, fla_dim_t* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
-	integer*   alpha;
-	integer    i, j;
+	fla_dim_t*   alpha;
+	fla_dim_t    i, j;
 
 	for ( j = 0; j < n; ++j )
 	{
@@ -32,10 +32,10 @@ void bl1_isetm( integer m, integer n, integer* sigma, integer* a, integer a_rs, 
 	}
 }
 
-void bl1_ssetm( integer m, integer n, float* sigma, float* a, integer a_rs, integer a_cs )
+void bl1_ssetm( fla_dim_t m, fla_dim_t n, float* sigma, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float* alpha;
-	integer    i, j;
+	fla_dim_t    i, j;
 
 	for ( j = 0; j < n; ++j )
 	{
@@ -48,10 +48,10 @@ void bl1_ssetm( integer m, integer n, float* sigma, float* a, integer a_rs, inte
 	}
 }
 
-void bl1_dsetm( integer m, integer n, double* sigma, double* a, integer a_rs, integer a_cs )
+void bl1_dsetm( fla_dim_t m, fla_dim_t n, double* sigma, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double* alpha;
-	integer     i, j;
+	fla_dim_t     i, j;
 
 	for ( j = 0; j < n; ++j )
 	{
@@ -64,10 +64,10 @@ void bl1_dsetm( integer m, integer n, double* sigma, double* a, integer a_rs, in
 	}
 }
 
-void bl1_csetm( integer m, integer n, scomplex* sigma, scomplex* a, integer a_rs, integer a_cs )
+void bl1_csetm( fla_dim_t m, fla_dim_t n, scomplex* sigma, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	scomplex* alpha;
-	integer       i, j;
+	fla_dim_t       i, j;
 
 	for ( j = 0; j < n; ++j )
 	{
@@ -81,10 +81,10 @@ void bl1_csetm( integer m, integer n, scomplex* sigma, scomplex* a, integer a_rs
 	}
 }
 
-void bl1_zsetm( integer m, integer n, dcomplex* sigma, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zsetm( fla_dim_t m, fla_dim_t n, dcomplex* sigma, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	dcomplex* alpha;
-	integer       i, j;
+	fla_dim_t       i, j;
 
 	for ( j = 0; j < n; ++j )
 	{

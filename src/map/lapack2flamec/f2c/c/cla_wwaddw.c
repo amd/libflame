@@ -76,7 +76,19 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
+/** Generated wrapper function */
+void cla_wwaddw_(aocl_int_t *n, scomplex *x, scomplex *y, scomplex *w)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cla_wwaddw(n, x, y, w);
+#else
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_cla_wwaddw(&n_64, x, y, w);
+#endif
+}
+
+void aocl_lapack_cla_wwaddw(aocl_int64_t *n, scomplex *x, scomplex *y, scomplex *w)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -89,11 +101,11 @@ void cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2, q__3;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1, q__2, q__3;
     /* Local variables */
-    integer i__;
-    complex s;
+    aocl_int64_t i__;
+    scomplex s;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -116,31 +128,31 @@ void cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
     {
         i__2 = i__;
         i__3 = i__;
-        q__1.r = x[i__2].r + w[i__3].r;
-        q__1.i = x[i__2].i + w[i__3].i; // , expr subst
-        s.r = q__1.r;
-        s.i = q__1.i; // , expr subst
-        q__2.r = s.r + s.r;
-        q__2.i = s.i + s.i; // , expr subst
-        q__1.r = q__2.r - s.r;
-        q__1.i = q__2.i - s.i; // , expr subst
-        s.r = q__1.r;
-        s.i = q__1.i; // , expr subst
+        q__1.real = x[i__2].real + w[i__3].real;
+        q__1.imag = x[i__2].imag + w[i__3].imag; // , expr subst
+        s.real = q__1.real;
+        s.imag = q__1.imag; // , expr subst
+        q__2.real = s.real + s.real;
+        q__2.imag = s.imag + s.imag; // , expr subst
+        q__1.real = q__2.real - s.real;
+        q__1.imag = q__2.imag - s.imag; // , expr subst
+        s.real = q__1.real;
+        s.imag = q__1.imag; // , expr subst
         i__2 = i__;
         i__3 = i__;
-        q__3.r = x[i__3].r - s.r;
-        q__3.i = x[i__3].i - s.i; // , expr subst
+        q__3.real = x[i__3].real - s.real;
+        q__3.imag = x[i__3].imag - s.imag; // , expr subst
         i__4 = i__;
-        q__2.r = q__3.r + w[i__4].r;
-        q__2.i = q__3.i + w[i__4].i; // , expr subst
+        q__2.real = q__3.real + w[i__4].real;
+        q__2.imag = q__3.imag + w[i__4].imag; // , expr subst
         i__5 = i__;
-        q__1.r = q__2.r + y[i__5].r;
-        q__1.i = q__2.i + y[i__5].i; // , expr subst
-        y[i__2].r = q__1.r;
-        y[i__2].i = q__1.i; // , expr subst
+        q__1.real = q__2.real + y[i__5].real;
+        q__1.imag = q__2.imag + y[i__5].imag; // , expr subst
+        y[i__2].real = q__1.real;
+        y[i__2].imag = q__1.imag; // , expr subst
         i__2 = i__;
-        x[i__2].r = s.r;
-        x[i__2].i = s.i; // , expr subst
+        x[i__2].real = s.real;
+        x[i__2].imag = s.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

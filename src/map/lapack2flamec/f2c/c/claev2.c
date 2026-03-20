@@ -117,18 +117,18 @@ higher precision or correctly rounded or */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *cs1, complex *sn1)
+void claev2_(scomplex *a, scomplex *b, scomplex *c__, real *rt1, real *rt2, real *cs1, scomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     real r__1, r__2, r__3;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double c_abs(complex *);
-    void r_cnjg(complex *, complex *);
+    double c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     real t;
-    complex w;
+    scomplex w;
     extern /* Subroutine */
         void
         slaev2_(real *, real *, real *, real *, real *, real *, real *);
@@ -150,25 +150,25 @@ void claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *c
     /* .. Executable Statements .. */
     if(c_abs(b) == 0.f)
     {
-        w.r = 1.f;
-        w.i = 0.f; // , expr subst
+        w.real = 1.f;
+        w.imag = 0.f; // , expr subst
     }
     else
     {
         r_cnjg(&q__2, b);
         r__1 = c_abs(b);
-        q__1.r = q__2.r / r__1;
-        q__1.i = q__2.i / r__1; // , expr subst
-        w.r = q__1.r;
-        w.i = q__1.i; // , expr subst
+        q__1.real = q__2.real / r__1;
+        q__1.imag = q__2.imag / r__1; // , expr subst
+        w.real = q__1.real;
+        w.imag = q__1.imag; // , expr subst
     }
-    r__1 = a->r;
+    r__1 = a->real;
     r__2 = c_abs(b);
-    r__3 = c__->r;
+    r__3 = c__->real;
     slaev2_(&r__1, &r__2, &r__3, rt1, rt2, cs1, &t);
-    q__1.r = t * w.r;
-    q__1.i = t * w.i; // , expr subst
-    sn1->r = q__1.r, sn1->i = q__1.i;
+    q__1.real = t * w.real;
+    q__1.imag = t * w.imag; // , expr subst
+    sn1->real = q__1.real, sn1->imag = q__1.imag;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CLAEV2 */

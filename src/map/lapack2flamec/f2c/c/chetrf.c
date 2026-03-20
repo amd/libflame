@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CHETRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHETRF computes the factorization of a complex Hermitian matrix A */
+/* > CHETRF computes the factorization of a scomplex Hermitian matrix A */
 /* > using the Bunch-Kaufman diagonal pivoting method. The form of the */
 /* > factorization is */
 /* > */
@@ -176,8 +176,26 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void chetrf_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetrf(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetrf(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -192,23 +210,15 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer j, k, kb, nb, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t j, k, kb, nb, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        chetf2_(char *, integer *, complex *, integer *, integer *, integer *),
-        clahef_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *,
-                integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -256,16 +266,16 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     if(*info == 0)
     {
         /* Determine the block size */
-        nb = ilaenv_(&c__1, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        r__1 = sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHETRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -286,7 +296,8 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
             nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2
+                = aocl_lapack_ilaenv(&c__2, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -315,12 +326,13 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
         {
             /* Factorize columns k-kb+1:k of A and use blocked code to */
             /* update columns 1:k-kb */
-            clahef_(uplo, &k, &nb, &kb, &a[a_offset], lda, &ipiv[1], &work[1], n, &iinfo);
+            aocl_lapack_clahef(uplo, &k, &nb, &kb, &a[a_offset], lda, &ipiv[1], &work[1], n,
+                               &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns 1:k of A */
-            chetf2_(uplo, &k, &a[a_offset], lda, &ipiv[1], &iinfo);
+            aocl_lapack_chetf2(uplo, &k, &a[a_offset], lda, &ipiv[1], &iinfo);
             kb = k;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -350,13 +362,14 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
             /* Factorize columns k:k+kb-1 of A and use blocked code to */
             /* update columns k+kb:n */
             i__1 = *n - k + 1;
-            clahef_(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1], n, &iinfo);
+            aocl_lapack_clahef(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1],
+                               n, &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns k:n of A */
             i__1 = *n - k + 1;
-            chetf2_(uplo, &i__1, &a[k + k * a_dim1], lda, &ipiv[k], &iinfo);
+            aocl_lapack_chetf2(uplo, &i__1, &a[k + k * a_dim1], lda, &ipiv[k], &iinfo);
             kb = *n - k + 1;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -370,11 +383,11 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
         {
             if(ipiv[j] > 0)
             {
-                ipiv[j] = ipiv[j] + k - 1;
+                ipiv[j] = (aocl_int_t)(ipiv[j] + k - 1);
             }
             else
             {
-                ipiv[j] = ipiv[j] - k + 1;
+                ipiv[j] = (aocl_int_t)(ipiv[j] - k + 1);
             }
             /* L30: */
         }
@@ -383,9 +396,9 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
         goto L20;
     }
 L40:
-    r__1 = sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHETRF */

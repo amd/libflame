@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b8 = 0.;
 static doublereal c_b14 = -1.;
 /* > \brief \b DSYTD2 reduces a symmetric matrix to real symmetric tridiagonal form by an orthogonal
@@ -176,31 +176,17 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsytd2_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e,
-                doublereal *tau, integer *info)
+void dsytd2_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *d__,
+                doublereal *e, doublereal *tau, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t i__;
     doublereal taui;
-    extern /* Subroutine */
-        void
-        dsyr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-               doublereal *, integer *);
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-               doublereal *, doublereal *, integer *),
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,7 +233,7 @@ void dsytd2_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYTD2", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -262,22 +248,24 @@ void dsytd2_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**T */
             /* to annihilate A(1:i-1,i+1) */
-            dlarfg_(&i__, &a[i__ + (i__ + 1) * a_dim1], &a[(i__ + 1) * a_dim1 + 1], &c__1, &taui);
+            aocl_lapack_dlarfg(&i__, &a[i__ + (i__ + 1) * a_dim1], &a[(i__ + 1) * a_dim1 + 1],
+                               &c__1, &taui);
             e[i__] = a[i__ + (i__ + 1) * a_dim1];
             if(taui != 0.)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 a[i__ + (i__ + 1) * a_dim1] = 1.;
                 /* Compute x := tau * A * v storing x in TAU(1:i) */
-                dsymv_(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1], &c__1,
-                       &c_b8, &tau[1], &c__1);
+                aocl_blas_dsymv(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1],
+                                &c__1, &c_b8, &tau[1], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**T * v) * v */
-                alpha = taui * -.5 * ddot_(&i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
-                daxpy_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
+                alpha = taui * -.5
+                        * aocl_blas_ddot(&i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
+                aocl_blas_daxpy(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**T - w * v**T */
-                dsyr2_(uplo, &i__, &c_b14, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1,
-                       &a[a_offset], lda);
+                aocl_blas_dsyr2(uplo, &i__, &c_b14, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1],
+                                &c__1, &a[a_offset], lda);
                 a[i__ + (i__ + 1) * a_dim1] = e[i__];
             }
             d__[i__ + 1] = a[i__ + 1 + (i__ + 1) * a_dim1];
@@ -297,8 +285,8 @@ void dsytd2_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             i__2 = *n - i__;
             /* Computing MIN */
             i__3 = i__ + 2;
-            dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1,
-                    &taui);
+            aocl_lapack_dlarfg(&i__2, &a[i__ + 1 + i__ * a_dim1],
+                               &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
             e[i__] = a[i__ + 1 + i__ * a_dim1];
             if(taui != 0.)
             {
@@ -306,19 +294,20 @@ void dsytd2_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
                 a[i__ + 1 + i__ * a_dim1] = 1.;
                 /* Compute x := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                dsymv_(uplo, &i__2, &taui, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b8, &tau[i__], &c__1);
+                aocl_blas_dsymv(uplo, &i__2, &taui, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b8, &tau[i__], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**T * v) * v */
                 i__2 = *n - i__;
-                alpha = taui * -.5
-                        * ddot_(&i__2, &tau[i__], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+                alpha
+                    = taui * -.5
+                      * aocl_blas_ddot(&i__2, &tau[i__], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
                 i__2 = *n - i__;
-                daxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1);
+                aocl_blas_daxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**T - w * v**T */
                 i__2 = *n - i__;
-                dsyr2_(uplo, &i__2, &c_b14, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1,
-                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
+                aocl_blas_dsyr2(uplo, &i__2, &c_b14, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+                                &c__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
                 a[i__ + 1 + i__ * a_dim1] = e[i__];
             }
             d__[i__] = a[i__ + i__ * a_dim1];

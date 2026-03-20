@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static complex c_b19 = {1.f, 0.f};
-static complex c_b20 = {0.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static scomplex c_b19 = {1.f, 0.f};
+static scomplex c_b20 = {0.f, 0.f};
 static logical c_false = FALSE_;
-static integer c__3 = 3;
+static aocl_int64_t c__3 = 3;
 /* > \brief \b CTGSNA */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -237,7 +237,7 @@ for each selected eigenvalue */
 /* > */
 /* > where u and v are the right and left eigenvectors of (A, B) */
 /* > corresponding to w;
-|z| denotes the absolute value of the complex */
+|z| denotes the absolute value of the scomplex */
 /* > number, and norm(u) denotes the 2-norm of the vector u. The pair */
 /* > (a, b) corresponds to an eigenvalue w = a/b (= v**HAu/v**HBu) of the */
 /* > matrix pair (A, B). If both a and b equal zero, then (A,B) is */
@@ -317,10 +317,39 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, integer *lda,
-             complex *b, integer *ldb, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
-             real *s, real *dif, integer *mm, integer *m, complex *work, integer *lwork,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void ctgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
+             scomplex *b, aocl_int_t *ldb, scomplex *vl, aocl_int_t *ldvl, scomplex *vr,
+             aocl_int_t *ldvr, real *s, real *dif, aocl_int_t *mm, aocl_int_t *m, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctgsna(job, howmny, select, n, a, lda, b, ldb, vl, ldvl, vr, ldvr, s, dif, mm, m,
+                       work, lwork, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctgsna(job, howmny, select, &n_64, a, &lda_64, b, &ldb_64, vl, &ldvl_64, vr,
+                       &ldvr_64, s, dif, &mm_64, &m_64, work, &lwork_64, iwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *n, scomplex *a,
+                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *vl,
+                        aocl_int64_t *ldvl, scomplex *vr, aocl_int64_t *ldvr, real *s, real *dif,
+                        aocl_int64_t *mm, aocl_int64_t *m, scomplex *work, aocl_int64_t *lwork,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -339,47 +368,28 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double c_abs(complex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, k, n1, n2, ks;
+    aocl_int64_t i__, k, n1, n2, ks;
     real cond;
-    integer ierr, ifst;
+    aocl_int64_t ierr, ifst;
     real lnrm;
-    complex yhax, yhbx;
-    integer ilst;
+    scomplex yhax, yhbx;
+    aocl_int64_t ilst;
     real rnrm, scale;
-    extern /* Complex */
-        void
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    integer lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwmin;
     logical wants;
-    complex dummy[1];
-    extern real scnrm2_(integer *, complex *, integer *), slapy2_(real *, real *);
-    complex dummy1[1];
+    scomplex dummy[1];
+    extern real slapy2_(real *, real *);
+    scomplex dummy1[1];
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *,
-                complex *, integer *, complex *, integer *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh, wantdf, somcon;
-    extern /* Subroutine */
-        void
-        ctgsyl_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
-                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
-                integer *, real *, real *, complex *, integer *, integer *, integer *);
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -488,9 +498,9 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
         {
             lwmin = *n;
         }
-        r__1 = sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*mm < *m)
         {
             *info = -15;
@@ -503,7 +513,7 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTGSNA", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTGSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -537,18 +547,18 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
         {
             /* Compute the reciprocal condition number of the k-th */
             /* eigenvalue. */
-            rnrm = scnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
-            lnrm = scnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-            cgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b20,
-                   &work[1], &c__1);
-            cdotc_f2c_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            yhax.r = q__1.r;
-            yhax.i = q__1.i; // , expr subst
-            cgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b20,
-                   &work[1], &c__1);
-            cdotc_f2c_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            yhbx.r = q__1.r;
-            yhbx.i = q__1.i; // , expr subst
+            rnrm = aocl_blas_scnrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
+            lnrm = aocl_blas_scnrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
+            aocl_blas_cgemv("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1,
+                            &c_b20, &work[1], &c__1);
+            aocl_lapack_cdotc_f2c(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+            yhax.real = q__1.real;
+            yhax.imag = q__1.imag; // , expr subst
+            aocl_blas_cgemv("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1,
+                            &c_b20, &work[1], &c__1);
+            aocl_lapack_cdotc_f2c(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+            yhbx.real = q__1.real;
+            yhbx.imag = q__1.imag; // , expr subst
             r__1 = c_abs(&yhax);
             r__2 = c_abs(&yhbx);
             cond = slapy2_(&r__1, &r__2);
@@ -575,12 +585,12 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
                 /* eigenvectors. */
                 /* Copy the matrix (A, B) to the array WORK and move the */
                 /* (k,k)th pair to the (1,1) position. */
-                clacpy_("Full", n, n, &a[a_offset], lda, &work[1], n);
-                clacpy_("Full", n, n, &b[b_offset], ldb, &work[*n * *n + 1], n);
+                aocl_lapack_clacpy("Full", n, n, &a[a_offset], lda, &work[1], n);
+                aocl_lapack_clacpy("Full", n, n, &b[b_offset], ldb, &work[*n * *n + 1], n);
                 ifst = k;
                 ilst = 1;
-                ctgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1,
-                        dummy1, &c__1, &ifst, &ilst, &ierr);
+                aocl_lapack_ctgexc(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy,
+                                   &c__1, dummy1, &c__1, &ifst, &ilst, &ierr);
                 if(ierr > 0)
                 {
                     /* Ill-conditioned problem - swap rejected. */
@@ -596,17 +606,18 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
                     n1 = 1;
                     n2 = *n - n1;
                     i__ = *n * *n + 1;
-                    ctgsyl_("N", &c__3, &n2, &n1, &work[*n * n1 + n1 + 1], n, &work[1], n,
-                            &work[n1 + 1], n, &work[*n * n1 + n1 + i__], n, &work[i__], n,
-                            &work[n1 + i__], n, &scale, &dif[ks], dummy, &c__1, &iwork[1], &ierr);
+                    aocl_lapack_ctgsyl("N", &c__3, &n2, &n1, &work[*n * n1 + n1 + 1], n, &work[1],
+                                       n, &work[n1 + 1], n, &work[*n * n1 + n1 + i__], n,
+                                       &work[i__], n, &work[n1 + i__], n, &scale, &dif[ks], dummy,
+                                       &c__1, &iwork[1], &ierr);
                 }
             }
         }
     L20:;
     }
-    r__1 = sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CTGSNA */

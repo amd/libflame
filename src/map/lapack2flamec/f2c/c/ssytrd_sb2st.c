@@ -7,10 +7,10 @@
 #ifdef FLA_OPENMP_MULTITHREADING
 #include <omp.h>
 #endif
-static integer c__2 = 2;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 static real c_b26 = 0.f;
 /* > \brief \b SSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric tridiagonal
  * form T */
@@ -240,37 +240,43 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, real *ab,
-                   integer *ldab, real *d__, real *e, real *hous, integer *lhous, real *work,
-                   integer *lwork, integer *info)
+/** Generated wrapper function */
+void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ldab, real *d__, real *e, real *hous, aocl_int_t *lhous, real *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssytrd_sb2st(stage1, vect, uplo, n, kd, ab, ldab, d__, e, hous, lhous, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t lhous_64 = *lhous;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssytrd_sb2st(stage1, vect, uplo, &n_64, &kd_64, ab, &ldab_64, d__, e, hous, &lhous_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssytrd_sb2st(char *stage1, char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *kd,
+                   real *ab, aocl_int64_t *ldab, real *d__, real *e, real *hous,
+                   aocl_int64_t *lhous, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssytrd_sb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
-             ", ldab %" FLA_IS ", lhous %" FLA_IS "",
-             *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous);
+    AOCL_DTL_SNPRINTF("ssytrd_sb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", ldab %" FLA_IS ", lhous %" FLA_IS "",
+                      *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer abofdpos, i__, k, m, stepercol, ed, ib, st, blklastind, lda, tid, ldv, stt, inda;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
-    integer thed, indv, myid, indw, apos, dpos, edind;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lhmin, sizea, shift, stind, colpt, lwmin, awpos;
+    aocl_int64_t abofdpos, i__, k, m, stepercol, ed, ib, st, blklastind, lda, tid, ldv, stt, inda;
+    aocl_int64_t thed, indv, myid, indw, apos, dpos, edind;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lhmin, sizea, shift, stind, colpt, lwmin, awpos;
     logical wantq, upper;
-    integer grsiz, ttype, abdpos;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer thgrid, thgrnb, indtau, ofdpos;
-    extern /* Subroutine */
-        int
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
-        ssb2st_kernels_(char *, logical *, integer *, integer *, integer *, integer *, integer *,
-                        integer *, integer *, real *, integer *, real *, real *, integer *, real *);
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t grsiz, ttype, abdpos;
+    aocl_int64_t thgrid, thgrnb, indtau, ofdpos;
 #ifdef FLA_OPENMP_MULTITHREADING
     extern /* Function */
         int
@@ -278,7 +284,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     int nthreads;
 #endif
     logical lquery, afters1;
-    integer ceiltmp, sweepid, nbtiles, sizetau, thgrsiz;
+    aocl_int64_t ceiltmp, sweepid, nbtiles, sizetau, thgrsiz;
 
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -317,9 +323,9 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *lhous == -1;
     /* Determine the block size, the workspace size and the hous size. */
-    ib = ilaenv2stage_(&c__2, "SSYTRD_SB2ST", vect, n, kd, &c_n1, &c_n1);
-    lhmin = ilaenv2stage_(&c__3, "SSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
-    lwmin = ilaenv2stage_(&c__4, "SSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
+    ib = aocl_lapack_ilaenv2stage(&c__2, "SSYTRD_SB2ST", vect, n, kd, &c_n1, &c_n1);
+    lhmin = aocl_lapack_ilaenv2stage(&c__3, "SSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
+    lwmin = aocl_lapack_ilaenv2stage(&c__4, "SSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
     if(!afters1 && !lsame_(stage1, "N", 1, 1))
     {
         *info = -1;
@@ -355,12 +361,12 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     if(*info == 0)
     {
         hous[1] = (real)lhmin;
-        work[1] = sroundup_lwork(&lwmin);
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRD_SB2ST", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("SSYTRD_SB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -496,17 +502,17 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         ++thgrnb;
     }
     i__1 = *kd + 1;
-    slacpy_("A", &i__1, n, &ab[ab_offset], ldab, &work[apos], &lda);
-    slaset_("A", kd, n, &c_b26, &c_b26, &work[awpos], &lda);
+    aocl_lapack_slacpy("A", &i__1, n, &ab[ab_offset], ldab, &work[apos], &lda);
+    aocl_lapack_slaset("A", kd, n, &c_b26, &c_b26, &work[awpos], &lda);
 
     /* openMP parallelisation start here */
 #ifdef FLA_OPENMP_MULTITHREADING
     nthreads = 1;
     nthreads = fla_thread_get_num_threads();
 #pragma omp parallel num_threads(nthreads) private(tid, thgrid, blklastind) private(             \
-    thed, i__, m, k, st, ed, stt, sweepid, myid, ttype, colpt, stind, edind)                     \
+        thed, i__, m, k, st, ed, stt, sweepid, myid, ttype, colpt, stind, edind)                 \
     shared(uplo, wantq, indv, indtau, hous, work, n, kd, ib, nbtiles, lda, ldv, inda, stepercol, \
-           thgrnb, thgrsiz, grsiz, shift)
+               thgrnb, thgrsiz, grsiz, shift)
     {
 #pragma omp master
         {
@@ -572,16 +578,14 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
 #ifdef FLA_OPENMP_MULTITHREADING
                                 if(ttype != 1)
                                 {
-#pragma omp task depend(in                                                            \
-                        : work[myid + shift - 1]) depend(in                           \
-                                                         : work[myid - 1]) depend(out \
-                                                                                  : work[myid])
+#pragma omp task depend(in : work[myid + shift - 1]) depend(in : work[myid - 1]) \
+    depend(out : work[myid])
                                     {
                                         tid = omp_get_thread_num();
-                                        ssb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind,
-                                                        &sweepid, n, kd, &ib, &work[inda], &lda,
-                                                        &hous[indv], &hous[indtau], &ldv,
-                                                        &work[indw + tid * *kd]);
+                                        aocl_lapack_ssb2st_kernels(
+                                            uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd,
+                                            &ib, &work[inda], &lda, &hous[indv], &hous[indtau],
+                                            &ldv, &work[indw + tid * *kd]);
                                     }
                                 }
                                 else
@@ -589,16 +593,16 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
 #pragma omp task depend(in : work[myid + shift - 1]) depend(out : work[myid])
                                     {
                                         tid = omp_get_thread_num();
-                                        ssb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind,
-                                                        &sweepid, n, kd, &ib, &work[inda], &lda,
-                                                        &hous[indv], &hous[indtau], &ldv,
-                                                        &work[indw + tid * *kd]);
+                                        aocl_lapack_ssb2st_kernels(
+                                            uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd,
+                                            &ib, &work[inda], &lda, &hous[indv], &hous[indtau],
+                                            &ldv, &work[indw + tid * *kd]);
                                     }
                                 }
 #else
-                        ssb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib,
-                                        &work[inda], &lda, &hous[indv], &hous[indtau], &ldv,
-                                        &work[indw]);
+                        aocl_lapack_ssb2st_kernels(uplo, &wantq, &ttype, &stind, &edind, &sweepid,
+                                                   n, kd, &ib, &work[inda], &lda, &hous[indv],
+                                                   &hous[indtau], &ldv, &work[indw]);
 #endif
                                 if(blklastind >= *n - 1)
                                 {
@@ -648,7 +652,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         }
     }
     hous[1] = (real)lhmin;
-    work[1] = sroundup_lwork(&lwmin);
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRD_SB2ST */

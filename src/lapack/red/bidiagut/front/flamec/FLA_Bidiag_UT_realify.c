@@ -159,12 +159,12 @@ FLA_Error FLA_Bidiag_UT_l_realify_unb( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 FLA_Error FLA_Bidiag_UT_l_realify_opt( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 {
   FLA_Datatype datatype;
-  integer          m_A;
-  integer          min_m_n;
-  integer          rs_A, cs_A;
-  integer          inc_d;
-  integer          inc_e;
-  integer          i;
+  fla_dim_t          m_A;
+  fla_dim_t          min_m_n;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_d;
+  fla_dim_t          inc_e;
+  fla_dim_t          i;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -231,8 +231,8 @@ FLA_Error FLA_Bidiag_UT_l_realify_opt( FLA_Obj A, FLA_Obj d, FLA_Obj e )
         scomplex* epsilon1 = buff_e + (i  )*inc_e;
         scomplex  absv;
 
-        integer       m_ahead  = m_A - i - 1;
-        integer       m_behind = i;
+        fla_dim_t       m_ahead  = m_A - i - 1;
+        fla_dim_t       m_behind = i;
 
         if ( m_behind == 0 )
         {
@@ -299,8 +299,8 @@ FLA_Error FLA_Bidiag_UT_l_realify_opt( FLA_Obj A, FLA_Obj d, FLA_Obj e )
         dcomplex* epsilon1 = buff_e + (i  )*inc_e;
         dcomplex  absv;
 
-        integer       m_ahead  = m_A - i - 1;
-        integer       m_behind = i;
+        fla_dim_t       m_ahead  = m_A - i - 1;
+        fla_dim_t       m_behind = i;
 
         if ( m_behind == 0 )
         {
@@ -481,12 +481,12 @@ FLA_Error FLA_Bidiag_UT_u_realify_unb( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 FLA_Error FLA_Bidiag_UT_u_realify_opt( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 {
   FLA_Datatype datatype;
-  integer          n_A;
-  integer          min_m_n;
-  integer          rs_A, cs_A;
-  integer          inc_d;
-  integer          inc_e;
-  integer          i;
+  fla_dim_t          n_A;
+  fla_dim_t          min_m_n;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_d;
+  fla_dim_t          inc_e;
+  fla_dim_t          i;
 
   datatype = FLA_Obj_datatype( A );
   n_A      = FLA_Obj_width( A );
@@ -551,8 +551,8 @@ FLA_Error FLA_Bidiag_UT_u_realify_opt( FLA_Obj A, FLA_Obj d, FLA_Obj e )
         scomplex* epsilon1 = buff_e + (i  )*inc_e;
         scomplex  absv;
 
-        integer       n_ahead  = n_A - i - 1;
-        integer       n_behind = i;
+        fla_dim_t       n_ahead  = n_A - i - 1;
+        fla_dim_t       n_behind = i;
 
         if ( n_behind == 0 )
         {
@@ -618,8 +618,8 @@ FLA_Error FLA_Bidiag_UT_u_realify_opt( FLA_Obj A, FLA_Obj d, FLA_Obj e )
         dcomplex* epsilon1 = buff_e + (i  )*inc_e;
         dcomplex  absv;
 
-        integer       n_ahead  = n_A - i - 1;
-        integer       n_behind = i;
+        fla_dim_t       n_ahead  = n_A - i - 1;
+        fla_dim_t       n_behind = i;
 
         if ( n_behind == 0 )
         {

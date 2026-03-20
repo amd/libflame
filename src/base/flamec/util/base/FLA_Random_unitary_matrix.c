@@ -38,8 +38,8 @@ FLA_Error FLA_Random_unitary_matrix( FLA_Obj A )
   FLA_Obj      v, tau;
   FLA_Obj      aT,
                AB;
-  integer          i, mn;
-  integer          k;
+  fla_dim_t          i, mn;
+  fla_dim_t          k;
 
   datatype = FLA_Obj_datatype( A );
   mn       = FLA_Obj_length( A );

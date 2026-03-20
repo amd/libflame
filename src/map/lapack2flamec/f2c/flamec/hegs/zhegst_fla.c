@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {.5, 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {.5, 0.};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b18 = 1.;
 /* > \brief \b ZHEGST */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static doublereal c_b18 = 1.;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZHEGST reduces a complex Hermitian-definite generalized */
+/* > ZHEGST reduces a scomplex Hermitian-definite generalized */
 /* > eigenproblem to standard form. */
 /* > */
 /* > If ITYPE = 1, the problem is A*x = lambda*B*x, */
@@ -130,32 +130,16 @@ static doublereal c_b18 = 1.;
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda,
-                doublecomplex *b, integer *ldb, integer *info)
+void zhegst_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *a,
+                aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Local variables */
-    integer k, kb, nb;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zhemm_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t k, kb, nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        zhegs2_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, integer *),
-        zher2k_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublereal *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,7 +193,7 @@ void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHEGST", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHEGST", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -218,11 +202,11 @@ void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
         return;
     }
     /* Determine the block size for this environment. */
-    nb = ilaenv_(&c__1, "ZHEGST", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZHEGST", uplo, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {
         /* Use unblocked code */
-        zhegs2_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+        aocl_lapack_zhegs2(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
     }
     else
     {
@@ -240,34 +224,36 @@ void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                     i__3 = *n - k + 1;
                     kb = fla_min(i__3, nb);
                     /* Update the upper triangle of A(k:n,k:n) */
-                    zhegs2_(itype, uplo, &kb, &a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb,
-                            info);
+                    aocl_lapack_zhegs2(itype, uplo, &kb, &a[k + k * a_dim1], lda,
+                                       &b[k + k * b_dim1], ldb, info);
                     if(k + kb <= *n)
                     {
                         i__3 = *n - k - kb + 1;
-                        ztrsm_("Left", uplo, "Conjugate transpose", "Non-unit", &kb, &i__3, &c_b1,
-                               &b[k + k * b_dim1], ldb, &a[k + (k + kb) * a_dim1], lda);
+                        aocl_blas_ztrsm("Left", uplo, "Conjugate transpose", "Non-unit", &kb, &i__3,
+                                        &c_b1, &b[k + k * b_dim1], ldb, &a[k + (k + kb) * a_dim1],
+                                        lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -.5;
-                        z__1.i = -0.; // , expr subst
-                        zhemm_("Left", uplo, &kb, &i__3, &z__1, &a[k + k * a_dim1], lda,
-                               &b[k + (k + kb) * b_dim1], ldb, &c_b1, &a[k + (k + kb) * a_dim1],
-                               lda);
+                        z__1.real = -.5;
+                        z__1.imag = -0.; // , expr subst
+                        aocl_blas_zhemm("Left", uplo, &kb, &i__3, &z__1, &a[k + k * a_dim1], lda,
+                                        &b[k + (k + kb) * b_dim1], ldb, &c_b1,
+                                        &a[k + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
-                        zher2k_(uplo, "Conjugate transpose", &i__3, &kb, &z__1,
-                                &a[k + (k + kb) * a_dim1], lda, &b[k + (k + kb) * b_dim1], ldb,
-                                &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
+                        aocl_blas_zher2k(uplo, "Conjugate transpose", &i__3, &kb, &z__1,
+                                         &a[k + (k + kb) * a_dim1], lda, &b[k + (k + kb) * b_dim1],
+                                         ldb, &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -.5;
-                        z__1.i = -0.; // , expr subst
-                        zhemm_("Left", uplo, &kb, &i__3, &z__1, &a[k + k * a_dim1], lda,
-                               &b[k + (k + kb) * b_dim1], ldb, &c_b1, &a[k + (k + kb) * a_dim1],
-                               lda);
+                        z__1.real = -.5;
+                        z__1.imag = -0.; // , expr subst
+                        aocl_blas_zhemm("Left", uplo, &kb, &i__3, &z__1, &a[k + k * a_dim1], lda,
+                                        &b[k + (k + kb) * b_dim1], ldb, &c_b1,
+                                        &a[k + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        ztrsm_("Right", uplo, "No transpose", "Non-unit", &kb, &i__3, &c_b1,
-                               &b[k + kb + (k + kb) * b_dim1], ldb, &a[k + (k + kb) * a_dim1], lda);
+                        aocl_blas_ztrsm("Right", uplo, "No transpose", "Non-unit", &kb, &i__3,
+                                        &c_b1, &b[k + kb + (k + kb) * b_dim1], ldb,
+                                        &a[k + (k + kb) * a_dim1], lda);
                     }
                     /* L10: */
                 }
@@ -283,35 +269,38 @@ void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                     i__3 = *n - k + 1;
                     kb = fla_min(i__3, nb);
                     /* Update the lower triangle of A(k:n,k:n) */
-                    zhegs2_(itype, uplo, &kb, &a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb,
-                            info);
+                    aocl_lapack_zhegs2(itype, uplo, &kb, &a[k + k * a_dim1], lda,
+                                       &b[k + k * b_dim1], ldb, info);
                     if(k + kb <= *n)
                     {
                         i__3 = *n - k - kb + 1;
-                        ztrsm_("Right", uplo, "Conjugate transpose",
-                               "Non-un"
-                               "it",
-                               &i__3, &kb, &c_b1, &b[k + k * b_dim1], ldb, &a[k + kb + k * a_dim1],
-                               lda);
+                        aocl_blas_ztrsm("Right", uplo, "Conjugate transpose",
+                                        "Non-un"
+                                        "it",
+                                        &i__3, &kb, &c_b1, &b[k + k * b_dim1], ldb,
+                                        &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -.5;
-                        z__1.i = -0.; // , expr subst
-                        zhemm_("Right", uplo, &i__3, &kb, &z__1, &a[k + k * a_dim1], lda,
-                               &b[k + kb + k * b_dim1], ldb, &c_b1, &a[k + kb + k * a_dim1], lda);
+                        z__1.real = -.5;
+                        z__1.imag = -0.; // , expr subst
+                        aocl_blas_zhemm("Right", uplo, &i__3, &kb, &z__1, &a[k + k * a_dim1], lda,
+                                        &b[k + kb + k * b_dim1], ldb, &c_b1,
+                                        &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
-                        zher2k_(uplo, "No transpose", &i__3, &kb, &z__1, &a[k + kb + k * a_dim1],
-                                lda, &b[k + kb + k * b_dim1], ldb, &c_b18,
-                                &a[k + kb + (k + kb) * a_dim1], lda);
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
+                        aocl_blas_zher2k(uplo, "No transpose", &i__3, &kb, &z__1,
+                                         &a[k + kb + k * a_dim1], lda, &b[k + kb + k * b_dim1], ldb,
+                                         &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -.5;
-                        z__1.i = -0.; // , expr subst
-                        zhemm_("Right", uplo, &i__3, &kb, &z__1, &a[k + k * a_dim1], lda,
-                               &b[k + kb + k * b_dim1], ldb, &c_b1, &a[k + kb + k * a_dim1], lda);
+                        z__1.real = -.5;
+                        z__1.imag = -0.; // , expr subst
+                        aocl_blas_zhemm("Right", uplo, &i__3, &kb, &z__1, &a[k + k * a_dim1], lda,
+                                        &b[k + kb + k * b_dim1], ldb, &c_b1,
+                                        &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        ztrsm_("Left", uplo, "No transpose", "Non-unit", &i__3, &kb, &c_b1,
-                               &b[k + kb + (k + kb) * b_dim1], ldb, &a[k + kb + k * a_dim1], lda);
+                        aocl_blas_ztrsm("Left", uplo, "No transpose", "Non-unit", &i__3, &kb, &c_b1,
+                                        &b[k + kb + (k + kb) * b_dim1], ldb,
+                                        &a[k + kb + k * a_dim1], lda);
                     }
                     /* L20: */
                 }
@@ -331,22 +320,22 @@ void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                     kb = fla_min(i__3, nb);
                     /* Update the upper triangle of A(1:k+kb-1,1:k+kb-1) */
                     i__3 = k - 1;
-                    ztrmm_("Left", uplo, "No transpose", "Non-unit", &i__3, &kb, &c_b1,
-                           &b[b_offset], ldb, &a[k * a_dim1 + 1], lda);
+                    aocl_blas_ztrmm("Left", uplo, "No transpose", "Non-unit", &i__3, &kb, &c_b1,
+                                    &b[b_offset], ldb, &a[k * a_dim1 + 1], lda);
                     i__3 = k - 1;
-                    zhemm_("Right", uplo, &i__3, &kb, &c_b2, &a[k + k * a_dim1], lda,
-                           &b[k * b_dim1 + 1], ldb, &c_b1, &a[k * a_dim1 + 1], lda);
+                    aocl_blas_zhemm("Right", uplo, &i__3, &kb, &c_b2, &a[k + k * a_dim1], lda,
+                                    &b[k * b_dim1 + 1], ldb, &c_b1, &a[k * a_dim1 + 1], lda);
                     i__3 = k - 1;
-                    zher2k_(uplo, "No transpose", &i__3, &kb, &c_b1, &a[k * a_dim1 + 1], lda,
-                            &b[k * b_dim1 + 1], ldb, &c_b18, &a[a_offset], lda);
+                    aocl_blas_zher2k(uplo, "No transpose", &i__3, &kb, &c_b1, &a[k * a_dim1 + 1],
+                                     lda, &b[k * b_dim1 + 1], ldb, &c_b18, &a[a_offset], lda);
                     i__3 = k - 1;
-                    zhemm_("Right", uplo, &i__3, &kb, &c_b2, &a[k + k * a_dim1], lda,
-                           &b[k * b_dim1 + 1], ldb, &c_b1, &a[k * a_dim1 + 1], lda);
+                    aocl_blas_zhemm("Right", uplo, &i__3, &kb, &c_b2, &a[k + k * a_dim1], lda,
+                                    &b[k * b_dim1 + 1], ldb, &c_b1, &a[k * a_dim1 + 1], lda);
                     i__3 = k - 1;
-                    ztrmm_("Right", uplo, "Conjugate transpose", "Non-unit", &i__3, &kb, &c_b1,
-                           &b[k + k * b_dim1], ldb, &a[k * a_dim1 + 1], lda);
-                    zhegs2_(itype, uplo, &kb, &a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb,
-                            info);
+                    aocl_blas_ztrmm("Right", uplo, "Conjugate transpose", "Non-unit", &i__3, &kb,
+                                    &c_b1, &b[k + k * b_dim1], ldb, &a[k * a_dim1 + 1], lda);
+                    aocl_lapack_zhegs2(itype, uplo, &kb, &a[k + k * a_dim1], lda,
+                                       &b[k + k * b_dim1], ldb, info);
                     /* L30: */
                 }
             }
@@ -362,22 +351,22 @@ void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                     kb = fla_min(i__3, nb);
                     /* Update the lower triangle of A(1:k+kb-1,1:k+kb-1) */
                     i__3 = k - 1;
-                    ztrmm_("Right", uplo, "No transpose", "Non-unit", &kb, &i__3, &c_b1,
-                           &b[b_offset], ldb, &a[k + a_dim1], lda);
+                    aocl_blas_ztrmm("Right", uplo, "No transpose", "Non-unit", &kb, &i__3, &c_b1,
+                                    &b[b_offset], ldb, &a[k + a_dim1], lda);
                     i__3 = k - 1;
-                    zhemm_("Left", uplo, &kb, &i__3, &c_b2, &a[k + k * a_dim1], lda, &b[k + b_dim1],
-                           ldb, &c_b1, &a[k + a_dim1], lda);
+                    aocl_blas_zhemm("Left", uplo, &kb, &i__3, &c_b2, &a[k + k * a_dim1], lda,
+                                    &b[k + b_dim1], ldb, &c_b1, &a[k + a_dim1], lda);
                     i__3 = k - 1;
-                    zher2k_(uplo, "Conjugate transpose", &i__3, &kb, &c_b1, &a[k + a_dim1], lda,
-                            &b[k + b_dim1], ldb, &c_b18, &a[a_offset], lda);
+                    aocl_blas_zher2k(uplo, "Conjugate transpose", &i__3, &kb, &c_b1, &a[k + a_dim1],
+                                     lda, &b[k + b_dim1], ldb, &c_b18, &a[a_offset], lda);
                     i__3 = k - 1;
-                    zhemm_("Left", uplo, &kb, &i__3, &c_b2, &a[k + k * a_dim1], lda, &b[k + b_dim1],
-                           ldb, &c_b1, &a[k + a_dim1], lda);
+                    aocl_blas_zhemm("Left", uplo, &kb, &i__3, &c_b2, &a[k + k * a_dim1], lda,
+                                    &b[k + b_dim1], ldb, &c_b1, &a[k + a_dim1], lda);
                     i__3 = k - 1;
-                    ztrmm_("Left", uplo, "Conjugate transpose", "Non-unit", &kb, &i__3, &c_b1,
-                           &b[k + k * b_dim1], ldb, &a[k + a_dim1], lda);
-                    zhegs2_(itype, uplo, &kb, &a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb,
-                            info);
+                    aocl_blas_ztrmm("Left", uplo, "Conjugate transpose", "Non-unit", &kb, &i__3,
+                                    &c_b1, &b[k + k * b_dim1], ldb, &a[k + a_dim1], lda);
+                    aocl_lapack_zhegs2(itype, uplo, &kb, &a[k + k * a_dim1], lda,
+                                       &b[k + k * b_dim1], ldb, info);
                     /* L40: */
                 }
             }

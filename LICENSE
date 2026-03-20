@@ -1,119 +1,24 @@
-AOCL-LibFLAME v5.2 – LICENSE AND NOTICE FILE
+LICENSE File for AOCL-LibFLAME v.5.2.2
 
-SECTION 1: AMD Contributions
-AMD copyrighted code (BSD-3-Clause)
-Copyright (C) 2008–2022, Advanced Micro Devices, Inc. All rights
-reserved.
-Copyright (C) 2022–2023, Advanced Micro Devices, Inc. All rights
-reserved.
-License: BSD-3-Clause (SPDX: BSD-3-Clause)
-See full license text in Section 3.
+Portions of the AOCL-LibFLAME library licensed under BSD-3-clause
+
+AMD copyrighted code (BSD-3-clause)
+Copyright Statements
+Copyright (C) 2021-2024, Advanced Micro Devices, Inc. All rights reserved.
+License Text http://spdx.org/licenses/BSD-3-Clause
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+* Neither the name of the copyright holders nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Portions of the AOCL-LibFLAME library licensed under MIT
+
 AMD copyrighted code (MIT)
-Copyright (c) 2019–present Advanced Micro Devices, Inc. All rights
-reserved.
-License: MIT (SPDX: MIT)
-See full license text in Section 3.
+Copyright Statements
+Copyright (c) 2019 - 2024 Advanced Micro Devices, Inc. All rights reserved.
+License Text http://spdx.org/licenses/MIT
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-SECTION 2: Third-Party Components
-The following third-party components are included in AOCL-LibFLAME
-v5.2:
-
-
-cmake
-Copyright: Kitware, Inc. and Contributors
-License: BSD-3-Clause
-
-
-CMake-codecov
-Copyright: RWTH Aachen University
-License: BSD-3-Clause
-
-
-f2c.h
-Copyright: AT&T, Lucent Technologies, Bellcore
-License: MIT
-
-
-flame-blis v0.8.1
-Copyright: Advanced Micro Devices, Inc.;
-           The University of Texas at Austin
-License: BSD-3-Clause
-
-
-flame-libflame (multiple versions)
-Copyright: Advanced Micro Devices, Inc.;
-           The University of Texas at Austin;
-           AT&T, Lucent Technologies, Bellcore
-License: BSD-3-Clause
-
-
-reference-lapack-lapack (versions 3.4.2, 3.9.0, 3.10.0, 3.11.0,
-3.12.0)
-Copyright: The University of Tennessee;
-           The University of California Berkeley;
-           The University of Colorado Denver
-License: BSD-3-Clause
-
-
-SECTION 3: Full License Texts
-BSD-3-Clause License
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
-
-*Redistributions of source code must retain the above copyright
- notice, this list of conditions and the following disclaimer.
-
-*Redistributions in binary form must reproduce the above copyright
- notice, this list of conditions and the following disclaimer in the
- documentation and/or other materials provided with the distribution.
-
-*Neither the name of the copyright holders nor the names of its
- contributors may be used to endorse or promote products derived from
- this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
-OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
-AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
-WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE.
-
-MIT License
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
-Final Notes on License Text Applicability:
-
-The canonical BSD-3-Clause text reproduced above applies to: CMake,
-CMake-codecov, BLIS v0.8.1, libflame, and LAPACK (versions 3.4.2,
-3.9.0, 3.10.0, 3.11.0, 3.12.0).
-
-The MIT text applies to AMD MIT-licensed files and to f2c.h.
-
-The AT&T/Lucent/Bellcore permission license applies to the f2c-derived
-portions included within libflame.

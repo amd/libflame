@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLACON estimates the 1-norm of a square matrix, using reverse communication for
  * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
@@ -40,7 +40,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLACON estimates the 1-norm of a square, complex matrix A. */
+/* > CLACON estimates the 1-norm of a square, scomplex matrix A. */
 /* > Reverse communication is used for evaluating matrix-vector products. */
 /* > \endverbatim */
 /* Arguments: */
@@ -105,12 +105,27 @@ static integer c__1 = 1;
 /* ================ */
 /* > */
 /* > N.J. Higham, "FORTRAN codes for estimating the one-norm of */
-/* > a real or complex matrix, with applications to condition estimation", */
+/* > a real or scomplex matrix, with applications to condition estimation", */
 /* > ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clacon_(integer *n, complex *v, complex *x, real *est, integer *kase)
+/** Generated wrapper function */
+void clacon_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kase)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clacon(n, v, x, est, kase);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kase_64 = *kase;
+
+    aocl_lapack_clacon(&n_64, v, x, est, &kase_64);
+
+    *kase = (aocl_int_t)kase_64;
+#endif
+}
+
+void aocl_lapack_clacon(aocl_int64_t *n, scomplex *v, scomplex *x, real *est, aocl_int64_t *kase)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -123,24 +138,20 @@ void clacon_(integer *n, complex *v, complex *x, real *est, integer *kase)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double c_abs(complex *), r_imag(complex *);
+    double c_abs(scomplex *), r_imag(scomplex *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real temp;
-    static integer jump = 0;
-    static integer j = 0;
-    static integer iter = 0;
+    static aocl_int64_t jump = 0;
+    static aocl_int64_t j = 0;
+    static aocl_int64_t iter = 0;
     real absxi;
-    integer jlast;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    extern integer icmax1_(integer *, complex *, integer *);
-    extern real scsum1_(integer *, complex *, integer *), slamch_(char *);
+    aocl_int64_t jlast;
+    extern real slamch_(char *);
     real safmin, altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -176,10 +187,10 @@ void clacon_(integer *n, complex *v, complex *x, real *est, integer *kase)
         {
             i__2 = i__;
             r__1 = 1.f / (real)(*n);
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
-            x[i__2].r = q__1.r;
-            x[i__2].i = q__1.i; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
+            x[i__2].real = q__1.real;
+            x[i__2].imag = q__1.imag; // , expr subst
             /* L10: */
         }
         *kase = 1;
@@ -207,13 +218,13 @@ void clacon_(integer *n, complex *v, complex *x, real *est, integer *kase)
 L20:
     if(*n == 1)
     {
-        v[1].r = x[1].r;
-        v[1].i = x[1].i; // , expr subst
+        v[1].real = x[1].real;
+        v[1].imag = x[1].imag; // , expr subst
         *est = c_abs(&v[1]);
         /* ... QUIT */
         goto L130;
     }
-    *est = scsum1_(n, &x[1], &c__1);
+    *est = aocl_lapack_scsum1(n, &x[1], &c__1);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -222,18 +233,18 @@ L20:
         {
             i__2 = i__;
             i__3 = i__;
-            r__1 = x[i__3].r / absxi;
+            r__1 = x[i__3].real / absxi;
             r__2 = r_imag(&x[i__]) / absxi;
-            q__1.r = r__1;
-            q__1.i = r__2; // , expr subst
-            x[i__2].r = q__1.r;
-            x[i__2].i = q__1.i; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = r__2; // , expr subst
+            x[i__2].real = q__1.real;
+            x[i__2].imag = q__1.imag; // , expr subst
         }
         else
         {
             i__2 = i__;
-            x[i__2].r = 1.f;
-            x[i__2].i = 0.f; // , expr subst
+            x[i__2].real = 1.f;
+            x[i__2].imag = 0.f; // , expr subst
         }
         /* L30: */
     }
@@ -244,7 +255,7 @@ L20:
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
-    j = icmax1_(n, &x[1], &c__1);
+    j = aocl_lapack_icmax1(n, &x[1], &c__1);
     iter = 2;
     /* MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
 L50:
@@ -252,13 +263,13 @@ L50:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        x[i__2].r = 0.f;
-        x[i__2].i = 0.f; // , expr subst
+        x[i__2].real = 0.f;
+        x[i__2].imag = 0.f; // , expr subst
         /* L60: */
     }
     i__1 = j;
-    x[i__1].r = 1.f;
-    x[i__1].i = 0.f; // , expr subst
+    x[i__1].real = 1.f;
+    x[i__1].imag = 0.f; // , expr subst
     *kase = 1;
     jump = 3;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -266,9 +277,9 @@ L50:
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
-    ccopy_(n, &x[1], &c__1, &v[1], &c__1);
+    aocl_blas_ccopy(n, &x[1], &c__1, &v[1], &c__1);
     estold = *est;
-    *est = scsum1_(n, &v[1], &c__1);
+    *est = aocl_lapack_scsum1(n, &v[1], &c__1);
     /* TEST FOR CYCLING. */
     if(*est <= estold)
     {
@@ -282,18 +293,18 @@ L70:
         {
             i__2 = i__;
             i__3 = i__;
-            r__1 = x[i__3].r / absxi;
+            r__1 = x[i__3].real / absxi;
             r__2 = r_imag(&x[i__]) / absxi;
-            q__1.r = r__1;
-            q__1.i = r__2; // , expr subst
-            x[i__2].r = q__1.r;
-            x[i__2].i = q__1.i; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = r__2; // , expr subst
+            x[i__2].real = q__1.real;
+            x[i__2].imag = q__1.imag; // , expr subst
         }
         else
         {
             i__2 = i__;
-            x[i__2].r = 1.f;
-            x[i__2].i = 0.f; // , expr subst
+            x[i__2].real = 1.f;
+            x[i__2].imag = 0.f; // , expr subst
         }
         /* L80: */
     }
@@ -305,7 +316,7 @@ L70:
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
     jlast = j;
-    j = icmax1_(n, &x[1], &c__1);
+    j = aocl_lapack_icmax1(n, &x[1], &c__1);
     if(c_abs(&x[jlast]) != c_abs(&x[j]) && iter < 5)
     {
         ++iter;
@@ -319,10 +330,10 @@ L100:
     {
         i__2 = i__;
         r__1 = altsgn * ((real)(i__ - 1) / (real)(*n - 1) + 1.f);
-        q__1.r = r__1;
-        q__1.i = 0.f; // , expr subst
-        x[i__2].r = q__1.r;
-        x[i__2].i = q__1.i; // , expr subst
+        q__1.real = r__1;
+        q__1.imag = 0.f; // , expr subst
+        x[i__2].real = q__1.real;
+        x[i__2].imag = q__1.imag; // , expr subst
         altsgn = -altsgn;
         /* L110: */
     }
@@ -333,10 +344,10 @@ L100:
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
-    temp = scsum1_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    temp = aocl_lapack_scsum1(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
     if(temp > *est)
     {
-        ccopy_(n, &x[1], &c__1, &v[1], &c__1);
+        aocl_blas_ccopy(n, &x[1], &c__1, &v[1], &c__1);
         *est = temp;
     }
 L130:

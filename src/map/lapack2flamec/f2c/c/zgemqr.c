@@ -26,7 +26,7 @@
 /* > TRANS = 'N': Q * C C * Q */
 /* > TRANS = 'T': Q**H * C C * Q**H */
 /* > */
-/* > where Q is a complex unitary matrix defined as the product */
+/* > where Q is a scomplex unitary matrix defined as the product */
 /* > of blocked elementary reflectors computed by tall skinny */
 /* > QR factorization (ZGEQR) */
 /* > */
@@ -167,9 +167,34 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a,
-             integer *lda, doublecomplex *t, integer *tsize, doublecomplex *c__, integer *ldc,
-             doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zgemqr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a,
+             aocl_int_t *lda, dcomplex *t, aocl_int_t *tsize, dcomplex *c__,
+             aocl_int_t *ldc, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgemqr(side, trans, m, n, k, a, lda, t, tsize, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t tsize_64 = *tsize;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgemqr(side, trans, &m_64, &n_64, &k_64, a, &lda_64, t, &tsize_64, c__, &ldc_64,
+                       work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                        dcomplex *a, aocl_int64_t *lda, dcomplex *t, aocl_int64_t *tsize,
+                        dcomplex *c__, aocl_int64_t *ldc, dcomplex *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgemqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
@@ -177,26 +202,13 @@ void zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, double
                       *side, *trans, *m, *n, *k, *lda, *tsize, *ldc);
 
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        zlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *,
-                  doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                  integer *, doublecomplex *, integer *, integer *);
-    integer mb, nb, mn, lw;
+    aocl_int64_t mb, nb, mn, lw;
     logical left, tran;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
-    extern /* Subroutine */
-        void
-        zgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *,
-                 integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -232,8 +244,8 @@ void zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, double
     tran = lsame_(trans, "C", 1, 1);
     left = lsame_(side, "L", 1, 1);
     right = lsame_(side, "R", 1, 1);
-    mb = (integer)t[2].r;
-    nb = (integer)t[3].r;
+    mb = (integer)t[2].real;
+    nb = (integer)t[3].real;
     if(left)
     {
         lw = *n * nb;
@@ -283,13 +295,13 @@ void zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, double
     }
     if(*info == 0)
     {
-        work[1].r = (doublereal)lw;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lw;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEMQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEMQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -310,16 +322,16 @@ void zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, double
     i__1 = fla_max(*m, *n);
     if(left && *m <= *k || right && *n <= *k || mb <= *k || mb >= fla_max(i__1, *k))
     {
-        zgemqrt_(side, trans, m, n, k, &nb, &a[a_offset], lda, &t[6], &nb, &c__[c_offset], ldc,
-                 &work[1], info);
+        aocl_lapack_zgemqrt(side, trans, m, n, k, &nb, &a[a_offset], lda, &t[6], &nb,
+                            &c__[c_offset], ldc, &work[1], info);
     }
     else
     {
-        zlamtsqr_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &c__[c_offset],
-                  ldc, &work[1], lwork, info);
+        aocl_lapack_zlamtsqr(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb,
+                             &c__[c_offset], ldc, &work[1], lwork, info);
     }
-    work[1].r = (doublereal)lw;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lw;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEMQR */

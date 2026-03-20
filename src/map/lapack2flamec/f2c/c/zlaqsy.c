@@ -128,19 +128,33 @@
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqsy_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *s,
+/** Generated wrapper function */
+void zlaqsy_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s,
              doublereal *scond, doublereal *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqsy(uplo, n, a, lda, s, scond, amax, equed);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zlaqsy(uplo, &n_64, a, &lda_64, s, scond, amax, equed);
+#endif
+}
+
+void aocl_lapack_zlaqsy(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        doublereal *s, doublereal *scond, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqsy inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal cj, large;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -196,10 +210,10 @@ void zlaqsy_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
                     i__3 = i__ + j * a_dim1;
                     d__1 = cj * s[i__];
                     i__4 = i__ + j * a_dim1;
-                    z__1.r = d__1 * a[i__4].r;
-                    z__1.i = d__1 * a[i__4].i; // , expr subst
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    z__1.real = d__1 * a[i__4].real;
+                    z__1.imag = d__1 * a[i__4].imag; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -218,10 +232,10 @@ void zlaqsy_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
                     i__3 = i__ + j * a_dim1;
                     d__1 = cj * s[i__];
                     i__4 = i__ + j * a_dim1;
-                    z__1.r = d__1 * a[i__4].r;
-                    z__1.i = d__1 * a[i__4].i; // , expr subst
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    z__1.real = d__1 * a[i__4].real;
+                    z__1.imag = d__1 * a[i__4].imag; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     /* L30: */
                 }
                 /* L40: */

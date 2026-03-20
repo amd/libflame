@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -122,7 +122,7 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for gesdd\n");
+        printf("\nIllegal arguments for gesvd\n");
         printf("./<EXE> gesvd <precisions - sdcz> <JOBU> <JOBVT> <M> <N> <LDA> <LDU> <LDVT> "
                "<LWORK> <repeats>\n");
     }
@@ -220,9 +220,6 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
         create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
     }
     create_realtype_vector(datatype, &s, fla_min(m, n));
-    create_realtype_vector(datatype, &s_test, fla_min(m, n));
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        create_vector(get_realtype(datatype), &scal, 1);
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
      * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
@@ -230,18 +227,20 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
      * truth run */
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
         }
         else
         {
             /* Generate matrix A with singular value */
+            create_realtype_vector(datatype, &s_test, fla_min(m, n));
             create_svd_matrix(datatype, 'A', m, n, A, lda, s_test, s_one, s_one, i_one, i_one,
                               info);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
                 /* Initializing matrix with values around overflow underflow */
+                create_vector(get_realtype(datatype), &scal, 1);
                 init_matrix_overflow_underflow_svd(datatype, m, n, A, lda, params->imatrix_char,
                                                    scal);
             }
@@ -298,6 +297,11 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
                                          params->imatrix_char, scal, params),
                           check_bit_reproducibility_gesvd(filename, datatype, jobu, jobvt, m, n, A,
                                                           lda, s, U, ldu, V, ldvt, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesvd(tst_api, &jobu, &jobvt, m, n, A, A_test, lda, s, s_test, U, ldu, V, ldvt,
@@ -318,12 +322,16 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            free_vector(scal);
+        }
+        free_vector(s_test);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
     free_matrix(A);
     free_matrix(A_test);
     if(!same_char(jobu, 'N') && !same_char(jobu, 'O'))
@@ -335,7 +343,6 @@ free_buffers:
         free_matrix(V);
     }
     free_vector(s);
-    free_vector(s_test);
 }
 
 void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *A, integer lda,
@@ -597,7 +604,7 @@ void store_gesvd_outputs(void *filename, integer datatype, char jobu, char jobvt
         FLA_STORE_BRT_MATRIX(datatype, m_V, n, V, ldvt)
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 
 integer check_bit_reproducibility_gesvd(void *filename, integer datatype, char jobu, char jobvt,

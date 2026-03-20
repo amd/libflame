@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTGSEN */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CTGSEN reorders the generalized Schur decomposition of a complex */
+/* > CTGSEN reorders the generalized Schur decomposition of a scomplex */
 /* > matrix pair (A, B) (in terms of an unitary equivalence trans- */
 /* > formation Q**H * (A, B) * Z), so that a selected cluster of eigenvalues */
 /* > appears in the leading diagonal blocks of the pair (A,B). The leading */
@@ -436,10 +436,43 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n, complex *a,
-             integer *lda, complex *b, integer *ldb, complex *alpha, complex *beta, complex *q,
-             integer *ldq, complex *z__, integer *ldz, integer *m, real *pl, real *pr, real *dif,
-             complex *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void ctgsen_(aocl_int_t *ijob, logical *wantq, logical *wantz, logical *select, aocl_int_t *n,
+             scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *alpha,
+             scomplex *beta, scomplex *q, aocl_int_t *ldq, scomplex *z__, aocl_int_t *ldz,
+             aocl_int_t *m, real *pl, real *pr, real *dif, scomplex *work, aocl_int_t *lwork,
+             aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctgsen(ijob, wantq, wantz, select, n, a, lda, b, ldb, alpha, beta, q, ldq, z__, ldz,
+                       m, pl, pr, dif, work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctgsen(&ijob_64, wantq, wantz, select, &n_64, a, &lda_64, b, &ldb_64, alpha, beta,
+                       q, &ldq_64, z__, &ldz_64, &m_64, pl, pr, dif, work, &lwork_64, iwork,
+                       &liwork_64, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logical *select,
+                        aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
+                        aocl_int64_t *ldb, scomplex *alpha, scomplex *beta, scomplex *q,
+                        aocl_int64_t *ldq, scomplex *z__, aocl_int64_t *ldz, aocl_int64_t *m,
+                        real *pl, real *pr, real *dif, scomplex *work, aocl_int64_t *lwork,
+                        aocl_int_t *iwork, aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -457,50 +490,29 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
     real r__1;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double sqrt(doublereal), c_abs(complex *);
-    void r_cnjg(complex *, complex *);
+    double sqrt(doublereal), c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, k, n1, n2, ks, mn2, ijb, kase, ierr;
+    aocl_int64_t i__, k, n1, n2, ks, mn2, ijb, kase, ierr;
     real dsum;
     logical swap;
-    complex temp1, temp2;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
+    scomplex temp1, temp2;
     integer isave[3];
     logical wantd;
-    integer lwmin;
+    aocl_int64_t lwmin;
     logical wantp;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     logical wantd1, wantd2;
     real dscale;
     extern real slamch_(char *);
     real rdscal;
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     real safmin;
-    extern /* Subroutine */
-        void
-        ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *,
-                complex *, integer *, complex *, integer *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        classq_(integer *, complex *, integer *, real *, real *);
-    integer liwmin;
-    extern /* Subroutine */
-        void
-        ctgsyl_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
-                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
-                integer *, real *, real *, complex *, integer *, integer *, integer *);
+    aocl_int64_t liwmin;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -572,7 +584,7 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTGSEN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -591,12 +603,12 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         {
             i__2 = k;
             i__3 = k + k * a_dim1;
-            alpha[i__2].r = a[i__3].r;
-            alpha[i__2].i = a[i__3].i; // , expr subst
+            alpha[i__2].real = a[i__3].real;
+            alpha[i__2].imag = a[i__3].imag; // , expr subst
             i__2 = k;
             i__3 = k + k * b_dim1;
-            beta[i__2].r = b[i__3].r;
-            beta[i__2].i = b[i__3].i; // , expr subst
+            beta[i__2].real = b[i__3].real;
+            beta[i__2].imag = b[i__3].imag; // , expr subst
             if(k < *n)
             {
                 if(select[k])
@@ -642,10 +654,10 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         lwmin = 1;
         liwmin = 1;
     }
-    r__1 = sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
-    iwork[1] = liwmin;
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
+    iwork[1] = (aocl_int_t)(liwmin);
     if(*lwork < lwmin && !lquery)
     {
         *info = -21;
@@ -657,7 +669,7 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTGSEN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -681,8 +693,8 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             i__1 = *n;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
-                classq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
-                classq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
+                aocl_lapack_classq(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
+                aocl_lapack_classq(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
                 /* L20: */
             }
             dif[1] = dscale * sqrt(dsum);
@@ -705,8 +717,8 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             /* and Z that will swap adjacent diagonal blocks in (A, B). */
             if(k != ks)
             {
-                ctgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
-                        &z__[z_offset], ldz, &k, &ks, &ierr);
+                aocl_lapack_ctgexc(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
+                                   &q[q_offset], ldq, &z__[z_offset], ldz, &k, &ks, &ierr);
             }
             if(ierr > 0)
             {
@@ -735,19 +747,20 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         n1 = *m;
         n2 = *n - *m;
         i__ = n1 + 1;
-        clacpy_("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1);
-        clacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 1], &n1);
+        aocl_lapack_clacpy("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1);
+        aocl_lapack_clacpy("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 1], &n1);
         ijb = 0;
         i__1 = *lwork - (n1 << 1) * n2;
-        ctgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1,
-                &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale,
-                &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+        aocl_lapack_ctgsyl("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
+                           &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                           &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
+                           &i__1, &iwork[1], &ierr);
         /* Estimate the reciprocal of norms of "projections" onto */
         /* left and right eigenspaces */
         rdscal = 0.f;
         dsum = 1.f;
         i__1 = n1 * n2;
-        classq_(&i__1, &work[1], &c__1, &rdscal, &dsum);
+        aocl_lapack_classq(&i__1, &work[1], &c__1, &rdscal, &dsum);
         *pl = rdscal * sqrt(dsum);
         if(*pl == 0.f)
         {
@@ -760,7 +773,7 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         rdscal = 0.f;
         dsum = 1.f;
         i__1 = n1 * n2;
-        classq_(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
+        aocl_lapack_classq(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
         *pr = rdscal * sqrt(dsum);
         if(*pr == 0.f)
         {
@@ -782,14 +795,16 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             ijb = 3;
             /* Frobenius norm-based Difu estimate. */
             i__1 = *lwork - (n1 << 1) * n2;
-            ctgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1],
-                    &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1,
-                    &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+            aocl_lapack_ctgsyl("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
+                               &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                               &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
+                               &i__1, &iwork[1], &ierr);
             /* Frobenius norm-based Difl estimate. */
             i__1 = *lwork - (n1 << 1) * n2;
-            ctgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda, &work[1],
-                    &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2,
-                    &dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+            aocl_lapack_ctgsyl("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
+                               &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb,
+                               &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1],
+                               &i__1, &iwork[1], &ierr);
         }
         else
         {
@@ -805,59 +820,62 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             mn2 = (n1 << 1) * n2;
         /* 1-norm-based estimate of Difu. */
         L40:
-            clacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
+            aocl_lapack_clacn2(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
             if(kase != 0)
             {
                 if(kase == 1)
                 {
                     /* Solve generalized Sylvester equation */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ctgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
-                            &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
-                            &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
-                            &i__1, &iwork[1], &ierr);
+                    aocl_lapack_ctgsyl("N", &ijb, &n1, &n2, &a[a_offset], lda,
+                                       &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset],
+                                       ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1,
+                                       &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1,
+                                       &iwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve the transposed variant. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ctgsyl_("C", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
-                            &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
-                            &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
-                            &i__1, &iwork[1], &ierr);
+                    aocl_lapack_ctgsyl("C", &ijb, &n1, &n2, &a[a_offset], lda,
+                                       &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset],
+                                       ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1,
+                                       &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1,
+                                       &iwork[1], &ierr);
                 }
                 goto L40;
             }
             dif[1] = dscale / dif[1];
         /* 1-norm-based estimate of Difl. */
         L50:
-            clacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
+            aocl_lapack_clacn2(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
             if(kase != 0)
             {
                 if(kase == 1)
                 {
                     /* Solve generalized Sylvester equation */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ctgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
-                            &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb,
-                            &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1],
-                            &i__1, &iwork[1], &ierr);
+                    aocl_lapack_ctgsyl("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda,
+                                       &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1],
+                                       ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale,
+                                       &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve the transposed variant. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ctgsyl_("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
-                            &work[1], &n2, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
-                            &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1],
-                            &i__1, &iwork[1], &ierr);
+                    aocl_lapack_ctgsyl("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda,
+                                       &a[a_offset], lda, &work[1], &n2, &b[b_offset], ldb,
+                                       &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n2,
+                                       &dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1,
+                                       &iwork[1], &ierr);
                 }
                 goto L50;
             }
             dif[2] = dscale / dif[2];
         }
     }
-    /* If B(K,K) is complex, make it real and positive (normalization */
+    /* If B(K,K) is scomplex, make it real and positive (normalization */
     /* of the generalized Schur form) and Store the generalized */
     /* eigenvalues of reordered pair (A, B) */
     i__1 = *n;
@@ -867,49 +885,49 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         if(dscale > safmin)
         {
             i__2 = k + k * b_dim1;
-            q__2.r = b[i__2].r / dscale;
-            q__2.i = b[i__2].i / dscale; // , expr subst
+            q__2.real = b[i__2].real / dscale;
+            q__2.imag = b[i__2].imag / dscale; // , expr subst
             r_cnjg(&q__1, &q__2);
-            temp1.r = q__1.r;
-            temp1.i = q__1.i; // , expr subst
+            temp1.real = q__1.real;
+            temp1.imag = q__1.imag; // , expr subst
             i__2 = k + k * b_dim1;
-            q__1.r = b[i__2].r / dscale;
-            q__1.i = b[i__2].i / dscale; // , expr subst
-            temp2.r = q__1.r;
-            temp2.i = q__1.i; // , expr subst
+            q__1.real = b[i__2].real / dscale;
+            q__1.imag = b[i__2].imag / dscale; // , expr subst
+            temp2.real = q__1.real;
+            temp2.imag = q__1.imag; // , expr subst
             i__2 = k + k * b_dim1;
-            b[i__2].r = dscale;
-            b[i__2].i = 0.f; // , expr subst
+            b[i__2].real = dscale;
+            b[i__2].imag = 0.f; // , expr subst
             i__2 = *n - k;
-            cscal_(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
+            aocl_blas_cscal(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
             i__2 = *n - k + 1;
-            cscal_(&i__2, &temp1, &a[k + k * a_dim1], lda);
+            aocl_blas_cscal(&i__2, &temp1, &a[k + k * a_dim1], lda);
             if(*wantq)
             {
-                cscal_(n, &temp2, &q[k * q_dim1 + 1], &c__1);
+                aocl_blas_cscal(n, &temp2, &q[k * q_dim1 + 1], &c__1);
             }
         }
         else
         {
             i__2 = k + k * b_dim1;
-            b[i__2].r = 0.f;
-            b[i__2].i = 0.f; // , expr subst
+            b[i__2].real = 0.f;
+            b[i__2].imag = 0.f; // , expr subst
         }
         i__2 = k;
         i__3 = k + k * a_dim1;
-        alpha[i__2].r = a[i__3].r;
-        alpha[i__2].i = a[i__3].i; // , expr subst
+        alpha[i__2].real = a[i__3].real;
+        alpha[i__2].imag = a[i__3].imag; // , expr subst
         i__2 = k;
         i__3 = k + k * b_dim1;
-        beta[i__2].r = b[i__3].r;
-        beta[i__2].i = b[i__3].i; // , expr subst
+        beta[i__2].real = b[i__3].real;
+        beta[i__2].imag = b[i__3].imag; // , expr subst
         /* L60: */
     }
 L70:
-    r__1 = sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
-    iwork[1] = liwmin;
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CTGSEN */

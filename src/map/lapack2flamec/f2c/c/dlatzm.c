@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b5 = 1.;
 /* > \brief \b DLATZM */
 /* =========== DOCUMENTATION =========== */
@@ -149,28 +149,33 @@ static doublereal c_b5 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlatzm_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau,
-             doublereal *c1, doublereal *c2, integer *ldc, doublereal *work)
+/** Generated wrapper function */
+void dlatzm_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t *incv, doublereal *tau, doublereal *c1, doublereal *c2, aocl_int_t *ldc, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlatzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incv_64 = *incv;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_dlatzm(side, &m_64, &n_64, v, &incv_64, tau, c1, c2, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_dlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal *v, aocl_int64_t *incv,
+             doublereal *tau, doublereal *c1, doublereal *c2, aocl_int64_t *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
                       ", ldc %" FLA_IS "",
                       *side, *m, *n, *incv, *ldc);
     /* System generated locals */
-    integer c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
+    aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     doublereal d__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-              doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,31 +212,31 @@ void dlatzm_(char *side, integer *m, integer *n, doublereal *v, integer *incv, d
     if(lsame_(side, "L", 1, 1))
     {
         /* w := (C1 + v**T * C2)**T */
-        dcopy_(n, &c1[c1_offset], ldc, &work[1], &c__1);
+        aocl_blas_dcopy(n, &c1[c1_offset], ldc, &work[1], &c__1);
         i__1 = *m - 1;
-        dgemv_("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
-               &c__1);
+        aocl_blas_dgemv("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5,
+                        &work[1], &c__1);
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**T */
         /* [ C2 ] [ C2 ] [ v ] */
         d__1 = -(*tau);
-        daxpy_(n, &d__1, &work[1], &c__1, &c1[c1_offset], ldc);
+        aocl_blas_daxpy(n, &d__1, &work[1], &c__1, &c1[c1_offset], ldc);
         i__1 = *m - 1;
         d__1 = -(*tau);
-        dger_(&i__1, n, &d__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
+        aocl_blas_dger(&i__1, n, &d__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
     else if(lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
-        dcopy_(m, &c1[c1_offset], &c__1, &work[1], &c__1);
+        aocl_blas_dcopy(m, &c1[c1_offset], &c__1, &work[1], &c__1);
         i__1 = *n - 1;
-        dgemv_("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
-               &c__1);
+        aocl_blas_dgemv("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5,
+                        &work[1], &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**T] */
         d__1 = -(*tau);
-        daxpy_(m, &d__1, &work[1], &c__1, &c1[c1_offset], &c__1);
+        aocl_blas_daxpy(m, &d__1, &work[1], &c__1, &c1[c1_offset], &c__1);
         i__1 = *n - 1;
         d__1 = -(*tau);
-        dger_(m, &i__1, &d__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
+        aocl_blas_dger(m, &i__1, &d__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

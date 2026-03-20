@@ -99,7 +99,24 @@ if UPLO = 'L', only the lower trapezium is */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, complex *b, integer *ldb)
+/** Generated wrapper function */
+void clacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b,
+             aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clacpy(uplo, m, n, a, lda, b, ldb);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_clacpy(uplo, &m_64, &n_64, a, &lda_64, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_clacpy(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        scomplex *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -114,10 +131,10 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -152,8 +169,8 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4].r;
-                b[i__3].i = a[i__4].i; // , expr subst
+                b[i__3].real = a[i__4].real;
+                b[i__3].imag = a[i__4].imag; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -169,8 +186,8 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4].r;
-                b[i__3].i = a[i__4].i; // , expr subst
+                b[i__3].real = a[i__4].real;
+                b[i__3].imag = a[i__4].imag; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -186,8 +203,8 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4].r;
-                b[i__3].i = a[i__4].i; // , expr subst
+                b[i__3].real = a[i__4].real;
+                b[i__3].imag = a[i__4].imag; // , expr subst
                 /* L50: */
             }
             /* L60: */

@@ -103,17 +103,36 @@ if */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlag2s_(integer *m, integer *n, doublereal *a, integer *lda, real *sa, integer *ldsa,
-             integer *info)
+/** Generated wrapper function */
+void dlag2s_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, real *sa,
+             aocl_int_t *ldsa, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlag2s(m, n, a, lda, sa, ldsa, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldsa_64 = *ldsa;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlag2s(&m_64, &n_64, a, &lda_64, sa, &ldsa_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlag2s(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        real *sa, aocl_int64_t *ldsa, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlag2s inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS
                       "",
                       *m, *n, *lda, *ldsa);
     /* System generated locals */
-    integer sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal rmax;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine -- */

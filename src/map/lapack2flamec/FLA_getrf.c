@@ -41,9 +41,145 @@
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
 int fla_thread_get_num_threads(void);
+/** Generated wrapper function */
+void sgetrf_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgetrf(m, n, buff_A, ldim_A, buff_p, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgetrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgetrf_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgetrf(m, n, buff_A, ldim_A, buff_p, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgetrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void cgetrf_(aocl_int_t *m, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgetrf(m, n, buff_A, ldim_A, buff_p, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgetrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zgetrf_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgetrf(m, n, buff_A, ldim_A, buff_p, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgetrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sgetf2_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgetf2(m, n, buff_A, ldim_A, buff_p, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgetf2(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgetf2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgetf2(m, n, buff_A, ldim_A, buff_p, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgetf2(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void cgetf2_(aocl_int_t *m, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgetf2(m, n, buff_A, ldim_A, buff_p, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgetf2(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgetf2(m, n, buff_A, ldim_A, buff_p, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgetf2(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_getrf(prefix)                                                                 \
-    void F77_##prefix##getrf(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, integer * buff_p, integer * info)
+    void aocl_lapack_##prefix##getrf(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, aocl_int_t * buff_p, aocl_int64_t * info)
 
 #ifndef FLA_ENABLE_SUPERMATRIX
 
@@ -51,18 +187,18 @@ int fla_thread_get_num_threads(void);
 /* FLA_ENABLE_AMD_OPT enables the code which selects algorithm variants based on size */
 #define LAPACK_getrf_body_d(prefix)                                                         \
     extern fla_context fla_global_context;                                                  \
-    integer i = 0;                                                                          \
+    aocl_int64_t i = 0;                                                                     \
     if(*m == 2 && *n == 2)                                                                  \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_D_2x2(i, n, buff_A, ldim_A, buff_p, info);                         \
+        FLA_LU_PIV_SMALL_D_2x2(i, *n, buff_A, ldim_A, buff_p, *info);                       \
     }                                                                                       \
     else if(*m == 3 && *n == 3)                                                             \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_D_3x3(i, n, buff_A, ldim_A, buff_p, info);                         \
+        FLA_LU_PIV_SMALL_D_3x3(i, *n, buff_A, ldim_A, buff_p, *info);                       \
     }                                                                                       \
     else if(*m == 4 && *n == 4)                                                             \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_D_4x4(i, n, buff_A, ldim_A, buff_p, info);                         \
+        FLA_LU_PIV_SMALL_D_4x4(i, *n, buff_A, ldim_A, buff_p, *info);                       \
     }                                                                                       \
     else if(*m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0)               \
     {                                                                                       \
@@ -81,15 +217,14 @@ int fla_thread_get_num_threads(void);
         else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_DGETRF_SMALL_AVX512_THRESH0 \
                 && *n < FLA_DGETRF_SMALL_AVX512_THRESH0)                                    \
         {                                                                                   \
-            if(fla_thread_get_num_threads() > 1 && *m < FLA_DGETRF_SMALL_AVX512_THRESH1    \
+            if(fla_thread_get_num_threads() != 1 && *m < FLA_DGETRF_SMALL_AVX512_THRESH1    \
                && *n < FLA_DGETRF_SMALL_AVX512_THRESH1)                                     \
             {                                                                               \
-                /* Calling vectorized code when avx512 supported architecture detected */   \
                 fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);                \
             }                                                                               \
             else                                                                            \
             {                                                                               \
-                dgetrf2_(m, n, buff_A, ldim_A, buff_p, info);                               \
+                aocl_lapack_dgetrf2(m, n, buff_A, ldim_A, buff_p, info);                    \
             }                                                                               \
         }                                                                                   \
         else                                                                                \
@@ -121,15 +256,15 @@ int fla_thread_get_num_threads(void);
     integer i = 0;                                                                          \
     if(*m == 2 && *n == 2)                                                                  \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_S_2x2(i, n, buff_A, ldim_A, buff_p, info);                         \
+        FLA_LU_PIV_SMALL_S_2x2(i, *n, buff_A, ldim_A, buff_p, *info);                         \
     }                                                                                       \
     else if(*m == 3 && *n == 3)                                                             \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_S_3x3(i, n, buff_A, ldim_A, buff_p, info);                         \
+        FLA_LU_PIV_SMALL_S_3x3(i, *n, buff_A, ldim_A, buff_p, *info);                         \
     }                                                                                       \
     else if(*m == 4 && *n == 4)                                                             \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_S_4x4(i, n, buff_A, ldim_A, buff_p, info);                         \
+        FLA_LU_PIV_SMALL_S_4x4(i, *n, buff_A, ldim_A, buff_p, *info);                         \
     }                                                                                       \
     else if(*m <= FLA_SGETRF_SMALL_THRESH0 && *n <= FLA_SGETRF_SMALL_THRESH0)               \
     {                                                                                       \
@@ -197,7 +332,7 @@ int fla_thread_get_num_threads(void);
 #define LAPACK_getrf_body(prefix)                                                            \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                   \
     FLA_Obj A, p;                                                                            \
-    integer min_m_n = fla_min(*m, *n);                                                       \
+    aocl_int64_t min_m_n = fla_min(*m, *n);                                                       \
     FLA_Error e_val = FLA_SUCCESS;                                                           \
     FLA_Error init_result;                                                                   \
     FLA_Bool skip = FALSE;                                                                   \
@@ -230,13 +365,15 @@ int fla_thread_get_num_threads(void);
             || (datatype == FLA_DOUBLE_COMPLEX && *m < FLA_GETRF_DOUBLE_COMPLEX              \
                 && *n < FLA_GETRF_DOUBLE_COMPLEX))                                           \
     {                                                                                        \
+        fla_dim_t *buff_p64 = (fla_dim_t *) FLA_malloc(sizeof(fla_dim_t) * min_m_n);         \
+        if(buff_p64 == NULL) { return; }                                                     \
         FLA_Init_safe(&init_result);                                                         \
                                                                                              \
         FLA_Obj_create_without_buffer(datatype, *m, *n, &A);                                 \
         FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);                                       \
                                                                                              \
         FLA_Obj_create_without_buffer(FLA_INT, min_m_n, 1, &p);                              \
-        FLA_Obj_attach_buffer(buff_p, 1, min_m_n, &p);                                       \
+        FLA_Obj_attach_buffer(buff_p64, 1, min_m_n, &p);                                     \
                                                                                              \
         e_val = FLA_LU_piv(A, p);                                                            \
         FLA_Shift_pivots_to(FLA_LAPACK_PIVOTS, p);                                           \
@@ -245,6 +382,9 @@ int fla_thread_get_num_threads(void);
         FLA_Obj_free_without_buffer(&p);                                                     \
                                                                                              \
         FLA_Finalize_safe(init_result);                                                      \
+        for(aocl_int64_t ip = 0; ip < min_m_n; ip++)                                         \
+            buff_p[ip] = (aocl_int_t)buff_p64[ip];                                           \
+        FLA_free(buff_p64);                                                                  \
     }                                                                                        \
     else                                                                                     \
     {                                                                                        \
@@ -252,17 +392,17 @@ int fla_thread_get_num_threads(void);
         {                                                                                    \
             case FLA_FLOAT:                                                                  \
             {                                                                                \
-                sgetrf2_(m, n, (float *)buff_A, ldim_A, buff_p, info);                       \
+                aocl_lapack_sgetrf2(m, n, (float *)buff_A, ldim_A, buff_p, info);                       \
                 break;                                                                       \
             }                                                                                \
             case FLA_COMPLEX:                                                                \
             {                                                                                \
-                cgetrf2_(m, n, (scomplex *)buff_A, ldim_A, buff_p, info);                    \
+                aocl_lapack_cgetrf2(m, n, (scomplex *)buff_A, ldim_A, buff_p, info);                    \
                 break;                                                                       \
             }                                                                                \
             case FLA_DOUBLE_COMPLEX:                                                         \
             {                                                                                \
-                zgetrf2_(m, n, (dcomplex *)buff_A, ldim_A, buff_p, info);                    \
+                aocl_lapack_zgetrf2(m, n, (dcomplex *)buff_A, ldim_A, buff_p, info);                    \
                 break;                                                                       \
             }                                                                                \
         }                                                                                    \
@@ -417,8 +557,8 @@ LAPACK_getrf(z)
 }
 
 #define LAPACK_getf2(prefix)                                                                 \
-    void F77_##prefix##getf2(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, integer * buff_p, integer * info)
+    void aocl_lapack_##prefix##getf2(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, aocl_int_t * buff_p, aocl_int64_t * info)
 
 LAPACK_getf2(s)
 {

@@ -164,9 +164,9 @@ void libfla_test_lu_piv_experiment( test_params_t params,
 	FLA_Obj      A_test, p_test, x_test, b_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur / abs(m_input);
+	if ( m_input < 0 ) m = p_cur / -m_input;
 	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur / abs(n_input);
+	if ( n_input < 0 ) n = p_cur / -n_input;
 	else               n = p_cur;
 
 	// Create the matrices for the current operation.
@@ -397,10 +397,12 @@ void FLA_GETRF( integer m,
         double       time_min   = 1e9;
 	integer lda;
 	integer* p;
+	fla_dim_t* p_buff; 
 
 	lda     = (integer)FLA_Obj_col_stride( A );
-        p     = ( integer * ) FLA_INT_PTR( p_obj );
-        
+    p     = ( integer * ) FLA_malloc( fla_min( m, n ) * sizeof( integer ) );
+	p_buff = ( fla_dim_t * ) FLA_INT_PTR( p_obj );
+	        
         switch( datatype )
         {
                 case FLA_FLOAT:
@@ -468,6 +470,12 @@ void FLA_GETRF( integer m,
                         break;
                 }
         }
+		/* copy p to p_buff using explicit for */
+		for( i = 0; i < fla_min( m, n ); i++ )
+		{
+			p_buff[i] = (fla_dim_t)p[i];
+		}
+		FLA_free( p );
         *time_min_ = time_min;
 }
 

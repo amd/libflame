@@ -30,6 +30,14 @@ double prepare_lapacke_syevx_run(integer datatype, int matrix_layout, char *jobz
                                  integer il, integer iu, void *abstol, integer *m, void *w, void *z,
                                  integer ldz, void *ifail, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_syevx_outputs(void *filename, integer datatype, char jobz, char range, integer il,
+                         integer iu, integer n, void *A_test, integer lda, void *w, void *ifail,
+                         void *params);
+integer check_bit_reproducibility_syevx(void *filename, integer datatype, char jobz, char range,
+                                        integer il, integer iu, integer n, void *A_test,
+                                        integer lda, void *w, void *ifail, void *params);
+
 void fla_test_syevx(integer argc, char **argv, test_params_t *params)
 {
     srand(1); /* Setting the seed for random input generation values */
@@ -80,21 +88,8 @@ void fla_test_syevx(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].VL = atof(argv[8]);
         params->eig_sym_paramslist[0].VU = atof(argv[9]);
 
-        if(same_char(params->eig_sym_paramslist[0].range_x, 'I'))
-        {
-            /* 1 <= IL <= IU <= N, if N > 0;
-               IL = 1 and IU = 0 if N = 0. */
-            if(N == 0)
-            {
-                params->eig_sym_paramslist[0].IL = 1;
-                params->eig_sym_paramslist[0].IU = 0;
-            }
-            else
-            {
-                params->eig_sym_paramslist[0].IL = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
-                params->eig_sym_paramslist[0].IU = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
-            }
-        }
+        params->eig_sym_paramslist[0].IL = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->eig_sym_paramslist[0].IU = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
 
         params->eig_sym_paramslist[0].abstol = atof(argv[12]);
 
@@ -160,6 +155,7 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *ifail = NULL, *scal = NULL;
     void *vl, *vu, *abstol;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -174,8 +170,18 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
     lda = params->eig_sym_paramslist[pci].lda;
     ldz = params->eig_sym_paramslist[pci].ldz;
 
-    il = params->eig_sym_paramslist[pci].IL;
-    iu = params->eig_sym_paramslist[pci].IU;
+    /* 1 <= IL <= IU <= N, if N > 0;
+        IL = 1 and IU = 0 if N = 0. */
+    if(n == 0)
+    {
+        il = 1;
+        iu = 0;
+    }
+    else
+    {
+        il = params->eig_sym_paramslist[pci].IL;
+        iu = params->eig_sym_paramslist[pci].IU;
+    }
 
     create_realtype_vector(datatype, &vl, 1);
     create_realtype_vector(datatype, &vu, 1);
@@ -234,25 +240,57 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_realtype_vector(datatype, &w, n);
-    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
-    {
-        /*  Creating input matrix A by generating random eigen values.
-            When range = V, generate EVs in given range (vl,vu)  */
-        create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, get_realtype_value(datatype, vl),
-                                 get_realtype_value(datatype, vu), USE_ABS_EIGEN_VALUES);
 
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
         {
-            create_vector(get_realtype(datatype), &scal, 1);
-            scale_matrix_underflow_overflow_syevx(datatype, n, A, lda, params->imatrix_char, scal);
+            /*  Creating input matrix A by generating random eigen values.
+                When range = V, generate EVs in given range (vl,vu)  */
+            create_realtype_vector(datatype, &L, n);
+            generate_matrix_from_EVs(datatype, range, n, A, lda, L,
+                                     get_realtype_value(datatype, vl),
+                                     get_realtype_value(datatype, vu), USE_ABS_EIGEN_VALUES);
+
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                create_vector(get_realtype(datatype), &scal, 1);
+                scale_matrix_underflow_overflow_syevx(datatype, n, A, lda, params->imatrix_char,
+                                                      scal);
+            }
         }
+        else
+        {
+            /* Initialize input matrix with custom data */
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the input is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
+     * passed as input to the API
+     * */
+    if(datatype == FLOAT || datatype == COMPLEX)
+    {
+        FLA_BRT_PROCESS_SINGLE_INPUT(
+            datatype, n, n, A, lda, "cccddffddfdd", jobz, range, uplo, n, lda, *(float *)vl,
+            *(float *)vu, params->eig_sym_paramslist[pci].IL, params->eig_sym_paramslist[pci].IU,
+            *(float *)abstol, ldz, g_lwork)
     }
     else
     {
-        /* Initialize input matrix with custom data */
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        FLA_BRT_PROCESS_SINGLE_INPUT(
+            datatype, n, n, A, lda, "cccddffddfdd", jobz, range, uplo, n, lda, *(double *)vl,
+            *(double *)vu, params->eig_sym_paramslist[pci].IL, params->eig_sym_paramslist[pci].IU,
+            *(double *)abstol, ldz, g_lwork)
     }
+
     /* Make a copy of input matrix A.
        This is required to validate the API functionality.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
@@ -274,7 +312,15 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(n, n,
+                          store_syevx_outputs(filename, datatype, jobz, range, il, iu, n, A_test,
+                                              lda, w, ifail, params),
+                          validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, il, iu, L, w,
+                                        ifail, datatype, residual, params->imatrix_char, scal,
+                                        params),
+                          check_bit_reproducibility_syevx(filename, datatype, jobz, range, il, iu,
+                                                          n, A_test, lda, w, ifail, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, il, iu, L, w, ifail, datatype,
                       residual, params->imatrix_char, scal, params);
@@ -295,21 +341,26 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
+        {
+            free_vector(L);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                free_vector(scal);
+            }
+        }
+    }
+    free_vector(ifail);
+    free_matrix(A_test);
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_vector(vl);
     free_vector(vu);
     free_vector(abstol);
-    free_vector(ifail);
     free_matrix(A);
-    free_matrix(A_test);
     free_vector(w);
-    if(g_ext_fptr == NULL)
-    {
-        free_vector(L);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, integer lda,
@@ -519,4 +570,59 @@ void invoke_syevx(integer datatype, char *jobz, char *range, char *uplo, integer
             break;
         }
     }
+}
+
+void store_syevx_outputs(void *filename, integer datatype, char jobz, char range, integer il,
+                         integer iu, integer n, void *A_test, integer lda, void *w, void *ifail,
+                         void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    integer m;
+    /* Calculate m based on range parameter */
+    if(same_char(range, 'I'))
+        m = iu - il + 1;
+    else
+        m = n;
+
+    /* Always store eigenvalues (only first m elements are meaningful) */
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), m, w)
+
+    /* Only store eigenvectors and ifail vector if jobz = 'V' */
+    if(!same_char(jobz, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, A_test, lda)
+        FLA_STORE_BRT_VECTOR(INTEGER, m, ifail)
+    }
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+
+integer check_bit_reproducibility_syevx(void *filename, integer datatype, char jobz, char range,
+                                        integer il, integer iu, integer n, void *A_test,
+                                        integer lda, void *w, void *ifail, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    integer m;
+    /* Calculate m based on range parameter */
+    if(same_char(range, 'I'))
+        m = iu - il + 1;
+    else
+        m = n;
+
+    /* Always verify eigenvalues (only first m elements are meaningful) */
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), m, w)
+
+    /* Only verify eigenvectors and ifail vector if jobz = 'V' */
+    if(!same_char(jobz, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, A_test, lda)
+        FLA_VERIFY_BRT_VECTOR(INTEGER, m, ifail)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

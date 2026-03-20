@@ -41,14 +41,14 @@
             }                                                                                     \
             case COMPLEX:                                                                         \
             {                                                                                     \
-                _Fcomplex z_ = {((complex *)A)[i + j * lda].r, ((complex *)A)[i + j * lda].i};    \
+                _Fcomplex z_ = {((scomplex *)A)[i + j * lda].real, ((scomplex *)A)[i + j * lda].imag};    \
                 result = cabsf(z_);                                                               \
                 break;                                                                            \
             }                                                                                     \
             case DOUBLE_COMPLEX:                                                                  \
             {                                                                                     \
                 _Dcomplex z_                                                                      \
-                    = {((doublecomplex *)A)[i + j * lda].r, ((doublecomplex *)A)[i + j * lda].i}; \
+                    = {((dcomplex *)A)[i + j * lda].real, ((dcomplex *)A)[i + j * lda].imag}; \
                 result = cabs(z_);                                                                \
                 break;                                                                            \
             }                                                                                     \
@@ -66,11 +66,11 @@
                 result = FLA_FABS(((double *)A)[i + j * lda]);                                    \
                 break;                                                                            \
             case COMPLEX:                                                                         \
-                result = cabs(((complex *)A)[i + j * lda].r + I * ((complex *)A)[i + j * lda].i); \
+                result = cabs(((scomplex *)A)[i + j * lda].real + I * ((scomplex *)A)[i + j * lda].imag); \
                 break;                                                                            \
             case DOUBLE_COMPLEX:                                                                  \
-                result = cabs(((doublecomplex *)A)[i + j * lda].r                                 \
-                              + I * ((doublecomplex *)A)[i + j * lda].i);                         \
+                result = cabs(((dcomplex *)A)[i + j * lda].real                                 \
+                              + I * ((dcomplex *)A)[i + j * lda].imag);                         \
                 break;                                                                            \
         }                                                                                         \
     }
@@ -87,10 +87,10 @@
                 result = FLA_FABS(((double *)A)[i + j * lda]);          \
                 break;                                                  \
             case COMPLEX:                                               \
-                result = FLA_FABS(((complex *)A)[i + j * lda].r);       \
+                result = FLA_FABS(((scomplex *)A)[i + j * lda].real);       \
                 break;                                                  \
             case DOUBLE_COMPLEX:                                        \
-                result = FLA_FABS(((doublecomplex *)A)[i + j * lda].r); \
+                result = FLA_FABS(((dcomplex *)A)[i + j * lda].real); \
                 break;                                                  \
         }                                                               \
     }
@@ -100,10 +100,10 @@
         switch(datatype)                                                \
         {                                                               \
             case COMPLEX:                                               \
-                result = FLA_FABS(((complex *)A)[i + j * lda].i);       \
+                result = FLA_FABS(((scomplex *)A)[i + j * lda].imag);       \
                 break;                                                  \
             case DOUBLE_COMPLEX:                                        \
-                result = FLA_FABS(((doublecomplex *)A)[i + j * lda].i); \
+                result = FLA_FABS(((dcomplex *)A)[i + j * lda].imag); \
                 break;                                                  \
             default:                                                    \
                 result = 0.0;                                           \
@@ -127,16 +127,16 @@
             }                                                                         \
             case COMPLEX:                                                             \
             {                                                                         \
-                complex *C = (complex *)A;                                            \
-                result = (C[i + j * lda].r * C[i + j * lda].r)                        \
-                         + (C[i + j * lda].i * C[i + j * lda].i);                     \
+                scomplex *C = (scomplex *)A;                                            \
+                result = (C[i + j * lda].real * C[i + j * lda].real)                        \
+                         + (C[i + j * lda].imag * C[i + j * lda].imag);                     \
                 break;                                                                \
             }                                                                         \
             case DOUBLE_COMPLEX:                                                      \
             {                                                                         \
-                doublecomplex *C = (doublecomplex *)A;                                \
-                result = (C[i + j * lda].r * C[i + j * lda].r)                        \
-                         + (C[i + j * lda].i * C[i + j * lda].i);                     \
+                dcomplex *C = (dcomplex *)A;                                \
+                result = (C[i + j * lda].real * C[i + j * lda].real)                        \
+                         + (C[i + j * lda].imag * C[i + j * lda].imag);                     \
                 break;                                                                \
             }                                                                         \
         }                                                                             \
@@ -144,7 +144,7 @@
 
 #define GET_MNORM(realtype, datatype, A, m, n, lda, resultp)  \
     {                                                         \
-        integer i, j;                                         \
+        size_t i, j;                                          \
         realtype max_val = 0.0;                               \
         realtype abs_val;                                     \
         for(j = 0; j < n; j++)                                \
@@ -160,7 +160,7 @@
 
 #define GET_1NORM(realtype, datatype, A, m, n, lda, resultp)  \
     {                                                         \
-        integer i, j;                                         \
+        size_t i, j;                                          \
         realtype max_val = 0.0, col_sum = 0.0;                \
         double abs_val;                                       \
         for(j = 0; j < n; j++)                                \
@@ -178,7 +178,7 @@
 
 #define GET_INORM(realtype, datatype, A, m, n, lda, resultp)          \
     {                                                                 \
-        integer i, j;                                                 \
+        size_t i, j;                                                  \
         realtype max_val = 0.0;                                       \
         double abs_val;                                               \
         realtype *row_sums;                                           \
@@ -202,7 +202,7 @@
 
 #define GET_FNORM(realtype, datatype, A, m, n, lda, resultp)            \
     {                                                                   \
-        integer i, j;                                                   \
+        size_t i, j;                                                    \
         integer notbig = 1;                                             \
         realtype sqrsum = 0., scl = 1.;                                 \
         realtype abig, amed, asml, abs_val, t__;                        \
@@ -423,7 +423,6 @@ void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, 
 
     free_vector(calculated_value);
 
-    tst_api[5] = norm_type;
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

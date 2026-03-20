@@ -4,9 +4,9 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNGTSQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNGTSQR generates an M-by-N complex matrix Q_out with orthonormal */
+/* > ZUNGTSQR generates an M-by-N scomplex matrix Q_out with orthonormal */
 /* > columns, which are the first N columns of a product of comlpex unitary */
 /* > matrices of order M which are returned by ZLATSQR */
 /* > */
@@ -174,31 +174,45 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zungtsqr_(integer *m, integer *n, integer *mb, integer *nb, doublecomplex *a, integer *lda,
-               doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zungtsqr_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb, aocl_int_t *nb, dcomplex *a,
+               aocl_int_t *lda, dcomplex *t, aocl_int_t *ldt, dcomplex *work,
+               aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zungtsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zungtsqr(&m_64, &n_64, &mb_64, &nb_64, a, &lda_64, t, &ldt_64, work, &lwork_64,
+                         &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zungtsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aocl_int64_t *nb,
+                          dcomplex *a, aocl_int64_t *lda, dcomplex *t, aocl_int64_t *ldt,
+                          dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zungtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
                       ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",
                       *m, *n, *mb, *nb, *lda, *ldt, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
+    dcomplex z__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        zlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *,
-                  doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                  integer *, doublecomplex *, integer *, integer *);
-    integer lworkopt, j, lc, lw, ldc, iinfo;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
+    aocl_int64_t lworkopt, j, lc, lw, ldc, iinfo;
     logical lquery;
-    integer nblocal;
+    aocl_int64_t nblocal;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -289,26 +303,26 @@ void zungtsqr_(integer *m, integer *n, integer *mb, integer *nb, doublecomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNGTSQR", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("ZUNGTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        z__1.r = (doublereal)lworkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lworkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        z__1.r = (doublereal)lworkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lworkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -320,25 +334,25 @@ void zungtsqr_(integer *m, integer *n, integer *mb, integer *nb, doublecomplex *
     /* ( 0 ) 0 is a (M-N)-by-N zero matrix. */
     /* (1a) Form M-by-N matrix in the array WORK(1:LDC*N) with ones */
     /* on the diagonal and zeros elsewhere. */
-    zlaset_("F", m, n, &c_b2, &c_b1, &work[1], &ldc);
+    aocl_lapack_zlaset("F", m, n, &c_b2, &c_b1, &work[1], &ldc);
     /* (1b) On input, WORK(1:LDC*N) stores ( I );
      */
     /* ( 0 ) */
     /* On output, WORK(1:LDC*N) stores Q1_in. */
-    zlamtsqr_("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt, &work[1], &ldc,
-              &work[lc + 1], &lw, &iinfo);
+    aocl_lapack_zlamtsqr("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt,
+                         &work[1], &ldc, &work[lc + 1], &lw, &iinfo);
     /* (2) Copy the result from the part of the work array (1:M,1:N) */
     /* with the leading dimension LDC that starts at WORK(1) into */
     /* the output array A(1:M,1:N) column-by-column. */
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        zcopy_(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
+        aocl_blas_zcopy(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
     }
-    z__1.r = (doublereal)lworkopt;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = (doublereal)lworkopt;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNGTSQR */

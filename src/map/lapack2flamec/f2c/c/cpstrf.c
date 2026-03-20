@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b29 = -1.f;
 static real c_b30 = 1.f;
-/* > \brief \b CPSTRF computes the Cholesky factorization with complete pivoting of complex
+/* > \brief \b CPSTRF computes the Cholesky factorization with complete pivoting of scomplex
  * Hermitian positive semidefinite matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -48,7 +48,7 @@ static real c_b30 = 1.f;
 /* > \verbatim */
 /* > */
 /* > CPSTRF computes the Cholesky factorization with complete */
-/* > pivoting of a complex Hermitian positive semidefinite matrix A. */
+/* > pivoting of a scomplex Hermitian positive semidefinite matrix A. */
 /* > */
 /* > The factorization has the form */
 /* > P**T * A * P = U**H * U , if UPLO = 'U', */
@@ -144,8 +144,27 @@ static real c_b30 = 1.f;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, integer *rank,
-             real *tol, real *work, integer *info)
+/** Generated wrapper function */
+void cpstrf_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *piv,
+             aocl_int_t *rank, real *tol, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpstrf(uplo, n, a, lda, piv, rank, tol, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpstrf(uplo, &n_64, a, &lda_64, piv, &rank_64, tol, work, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int_t *piv,
+                        aocl_int64_t *rank, real *tol, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -158,45 +177,23 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, jb, nb;
+    aocl_int64_t i__, j, k, jb, nb;
     real ajj;
-    integer pvt;
-    extern /* Subroutine */
-        void
-        cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *,
-               complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    complex ctemp;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp;
+    aocl_int64_t pvt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    scomplex ctemp;
+    aocl_int64_t itemp;
     real stemp;
     logical upper;
     real sstop;
-    extern /* Subroutine */
-        void
-        cpstf2_(char *, integer *, complex *, integer *, integer *, integer *, real *, real *,
-                integer *),
-        clacgv_(integer *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *),
-        smaxloc_(real *, integer *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -243,7 +240,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPSTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPSTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -254,11 +251,11 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
         return;
     }
     /* Get block size */
-    nb = ilaenv_(&c__1, "CPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "CPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {
         /* Use unblocked code */
-        cpstf2_(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
+        aocl_lapack_cpstf2(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
         goto L230;
     }
     else
@@ -267,7 +264,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            piv[i__] = i__;
+            piv[i__] = (aocl_int_t)(i__);
             /* L100: */
         }
         /* Compute stopping value */
@@ -275,12 +272,12 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            work[i__] = a[i__2].r;
+            work[i__] = a[i__2].real;
             /* L110: */
         }
-        pvt = smaxloc_(&work[1], n);
+        pvt = aocl_lapack_smaxloc(&work[1], n);
         i__1 = pvt + pvt * a_dim1;
-        ajj = a[i__1].r;
+        ajj = a[i__1].real;
         if(ajj <= 0.f || sisnan_(&ajj))
         {
             *rank = 0;
@@ -329,25 +326,25 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                         {
                             r_cnjg(&q__2, &a[j - 1 + i__ * a_dim1]);
                             i__5 = j - 1 + i__ * a_dim1;
-                            q__1.r = q__2.r * a[i__5].r - q__2.i * a[i__5].i;
-                            q__1.i = q__2.r * a[i__5].i + q__2.i * a[i__5].r; // , expr subst
-                            work[i__] += q__1.r;
+                            q__1.real = q__2.real * a[i__5].real - q__2.imag * a[i__5].imag;
+                            q__1.imag = q__2.real * a[i__5].imag + q__2.imag * a[i__5].real; // , expr subst
+                            work[i__] += q__1.real;
                         }
                         i__5 = i__ + i__ * a_dim1;
-                        work[*n + i__] = a[i__5].r - work[i__];
+                        work[*n + i__] = a[i__5].real - work[i__];
                         /* L130: */
                     }
                     if(j > 1)
                     {
                         i__4 = *n - j + 1;
-                        itemp = smaxloc_(&work[*n + j], &i__4);
+                        itemp = aocl_lapack_smaxloc(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
                         if(ajj <= sstop || sisnan_(&ajj))
                         {
                             i__4 = j + j * a_dim1;
-                            a[i__4].r = ajj;
-                            a[i__4].i = 0.f; // , expr subst
+                            a[i__4].real = ajj;
+                            a[i__4].imag = 0.f; // , expr subst
                             goto L220;
                         }
                     }
@@ -356,63 +353,65 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                         /* Pivot OK, so can now swap pivot rows and columns */
                         i__4 = pvt + pvt * a_dim1;
                         i__5 = j + j * a_dim1;
-                        a[i__4].r = a[i__5].r;
-                        a[i__4].i = a[i__5].i; // , expr subst
+                        a[i__4].real = a[i__5].real;
+                        a[i__4].imag = a[i__5].imag; // , expr subst
                         i__4 = j - 1;
-                        cswap_(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
+                        aocl_blas_cswap(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1],
+                                        &c__1);
                         if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            cswap_(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
-                                   &a[pvt + (pvt + 1) * a_dim1], lda);
+                            aocl_blas_cswap(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
+                                            &a[pvt + (pvt + 1) * a_dim1], lda);
                         }
                         i__4 = pvt - 1;
                         for(i__ = j + 1; i__ <= i__4; ++i__)
                         {
                             r_cnjg(&q__1, &a[j + i__ * a_dim1]);
-                            ctemp.r = q__1.r;
-                            ctemp.i = q__1.i; // , expr subst
+                            ctemp.real = q__1.real;
+                            ctemp.imag = q__1.imag; // , expr subst
                             i__5 = j + i__ * a_dim1;
                             r_cnjg(&q__1, &a[i__ + pvt * a_dim1]);
-                            a[i__5].r = q__1.r;
-                            a[i__5].i = q__1.i; // , expr subst
+                            a[i__5].real = q__1.real;
+                            a[i__5].imag = q__1.imag; // , expr subst
                             i__5 = i__ + pvt * a_dim1;
-                            a[i__5].r = ctemp.r;
-                            a[i__5].i = ctemp.i; // , expr subst
+                            a[i__5].real = ctemp.real;
+                            a[i__5].imag = ctemp.imag; // , expr subst
                             /* L140: */
                         }
                         i__4 = j + pvt * a_dim1;
                         r_cnjg(&q__1, &a[j + pvt * a_dim1]);
-                        a[i__4].r = q__1.r;
-                        a[i__4].i = q__1.i; // , expr subst
+                        a[i__4].real = q__1.real;
+                        a[i__4].imag = q__1.imag; // , expr subst
                         /* Swap dot products and PIV */
                         stemp = work[j];
                         work[j] = work[pvt];
                         work[pvt] = stemp;
                         itemp = piv[pvt];
                         piv[pvt] = piv[j];
-                        piv[j] = itemp;
+                        piv[j] = (aocl_int_t)(itemp);
                     }
                     ajj = sqrt(ajj);
                     i__4 = j + j * a_dim1;
-                    a[i__4].r = ajj;
-                    a[i__4].i = 0.f; // , expr subst
+                    a[i__4].real = ajj;
+                    a[i__4].imag = 0.f; // , expr subst
                     /* Compute elements J+1:N of row J. */
                     if(j < *n)
                     {
                         i__4 = j - 1;
-                        clacgv_(&i__4, &a[j * a_dim1 + 1], &c__1);
+                        aocl_lapack_clacgv(&i__4, &a[j * a_dim1 + 1], &c__1);
                         i__4 = j - k;
                         i__5 = *n - j;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
-                        cgemv_("Trans", &i__4, &i__5, &q__1, &a[k + (j + 1) * a_dim1], lda,
-                               &a[k + j * a_dim1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1], lda);
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
+                        aocl_blas_cgemv("Trans", &i__4, &i__5, &q__1, &a[k + (j + 1) * a_dim1], lda,
+                                        &a[k + j * a_dim1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1],
+                                        lda);
                         i__4 = j - 1;
-                        clacgv_(&i__4, &a[j * a_dim1 + 1], &c__1);
+                        aocl_lapack_clacgv(&i__4, &a[j * a_dim1 + 1], &c__1);
                         i__4 = *n - j;
                         r__1 = 1.f / ajj;
-                        csscal_(&i__4, &r__1, &a[j + (j + 1) * a_dim1], lda);
+                        aocl_blas_csscal(&i__4, &r__1, &a[j + (j + 1) * a_dim1], lda);
                     }
                     /* L150: */
                 }
@@ -420,8 +419,8 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                 if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    cherk_("Upper", "Conj Trans", &i__3, &jb, &c_b29, &a[k + j * a_dim1], lda,
-                           &c_b30, &a[j + j * a_dim1], lda);
+                    aocl_blas_cherk("Upper", "Conj Trans", &i__3, &jb, &c_b29, &a[k + j * a_dim1],
+                                    lda, &c_b30, &a[j + j * a_dim1], lda);
                 }
                 /* L160: */
             }
@@ -459,25 +458,25 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                         {
                             r_cnjg(&q__2, &a[i__ + (j - 1) * a_dim1]);
                             i__5 = i__ + (j - 1) * a_dim1;
-                            q__1.r = q__2.r * a[i__5].r - q__2.i * a[i__5].i;
-                            q__1.i = q__2.r * a[i__5].i + q__2.i * a[i__5].r; // , expr subst
-                            work[i__] += q__1.r;
+                            q__1.real = q__2.real * a[i__5].real - q__2.imag * a[i__5].imag;
+                            q__1.imag = q__2.real * a[i__5].imag + q__2.imag * a[i__5].real; // , expr subst
+                            work[i__] += q__1.real;
                         }
                         i__5 = i__ + i__ * a_dim1;
-                        work[*n + i__] = a[i__5].r - work[i__];
+                        work[*n + i__] = a[i__5].real - work[i__];
                         /* L180: */
                     }
                     if(j > 1)
                     {
                         i__4 = *n - j + 1;
-                        itemp = smaxloc_(&work[*n + j], &i__4);
+                        itemp = aocl_lapack_smaxloc(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
                         if(ajj <= sstop || sisnan_(&ajj))
                         {
                             i__4 = j + j * a_dim1;
-                            a[i__4].r = ajj;
-                            a[i__4].i = 0.f; // , expr subst
+                            a[i__4].real = ajj;
+                            a[i__4].imag = 0.f; // , expr subst
                             goto L220;
                         }
                     }
@@ -486,63 +485,64 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                         /* Pivot OK, so can now swap pivot rows and columns */
                         i__4 = pvt + pvt * a_dim1;
                         i__5 = j + j * a_dim1;
-                        a[i__4].r = a[i__5].r;
-                        a[i__4].i = a[i__5].i; // , expr subst
+                        a[i__4].real = a[i__5].real;
+                        a[i__4].imag = a[i__5].imag; // , expr subst
                         i__4 = j - 1;
-                        cswap_(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
+                        aocl_blas_cswap(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
                         if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            cswap_(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
-                                   &a[pvt + 1 + pvt * a_dim1], &c__1);
+                            aocl_blas_cswap(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
+                                            &a[pvt + 1 + pvt * a_dim1], &c__1);
                         }
                         i__4 = pvt - 1;
                         for(i__ = j + 1; i__ <= i__4; ++i__)
                         {
                             r_cnjg(&q__1, &a[i__ + j * a_dim1]);
-                            ctemp.r = q__1.r;
-                            ctemp.i = q__1.i; // , expr subst
+                            ctemp.real = q__1.real;
+                            ctemp.imag = q__1.imag; // , expr subst
                             i__5 = i__ + j * a_dim1;
                             r_cnjg(&q__1, &a[pvt + i__ * a_dim1]);
-                            a[i__5].r = q__1.r;
-                            a[i__5].i = q__1.i; // , expr subst
+                            a[i__5].real = q__1.real;
+                            a[i__5].imag = q__1.imag; // , expr subst
                             i__5 = pvt + i__ * a_dim1;
-                            a[i__5].r = ctemp.r;
-                            a[i__5].i = ctemp.i; // , expr subst
+                            a[i__5].real = ctemp.real;
+                            a[i__5].imag = ctemp.imag; // , expr subst
                             /* L190: */
                         }
                         i__4 = pvt + j * a_dim1;
                         r_cnjg(&q__1, &a[pvt + j * a_dim1]);
-                        a[i__4].r = q__1.r;
-                        a[i__4].i = q__1.i; // , expr subst
+                        a[i__4].real = q__1.real;
+                        a[i__4].imag = q__1.imag; // , expr subst
                         /* Swap dot products and PIV */
                         stemp = work[j];
                         work[j] = work[pvt];
                         work[pvt] = stemp;
                         itemp = piv[pvt];
                         piv[pvt] = piv[j];
-                        piv[j] = itemp;
+                        piv[j] = (aocl_int_t)(itemp);
                     }
                     ajj = sqrt(ajj);
                     i__4 = j + j * a_dim1;
-                    a[i__4].r = ajj;
-                    a[i__4].i = 0.f; // , expr subst
+                    a[i__4].real = ajj;
+                    a[i__4].imag = 0.f; // , expr subst
                     /* Compute elements J+1:N of column J. */
                     if(j < *n)
                     {
                         i__4 = j - 1;
-                        clacgv_(&i__4, &a[j + a_dim1], lda);
+                        aocl_lapack_clacgv(&i__4, &a[j + a_dim1], lda);
                         i__4 = *n - j;
                         i__5 = j - k;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
-                        cgemv_("No Trans", &i__4, &i__5, &q__1, &a[j + 1 + k * a_dim1], lda,
-                               &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1], &c__1);
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
+                        aocl_blas_cgemv("No Trans", &i__4, &i__5, &q__1, &a[j + 1 + k * a_dim1],
+                                        lda, &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1],
+                                        &c__1);
                         i__4 = j - 1;
-                        clacgv_(&i__4, &a[j + a_dim1], lda);
+                        aocl_lapack_clacgv(&i__4, &a[j + a_dim1], lda);
                         i__4 = *n - j;
                         r__1 = 1.f / ajj;
-                        csscal_(&i__4, &r__1, &a[j + 1 + j * a_dim1], &c__1);
+                        aocl_blas_csscal(&i__4, &r__1, &a[j + 1 + j * a_dim1], &c__1);
                     }
                     /* L200: */
                 }
@@ -550,8 +550,8 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                 if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    cherk_("Lower", "No Trans", &i__3, &jb, &c_b29, &a[j + k * a_dim1], lda, &c_b30,
-                           &a[j + j * a_dim1], lda);
+                    aocl_blas_cherk("Lower", "No Trans", &i__3, &jb, &c_b29, &a[j + k * a_dim1],
+                                    lda, &c_b30, &a[j + j * a_dim1], lda);
                 }
                 /* L210: */
             }

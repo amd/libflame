@@ -67,7 +67,7 @@
 /* > \param[in] INFO */
 /* > \verbatim */
 /* > INFO is INTEGER */
-/* > The value of INFO returned from DSYTRF, .i.e., the pivot in */
+/* > The value of INFO returned from DSYTRF, .imag.e., the pivot in */
 /* > column INFO is exactly 0. */
 /* > \endverbatim */
 /* > */
@@ -116,21 +116,39 @@
 /* > \date December 2016 */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
-doublereal dla_syrpvgrw_(char *uplo, integer *n, integer *info, doublereal *a, integer *lda,
-                         doublereal *af, integer *ldaf, integer *ipiv, doublereal *work)
+/** Generated wrapper function */
+doublereal dla_syrpvgrw_(char *uplo, aocl_int_t *n, aocl_int_t *info, doublereal *a,
+                         aocl_int_t *lda, doublereal *af, aocl_int_t *ldaf, aocl_int_t *ipiv,
+                         doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dla_syrpvgrw(uplo, n, info, a, lda, af, ldaf, ipiv, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_dla_syrpvgrw(uplo, &n_64, &info_64, a, &lda_64, af, &ldaf_64, ipiv, work);
+#endif
+}
+
+doublereal aocl_lapack_dla_syrpvgrw(char *uplo, aocl_int64_t *n, aocl_int64_t *info, doublereal *a,
+                                    aocl_int64_t *lda, doublereal *af, aocl_int64_t *ldaf,
+                                    aocl_int_t *ipiv, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_syrpvgrw inputs: uplo %c, n %" FLA_IS ", info %" FLA_IS ", lda %" FLA_IS
                       ", ldaf %" FLA_IS "",
                       *uplo, *n, *lda, *ldaf);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     doublereal ret_val, d__1, d__2, d__3;
     /* Local variables */
-    integer i__, j, k, kp;
+    aocl_int64_t i__, j, k, kp;
     doublereal tmp, amax, umax;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer ncols;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t ncols;
     logical upper;
     doublereal rpvgrw;
     /* -- LAPACK computational routine (version 3.7.0) -- */

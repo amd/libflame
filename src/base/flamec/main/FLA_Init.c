@@ -8,6 +8,10 @@
 
 */
 
+/*
+*     Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
+
 #include "FLAME.h"
 
 
@@ -243,13 +247,13 @@ void FLA_Finalize_constants()
 
 char*     FLA_Get_AOCL_Version( void )
 {
-  static TLS_CLASS_SPEC LF_VERSION lflibversion;
-  if (lflibversion.once)
-  {
-	  return lflibversion.version;
-  }
-  integer vers_major, vers_minor, vers_patch;
-  ilaver_(&vers_major, &vers_minor, &vers_patch);
+     static TLS_CLASS_SPEC LF_VERSION lflibversion;
+     if (lflibversion.once)
+     {
+	     return lflibversion.version;
+     }
+     aocl_int_t vers_major, vers_minor, vers_patch;
+     ilaver_(&vers_major, &vers_minor, &vers_patch);
 
   char lfmainversion[] = "AOCL-LAPACK ";
   char* lfversion = lflibversion.version;
@@ -258,11 +262,11 @@ char*     FLA_Get_AOCL_Version( void )
            vers_major, vers_minor, vers_patch);
   int length, i;
 
-  length = 0;
-  for (i = 0; lfmainversion[length] != '\0'; ++i, ++length) 
-  {
-	  lfversion[length] = lfmainversion[i];
-  }
+     length = 0;
+     for (i = 0; lfmainversion[length] != '\0'; ++i, ++length) 
+     {
+	     lfversion[length] = lfmainversion[i];
+     }
 
 #ifdef FLA_LIBFLAME_VERSION
 #ifdef FLA_ENABLE_WINDOWS_BUILD

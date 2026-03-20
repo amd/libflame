@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static doublecomplex c_b10 = {-1., -0.};
+static aocl_int64_t c__1 = 1;
+static dcomplex c_b10 = {-1., -0.};
 /* > \brief \b ZGETC2 computes the LU factorization with complete pivoting of the general n-by-n
  * matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -111,28 +111,40 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *jpiv,
-             integer *info)
+/** Generated wrapper function */
+void zgetc2_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv, aocl_int_t *jpiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgetc2(n, a, lda, ipiv, jpiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgetc2(&n_64, a, &lda_64, ipiv, jpiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgetc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                        aocl_int_t *jpiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgetc2 inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, ip, jp;
+    aocl_int64_t i__, j, ip, jp;
     doublereal eps;
-    integer ipv, jpv;
+    aocl_int64_t ipv, jpv;
     doublereal smin, xmax;
-    extern /* Subroutine */
-        void
-        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -183,10 +195,10 @@ void zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer 
         {
             *info = 1;
             i__1 = a_dim1 + 1;
-            z__1.r = smlnum;
-            z__1.i = 0.; // , expr subst
-            a[i__1].r = z__1.r;
-            a[i__1].i = z__1.i; // , expr subst
+            z__1.real = smlnum;
+            z__1.imag = 0.; // , expr subst
+            a[i__1].real = z__1.real;
+            a[i__1].imag = z__1.imag; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -223,52 +235,52 @@ void zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer 
         /* Swap rows */
         if(ipv != i__)
         {
-            zswap_(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
+            aocl_blas_zswap(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
         }
-        ipiv[i__] = ipv;
+        ipiv[i__] = (aocl_int_t)(ipv);
         /* Swap columns */
         if(jpv != i__)
         {
-            zswap_(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_zswap(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
         }
-        jpiv[i__] = jpv;
+        jpiv[i__] = (aocl_int_t)(jpv);
         /* Check for singularity */
         if(z_abs(&a[i__ + i__ * a_dim1]) < smin)
         {
             *info = i__;
             i__2 = i__ + i__ * a_dim1;
-            z__1.r = smin;
-            z__1.i = 0.; // , expr subst
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            z__1.real = smin;
+            z__1.imag = 0.; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
         }
         i__2 = *n;
         for(j = i__ + 1; j <= i__2; ++j)
         {
             i__3 = j + i__ * a_dim1;
             z_div(&z__1, &a[j + i__ * a_dim1], &a[i__ + i__ * a_dim1]);
-            a[i__3].r = z__1.r;
-            a[i__3].i = z__1.i; // , expr subst
+            a[i__3].real = z__1.real;
+            a[i__3].imag = z__1.imag; // , expr subst
             /* L30: */
         }
         i__2 = *n - i__;
         i__3 = *n - i__;
-        zgeru_(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1,
-               &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
+        aocl_blas_zgeru(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1,
+                        &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
         /* L40: */
     }
     if(z_abs(&a[*n + *n * a_dim1]) < smin)
     {
         *info = *n;
         i__1 = *n + *n * a_dim1;
-        z__1.r = smin;
-        z__1.i = 0.; // , expr subst
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        z__1.real = smin;
+        z__1.imag = 0.; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
     }
     /* Set last pivots to N */
-    ipiv[*n] = *n;
-    jpiv[*n] = *n;
+    ipiv[*n] = (aocl_int_t)(*n);
+    jpiv[*n] = (aocl_int_t)(*n);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGETC2 */

@@ -149,9 +149,35 @@
 /* > \ingroup unbdb5 */
 /* ===================================================================== */
 /* Subroutine */
-void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *incx1, doublereal *x2,
-              integer *incx2, doublereal *q1, integer *ldq1, doublereal *q2, integer *ldq2,
-              doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aocl_int_t *incx1,
+              doublereal *x2, aocl_int_t *incx2, doublereal *q1, aocl_int_t *ldq1, doublereal *q2,
+              aocl_int_t *ldq2, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorbdb5(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
+#else
+    aocl_int64_t m1_64 = *m1;
+    aocl_int64_t m2_64 = *m2;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx1_64 = *incx1;
+    aocl_int64_t incx2_64 = *incx2;
+    aocl_int64_t ldq1_64 = *ldq1;
+    aocl_int64_t ldq2_64 = *ldq2;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorbdb5(&m1_64, &m2_64, &n_64, x1, &incx1_64, x2, &incx2_64, q1, &ldq1_64, q2,
+                        &ldq2_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dorbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, doublereal *x1,
+                         aocl_int64_t *incx1, doublereal *x2, aocl_int64_t *incx2, doublereal *q1,
+                         aocl_int64_t *ldq1, doublereal *q2, aocl_int64_t *ldq2, doublereal *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorbdb5 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS
@@ -159,25 +185,14 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
                       ", lwork %" FLA_IS "",
                       *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
     /* System generated locals */
-    integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2;
+    aocl_int64_t q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, childinfo;
+    aocl_int64_t i__, j, childinfo;
     doublereal scl, eps, ssq, norm;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *),
-        dorbdb6_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
-                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                 integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,7 +260,7 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORBDB5", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DORBDB5", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -253,8 +268,8 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     /* Project X onto the orthogonal complement of Q if X is nonzero */
     scl = 0.;
     ssq = 0.;
-    dlassq_(m1, &x1[1], incx1, &scl, &ssq);
-    dlassq_(m2, &x2[1], incx2, &scl, &ssq);
+    aocl_lapack_dlassq(m1, &x1[1], incx1, &scl, &ssq);
+    aocl_lapack_dlassq(m2, &x2[1], incx2, &scl, &ssq);
     norm = scl * sqrt(ssq);
     if(norm > *n * eps)
     {
@@ -264,13 +279,13 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
         /* * the round-off error has a negligible impact on */
         /* orthogonalization. */
         d__1 = 1. / norm;
-        dscal_(m1, &d__1, &x1[1], incx1);
+        aocl_blas_dscal(m1, &d__1, &x1[1], incx1);
         d__1 = 1. / norm;
-        dscal_(m2, &d__1, &x2[1], incx2);
-        dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
-                 ldq2, &work[1], lwork, &childinfo);
+        aocl_blas_dscal(m2, &d__1, &x2[1], incx2);
+        aocl_lapack_dorbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
+                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
         /* If the projection is nonzero, then return */
-        if(dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
+        if(aocl_blas_dnrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dnrm2(m2, &x2[1], incx2) != 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -292,9 +307,9 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
         {
             x2[j] = 0.;
         }
-        dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
-                 ldq2, &work[1], lwork, &childinfo);
-        if(dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
+        aocl_lapack_dorbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
+                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
+        if(aocl_blas_dnrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dnrm2(m2, &x2[1], incx2) != 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -316,9 +331,9 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
             x2[j] = 0.;
         }
         x2[i__] = 1.;
-        dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
-                 ldq2, &work[1], lwork, &childinfo);
-        if(dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
+        aocl_lapack_dorbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
+                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
+        if(aocl_blas_dnrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dnrm2(m2, &x2[1], incx2) != 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;

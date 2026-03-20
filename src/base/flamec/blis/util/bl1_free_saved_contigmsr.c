@@ -16,9 +16,9 @@
 #include "blis.h"
 #endif
 
-void bl1_sfree_saved_contigmsr( side1_t side, uplo1_t uplo, integer m, integer n, float* a_save, integer a_rs_save, integer a_cs_save, float** a, integer* a_rs, integer* a_cs )
+void bl1_sfree_saved_contigmsr( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, float* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, float** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
-	integer dim_a;
+	fla_dim_t dim_a;
 
 	// Choose the dimension of the matrix based on the side parameter.
 	if ( bl1_is_left( side ) ) dim_a = m;
@@ -46,9 +46,9 @@ void bl1_sfree_saved_contigmsr( side1_t side, uplo1_t uplo, integer m, integer n
 	}
 }
 
-void bl1_dfree_saved_contigmsr( side1_t side, uplo1_t uplo, integer m, integer n, double* a_save, integer a_rs_save, integer a_cs_save, double** a, integer* a_rs, integer* a_cs )
+void bl1_dfree_saved_contigmsr( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, double* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, double** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
-	integer dim_a;
+	fla_dim_t dim_a;
 
 	// Choose the dimension of the matrix based on the side parameter.
 	if ( bl1_is_left( side ) ) dim_a = m;
@@ -76,9 +76,9 @@ void bl1_dfree_saved_contigmsr( side1_t side, uplo1_t uplo, integer m, integer n
 	}
 }
 
-void bl1_cfree_saved_contigmsr( side1_t side, uplo1_t uplo, integer m, integer n, scomplex* a_save, integer a_rs_save, integer a_cs_save, scomplex** a, integer* a_rs, integer* a_cs )
+void bl1_cfree_saved_contigmsr( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, scomplex* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, scomplex** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
-	integer dim_a;
+	fla_dim_t dim_a;
 
 	// Choose the dimension of the matrix based on the side parameter.
 	if ( bl1_is_left( side ) ) dim_a = m;
@@ -106,9 +106,9 @@ void bl1_cfree_saved_contigmsr( side1_t side, uplo1_t uplo, integer m, integer n
 	}
 }
 
-void bl1_zfree_saved_contigmsr( side1_t side, uplo1_t uplo, integer m, integer n, dcomplex* a_save, integer a_rs_save, integer a_cs_save, dcomplex** a, integer* a_rs, integer* a_cs )
+void bl1_zfree_saved_contigmsr( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, dcomplex* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, dcomplex** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
-	integer dim_a;
+	fla_dim_t dim_a;
 
 	// Choose the dimension of the matrix based on the side parameter.
 	if ( bl1_is_left( side ) ) dim_a = m;

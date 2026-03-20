@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> ZSYSV_RK computes the solution to system of linear equations A * X = B for SY
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -41,7 +41,7 @@ static integer c_n1 = -1;
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > ZSYSV_RK computes the solution to a complex system of linear */
+/* > ZSYSV_RK computes the solution to a scomplex system of linear */
 /* > equations A * X = B, where A is an N-by-N symmetric matrix */
 /* > and X and B are N-by-NRHS matrices. */
 /* > */
@@ -54,7 +54,7 @@ static integer c_n1 = -1;
 /* > matrix, P**T is the transpose of P, and D is symmetric and block */
 /* > diagonal with 1-by-1 and 2-by-2 diagonal blocks. */
 /* > */
-/* > ZSYTRF_RK is called to compute the factorization of a complex */
+/* > ZSYTRF_RK is called to compute the factorization of a scomplex */
 /* > symmetric matrix. The factored form of A is then used to solve */
 /* > the system of equations A * X = B by calling BLAS3 routine ZSYTRS_3. */
 /* > \endverbatim */
@@ -228,28 +228,42 @@ static integer c_n1 = -1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zsysv_rk_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-               doublecomplex *e, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work,
-               integer *lwork, integer *info)
+/** Generated wrapper function */
+void zsysv_rk_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda,
+               dcomplex *e, aocl_int_t *ipiv, dcomplex *b, aocl_int_t *ldb,
+               dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsysv_rk(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsysv_rk(uplo, &n_64, &nrhs_64, a, &lda_64, e, ipiv, b, &ldb_64, work, &lwork_64,
+                         &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsysv_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
+                          aocl_int64_t *lda, dcomplex *e, aocl_int_t *ipiv, dcomplex *b,
+                          aocl_int64_t *ldb, dcomplex *work, aocl_int64_t *lwork,
+                          aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsysv_rk inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS ", lwork %" FLA_IS "",
                       *uplo, *n, *nrhs, *lda, *ldb, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        zsytrs_3_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                  integer *, doublecomplex *, integer *, integer *),
-        zsytrf_rk_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                   doublecomplex *, integer *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer lwkopt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -315,16 +329,17 @@ void zsysv_rk_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
         }
         else
         {
-            zsytrf_rk_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &c_n1, info);
-            lwkopt = (integer)work[1].r;
+            aocl_lapack_zsytrf_rk(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &c_n1,
+                                  info);
+            lwkopt = (integer)work[1].real;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYSV_RK ", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("ZSYSV_RK ", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -335,14 +350,15 @@ void zsysv_rk_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
     }
     /* Compute the factorization A = P*U*D*(U**T)*(P**T) or */
     /* A = P*U*D*(U**T)*(P**T). */
-    zsytrf_rk_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], lwork, info);
+    aocl_lapack_zsytrf_rk(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], lwork, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B with BLAS3 solver, overwriting B with X. */
-        zsytrs_3_(uplo, n, nrhs, &a[a_offset], lda, &e[1], &ipiv[1], &b[b_offset], ldb, info);
+        aocl_lapack_zsytrs_3(uplo, n, nrhs, &a[a_offset], lda, &e[1], &ipiv[1], &b[b_offset], ldb,
+                             info);
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZSYSV_RK */

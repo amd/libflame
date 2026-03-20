@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix
  * by inverse iteration. */
 /* =========== DOCUMENTATION =========== */
@@ -45,7 +45,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZLAEIN uses inverse iteration to find a right or left eigenvector */
-/* > corresponding to the eigenvalue W of a complex upper Hessenberg */
+/* > corresponding to the eigenvalue W of a scomplex upper Hessenberg */
 /* > matrix H. */
 /* > \endverbatim */
 /* Arguments: */
@@ -99,7 +99,7 @@ otherwise V need not be set. */
 /* > On exit, V contains the computed eigenvector, normalized so */
 /* > that the component of largest magnitude has magnitude 1;
 here */
-/* > the magnitude of a complex number (x,y) is taken to be */
+/* > the magnitude of a scomplex number (x,y) is taken to be */
 /* > |x| + |y|. */
 /* > \endverbatim */
 /* > */
@@ -150,42 +150,53 @@ V is set to the */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, integer *ldh,
-             doublecomplex *w, doublecomplex *v, doublecomplex *b, integer *ldb, doublereal *rwork,
-             doublereal *eps3, doublereal *smlnum, integer *info)
+/** Generated wrapper function */
+void zlaein_(logical *rightv, logical *noinit, aocl_int_t *n, dcomplex *h__, aocl_int_t *ldh,
+             dcomplex *w, dcomplex *v, dcomplex *b, aocl_int_t *ldb,
+             doublereal *rwork, doublereal *eps3, doublereal *smlnum, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaein(rightv, noinit, n, h__, ldh, w, v, b, ldb, rwork, eps3, smlnum, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlaein(rightv, noinit, &n_64, h__, &ldh_64, w, v, b, &ldb_64, rwork, eps3, smlnum,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomplex *h__,
+                        aocl_int64_t *ldh, dcomplex *w, dcomplex *v, dcomplex *b,
+                        aocl_int64_t *ldb, doublereal *rwork, doublereal *eps3, doublereal *smlnum,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "", *n, *ldh,
                       *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j;
-    doublecomplex x, ei, ej;
-    integer its, ierr;
-    doublecomplex temp;
+    aocl_int64_t i__, j;
+    dcomplex x, ei, ej;
+    aocl_int64_t its, ierr;
+    dcomplex temp;
     doublereal scale;
     char trans[1];
     doublereal rtemp, rootn, vnorm;
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Double Complex */
         void
-        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
     char normin[1];
-    extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     doublereal nrmsml;
-    extern /* Subroutine */
-        void
-        zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublereal *, doublereal *, integer *);
     doublereal growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -240,16 +251,16 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
         {
             i__3 = i__ + j * b_dim1;
             i__4 = i__ + j * h_dim1;
-            b[i__3].r = h__[i__4].r;
-            b[i__3].i = h__[i__4].i; // , expr subst
+            b[i__3].real = h__[i__4].real;
+            b[i__3].imag = h__[i__4].imag; // , expr subst
             /* L10: */
         }
         i__2 = j + j * b_dim1;
         i__3 = j + j * h_dim1;
-        z__1.r = h__[i__3].r - w->r;
-        z__1.i = h__[i__3].i - w->i; // , expr subst
-        b[i__2].r = z__1.r;
-        b[i__2].i = z__1.i; // , expr subst
+        z__1.real = h__[i__3].real - w->real;
+        z__1.imag = h__[i__3].imag - w->imag; // , expr subst
+        b[i__2].real = z__1.real;
+        b[i__2].imag = z__1.imag; // , expr subst
         /* L20: */
     }
     if(*noinit)
@@ -259,17 +270,17 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            v[i__2].r = *eps3;
-            v[i__2].i = 0.; // , expr subst
+            v[i__2].real = *eps3;
+            v[i__2].imag = 0.; // , expr subst
             /* L30: */
         }
     }
     else
     {
         /* Scale supplied initial vector. */
-        vnorm = dznrm2_(n, &v[1], &c__1);
+        vnorm = aocl_blas_dznrm2(n, &v[1], &c__1);
         d__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
-        zdscal_(n, &d__1, &v[1], &c__1);
+        aocl_blas_zdscal(n, &d__1, &v[1], &c__1);
     }
     if(*rightv)
     {
@@ -279,37 +290,37 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + 1 + i__ * h_dim1;
-            ei.r = h__[i__2].r;
-            ei.i = h__[i__2].i; // , expr subst
+            ei.real = h__[i__2].real;
+            ei.imag = h__[i__2].imag; // , expr subst
             i__2 = i__ + i__ * b_dim1;
-            if((d__1 = b[i__2].r, f2c_dabs(d__1))
+            if((d__1 = b[i__2].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&b[i__ + i__ * b_dim1]), f2c_dabs(d__2))
-               < (d__3 = ei.r, f2c_dabs(d__3)) + (d__4 = d_imag(&ei), f2c_dabs(d__4)))
+               < (d__3 = ei.real, f2c_dabs(d__3)) + (d__4 = d_imag(&ei), f2c_dabs(d__4)))
             {
                 /* Interchange rows and eliminate. */
                 zladiv_f2c_(&z__1, &b[i__ + i__ * b_dim1], &ei);
-                x.r = z__1.r;
-                x.i = z__1.i; // , expr subst
+                x.real = z__1.real;
+                x.imag = z__1.imag; // , expr subst
                 i__2 = i__ + i__ * b_dim1;
-                b[i__2].r = ei.r;
-                b[i__2].i = ei.i; // , expr subst
+                b[i__2].real = ei.real;
+                b[i__2].imag = ei.imag; // , expr subst
                 i__2 = *n;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + 1 + j * b_dim1;
-                    temp.r = b[i__3].r;
-                    temp.i = b[i__3].i; // , expr subst
+                    temp.real = b[i__3].real;
+                    temp.imag = b[i__3].imag; // , expr subst
                     i__3 = i__ + 1 + j * b_dim1;
                     i__4 = i__ + j * b_dim1;
-                    z__2.r = x.r * temp.r - x.i * temp.i;
-                    z__2.i = x.r * temp.i + x.i * temp.r; // , expr subst
-                    z__1.r = b[i__4].r - z__2.r;
-                    z__1.i = b[i__4].i - z__2.i; // , expr subst
-                    b[i__3].r = z__1.r;
-                    b[i__3].i = z__1.i; // , expr subst
+                    z__2.real = x.real * temp.real - x.imag * temp.imag;
+                    z__2.imag = x.real * temp.imag + x.imag * temp.real; // , expr subst
+                    z__1.real = b[i__4].real - z__2.real;
+                    z__1.imag = b[i__4].imag - z__2.imag; // , expr subst
+                    b[i__3].real = z__1.real;
+                    b[i__3].imag = z__1.imag; // , expr subst
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = temp.r;
-                    b[i__3].i = temp.i; // , expr subst
+                    b[i__3].real = temp.real;
+                    b[i__3].imag = temp.imag; // , expr subst
                     /* L40: */
                 }
             }
@@ -317,16 +328,16 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
             {
                 /* Eliminate without interchange. */
                 i__2 = i__ + i__ * b_dim1;
-                if(b[i__2].r == 0. && b[i__2].i == 0.)
+                if(b[i__2].real == 0. && b[i__2].imag == 0.)
                 {
                     i__3 = i__ + i__ * b_dim1;
-                    b[i__3].r = *eps3;
-                    b[i__3].i = 0.; // , expr subst
+                    b[i__3].real = *eps3;
+                    b[i__3].imag = 0.; // , expr subst
                 }
                 zladiv_f2c_(&z__1, &ei, &b[i__ + i__ * b_dim1]);
-                x.r = z__1.r;
-                x.i = z__1.i; // , expr subst
-                if(x.r != 0. || x.i != 0.)
+                x.real = z__1.real;
+                x.imag = z__1.imag; // , expr subst
+                if(x.real != 0. || x.imag != 0.)
                 {
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
@@ -334,12 +345,12 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
                         i__3 = i__ + 1 + j * b_dim1;
                         i__4 = i__ + 1 + j * b_dim1;
                         i__5 = i__ + j * b_dim1;
-                        z__2.r = x.r * b[i__5].r - x.i * b[i__5].i;
-                        z__2.i = x.r * b[i__5].i + x.i * b[i__5].r; // , expr subst
-                        z__1.r = b[i__4].r - z__2.r;
-                        z__1.i = b[i__4].i - z__2.i; // , expr subst
-                        b[i__3].r = z__1.r;
-                        b[i__3].i = z__1.i; // , expr subst
+                        z__2.real = x.real * b[i__5].real - x.imag * b[i__5].imag;
+                        z__2.imag = x.real * b[i__5].imag + x.imag * b[i__5].real; // , expr subst
+                        z__1.real = b[i__4].real - z__2.real;
+                        z__1.imag = b[i__4].imag - z__2.imag; // , expr subst
+                        b[i__3].real = z__1.real;
+                        b[i__3].imag = z__1.imag; // , expr subst
                         /* L50: */
                     }
                 }
@@ -347,11 +358,11 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
             /* L60: */
         }
         i__1 = *n + *n * b_dim1;
-        if(b[i__1].r == 0. && b[i__1].i == 0.)
+        if(b[i__1].real == 0. && b[i__1].imag == 0.)
         {
             i__2 = *n + *n * b_dim1;
-            b[i__2].r = *eps3;
-            b[i__2].i = 0.; // , expr subst
+            b[i__2].real = *eps3;
+            b[i__2].imag = 0.; // , expr subst
         }
         *(unsigned char *)trans = 'N';
     }
@@ -362,37 +373,37 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
         for(j = *n; j >= 2; --j)
         {
             i__1 = j + (j - 1) * h_dim1;
-            ej.r = h__[i__1].r;
-            ej.i = h__[i__1].i; // , expr subst
+            ej.real = h__[i__1].real;
+            ej.imag = h__[i__1].imag; // , expr subst
             i__1 = j + j * b_dim1;
-            if((d__1 = b[i__1].r, f2c_dabs(d__1))
+            if((d__1 = b[i__1].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&b[j + j * b_dim1]), f2c_dabs(d__2))
-               < (d__3 = ej.r, f2c_dabs(d__3)) + (d__4 = d_imag(&ej), f2c_dabs(d__4)))
+               < (d__3 = ej.real, f2c_dabs(d__3)) + (d__4 = d_imag(&ej), f2c_dabs(d__4)))
             {
                 /* Interchange columns and eliminate. */
                 zladiv_f2c_(&z__1, &b[j + j * b_dim1], &ej);
-                x.r = z__1.r;
-                x.i = z__1.i; // , expr subst
+                x.real = z__1.real;
+                x.imag = z__1.imag; // , expr subst
                 i__1 = j + j * b_dim1;
-                b[i__1].r = ej.r;
-                b[i__1].i = ej.i; // , expr subst
+                b[i__1].real = ej.real;
+                b[i__1].imag = ej.imag; // , expr subst
                 i__1 = j - 1;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + (j - 1) * b_dim1;
-                    temp.r = b[i__2].r;
-                    temp.i = b[i__2].i; // , expr subst
+                    temp.real = b[i__2].real;
+                    temp.imag = b[i__2].imag; // , expr subst
                     i__2 = i__ + (j - 1) * b_dim1;
                     i__3 = i__ + j * b_dim1;
-                    z__2.r = x.r * temp.r - x.i * temp.i;
-                    z__2.i = x.r * temp.i + x.i * temp.r; // , expr subst
-                    z__1.r = b[i__3].r - z__2.r;
-                    z__1.i = b[i__3].i - z__2.i; // , expr subst
-                    b[i__2].r = z__1.r;
-                    b[i__2].i = z__1.i; // , expr subst
+                    z__2.real = x.real * temp.real - x.imag * temp.imag;
+                    z__2.imag = x.real * temp.imag + x.imag * temp.real; // , expr subst
+                    z__1.real = b[i__3].real - z__2.real;
+                    z__1.imag = b[i__3].imag - z__2.imag; // , expr subst
+                    b[i__2].real = z__1.real;
+                    b[i__2].imag = z__1.imag; // , expr subst
                     i__2 = i__ + j * b_dim1;
-                    b[i__2].r = temp.r;
-                    b[i__2].i = temp.i; // , expr subst
+                    b[i__2].real = temp.real;
+                    b[i__2].imag = temp.imag; // , expr subst
                     /* L70: */
                 }
             }
@@ -400,16 +411,16 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
             {
                 /* Eliminate without interchange. */
                 i__1 = j + j * b_dim1;
-                if(b[i__1].r == 0. && b[i__1].i == 0.)
+                if(b[i__1].real == 0. && b[i__1].imag == 0.)
                 {
                     i__2 = j + j * b_dim1;
-                    b[i__2].r = *eps3;
-                    b[i__2].i = 0.; // , expr subst
+                    b[i__2].real = *eps3;
+                    b[i__2].imag = 0.; // , expr subst
                 }
                 zladiv_f2c_(&z__1, &ej, &b[j + j * b_dim1]);
-                x.r = z__1.r;
-                x.i = z__1.i; // , expr subst
-                if(x.r != 0. || x.i != 0.)
+                x.real = z__1.real;
+                x.imag = z__1.imag; // , expr subst
+                if(x.real != 0. || x.imag != 0.)
                 {
                     i__1 = j - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -417,12 +428,12 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
                         i__2 = i__ + (j - 1) * b_dim1;
                         i__3 = i__ + (j - 1) * b_dim1;
                         i__4 = i__ + j * b_dim1;
-                        z__2.r = x.r * b[i__4].r - x.i * b[i__4].i;
-                        z__2.i = x.r * b[i__4].i + x.i * b[i__4].r; // , expr subst
-                        z__1.r = b[i__3].r - z__2.r;
-                        z__1.i = b[i__3].i - z__2.i; // , expr subst
-                        b[i__2].r = z__1.r;
-                        b[i__2].i = z__1.i; // , expr subst
+                        z__2.real = x.real * b[i__4].real - x.imag * b[i__4].imag;
+                        z__2.imag = x.real * b[i__4].imag + x.imag * b[i__4].real; // , expr subst
+                        z__1.real = b[i__3].real - z__2.real;
+                        z__1.imag = b[i__3].imag - z__2.imag; // , expr subst
+                        b[i__2].real = z__1.real;
+                        b[i__2].imag = z__1.imag; // , expr subst
                         /* L80: */
                     }
                 }
@@ -430,11 +441,11 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
             /* L90: */
         }
         i__1 = b_dim1 + 1;
-        if(b[i__1].r == 0. && b[i__1].i == 0.)
+        if(b[i__1].real == 0. && b[i__1].imag == 0.)
         {
             i__2 = b_dim1 + 1;
-            b[i__2].r = *eps3;
-            b[i__2].i = 0.; // , expr subst
+            b[i__2].real = *eps3;
+            b[i__2].imag = 0.; // , expr subst
         }
         *(unsigned char *)trans = 'C';
     }
@@ -445,43 +456,43 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
         /* Solve U*x = scale*v for a right eigenvector */
         /* or U**H *x = scale*v for a left eigenvector, */
         /* overwriting x on v. */
-        zlatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale, &rwork[1],
-                &ierr);
+        aocl_lapack_zlatrs("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale,
+                           &rwork[1], &ierr);
         *(unsigned char *)normin = 'Y';
         /* Test for sufficient growth in the norm of v. */
-        vnorm = dzasum_(n, &v[1], &c__1);
+        vnorm = aocl_blas_dzasum(n, &v[1], &c__1);
         if(vnorm >= growto * scale)
         {
             goto L120;
         }
         /* Choose new orthogonal starting vector and try again. */
         rtemp = *eps3 / (rootn + 1.);
-        v[1].r = *eps3;
-        v[1].i = 0.; // , expr subst
+        v[1].real = *eps3;
+        v[1].imag = 0.; // , expr subst
         i__2 = *n;
         for(i__ = 2; i__ <= i__2; ++i__)
         {
             i__3 = i__;
-            v[i__3].r = rtemp;
-            v[i__3].i = 0.; // , expr subst
+            v[i__3].real = rtemp;
+            v[i__3].imag = 0.; // , expr subst
             /* L100: */
         }
         i__2 = *n - its + 1;
         i__3 = *n - its + 1;
         d__1 = *eps3 * rootn;
-        z__1.r = v[i__3].r - d__1;
-        z__1.i = v[i__3].i; // , expr subst
-        v[i__2].r = z__1.r;
-        v[i__2].i = z__1.i; // , expr subst
+        z__1.real = v[i__3].real - d__1;
+        z__1.imag = v[i__3].imag; // , expr subst
+        v[i__2].real = z__1.real;
+        v[i__2].imag = z__1.imag; // , expr subst
         /* L110: */
     }
     /* Failure to find eigenvector in N iterations. */
     *info = 1;
 L120: /* Normalize eigenvector. */
-    i__ = izamax_(n, &v[1], &c__1);
+    i__ = aocl_blas_izamax(n, &v[1], &c__1);
     i__1 = i__;
-    d__3 = 1. / ((d__1 = v[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_dabs(d__2)));
-    zdscal_(n, &d__3, &v[1], &c__1);
+    d__3 = 1. / ((d__1 = v[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_dabs(d__2)));
+    aocl_blas_zdscal(n, &d__3, &v[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLAEIN */

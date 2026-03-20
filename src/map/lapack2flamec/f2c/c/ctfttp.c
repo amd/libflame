@@ -207,7 +207,23 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, integer *info)
+/** Generated wrapper function */
+void ctfttp_(char *transr, char *uplo, aocl_int_t *n, scomplex *arf, scomplex *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctfttp(transr, uplo, n, arf, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctfttp(transr, uplo, &n_64, arf, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf, scomplex *ap,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -220,18 +236,15 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    complex q__1;
+    aocl_int64_t i__1, i__2, i__3, i__4;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k, n1, n2, ij, jp, js, lda, ijp;
+    aocl_int64_t i__, j, k, n1, n2, ij, jp, js, lda, ijp;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -274,7 +287,7 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTFTTP", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTFTTP", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -288,14 +301,14 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
     {
         if(normaltransr)
         {
-            ap[0].r = arf[0].r;
-            ap[0].i = arf[0].i; // , expr subst
+            ap[0].real = arf[0].real;
+            ap[0].imag = arf[0].imag; // , expr subst
         }
         else
         {
             r_cnjg(&q__1, arf);
-            ap[0].r = q__1.r;
-            ap[0].i = q__1.i; // , expr subst
+            ap[0].real = q__1.real;
+            ap[0].imag = q__1.imag; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -356,8 +369,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                         ij = i__ + jp;
                         i__3 = ijp;
                         i__4 = ij;
-                        ap[i__3].r = arf[i__4].r;
-                        ap[i__3].i = arf[i__4].i; // , expr subst
+                        ap[i__3].real = arf[i__4].real;
+                        ap[i__3].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     jp += lda;
@@ -371,8 +384,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                         ij = i__ + j * lda;
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -392,8 +405,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++ijp;
                         ij += lda;
                     }
@@ -408,8 +421,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__3 = ijp;
                         i__4 = ij;
-                        ap[i__3].r = arf[i__4].r;
-                        ap[i__3].i = arf[i__4].i; // , expr subst
+                        ap[i__3].real = arf[i__4].real;
+                        ap[i__3].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -435,8 +448,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__4].r = q__1.r;
-                        ap[i__4].i = q__1.i; // , expr subst
+                        ap[i__4].real = q__1.real;
+                        ap[i__4].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -449,8 +462,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__2 = ijp;
                         i__4 = ij;
-                        ap[i__2].r = arf[i__4].r;
-                        ap[i__2].i = arf[i__4].i; // , expr subst
+                        ap[i__2].real = arf[i__4].real;
+                        ap[i__2].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js = js + lda + 1;
@@ -472,8 +485,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__2 = ijp;
                         i__4 = ij;
-                        ap[i__2].r = arf[i__4].r;
-                        ap[i__2].i = arf[i__4].i; // , expr subst
+                        ap[i__2].real = arf[i__4].real;
+                        ap[i__2].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -487,8 +500,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__4].r = q__1.r;
-                        ap[i__4].i = q__1.i; // , expr subst
+                        ap[i__4].real = q__1.real;
+                        ap[i__4].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -517,8 +530,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                         ij = i__ + 1 + jp;
                         i__3 = ijp;
                         i__4 = ij;
-                        ap[i__3].r = arf[i__4].r;
-                        ap[i__3].i = arf[i__4].i; // , expr subst
+                        ap[i__3].real = arf[i__4].real;
+                        ap[i__3].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     jp += lda;
@@ -532,8 +545,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                         ij = i__ + j * lda;
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -553,8 +566,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++ijp;
                         ij += lda;
                     }
@@ -569,8 +582,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__3 = ijp;
                         i__4 = ij;
-                        ap[i__3].r = arf[i__4].r;
-                        ap[i__3].i = arf[i__4].i; // , expr subst
+                        ap[i__3].real = arf[i__4].real;
+                        ap[i__3].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -596,8 +609,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__4].r = q__1.r;
-                        ap[i__4].i = q__1.i; // , expr subst
+                        ap[i__4].real = q__1.real;
+                        ap[i__4].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -610,8 +623,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__2 = ijp;
                         i__4 = ij;
-                        ap[i__2].r = arf[i__4].r;
-                        ap[i__2].i = arf[i__4].i; // , expr subst
+                        ap[i__2].real = arf[i__4].real;
+                        ap[i__2].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js = js + lda + 1;
@@ -633,8 +646,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__2 = ijp;
                         i__4 = ij;
-                        ap[i__2].r = arf[i__4].r;
-                        ap[i__2].i = arf[i__4].i; // , expr subst
+                        ap[i__2].real = arf[i__4].real;
+                        ap[i__2].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -648,8 +661,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__4].r = q__1.r;
-                        ap[i__4].i = q__1.i; // , expr subst
+                        ap[i__4].real = q__1.real;
+                        ap[i__4].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }

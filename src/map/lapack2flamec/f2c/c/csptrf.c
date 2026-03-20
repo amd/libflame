@@ -9,8 +9,8 @@
  */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CSPTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -46,7 +46,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CSPTRF computes the factorization of a complex symmetric matrix A */
+/* > CSPTRF computes the factorization of a scomplex symmetric matrix A */
 /* > stored in packed format using the Bunch-Kaufman diagonal pivoting */
 /* > method: */
 /* > */
@@ -163,7 +163,23 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csptrf(uplo, n, ap, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csptrf(uplo, &n_64, ap, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *ipiv,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -176,38 +192,25 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    double sqrt(doublereal), r_imag(complex *);
-    void c_div(complex *, complex *, complex *);
+    double sqrt(doublereal), r_imag(scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k;
-    complex t, r1, d11, d12, d21, d22;
-    integer kc, kk, kp;
-    complex wk;
-    integer kx, knc, kpc, npp;
-    complex wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        cspr_(char *, integer *, complex *, complex *, integer *, complex *);
+    aocl_int64_t i__, j, k;
+    scomplex t, r1, d11, d12, d21, d22;
+    aocl_int64_t kc, kk, kp;
+    scomplex wk;
+    aocl_int64_t kx, knc, kpc, npp;
+    scomplex wkm1, wkp1;
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
     real absakk;
-    extern integer icamax_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -253,7 +256,7 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -278,15 +281,15 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = kc + k - 1;
         absakk
-            = (r__1 = ap[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kc + k - 1]), f2c_abs(r__2));
+            = (r__1 = ap[i__1].real, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kc + k - 1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value */
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = icamax_(&i__1, &ap[kc], &c__1);
+            imax = aocl_blas_icamax(&i__1, &ap[kc], &c__1);
             i__1 = kc + imax - 1;
-            colmax = (r__1 = ap[i__1].r, f2c_abs(r__1))
+            colmax = (r__1 = ap[i__1].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&ap[kc + imax - 1]), f2c_abs(r__2));
         }
         else
@@ -318,11 +321,11 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 for(j = imax + 1; j <= i__1; ++j)
                 {
                     i__2 = kx;
-                    if((r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2))
+                    if((r__1 = ap[i__2].real, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2))
                        > rowmax)
                     {
                         i__2 = kx;
-                        rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1))
+                        rowmax = (r__1 = ap[i__2].real, f2c_abs(r__1))
                                  + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
                         /* jmax = j; */
                     }
@@ -333,11 +336,11 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    jmax = icamax_(&i__1, &ap[kpc], &c__1);
+                    jmax = aocl_blas_icamax(&i__1, &ap[kpc], &c__1);
                     /* Computing MAX */
                     i__1 = kpc + jmax - 1;
                     r__3 = rowmax;
-                    r__4 = (r__1 = ap[i__1].r, f2c_abs(r__1))
+                    r__4 = (r__1 = ap[i__1].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&ap[kpc + jmax - 1]), f2c_abs(r__2)); // , expr subst
                     rowmax = fla_max(r__3, r__4);
                 }
@@ -349,7 +352,7 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 else /* if(complicated condition) */
                 {
                     i__1 = kpc + imax - 1;
-                    if((r__1 = ap[i__1].r, f2c_abs(r__1))
+                    if((r__1 = ap[i__1].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&ap[kpc + imax - 1]), f2c_abs(r__2))
                        >= alpha * rowmax)
                     {
@@ -376,46 +379,46 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 /* Interchange rows and columns KK and KP in the leading */
                 /* submatrix A(1:k,1:k) */
                 i__1 = kp - 1;
-                cswap_(&i__1, &ap[knc], &c__1, &ap[kpc], &c__1);
+                aocl_blas_cswap(&i__1, &ap[knc], &c__1, &ap[kpc], &c__1);
                 kx = kpc + kp - 1;
                 i__1 = kk - 1;
                 for(j = kp + 1; j <= i__1; ++j)
                 {
                     kx = kx + j - 1;
                     i__2 = knc + j - 1;
-                    t.r = ap[i__2].r;
-                    t.i = ap[i__2].i; // , expr subst
+                    t.real = ap[i__2].real;
+                    t.imag = ap[i__2].imag; // , expr subst
                     i__2 = knc + j - 1;
                     i__3 = kx;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                     i__2 = kx;
-                    ap[i__2].r = t.r;
-                    ap[i__2].i = t.i; // , expr subst
+                    ap[i__2].real = t.real;
+                    ap[i__2].imag = t.imag; // , expr subst
                     /* L30: */
                 }
                 i__1 = knc + kk - 1;
-                t.r = ap[i__1].r;
-                t.i = ap[i__1].i; // , expr subst
+                t.real = ap[i__1].real;
+                t.imag = ap[i__1].imag; // , expr subst
                 i__1 = knc + kk - 1;
                 i__2 = kpc + kp - 1;
-                ap[i__1].r = ap[i__2].r;
-                ap[i__1].i = ap[i__2].i; // , expr subst
+                ap[i__1].real = ap[i__2].real;
+                ap[i__1].imag = ap[i__2].imag; // , expr subst
                 i__1 = kpc + kp - 1;
-                ap[i__1].r = t.r;
-                ap[i__1].i = t.i; // , expr subst
+                ap[i__1].real = t.real;
+                ap[i__1].imag = t.imag; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = kc + k - 2;
-                    t.r = ap[i__1].r;
-                    t.i = ap[i__1].i; // , expr subst
+                    t.real = ap[i__1].real;
+                    t.imag = ap[i__1].imag; // , expr subst
                     i__1 = kc + k - 2;
                     i__2 = kc + kp - 1;
-                    ap[i__1].r = ap[i__2].r;
-                    ap[i__1].i = ap[i__2].i; // , expr subst
+                    ap[i__1].real = ap[i__2].real;
+                    ap[i__1].imag = ap[i__2].imag; // , expr subst
                     i__1 = kc + kp - 1;
-                    ap[i__1].r = t.r;
-                    ap[i__1].i = t.i; // , expr subst
+                    ap[i__1].real = t.real;
+                    ap[i__1].imag = t.imag; // , expr subst
                 }
             }
             /* Update the leading submatrix */
@@ -427,15 +430,15 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 /* Perform a rank-1 update of A(1:k-1,1:k-1) as */
                 /* A := A - U(k)*D(k)*U(k)**T = A - W(k)*1/D(k)*W(k)**T */
                 c_div(&q__1, &c_b1, &ap[kc + k - 1]);
-                r1.r = q__1.r;
-                r1.i = q__1.i; // , expr subst
+                r1.real = q__1.real;
+                r1.imag = q__1.imag; // , expr subst
                 i__1 = k - 1;
-                q__1.r = -r1.r;
-                q__1.i = -r1.i; // , expr subst
-                cspr_(uplo, &i__1, &q__1, &ap[kc], &c__1, &ap[1]);
+                q__1.real = -r1.real;
+                q__1.imag = -r1.imag; // , expr subst
+                aocl_lapack_cspr(uplo, &i__1, &q__1, &ap[kc], &c__1, &ap[1]);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
-                cscal_(&i__1, &r1, &ap[kc], &c__1);
+                aocl_blas_cscal(&i__1, &r1, &ap[kc], &c__1);
             }
             else
             {
@@ -449,70 +452,70 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 if(k > 2)
                 {
                     i__1 = k - 1 + (k - 1) * k / 2;
-                    d12.r = ap[i__1].r;
-                    d12.i = ap[i__1].i; // , expr subst
+                    d12.real = ap[i__1].real;
+                    d12.imag = ap[i__1].imag; // , expr subst
                     c_div(&q__1, &ap[k - 1 + (k - 2) * (k - 1) / 2], &d12);
-                    d22.r = q__1.r;
-                    d22.i = q__1.i; // , expr subst
+                    d22.real = q__1.real;
+                    d22.imag = q__1.imag; // , expr subst
                     c_div(&q__1, &ap[k + (k - 1) * k / 2], &d12);
-                    d11.r = q__1.r;
-                    d11.i = q__1.i; // , expr subst
-                    q__3.r = d11.r * d22.r - d11.i * d22.i;
-                    q__3.i = d11.r * d22.i + d11.i * d22.r; // , expr subst
-                    q__2.r = q__3.r - 1.f;
-                    q__2.i = q__3.i - 0.f; // , expr subst
+                    d11.real = q__1.real;
+                    d11.imag = q__1.imag; // , expr subst
+                    q__3.real = d11.real * d22.real - d11.imag * d22.imag;
+                    q__3.imag = d11.real * d22.imag + d11.imag * d22.real; // , expr subst
+                    q__2.real = q__3.real - 1.f;
+                    q__2.imag = q__3.imag - 0.f; // , expr subst
                     c_div(&q__1, &c_b1, &q__2);
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                     c_div(&q__1, &t, &d12);
-                    d12.r = q__1.r;
-                    d12.i = q__1.i; // , expr subst
+                    d12.real = q__1.real;
+                    d12.imag = q__1.imag; // , expr subst
                     for(j = k - 2; j >= 1; --j)
                     {
                         i__1 = j + (k - 2) * (k - 1) / 2;
-                        q__3.r = d11.r * ap[i__1].r - d11.i * ap[i__1].i;
-                        q__3.i = d11.r * ap[i__1].i + d11.i * ap[i__1].r; // , expr subst
+                        q__3.real = d11.real * ap[i__1].real - d11.imag * ap[i__1].imag;
+                        q__3.imag = d11.real * ap[i__1].imag + d11.imag * ap[i__1].real; // , expr subst
                         i__2 = j + (k - 1) * k / 2;
-                        q__2.r = q__3.r - ap[i__2].r;
-                        q__2.i = q__3.i - ap[i__2].i; // , expr subst
-                        q__1.r = d12.r * q__2.r - d12.i * q__2.i;
-                        q__1.i = d12.r * q__2.i + d12.i * q__2.r; // , expr subst
-                        wkm1.r = q__1.r;
-                        wkm1.i = q__1.i; // , expr subst
+                        q__2.real = q__3.real - ap[i__2].real;
+                        q__2.imag = q__3.imag - ap[i__2].imag; // , expr subst
+                        q__1.real = d12.real * q__2.real - d12.imag * q__2.imag;
+                        q__1.imag = d12.real * q__2.imag + d12.imag * q__2.real; // , expr subst
+                        wkm1.real = q__1.real;
+                        wkm1.imag = q__1.imag; // , expr subst
                         i__1 = j + (k - 1) * k / 2;
-                        q__3.r = d22.r * ap[i__1].r - d22.i * ap[i__1].i;
-                        q__3.i = d22.r * ap[i__1].i + d22.i * ap[i__1].r; // , expr subst
+                        q__3.real = d22.real * ap[i__1].real - d22.imag * ap[i__1].imag;
+                        q__3.imag = d22.real * ap[i__1].imag + d22.imag * ap[i__1].real; // , expr subst
                         i__2 = j + (k - 2) * (k - 1) / 2;
-                        q__2.r = q__3.r - ap[i__2].r;
-                        q__2.i = q__3.i - ap[i__2].i; // , expr subst
-                        q__1.r = d12.r * q__2.r - d12.i * q__2.i;
-                        q__1.i = d12.r * q__2.i + d12.i * q__2.r; // , expr subst
-                        wk.r = q__1.r;
-                        wk.i = q__1.i; // , expr subst
+                        q__2.real = q__3.real - ap[i__2].real;
+                        q__2.imag = q__3.imag - ap[i__2].imag; // , expr subst
+                        q__1.real = d12.real * q__2.real - d12.imag * q__2.imag;
+                        q__1.imag = d12.real * q__2.imag + d12.imag * q__2.real; // , expr subst
+                        wk.real = q__1.real;
+                        wk.imag = q__1.imag; // , expr subst
                         for(i__ = j; i__ >= 1; --i__)
                         {
                             i__1 = i__ + (j - 1) * j / 2;
                             i__2 = i__ + (j - 1) * j / 2;
                             i__3 = i__ + (k - 1) * k / 2;
-                            q__3.r = ap[i__3].r * wk.r - ap[i__3].i * wk.i;
-                            q__3.i = ap[i__3].r * wk.i + ap[i__3].i * wk.r; // , expr subst
-                            q__2.r = ap[i__2].r - q__3.r;
-                            q__2.i = ap[i__2].i - q__3.i; // , expr subst
+                            q__3.real = ap[i__3].real * wk.real - ap[i__3].imag * wk.imag;
+                            q__3.imag = ap[i__3].real * wk.imag + ap[i__3].imag * wk.real; // , expr subst
+                            q__2.real = ap[i__2].real - q__3.real;
+                            q__2.imag = ap[i__2].imag - q__3.imag; // , expr subst
                             i__4 = i__ + (k - 2) * (k - 1) / 2;
-                            q__4.r = ap[i__4].r * wkm1.r - ap[i__4].i * wkm1.i;
-                            q__4.i = ap[i__4].r * wkm1.i + ap[i__4].i * wkm1.r; // , expr subst
-                            q__1.r = q__2.r - q__4.r;
-                            q__1.i = q__2.i - q__4.i; // , expr subst
-                            ap[i__1].r = q__1.r;
-                            ap[i__1].i = q__1.i; // , expr subst
+                            q__4.real = ap[i__4].real * wkm1.real - ap[i__4].imag * wkm1.imag;
+                            q__4.imag = ap[i__4].real * wkm1.imag + ap[i__4].imag * wkm1.real; // , expr subst
+                            q__1.real = q__2.real - q__4.real;
+                            q__1.imag = q__2.imag - q__4.imag; // , expr subst
+                            ap[i__1].real = q__1.real;
+                            ap[i__1].imag = q__1.imag; // , expr subst
                             /* L40: */
                         }
                         i__1 = j + (k - 1) * k / 2;
-                        ap[i__1].r = wk.r;
-                        ap[i__1].i = wk.i; // , expr subst
+                        ap[i__1].real = wk.real;
+                        ap[i__1].imag = wk.imag; // , expr subst
                         i__1 = j + (k - 2) * (k - 1) / 2;
-                        ap[i__1].r = wkm1.r;
-                        ap[i__1].i = wkm1.i; // , expr subst
+                        ap[i__1].real = wkm1.real;
+                        ap[i__1].imag = wkm1.imag; // , expr subst
                         /* L50: */
                     }
                 }
@@ -521,12 +524,12 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -552,15 +555,15 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = kc;
-        absakk = (r__1 = ap[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kc]), f2c_abs(r__2));
+        absakk = (r__1 = ap[i__1].real, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kc]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value */
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + icamax_(&i__1, &ap[kc + 1], &c__1);
+            imax = k + aocl_blas_icamax(&i__1, &ap[kc + 1], &c__1);
             i__1 = kc + imax - k;
-            colmax = (r__1 = ap[i__1].r, f2c_abs(r__1))
+            colmax = (r__1 = ap[i__1].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&ap[kc + imax - k]), f2c_abs(r__2));
         }
         else
@@ -593,11 +596,11 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 for(j = k; j <= i__1; ++j)
                 {
                     i__2 = kx;
-                    if((r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2))
+                    if((r__1 = ap[i__2].real, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2))
                        > rowmax)
                     {
                         i__2 = kx;
-                        rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1))
+                        rowmax = (r__1 = ap[i__2].real, f2c_abs(r__1))
                                  + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
                         /* jmax = j; */
                     }
@@ -608,11 +611,11 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    jmax = imax + icamax_(&i__1, &ap[kpc + 1], &c__1);
+                    jmax = imax + aocl_blas_icamax(&i__1, &ap[kpc + 1], &c__1);
                     /* Computing MAX */
                     i__1 = kpc + jmax - imax;
                     r__3 = rowmax;
-                    r__4 = (r__1 = ap[i__1].r, f2c_abs(r__1))
+                    r__4 = (r__1 = ap[i__1].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&ap[kpc + jmax - imax]), f2c_abs(r__2)); // , expr subst
                     rowmax = fla_max(r__3, r__4);
                 }
@@ -624,7 +627,7 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 else /* if(complicated condition) */
                 {
                     i__1 = kpc;
-                    if((r__1 = ap[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kpc]), f2c_abs(r__2))
+                    if((r__1 = ap[i__1].real, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kpc]), f2c_abs(r__2))
                        >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
@@ -652,7 +655,7 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    cswap_(&i__1, &ap[knc + kp - kk + 1], &c__1, &ap[kpc + 1], &c__1);
+                    aocl_blas_cswap(&i__1, &ap[knc + kp - kk + 1], &c__1, &ap[kpc + 1], &c__1);
                 }
                 kx = knc + kp - kk;
                 i__1 = kp - 1;
@@ -660,39 +663,39 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 {
                     kx = kx + *n - j + 1;
                     i__2 = knc + j - kk;
-                    t.r = ap[i__2].r;
-                    t.i = ap[i__2].i; // , expr subst
+                    t.real = ap[i__2].real;
+                    t.imag = ap[i__2].imag; // , expr subst
                     i__2 = knc + j - kk;
                     i__3 = kx;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                     i__2 = kx;
-                    ap[i__2].r = t.r;
-                    ap[i__2].i = t.i; // , expr subst
+                    ap[i__2].real = t.real;
+                    ap[i__2].imag = t.imag; // , expr subst
                     /* L80: */
                 }
                 i__1 = knc;
-                t.r = ap[i__1].r;
-                t.i = ap[i__1].i; // , expr subst
+                t.real = ap[i__1].real;
+                t.imag = ap[i__1].imag; // , expr subst
                 i__1 = knc;
                 i__2 = kpc;
-                ap[i__1].r = ap[i__2].r;
-                ap[i__1].i = ap[i__2].i; // , expr subst
+                ap[i__1].real = ap[i__2].real;
+                ap[i__1].imag = ap[i__2].imag; // , expr subst
                 i__1 = kpc;
-                ap[i__1].r = t.r;
-                ap[i__1].i = t.i; // , expr subst
+                ap[i__1].real = t.real;
+                ap[i__1].imag = t.imag; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = kc + 1;
-                    t.r = ap[i__1].r;
-                    t.i = ap[i__1].i; // , expr subst
+                    t.real = ap[i__1].real;
+                    t.imag = ap[i__1].imag; // , expr subst
                     i__1 = kc + 1;
                     i__2 = kc + kp - k;
-                    ap[i__1].r = ap[i__2].r;
-                    ap[i__1].i = ap[i__2].i; // , expr subst
+                    ap[i__1].real = ap[i__2].real;
+                    ap[i__1].imag = ap[i__2].imag; // , expr subst
                     i__1 = kc + kp - k;
-                    ap[i__1].r = t.r;
-                    ap[i__1].i = t.i; // , expr subst
+                    ap[i__1].real = t.real;
+                    ap[i__1].imag = t.imag; // , expr subst
                 }
             }
             /* Update the trailing submatrix */
@@ -706,15 +709,15 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                     /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
                     /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
                     c_div(&q__1, &c_b1, &ap[kc]);
-                    r1.r = q__1.r;
-                    r1.i = q__1.i; // , expr subst
+                    r1.real = q__1.real;
+                    r1.imag = q__1.imag; // , expr subst
                     i__1 = *n - k;
-                    q__1.r = -r1.r;
-                    q__1.i = -r1.i; // , expr subst
-                    cspr_(uplo, &i__1, &q__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
+                    q__1.real = -r1.real;
+                    q__1.imag = -r1.imag; // , expr subst
+                    aocl_lapack_cspr(uplo, &i__1, &q__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
-                    cscal_(&i__1, &r1, &ap[kc + 1], &c__1);
+                    aocl_blas_cscal(&i__1, &r1, &ap[kc + 1], &c__1);
                 }
             }
             else
@@ -731,72 +734,72 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                     /* where L(k) and L(k+1) are the k-th and (k+1)-th */
                     /* columns of L */
                     i__1 = k + 1 + (k - 1) * ((*n << 1) - k) / 2;
-                    d21.r = ap[i__1].r;
-                    d21.i = ap[i__1].i; // , expr subst
+                    d21.real = ap[i__1].real;
+                    d21.imag = ap[i__1].imag; // , expr subst
                     c_div(&q__1, &ap[k + 1 + k * ((*n << 1) - k - 1) / 2], &d21);
-                    d11.r = q__1.r;
-                    d11.i = q__1.i; // , expr subst
+                    d11.real = q__1.real;
+                    d11.imag = q__1.imag; // , expr subst
                     c_div(&q__1, &ap[k + (k - 1) * ((*n << 1) - k) / 2], &d21);
-                    d22.r = q__1.r;
-                    d22.i = q__1.i; // , expr subst
-                    q__3.r = d11.r * d22.r - d11.i * d22.i;
-                    q__3.i = d11.r * d22.i + d11.i * d22.r; // , expr subst
-                    q__2.r = q__3.r - 1.f;
-                    q__2.i = q__3.i - 0.f; // , expr subst
+                    d22.real = q__1.real;
+                    d22.imag = q__1.imag; // , expr subst
+                    q__3.real = d11.real * d22.real - d11.imag * d22.imag;
+                    q__3.imag = d11.real * d22.imag + d11.imag * d22.real; // , expr subst
+                    q__2.real = q__3.real - 1.f;
+                    q__2.imag = q__3.imag - 0.f; // , expr subst
                     c_div(&q__1, &c_b1, &q__2);
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                     c_div(&q__1, &t, &d21);
-                    d21.r = q__1.r;
-                    d21.i = q__1.i; // , expr subst
+                    d21.real = q__1.real;
+                    d21.imag = q__1.imag; // , expr subst
                     i__1 = *n;
                     for(j = k + 2; j <= i__1; ++j)
                     {
                         i__2 = j + (k - 1) * ((*n << 1) - k) / 2;
-                        q__3.r = d11.r * ap[i__2].r - d11.i * ap[i__2].i;
-                        q__3.i = d11.r * ap[i__2].i + d11.i * ap[i__2].r; // , expr subst
+                        q__3.real = d11.real * ap[i__2].real - d11.imag * ap[i__2].imag;
+                        q__3.imag = d11.real * ap[i__2].imag + d11.imag * ap[i__2].real; // , expr subst
                         i__3 = j + k * ((*n << 1) - k - 1) / 2;
-                        q__2.r = q__3.r - ap[i__3].r;
-                        q__2.i = q__3.i - ap[i__3].i; // , expr subst
-                        q__1.r = d21.r * q__2.r - d21.i * q__2.i;
-                        q__1.i = d21.r * q__2.i + d21.i * q__2.r; // , expr subst
-                        wk.r = q__1.r;
-                        wk.i = q__1.i; // , expr subst
+                        q__2.real = q__3.real - ap[i__3].real;
+                        q__2.imag = q__3.imag - ap[i__3].imag; // , expr subst
+                        q__1.real = d21.real * q__2.real - d21.imag * q__2.imag;
+                        q__1.imag = d21.real * q__2.imag + d21.imag * q__2.real; // , expr subst
+                        wk.real = q__1.real;
+                        wk.imag = q__1.imag; // , expr subst
                         i__2 = j + k * ((*n << 1) - k - 1) / 2;
-                        q__3.r = d22.r * ap[i__2].r - d22.i * ap[i__2].i;
-                        q__3.i = d22.r * ap[i__2].i + d22.i * ap[i__2].r; // , expr subst
+                        q__3.real = d22.real * ap[i__2].real - d22.imag * ap[i__2].imag;
+                        q__3.imag = d22.real * ap[i__2].imag + d22.imag * ap[i__2].real; // , expr subst
                         i__3 = j + (k - 1) * ((*n << 1) - k) / 2;
-                        q__2.r = q__3.r - ap[i__3].r;
-                        q__2.i = q__3.i - ap[i__3].i; // , expr subst
-                        q__1.r = d21.r * q__2.r - d21.i * q__2.i;
-                        q__1.i = d21.r * q__2.i + d21.i * q__2.r; // , expr subst
-                        wkp1.r = q__1.r;
-                        wkp1.i = q__1.i; // , expr subst
+                        q__2.real = q__3.real - ap[i__3].real;
+                        q__2.imag = q__3.imag - ap[i__3].imag; // , expr subst
+                        q__1.real = d21.real * q__2.real - d21.imag * q__2.imag;
+                        q__1.imag = d21.real * q__2.imag + d21.imag * q__2.real; // , expr subst
+                        wkp1.real = q__1.real;
+                        wkp1.imag = q__1.imag; // , expr subst
                         i__2 = *n;
                         for(i__ = j; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + (j - 1) * ((*n << 1) - j) / 2;
                             i__4 = i__ + (j - 1) * ((*n << 1) - j) / 2;
                             i__5 = i__ + (k - 1) * ((*n << 1) - k) / 2;
-                            q__3.r = ap[i__5].r * wk.r - ap[i__5].i * wk.i;
-                            q__3.i = ap[i__5].r * wk.i + ap[i__5].i * wk.r; // , expr subst
-                            q__2.r = ap[i__4].r - q__3.r;
-                            q__2.i = ap[i__4].i - q__3.i; // , expr subst
+                            q__3.real = ap[i__5].real * wk.real - ap[i__5].imag * wk.imag;
+                            q__3.imag = ap[i__5].real * wk.imag + ap[i__5].imag * wk.real; // , expr subst
+                            q__2.real = ap[i__4].real - q__3.real;
+                            q__2.imag = ap[i__4].imag - q__3.imag; // , expr subst
                             i__6 = i__ + k * ((*n << 1) - k - 1) / 2;
-                            q__4.r = ap[i__6].r * wkp1.r - ap[i__6].i * wkp1.i;
-                            q__4.i = ap[i__6].r * wkp1.i + ap[i__6].i * wkp1.r; // , expr subst
-                            q__1.r = q__2.r - q__4.r;
-                            q__1.i = q__2.i - q__4.i; // , expr subst
-                            ap[i__3].r = q__1.r;
-                            ap[i__3].i = q__1.i; // , expr subst
+                            q__4.real = ap[i__6].real * wkp1.real - ap[i__6].imag * wkp1.imag;
+                            q__4.imag = ap[i__6].real * wkp1.imag + ap[i__6].imag * wkp1.real; // , expr subst
+                            q__1.real = q__2.real - q__4.real;
+                            q__1.imag = q__2.imag - q__4.imag; // , expr subst
+                            ap[i__3].real = q__1.real;
+                            ap[i__3].imag = q__1.imag; // , expr subst
                             /* L90: */
                         }
                         i__2 = j + (k - 1) * ((*n << 1) - k) / 2;
-                        ap[i__2].r = wk.r;
-                        ap[i__2].i = wk.i; // , expr subst
+                        ap[i__2].real = wk.real;
+                        ap[i__2].imag = wk.imag; // , expr subst
                         i__2 = j + k * ((*n << 1) - k - 1) / 2;
-                        ap[i__2].r = wkp1.r;
-                        ap[i__2].i = wkp1.i; // , expr subst
+                        ap[i__2].real = wkp1.real;
+                        ap[i__2].imag = wkp1.imag; // , expr subst
                         /* L100: */
                     }
                 }
@@ -805,12 +808,12 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;

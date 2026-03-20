@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 static real c_b39 = -1.f;
 static real c_b42 = 1.f;
 /* > \brief \b CTGSJA */
@@ -50,7 +50,7 @@ static real c_b42 = 1.f;
 /* > \verbatim */
 /* > */
 /* > CTGSJA computes the generalized singular value decomposition (GSVD) */
-/* > of two complex upper triangular (or trapezoidal) matrices A and B. */
+/* > of two scomplex upper triangular (or trapezoidal) matrices A and B. */
 /* > */
 /* > On entry, it is assumed that matrices A and B have the following */
 /* > forms, which may be obtained by the preprocessing subroutine CGGSVP */
@@ -393,10 +393,45 @@ V1**H *B13*Q1 = S1*R1, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k,
-             integer *l, complex *a, integer *lda, complex *b, integer *ldb, real *tola, real *tolb,
-             real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv,
-             complex *q, integer *ldq, complex *work, integer *ncycle, integer *info)
+/** Generated wrapper function */
+void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, aocl_int_t *n,
+             aocl_int_t *k, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb,
+             real *tola, real *tolb, real *alpha, real *beta, scomplex *u, aocl_int_t *ldu,
+             scomplex *v, aocl_int_t *ldv, scomplex *q, aocl_int_t *ldq, scomplex *work,
+             aocl_int_t *ncycle, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctgsja(jobu, jobv, jobq, m, p, n, k, l, a, lda, b, ldb, tola, tolb, alpha, beta, u,
+                       ldu, v, ldv, q, ldq, work, ncycle, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ncycle_64 = *ncycle;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctgsja(jobu, jobv, jobq, &m_64, &p_64, &n_64, &k_64, &l_64, a, &lda_64, b, &ldb_64,
+                       tola, tolb, alpha, beta, u, &ldu_64, v, &ldv_64, q, &ldq_64, work,
+                       &ncycle_64, &info_64);
+
+    *ncycle = (aocl_int_t)ncycle_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctgsja(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aocl_int64_t *p,
+                        aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *l, scomplex *a,
+                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, real *tola, real *tolb,
+                        real *alpha, real *beta, scomplex *u, aocl_int64_t *ldu, scomplex *v,
+                        aocl_int64_t *ldv, scomplex *q, aocl_int64_t *ldq, scomplex *work,
+                        aocl_int64_t *ncycle, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ctgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS
@@ -405,43 +440,27 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                       *jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq,
                       *ncycle);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3, i__4;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real a1, b1, a3, b3;
-    complex a2, b2;
+    scomplex a2, b2;
     real csq, csu, csv;
-    complex snq;
+    scomplex snq;
     real rwk;
-    complex snu, snv;
-    extern /* Subroutine */
-        void
-        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    scomplex snu, snv;
     real gamma;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical initq, initu, initv, wantq, upper;
     real error, ssmin;
     logical wantu, wantv;
-    extern /* Subroutine */
-        void
-        clags2_(logical *, real *, complex *, real *, real *, complex *, real *, real *, complex *,
-                real *, complex *, real *, complex *),
-        clapll_(integer *, complex *, integer *, complex *, integer *, real *),
-        csscal_(integer *, real *, complex *, integer *);
-    integer kcycle;
-    extern /* Subroutine */
-        void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slartg_(real *, real *, real *, real *, real *);
+    aocl_int64_t kcycle;
+    extern void slartg_(real *, real *, real *, real *, real *);
     real hugenum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -538,22 +557,22 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTGSJA", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTGSJA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize U, V and Q, if necessary */
     if(initu)
     {
-        claset_("Full", m, m, &c_b1, &c_b2, &u[u_offset], ldu);
+        aocl_lapack_claset("Full", m, m, &c_b1, &c_b2, &u[u_offset], ldu);
     }
     if(initv)
     {
-        claset_("Full", p, p, &c_b1, &c_b2, &v[v_offset], ldv);
+        aocl_lapack_claset("Full", p, p, &c_b1, &c_b2, &v[v_offset], ldv);
     }
     if(initq)
     {
-        claset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
+        aocl_lapack_claset("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
     }
     /* Loop until convergence */
     upper = FALSE_;
@@ -567,133 +586,134 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 a1 = 0.f;
-                a2.r = 0.f;
-                a2.i = 0.f; // , expr subst
+                a2.real = 0.f;
+                a2.imag = 0.f; // , expr subst
                 a3 = 0.f;
                 if(*k + i__ <= *m)
                 {
                     i__3 = *k + i__ + (*n - *l + i__) * a_dim1;
-                    a1 = a[i__3].r;
+                    a1 = a[i__3].real;
                 }
                 if(*k + j <= *m)
                 {
                     i__3 = *k + j + (*n - *l + j) * a_dim1;
-                    a3 = a[i__3].r;
+                    a3 = a[i__3].real;
                 }
                 i__3 = i__ + (*n - *l + i__) * b_dim1;
-                b1 = b[i__3].r;
+                b1 = b[i__3].real;
                 i__3 = j + (*n - *l + j) * b_dim1;
-                b3 = b[i__3].r;
+                b3 = b[i__3].real;
                 if(upper)
                 {
                     if(*k + i__ <= *m)
                     {
                         i__3 = *k + i__ + (*n - *l + j) * a_dim1;
-                        a2.r = a[i__3].r;
-                        a2.i = a[i__3].i; // , expr subst
+                        a2.real = a[i__3].real;
+                        a2.imag = a[i__3].imag; // , expr subst
                     }
                     i__3 = i__ + (*n - *l + j) * b_dim1;
-                    b2.r = b[i__3].r;
-                    b2.i = b[i__3].i; // , expr subst
+                    b2.real = b[i__3].real;
+                    b2.imag = b[i__3].imag; // , expr subst
                 }
                 else
                 {
                     if(*k + j <= *m)
                     {
                         i__3 = *k + j + (*n - *l + i__) * a_dim1;
-                        a2.r = a[i__3].r;
-                        a2.i = a[i__3].i; // , expr subst
+                        a2.real = a[i__3].real;
+                        a2.imag = a[i__3].imag; // , expr subst
                     }
                     i__3 = j + (*n - *l + i__) * b_dim1;
-                    b2.r = b[i__3].r;
-                    b2.i = b[i__3].i; // , expr subst
+                    b2.real = b[i__3].real;
+                    b2.imag = b[i__3].imag; // , expr subst
                 }
                 clags2_(&upper, &a1, &a2, &a3, &b1, &b2, &b3, &csu, &snu, &csv, &snv, &csq, &snq);
                 /* Update (K+I)-th and (K+J)-th rows of matrix A: U**H *A */
                 if(*k + j <= *m)
                 {
                     r_cnjg(&q__1, &snu);
-                    crot_(l, &a[*k + j + (*n - *l + 1) * a_dim1], lda,
-                          &a[*k + i__ + (*n - *l + 1) * a_dim1], lda, &csu, &q__1);
+                    aocl_lapack_crot(l, &a[*k + j + (*n - *l + 1) * a_dim1], lda,
+                                     &a[*k + i__ + (*n - *l + 1) * a_dim1], lda, &csu, &q__1);
                 }
                 /* Update I-th and J-th rows of matrix B: V**H *B */
                 r_cnjg(&q__1, &snv);
-                crot_(l, &b[j + (*n - *l + 1) * b_dim1], ldb, &b[i__ + (*n - *l + 1) * b_dim1], ldb,
-                      &csv, &q__1);
+                aocl_lapack_crot(l, &b[j + (*n - *l + 1) * b_dim1], ldb,
+                                 &b[i__ + (*n - *l + 1) * b_dim1], ldb, &csv, &q__1);
                 /* Update (N-L+I)-th and (N-L+J)-th columns of matrices */
                 /* A and B: A*Q and B*Q */
                 /* Computing MIN */
                 i__4 = *k + *l;
                 i__3 = fla_min(i__4, *m);
-                crot_(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1,
-                      &a[(*n - *l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
-                crot_(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1, &b[(*n - *l + i__) * b_dim1 + 1],
-                      &c__1, &csq, &snq);
+                aocl_lapack_crot(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1,
+                                 &a[(*n - *l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
+                aocl_lapack_crot(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1,
+                                 &b[(*n - *l + i__) * b_dim1 + 1], &c__1, &csq, &snq);
                 if(upper)
                 {
                     if(*k + i__ <= *m)
                     {
                         i__3 = *k + i__ + (*n - *l + j) * a_dim1;
-                        a[i__3].r = 0.f;
-                        a[i__3].i = 0.f; // , expr subst
+                        a[i__3].real = 0.f;
+                        a[i__3].imag = 0.f; // , expr subst
                     }
                     i__3 = i__ + (*n - *l + j) * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                 }
                 else
                 {
                     if(*k + j <= *m)
                     {
                         i__3 = *k + j + (*n - *l + i__) * a_dim1;
-                        a[i__3].r = 0.f;
-                        a[i__3].i = 0.f; // , expr subst
+                        a[i__3].real = 0.f;
+                        a[i__3].imag = 0.f; // , expr subst
                     }
                     i__3 = j + (*n - *l + i__) * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                 }
                 /* Ensure that the diagonal elements of A and B are real. */
                 if(*k + i__ <= *m)
                 {
                     i__3 = *k + i__ + (*n - *l + i__) * a_dim1;
                     i__4 = *k + i__ + (*n - *l + i__) * a_dim1;
-                    r__1 = a[i__4].r;
-                    a[i__3].r = r__1;
-                    a[i__3].i = 0.f; // , expr subst
+                    r__1 = a[i__4].real;
+                    a[i__3].real = r__1;
+                    a[i__3].imag = 0.f; // , expr subst
                 }
                 if(*k + j <= *m)
                 {
                     i__3 = *k + j + (*n - *l + j) * a_dim1;
                     i__4 = *k + j + (*n - *l + j) * a_dim1;
-                    r__1 = a[i__4].r;
-                    a[i__3].r = r__1;
-                    a[i__3].i = 0.f; // , expr subst
+                    r__1 = a[i__4].real;
+                    a[i__3].real = r__1;
+                    a[i__3].imag = 0.f; // , expr subst
                 }
                 i__3 = i__ + (*n - *l + i__) * b_dim1;
                 i__4 = i__ + (*n - *l + i__) * b_dim1;
-                r__1 = b[i__4].r;
-                b[i__3].r = r__1;
-                b[i__3].i = 0.f; // , expr subst
+                r__1 = b[i__4].real;
+                b[i__3].real = r__1;
+                b[i__3].imag = 0.f; // , expr subst
                 i__3 = j + (*n - *l + j) * b_dim1;
                 i__4 = j + (*n - *l + j) * b_dim1;
-                r__1 = b[i__4].r;
-                b[i__3].r = r__1;
-                b[i__3].i = 0.f; // , expr subst
+                r__1 = b[i__4].real;
+                b[i__3].real = r__1;
+                b[i__3].imag = 0.f; // , expr subst
                 /* Update unitary matrices U, V, Q, if desired. */
                 if(wantu && *k + j <= *m)
                 {
-                    crot_(m, &u[(*k + j) * u_dim1 + 1], &c__1, &u[(*k + i__) * u_dim1 + 1], &c__1,
-                          &csu, &snu);
+                    aocl_lapack_crot(m, &u[(*k + j) * u_dim1 + 1], &c__1,
+                                     &u[(*k + i__) * u_dim1 + 1], &c__1, &csu, &snu);
                 }
                 if(wantv)
                 {
-                    crot_(p, &v[j * v_dim1 + 1], &c__1, &v[i__ * v_dim1 + 1], &c__1, &csv, &snv);
+                    aocl_lapack_crot(p, &v[j * v_dim1 + 1], &c__1, &v[i__ * v_dim1 + 1], &c__1,
+                                     &csv, &snv);
                 }
                 if(wantq)
                 {
-                    crot_(n, &q[(*n - *l + j) * q_dim1 + 1], &c__1,
-                          &q[(*n - *l + i__) * q_dim1 + 1], &c__1, &csq, &snq);
+                    aocl_lapack_crot(n, &q[(*n - *l + j) * q_dim1 + 1], &c__1,
+                                     &q[(*n - *l + i__) * q_dim1 + 1], &c__1, &csq, &snq);
                 }
                 /* L10: */
             }
@@ -713,11 +733,13 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = *l - i__ + 1;
-                ccopy_(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, &work[1], &c__1);
+                aocl_blas_ccopy(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, &work[1],
+                                &c__1);
                 i__2 = *l - i__ + 1;
-                ccopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[*l + 1], &c__1);
+                aocl_blas_ccopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[*l + 1],
+                                &c__1);
                 i__2 = *l - i__ + 1;
-                clapll_(&i__2, &work[1], &c__1, &work[*l + 1], &c__1, &ssmin);
+                aocl_lapack_clapll(&i__2, &work[1], &c__1, &work[*l + 1], &c__1, &ssmin);
                 error = fla_max(error, ssmin);
                 /* L30: */
             }
@@ -749,19 +771,19 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *k + i__ + (*n - *l + i__) * a_dim1;
-        a1 = a[i__2].r;
+        a1 = a[i__2].real;
         i__2 = i__ + (*n - *l + i__) * b_dim1;
-        b1 = b[i__2].r;
+        b1 = b[i__2].real;
         gamma = b1 / a1;
         if(gamma <= hugenum && gamma >= -hugenum)
         {
             if(gamma < 0.f)
             {
                 i__2 = *l - i__ + 1;
-                csscal_(&i__2, &c_b39, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
+                aocl_blas_csscal(&i__2, &c_b39, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
                 if(wantv)
                 {
-                    csscal_(p, &c_b39, &v[i__ * v_dim1 + 1], &c__1);
+                    aocl_blas_csscal(p, &c_b39, &v[i__ * v_dim1 + 1], &c__1);
                 }
             }
             r__1 = f2c_abs(gamma);
@@ -770,16 +792,16 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
             {
                 i__2 = *l - i__ + 1;
                 r__1 = 1.f / alpha[*k + i__];
-                csscal_(&i__2, &r__1, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+                aocl_blas_csscal(&i__2, &r__1, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
             }
             else
             {
                 i__2 = *l - i__ + 1;
                 r__1 = 1.f / beta[*k + i__];
-                csscal_(&i__2, &r__1, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
+                aocl_blas_csscal(&i__2, &r__1, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
                 i__2 = *l - i__ + 1;
-                ccopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
-                       &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+                aocl_blas_ccopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
+                                &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
             }
         }
         else
@@ -787,8 +809,8 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
             alpha[*k + i__] = 0.f;
             beta[*k + i__] = 1.f;
             i__2 = *l - i__ + 1;
-            ccopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
-                   &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+            aocl_blas_ccopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
+                            &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
         }
         /* L70: */
     }

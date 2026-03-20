@@ -1,17 +1,17 @@
 /* zdrot.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zdrot_(integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy, doublereal *c__, doublereal *s)
+int zdrot_(integer *n, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy, doublereal *c__, doublereal *s)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Local variables */
     integer i__;
-    doublecomplex ztemp;
+    dcomplex ztemp;
     integer ix, iy;
     /* applies a plane rotation, where the cos and sin (c and s) are */
-    /* double precision and the vectors zx and zy are double complex. */
+    /* double precision and the vectors zx and zy are double scomplex. */
     /* jack dongarra, linpack, 3/11/78. */
     /* Parameter adjustments */
     --zy;
@@ -43,20 +43,20 @@ int zdrot_(integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, inte
             ++i__)
     {
         i__2 = ix;
-        z__2.r = *c__ * zx[i__2].r, z__2.i = *c__ * zx[i__2].i;
+        z__2.real = *c__ * zx[i__2].real, z__2.imag = *c__ * zx[i__2].imag;
         i__3 = iy;
-        z__3.r = *s * zy[i__3].r, z__3.i = *s * zy[i__3].i;
-        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-        ztemp.r = z__1.r, ztemp.i = z__1.i;
+        z__3.real = *s * zy[i__3].real, z__3.imag = *s * zy[i__3].imag;
+        z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+        ztemp.real = z__1.real, ztemp.imag = z__1.imag;
         i__2 = iy;
         i__3 = iy;
-        z__2.r = *c__ * zy[i__3].r, z__2.i = *c__ * zy[i__3].i;
+        z__2.real = *c__ * zy[i__3].real, z__2.imag = *c__ * zy[i__3].imag;
         i__4 = ix;
-        z__3.r = *s * zx[i__4].r, z__3.i = *s * zx[i__4].i;
-        z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
-        zy[i__2].r = z__1.r, zy[i__2].i = z__1.i;
+        z__3.real = *s * zx[i__4].real, z__3.imag = *s * zx[i__4].imag;
+        z__1.real = z__2.real - z__3.real, z__1.imag = z__2.imag - z__3.imag;
+        zy[i__2].real = z__1.real, zy[i__2].imag = z__1.imag;
         i__2 = ix;
-        zx[i__2].r = ztemp.r, zx[i__2].i = ztemp.i;
+        zx[i__2].real = ztemp.real, zx[i__2].imag = ztemp.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -70,20 +70,20 @@ L20:
             ++i__)
     {
         i__2 = i__;
-        z__2.r = *c__ * zx[i__2].r, z__2.i = *c__ * zx[i__2].i;
+        z__2.real = *c__ * zx[i__2].real, z__2.imag = *c__ * zx[i__2].imag;
         i__3 = i__;
-        z__3.r = *s * zy[i__3].r, z__3.i = *s * zy[i__3].i;
-        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-        ztemp.r = z__1.r, ztemp.i = z__1.i;
+        z__3.real = *s * zy[i__3].real, z__3.imag = *s * zy[i__3].imag;
+        z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+        ztemp.real = z__1.real, ztemp.imag = z__1.imag;
         i__2 = i__;
         i__3 = i__;
-        z__2.r = *c__ * zy[i__3].r, z__2.i = *c__ * zy[i__3].i;
+        z__2.real = *c__ * zy[i__3].real, z__2.imag = *c__ * zy[i__3].imag;
         i__4 = i__;
-        z__3.r = *s * zx[i__4].r, z__3.i = *s * zx[i__4].i;
-        z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
-        zy[i__2].r = z__1.r, zy[i__2].i = z__1.i;
+        z__3.real = *s * zx[i__4].real, z__3.imag = *s * zx[i__4].imag;
+        z__1.real = z__2.real - z__3.real, z__1.imag = z__2.imag - z__3.imag;
+        zy[i__2].real = z__1.real, zy[i__2].imag = z__1.imag;
         i__2 = i__;
-        zx[i__2].r = ztemp.r, zx[i__2].i = ztemp.i;
+        zx[i__2].real = ztemp.real, zx[i__2].imag = ztemp.imag;
         /* L30: */
     }
     return 0;

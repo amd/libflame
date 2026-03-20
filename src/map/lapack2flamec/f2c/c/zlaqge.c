@@ -136,17 +136,33 @@
 /* > \ingroup complex16GEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqge_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *r__,
+/** Generated wrapper function */
+void zlaqge_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *r__,
              doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqge(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, equed);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zlaqge(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, equed);
+#endif
+}
+
+void aocl_lapack_zlaqge(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+                        doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal cj, large, small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -202,10 +218,10 @@ void zlaqge_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 {
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__ + j * a_dim1;
-                    z__1.r = cj * a[i__4].r;
-                    z__1.i = cj * a[i__4].i; // , expr subst
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    z__1.real = cj * a[i__4].real;
+                    z__1.imag = cj * a[i__4].imag; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -225,10 +241,10 @@ void zlaqge_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = r__[i__4] * a[i__5].r;
-                z__1.i = r__[i__4] * a[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = r__[i__4] * a[i__5].real;
+                z__1.imag = r__[i__4] * a[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -248,10 +264,10 @@ void zlaqge_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 i__3 = i__ + j * a_dim1;
                 d__1 = cj * r__[i__];
                 i__4 = i__ + j * a_dim1;
-                z__1.r = d__1 * a[i__4].r;
-                z__1.i = d__1 * a[i__4].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = d__1 * a[i__4].real;
+                z__1.imag = d__1 * a[i__4].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */

@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> SSBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -148,53 +148,53 @@ i */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *w,
-            real *z__, integer *ldz, real *work, integer *info)
+/** Generated wrapper function */
+void ssbev_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ldab,
+            real *w, real *z__, aocl_int_t *ldz, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssbev(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssbev(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, real *ab,
+                       aocl_int64_t *ldab, real *w, real *z__, aocl_int64_t *ldz, real *work,
+                       aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
-             ", ldz %" FLA_IS "",
-             *jobz, *uplo, *n, *kd, *ldab, *ldz);
+    AOCL_DTL_SNPRINTF("ssbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *jobz, *uplo, *n, *kd, *ldab, *ldz);
     /* System generated locals */
-    integer ab_dim1, ab_offset, z_dim1, z_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real eps;
-    integer inde;
+    aocl_int64_t inde;
     real anrm;
-    integer imax;
+    aocl_int64_t imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical lower, wantz;
-    integer iscale;
+    aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    integer indwrk;
-    extern /* Subroutine */
-        void
-        ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *,
-                integer *, real *, integer *),
-        ssterf_(integer *, real *, real *, integer *);
+    aocl_int64_t indwrk;
     real smlnum;
-    extern /* Subroutine */
-        void
-        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -256,7 +256,7 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSBEV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSBEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -291,7 +291,7 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = slansb_("M", uplo, n, kd, &ab[ab_offset], ldab, &work[1]);
+    anrm = aocl_lapack_slansb("M", uplo, n, kd, &ab[ab_offset], ldab, &work[1]);
     iscale = 0;
     if(anrm > 0.f && anrm < rmin)
     {
@@ -307,26 +307,26 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     {
         if(lower)
         {
-            slascl_("B", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_slascl("B", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
         else
         {
-            slascl_("Q", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_slascl("Q", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
     }
     /* Call SSBTRD to reduce symmetric band matrix to tridiagonal form. */
     inde = 1;
     indwrk = inde + *n;
-    ssbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset], ldz,
-            &work[indwrk], &iinfo);
+    aocl_lapack_ssbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset],
+                       ldz, &work[indwrk], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call SSTEQR. */
     if(!wantz)
     {
-        ssterf_(n, &w[1], &work[inde], info);
+        aocl_lapack_ssterf(n, &w[1], &work[inde], info);
     }
     else
     {
-        ssteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
+        aocl_lapack_ssteqr(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -340,7 +340,7 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
             imax = *info - 1;
         }
         r__1 = 1.f / sigma;
-        sscal_(&imax, &r__1, &w[1], &c__1);
+        aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

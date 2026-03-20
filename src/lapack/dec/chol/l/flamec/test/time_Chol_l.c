@@ -17,17 +17,17 @@
 
 
 void time_Chol_l(
-                  integer variant, integer type, integer nrepeats, integer n, integer nb_alg,
+                  aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t n, aocl_int64_t nb_alg,
                   FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj norm,
                   double *dtime, double *diff, double *gflops );
 
 
 void time_Chol_l(
-                  integer variant, integer type, integer nrepeats, integer n, integer nb_alg,
+                  aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t n, aocl_int64_t nb_alg,
                   FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj norm,
                   double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

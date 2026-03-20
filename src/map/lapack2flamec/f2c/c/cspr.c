@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CSPR performs the symmetrical rank-1 update of a complex symmetric packed matrix. */
+#include "FLA_f2c.h" /* > \brief \b CSPR performs the symmetrical rank-1 update of a scomplex symmetric packed matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -42,7 +42,7 @@
 /* > */
 /* > A := alpha*x*x**H + A, */
 /* > */
-/* > where alpha is a complex scalar, x is an n element vector and A is an */
+/* > where alpha is a scomplex scalar, x is an n element vector and A is an */
 /* > n by n symmetric matrix, supplied in packed form. */
 /* > \endverbatim */
 /* Arguments: */
@@ -127,7 +127,21 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, complex *ap)
+/** Generated wrapper function */
+void cspr_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *x, aocl_int_t *incx, scomplex *ap)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cspr(uplo, n, alpha, x, incx, ap);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_cspr(uplo, &n_64, alpha, x, &incx_64, ap);
+#endif
+}
+
+void aocl_lapack_cspr(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int64_t *incx,
+                      scomplex *ap)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -140,15 +154,12 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1, q__2;
     /* Local variables */
-    integer i__, j, k, kk, ix, jx, kx, info;
-    complex temp;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, k, kk, ix, jx, kx, info;
+    scomplex temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -188,12 +199,12 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
     }
     if(info != 0)
     {
-        xerbla_("CSPR ", &info, (ftnlen)5);
+        aocl_blas_xerbla("CSPR ", &info, (ftnlen)5);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible. */
-    if(*n == 0 || alpha->r == 0.f && alpha->i == 0.f)
+    if(*n == 0 || alpha->real == 0.f && alpha->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -219,13 +230,13 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if(x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if(x[i__2].real != 0.f || x[i__2].imag != 0.f)
                 {
                     i__2 = j;
-                    q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = q__1.r;
-                    temp.i = q__1.i; // , expr subst
+                    q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = q__1.real;
+                    temp.imag = q__1.imag; // , expr subst
                     k = kk;
                     i__2 = j - 1;
                     for(i__ = 1; i__ <= i__2; ++i__)
@@ -233,31 +244,31 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
                         i__3 = k;
                         i__4 = k;
                         i__5 = i__;
-                        q__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i;
-                        q__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r; // , expr subst
-                        q__1.r = ap[i__4].r + q__2.r;
-                        q__1.i = ap[i__4].i + q__2.i; // , expr subst
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        q__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag;
+                        q__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real; // , expr subst
+                        q__1.real = ap[i__4].real + q__2.real;
+                        q__1.imag = ap[i__4].imag + q__2.imag; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++k;
                         /* L10: */
                     }
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
                     i__4 = j;
-                    q__2.r = x[i__4].r * temp.r - x[i__4].i * temp.i;
-                    q__2.i = x[i__4].r * temp.i + x[i__4].i * temp.r; // , expr subst
-                    q__1.r = ap[i__3].r + q__2.r;
-                    q__1.i = ap[i__3].i + q__2.i; // , expr subst
-                    ap[i__2].r = q__1.r;
-                    ap[i__2].i = q__1.i; // , expr subst
+                    q__2.real = x[i__4].real * temp.real - x[i__4].imag * temp.imag;
+                    q__2.imag = x[i__4].real * temp.imag + x[i__4].imag * temp.real; // , expr subst
+                    q__1.real = ap[i__3].real + q__2.real;
+                    q__1.imag = ap[i__3].imag + q__2.imag; // , expr subst
+                    ap[i__2].real = q__1.real;
+                    ap[i__2].imag = q__1.imag; // , expr subst
                 }
                 else
                 {
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                 }
                 kk += j;
                 /* L20: */
@@ -270,13 +281,13 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if(x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if(x[i__2].real != 0.f || x[i__2].imag != 0.f)
                 {
                     i__2 = jx;
-                    q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = q__1.r;
-                    temp.i = q__1.i; // , expr subst
+                    q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = q__1.real;
+                    temp.imag = q__1.imag; // , expr subst
                     ix = kx;
                     i__2 = kk + j - 2;
                     for(k = kk; k <= i__2; ++k)
@@ -284,31 +295,31 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
                         i__3 = k;
                         i__4 = k;
                         i__5 = ix;
-                        q__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i;
-                        q__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r; // , expr subst
-                        q__1.r = ap[i__4].r + q__2.r;
-                        q__1.i = ap[i__4].i + q__2.i; // , expr subst
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        q__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag;
+                        q__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real; // , expr subst
+                        q__1.real = ap[i__4].real + q__2.real;
+                        q__1.imag = ap[i__4].imag + q__2.imag; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ix += *incx;
                         /* L30: */
                     }
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
                     i__4 = jx;
-                    q__2.r = x[i__4].r * temp.r - x[i__4].i * temp.i;
-                    q__2.i = x[i__4].r * temp.i + x[i__4].i * temp.r; // , expr subst
-                    q__1.r = ap[i__3].r + q__2.r;
-                    q__1.i = ap[i__3].i + q__2.i; // , expr subst
-                    ap[i__2].r = q__1.r;
-                    ap[i__2].i = q__1.i; // , expr subst
+                    q__2.real = x[i__4].real * temp.real - x[i__4].imag * temp.imag;
+                    q__2.imag = x[i__4].real * temp.imag + x[i__4].imag * temp.real; // , expr subst
+                    q__1.real = ap[i__3].real + q__2.real;
+                    q__1.imag = ap[i__3].imag + q__2.imag; // , expr subst
+                    ap[i__2].real = q__1.real;
+                    ap[i__2].imag = q__1.imag; // , expr subst
                 }
                 else
                 {
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                 }
                 jx += *incx;
                 kk += j;
@@ -325,22 +336,22 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if(x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if(x[i__2].real != 0.f || x[i__2].imag != 0.f)
                 {
                     i__2 = j;
-                    q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = q__1.r;
-                    temp.i = q__1.i; // , expr subst
+                    q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = q__1.real;
+                    temp.imag = q__1.imag; // , expr subst
                     i__2 = kk;
                     i__3 = kk;
                     i__4 = j;
-                    q__2.r = temp.r * x[i__4].r - temp.i * x[i__4].i;
-                    q__2.i = temp.r * x[i__4].i + temp.i * x[i__4].r; // , expr subst
-                    q__1.r = ap[i__3].r + q__2.r;
-                    q__1.i = ap[i__3].i + q__2.i; // , expr subst
-                    ap[i__2].r = q__1.r;
-                    ap[i__2].i = q__1.i; // , expr subst
+                    q__2.real = temp.real * x[i__4].real - temp.imag * x[i__4].imag;
+                    q__2.imag = temp.real * x[i__4].imag + temp.imag * x[i__4].real; // , expr subst
+                    q__1.real = ap[i__3].real + q__2.real;
+                    q__1.imag = ap[i__3].imag + q__2.imag; // , expr subst
+                    ap[i__2].real = q__1.real;
+                    ap[i__2].imag = q__1.imag; // , expr subst
                     k = kk + 1;
                     i__2 = *n;
                     for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -348,12 +359,12 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
                         i__3 = k;
                         i__4 = k;
                         i__5 = i__;
-                        q__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i;
-                        q__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r; // , expr subst
-                        q__1.r = ap[i__4].r + q__2.r;
-                        q__1.i = ap[i__4].i + q__2.i; // , expr subst
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        q__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag;
+                        q__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real; // , expr subst
+                        q__1.real = ap[i__4].real + q__2.real;
+                        q__1.imag = ap[i__4].imag + q__2.imag; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++k;
                         /* L50: */
                     }
@@ -362,8 +373,8 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
                 {
                     i__2 = kk;
                     i__3 = kk;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                 }
                 kk = kk + *n - j + 1;
                 /* L60: */
@@ -376,22 +387,22 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if(x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if(x[i__2].real != 0.f || x[i__2].imag != 0.f)
                 {
                     i__2 = jx;
-                    q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = q__1.r;
-                    temp.i = q__1.i; // , expr subst
+                    q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = q__1.real;
+                    temp.imag = q__1.imag; // , expr subst
                     i__2 = kk;
                     i__3 = kk;
                     i__4 = jx;
-                    q__2.r = temp.r * x[i__4].r - temp.i * x[i__4].i;
-                    q__2.i = temp.r * x[i__4].i + temp.i * x[i__4].r; // , expr subst
-                    q__1.r = ap[i__3].r + q__2.r;
-                    q__1.i = ap[i__3].i + q__2.i; // , expr subst
-                    ap[i__2].r = q__1.r;
-                    ap[i__2].i = q__1.i; // , expr subst
+                    q__2.real = temp.real * x[i__4].real - temp.imag * x[i__4].imag;
+                    q__2.imag = temp.real * x[i__4].imag + temp.imag * x[i__4].real; // , expr subst
+                    q__1.real = ap[i__3].real + q__2.real;
+                    q__1.imag = ap[i__3].imag + q__2.imag; // , expr subst
+                    ap[i__2].real = q__1.real;
+                    ap[i__2].imag = q__1.imag; // , expr subst
                     ix = jx;
                     i__2 = kk + *n - j;
                     for(k = kk + 1; k <= i__2; ++k)
@@ -400,12 +411,12 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
                         i__3 = k;
                         i__4 = k;
                         i__5 = ix;
-                        q__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i;
-                        q__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r; // , expr subst
-                        q__1.r = ap[i__4].r + q__2.r;
-                        q__1.i = ap[i__4].i + q__2.i; // , expr subst
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        q__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag;
+                        q__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real; // , expr subst
+                        q__1.real = ap[i__4].real + q__2.real;
+                        q__1.imag = ap[i__4].imag + q__2.imag; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         /* L70: */
                     }
                 }
@@ -413,8 +424,8 @@ void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
                 {
                     i__2 = kk;
                     i__3 = kk;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                 }
                 jx += *incx;
                 kk = kk + *n - j + 1;

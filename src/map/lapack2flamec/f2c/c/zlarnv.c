@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARNV returns a vector of n random complex numbers from a uniform or */
+/* > ZLARNV returns a vector of n random scomplex numbers from a uniform or */
 /* > normal distribution. */
 /* > \endverbatim */
 /* Arguments: */
@@ -94,24 +94,34 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
+/** Generated wrapper function */
+void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarnv(idist, iseed, n, x);
+#else
+    aocl_int64_t idist_64 = *idist;
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_zlarnv(&idist_64, iseed, &n_64, x);
+#endif
+}
+
+void aocl_lapack_zlarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n, dcomplex *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarnv inputs: idist %" FLA_IS ", n %" FLA_IS "", *idist, *n);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
     double log(doublereal), sqrt(doublereal);
-    void z_exp(doublecomplex *, doublecomplex *);
+    void z_exp(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal u[128];
-    integer il, iv;
-    extern /* Subroutine */
-        void
-        dlaruv_(integer *, integer *, doublereal *);
+    aocl_int64_t il, iv;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -145,7 +155,7 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
         /* Call DLARUV to generate 2*IL real numbers from a uniform (0,1) */
         /* distribution (2*IL <= LV) */
         i__2 = il << 1;
-        dlaruv_(&iseed[1], &i__2, u);
+        aocl_lapack_dlaruv(&iseed[1], &i__2, u);
         if(*idist == 1)
         {
             /* Copy generated numbers */
@@ -155,10 +165,10 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
                 i__3 = iv + i__ - 1;
                 i__4 = (i__ << 1) - 2;
                 i__5 = (i__ << 1) - 1;
-                z__1.r = u[i__4];
-                z__1.i = u[i__5]; // , expr subst
-                x[i__3].r = z__1.r;
-                x[i__3].i = z__1.i; // , expr subst
+                z__1.real = u[i__4];
+                z__1.imag = u[i__5]; // , expr subst
+                x[i__3].real = z__1.real;
+                x[i__3].imag = z__1.imag; // , expr subst
                 /* L10: */
             }
         }
@@ -171,10 +181,10 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
                 i__3 = iv + i__ - 1;
                 d__1 = u[(i__ << 1) - 2] * 2. - 1.;
                 d__2 = u[(i__ << 1) - 1] * 2. - 1.;
-                z__1.r = d__1;
-                z__1.i = d__2; // , expr subst
-                x[i__3].r = z__1.r;
-                x[i__3].i = z__1.i; // , expr subst
+                z__1.real = d__1;
+                z__1.imag = d__2; // , expr subst
+                x[i__3].real = z__1.real;
+                x[i__3].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
         }
@@ -187,19 +197,19 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
                 i__3 = iv + i__ - 1;
                 d__1 = sqrt(log(u[(i__ << 1) - 2]) * -2.);
                 d__2 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__3.r = 0.;
-                z__3.i = d__2; // , expr subst
+                z__3.real = 0.;
+                z__3.imag = d__2; // , expr subst
                 z_exp(&z__2, &z__3);
-                z__1.r = d__1 * z__2.r;
-                z__1.i = d__1 * z__2.i; // , expr subst
-                x[i__3].r = z__1.r;
-                x[i__3].i = z__1.i; // , expr subst
+                z__1.real = d__1 * z__2.real;
+                z__1.imag = d__1 * z__2.imag; // , expr subst
+                x[i__3].real = z__1.real;
+                x[i__3].imag = z__1.imag; // , expr subst
                 /* L30: */
             }
         }
         else if(*idist == 4)
         {
-            /* Convert generated numbers to complex numbers uniformly */
+            /* Convert generated numbers to scomplex numbers uniformly */
             /* distributed on the unit disk */
             i__2 = il;
             for(i__ = 1; i__ <= i__2; ++i__)
@@ -207,30 +217,30 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
                 i__3 = iv + i__ - 1;
                 d__1 = sqrt(u[(i__ << 1) - 2]);
                 d__2 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__3.r = 0.;
-                z__3.i = d__2; // , expr subst
+                z__3.real = 0.;
+                z__3.imag = d__2; // , expr subst
                 z_exp(&z__2, &z__3);
-                z__1.r = d__1 * z__2.r;
-                z__1.i = d__1 * z__2.i; // , expr subst
-                x[i__3].r = z__1.r;
-                x[i__3].i = z__1.i; // , expr subst
+                z__1.real = d__1 * z__2.real;
+                z__1.imag = d__1 * z__2.imag; // , expr subst
+                x[i__3].real = z__1.real;
+                x[i__3].imag = z__1.imag; // , expr subst
                 /* L40: */
             }
         }
         else if(*idist == 5)
         {
-            /* Convert generated numbers to complex numbers uniformly */
+            /* Convert generated numbers to scomplex numbers uniformly */
             /* distributed on the unit circle */
             i__2 = il;
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = iv + i__ - 1;
                 d__1 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__2.r = 0.;
-                z__2.i = d__1; // , expr subst
+                z__2.real = 0.;
+                z__2.imag = d__1; // , expr subst
                 z_exp(&z__1, &z__2);
-                x[i__3].r = z__1.r;
-                x[i__3].i = z__1.i; // , expr subst
+                x[i__3].real = z__1.real;
+                x[i__3].imag = z__1.imag; // , expr subst
                 /* L50: */
             }
         }

@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-/* > \brief \b CLAQP2RK computes truncated QR factorization with column pivoting of a complex matrix
- * block usi ng Level 2 BLAS and overwrites a complex m-by-nrhs matrix B with Q**H * B. */
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CLAQP2RK computes truncated QR factorization with column pivoting of a scomplex matrix
+ * block usi ng Level 2 BLAS and overwrites a scomplex m-by-nrhs matrix B with Q**H * B. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -49,7 +49,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CLAQP2RK computes a truncated (rank K) or full rank Householder QR */
-/* > factorization with column pivoting of the complex matrix */
+/* > factorization with column pivoting of the scomplex matrix */
 /* > block A(IOFFSET+1:M,1:N) as */
 /* > */
 /* > A * P(K) = Q(K) * R(K). */
@@ -343,39 +343,60 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer *kmax, real *abstol,
-               real *reltol, integer *kp1, real *maxc2nrm, complex *a, integer *lda, integer *k,
-               real *maxc2nrmk, real *relmaxc2nrmk, integer *jpiv, complex *tau, real *vn1,
-               real *vn2, complex *work, integer *info)
+/** Generated wrapper function */
+void claqp2rk_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, aocl_int_t *ioffset,
+               aocl_int_t *kmax, real *abstol, real *reltol, aocl_int_t *kp1, real *maxc2nrm,
+               scomplex *a, aocl_int_t *lda, aocl_int_t *k, real *maxc2nrmk, real *relmaxc2nrmk,
+               aocl_int_t *jpiv, scomplex *tau, real *vn1, real *vn2, scomplex *work,
+               aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqp2rk(m, n, nrhs, ioffset, kmax, abstol, reltol, kp1, maxc2nrm, a, lda, k,
+                         maxc2nrmk, relmaxc2nrmk, jpiv, tau, vn1, vn2, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ioffset_64 = *ioffset;
+    aocl_int64_t kmax_64 = *kmax;
+    aocl_int64_t kp1_64 = *kp1;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_claqp2rk(&m_64, &n_64, &nrhs_64, &ioffset_64, &kmax_64, abstol, reltol, &kp1_64,
+                         maxc2nrm, a, &lda_64, &k_64, maxc2nrmk, relmaxc2nrmk, jpiv, tau, vn1, vn2,
+                         work, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_claqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
+                          aocl_int64_t *ioffset, aocl_int64_t *kmax, real *abstol, real *reltol,
+                          aocl_int64_t *kp1, real *maxc2nrm, scomplex *a, aocl_int64_t *lda,
+                          aocl_int64_t *k, real *maxc2nrmk, real *relmaxc2nrmk, aocl_int_t *jpiv,
+                          scomplex *tau, real *vn1, real *vn2, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("claqp2rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",ioffset %" FLA_IS ",kmax %" FLA_IS ",kp1 %" FLA_IS ",lda %" FLA_IS "",
                       *m, *n, *nrhs, *ioffset, *kmax, *kp1, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double sqrt(doublereal), r_imag(complex *);
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
+    double sqrt(doublereal), r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, j, jmaxc2nrm, minmnfact, minmnupdt, kk, kp;
-    complex aikk;
+    aocl_int64_t i__, j, jmaxc2nrm, minmnfact, minmnupdt, kk, kp;
+    scomplex aikk;
     real temp, temp2, tol3z;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp;
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    extern integer isamax_(integer *, real *, integer *);
     real taunan;
     extern logical sisnan_(real *);
     real hugeval;
@@ -447,7 +468,7 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             /* of the column with the maximum 2-norm in the */
             /* submatrix A(I:M,K:N). */
             i__2 = *n - kk + 1;
-            kp = kk - 1 + isamax_(&i__2, &vn1[kk], &c__1);
+            kp = kk - 1 + aocl_blas_isamax(&i__2, &vn1[kk], &c__1);
             /* Determine the maximum column 2-norm and the relative maximum */
             /* column 2-norm of the submatrix A(I:M,KK:N) in step KK. */
             /* RELMAXC2NRMK will be computed later, after somecondition */
@@ -493,8 +514,8 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 for(j = kk; j <= i__2; ++j)
                 {
                     i__3 = j;
-                    tau[i__3].r = 0.f;
-                    tau[i__3].i = 0.f; // , expr subst
+                    tau[i__3].real = 0.f;
+                    tau[i__3].imag = 0.f; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -534,8 +555,8 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 for(j = kk; j <= i__2; ++j)
                 {
                     i__3 = j;
-                    tau[i__3].r = 0.f;
-                    tau[i__3].i = 0.f; // , expr subst
+                    tau[i__3].real = 0.f;
+                    tau[i__3].imag = 0.f; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -558,12 +579,12 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* the original matrix A, not the block A(1:M,1:N). */
         if(kp != kk)
         {
-            cswap_(m, &a[kp * a_dim1 + 1], &c__1, &a[kk * a_dim1 + 1], &c__1);
+            aocl_blas_cswap(m, &a[kp * a_dim1 + 1], &c__1, &a[kk * a_dim1 + 1], &c__1);
             vn1[kp] = vn1[kk];
             vn2[kp] = vn2[kk];
             itemp = jpiv[kp];
             jpiv[kp] = jpiv[kk];
-            jpiv[kk] = itemp;
+            jpiv[kk] = (aocl_int_t)(itemp);
         }
         /* Generate elementary reflector H(KK) using the column A(I:M,KK), */
         /* if the column has more than one element, otherwise */
@@ -572,13 +593,14 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         if(i__ < *m)
         {
             i__2 = *m - i__ + 1;
-            clarfg_(&i__2, &a[i__ + kk * a_dim1], &a[i__ + 1 + kk * a_dim1], &c__1, &tau[kk]);
+            aocl_lapack_clarfg(&i__2, &a[i__ + kk * a_dim1], &a[i__ + 1 + kk * a_dim1], &c__1,
+                               &tau[kk]);
         }
         else
         {
             i__2 = kk;
-            tau[i__2].r = 0.f;
-            tau[i__2].i = 0.f; // , expr subst
+            tau[i__2].real = 0.f;
+            tau[i__2].imag = 0.f; // , expr subst
         }
         /* Check if TAU(KK) contains NaN, set INFO parameter */
         /* to the column number where NaN is found and return from */
@@ -590,11 +612,11 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* TAU(KK) to contain NaN. Therefore, this case of generating Inf */
         /* by CLARFG is covered by checking TAU(KK) for NaN. */
         i__2 = kk;
-        r__1 = tau[i__2].r;
+        r__1 = tau[i__2].real;
         if(sisnan_(&r__1))
         {
             i__2 = kk;
-            taunan = tau[i__2].r;
+            taunan = tau[i__2].real;
         }
         else /* if(complicated condition) */
         {
@@ -634,19 +656,19 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         if(kk < minmnupdt)
         {
             i__2 = i__ + kk * a_dim1;
-            aikk.r = a[i__2].r;
-            aikk.i = a[i__2].i; // , expr subst
+            aikk.real = a[i__2].real;
+            aikk.imag = a[i__2].imag; // , expr subst
             i__2 = i__ + kk * a_dim1;
-            a[i__2].r = 1.f;
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = 1.f;
+            a[i__2].imag = 0.f; // , expr subst
             i__2 = *m - i__ + 1;
             i__3 = *n + *nrhs - kk;
             r_cnjg(&q__1, &tau[kk]);
-            clarf_("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &q__1,
-                   &a[i__ + (kk + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &q__1,
+                              &a[i__ + (kk + 1) * a_dim1], lda, &work[1]);
             i__2 = i__ + kk * a_dim1;
-            a[i__2].r = aikk.r;
-            a[i__2].i = aikk.i; // , expr subst
+            a[i__2].real = aikk.real;
+            a[i__2].imag = aikk.imag; // , expr subst
         }
         if(kk < minmnfact)
         {
@@ -674,7 +696,7 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                         /* and store it in both partial 2-norm vector VN1 */
                         /* and exact column 2-norm vector VN2. */
                         i__3 = *m - i__;
-                        vn1[j] = scnrm2_(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
+                        vn1[j] = aocl_blas_scnrm2(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else
@@ -700,7 +722,7 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     if(*k < minmnfact)
     {
         i__1 = *n - *k;
-        jmaxc2nrm = *k + isamax_(&i__1, &vn1[*k + 1], &c__1);
+        jmaxc2nrm = *k + aocl_blas_isamax(&i__1, &vn1[*k + 1], &c__1);
         *maxc2nrmk = vn1[jmaxc2nrm];
         if(*k == 0)
         {
@@ -723,8 +745,8 @@ void claqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     for(j = *k + 1; j <= i__1; ++j)
     {
         i__2 = j;
-        tau[i__2].r = 0.f;
-        tau[i__2].i = 0.f; // , expr subst
+        tau[i__2].real = 0.f;
+        tau[i__2].imag = 0.f; // , expr subst
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

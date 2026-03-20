@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix
  * by inverse iteration. */
 /* =========== DOCUMENTATION =========== */
@@ -45,7 +45,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CLAEIN uses inverse iteration to find a right or left eigenvector */
-/* > corresponding to the eigenvalue W of a complex upper Hessenberg */
+/* > corresponding to the eigenvalue W of a scomplex upper Hessenberg */
 /* > matrix H. */
 /* > \endverbatim */
 /* Arguments: */
@@ -99,7 +99,7 @@ otherwise V need not be set. */
 /* > On exit, V contains the computed eigenvector, normalized so */
 /* > that the component of largest magnitude has magnitude 1;
 here */
-/* > the magnitude of a complex number (x,y) is taken to be */
+/* > the magnitude of a scomplex number (x,y) is taken to be */
 /* > |x| + |y|. */
 /* > \endverbatim */
 /* > */
@@ -150,9 +150,29 @@ V is set to the */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer *ldh, complex *w,
-             complex *v, complex *b, integer *ldb, real *rwork, real *eps3, real *smlnum,
-             integer *info)
+/** Generated wrapper function */
+void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aocl_int_t *ldh,
+             scomplex *w, scomplex *v, scomplex *b, aocl_int_t *ldb, real *rwork, real *eps3,
+             real *smlnum, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claein(rightv, noinit, n, h__, ldh, w, v, b, ldb, rwork, eps3, smlnum, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_claein(rightv, noinit, &n_64, h__, &ldh_64, w, v, b, &ldb_64, rwork, eps3, smlnum,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomplex *h__,
+                        aocl_int64_t *ldh, scomplex *w, scomplex *v, scomplex *b, aocl_int64_t *ldb,
+                        real *rwork, real *eps3, real *smlnum, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -165,30 +185,22 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double sqrt(doublereal), r_imag(complex *);
+    double sqrt(doublereal), r_imag(scomplex *);
     /* Local variables */
-    integer i__, j;
-    complex x, ei, ej;
-    integer its, ierr;
-    complex temp;
+    aocl_int64_t i__, j;
+    scomplex x, ei, ej;
+    aocl_int64_t its, ierr;
+    scomplex temp;
     real scale;
     char trans[1];
     real rtemp, rootn, vnorm;
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
-                real *, integer *);
-    extern real scasum_(integer *, complex *, integer *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     char normin[1];
     real nrmsml, growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -244,16 +256,16 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
         {
             i__3 = i__ + j * b_dim1;
             i__4 = i__ + j * h_dim1;
-            b[i__3].r = h__[i__4].r;
-            b[i__3].i = h__[i__4].i; // , expr subst
+            b[i__3].real = h__[i__4].real;
+            b[i__3].imag = h__[i__4].imag; // , expr subst
             /* L10: */
         }
         i__2 = j + j * b_dim1;
         i__3 = j + j * h_dim1;
-        q__1.r = h__[i__3].r - w->r;
-        q__1.i = h__[i__3].i - w->i; // , expr subst
-        b[i__2].r = q__1.r;
-        b[i__2].i = q__1.i; // , expr subst
+        q__1.real = h__[i__3].real - w->real;
+        q__1.imag = h__[i__3].imag - w->imag; // , expr subst
+        b[i__2].real = q__1.real;
+        b[i__2].imag = q__1.imag; // , expr subst
         /* L20: */
     }
     if(*noinit)
@@ -263,17 +275,17 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            v[i__2].r = *eps3;
-            v[i__2].i = 0.f; // , expr subst
+            v[i__2].real = *eps3;
+            v[i__2].imag = 0.f; // , expr subst
             /* L30: */
         }
     }
     else
     {
         /* Scale supplied initial vector. */
-        vnorm = scnrm2_(n, &v[1], &c__1);
+        vnorm = aocl_blas_scnrm2(n, &v[1], &c__1);
         r__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
-        csscal_(n, &r__1, &v[1], &c__1);
+        aocl_blas_csscal(n, &r__1, &v[1], &c__1);
     }
     if(*rightv)
     {
@@ -283,37 +295,37 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + 1 + i__ * h_dim1;
-            ei.r = h__[i__2].r;
-            ei.i = h__[i__2].i; // , expr subst
+            ei.real = h__[i__2].real;
+            ei.imag = h__[i__2].imag; // , expr subst
             i__2 = i__ + i__ * b_dim1;
-            if((r__1 = b[i__2].r, f2c_abs(r__1))
+            if((r__1 = b[i__2].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&b[i__ + i__ * b_dim1]), f2c_abs(r__2))
-               < (r__3 = ei.r, f2c_abs(r__3)) + (r__4 = r_imag(&ei), f2c_abs(r__4)))
+               < (r__3 = ei.real, f2c_abs(r__3)) + (r__4 = r_imag(&ei), f2c_abs(r__4)))
             {
                 /* Interchange rows and eliminate. */
                 cladiv_f2c_(&q__1, &b[i__ + i__ * b_dim1], &ei);
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
                 i__2 = i__ + i__ * b_dim1;
-                b[i__2].r = ei.r;
-                b[i__2].i = ei.i; // , expr subst
+                b[i__2].real = ei.real;
+                b[i__2].imag = ei.imag; // , expr subst
                 i__2 = *n;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + 1 + j * b_dim1;
-                    temp.r = b[i__3].r;
-                    temp.i = b[i__3].i; // , expr subst
+                    temp.real = b[i__3].real;
+                    temp.imag = b[i__3].imag; // , expr subst
                     i__3 = i__ + 1 + j * b_dim1;
                     i__4 = i__ + j * b_dim1;
-                    q__2.r = x.r * temp.r - x.i * temp.i;
-                    q__2.i = x.r * temp.i + x.i * temp.r; // , expr subst
-                    q__1.r = b[i__4].r - q__2.r;
-                    q__1.i = b[i__4].i - q__2.i; // , expr subst
-                    b[i__3].r = q__1.r;
-                    b[i__3].i = q__1.i; // , expr subst
+                    q__2.real = x.real * temp.real - x.imag * temp.imag;
+                    q__2.imag = x.real * temp.imag + x.imag * temp.real; // , expr subst
+                    q__1.real = b[i__4].real - q__2.real;
+                    q__1.imag = b[i__4].imag - q__2.imag; // , expr subst
+                    b[i__3].real = q__1.real;
+                    b[i__3].imag = q__1.imag; // , expr subst
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = temp.r;
-                    b[i__3].i = temp.i; // , expr subst
+                    b[i__3].real = temp.real;
+                    b[i__3].imag = temp.imag; // , expr subst
                     /* L40: */
                 }
             }
@@ -321,16 +333,16 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             {
                 /* Eliminate without interchange. */
                 i__2 = i__ + i__ * b_dim1;
-                if(b[i__2].r == 0.f && b[i__2].i == 0.f)
+                if(b[i__2].real == 0.f && b[i__2].imag == 0.f)
                 {
                     i__3 = i__ + i__ * b_dim1;
-                    b[i__3].r = *eps3;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = *eps3;
+                    b[i__3].imag = 0.f; // , expr subst
                 }
                 cladiv_f2c_(&q__1, &ei, &b[i__ + i__ * b_dim1]);
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
-                if(x.r != 0.f || x.i != 0.f)
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
+                if(x.real != 0.f || x.imag != 0.f)
                 {
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
@@ -338,12 +350,12 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
                         i__3 = i__ + 1 + j * b_dim1;
                         i__4 = i__ + 1 + j * b_dim1;
                         i__5 = i__ + j * b_dim1;
-                        q__2.r = x.r * b[i__5].r - x.i * b[i__5].i;
-                        q__2.i = x.r * b[i__5].i + x.i * b[i__5].r; // , expr subst
-                        q__1.r = b[i__4].r - q__2.r;
-                        q__1.i = b[i__4].i - q__2.i; // , expr subst
-                        b[i__3].r = q__1.r;
-                        b[i__3].i = q__1.i; // , expr subst
+                        q__2.real = x.real * b[i__5].real - x.imag * b[i__5].imag;
+                        q__2.imag = x.real * b[i__5].imag + x.imag * b[i__5].real; // , expr subst
+                        q__1.real = b[i__4].real - q__2.real;
+                        q__1.imag = b[i__4].imag - q__2.imag; // , expr subst
+                        b[i__3].real = q__1.real;
+                        b[i__3].imag = q__1.imag; // , expr subst
                         /* L50: */
                     }
                 }
@@ -351,11 +363,11 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             /* L60: */
         }
         i__1 = *n + *n * b_dim1;
-        if(b[i__1].r == 0.f && b[i__1].i == 0.f)
+        if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
         {
             i__2 = *n + *n * b_dim1;
-            b[i__2].r = *eps3;
-            b[i__2].i = 0.f; // , expr subst
+            b[i__2].real = *eps3;
+            b[i__2].imag = 0.f; // , expr subst
         }
         *(unsigned char *)trans = 'N';
     }
@@ -366,37 +378,37 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
         for(j = *n; j >= 2; --j)
         {
             i__1 = j + (j - 1) * h_dim1;
-            ej.r = h__[i__1].r;
-            ej.i = h__[i__1].i; // , expr subst
+            ej.real = h__[i__1].real;
+            ej.imag = h__[i__1].imag; // , expr subst
             i__1 = j + j * b_dim1;
-            if((r__1 = b[i__1].r, f2c_abs(r__1))
+            if((r__1 = b[i__1].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&b[j + j * b_dim1]), f2c_abs(r__2))
-               < (r__3 = ej.r, f2c_abs(r__3)) + (r__4 = r_imag(&ej), f2c_abs(r__4)))
+               < (r__3 = ej.real, f2c_abs(r__3)) + (r__4 = r_imag(&ej), f2c_abs(r__4)))
             {
                 /* Interchange columns and eliminate. */
                 cladiv_f2c_(&q__1, &b[j + j * b_dim1], &ej);
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
                 i__1 = j + j * b_dim1;
-                b[i__1].r = ej.r;
-                b[i__1].i = ej.i; // , expr subst
+                b[i__1].real = ej.real;
+                b[i__1].imag = ej.imag; // , expr subst
                 i__1 = j - 1;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + (j - 1) * b_dim1;
-                    temp.r = b[i__2].r;
-                    temp.i = b[i__2].i; // , expr subst
+                    temp.real = b[i__2].real;
+                    temp.imag = b[i__2].imag; // , expr subst
                     i__2 = i__ + (j - 1) * b_dim1;
                     i__3 = i__ + j * b_dim1;
-                    q__2.r = x.r * temp.r - x.i * temp.i;
-                    q__2.i = x.r * temp.i + x.i * temp.r; // , expr subst
-                    q__1.r = b[i__3].r - q__2.r;
-                    q__1.i = b[i__3].i - q__2.i; // , expr subst
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    q__2.real = x.real * temp.real - x.imag * temp.imag;
+                    q__2.imag = x.real * temp.imag + x.imag * temp.real; // , expr subst
+                    q__1.real = b[i__3].real - q__2.real;
+                    q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                     i__2 = i__ + j * b_dim1;
-                    b[i__2].r = temp.r;
-                    b[i__2].i = temp.i; // , expr subst
+                    b[i__2].real = temp.real;
+                    b[i__2].imag = temp.imag; // , expr subst
                     /* L70: */
                 }
             }
@@ -404,16 +416,16 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             {
                 /* Eliminate without interchange. */
                 i__1 = j + j * b_dim1;
-                if(b[i__1].r == 0.f && b[i__1].i == 0.f)
+                if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
                 {
                     i__2 = j + j * b_dim1;
-                    b[i__2].r = *eps3;
-                    b[i__2].i = 0.f; // , expr subst
+                    b[i__2].real = *eps3;
+                    b[i__2].imag = 0.f; // , expr subst
                 }
                 cladiv_f2c_(&q__1, &ej, &b[j + j * b_dim1]);
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
-                if(x.r != 0.f || x.i != 0.f)
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
+                if(x.real != 0.f || x.imag != 0.f)
                 {
                     i__1 = j - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -421,12 +433,12 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
                         i__2 = i__ + (j - 1) * b_dim1;
                         i__3 = i__ + (j - 1) * b_dim1;
                         i__4 = i__ + j * b_dim1;
-                        q__2.r = x.r * b[i__4].r - x.i * b[i__4].i;
-                        q__2.i = x.r * b[i__4].i + x.i * b[i__4].r; // , expr subst
-                        q__1.r = b[i__3].r - q__2.r;
-                        q__1.i = b[i__3].i - q__2.i; // , expr subst
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        q__2.real = x.real * b[i__4].real - x.imag * b[i__4].imag;
+                        q__2.imag = x.real * b[i__4].imag + x.imag * b[i__4].real; // , expr subst
+                        q__1.real = b[i__3].real - q__2.real;
+                        q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                         /* L80: */
                     }
                 }
@@ -434,11 +446,11 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             /* L90: */
         }
         i__1 = b_dim1 + 1;
-        if(b[i__1].r == 0.f && b[i__1].i == 0.f)
+        if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
         {
             i__2 = b_dim1 + 1;
-            b[i__2].r = *eps3;
-            b[i__2].i = 0.f; // , expr subst
+            b[i__2].real = *eps3;
+            b[i__2].imag = 0.f; // , expr subst
         }
         *(unsigned char *)trans = 'C';
     }
@@ -449,43 +461,43 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
         /* Solve U*x = scale*v for a right eigenvector */
         /* or U**H *x = scale*v for a left eigenvector, */
         /* overwriting x on v. */
-        clatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale, &rwork[1],
-                &ierr);
+        aocl_lapack_clatrs("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale,
+                           &rwork[1], &ierr);
         *(unsigned char *)normin = 'Y';
         /* Test for sufficient growth in the norm of v. */
-        vnorm = scasum_(n, &v[1], &c__1);
+        vnorm = aocl_blas_scasum(n, &v[1], &c__1);
         if(vnorm >= growto * scale)
         {
             goto L120;
         }
         /* Choose new orthogonal starting vector and try again. */
         rtemp = *eps3 / (rootn + 1.f);
-        v[1].r = *eps3;
-        v[1].i = 0.f; // , expr subst
+        v[1].real = *eps3;
+        v[1].imag = 0.f; // , expr subst
         i__2 = *n;
         for(i__ = 2; i__ <= i__2; ++i__)
         {
             i__3 = i__;
-            v[i__3].r = rtemp;
-            v[i__3].i = 0.f; // , expr subst
+            v[i__3].real = rtemp;
+            v[i__3].imag = 0.f; // , expr subst
             /* L100: */
         }
         i__2 = *n - its + 1;
         i__3 = *n - its + 1;
         r__1 = *eps3 * rootn;
-        q__1.r = v[i__3].r - r__1;
-        q__1.i = v[i__3].i; // , expr subst
-        v[i__2].r = q__1.r;
-        v[i__2].i = q__1.i; // , expr subst
+        q__1.real = v[i__3].real - r__1;
+        q__1.imag = v[i__3].imag; // , expr subst
+        v[i__2].real = q__1.real;
+        v[i__2].imag = q__1.imag; // , expr subst
         /* L110: */
     }
     /* Failure to find eigenvector in N iterations. */
     *info = 1;
 L120: /* Normalize eigenvector. */
-    i__ = icamax_(n, &v[1], &c__1);
+    i__ = aocl_blas_icamax(n, &v[1], &c__1);
     i__1 = i__;
-    r__3 = 1.f / ((r__1 = v[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
-    csscal_(n, &r__3, &v[1], &c__1);
+    r__3 = 1.f / ((r__1 = v[i__1].real, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
+    aocl_blas_csscal(n, &r__3, &v[1], &c__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CLAEIN */

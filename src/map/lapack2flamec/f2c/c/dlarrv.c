@@ -5,8 +5,8 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b5 = 0.;
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DLARRV computes the eigenvectors of the tridiagonal matrix T = L D LT given L, D and
  * the eigenv alues of L D LT. */
 /* =========== DOCUMENTATION =========== */
@@ -288,12 +288,40 @@ IBLOCK(i)=1 if eigenvalue */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *l,
-             doublereal *pivmin, integer *isplit, integer *m, integer *dol, integer *dou,
-             doublereal *minrgp, doublereal *rtol1, doublereal *rtol2, doublereal *w,
-             doublereal *werr, doublereal *wgap, integer *iblock, integer *indexw, doublereal *gers,
-             doublereal *z__, integer *ldz, integer *isuppz, doublereal *work, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void dlarrv_(aocl_int_t *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *l,
+             doublereal *pivmin, aocl_int_t *isplit, aocl_int_t *m, aocl_int_t *dol,
+             aocl_int_t *dou, doublereal *minrgp, doublereal *rtol1, doublereal *rtol2,
+             doublereal *w, doublereal *werr, doublereal *wgap, aocl_int_t *iblock,
+             aocl_int_t *indexw, doublereal *gers, doublereal *z__, aocl_int_t *ldz,
+             aocl_int_t *isuppz, doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarrv(n, vl, vu, d__, l, pivmin, isplit, m, dol, dou, minrgp, rtol1, rtol2, w,
+                       werr, wgap, iblock, indexw, gers, z__, ldz, isuppz, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t dol_64 = *dol;
+    aocl_int64_t dou_64 = *dou;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlarrv(&n_64, vl, vu, d__, l, pivmin, isplit, &m_64, &dol_64, &dou_64, minrgp,
+                       rtol1, rtol2, w, werr, wgap, iblock, indexw, gers, z__, &ldz_64, isuppz,
+                       work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doublereal *d__,
+                        doublereal *l, doublereal *pivmin, aocl_int_t *isplit, aocl_int64_t *m,
+                        aocl_int64_t *dol, aocl_int64_t *dou, doublereal *minrgp, doublereal *rtol1,
+                        doublereal *rtol2, doublereal *w, doublereal *werr, doublereal *wgap,
+                        aocl_int_t *iblock, aocl_int_t *indexw, doublereal *gers, doublereal *z__,
+                        aocl_int64_t *ldz, aocl_int_t *isuppz, doublereal *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrv inputs: n %" FLA_IS ", isplit %" FLA_IS ", m %" FLA_IS
@@ -301,86 +329,61 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                       ", ldz %" FLA_IS "",
                       *n, *isplit, *m, *dol, *dou, *iblock, *indexw, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
     logical L__1;
     /* Builtin functions */
     double log(doublereal);
     /* Local variables */
-    integer minwsize, i__, j, k, p, q, miniwsize, ii;
+    aocl_int64_t minwsize, i__, j, k, p, q, miniwsize, ii;
     doublereal gl;
-    integer im, in;
+    aocl_int64_t im, in;
     doublereal gu, gap, eps, tau, tol, tmp;
-    integer zto;
+    aocl_int64_t zto;
     doublereal ztz;
-    integer iend, jblk;
+    aocl_int64_t iend, jblk;
     doublereal lgap;
-    integer done;
     doublereal rgap, left;
-    integer wend, iter;
+    aocl_int64_t wend, iter;
     doublereal bstw;
-    integer itmp1;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    integer indld;
+    aocl_int64_t itmp1;
+    aocl_int64_t indld;
     doublereal fudge;
-    integer idone;
+    aocl_int64_t idone;
     doublereal sigma;
-    integer iinfo, iindr;
+    aocl_int64_t iinfo, iindr;
     doublereal resid;
     logical eskip;
     doublereal right;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer nclus, zfrom;
+    aocl_int64_t nclus, zfrom;
     doublereal rqtol;
-    integer iindc1, iindc2;
-    extern /* Subroutine */
-        void
-        dlar1v_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, logical *,
-                integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                doublereal *, doublereal *, doublereal *);
+    aocl_int64_t iindc1, iindc2;
     logical stp2ii;
     doublereal lambda;
     extern doublereal dlamch_(char *);
-    integer ibegin, indeig;
+    aocl_int64_t ibegin, indeig;
     logical needbs;
-    integer indlld;
+    aocl_int64_t indlld;
     doublereal sgndef, mingma;
-    extern /* Subroutine */
-        void
-        dlarrb_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, doublereal *, doublereal *, integer *, integer *);
-    integer oldien, oldncl, wbegin;
+    aocl_int64_t oldien, oldncl, wbegin;
     doublereal spdiam;
-    integer negcnt;
-    extern /* Subroutine */
-        void
-        dlarrf_(integer *, doublereal *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
-    integer oldcls;
+    aocl_int64_t negcnt;
+    aocl_int64_t oldcls;
     doublereal savgap;
-    integer ndepth;
+    aocl_int64_t ndepth;
     doublereal ssigma;
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical usedbs;
-    integer iindwk, offset;
+    aocl_int64_t iindwk, offset;
     doublereal gaptol;
-    integer newcls, oldfst, indwrk, windex, oldlst;
+    aocl_int64_t newcls, oldfst, indwrk, windex, oldlst;
     logical usedrq;
-    integer newfst, newftt, parity, windmn, windpl, isupmn, newlst, zusedl;
+    aocl_int64_t newfst, newftt, parity, windmn, windpl, isupmn, newlst, zusedl;
     doublereal bstres;
-    integer newsiz, zusedu, zusedw;
+    aocl_int64_t newsiz, zusedu, zusedw;
     doublereal nrminv, rqcorr;
     logical tryrqc;
-    integer isupmx;
+    aocl_int64_t isupmx;
+    aocl_int64_t iwork_sca;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -465,7 +468,7 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
     }
     /* The width of the part of Z that is used */
     zusedw = zusedu - zusedl + 1;
-    dlaset_("Full", n, &zusedw, &c_b5, &c_b5, &z__[zusedl * z_dim1 + 1], ldz);
+    aocl_lapack_dlaset("Full", n, &zusedw, &c_b5, &c_b5, &z__[zusedl * z_dim1 + 1], ldz);
     eps = dlamch_("Precision");
     rqtol = eps * 2.;
     /* Set expert flags for standard code. */
@@ -486,8 +489,6 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
     /* entries is contained in the interval IBEGIN:IEND. */
     /* Remark that if k eigenpairs are desired, then the eigenvectors */
     /* are stored in k contiguous columns of Z. */
-    /* DONE is the number of eigenvectors already computed */
-    done = 0;
     ibegin = 1;
     wbegin = 1;
     i__1 = iblock[*m];
@@ -542,10 +543,9 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
         /* This is for a 1x1 block */
         if(ibegin == iend)
         {
-            ++done;
             z__[ibegin + wbegin * z_dim1] = 1.;
-            isuppz[(wbegin << 1) - 1] = ibegin;
-            isuppz[wbegin * 2] = ibegin;
+            isuppz[(wbegin << 1) - 1] = (aocl_int_t)(ibegin);
+            isuppz[wbegin * 2] = (aocl_int_t)(ibegin);
             w[wbegin] += sigma;
             work[wbegin] = w[wbegin];
             ibegin = iend + 1;
@@ -558,7 +558,7 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
         /* The eigenvalue approximations will be refined when necessary as */
         /* high relative accuracy is required for the computation of the */
         /* corresponding eigenvectors. */
-        dcopy_(&im, &w[wbegin], &c__1, &work[wbegin], &c__1);
+        aocl_blas_dcopy(&im, &w[wbegin], &c__1, &work[wbegin], &c__1);
         /* We store in W the eigenvalue approximations w.r.t. the original */
         /* matrix T. */
         i__2 = im;
@@ -575,7 +575,7 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
         /* representation tree, we start with NCLUS = 1 for the root */
         nclus = 1;
         iwork[iindc1 + 1] = 1;
-        iwork[iindc1 + 2] = im;
+        iwork[iindc1 + 2] = (aocl_int_t)(im);
         /* IDONE is the number of eigenvectors already computed in the current */
         /* block */
         idone = 0;
@@ -647,12 +647,14 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                             j = wbegin + oldfst - 1;
                         }
                     }
-                    dcopy_(&in, &z__[ibegin + j * z_dim1], &c__1, &d__[ibegin], &c__1);
+                    aocl_blas_dcopy(&in, &z__[ibegin + j * z_dim1], &c__1, &d__[ibegin], &c__1);
                     i__3 = in - 1;
-                    dcopy_(&i__3, &z__[ibegin + (j + 1) * z_dim1], &c__1, &l[ibegin], &c__1);
+                    aocl_blas_dcopy(&i__3, &z__[ibegin + (j + 1) * z_dim1], &c__1, &l[ibegin],
+                                    &c__1);
                     sigma = z__[iend + (j + 1) * z_dim1];
                     /* Set the corresponding entries in Z to zero */
-                    dlaset_("Full", &in, &c__2, &c_b5, &c_b5, &z__[ibegin + j * z_dim1], ldz);
+                    aocl_lapack_dlaset("Full", &in, &c__2, &c_b5, &c_b5, &z__[ibegin + j * z_dim1],
+                                       ldz);
                 }
                 /* Compute DL and DLL of current RRR */
                 i__3 = iend - 1;
@@ -675,9 +677,9 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                     offset = indexw[wbegin] - 1;
                     /* perform limited bisection (if necessary) to get approximate */
                     /* eigenvalues to the precision needed. */
-                    dlarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, &q, rtol1, rtol2,
-                            &offset, &work[wbegin], &wgap[wbegin], &werr[wbegin], &work[indwrk],
-                            &iwork[iindwk], pivmin, &spdiam, &in, &iinfo);
+                    aocl_lapack_dlarrb(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, &q, rtol1,
+                                       rtol2, &offset, &work[wbegin], &wgap[wbegin], &werr[wbegin],
+                                       &work[indwrk], &iwork[iindwk], pivmin, &spdiam, &in, &iinfo);
                     if(iinfo != 0)
                     {
                         *info = -1;
@@ -806,9 +808,10 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                                 p = indexw[wbegin - 1 + newlst];
                             }
                             offset = indexw[wbegin] - 1;
-                            dlarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, &p, &rqtol,
-                                    &rqtol, &offset, &work[wbegin], &wgap[wbegin], &werr[wbegin],
-                                    &work[indwrk], &iwork[iindwk], pivmin, &spdiam, &in, &iinfo);
+                            aocl_lapack_dlarrb(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p,
+                                               &p, &rqtol, &rqtol, &offset, &work[wbegin],
+                                               &wgap[wbegin], &werr[wbegin], &work[indwrk],
+                                               &iwork[iindwk], pivmin, &spdiam, &in, &iinfo);
                             /* L55: */
                         }
                         if(wbegin + newlst - 1 < *dol || wbegin + newfst - 1 > *dou)
@@ -825,10 +828,11 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                         /* Compute RRR of child cluster. */
                         /* Note that the new RRR is stored in Z */
                         /* DLARRF needs LWORK = 2*N */
-                        dlarrf_(&in, &d__[ibegin], &l[ibegin], &work[indld + ibegin - 1], &newfst,
-                                &newlst, &work[wbegin], &wgap[wbegin], &werr[wbegin], &spdiam,
-                                &lgap, &rgap, pivmin, &tau, &z__[ibegin + newftt * z_dim1],
-                                &z__[ibegin + (newftt + 1) * z_dim1], &work[indwrk], &iinfo);
+                        aocl_lapack_dlarrf(
+                            &in, &d__[ibegin], &l[ibegin], &work[indld + ibegin - 1], &newfst,
+                            &newlst, &work[wbegin], &wgap[wbegin], &werr[wbegin], &spdiam, &lgap,
+                            &rgap, pivmin, &tau, &z__[ibegin + newftt * z_dim1],
+                            &z__[ibegin + (newftt + 1) * z_dim1], &work[indwrk], &iinfo);
                         if(iinfo == 0)
                         {
                             /* a new RRR for the cluster was found by DLARRF */
@@ -856,8 +860,8 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                             }
                             ++nclus;
                             k = newcls + (nclus << 1);
-                            iwork[k - 1] = newfst;
-                            iwork[k] = newlst;
+                            iwork[k - 1] = (aocl_int_t)(newfst);
+                            iwork[k] = (aocl_int_t)(newlst);
                         }
                         else
                         {
@@ -880,7 +884,6 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                         i__4 = windex + 1;
                         windpl = fla_min(i__4, *m);
                         lambda = work[windex];
-                        ++done;
                         /* Check if eigenvector computation is to be skipped */
                         if(windex < *dol || windex > *dou)
                         {
@@ -972,10 +975,10 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                             itmp1 = iwork[iindr + windex];
                             offset = indexw[wbegin] - 1;
                             d__1 = eps * 2.;
-                            dlarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &indeig, &indeig,
-                                    &c_b5, &d__1, &offset, &work[wbegin], &wgap[wbegin],
-                                    &werr[wbegin], &work[indwrk], &iwork[iindwk], pivmin, &spdiam,
-                                    &itmp1, &iinfo);
+                            aocl_lapack_dlarrb(
+                                &in, &d__[ibegin], &work[indlld + ibegin - 1], &indeig, &indeig,
+                                &c_b5, &d__1, &offset, &work[wbegin], &wgap[wbegin], &werr[wbegin],
+                                &work[indwrk], &iwork[iindwk], pivmin, &spdiam, &itmp1, &iinfo);
                             if(iinfo != 0)
                             {
                                 *info = -3;
@@ -989,11 +992,14 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                         }
                         /* Given LAMBDA, compute the eigenvector. */
                         L__1 = !usedbs;
-                        dlar1v_(&in, &c__1, &in, &lambda, &d__[ibegin], &l[ibegin],
-                                &work[indld + ibegin - 1], &work[indlld + ibegin - 1], pivmin,
-                                &gaptol, &z__[ibegin + windex * z_dim1], &L__1, &negcnt, &ztz,
-                                &mingma, &iwork[iindr + windex], &isuppz[(windex << 1) - 1],
-                                &nrminv, &resid, &rqcorr, &work[indwrk]);
+                        iwork_sca = iwork[iindr + windex];
+                        aocl_lapack_dlar1v(&in, &c__1, &in, &lambda, &d__[ibegin], &l[ibegin],
+                                           &work[indld + ibegin - 1], &work[indlld + ibegin - 1],
+                                           pivmin, &gaptol, &z__[ibegin + windex * z_dim1], &L__1,
+                                           &negcnt, &ztz, &mingma, &iwork_sca,
+                                           &isuppz[(windex << 1) - 1], &nrminv, &resid, &rqcorr,
+                                           &work[indwrk]);
+                        iwork[iindr + windex] = (aocl_int_t)iwork_sca;
                         if(iter == 0)
                         {
                             bstres = resid;
@@ -1109,18 +1115,20 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                             {
                                 /* improve error angle by second step */
                                 L__1 = !usedbs;
-                                dlar1v_(&in, &c__1, &in, &lambda, &d__[ibegin], &l[ibegin],
-                                        &work[indld + ibegin - 1], &work[indlld + ibegin - 1],
-                                        pivmin, &gaptol, &z__[ibegin + windex * z_dim1], &L__1,
-                                        &negcnt, &ztz, &mingma, &iwork[iindr + windex],
-                                        &isuppz[(windex << 1) - 1], &nrminv, &resid, &rqcorr,
-                                        &work[indwrk]);
+                                iwork_sca = iwork[iindr + windex];
+                                aocl_lapack_dlar1v(
+                                    &in, &c__1, &in, &lambda, &d__[ibegin], &l[ibegin],
+                                    &work[indld + ibegin - 1], &work[indlld + ibegin - 1], pivmin,
+                                    &gaptol, &z__[ibegin + windex * z_dim1], &L__1, &negcnt, &ztz,
+                                    &mingma, &iwork_sca, &isuppz[(windex << 1) - 1],
+                                    &nrminv, &resid, &rqcorr, &work[indwrk]);
+                                iwork[iindr + windex] = (aocl_int_t)iwork_sca;
                             }
                             work[windex] = lambda;
                         }
                         /* Compute FP-vector support w.r.t. whole matrix */
-                        isuppz[(windex << 1) - 1] += oldien;
-                        isuppz[windex * 2] += oldien;
+                        isuppz[(windex << 1) - 1] += (aocl_int_t)(oldien);
+                        isuppz[windex * 2] += (aocl_int_t)(oldien);
                         zfrom = isuppz[(windex << 1) - 1];
                         zto = isuppz[windex * 2];
                         isupmn += oldien;
@@ -1145,7 +1153,7 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                             }
                         }
                         i__4 = zto - zfrom + 1;
-                        dscal_(&i__4, &nrminv, &z__[zfrom + windex * z_dim1], &c__1);
+                        aocl_blas_dscal(&i__4, &nrminv, &z__[zfrom + windex * z_dim1], &c__1);
                     L125: /* Update W */
                         w[windex] = lambda + sigma;
                         /* Recompute the gaps on the left and right */

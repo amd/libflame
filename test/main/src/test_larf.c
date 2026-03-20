@@ -114,6 +114,7 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     void *c__ = NULL;
     void *c__out = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     char side = params->aux_paramslist[pci].side;
     integer incv = params->aux_paramslist[pci].incv;
@@ -144,25 +145,29 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
 
     v_length = 1 + (v_num_elements - 1) * incv_abs;
     create_vector(datatype, &work, work_num_elements);
-
-    create_vector(datatype, &v_tmp, v_length);
     create_vector(datatype, &tau, 1);
-
-    rand_vector(datatype, v_num_elements, v_tmp, incv_abs, d_zero, d_zero, 'R');
-
-    /* Input generation (v_tmp and tau) for larf from larfg
-       Increment of v_tmp for larfg must be positive. Hence calling larfg with incv_abs
-       Increment of v for larf could be positive or negative. Hence copying
-       from v_tmp using incv(which could be positive or negative)
-    */
-    invoke_larfg(datatype, &v_num_elements, v_tmp, &incv_abs, &incv_abs, tau);
-    assign_value(datatype, v_tmp, 1, 0);
     create_vector(datatype, &v, v_length);
-    copy_vector(datatype, v_num_elements, v_tmp, incv_abs, v, incv);
-
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__, ldc);
 
-    init_matrix(datatype, c__, m, n, ldc, g_ext_fptr, params->imatrix_char);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        create_vector(datatype, &v_tmp, v_length);
+        rand_vector(datatype, v_num_elements, v_tmp, incv_abs, d_zero, d_zero, 'R');
+
+        /* Input generation (v_tmp and tau) for larf from larfg
+        Increment of v_tmp for larfg must be positive. Hence calling larfg with incv_abs
+        Increment of v for larf could be positive or negative. Hence copying
+        from v_tmp using incv(which could be positive or negative)
+        */
+        invoke_larfg(datatype, &v_num_elements, v_tmp, &incv_abs, &incv_abs, tau);
+        assign_value(datatype, v_tmp, 1, 0);
+        copy_vector(datatype, v_num_elements, v_tmp, incv_abs, v, incv);
+
+        init_matrix(datatype, c__, m, n, ldc, g_ext_fptr, params->imatrix_char);
+        free_vector(v_tmp);
+    }
+    FLA_BRT_PROCESS_THREE_INPUT(datatype, m, n, c__, ldc, datatype, v_length, 1, v, v_length,
+                                datatype, 1, 1, tau, 1, "cdddd", side, m, n, incv, ldc);
 
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
@@ -187,7 +192,12 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
         perf *= 4.0;
     }
     /* Output Validation */
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, c__out, ldc),
+        validate_larf(tst_api, datatype, side, m, n, v, incv, c__, ldc, c__out, ldc, tau,
+                      err_thresh, params),
+        check_reproducibility_base(filename, params, 1, 0, datatype, m, n, c__out, ldc))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_larf(tst_api, datatype, side, m, n, v, incv, c__, ldc, c__out, ldc, tau,
                       err_thresh, params);
@@ -206,10 +216,11 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     }
 
     /* Free up the buffers */
-    free_matrix(c__);
     free_matrix(c__out);
+free_buffers:
+    FLA_FREE_FILENAME(filename)
+    free_matrix(c__);
     free_vector(v);
-    free_vector(v_tmp);
     free_vector(work);
     free_vector(tau);
 }

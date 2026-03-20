@@ -1,15 +1,22 @@
-/* ../netlib/sorgl2.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+/* ../netlib/sorgl2.f -- translated by f2c (version 20000121). You must link the resulting object
+ * file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* > \brief \b SORGL2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORGL2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgl2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgl2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgl2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgl2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgl2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgl2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -97,15 +104,14 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sorgl2(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
+int lapack_sorgl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl_int64_t *lda,
+                  real *tau, real *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -132,80 +138,73 @@ int lapack_sorgl2(integer *m, integer *n, integer *k, real *a, integer *lda, rea
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if (*k < 0 || *k > *m)
+    else if(*k < 0 || *k > *m)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORGL2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORGL2", &i__1, (ftnlen)6);
         return 0;
     }
     /* Quick return if possible */
-    if (*m <= 0)
+    if(*m <= 0)
     {
         return 0;
     }
-    if (*k < *m)
+    if(*k < *m)
     {
         /* Initialise rows k+1:m to rows of the unit matrix */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (l = *k + 1;
-                    l <= i__2;
-                    ++l)
+            for(l = *k + 1; l <= i__2; ++l)
             {
                 a[l + j * a_dim1] = 0.f;
                 /* L10: */
             }
-            if (j > *k && j <= *m)
+            if(j > *k && j <= *m)
             {
                 a[j + j * a_dim1] = 1.f;
             }
             /* L20: */
         }
     }
-    for (i__ = *k;
-            i__ >= 1;
-            --i__)
+    for(i__ = *k; i__ >= 1; --i__)
     {
         /* Apply H(i) to A(i:m,i:n) from the right */
-        if (i__ < *n)
+        if(i__ < *n)
         {
-            if (i__ < *m)
+            if(i__ < *m)
             {
                 a[i__ + i__ * a_dim1] = 1.f;
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
-                slarf_("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, & tau[i__], &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                aocl_lapack_slarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             r__1 = -tau[i__];
-            sscal_(&i__1, &r__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_blas_sscal(&i__1, &r__1, &a[i__ + (i__ + 1) * a_dim1], lda);
         }
         a[i__ + i__ * a_dim1] = 1.f - tau[i__];
         /* Set A(i,1:i-1) to zero */
         i__1 = i__ - 1;
-        for (l = 1;
-                l <= i__1;
-                ++l)
+        for(l = 1; l <= i__1; ++l)
         {
             a[i__ + l * a_dim1] = 0.f;
             /* L30: */

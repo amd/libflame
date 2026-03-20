@@ -11,12 +11,12 @@
 // --- FLA_Tevd_francis_n_opt_var1() -------------------------------------------
 
 FLA_Error FLA_Tevd_francis_n_opt_var1( FLA_Obj shift, FLA_Obj d, FLA_Obj e );
-FLA_Error FLA_Tevd_francis_n_ops_var1( integer       m_A,
+FLA_Error FLA_Tevd_francis_n_ops_var1( fla_dim_t       m_A,
                                        float*    buff_shift,
-                                       float*    buff_d, integer inc_d, 
-                                       float*    buff_e, integer inc_e ); 
-FLA_Error FLA_Tevd_francis_n_opd_var1( integer       m_A,
+                                       float*    buff_d, fla_dim_t inc_d, 
+                                       float*    buff_e, fla_dim_t inc_e ); 
+FLA_Error FLA_Tevd_francis_n_opd_var1( fla_dim_t       m_A,
                                        double*   buff_shift,
-                                       double*   buff_d, integer inc_d, 
-                                       double*   buff_e, integer inc_e ); 
+                                       double*   buff_d, fla_dim_t inc_d, 
+                                       double*   buff_e, fla_dim_t inc_e ); 
 

@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b21 = -1.;
 static doublereal c_b22 = 1.;
-static integer c__33 = 33;
+static aocl_int64_t c__33 = 33;
 /* > \brief \b ZPBTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -44,7 +44,7 @@ static integer c__33 = 33;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZPBTRF computes the Cholesky factorization of a complex Hermitian */
+/* > ZPBTRF computes the Cholesky factorization of a scomplex Hermitian */
 /* > positive definite band matrix A. */
 /* > */
 /* > The factorization has the form */
@@ -144,32 +144,39 @@ static integer c__33 = 33;
 /* > Peter Mayes and Giuseppe Radicati, IBM ECSEC, Rome, March 23, 1989 */
 /* ===================================================================== */
 /* Subroutine */
-void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, integer *info)
+/** Generated wrapper function */
+void zpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t *ldab,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpbtrf(uplo, n, kd, ab, ldab, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpbtrf(uplo, &n_64, &kd_64, ab, &ldab_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex *ab,
+                        aocl_int64_t *ldab, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpbtrf inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
                       *uplo, *n, *kd, *ldab);
 
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublecomplex z__1;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j, i2, i3, ib, nb, ii, jj;
-    doublecomplex work[1056] /* was [33][32] */
+    aocl_int64_t i__, j, i2, i3, ib, nb, ii, jj;
+    dcomplex work[1056] /* was [33][32] */
         ;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
-               doublereal *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        zpbtf2_(char *, integer *, integer *, doublecomplex *, integer *, integer *),
-        zpotf2_(char *, integer *, doublecomplex *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -218,7 +225,7 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPBTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -229,14 +236,14 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
         return;
     }
     /* Determine the block size for this environment */
-    nb = ilaenv_(&c__1, "ZPBTRF", uplo, n, kd, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZPBTRF", uplo, n, kd, &c_n1, &c_n1);
     /* The block size must not exceed the semi-bandwidth KD, and must not */
     /* exceed the limit set by the size of the local array WORK. */
     nb = fla_min(nb, 32);
     if(nb <= 1 || nb > *kd)
     {
         /* Use unblocked code */
-        zpbtf2_(uplo, n, kd, &ab[ab_offset], ldab, info);
+        aocl_lapack_zpbtf2(uplo, n, kd, &ab[ab_offset], ldab, info);
     }
     else
     {
@@ -254,8 +261,8 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * 33 - 34;
-                    work[i__3].r = 0.;
-                    work[i__3].i = 0.; // , expr subst
+                    work[i__3].real = 0.;
+                    work[i__3].imag = 0.; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -271,7 +278,7 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                 ib = fla_min(i__3, i__4);
                 /* Factorize the diagonal block */
                 i__3 = *ldab - 1;
-                zpotf2_(uplo, &ib, &ab[*kd + 1 + i__ * ab_dim1], &i__3, &ii);
+                aocl_lapack_zpotf2(uplo, &ib, &ab[*kd + 1 + i__ * ab_dim1], &i__3, &ii);
                 if(ii != 0)
                 {
                     *info = i__ + ii - 1;
@@ -303,17 +310,17 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                         /* Update A12 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        ztrsm_("Left", "Upper", "Conjugate transpose",
-                               "Non-"
-                               "unit",
-                               &ib, &i2, &c_b1, &ab[*kd + 1 + i__ * ab_dim1], &i__3,
-                               &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
+                        aocl_blas_ztrsm("Left", "Upper", "Conjugate transpose",
+                                        "Non-"
+                                        "unit",
+                                        &ib, &i2, &c_b1, &ab[*kd + 1 + i__ * ab_dim1], &i__3,
+                                        &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
                         /* Update A22 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        zherk_("Upper", "Conjugate transpose", &i2, &ib, &c_b21,
-                               &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, &c_b22,
-                               &ab[*kd + 1 + (i__ + ib) * ab_dim1], &i__4);
+                        aocl_blas_zherk("Upper", "Conjugate transpose", &i2, &ib, &c_b21,
+                                        &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, &c_b22,
+                                        &ab[*kd + 1 + (i__ + ib) * ab_dim1], &i__4);
                     }
                     if(i3 > 0)
                     {
@@ -326,33 +333,36 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                             {
                                 i__5 = ii + jj * 33 - 34;
                                 i__6 = ii - jj + 1 + (jj + i__ + *kd - 1) * ab_dim1;
-                                work[i__5].r = ab[i__6].r;
-                                work[i__5].i = ab[i__6].i; // , expr subst
+                                work[i__5].real = ab[i__6].real;
+                                work[i__5].imag = ab[i__6].imag; // , expr subst
                                 /* L30: */
                             }
                             /* L40: */
                         }
                         /* Update A13 (in the work array). */
                         i__3 = *ldab - 1;
-                        ztrsm_("Left", "Upper", "Conjugate transpose",
-                               "Non-"
-                               "unit",
-                               &ib, &i3, &c_b1, &ab[*kd + 1 + i__ * ab_dim1], &i__3, work, &c__33);
+                        aocl_blas_ztrsm("Left", "Upper", "Conjugate transpose",
+                                        "Non-"
+                                        "unit",
+                                        &ib, &i3, &c_b1, &ab[*kd + 1 + i__ * ab_dim1], &i__3, work,
+                                        &c__33);
                         /* Update A23 */
                         if(i2 > 0)
                         {
-                            z__1.r = -1.;
-                            z__1.i = -0.; // , expr subst
+                            z__1.real = -1.;
+                            z__1.imag = -0.; // , expr subst
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            zgemm_("Conjugate transpose", "No transpose", &i2, &i3, &ib, &z__1,
-                                   &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, work, &c__33,
-                                   &c_b1, &ab[ib + 1 + (i__ + *kd) * ab_dim1], &i__4);
+                            aocl_blas_zgemm("Conjugate transpose", "No transpose", &i2, &i3, &ib,
+                                            &z__1, &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3,
+                                            work, &c__33, &c_b1,
+                                            &ab[ib + 1 + (i__ + *kd) * ab_dim1], &i__4);
                         }
                         /* Update A33 */
                         i__3 = *ldab - 1;
-                        zherk_("Upper", "Conjugate transpose", &i3, &ib, &c_b21, work, &c__33,
-                               &c_b22, &ab[*kd + 1 + (i__ + *kd) * ab_dim1], &i__3);
+                        aocl_blas_zherk("Upper", "Conjugate transpose", &i3, &ib, &c_b21, work,
+                                        &c__33, &c_b22, &ab[*kd + 1 + (i__ + *kd) * ab_dim1],
+                                        &i__3);
                         /* Copy the lower triangle of A13 back into place. */
                         i__3 = i3;
                         for(jj = 1; jj <= i__3; ++jj)
@@ -362,8 +372,8 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                             {
                                 i__5 = ii - jj + 1 + (jj + i__ + *kd - 1) * ab_dim1;
                                 i__6 = ii + jj * 33 - 34;
-                                ab[i__5].r = work[i__6].r;
-                                ab[i__5].i = work[i__6].i; // , expr subst
+                                ab[i__5].real = work[i__6].real;
+                                ab[i__5].imag = work[i__6].imag; // , expr subst
                                 /* L50: */
                             }
                             /* L60: */
@@ -386,8 +396,8 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                 for(i__ = j + 1; i__ <= i__1; ++i__)
                 {
                     i__3 = i__ + j * 33 - 34;
-                    work[i__3].r = 0.;
-                    work[i__3].i = 0.; // , expr subst
+                    work[i__3].real = 0.;
+                    work[i__3].imag = 0.; // , expr subst
                     /* L80: */
                 }
                 /* L90: */
@@ -403,7 +413,7 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                 ib = fla_min(i__3, i__4);
                 /* Factorize the diagonal block */
                 i__3 = *ldab - 1;
-                zpotf2_(uplo, &ib, &ab[i__ * ab_dim1 + 1], &i__3, &ii);
+                aocl_lapack_zpotf2(uplo, &ib, &ab[i__ * ab_dim1 + 1], &i__3, &ii);
                 if(ii != 0)
                 {
                     *info = i__ + ii - 1;
@@ -435,17 +445,17 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                         /* Update A21 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        ztrsm_("Right", "Lower", "Conjugate transpose",
-                               "Non"
-                               "-unit",
-                               &i2, &ib, &c_b1, &ab[i__ * ab_dim1 + 1], &i__3,
-                               &ab[ib + 1 + i__ * ab_dim1], &i__4);
+                        aocl_blas_ztrsm("Right", "Lower", "Conjugate transpose",
+                                        "Non"
+                                        "-unit",
+                                        &i2, &ib, &c_b1, &ab[i__ * ab_dim1 + 1], &i__3,
+                                        &ab[ib + 1 + i__ * ab_dim1], &i__4);
                         /* Update A22 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        zherk_("Lower", "No transpose", &i2, &ib, &c_b21,
-                               &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b22,
-                               &ab[(i__ + ib) * ab_dim1 + 1], &i__4);
+                        aocl_blas_zherk("Lower", "No transpose", &i2, &ib, &c_b21,
+                                        &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b22,
+                                        &ab[(i__ + ib) * ab_dim1 + 1], &i__4);
                     }
                     if(i3 > 0)
                     {
@@ -458,33 +468,34 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                             {
                                 i__5 = ii + jj * 33 - 34;
                                 i__6 = *kd + 1 - jj + ii + (jj + i__ - 1) * ab_dim1;
-                                work[i__5].r = ab[i__6].r;
-                                work[i__5].i = ab[i__6].i; // , expr subst
+                                work[i__5].real = ab[i__6].real;
+                                work[i__5].imag = ab[i__6].imag; // , expr subst
                                 /* L100: */
                             }
                             /* L110: */
                         }
                         /* Update A31 (in the work array). */
                         i__3 = *ldab - 1;
-                        ztrsm_("Right", "Lower", "Conjugate transpose",
-                               "Non"
-                               "-unit",
-                               &i3, &ib, &c_b1, &ab[i__ * ab_dim1 + 1], &i__3, work, &c__33);
+                        aocl_blas_ztrsm("Right", "Lower", "Conjugate transpose",
+                                        "Non"
+                                        "-unit",
+                                        &i3, &ib, &c_b1, &ab[i__ * ab_dim1 + 1], &i__3, work,
+                                        &c__33);
                         /* Update A32 */
                         if(i2 > 0)
                         {
-                            z__1.r = -1.;
-                            z__1.i = -0.; // , expr subst
+                            z__1.real = -1.;
+                            z__1.imag = -0.; // , expr subst
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            zgemm_("No transpose", "Conjugate transpose", &i3, &i2, &ib, &z__1,
-                                   work, &c__33, &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b1,
-                                   &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
+                            aocl_blas_zgemm("No transpose", "Conjugate transpose", &i3, &i2, &ib,
+                                            &z__1, work, &c__33, &ab[ib + 1 + i__ * ab_dim1], &i__3,
+                                            &c_b1, &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
                         }
                         /* Update A33 */
                         i__3 = *ldab - 1;
-                        zherk_("Lower", "No transpose", &i3, &ib, &c_b21, work, &c__33, &c_b22,
-                               &ab[(i__ + *kd) * ab_dim1 + 1], &i__3);
+                        aocl_blas_zherk("Lower", "No transpose", &i3, &ib, &c_b21, work, &c__33,
+                                        &c_b22, &ab[(i__ + *kd) * ab_dim1 + 1], &i__3);
                         /* Copy the upper triangle of A31 back into place. */
                         i__3 = ib;
                         for(jj = 1; jj <= i__3; ++jj)
@@ -494,8 +505,8 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                             {
                                 i__5 = *kd + 1 - jj + ii + (jj + i__ - 1) * ab_dim1;
                                 i__6 = ii + jj * 33 - 34;
-                                ab[i__5].r = work[i__6].r;
-                                ab[i__5].i = work[i__6].i; // , expr subst
+                                ab[i__5].real = work[i__6].real;
+                                ab[i__5].imag = work[i__6].imag; // , expr subst
                                 /* L120: */
                             }
                             /* L130: */

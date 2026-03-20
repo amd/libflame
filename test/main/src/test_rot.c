@@ -110,6 +110,7 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     void *cx_test = NULL, *cy_test = NULL;
     integer interfacetype = params->interfacetype;
     double err_thresh;
+    void *filename = NULL;
 
     integer realtype;
     realtype = get_realtype(datatype);
@@ -130,28 +131,41 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     create_vector(realtype, &c, 1);
     create_vector(datatype, &s, 1);
 
-    create_vector(datatype, &f, 1);
-    create_vector(datatype, &g, 1);
-    create_vector(datatype, &r, 1);
-
-    rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
-    rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
-
-    /*calling lartg api for getting c and s value for plane rotation*/
-    invoke_lartg(datatype, f, g, c, s, r);
-
-    if(g_ext_fptr != NULL)
+    /* Initialize vectors only when not in BRT verification run mode */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input vectors with custom data */
-        init_vector_from_file(datatype, cx, 1 + (n - 1) * fla_i_abs(&incx), 1, g_ext_fptr);
-        init_vector_from_file(datatype, cy, 1 + (n - 1) * fla_i_abs(&incy), 1, g_ext_fptr);
+        create_vector(datatype, &f, 1);
+        create_vector(datatype, &g, 1);
+        create_vector(datatype, &r, 1);
+
+        rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
+        rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
+
+        /*calling lartg api for getting c and s value for plane rotation*/
+        invoke_lartg(datatype, f, g, c, s, r);
+
+        if(g_ext_fptr != NULL)
+        {
+            /* Initialize input vectors with custom data */
+            init_vector_from_file(datatype, cx, 1 + (n - 1) * fla_i_abs(&incx), 1, g_ext_fptr);
+            init_vector_from_file(datatype, cy, 1 + (n - 1) * fla_i_abs(&incy), 1, g_ext_fptr);
+        }
+        else
+        {
+            /* Initialize input matrix with random numbers */
+            rand_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, 1, d_zero, d_zero, 'R');
+            rand_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, 1, d_zero, d_zero, 'R');
+        }
+        free_vector(f);
+        free_vector(g);
+        free_vector(r);
     }
-    else
-    {
-        /* Initialize input matrix with random numbers */
-        rand_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, 1, d_zero, d_zero, 'R');
-        rand_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, 1, d_zero, d_zero, 'R');
-    }
+
+    /* BRT macro for processing two input vectors (cx and cy) */
+    integer cx_size = 1 + (n - 1) * fla_i_abs(&incx);
+    integer cy_size = 1 + (n - 1) * fla_i_abs(&incy);
+    FLA_BRT_PROCESS_FOUR_INPUT(datatype, cx_size, 1, cx, 1, datatype, cy_size, 1, cy, 1, datatype,
+                               1, 1, c, 1, datatype, 1, 1, s, 1, "ddd", n, incx, incy)
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, i_one, cx_test, i_one);
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, i_one, cy_test, i_one);
 
@@ -166,20 +180,31 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     /* Compute the performance of the best experiment repeat */
     /* 4*n */
     perf = (double)(4.0 * n) / time_min / FLOPS_PER_UNIT_PERF;
+
     /* output validation */
-    validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, err_thresh,
-                 params);
+    double residual = 0;
+    IF_FLA_BRT_VALIDATION(
+        cx_size, cy_size,
+        store_outputs_base(filename, params, 0, 2, datatype, cx_size, cx, datatype, cy_size, cy),
+        validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, err_thresh,
+                     params),
+        check_reproducibility_base(filename, params, 0, 2, datatype, cx_size, cx, datatype, cy_size,
+                                   cy))
+    else
+    {
+        validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, err_thresh,
+                     params);
+    }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_vector(cx);
     free_vector(cy);
     free_vector(cx_test);
     free_vector(cy_test);
     free_vector(c);
     free_vector(s);
-    free_vector(f);
-    free_vector(g);
-    free_vector(r);
 }
 
 void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void *cy, integer incy,

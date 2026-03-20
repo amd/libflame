@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLANTB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a triangular band matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -138,28 +138,40 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
-doublereal zlantb_(char *norm, char *uplo, char *diag, integer *n, integer *k, doublecomplex *ab,
-                   integer *ldab, doublereal *work)
+/** Generated wrapper function */
+doublereal zlantb_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *k,
+                   dcomplex *ab, aocl_int_t *ldab, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zlantb(norm, uplo, diag, n, k, ab, ldab, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldab_64 = *ldab;
+
+    return aocl_lapack_zlantb(norm, uplo, diag, &n_64, &k_64, ab, &ldab_64, work);
+#endif
+}
+
+doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aocl_int64_t *k,
+                              dcomplex *ab, aocl_int64_t *ldab, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlantb inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", k %" FLA_IS
                       ", ldab %" FLA_IS "",
                       *norm, *uplo, *diag, *n, *k, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, l;
+    aocl_int64_t i__, j, l;
     doublereal sum, scale;
     logical udiag;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -500,7 +512,7 @@ doublereal zlantb_(char *norm, char *uplo, char *diag, integer *n, integer *k, d
                         i__3 = fla_min(i__4, *k);
                         /* Computing MAX */
                         i__2 = *k + 2 - j;
-                        zlassq_(&i__3, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
+                        aocl_lapack_zlassq(&i__3, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
                         /* L280: */
                     }
                 }
@@ -518,7 +530,7 @@ doublereal zlantb_(char *norm, char *uplo, char *diag, integer *n, integer *k, d
                     i__3 = fla_min(i__4, i__2);
                     /* Computing MAX */
                     i__5 = *k + 2 - j;
-                    zlassq_(&i__3, &ab[fla_max(i__5, 1) + j * ab_dim1], &c__1, &scale, &sum);
+                    aocl_lapack_zlassq(&i__3, &ab[fla_max(i__5, 1) + j * ab_dim1], &c__1, &scale, &sum);
                     /* L290: */
                 }
             }
@@ -537,7 +549,7 @@ doublereal zlantb_(char *norm, char *uplo, char *diag, integer *n, integer *k, d
                         /* Computing MIN */
                         i__4 = *n - j;
                         i__3 = fla_min(i__4, *k);
-                        zlassq_(&i__3, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
+                        aocl_lapack_zlassq(&i__3, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
                         /* L300: */
                     }
                 }
@@ -553,7 +565,7 @@ doublereal zlantb_(char *norm, char *uplo, char *diag, integer *n, integer *k, d
                     i__4 = *n - j + 1;
                     i__2 = *k + 1; // , expr subst
                     i__3 = fla_min(i__4, i__2);
-                    zlassq_(&i__3, &ab[j * ab_dim1 + 1], &c__1, &scale, &sum);
+                    aocl_lapack_zlassq(&i__3, &ab[j * ab_dim1 + 1], &c__1, &scale, &sum);
                     /* L310: */
                 }
             }

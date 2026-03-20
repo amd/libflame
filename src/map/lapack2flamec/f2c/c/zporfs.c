@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZPORFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -180,10 +180,36 @@ static integer c__1 = 1;
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-             doublecomplex *af, integer *ldaf, doublecomplex *b, integer *ldb, doublecomplex *x,
-             integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work,
-             doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda,
+             dcomplex *af, aocl_int_t *ldaf, dcomplex *b, aocl_int_t *ldb,
+             dcomplex *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr,
+             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zporfs(uplo, n, nrhs, a, lda, af, ldaf, b, ldb, x, ldx, ferr, berr, work, rwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zporfs(uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, b, &ldb_64, x, &ldx_64,
+                       ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zporfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *af, aocl_int64_t *ldaf, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *x, aocl_int64_t *ldx, doublereal *ferr,
+                        doublereal *berr, dcomplex *work, doublereal *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zporfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
@@ -191,41 +217,26 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
                       *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
-        i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal s, xk;
-    integer nz;
+    aocl_int64_t nz;
     doublereal eps;
-    integer kase;
+    aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer isave[3], count;
-    extern /* Subroutine */
-        void
-        zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, doublecomplex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int_t isave[3];
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
-    extern /* Subroutine */
-        void
-        zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -304,7 +315,7 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPORFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPORFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -335,11 +346,11 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
         lstres = 3.;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        zcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
-        zhemv_(uplo, n, &z__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1],
-               &c__1);
+        aocl_blas_zcopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        aocl_blas_zhemv(uplo, n, &z__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1,
+                        &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -350,7 +361,7 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+            rwork[i__] = (d__1 = b[i__3].real, f2c_dabs(d__1))
                          + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
             /* L30: */
         }
@@ -362,25 +373,25 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             {
                 s = 0.;
                 i__3 = k + j * x_dim1;
-                xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                xk = (d__1 = x[i__3].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                 i__3 = k - 1;
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                    rwork[i__] += ((d__1 = a[i__4].real, f2c_dabs(d__1))
                                    + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
                                   * xk;
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                    s += ((d__1 = a[i__4].real, f2c_dabs(d__1))
                           + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
-                         * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                         * ((d__3 = x[i__5].real, f2c_dabs(d__3))
                             + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                     /* L40: */
                 }
                 i__3 = k + k * a_dim1;
-                rwork[k] = rwork[k] + (d__1 = a[i__3].r, f2c_dabs(d__1)) * xk + s;
+                rwork[k] = rwork[k] + (d__1 = a[i__3].real, f2c_dabs(d__1)) * xk + s;
                 /* L50: */
             }
         }
@@ -391,22 +402,22 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             {
                 s = 0.;
                 i__3 = k + j * x_dim1;
-                xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                xk = (d__1 = x[i__3].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                 i__3 = k + k * a_dim1;
-                rwork[k] += (d__1 = a[i__3].r, f2c_dabs(d__1)) * xk;
+                rwork[k] += (d__1 = a[i__3].real, f2c_dabs(d__1)) * xk;
                 i__3 = *n;
                 for(i__ = k + 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                    rwork[i__] += ((d__1 = a[i__4].real, f2c_dabs(d__1))
                                    + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
                                   * xk;
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                    s += ((d__1 = a[i__4].real, f2c_dabs(d__1))
                           + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
-                         * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                         * ((d__3 = x[i__5].real, f2c_dabs(d__3))
                             + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                     /* L60: */
                 }
@@ -423,7 +434,7 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                d__4 = ((d__1 = work[i__3].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)))
                        / rwork[i__]; // , expr subst
                 s = fla_max(d__3, d__4);
@@ -433,7 +444,7 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                d__4 = ((d__1 = work[i__3].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1)
                        / (rwork[i__] + safe1); // , expr subst
                 s = fla_max(d__3, d__4);
@@ -449,8 +460,8 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            zpotrs_(uplo, n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
-            zaxpy_(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_zpotrs(uplo, n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
+            aocl_blas_zaxpy(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -478,13 +489,13 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                rwork[i__] = (d__1 = work[i__3].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                rwork[i__] = (d__1 = work[i__3].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__]
                              + safe1;
             }
@@ -492,23 +503,23 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
         }
         kase = 0;
     L100:
-        zlacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(A**H). */
-                zpotrs_(uplo, n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
+                aocl_lapack_zpotrs(uplo, n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__;
-                    z__1.r = rwork[i__4] * work[i__5].r;
-                    z__1.i = rwork[i__4] * work[i__5].i; // , expr subst
-                    work[i__3].r = z__1.r;
-                    work[i__3].i = z__1.i; // , expr subst
+                    z__1.real = rwork[i__4] * work[i__5].real;
+                    z__1.imag = rwork[i__4] * work[i__5].imag; // , expr subst
+                    work[i__3].real = z__1.real;
+                    work[i__3].imag = z__1.imag; // , expr subst
                     /* L110: */
                 }
             }
@@ -521,13 +532,13 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__;
-                    z__1.r = rwork[i__4] * work[i__5].r;
-                    z__1.i = rwork[i__4] * work[i__5].i; // , expr subst
-                    work[i__3].r = z__1.r;
-                    work[i__3].i = z__1.i; // , expr subst
+                    z__1.real = rwork[i__4] * work[i__5].real;
+                    z__1.imag = rwork[i__4] * work[i__5].imag; // , expr subst
+                    work[i__3].real = z__1.real;
+                    work[i__3].imag = z__1.imag; // , expr subst
                     /* L120: */
                 }
-                zpotrs_(uplo, n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
+                aocl_lapack_zpotrs(uplo, n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
             }
             goto L100;
         }
@@ -539,7 +550,7 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             d__3 = lstres;
-            d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1))
+            d__4 = (d__1 = x[i__3].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
             lstres = fla_max(d__3, d__4);
             /* L130: */

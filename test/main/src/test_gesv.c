@@ -28,13 +28,6 @@ double prepare_lapacke_gesv_run(integer datatype, int matrix_layout, integer n_A
                                 void *A, integer lda, void *B, integer ldb, integer *ipiv,
                                 integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gesv_outputs(void *filename, integer datatype, integer n, integer nrhs, void *A,
-                        integer lda, void *B, integer ldb, integer *ipiv, void *params);
-integer check_bit_reproducibility_gesv(void *filename, integer datatype, integer n, integer nrhs,
-                                       void *A, integer lda, void *B, integer ldb, integer *ipiv,
-                                       void *params);
-
 void fla_test_gesv(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Linear Solve using LU";
@@ -169,11 +162,6 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     create_vector(INTEGER, &IPIV, n);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
-    create_realtype_vector(datatype, &s_test, n);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        create_vector(get_realtype(datatype), &scal, 1);
-    }
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
      * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
@@ -182,11 +170,13 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     if(!FLA_BRT_VERIFICATION_RUN)
     {
         /* Initialize the test matrices*/
-        if((!FLA_EXTREME_CASE_TEST) && g_ext_fptr == NULL)
+        if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL) && !(FLA_RANDOM_INIT_MODE))
         {
             /* Generate input matrix with condition number <= 100 */
+            create_realtype_vector(datatype, &s_test, n);
             create_svd_matrix(datatype, range, n, n, A, lda, s_test, GESV_VL, GESV_VU, i_zero,
                               i_zero, info);
+            free_vector(s_test);
         }
         else
         {
@@ -207,6 +197,7 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     /* Initialize the scaling factor only for overflow/underflow test */
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
+        create_vector(get_realtype(datatype), &scal, 1);
         scale_matrix_underflow_overflow_gesv(datatype, n, A, lda, params->imatrix_char, scal);
     }
 
@@ -226,13 +217,19 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        n, n,
-        store_gesv_outputs(filename, datatype, n, NRHS, A_save, lda, B_save, ldb, IPIV, params),
-        validate_gesv(tst_api, n, NRHS, A, lda, B, ldb, B_save, datatype, residual,
-                      params->imatrix_char, scal, params),
-        check_bit_reproducibility_gesv(filename, datatype, n, NRHS, A_save, lda, B_save, ldb, IPIV,
-                                       params))
+    IF_FLA_BRT_VALIDATION(n, n,
+                          store_outputs_base(filename, params, 2, 1, datatype, n, n, A_save, lda,
+                                             datatype, n, NRHS, B_save, ldb, INTEGER, n, IPIV),
+                          validate_gesv(tst_api, n, NRHS, A, lda, B, ldb, B_save, datatype,
+                                        residual, params->imatrix_char, scal, params),
+                          check_reproducibility_base(filename, params, 2, 1, datatype, n, n, A_save,
+                                                     lda, datatype, n, NRHS, B_save, ldb, INTEGER,
+                                                     n, IPIV))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesv(tst_api, n, NRHS, A, lda, B, ldb, B_save, datatype, residual,
@@ -254,6 +251,10 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     }
 
     /* Free up the buffers */
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
@@ -261,11 +262,6 @@ free_buffers:
     free_vector(IPIV);
     free_matrix(B);
     free_matrix(B_save);
-    free_vector(s_test);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
@@ -398,34 +394,4 @@ void invoke_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *
             break;
         }
     }
-}
-
-void store_gesv_outputs(void *filename, integer datatype, integer n, integer nrhs, void *A,
-                        integer lda, void *B, integer ldb, integer *ipiv, void *params)
-{
-    /* Create and open a file for storing Ground truth */
-    FLA_OPEN_GT_FILE_STORE
-
-    /* Store the ground truth data */
-    FLA_STORE_BRT_MATRIX(datatype, n, n, A, lda)
-    FLA_STORE_BRT_MATRIX(datatype, n, nrhs, B, ldb)
-    FLA_STORE_BRT_VECTOR(INTEGER, n, ipiv)
-
-    fclose(gt_file);
-}
-
-integer check_bit_reproducibility_gesv(void *filename, integer datatype, integer n, integer nrhs,
-                                       void *A, integer lda, void *B, integer ldb, integer *ipiv,
-                                       void *params)
-{
-    /* Create and open a file for storing Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    /* Store the ground truth data */
-    FLA_VERIFY_BRT_MATRIX(datatype, n, n, A, lda)
-    FLA_VERIFY_BRT_MATRIX(datatype, n, nrhs, B, ldb)
-    FLA_VERIFY_BRT_VECTOR(INTEGER, n, ipiv)
-
-    fclose(gt_file);
-    return 1;
 }

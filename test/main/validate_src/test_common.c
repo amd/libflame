@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -157,7 +157,7 @@ void free_vector(void *A)
 /* initialize to zero */
 void reset_vector(integer datatype, void *A, integer M, integer incA)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if(M <= 0 || incA == 0 || A == NULL)
@@ -220,7 +220,7 @@ void reset_vector(integer datatype, void *A, integer M, integer incA)
 void rand_vector(integer datatype, integer M, void *A, integer inc, double VL, double VU,
                  char range)
 {
-    integer i;
+    aocl_int64_t i;
     double step = (VU - VL) / M;
 
     /* early return */
@@ -322,7 +322,7 @@ void copy_vector(integer datatype, integer M, void *a, integer inca, void *b, in
     {
         case INTEGER:
         {
-            integer i, ia = 0, ib = 0;
+            aocl_int64_t i, ia = 0, ib = 0;
 
             if(inca < 0)
             {
@@ -371,7 +371,7 @@ void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, int
     {
         case INTEGER:
         {
-            integer i, iA = 0, iB = 0;
+            aocl_int64_t i, iA = 0, iB = 0;
 
             if(LDA < 0)
             {
@@ -489,7 +489,7 @@ void copy_realtype_vector(integer datatype, integer M, void *a, integer inca, vo
 /* create matrix of given datatype */
 void create_matrix(integer datatype, int matrix_layout, integer M, integer N, void **A, integer lda)
 {
-    integer rs, cs;
+    aocl_int64_t rs, cs;
     *A = NULL;
 
     if(matrix_layout == LAPACK_ROW_MAJOR)
@@ -542,9 +542,9 @@ void create_realtype_matrix(integer datatype, void **A, integer M, integer N)
     *A = NULL;
 
     if(datatype == FLOAT || datatype == COMPLEX)
-        *A = (float *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(float));
+        *A = (float *)fla_mem_alloc((aocl_int64_t)fla_max(1, M) * fla_max(1, N) * sizeof(float));
     else
-        *A = (double *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(double));
+        *A = (double *)fla_mem_alloc((aocl_int64_t)fla_max(1, M) * fla_max(1, N) * sizeof(double));
 }
 
 void *get_m_ptr(integer datatype, void *A, integer M, integer N, integer LDA)
@@ -594,7 +594,7 @@ void free_matrix(void *A)
 /* Initialize matrix with random values */
 void rand_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(M <= 0 || N <= 0 || LDA < M || A == NULL)
@@ -656,7 +656,7 @@ void rand_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
 /* Initialize symmetric matrix with random values */
 void rand_sym_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(M <= 0 || N <= 0 || LDA < M || A == NULL)
@@ -768,7 +768,7 @@ void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, in
 
     if(same_char(*uplo, 'U'))
     {
-        for(int i = 0; i < N; i++)
+        for(aocl_int64_t i = 0; i < N; i++)
         {
             memcpy((char *)B + (i * LDB) * element_size, (char *)A + (i * LDA) * element_size,
                    fla_min(i + 1, M) * element_size);
@@ -776,7 +776,7 @@ void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, in
     }
     else if(same_char(*uplo, 'L'))
     {
-        for(int i = 0; i < N && i < M; i++)
+        for(aocl_int64_t i = 0; i < N && i < M; i++)
         {
             memcpy((char *)B + (i * LDB + i) * element_size,
                    (char *)A + (i * LDA + i) * element_size, (M - i) * element_size);
@@ -790,10 +790,10 @@ void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, in
         }
         else
         {
-            for(int i = 0; i < N; i++)
+            for(aocl_int64_t i = 0; i < N; i++)
             {
-                memcpy((char *)B + (i * LDB) * element_size, (char *)A + (i * LDA) * element_size,
-                       M * element_size);
+                memcpy((char *)B + (i * (aocl_int64_t)LDB) * element_size,
+                       (char *)A + (i * LDA) * element_size, M * element_size);
             }
         }
     }
@@ -817,7 +817,7 @@ void copy_realtype_matrix(integer datatype, char *uplo, integer M, integer N, vo
 /* Initialize a matrix with zeros */
 void reset_matrix(integer datatype, integer M, integer N, void *A, integer LDA)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(M <= 0 || N <= 0 || LDA < M || A == NULL)
@@ -919,7 +919,7 @@ void z_div_t(dcomplex *cp, dcomplex *ap, dcomplex *bp)
     cp->imag = (a.imag * b.real - a.real * b.imag) / temp;
 }
 
-/* Division of complex types */
+/* Division of scomplex types */
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp)
 {
     scomplex a = *ap;
@@ -987,7 +987,7 @@ void diagmv(integer datatype, integer m, integer n, void *x, integer incx, void 
     integer inca, lda;
     integer n_iter;
     integer n_elem;
-    integer j;
+    aocl_int64_t j;
 
     /* early return */
     if(m <= 0 || n <= 0 || a_rs <= 0 || a_cs <= 0 || incx <= 0 || a == NULL || x == NULL)
@@ -1052,7 +1052,7 @@ void diagmv(integer datatype, integer m, integer n, void *x, integer incx, void 
 /* element-wise multiply */
 void scalv(integer datatype, integer n, void *x, integer incx, void *y, integer incy)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if(n <= 0 || incx <= 0 || incy <= 0 || x == NULL || y == NULL)
@@ -1170,7 +1170,8 @@ void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer l
 void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n,
                                  integer LDA)
 {
-    integer incr, i, j, min_m_n;
+    integer incr, min_m_n;
+    aocl_int64_t i, j;
 
     /* early return */
     if(m <= 0 || n <= 0 || LDA < m || s == NULL || sigma == NULL)
@@ -1255,7 +1256,7 @@ void rand_hermitian_matrix(integer datatype, integer n, void **A, integer lda)
 
 /* block diagonal matrix is required for computing eigen decomposition of non symmetric matrix.
    W is a block diagonal matrix, with a 1x1 block for each
-   real eigenvalue and a 2x2 block for each complex conjugate
+   real eigenvalue and a 2x2 block for each scomplex conjugate
    pair.then the 2 x 2 block corresponding to the pair will be:
 
               (  wr  wi  )
@@ -1264,7 +1265,7 @@ void rand_hermitian_matrix(integer datatype, integer n, void **A, integer lda)
 void create_block_diagonal_matrix(integer datatype, void *wr, void *wi, void *lambda, integer m,
                                   integer n, integer lda)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(m <= 0 || n <= 0 || lda < m || wr == NULL || wi == NULL || lambda == NULL)
@@ -1323,7 +1324,7 @@ void create_block_diagonal_matrix(integer datatype, void *wr, void *wi, void *la
    If trn == 'T' => checks whether A**T * A == I*/
 
 double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, integer n, integer k,
-                               integer lda)
+                               integer lda, void *params)
 {
     void *a_temp = NULL, *work = NULL;
     double resid = 0.;
@@ -1341,8 +1342,7 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
     {
         case FLOAT:
         {
-            float eps, norm;
-            eps = fla_lapack_slamch("P");
+            float norm;
 
             fla_lapack_slaset("full", &k, &k, &s_zero, &s_one, a_temp, &k);
             if(same_char(trn, 'N'))
@@ -1354,13 +1354,12 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
                 sgemm_("T", "N", &m, &m, &n, &s_one, A, &lda, A, &lda, &s_n_one, a_temp, &k);
             }
             norm = fla_lapack_slange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * fla_max(m, n)));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, fla_max(m, n), params);
             break;
         }
         case DOUBLE:
         {
-            double eps, norm;
-            eps = fla_lapack_dlamch("P");
+            double norm;
 
             fla_lapack_dlaset("full", &k, &k, &d_zero, &d_one, a_temp, &k);
             if(same_char(trn, 'N'))
@@ -1372,13 +1371,12 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
                 dgemm_("T", "N", &m, &m, &n, &d_one, A, &lda, A, &lda, &d_n_one, a_temp, &k);
             }
             norm = fla_lapack_dlange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * fla_max(m, n)));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, fla_max(m, n), params);
             break;
         }
         case COMPLEX:
         {
-            float eps, norm;
-            eps = fla_lapack_slamch("P");
+            float norm;
             fla_lapack_claset("full", &k, &k, &c_zero, &c_one, a_temp, &k);
             if(same_char(trn, 'N'))
             {
@@ -1389,13 +1387,12 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
                 cgemm_("C", "N", &m, &m, &n, &c_one, A, &lda, A, &lda, &c_n_one, a_temp, &k);
             }
             norm = fla_lapack_clange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * fla_max(m, n)));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, fla_max(m, n), params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double eps, norm;
-            eps = fla_lapack_dlamch("P");
+            double norm;
             fla_lapack_zlaset("full", &k, &k, &z_zero, &z_one, a_temp, &k);
             if(same_char(trn, 'N'))
             {
@@ -1406,7 +1403,7 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
                 zgemm_("C", "N", &m, &m, &n, &z_one, A, &lda, A, &lda, &z_n_one, a_temp, &k);
             }
             norm = fla_lapack_zlange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * fla_max(m, n)));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, fla_max(m, n), params);
             break;
         }
     }
@@ -1415,7 +1412,8 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
 }
 
 /* Checks whether A**T * A == I */
-double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda)
+double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda,
+                           void *params)
 {
     void *a_temp = NULL, *work = NULL;
     double resid = 0.;
@@ -1442,46 +1440,42 @@ double check_orthogonality(integer datatype, void *A, integer m, integer n, inte
     {
         case FLOAT:
         {
-            float eps, norm;
-            eps = fla_lapack_slamch("P");
+            float norm;
 
             fla_lapack_slaset("full", &k, &k, &s_zero, &s_one, a_temp, &k);
             sgemm_("T", "N", &k, &k, &m, &s_one, A, &lda, A, &lda, &s_n_one, a_temp, &k);
             norm = fla_lapack_slange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * (float)k));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, k, params);
             break;
         }
         case DOUBLE:
         {
-            double eps, norm;
-            eps = fla_lapack_dlamch("P");
+            double norm;
 
             fla_lapack_dlaset("full", &k, &k, &d_zero, &d_one, a_temp, &k);
             dgemm_("T", "N", &k, &k, &m, &d_one, A, &lda, A, &lda, &d_n_one, a_temp, &k);
             norm = fla_lapack_dlange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * (float)k));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, k, params);
             break;
         }
         case COMPLEX:
         {
-            float eps, norm;
-            eps = fla_lapack_slamch("P");
+            float norm;
 
             fla_lapack_claset("full", &k, &k, &c_zero, &c_one, a_temp, &k);
             cgemm_("C", "N", &k, &k, &m, &c_one, A, &lda, A, &lda, &c_n_one, a_temp, &k);
             norm = fla_lapack_clange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * (float)k));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, k, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double eps, norm;
-            eps = fla_lapack_dlamch("P");
+            double norm;
 
             fla_lapack_zlaset("full", &k, &k, &z_zero, &z_one, a_temp, &k);
             zgemm_("C", "N", &k, &k, &m, &z_one, A, &lda, A, &lda, &z_n_one, a_temp, &k);
             norm = fla_lapack_zlange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * (float)k));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, k, params);
             break;
         }
     }
@@ -1544,7 +1538,7 @@ void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda
 void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alpha, float *a,
             integer lda, scomplex *v, integer incv, float beta, scomplex *c, integer inc)
 {
-    integer i, j;
+    aocl_int64_t i, j;
     float real, imag;
     float rl, ig;
     float alphar;
@@ -1700,7 +1694,7 @@ double get_realtype_value(integer datatype, void *value)
    Initializes random values only for diagonal and off diagonal elements.*/
 void rand_sym_tridiag_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(M <= 0 || N <= 0 || LDA < M || A == NULL)
@@ -1782,7 +1776,7 @@ void rand_sym_tridiag_matrix(integer datatype, void *A, integer M, integer N, in
 /* Get diagonal elements of matrix A into Diag vector. */
 void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Diag)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(m <= 0 || n <= 0 || lda < m || A == NULL || Diag == NULL)
@@ -1832,7 +1826,7 @@ void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, 
 /* Get subdiagonal elements of matrix A into Subdiag vector.*/
 void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Subdiag)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(m <= 0 || n <= 0 || lda < m || A == NULL || Subdiag == NULL)
@@ -1882,7 +1876,7 @@ void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer ld
 void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *B,
                              integer LDA)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(M <= 0 || N <= 0 || LDA < M || D == NULL || E == NULL || B == NULL)
@@ -2035,7 +2029,7 @@ void get_max_from_array(integer datatype, void *arr, void *max_val, integer n)
             break;
         }
 
-        /* Implementation of complex needs to be relook*/
+        /* Implementation of scomplex needs to be relook*/
         case COMPLEX:
         {
             scomplex *ptr = arr;
@@ -2064,7 +2058,7 @@ void get_max_from_array(integer datatype, void *arr, void *max_val, integer n)
             break;
         }
 
-        /* Implementation of complex needs to be relook*/
+        /* Implementation of scomplex needs to be relook*/
         case DOUBLE_COMPLEX:
         {
             dcomplex *ptr = arr;
@@ -2162,7 +2156,7 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
             break;
         }
 
-        /* Implementation of complex needs to be relook*/
+        /* Implementation of scomplex needs to be relook*/
         case COMPLEX:
         {
             scomplex *ptr = arr;
@@ -2191,7 +2185,7 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
             break;
         }
 
-        /* Implementation of complex needs to be relook*/
+        /* Implementation of scomplex needs to be relook*/
         case DOUBLE_COMPLEX:
         {
             dcomplex *ptr = arr;
@@ -2224,7 +2218,7 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
 /* Reading matrix input data from a file in column major format m-rows, n-columns */
 void init_matrix_from_file(integer datatype, void *A, integer m, integer n, integer lda, FILE *fptr)
 {
-    int i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(m <= 0 || n <= 0 || lda < m || A == NULL || fptr == NULL)
@@ -2302,7 +2296,7 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
 /* Reading vector input data from a file */
 void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FILE *fptr)
 {
-    int i;
+    aocl_int64_t i;
 
     /* early return */
     if(m <= 0 || inc <= 0 || A == NULL || fptr == NULL)
@@ -2370,7 +2364,7 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
                                    integer ihi, integer AInitialized)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if(N <= 0 || LDA < N || ilo < 1 || ihi < 1 || ilo > ihi || ihi > N || A == NULL)
@@ -2458,7 +2452,7 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
    On output: A has upper hessenberg matrix.
               Z has orthogonal matrix.
               wr_in has eigen values.
-              wi_in has eigen values for imaginary parts of complex conjugate pairs
+              wi_in has eigen values for imaginary parts of scomplex conjugate pairs
               for real/double datatypes. */
 void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
@@ -2723,7 +2717,7 @@ void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, vo
 /* Convert matrix to upper hessenberg form */
 void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if(n <= 0 || lda < n || A == NULL)
@@ -2775,7 +2769,7 @@ void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
 /* Pack a symmetric matrix in column first order */
 void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(N <= 0 || lda < N || B == NULL || A == NULL)
@@ -2845,9 +2839,10 @@ void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda)
 }
 
 /* Convert matrix to upper hessenberg form */
-void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda)
+void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, integer ilo,
+                                     integer ihi)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if(n <= 0 || lda < n || A == NULL)
@@ -2855,45 +2850,65 @@ void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integ
         return;
     }
 
+    /* Convert 1-indexed ilo, ihi to 0-indexed */
+    integer ilo_idx = ilo - 1;
+    integer ihi_idx = ihi - 1;
+
     switch(datatype)
     {
         case FLOAT:
         {
-            /* Making elements below sub diagonal to Zero */
-            for(i = 0; i < n; i++)
+            /* Making elements below sub diagonal to Zero within the ilo:ihi range */
+            for(i = ilo_idx; i < ihi_idx; i++)
             {
-                float *p = &((float *)A)[(i + 2) + i * lda];
-                reset_vector(datatype, (void *)p, n - i - 2, 1);
+                integer num_elements = ihi_idx - i - 1;
+                if(num_elements > 0)
+                {
+                    float *p = &((float *)A)[(i + 2) + i * lda];
+                    reset_vector(datatype, (void *)p, num_elements, 1);
+                }
             }
             break;
         }
         case DOUBLE:
         {
-            /* Making elements below sub diagonal to Zero */
-            for(i = 0; i < n; i++)
+            /* Making elements below sub diagonal to Zero within the ilo:ihi range */
+            for(i = ilo_idx; i < ihi_idx; i++)
             {
-                double *p = &((double *)A)[(i + 2) + i * lda];
-                reset_vector(datatype, (void *)p, n - i - 2, 1);
+                integer num_elements = ihi_idx - i - 1;
+                if(num_elements > 0)
+                {
+                    double *p = &((double *)A)[(i + 2) + i * lda];
+                    reset_vector(datatype, (void *)p, num_elements, 1);
+                }
             }
             break;
         }
         case COMPLEX:
         {
-            /* Making elements below sub diagonal to Zero */
-            for(i = 0; i < n; i++)
+            /* Making elements below sub diagonal to Zero within the ilo:ihi range */
+            for(i = ilo_idx; i < ihi_idx; i++)
             {
-                scomplex *p = &((scomplex *)A)[(i + 2) + i * lda];
-                reset_vector(datatype, (void *)p, n - i - 2, 1);
+                integer num_elements = ihi_idx - i - 1;
+                if(num_elements > 0)
+                {
+                    scomplex *p = &((scomplex *)A)[(i + 2) + i * lda];
+                    reset_vector(datatype, (void *)p, num_elements, 1);
+                }
             }
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            /* Making elements below sub diagonal to Zero */
-            for(i = 0; i < n; i++)
+            /* Making elements below sub diagonal to Zero within the ilo:ihi range */
+            for(i = ilo_idx; i < ihi_idx; i++)
             {
-                dcomplex *p = &((dcomplex *)A)[(i + 2) + i * lda];
-                reset_vector(datatype, (void *)p, n - i - 2, 1);
+                integer num_elements = ihi_idx - i - 1;
+                if(num_elements > 0)
+                {
+                    dcomplex *p = &((dcomplex *)A)[(i + 2) + i * lda];
+                    reset_vector(datatype, (void *)p, num_elements, 1);
+                }
             }
             break;
         }
@@ -3034,7 +3049,7 @@ void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer
 void print_matrix(char *desc, char *order, integer datatype, integer M, integer N, void *A,
                   integer lda)
 {
-    integer i, j, row_max = M, col_max = N, ldc = lda, ldr = 1;
+    aocl_int64_t i, j, row_max = M, col_max = N, ldc = lda, ldr = 1;
 
     /* early return */
     if(M <= 0 || N <= 0 || lda <= 0 || A == NULL || desc == NULL || order == NULL)
@@ -3133,7 +3148,7 @@ void print_matrix(char *desc, char *order, integer datatype, integer M, integer 
 void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda,
                            integer A_init, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if(m <= 0 || n <= 0 || lda < m || A == NULL || uplo == NULL)
@@ -3290,7 +3305,7 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
 /*Test to Check order of Singular values of SVD (positive and non-decreasing)*/
 double svd_check_order(integer datatype, void *s, integer m, integer n, double residual)
 {
-    integer min_m_n, i;
+    aocl_int64_t min_m_n, i;
     min_m_n = fla_min(m, n);
     double resid = 0.;
 
@@ -3381,7 +3396,7 @@ double svd_check_order(integer datatype, void *s, integer m, integer n, double r
 /* Initialize matrix with special values*/
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(M <= 0 || N <= 0 || LDA < M || A == NULL)
@@ -3464,7 +3479,7 @@ void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, intege
 void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, integer LDA,
                               char type)
 {
-    integer rows, cols, upspan, lowspan, span;
+    aocl_int64_t rows, cols, upspan, lowspan, span;
 
     /* early return */
     if(M <= 0 || N <= 0 || LDA < M || A == NULL)
@@ -3671,7 +3686,7 @@ void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, i
 /* Test to check the extreme values propagation in output matrix */
 integer check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(M <= 0 || N <= 0 || LDA <= 0 || A == NULL)
@@ -3823,7 +3838,7 @@ integer check_extreme_value(integer datatype, integer M, integer N, void *A, int
 /* Initialize vector with special values */
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if(M <= 0 || incx <= 0 || A == NULL)
@@ -3892,7 +3907,7 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
 /* Initialize vector with special values in random locations */
 void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx, char type)
 {
-    integer rows, span;
+    aocl_int64_t rows, span;
 
     /* early return */
     if(M <= 0 || incx <= 0 || A == NULL)
@@ -3917,7 +3932,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     */
     if(M > 10)
     {
-        span = (M)*0.2;
+        span = (M) * 0.2;
     }
     else
     {
@@ -4287,7 +4302,7 @@ void tridiag_matrix_multiply(integer datatype, integer n, integer nrhs, void *dl
 void matrix_difference(integer datatype, integer m, integer n, void *A, integer lda, void *B,
                        integer ldb)
 {
-    integer i = 0;
+    aocl_int64_t i = 0;
 
     /* early return */
     if(m <= 0 || n <= 0 || lda < m || ldb < m || A == NULL || B == NULL)
@@ -4473,7 +4488,8 @@ void copy_tridiag_vector(integer datatype, void *dl, void *d, void *du, integer 
 void multiply_matrix_diag_vector(integer datatype, char side, enum VECTOR_TYPE vectype, integer m,
                                  integer n, void *A, integer lda, void *X, integer incx)
 {
-    integer j, loopn, inca, veclen;
+    integer loopn, inca, veclen;
+    aocl_int64_t j;
 
     /* early return */
     if(m <= 0 || n <= 0 || lda < m || incx <= 0 || A == NULL || X == NULL)
@@ -4622,7 +4638,7 @@ void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, 
          = D - Descending order */
 void sort_realtype_vector(integer datatype, char *order, integer vect_len, void *w, integer incw)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if(vect_len <= 0 || incw <= 0 || w == NULL || order == NULL)
@@ -4697,7 +4713,7 @@ void sort_realtype_vector(integer datatype, char *order, integer vect_len, void 
 integer compare_realtype_vector(integer datatype, integer vect_len, void *A, integer inca,
                                 integer offset_A, void *B, integer incb)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if(vect_len <= 0 || inca <= 0 || incb <= 0 || offset_A < 0 || A == NULL || B == NULL)
@@ -4746,7 +4762,7 @@ integer compare_realtype_vector(integer datatype, integer vect_len, void *A, int
 
 void convert_signed_eigen_values(integer datatype, void *L, integer n)
 {
-    integer i, tmp;
+    aocl_int64_t i, tmp;
 
     /* early return */
     if(n <= 0 || L == NULL)
@@ -4817,7 +4833,7 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
 /* Get absolute value of a real vector*/
 void get_abs_vector_value(integer datatype, void *S, integer M, integer inc)
 {
-    integer i = 0;
+    aocl_int64_t i = 0;
 
     /* early return */
     if(M <= 0 || inc <= 0 || S == NULL)
@@ -5614,9 +5630,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                             &((float *)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))], &INFO);
                     norm = 0;
                     /*Compute norm*/
-                    for(integer j = n + 1; j < temp; j++)
+                    for(aocl_int64_t j = n + 1; j < temp; j++)
                     {
-                        for(integer i = n + 1; i < fla_min(m, j); i++)
+                        for(aocl_int64_t i = n + 1; i < fla_min(m, j); i++)
                         {
                             temp1 = FLA_FABS(((float *)work)[i + (j - 1) * m]);
                             norm = fla_max(temp1, norm);
@@ -5626,9 +5642,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                 else if(same_char(*trans, 'N'))
                 {
                     /*Copy x into work*/
-                    for(integer i = 0; i < n; i++)
+                    for(aocl_int64_t i = 0; i < n; i++)
                     {
-                        for(integer j = 0; j < nrhs; j++)
+                        for(aocl_int64_t j = 0; j < nrhs; j++)
                         {
                             ((float *)work)[m + j + (i * ldwork)] = ((float *)x)[i + j * ldb];
                         }
@@ -5645,9 +5661,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                     sgelq2_(&ldwork, &n, work, &ldwork, &((float *)work)[ldwork * n],
                             &((float *)work)[ldwork * (n + 1)], &INFO);
                     /*Compute norm*/
-                    for(integer j = m + 1; j < n; j++)
+                    for(aocl_int64_t j = m + 1; j < n; j++)
                     {
-                        for(integer i = j; i < ldwork; i++)
+                        for(aocl_int64_t i = j; i < ldwork; i++)
                         {
                             temp1 = FLA_FABS(((float *)work)[i + (j * ldwork)]);
                             norm = fla_max(temp1, norm);
@@ -5692,9 +5708,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                             &((double *)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))], &INFO);
                     norm = 0;
                     /*Compute norm*/
-                    for(integer j = n + 1; j < temp; j++)
+                    for(aocl_int64_t j = n + 1; j < temp; j++)
                     {
-                        for(integer i = n + 1; i < fla_min(m, j); i++)
+                        for(aocl_int64_t i = n + 1; i < fla_min(m, j); i++)
                         {
                             temp1 = FLA_FABS(((double *)work)[i + (j - 1) * m]);
                             norm = fla_max(temp1, norm);
@@ -5704,9 +5720,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                 else if(same_char(*trans, 'N'))
                 {
                     /*Copy x into work*/
-                    for(integer i = 0; i < n; i++)
+                    for(aocl_int64_t i = 0; i < n; i++)
                     {
-                        for(integer j = 0; j < nrhs; j++)
+                        for(aocl_int64_t j = 0; j < nrhs; j++)
                         {
                             ((double *)work)[m + j + (i * ldwork)] = ((double *)x)[i + j * ldb];
                         }
@@ -5770,9 +5786,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                             &INFO);
                     norm = 0;
                     /*Compute norm*/
-                    for(integer j = n + 1; j < temp; j++)
+                    for(aocl_int64_t j = n + 1; j < temp; j++)
                     {
-                        for(integer i = n + 1; i < fla_min(m, j); i++)
+                        for(aocl_int64_t i = n + 1; i < fla_min(m, j); i++)
                         {
                             temp1 = FLA_FABS(((scomplex *)work)[i + (j - 1) * m].real);
                             norm = fla_max(temp1, norm);
@@ -5782,9 +5798,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                 else if(same_char(*trans, 'N'))
                 {
                     /*Copy x into work*/
-                    for(integer i = 0; i < n; i++)
+                    for(aocl_int64_t i = 0; i < n; i++)
                     {
-                        for(integer j = 0; j < nrhs; j++)
+                        for(aocl_int64_t j = 0; j < nrhs; j++)
                         {
                             ((scomplex *)work)[m + j + (i * ldwork)].real
                                 = ((scomplex *)x)[i + j * ldb].real;
@@ -5804,9 +5820,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                     cgelq2_(&ldwork, &n, work, &ldwork, &((scomplex *)work)[ldwork * n],
                             &((scomplex *)work)[ldwork * (n + 1)], &INFO);
                     /*Compute norm*/
-                    for(integer j = m + 1; j < n; j++)
+                    for(aocl_int64_t j = m + 1; j < n; j++)
                     {
-                        for(integer i = j; i < ldwork; i++)
+                        for(aocl_int64_t i = j; i < ldwork; i++)
                         {
                             temp1 = FLA_FABS(((scomplex *)work)[i + (j * ldwork)].real);
                             norm = fla_max(norm, temp1);
@@ -5863,9 +5879,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                 else if(same_char(*trans, 'N'))
                 {
                     /*Copy x into work*/
-                    for(integer i = 0; i < n; i++)
+                    for(aocl_int64_t i = 0; i < n; i++)
                     {
-                        for(integer j = 0; j < nrhs; j++)
+                        for(aocl_int64_t j = 0; j < nrhs; j++)
                         {
                             ((dcomplex *)work)[m + j + (i * ldwork)] = ((dcomplex *)x)[i + j * ldb];
                             ((dcomplex *)work)[m + j + (i * ldwork)].imag
@@ -5884,9 +5900,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                     zgelq2_(&ldwork, &n, work, &ldwork, &((dcomplex *)work)[ldwork * n],
                             &((dcomplex *)work)[ldwork * (n + 1)], &INFO);
                     /*Compute norm*/
-                    for(integer j = m + 1; j < n; j++)
+                    for(aocl_int64_t j = m + 1; j < n; j++)
                     {
-                        for(integer i = j; i < ldwork; i++)
+                        for(aocl_int64_t i = j; i < ldwork; i++)
                         {
                             temp1 = FLA_FABS(((dcomplex *)work)[i + (j * ldwork)].real);
                             norm = fla_max(norm, temp1);
@@ -5910,7 +5926,7 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
 void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, void *A, integer lda,
                          void *nrm2, char imatrix, void *work)
 {
-    integer i;
+    aocl_int64_t i;
     void *col;
 
     /* early return */
@@ -6008,7 +6024,7 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
     {
         case FLOAT:
         {
-            for(integer i = 0; i < nrhs; i++)
+            for(aocl_int64_t i = 0; i < nrhs; i++)
             {
                 *resid = fla_max(snrm2_(&temp, &((float *)x)[(i * ldx) + n], &i_one), *resid);
             }
@@ -6016,7 +6032,7 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
         }
         case DOUBLE:
         {
-            for(integer i = 0; i < nrhs; i++)
+            for(aocl_int64_t i = 0; i < nrhs; i++)
             {
                 *resid = fla_max(dnrm2_(&temp, &((double *)x)[(i * ldx) + n], &i_one), *resid);
             }
@@ -6024,7 +6040,7 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
         }
         case COMPLEX:
         {
-            for(integer i = 0; i < nrhs; i++)
+            for(aocl_int64_t i = 0; i < nrhs; i++)
             {
                 *resid = fla_max(scnrm2_(&temp, &((scomplex *)x)[(i * ldx) + n], &i_one), *resid);
             }
@@ -6032,7 +6048,7 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
         }
         case DOUBLE_COMPLEX:
         {
-            for(integer i = 0; i < nrhs; i++)
+            for(aocl_int64_t i = 0; i < nrhs; i++)
             {
                 *resid = fla_max(dznrm2_(&temp, &((dcomplex *)x)[(i * ldx) + n], &i_one), *resid);
             }
@@ -6097,12 +6113,12 @@ void swap_row_col(integer datatype, integer *m, void *A, integer lda, integer *i
     }
 }
 
-/* GEMM implementation for  C := op( A )*op( B )
- * Where alpha = 1, beta = 0
+/* General matrix multiplication: C := alpha*op(A)*op(B) + beta*C
+ * Wrapper function that calls the appropriate BLAS gemm routine based on datatype.
  */
 void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, integer *n,
-                     integer *k, void *A, integer *lda, void *B, integer *ldb, void *C,
-                     integer *ldc)
+                     integer *k, double alpha, void *A, integer *lda, void *B, integer *ldb,
+                     double beta, void *C, integer *ldc)
 {
     /* check for NULL pointers */
     if((transA == NULL) || (transB == NULL) || (m == NULL) || (n == NULL) || (k == NULL)
@@ -6116,22 +6132,28 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
     {
         case FLOAT:
         {
-            sgemm_(transA, transB, m, n, k, &s_one, A, lda, B, ldb, &s_zero, C, ldc);
+            float gemm_alpha = (float)alpha;
+            float gemm_beta = (float)beta;
+            sgemm_(transA, transB, m, n, k, &gemm_alpha, A, lda, B, ldb, &gemm_beta, C, ldc);
             break;
         }
         case DOUBLE:
         {
-            dgemm_(transA, transB, m, n, k, &d_one, A, lda, B, ldb, &d_zero, C, ldc);
+            dgemm_(transA, transB, m, n, k, &alpha, A, lda, B, ldb, &beta, C, ldc);
             break;
         }
         case COMPLEX:
         {
-            cgemm_(transA, transB, m, n, k, &c_one, A, lda, B, ldb, &c_zero, C, ldc);
+            scomplex gemm_alpha = {(float)alpha, 0.0f};
+            scomplex gemm_beta = {(float)beta, 0.0f};
+            cgemm_(transA, transB, m, n, k, &gemm_alpha, A, lda, B, ldb, &gemm_beta, C, ldc);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            zgemm_(transA, transB, m, n, k, &z_one, A, lda, B, ldb, &z_zero, C, ldc);
+            dcomplex gemm_alpha = {alpha, 0.0};
+            dcomplex gemm_beta = {beta, 0.0};
+            zgemm_(transA, transB, m, n, k, &gemm_alpha, A, lda, B, ldb, &gemm_beta, C, ldc);
             break;
         }
     }
@@ -6146,7 +6168,8 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
  */
 void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type, char uplo)
 {
-    integer i, j, conj = 1, i_temp, j_temp;
+    aocl_int64_t i, j, i_temp, j_temp;
+    integer conj = 1;
 
     /* early return */
     if((n <= 0) || (A == NULL) || (lda < n) || (type == NULL))
@@ -6259,7 +6282,7 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
 /* Scaling the matrix by x scalar */
 void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integer lda, integer inc)
 {
-    integer j;
+    aocl_int64_t j;
 
     /* early return */
     if((m <= 0) || (n <= 0) || (lda <= 0) || (A == NULL) || (x == NULL) || (inc <= 0))
@@ -6324,7 +6347,7 @@ void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integ
 void get_max_from_matrix(integer datatype, void *A, void *max_val, integer m, integer n,
                          integer lda)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if((m <= 0) || (n <= 0) || (lda <= 0) || (A == NULL) || (max_val == NULL))
@@ -6430,7 +6453,7 @@ void get_max_from_matrix(integer datatype, void *A, void *max_val, integer m, in
 void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, integer n,
                          integer lda)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if((m <= 0) || (n <= 0) || (lda <= 0) || (A == NULL) || (min_val == NULL))
@@ -6544,7 +6567,7 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
          = D - Descending order */
 void sort_vector(integer datatype, char *order, integer vect_len, void *w, integer incw)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* early return */
     if((vect_len <= 0) || (w == NULL) || (order == NULL) || (incw <= 0))
@@ -6764,11 +6787,11 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
     }
 }
 
-/* Generate a block diagonal matrix with complex conjugate eigen value pairs as
+/* Generate a block diagonal matrix with scomplex conjugate eigen value pairs as
    2 * 2 blocks along the diagonal. This is used for generating asymmetric matrix */
 void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if((n <= 0) || (lda < n) || (A == NULL))
@@ -6917,7 +6940,7 @@ void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer 
 integer compare_vector(integer datatype, integer vect_len, void *A, integer inca, integer offset_A,
                        void *B, integer incb)
 {
-    integer i;
+    aocl_int64_t i;
 
     /* early return */
     if((vect_len <= 0) || (A == NULL) || (B == NULL) || (inca <= 0) || (incb <= 0)
@@ -7026,7 +7049,7 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
 }
 
 /* Find negative value of every 2nd element (starting from ilo-1 till ihi-2) and store in next
- * location. Used to store imaginary parts of complex conjuate pair of eigen values */
+ * location. Used to store imaginary parts of scomplex conjuate pair of eigen values */
 void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, integer ihi)
 {
     integer i;
@@ -7056,7 +7079,7 @@ void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, inte
 }
 
 /* Find negative value of each element and store in next location
-   Used to store imaginary parts of complex conjuate pair of eigen values
+   Used to store imaginary parts of scomplex conjuate pair of eigen values
    in asymmetric matrix eigen decomposition APIs
    Ex: input vector {a, 0, -b, 0 ...}
        output vector {a, -a, -b, b, ...} */
@@ -7099,7 +7122,7 @@ void add_negative_values(integer datatype, void *vect, integer n)
 void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integer n, void *a,
                            integer lda, void *a_t, integer lda_t)
 {
-    integer i, j, cs, rs;
+    aocl_int64_t i, j, cs, rs;
 
     /* early return TODO */
     if(((a == NULL) || (a_t == NULL) || m <= 0) || (n <= 0) || (lda <= 0) || (lda_t <= 0))
@@ -7179,7 +7202,7 @@ void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integ
 /* To find reciprocal of each number in real vector X and store it in Y */
 void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, integer inx)
 {
-    integer i = 0;
+    aocl_int64_t i = 0;
 
     /* early return */
     if((n <= 0) || (X == NULL) || (Y == NULL) || (inx <= 0))
@@ -7279,8 +7302,7 @@ typedef union
 void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m, integer n,
                                   void *AB, integer ldab, void *AB_trans, integer ldab_trans)
 {
-    integer i, j;
-    integer cs, rs;
+    integer i, j, cs, rs;
 
     /* check for NULL pointers */
     if(AB == NULL || AB_trans == NULL || m <= 0 || n <= 0 || ldab <= 0 || ldab_trans <= 0)
@@ -7606,7 +7628,8 @@ void set_matrix_bounds(char *uplo, integer i, integer m, integer *j_start, integ
 integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
                        void *B, integer ldb)
 {
-    integer i, j, j_start = 0, j_end = m;
+    aocl_int64_t i, j;
+    integer j_start = 0, j_end = m;
 
     /* early return */
     if((m <= 0) || (n <= 0) || (lda < m) || (ldb < m) || (A == NULL) || (B == NULL)
@@ -8211,7 +8234,7 @@ void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n)
 void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, void *d, void *e,
                              void *B, integer ldb, integer type)
 {
-    integer i;
+    aocl_int64_t i;
 
     if(!B || !d || (type != LOWER_BIDIAG && type != UPPER_BIDIAG))
         return;
@@ -8307,7 +8330,7 @@ void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, 
 /**
  * @brief Generate a well-conditioned, strictly diagonally dominant triangular matrix.
  *        - Diagonal: sum(abs(off-diagonal)) + margin (or 1 if UNIT_DIAG)
- *        - Off-diagonal: small random values in [-0.01, 0.01] (real and imag for complex)
+ *        - Off-diagonal: small random values in [-0.01, 0.01] (real and imag for scomplex)
  * @param uplo - 'U' for upper triangular matrix, 'L' for lower triangular matrix.
  * @param datatype - Data type of matrix.
  * @param m - Number of rows of matrix.
@@ -8319,7 +8342,7 @@ void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, 
 void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
                                         integer lda, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type)
 {
-    integer i, j;
+    aocl_int64_t i, j;
     integer min_mn = (m < n) ? m : n;
 
     /* early return */
@@ -8496,4 +8519,90 @@ void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m,
         default:
             break;
     }
+}
+
+/*
+ * The same_string function performs a case-insensitive comparison of
+ * two input strings and returns true (1) if they are equal.
+ * It utilizes the existing same_char function for character-by-character comparison.
+ *
+ * Parameters:
+ *   str_a - First string to compare (can be NULL)
+ *   str_b - Second string to compare (can be NULL)
+ *
+ * Returns:
+ *   1 if strings are equal (case-insensitive)
+ *   0 if strings are different or if either is NULL
+ */
+logical same_string(const char *str_a, const char *str_b)
+{
+    /* Handle NULL cases */
+    if(!str_a || !str_b)
+        return 0;
+
+    /* Compare characters using existing same_char function */
+    while(*str_a && *str_b)
+    {
+        if(!same_char(*str_a, *str_b))
+            return 0;
+        ++str_a;
+        ++str_b;
+    }
+
+    /* Both strings must end at the same position */
+    return (*str_a == '\0' && *str_b == '\0') ? 1 : 0;
+}
+
+/*===========================================================================
+ * compute_matrix_inverse
+ *
+ * Computes the inverse of a square matrix using GETRF (LU factorization)
+ * followed by GETRI (inverse from LU factors).
+ *
+ * Parameters:
+ *   datatype  - Data type (FLOAT, DOUBLE, COMPLEX, DOUBLE_COMPLEX)
+ *   n         - Matrix dimension (n x n)
+ *   A         - Input matrix (n x n), will be OVERWRITTEN with A^{-1}
+ *   lda       - Leading dimension of A
+ *
+ * Returns:
+ *   0 on success, non-zero on failure (singular matrix or error)
+ *===========================================================================*/
+integer compute_matrix_inverse(integer datatype, integer n, void *A, integer lda)
+{
+    void *work = NULL;
+    void *ipiv = NULL;
+    integer lwork = -1;
+    integer info_getrf = 0, info_getri = 0;
+
+    if(A == NULL || n <= 0 || lda < n)
+        return -1;
+
+    create_vector(INTEGER, &ipiv, n);
+
+    /* Step 1: LU factorization using GETRF */
+    invoke_getrf(datatype, &n, &n, A, &lda, ipiv, &info_getrf);
+
+    if(info_getrf != 0)
+    {
+        free_vector(ipiv);
+        return info_getrf; /* Matrix is singular or error occurred */
+    }
+
+    /* Step 2: Workspace query for GETRI */
+    create_vector(datatype, &work, 1);
+    invoke_getri(datatype, &n, A, &lda, ipiv, work, &lwork, &info_getri);
+    lwork = get_work_value(datatype, work);
+    if(lwork < n)
+        lwork = n;
+    free_vector(work);
+
+    /* Step 3: Allocate workspace and compute inverse using GETRI */
+    create_vector(datatype, &work, lwork);
+    invoke_getri(datatype, &n, A, &lda, ipiv, work, &lwork, &info_getri);
+
+    free_vector(work);
+    free_vector(ipiv);
+
+    return info_getri;
 }

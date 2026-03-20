@@ -220,16 +220,22 @@
     }
 
 /* Helper macro used in store_API_outputs function to store the CRC and binary data of a matrix */
-#define FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)             \
-    if(same_char(((test_params_t *)params)->BRT_char, 'G'))      \
-    {                                                            \
-        uint32_t A_GT;                                           \
-        A_GT = generate_crc_matrix(datatype, m, n, A, lda);      \
-        fwrite(&A_GT, sizeof(uint32_t), 1, gt_file);             \
-    }                                                            \
-    else if(same_char(((test_params_t *)params)->BRT_char, 'F')) \
-    {                                                            \
-        FLA_STORE_MATRIX(datatype, m, n, A, lda);                \
+#define FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)                   \
+    if(same_char(((test_params_t *)params)->BRT_char, 'G'))            \
+    {                                                                  \
+        uint32_t A_GT;                                                 \
+        A_GT = generate_crc_matrix(datatype, m, n, A, lda);            \
+        fwrite(&A_GT, sizeof(uint32_t), 1, gt_file);                   \
+    }                                                                  \
+    else if(same_char(((test_params_t *)params)->BRT_char, 'F'))       \
+    {                                                                  \
+        FLA_STORE_MATRIX(datatype, m, n, A, lda);                      \
+    }                                                                  \
+    else if(same_char(((test_params_t *)params)->BRT_char, 'L'))       \
+    {                                                                  \
+        uint32_t A_GT;                                                 \
+        A_GT = generate_crc_vector(datatype, m, A);                    \
+        printf("Output: %d matrix\tCRC:%" PRIu32 "\n", ++count, A_GT); \
     }
 
 /* Helper macro used in store_API_outputs function to store the CRC and binary data of a matrix
@@ -244,19 +250,31 @@
     else if(same_char(((test_params_t *)params)->BRT_char, 'F'))           \
     {                                                                      \
         FLA_STORE_MATRIX(datatype, m, n, A, lda);                          \
+    }                                                                      \
+    else if(same_char(((test_params_t *)params)->BRT_char, 'L'))           \
+    {                                                                      \
+        uint32_t A_GT;                                                     \
+        A_GT = generate_crc_matrix_no_nb_diag(datatype, m, n, nb, A, lda); \
+        printf("Output: %d matrix\tCRC:%" PRIu32 "\n", ++count, A_GT);     \
     }
 
 /* Helper macro used in store_API_outputs function to store the CRC and binary data of a vector */
-#define FLA_STORE_BRT_VECTOR(datatype, m, A)                     \
-    if(same_char(((test_params_t *)params)->BRT_char, 'G'))      \
-    {                                                            \
-        uint32_t A_GT;                                           \
-        A_GT = generate_crc_vector(datatype, m, A);              \
-        fwrite(&A_GT, sizeof(uint32_t), 1, gt_file);             \
-    }                                                            \
-    else if(same_char(((test_params_t *)params)->BRT_char, 'F')) \
-    {                                                            \
-        FLA_STORE_VECTOR(datatype, m, A);                        \
+#define FLA_STORE_BRT_VECTOR(datatype, m, A)                           \
+    if(same_char(((test_params_t *)params)->BRT_char, 'G'))            \
+    {                                                                  \
+        uint32_t A_GT;                                                 \
+        A_GT = generate_crc_vector(datatype, m, A);                    \
+        fwrite(&A_GT, sizeof(uint32_t), 1, gt_file);                   \
+    }                                                                  \
+    else if(same_char(((test_params_t *)params)->BRT_char, 'F'))       \
+    {                                                                  \
+        FLA_STORE_VECTOR(datatype, m, A);                              \
+    }                                                                  \
+    else if(same_char(((test_params_t *)params)->BRT_char, 'L'))       \
+    {                                                                  \
+        uint32_t A_GT;                                                 \
+        A_GT = generate_crc_vector(datatype, m, A);                    \
+        printf("Output: %d vector\tCRC:%" PRIu32 "\n", ++count, A_GT); \
     }
 
 /* Helper macro used in check_bit_reproducibility_API function to verify the CRC and binary data of
@@ -359,10 +377,19 @@
 #define IF_FLA_BRT_VALIDATION(m, n, storeFunction, validateFunction, checkBRTFunction) \
     if(FLA_BIT_REPRODUCIBILITY_TEST)                                                   \
     {                                                                                  \
-        if(same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'F'))       \
+        if(same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'F')        \
+           || same_char(params->BRT_char, 'L'))                                        \
         {                                                                              \
             storeFunction;                                                             \
-            validateFunction;                                                          \
+            if(!FLA_SKIP_VALIDATION_MODE)                                              \
+            {                                                                          \
+                validateFunction;                                                      \
+            }                                                                          \
+            else                                                                       \
+            {                                                                          \
+                residual = err_thresh;                                                 \
+                FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);                     \
+            }                                                                          \
         }                                                                              \
         else if(same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))  \
         {                                                                              \
@@ -381,16 +408,23 @@
 /* Macro for the BRT path in the pre processing of API inputs in the test driver
  * This macro generates the unique filename and stores the API input in GT case and loads API input
  * in V case */
-#define FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, format, ...)                     \
-    if(FLA_BIT_REPRODUCIBILITY_TEST)                                                          \
-    {                                                                                         \
-        generate_filename(&filename, tst_api, params->seed, get_datatype_char(datatype),      \
-                          params->imatrix_char, format, __VA_ARGS__);                         \
-        update_filetype(&filename, "BRT/Input-Matrix", FALSE);                                \
-        if(!store_load_input_matrices(params->BRT_char, filename, 1, datatype, m, n, A, lda)) \
-        {                                                                                     \
-            goto free_buffers;                                                                \
-        }                                                                                     \
+#define FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, format, ...)                         \
+    if(FLA_BIT_REPRODUCIBILITY_TEST)                                                              \
+    {                                                                                             \
+        generate_filename(&filename, tst_api, params->seed, get_datatype_char(datatype),          \
+                          params->imatrix_char, format, __VA_ARGS__);                             \
+        if(!same_char(((test_params_t *)params)->BRT_char, 'L'))                                  \
+        {                                                                                         \
+            update_filetype(&filename, "BRT/Input-Matrix/", FALSE);                               \
+            if(!store_load_input_matrices(params->BRT_char, filename, 1, datatype, m, n, A, lda)) \
+            {                                                                                     \
+                goto free_buffers;                                                                \
+            }                                                                                     \
+        }                                                                                         \
+        else                                                                                      \
+        {                                                                                         \
+            ((char *)filename)[strlen(filename) - 4] = '\0';                                      \
+        }                                                                                         \
     }
 
 /* Macro for the BRT path in the pre processing of API inputs in the test driver
@@ -401,11 +435,18 @@
     {                                                                                             \
         generate_filename(&filename, tst_api, params->seed, get_datatype_char(datatype),          \
                           params->imatrix_char, format, __VA_ARGS__);                             \
-        update_filetype(&filename, "BRT/Input-Matrix", FALSE);                                    \
-        if(!store_load_input_matrices(params->BRT_char, filename, 2, datatype, m, n, A, lda,      \
-                                      datatypeB, mB, nB, B, ldb))                                 \
+        if(!same_char(((test_params_t *)params)->BRT_char, 'L'))                                  \
         {                                                                                         \
-            goto free_buffers;                                                                    \
+            update_filetype(&filename, "BRT/Input-Matrix/", FALSE);                               \
+            if(!store_load_input_matrices(params->BRT_char, filename, 2, datatype, m, n, A, lda,  \
+                                          datatypeB, mB, nB, B, ldb))                             \
+            {                                                                                     \
+                goto free_buffers;                                                                \
+            }                                                                                     \
+        }                                                                                         \
+        else                                                                                      \
+        {                                                                                         \
+            ((char *)filename)[strlen(filename) - 4] = '\0';                                      \
         }                                                                                         \
     }
 
@@ -418,12 +459,44 @@
     {                                                                                             \
         generate_filename(&filename, tst_api, params->seed, get_datatype_char(datatype),          \
                           params->imatrix_char, format, __VA_ARGS__);                             \
-        update_filetype(&filename, "BRT/Input-Matrix", FALSE);                                    \
-        if(!store_load_input_matrices(params->BRT_char, filename, 3, datatype, m, n, A, lda,      \
-                                      datatypeB, mB, nB, B, ldb, datatypeC, mC, nC, C, ldc))      \
+        if(!same_char(((test_params_t *)params)->BRT_char, 'L'))                                  \
         {                                                                                         \
-            goto free_buffers;                                                                    \
+            update_filetype(&filename, "BRT/Input-Matrix/", FALSE);                               \
+            if(!store_load_input_matrices(params->BRT_char, filename, 3, datatype, m, n, A, lda,  \
+                                          datatypeB, mB, nB, B, ldb, datatypeC, mC, nC, C, ldc))  \
+            {                                                                                     \
+                goto free_buffers;                                                                \
+            }                                                                                     \
         }                                                                                         \
+        else                                                                                      \
+        {                                                                                         \
+            ((char *)filename)[strlen(filename) - 4] = '\0';                                      \
+        }                                                                                         \
+    }
+
+/* Macro for the BRT path in the pre processing of API inputs in the test driver
+ * This macro generates the unique filename and stores the API input in GT case and loads API input
+ * in V case */
+#define FLA_BRT_PROCESS_FOUR_INPUT(datatype, m, n, A, lda, datatypeB, mB, nB, B, ldb, datatypeC, \
+                                   mC, nC, C, ldc, datatypeD, mD, nD, D, ldd, format, ...)       \
+    if(FLA_BIT_REPRODUCIBILITY_TEST)                                                             \
+    {                                                                                            \
+        generate_filename(&filename, tst_api, params->seed, get_datatype_char(datatype),         \
+                          params->imatrix_char, format, __VA_ARGS__);                            \
+        if(!same_char(((test_params_t *)params)->BRT_char, 'L'))                                 \
+        {                                                                                        \
+            update_filetype(&filename, "BRT/Input-Matrix/", FALSE);                              \
+            if(!store_load_input_matrices(params->BRT_char, filename, 4, datatype, m, n, A, lda, \
+                                          datatypeB, mB, nB, B, ldb, datatypeC, mC, nC, C, ldc,  \
+                                          datatypeD, mD, nD, D, ldd))                            \
+            {                                                                                    \
+                goto free_buffers;                                                               \
+            }                                                                                    \
+        }                                                                                        \
+        else                                                                                     \
+        {                                                                                        \
+            ((char *)filename)[strlen(filename) - 5] = '\0';                                     \
+        }                                                                                        \
     }
 
 /* Free filename for BRT path*/
@@ -435,26 +508,68 @@
     }
 
 /* Macro for opening file for writing ground truth */
-#define FLA_OPEN_GT_FILE_STORE                            \
-    update_filetype(&filename, "BRT/Ground-Truth", TRUE); \
-    create_file_path_dirs((char *)filename);              \
-    FILE *gt_file = fopen((char *)filename, "wb");        \
-    if(gt_file == NULL)                                   \
-    {                                                     \
-        printf("Error opening : %s\n", (char *)filename); \
-        perror("");                                       \
-        return;                                           \
+#define FLA_OPEN_GT_FILE_STORE                                 \
+    FILE *gt_file = NULL;                                      \
+    int count = 0;                                             \
+    if(!same_char(((test_params_t *)params)->BRT_char, 'L'))   \
+    {                                                          \
+        update_filetype(&filename, "BRT/Ground-Truth/", TRUE); \
+        create_file_path_dirs((char *)filename);               \
+        gt_file = fopen((char *)filename, "wb");               \
+        if(gt_file == NULL)                                    \
+        {                                                      \
+            printf("Error opening : %s\n", (char *)filename);  \
+            perror("");                                        \
+            return;                                            \
+        }                                                      \
+    }                                                          \
+    else                                                       \
+    {                                                          \
+        printf("Test ID: %s\n", (char *)filename);             \
+    }
+
+/* Macro for closing file after writing ground truth */
+#define FLA_CLOSE_GT_FILE_STORE                              \
+    if(!same_char(((test_params_t *)params)->BRT_char, 'L')) \
+    {                                                        \
+        fclose(gt_file);                                     \
     }
 
 /* Macro for opening file for reading ground truth */
-#define FLA_OPEN_GT_FILE_READ                             \
-    update_filetype(&filename, "BRT/Ground-Truth", TRUE); \
-    FILE *gt_file = fopen(filename, "rb");                \
-    if(gt_file == NULL)                                   \
-    {                                                     \
-        printf("Error opening : %s\n", (char *)filename); \
-        perror("");                                       \
-        return 0;                                         \
+#define FLA_OPEN_GT_FILE_READ                              \
+    update_filetype(&filename, "BRT/Ground-Truth/", TRUE); \
+    FILE *gt_file = fopen(filename, "rb");                 \
+    if(gt_file == NULL)                                    \
+    {                                                      \
+        printf("Error opening : %s\n", (char *)filename);  \
+        perror("");                                        \
+        return 0;                                          \
+    }
+
+/* Macro for the BRT path in the pre processing of API inputs in the test driver
+ * This macro generates the unique filename and stores the API input in GT case and loads API input
+ * in V case */
+#define FLA_BRT_PROCESS_FIVE_INPUT(datatype, m, n, A, lda, datatypeB, mB, nB, B, ldb, datatypeC, \
+                                   mC, nC, C, ldc, datatypeD, mD, nD, D, ldd, datatypeE, mE, nE,   \
+                                   E, lde, format, ...)                                             \
+    if(FLA_BIT_REPRODUCIBILITY_TEST)                                                               \
+    {                                                                                              \
+        generate_filename(&filename, tst_api, params->seed, get_datatype_char(datatype),           \
+                          params->imatrix_char, format, __VA_ARGS__);                              \
+        if(!same_char(((test_params_t *)params)->BRT_char, 'L'))                                   \
+        {                                                                                          \
+            update_filetype(&filename, "BRT/Input-Matrix/", FALSE);                                \
+            if(!store_load_input_matrices(params->BRT_char, filename, 5, datatype, m, n, A, lda,   \
+                                          datatypeB, mB, nB, B, ldb, datatypeC, mC, nC, C, ldc,    \
+                                          datatypeD, mD, nD, D, ldd, datatypeE, mE, nE, E, lde))   \
+            {                                                                                      \
+                goto free_buffers;                                                                 \
+            }                                                                                      \
+        }                                                                                          \
+        else                                                                                       \
+        {                                                                                          \
+            ((char *)filename)[strlen(filename) - 5] = '\0';                                       \
+        }                                                                                          \
     }
 
 /* Given a file path, create all constituent directories if missing */
@@ -493,4 +608,33 @@ uint32_t generate_crc_matrix(integer datatype, integer m, integer n, void *A, in
 uint32_t generate_crc_matrix_no_nb_diag(integer datatype, integer m, integer n, integer nb, void *A,
                                         integer lda);
 
+/* Base function used to store the outputs of an API which are to be verified
+ *
+ * nMatrix and nVector arguments specify the number of matrices and vectors which are passed to the
+ * function. The following arguments are required in the same order for each matrix
+ *    - datatype, rows, columns, buffer, leading dimension
+ * Followed by the following arguments for each vector
+ *    - datatype, number of elements, buffer
+ *
+ * All matrices must be defined before moving to vectors
+ *
+ * Note : The order of buffers must be the same for both store_outputs_base function and
+ * check_reproducibility_base function
+ * */
+void store_outputs_base(void *filename, void *params, int nMatrix, int nVector, ...);
+
+/* Base function used to load and verify bit exact match of the outputs of an API
+ *
+ * nMatrix and nVector arguments specify the number of matrices and vectors which are passed to the
+ * function. The following arguments are required in the same order for each matrix
+ *    - datatype, rows, columns, buffer, leading dimension
+ * Followed by the following arguments for each vector
+ *    - datatype, number of elements, buffer
+ *
+ * All matrices must be defined before moving to vectors
+ *
+ * Note : The order of buffers must be the same for both store_outputs_base function and
+ * check_reproducibility_base function
+ *  */
+integer check_reproducibility_base(void *filename, void *params, int nMatrix, int nVector, ...);
 #endif

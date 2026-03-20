@@ -163,33 +163,40 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doublereal *alpha,
-            doublecomplex *a, integer *lda, doublereal *beta, doublecomplex *c__)
+/** Generated wrapper function */
+void zhfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k, doublereal *alpha,
+            dcomplex *a, aocl_int_t *lda, doublereal *beta, dcomplex *c__)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c__);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zhfrk(transr, uplo, trans, &n_64, &k_64, alpha, a, &lda_64, beta, c__);
+#endif
+}
+
+void aocl_lapack_zhfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, aocl_int64_t *k,
+                       doublereal *alpha, dcomplex *a, aocl_int64_t *lda, doublereal *beta,
+                       dcomplex *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS "",
                       *transr, *uplo, *trans, *n, *k, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    dcomplex z__1;
     /* Local variables */
-    integer j, n1, n2, nk, info;
-    doublecomplex cbeta;
+    aocl_int64_t j, n1, n2, nk, info;
+    dcomplex cbeta;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
-               doublereal *, doublecomplex *, integer *);
-    integer nrowa;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nrowa;
     logical lower;
-    doublecomplex calpha;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    dcomplex calpha;
     logical nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -257,7 +264,7 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
     if(info != 0)
     {
         i__1 = -info;
-        xerbla_("ZHFRK ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHFRK ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -275,20 +282,20 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
-            c__[i__2].r = 0.;
-            c__[i__2].i = 0.; // , expr subst
+            c__[i__2].real = 0.;
+            c__[i__2].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    z__1.r = *alpha;
-    z__1.i = 0.; // , expr subst
-    calpha.r = z__1.r;
-    calpha.i = z__1.i; // , expr subst
-    z__1.r = *beta;
-    z__1.i = 0.; // , expr subst
-    cbeta.r = z__1.r;
-    cbeta.i = z__1.i; // , expr subst
+    z__1.real = *alpha;
+    z__1.imag = 0.; // , expr subst
+    calpha.real = z__1.real;
+    calpha.imag = z__1.imag; // , expr subst
+    z__1.real = *beta;
+    z__1.imag = 0.; // , expr subst
+    cbeta.real = z__1.real;
+    cbeta.imag = z__1.imag; // , expr subst
     /* C is N-by-N. */
     /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
     /* If N is even, NISODD = .FALSE., and NK. */
@@ -323,20 +330,20 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
                 if(notrans)
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'N' */
-                    zherk_("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
-                    zherk_("U", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta, &c__[*n + 1],
-                           n);
-                    zgemm_("N", "C", &n2, &n1, k, &calpha, &a[n1 + 1 + a_dim1], lda, &a[a_dim1 + 1],
-                           lda, &cbeta, &c__[n1 + 1], n);
+                    aocl_blas_zherk("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
+                    aocl_blas_zherk("U", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
+                                    &c__[*n + 1], n);
+                    aocl_blas_zgemm("N", "C", &n2, &n1, k, &calpha, &a[n1 + 1 + a_dim1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[n1 + 1], n);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'C' */
-                    zherk_("L", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
-                    zherk_("U", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
-                           &c__[*n + 1], n);
-                    zgemm_("C", "N", &n2, &n1, k, &calpha, &a[(n1 + 1) * a_dim1 + 1], lda,
-                           &a[a_dim1 + 1], lda, &cbeta, &c__[n1 + 1], n);
+                    aocl_blas_zherk("L", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
+                    aocl_blas_zherk("U", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[*n + 1], n);
+                    aocl_blas_zgemm("C", "N", &n2, &n1, k, &calpha, &a[(n1 + 1) * a_dim1 + 1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[n1 + 1], n);
                 }
             }
             else
@@ -345,19 +352,22 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
                 if(notrans)
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'N' */
-                    zherk_("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 + 1], n);
-                    zherk_("U", "N", &n2, k, alpha, &a[n2 + a_dim1], lda, beta, &c__[n1 + 1], n);
-                    zgemm_("N", "C", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda, &a[n2 + a_dim1],
-                           lda, &cbeta, &c__[1], n);
+                    aocl_blas_zherk("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[n2 + 1], n);
+                    aocl_blas_zherk("U", "N", &n2, k, alpha, &a[n2 + a_dim1], lda, beta,
+                                    &c__[n1 + 1], n);
+                    aocl_blas_zgemm("N", "C", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[n2 + a_dim1], lda, &cbeta, &c__[1], n);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'C' */
-                    zherk_("L", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 + 1], n);
-                    zherk_("U", "C", &n2, k, alpha, &a[n2 * a_dim1 + 1], lda, beta, &c__[n1 + 1],
-                           n);
-                    zgemm_("C", "N", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda, &a[n2 * a_dim1 + 1],
-                           lda, &cbeta, &c__[1], n);
+                    aocl_blas_zherk("L", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[n2 + 1], n);
+                    aocl_blas_zherk("U", "C", &n2, k, alpha, &a[n2 * a_dim1 + 1], lda, beta,
+                                    &c__[n1 + 1], n);
+                    aocl_blas_zgemm("C", "N", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[n2 * a_dim1 + 1], lda, &cbeta, &c__[1], n);
                 }
             }
         }
@@ -370,19 +380,22 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
                 if(notrans)
                 {
                     /* N is odd, TRANSR = 'C', UPLO = 'L', and TRANS = 'N' */
-                    zherk_("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], &n1);
-                    zherk_("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta, &c__[2], &n1);
-                    zgemm_("N", "C", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
-                           lda, &cbeta, &c__[n1 * n1 + 1], &n1);
+                    aocl_blas_zherk("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1],
+                                    &n1);
+                    aocl_blas_zherk("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
+                                    &c__[2], &n1);
+                    aocl_blas_zgemm("N", "C", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[n1 + 1 + a_dim1], lda, &cbeta, &c__[n1 * n1 + 1], &n1);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'C', UPLO = 'L', and TRANS = 'C' */
-                    zherk_("U", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], &n1);
-                    zherk_("L", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta, &c__[2],
-                           &n1);
-                    zgemm_("C", "N", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
-                           &a[(n1 + 1) * a_dim1 + 1], lda, &cbeta, &c__[n1 * n1 + 1], &n1);
+                    aocl_blas_zherk("U", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1],
+                                    &n1);
+                    aocl_blas_zherk("L", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[2], &n1);
+                    aocl_blas_zgemm("C", "N", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[(n1 + 1) * a_dim1 + 1], lda, &cbeta, &c__[n1 * n1 + 1], &n1);
                 }
             }
             else
@@ -391,22 +404,22 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
                 if(notrans)
                 {
                     /* N is odd, TRANSR = 'C', UPLO = 'U', and TRANS = 'N' */
-                    zherk_("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 * n2 + 1],
-                           &n2);
-                    zherk_("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
-                           &c__[n1 * n2 + 1], &n2);
-                    zgemm_("N", "C", &n2, &n1, k, &calpha, &a[n1 + 1 + a_dim1], lda, &a[a_dim1 + 1],
-                           lda, &cbeta, &c__[1], &n2);
+                    aocl_blas_zherk("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[n2 * n2 + 1], &n2);
+                    aocl_blas_zherk("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
+                                    &c__[n1 * n2 + 1], &n2);
+                    aocl_blas_zgemm("N", "C", &n2, &n1, k, &calpha, &a[n1 + 1 + a_dim1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[1], &n2);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'C', UPLO = 'U', and TRANS = 'C' */
-                    zherk_("U", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 * n2 + 1],
-                           &n2);
-                    zherk_("L", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
-                           &c__[n1 * n2 + 1], &n2);
-                    zgemm_("C", "N", &n2, &n1, k, &calpha, &a[(n1 + 1) * a_dim1 + 1], lda,
-                           &a[a_dim1 + 1], lda, &cbeta, &c__[1], &n2);
+                    aocl_blas_zherk("U", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[n2 * n2 + 1], &n2);
+                    aocl_blas_zherk("L", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[n1 * n2 + 1], &n2);
+                    aocl_blas_zgemm("C", "N", &n2, &n1, k, &calpha, &a[(n1 + 1) * a_dim1 + 1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[1], &n2);
                 }
             }
         }
@@ -424,24 +437,27 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'N' */
                     i__1 = *n + 1;
-                    zherk_("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2], &i__1);
+                    aocl_blas_zherk("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2],
+                                    &i__1);
                     i__1 = *n + 1;
-                    zherk_("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[1], &i__1);
+                    aocl_blas_zherk("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                                    &c__[1], &i__1);
                     i__1 = *n + 1;
-                    zgemm_("N", "C", &nk, &nk, k, &calpha, &a[nk + 1 + a_dim1], lda, &a[a_dim1 + 1],
-                           lda, &cbeta, &c__[nk + 2], &i__1);
+                    aocl_blas_zgemm("N", "C", &nk, &nk, k, &calpha, &a[nk + 1 + a_dim1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[nk + 2], &i__1);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'C' */
                     i__1 = *n + 1;
-                    zherk_("L", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2], &i__1);
+                    aocl_blas_zherk("L", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2],
+                                    &i__1);
                     i__1 = *n + 1;
-                    zherk_("U", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1],
-                           &i__1);
+                    aocl_blas_zherk("U", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[1], &i__1);
                     i__1 = *n + 1;
-                    zgemm_("C", "N", &nk, &nk, k, &calpha, &a[(nk + 1) * a_dim1 + 1], lda,
-                           &a[a_dim1 + 1], lda, &cbeta, &c__[nk + 2], &i__1);
+                    aocl_blas_zgemm("C", "N", &nk, &nk, k, &calpha, &a[(nk + 1) * a_dim1 + 1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[nk + 2], &i__1);
                 }
             }
             else
@@ -451,25 +467,27 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'N' */
                     i__1 = *n + 1;
-                    zherk_("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 2], &i__1);
+                    aocl_blas_zherk("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk + 2], &i__1);
                     i__1 = *n + 1;
-                    zherk_("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[nk + 1],
-                           &i__1);
+                    aocl_blas_zherk("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                                    &c__[nk + 1], &i__1);
                     i__1 = *n + 1;
-                    zgemm_("N", "C", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda, &a[nk + 1 + a_dim1],
-                           lda, &cbeta, &c__[1], &i__1);
+                    aocl_blas_zgemm("N", "C", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[nk + 1 + a_dim1], lda, &cbeta, &c__[1], &i__1);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'C' */
                     i__1 = *n + 1;
-                    zherk_("L", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 2], &i__1);
+                    aocl_blas_zherk("L", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk + 2], &i__1);
                     i__1 = *n + 1;
-                    zherk_("U", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
-                           &c__[nk + 1], &i__1);
+                    aocl_blas_zherk("U", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[nk + 1], &i__1);
                     i__1 = *n + 1;
-                    zgemm_("C", "N", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
-                           &a[(nk + 1) * a_dim1 + 1], lda, &cbeta, &c__[1], &i__1);
+                    aocl_blas_zgemm("C", "N", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[(nk + 1) * a_dim1 + 1], lda, &cbeta, &c__[1], &i__1);
                 }
             }
         }
@@ -482,19 +500,23 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
                 if(notrans)
                 {
                     /* N is even, TRANSR = 'C', UPLO = 'L', and TRANS = 'N' */
-                    zherk_("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 1], &nk);
-                    zherk_("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[1], &nk);
-                    zgemm_("N", "C", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda, &a[nk + 1 + a_dim1],
-                           lda, &cbeta, &c__[(nk + 1) * nk + 1], &nk);
+                    aocl_blas_zherk("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk + 1], &nk);
+                    aocl_blas_zherk("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                                    &c__[1], &nk);
+                    aocl_blas_zgemm("N", "C", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[nk + 1 + a_dim1], lda, &cbeta, &c__[(nk + 1) * nk + 1], &nk);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'C', UPLO = 'L', and TRANS = 'C' */
-                    zherk_("U", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 1], &nk);
-                    zherk_("L", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1],
-                           &nk);
-                    zgemm_("C", "N", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
-                           &a[(nk + 1) * a_dim1 + 1], lda, &cbeta, &c__[(nk + 1) * nk + 1], &nk);
+                    aocl_blas_zherk("U", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk + 1], &nk);
+                    aocl_blas_zherk("L", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[1], &nk);
+                    aocl_blas_zgemm("C", "N", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[(nk + 1) * a_dim1 + 1], lda, &cbeta, &c__[(nk + 1) * nk + 1],
+                                    &nk);
                 }
             }
             else
@@ -503,22 +525,22 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
                 if(notrans)
                 {
                     /* N is even, TRANSR = 'C', UPLO = 'U', and TRANS = 'N' */
-                    zherk_("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
-                           &c__[nk * (nk + 1) + 1], &nk);
-                    zherk_("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
-                           &c__[nk * nk + 1], &nk);
-                    zgemm_("N", "C", &nk, &nk, k, &calpha, &a[nk + 1 + a_dim1], lda, &a[a_dim1 + 1],
-                           lda, &cbeta, &c__[1], &nk);
+                    aocl_blas_zherk("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk * (nk + 1) + 1], &nk);
+                    aocl_blas_zherk("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                                    &c__[nk * nk + 1], &nk);
+                    aocl_blas_zgemm("N", "C", &nk, &nk, k, &calpha, &a[nk + 1 + a_dim1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[1], &nk);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'C', UPLO = 'U', and TRANS = 'C' */
-                    zherk_("U", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
-                           &c__[nk * (nk + 1) + 1], &nk);
-                    zherk_("L", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
-                           &c__[nk * nk + 1], &nk);
-                    zgemm_("C", "N", &nk, &nk, k, &calpha, &a[(nk + 1) * a_dim1 + 1], lda,
-                           &a[a_dim1 + 1], lda, &cbeta, &c__[1], &nk);
+                    aocl_blas_zherk("U", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk * (nk + 1) + 1], &nk);
+                    aocl_blas_zherk("L", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[nk * nk + 1], &nk);
+                    aocl_blas_zgemm("C", "N", &nk, &nk, k, &calpha, &a[(nk + 1) * a_dim1 + 1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[1], &nk);
                 }
             }
         }

@@ -18,7 +18,6 @@
 #ifndef __cplusplus
 #include <complex.h>
 #endif
-#undef complex
 #include "FLA_config.h"
 #include "FLA_macro_defs.h"
 #include "FLA_type_defs.h"
@@ -26,6 +25,10 @@
 #include "FLA_progress.h"
 #include "FLA_Context.h"
 #include "FLA_Threads.h"
+#include "aocl_lapack.h"
+#include "aocl_fla_lapack.h"
+#include "aocl_blas.h"
+#include "FLA_lapack_f77_prototypes.h"
 
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE
@@ -42,14 +45,20 @@
 #endif
 
 /* DTL purpose */
+#ifdef _WIN32
+	#define FLA_IS "lld"
+#else
+	#define FLA_IS "ld"
+#endif
+
 #ifdef FLA_ENABLE_ILP64
   #ifdef _WIN32
-    #define FLA_IS "lld"
+    #define FLA_ISL "lld"
   #else
-    #define FLA_IS "ld"
+    #define FLA_ISL "ld"
   #endif
 #else
-  #define FLA_IS "d"
+  #define FLA_ISL "d"
 #endif
 
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -149,7 +158,7 @@
 #define FLA_SPFFRT2__BSIZE3           (64)
 
 
-/* typedef long integer integer; */
+/* typedef long fla_dim_t fla_dim_t; */
 #ifdef __cplusplus
   // For C++, include stdint.h.
 #include <stdint.h> // skipped
@@ -166,34 +175,6 @@ typedef unsigned __int64 uint64_t;
 #else
 #error "Attempting to compile on pre-C99 system without stdint.h."
 #endif
-#endif
-/* typedef long integer integer; */
-#ifdef FLA_ENABLE_ILP64
-typedef int64_t integer;
-typedef uint64_t uinteger;
-#else
-typedef int32_t integer;
-typedef unsigned long int uinteger;
-#endif
-
-typedef char *address;
-typedef short int shortint;
-typedef float real;
-typedef double doublereal;
-typedef struct { real r, i; } complex;
-typedef struct { doublereal r, i; } doublecomplex;
-
-/* typedef long int logical; */
-typedef integer logical; 
-
-typedef short int shortlogical;
-typedef char logical1;
-typedef char integer1;
-#ifdef INTEGER_STAR_8	/* Adjust for integer*8. */
-typedef long long longint;		/* system-dependent */
-typedef unsigned long long ulongint;	/* system-dependent */
-#define qbit_clear(a,b)	((a) & ~((ulongint)1 << (b)))
-#define qbit_set(a,b)	((a) |  ((ulongint)1 << (b)))
 #endif
 
 #define TRUE_ (1)
@@ -291,17 +272,15 @@ typedef struct
 	ftnlen	inblanklen;
 } inlist;
 
-#define VOID void
-
 union Multitype {	/* for multiple entry points */
 	integer1 g;
 	shortint h;
-	integer i;
+	fla_dim_t i;
 	/* longint j; */
 	real r;
 	doublereal d;
-	complex c;
-	doublecomplex z;
+	scomplex c;
+	dcomplex z;
 	};
 
 typedef union Multitype Multitype;
@@ -324,10 +303,10 @@ struct Namelist {
 typedef struct Namelist Namelist;
 
 #ifndef ceiling_f90_
-  #define ceiling_f90_(x) ((integer)(x) + ((x) > 0 && (x) != (integer)(x)))
+  #define ceiling_f90_(x) ((fla_dim_t)(x) + ((x) > 0 && (x) != (fla_dim_t)(x)))
 #endif
 #ifndef floor_f90_
-  #define floor_f90_(x) ((integer)(x) - ((x) < 0 && (x) != (integer)(x)))
+  #define floor_f90_(x) ((fla_dim_t)(x) - ((x) < 0 && (x) != (fla_dim_t)(x)))
 #endif
 #ifndef f2c_abs
   #define f2c_abs(x) ((x) >= 0 ? (x) : -(x))
@@ -346,57 +325,7 @@ typedef struct Namelist Namelist;
 #define bit_clear(a,b)	((a) & ~((uinteger)1 << (b)))
 #define bit_set(a,b)	((a) |  ((uinteger)1 << (b)))
 
-/* procedure parameter types for -A and -C++ */
 
-#define F2C_proc_par_types 1
-#ifdef __cplusplus
-typedef int /* Unknown procedure type */ (*U_fp)(...);
-typedef shortint (*J_fp)(...);
-typedef integer (*I_fp)(...);
-typedef real (*R_fp)(...);
-typedef doublereal (*D_fp)(...);
-typedef doublereal (*E_fp)(...);
-typedef /* Complex */ VOID (*C_fp)(...);
-typedef /* Double Complex */ VOID (*Z_fp)(...);
-typedef logical (*L_fp)(...);
-typedef logical (*L_fp1)(complex *);
-typedef logical (*L_fp2)(complex *, complex *);
-typedef logical (*L_fps2)(real *, real *);
-typedef logical (*L_fps3)(real *, real *, real *);
-typedef logical (*L_fpd2)(doublereal *, doublereal *);
-typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
-typedef logical (*L_fpz1)(doublecomplex *);
-typedef logical (*L_fpz2)(doublecomplex *, doublecomplex *);
-typedef shortlogical (*K_fp)(...);
-typedef /* Character */ VOID (*H_fp)(...);
-typedef /* Subroutine */ int (*S_fp)(...);
-#else
-typedef int /* Unknown procedure type */ (*U_fp)();
-typedef shortint (*J_fp)();
-typedef integer (*I_fp)();
-typedef real (*R_fp)();
-typedef doublereal (*D_fp)();
-typedef doublereal (*E_fp)();
-typedef /* Complex */ VOID (*C_fp)();
-typedef /* Double Complex */ VOID (*Z_fp)();
-typedef logical (*L_fp)();
-typedef logical (*L_fp1)(complex *);
-typedef logical (*L_fp2)(complex *, complex *);
-typedef logical (*L_fps2)(real *, real *);
-typedef logical (*L_fps3)(real *, real *, real *);
-typedef logical (*L_fpd2)(doublereal *, doublereal *);
-typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
-typedef logical (*L_fpz1)(doublecomplex *);
-typedef logical (*L_fpz2)(doublecomplex *, doublecomplex *);
-typedef shortlogical (*K_fp)();
-typedef /* Character */ VOID (*H_fp)();
-typedef /* Subroutine */ int (*S_fp)();
-#endif
-/* E_fp is for real functions when -R is not specified */
-typedef VOID C_f;	/* complex function */
-typedef VOID H_f;	/* character function */
-typedef VOID Z_f;	/* double complex function */
-typedef doublereal E_f;	/* real function with -R not specified */
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 

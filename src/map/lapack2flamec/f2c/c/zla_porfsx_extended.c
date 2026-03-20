@@ -6,8 +6,8 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static doublecomplex c_b11 = {-1., 0.};
-static doublecomplex c_b12 = {1., 0.};
+static dcomplex c_b11 = {-1., 0.};
+static dcomplex c_b12 = {1., 0.};
 static doublereal c_b34 = 1.;
 /* > \brief \b ZLA_PORFSX_EXTENDED improves the computed solution to a system of linear equations
  * for symmetri c or Hermitian positive-definite matrices by performing extra-precise iterative
@@ -396,12 +396,12 @@ i+1}
 /* ===================================================================== */
 /* Subroutine */
 void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs,
-                          doublecomplex *a, integer *lda, doublecomplex *af, integer *ldaf,
-                          logical *colequ, doublereal *c__, doublecomplex *b, integer *ldb,
-                          doublecomplex *y, integer *ldy, doublereal *berr_out__,
+                          dcomplex *a, integer *lda, dcomplex *af, integer *ldaf,
+                          logical *colequ, doublereal *c__, dcomplex *b, integer *ldb,
+                          dcomplex *y, integer *ldy, doublereal *berr_out__,
                           integer *n_norms__, doublereal *err_bnds_norm__,
-                          doublereal *err_bnds_comp__, doublecomplex *res, doublereal *ayb,
-                          doublecomplex *dy, doublecomplex *y_tail__, doublereal *rcond,
+                          doublereal *err_bnds_comp__, dcomplex *res, doublereal *ayb,
+                          dcomplex *dy, dcomplex *y_tail__, doublereal *rcond,
                           integer *ithresh, doublereal *rthresh, doublereal *dz_ub__,
                           logical *ignore_cwise__, integer *info)
 {
@@ -418,53 +418,53 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         i__2, i__3, i__4;
     doublereal d__1, d__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
     doublereal dxratmax, dzratmax;
     integer i__, j;
     logical incr_prec__;
     extern /* Subroutine */
         void
-        zla_heamv_(integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *,
+        zla_heamv_(integer *, integer *, doublereal *, dcomplex *, integer *, dcomplex *,
                    integer *, doublereal *, doublereal *, integer *);
     doublereal prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
         void
-        zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
+        zla_wwaddw_(integer *, dcomplex *, dcomplex *, dcomplex *);
     doublereal prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
         void
-        zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *);
+        zla_lin_berr_(integer *, integer *, integer *, dcomplex *, doublereal *, doublereal *);
     integer y_prec_state__;
     extern /* Subroutine */
         int
-        blas_zhemv_x_(integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-                      doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *,
+        blas_zhemv_x_(integer *, integer *, dcomplex *, dcomplex *, integer *,
+                      dcomplex *, integer *, dcomplex *, dcomplex *, integer *,
                       integer *);
     integer uplo2;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         int
-        blas_zhemv2_x_(integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-                       doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-                       doublecomplex *, integer *, integer *);
+        blas_zhemv2_x_(integer *, integer *, dcomplex *, dcomplex *, integer *,
+                       dcomplex *, dcomplex *, integer *, dcomplex *,
+                       dcomplex *, integer *, integer *);
     doublereal dxrat, dzrat;
     extern /* Subroutine */
         void
-        zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, doublecomplex *, integer *);
+        zhemv_(char *, integer *, dcomplex *, dcomplex *, integer *, dcomplex *,
+               integer *, dcomplex *, dcomplex *, integer *);
     doublereal normx, normy;
     extern /* Subroutine */
         void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        zcopy_(integer *, dcomplex *, integer *, dcomplex *, integer *),
+        zaxpy_(integer *, dcomplex *, dcomplex *, integer *, dcomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal normdx;
     extern /* Subroutine */
         void
-        zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+        zpotrs_(char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
                 integer *, integer *);
     doublereal hugeval;
     extern integer ilauplo_(char *);
@@ -548,8 +548,8 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__;
-                y_tail__[i__3].r = 0.;
-                y_tail__[i__3].i = 0.; // , expr subst
+                y_tail__[i__3].real = 0.;
+                y_tail__[i__3].imag = 0.; // , expr subst
             }
         }
         dxrat = 0.;
@@ -599,10 +599,10 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * y_dim1;
-                yk = (d__1 = y[i__4].r, f2c_dabs(d__1))
+                yk = (d__1 = y[i__4].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&y[i__ + j * y_dim1]), f2c_dabs(d__2));
                 i__4 = i__;
-                dyk = (d__1 = dy[i__4].r, f2c_dabs(d__1))
+                dyk = (d__1 = dy[i__4].real, f2c_dabs(d__1))
                       + (d__2 = d_imag(&dy[i__]), f2c_dabs(d__2));
                 if(yk != 0.)
                 {
@@ -741,8 +741,8 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__;
-                    y_tail__[i__4].r = 0.;
-                    y_tail__[i__4].i = 0.; // , expr subst
+                    y_tail__[i__4].real = 0.;
+                    y_tail__[i__4].imag = 0.; // , expr subst
                 }
             }
             prevnormdx = normdx;
@@ -789,7 +789,7 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            ayb[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+            ayb[i__] = (d__1 = b[i__3].real, f2c_dabs(d__1))
                        + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
         }
         /* Compute f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s). */

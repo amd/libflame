@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__0 = 0;
-static integer c__2 = 2;
-static integer c__1 = 1;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> CGELSX solves overdetermined or underdetermined systems for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -48,7 +48,7 @@ static integer c__1 = 1;
 /* > */
 /* > This routine is deprecated and has been replaced by routine CGELSY. */
 /* > */
-/* > CGELSX computes the minimum-norm solution to a complex linear least */
+/* > CGELSX computes the minimum-norm solution to a scomplex linear least */
 /* > squares problem: */
 /* > minimize || A * X - B || */
 /* > using a complete orthogonal factorization of A. A is an M-by-N */
@@ -186,9 +186,30 @@ only the remaining */
 /* > \ingroup complexGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgelsx_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, complex *b,
-             integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, real *rwork,
-             integer *info)
+/** Generated wrapper function */
+void cgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int_t *rank, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, rwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgelsx(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, jpvt, rcond, &rank_64, work, rwork, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a, aocl_int64_t *lda,
+             scomplex *b, aocl_int64_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int64_t *rank,
+             scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,46 +224,20 @@ void cgelsx_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Builtin functions */
-    double c_abs(complex *);
-    void r_cnjg(complex *, complex *);
+    double c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k;
-    complex c1, c2, s1, s2, t1, t2;
-    integer mn;
+    aocl_int64_t i__, j, k;
+    scomplex c1, c2, s1, s2, t1, t2;
+    aocl_int64_t mn;
     real anrm, bnrm, smin, smax;
-    integer iascl, ibscl, ismin, ismax;
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *),
-        claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *,
-                complex *),
-        cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *);
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *),
-        cgeqpf_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, real *,
-                integer *);
+    aocl_int64_t iascl, ibscl, ismin, ismax;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern /* Subroutine */
-        void
-        clatzm_(char *, integer *, integer *, complex *, integer *, complex *, complex *, complex *,
-                integer *, complex *);
     real sminpr;
-    extern /* Subroutine */
-        void
-        ctzrqf_(integer *, integer *, complex *, integer *, complex *, integer *);
     real smaxpr, smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -308,7 +303,7 @@ void cgelsx_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGELSX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGELSX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -325,61 +320,61 @@ void cgelsx_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
     /* Scale A, B if max elements outside range [SMLNUM,BIGNUM] */
-    anrm = clange_("M", m, n, &a[a_offset], lda, &rwork[1]);
+    anrm = aocl_lapack_clange("M", m, n, &a[a_offset], lda, &rwork[1]);
     iascl = 0;
     if(anrm > 0.f && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        clascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
     else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        clascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
         i__1 = fla_max(*m, *n);
-        claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        aocl_lapack_claset("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         *rank = 0;
         goto L100;
     }
-    bnrm = clange_("M", m, nrhs, &b[b_offset], ldb, &rwork[1]);
+    bnrm = aocl_lapack_clange("M", m, nrhs, &b[b_offset], ldb, &rwork[1]);
     ibscl = 0;
     if(bnrm > 0.f && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        clascl_("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
     else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        clascl_("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 2;
     }
     /* Compute QR factorization with column pivoting of A: */
     /* A * P = Q * R */
-    cgeqpf_(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &rwork[1], info);
-    /* complex workspace MN+N. Real workspace 2*N. Details of Householder */
+    aocl_lapack_cgeqpf(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &rwork[1], info);
+    /* scomplex workspace MN+N. Real workspace 2*N. Details of Householder */
     /* rotations stored in WORK(1:MN). */
     /* Determine RANK using incremental condition estimation */
     i__1 = ismin;
-    work[i__1].r = 1.f;
-    work[i__1].i = 0.f; // , expr subst
+    work[i__1].real = 1.f;
+    work[i__1].imag = 0.f; // , expr subst
     i__1 = ismax;
-    work[i__1].r = 1.f;
-    work[i__1].i = 0.f; // , expr subst
+    work[i__1].real = 1.f;
+    work[i__1].imag = 0.f; // , expr subst
     smax = c_abs(&a[a_dim1 + 1]);
     smin = smax;
     if(c_abs(&a[a_dim1 + 1]) == 0.f)
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);
-        claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        aocl_lapack_claset("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         goto L100;
     }
     else
@@ -390,10 +385,10 @@ L10:
     if(*rank < mn)
     {
         i__ = *rank + 1;
-        claic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
-                &sminpr, &s1, &c1);
-        claic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
-                &smaxpr, &s2, &c2);
+        aocl_lapack_claic1(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1],
+                           &a[i__ + i__ * a_dim1], &sminpr, &s1, &c1);
+        aocl_lapack_claic1(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1],
+                           &a[i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
         if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
@@ -401,24 +396,24 @@ L10:
             {
                 i__2 = ismin + i__ - 1;
                 i__3 = ismin + i__ - 1;
-                q__1.r = s1.r * work[i__3].r - s1.i * work[i__3].i;
-                q__1.i = s1.r * work[i__3].i + s1.i * work[i__3].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = s1.real * work[i__3].real - s1.imag * work[i__3].imag;
+                q__1.imag = s1.real * work[i__3].imag + s1.imag * work[i__3].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = ismax + i__ - 1;
                 i__3 = ismax + i__ - 1;
-                q__1.r = s2.r * work[i__3].r - s2.i * work[i__3].i;
-                q__1.i = s2.r * work[i__3].i + s2.i * work[i__3].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = s2.real * work[i__3].real - s2.imag * work[i__3].imag;
+                q__1.imag = s2.real * work[i__3].imag + s2.imag * work[i__3].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             i__1 = ismin + *rank;
-            work[i__1].r = c1.r;
-            work[i__1].i = c1.i; // , expr subst
+            work[i__1].real = c1.real;
+            work[i__1].imag = c1.imag; // , expr subst
             i__1 = ismax + *rank;
-            work[i__1].r = c2.r;
-            work[i__1].i = c2.i; // , expr subst
+            work[i__1].real = c2.real;
+            work[i__1].imag = c2.imag; // , expr subst
             smin = sminpr;
             smax = smaxpr;
             ++(*rank);
@@ -431,16 +426,16 @@ L10:
     /* [R11,R12] = [ T11, 0 ] * Y */
     if(*rank < *n)
     {
-        ctzrqf_(rank, n, &a[a_offset], lda, &work[mn + 1], info);
+        aocl_lapack_ctzrqf(rank, n, &a[a_offset], lda, &work[mn + 1], info);
     }
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS) */
-    cunm2r_("Left", "Conjugate transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
-            ldb, &work[(mn << 1) + 1], info);
+    aocl_lapack_cunm2r("Left", "Conjugate transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1],
+                       &b[b_offset], ldb, &work[(mn << 1) + 1], info);
     /* workspace NRHS */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    ctrsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[a_offset], lda,
-           &b[b_offset], ldb);
+    aocl_blas_ctrsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[a_offset],
+                    lda, &b[b_offset], ldb);
     i__1 = *n;
     for(i__ = *rank + 1; i__ <= i__1; ++i__)
     {
@@ -448,8 +443,8 @@ L10:
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * b_dim1;
-            b[i__3].r = 0.f;
-            b[i__3].i = 0.f; // , expr subst
+            b[i__3].real = 0.f;
+            b[i__3].imag = 0.f; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -462,7 +457,7 @@ L10:
         {
             i__2 = *n - *rank + 1;
             r_cnjg(&q__1, &work[mn + i__]);
-            clatzm_("Left", &i__2, nrhs, &a[i__ + (*rank + 1) * a_dim1], lda, &q__1,
+            aocl_lapack_clatzm("Left", &i__2, nrhs, &a[i__ + (*rank + 1) * a_dim1], lda, &q__1,
                     &b[i__ + b_dim1], &b[*rank + 1 + b_dim1], ldb, &work[(mn << 1) + 1]);
             /* L50: */
         }
@@ -476,48 +471,48 @@ L10:
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = (mn << 1) + i__;
-            work[i__3].r = 1.f;
-            work[i__3].i = 0.f; // , expr subst
+            work[i__3].real = 1.f;
+            work[i__3].imag = 0.f; // , expr subst
             /* L60: */
         }
         i__2 = *n;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = (mn << 1) + i__;
-            if(work[i__3].r == 1.f && work[i__3].i == 0.f)
+            if(work[i__3].real == 1.f && work[i__3].imag == 0.f)
             {
                 if(jpvt[i__] != i__)
                 {
                     k = i__;
                     i__3 = k + j * b_dim1;
-                    t1.r = b[i__3].r;
-                    t1.i = b[i__3].i; // , expr subst
+                    t1.real = b[i__3].real;
+                    t1.imag = b[i__3].imag; // , expr subst
                     i__3 = jpvt[k] + j * b_dim1;
-                    t2.r = b[i__3].r;
-                    t2.i = b[i__3].i; // , expr subst
+                    t2.real = b[i__3].real;
+                    t2.imag = b[i__3].imag; // , expr subst
                 L70:
                     i__3 = jpvt[k] + j * b_dim1;
-                    b[i__3].r = t1.r;
-                    b[i__3].i = t1.i; // , expr subst
+                    b[i__3].real = t1.real;
+                    b[i__3].imag = t1.imag; // , expr subst
                     i__3 = (mn << 1) + k;
-                    work[i__3].r = 0.f;
-                    work[i__3].i = 0.f; // , expr subst
-                    t1.r = t2.r;
-                    t1.i = t2.i; // , expr subst
+                    work[i__3].real = 0.f;
+                    work[i__3].imag = 0.f; // , expr subst
+                    t1.real = t2.real;
+                    t1.imag = t2.imag; // , expr subst
                     k = jpvt[k];
                     i__3 = jpvt[k] + j * b_dim1;
-                    t2.r = b[i__3].r;
-                    t2.i = b[i__3].i; // , expr subst
+                    t2.real = b[i__3].real;
+                    t2.imag = b[i__3].imag; // , expr subst
                     if(jpvt[k] != i__)
                     {
                         goto L70;
                     }
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = t1.r;
-                    b[i__3].i = t1.i; // , expr subst
+                    b[i__3].real = t1.real;
+                    b[i__3].imag = t1.imag; // , expr subst
                     i__3 = (mn << 1) + k;
-                    work[i__3].r = 0.f;
-                    work[i__3].i = 0.f; // , expr subst
+                    work[i__3].real = 0.f;
+                    work[i__3].imag = 0.f; // , expr subst
                 }
             }
             /* L80: */
@@ -527,21 +522,21 @@ L10:
     /* Undo scaling */
     if(iascl == 1)
     {
-        clascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
-        clascl_("U", &c__0, &c__0, &smlnum, &anrm, rank, rank, &a[a_offset], lda, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("U", &c__0, &c__0, &smlnum, &anrm, rank, rank, &a[a_offset], lda, info);
     }
     else if(iascl == 2)
     {
-        clascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
-        clascl_("U", &c__0, &c__0, &bignum, &anrm, rank, rank, &a[a_offset], lda, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("U", &c__0, &c__0, &bignum, &anrm, rank, rank, &a[a_offset], lda, info);
     }
     if(ibscl == 1)
     {
-        clascl_("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
     else if(ibscl == 2)
     {
-        clascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L100:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

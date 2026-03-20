@@ -100,8 +100,23 @@
 /* > \date June 2016 */
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
-real cla_porpvgrw_(char *uplo, integer *ncols, complex *a, integer *lda, complex *af, integer *ldaf,
-                   real *work)
+/** Generated wrapper function */
+real cla_porpvgrw_(char *uplo, aocl_int_t *ncols, scomplex *a, aocl_int_t *lda, scomplex *af,
+                   aocl_int_t *ldaf, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_cla_porpvgrw(uplo, ncols, a, lda, af, ldaf, work);
+#else
+    aocl_int64_t ncols_64 = *ncols;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_cla_porpvgrw(uplo, &ncols_64, a, &lda_64, af, &ldaf_64, work);
+#endif
+}
+
+real aocl_lapack_cla_porpvgrw(char *uplo, aocl_int64_t *ncols, scomplex *a, aocl_int64_t *lda,
+                              scomplex *af, aocl_int64_t *ldaf, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -116,14 +131,14 @@ real cla_porpvgrw_(char *uplo, integer *ncols, complex *a, integer *lda, complex
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
     real ret_val, r__1, r__2, r__3, r__4;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real amax, umax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     real rpvgrw;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -176,7 +191,7 @@ real cla_porpvgrw_(char *uplo, integer *ncols, complex *a, integer *lda, complex
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
-                r__3 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                r__3 = (r__1 = a[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                 r__4 = work[*ncols + j]; // , expr subst
                 work[*ncols + j] = fla_max(r__3, r__4);
@@ -193,7 +208,7 @@ real cla_porpvgrw_(char *uplo, integer *ncols, complex *a, integer *lda, complex
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
-                r__3 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                r__3 = (r__1 = a[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                 r__4 = work[*ncols + j]; // , expr subst
                 work[*ncols + j] = fla_max(r__3, r__4);
@@ -212,7 +227,7 @@ real cla_porpvgrw_(char *uplo, integer *ncols, complex *a, integer *lda, complex
             {
                 /* Computing MAX */
                 i__3 = i__ + j * af_dim1;
-                r__3 = (r__1 = af[i__3].r, f2c_abs(r__1))
+                r__3 = (r__1 = af[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&af[i__ + j * af_dim1]), f2c_abs(r__2));
                 r__4 = work[j]; // , expr subst
                 work[j] = fla_max(r__3, r__4);
@@ -229,7 +244,7 @@ real cla_porpvgrw_(char *uplo, integer *ncols, complex *a, integer *lda, complex
             {
                 /* Computing MAX */
                 i__3 = i__ + j * af_dim1;
-                r__3 = (r__1 = af[i__3].r, f2c_abs(r__1))
+                r__3 = (r__1 = af[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&af[i__ + j * af_dim1]), f2c_abs(r__2));
                 r__4 = work[j]; // , expr subst
                 work[j] = fla_max(r__3, r__4);

@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CHEGVX */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -48,7 +48,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > */
 /* > CHEGVX computes selected eigenvalues, and optionally, eigenvectors */
-/* > of a complex generalized Hermitian-definite eigenproblem, of the form */
+/* > of a scomplex generalized Hermitian-definite eigenproblem, of the form */
 /* > A*x=(lambda)*B*x, A*Bx=(lambda)*x, or B*A*x=(lambda)*x. Here A and */
 /* > B are assumed to be Hermitian and B is also positive definite. */
 /* > Eigenvalues and eigenvectors can be selected by specifying either a */
@@ -310,10 +310,43 @@ the routine */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, complex *a,
-             integer *lda, complex *b, integer *ldb, real *vl, real *vu, integer *il, integer *iu,
-             real *abstol, integer *m, real *w, complex *z__, integer *ldz, complex *work,
-             integer *lwork, real *rwork, integer *iwork, integer *ifail, integer *info)
+/** Generated wrapper function */
+void chegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a,
+             aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, real *vl, real *vu, aocl_int_t *il,
+             aocl_int_t *iu, real *abstol, aocl_int_t *m, real *w, scomplex *z__, aocl_int_t *ldz,
+             scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *iwork, aocl_int_t *ifail,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chegvx(itype, jobz, range, uplo, n, a, lda, b, ldb, vl, vu, il, iu, abstol, m, w,
+                       z__, ldz, work, lwork, rwork, iwork, ifail, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chegvx(&itype_64, jobz, range, uplo, &n_64, a, &lda_64, b, &ldb_64, vl, vu, &il_64,
+                       &iu_64, abstol, &m_64, w, z__, &ldz_64, work, &lwork_64, rwork, iwork, ifail,
+                       &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chegvx(aocl_int64_t *itype, char *jobz, char *range, char *uplo, aocl_int64_t *n,
+                        scomplex *a, aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, real *vl,
+                        real *vu, aocl_int64_t *il, aocl_int64_t *iu, real *abstol, aocl_int64_t *m,
+                        real *w, scomplex *z__, aocl_int64_t *ldz, scomplex *work,
+                        aocl_int64_t *lwork, real *rwork, aocl_int_t *iwork, aocl_int_t *ifail,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -332,36 +365,15 @@ void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer nb;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    aocl_int64_t nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
     logical upper, wantz, alleig, indeig, valeig;
-    extern /* Subroutine */
-        void
-        chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *,
-                integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cheevx_(char *, char *, char *, integer *, complex *, integer *, real *, real *, integer *,
-                integer *, real *, integer *, real *, complex *, integer *, complex *, integer *,
-                real *, integer *, integer *, integer *),
-        cpotrf_(char *, integer *, complex *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -463,14 +475,14 @@ void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
     }
     if(*info == 0)
     {
-        nb = ilaenv_(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 1) * *n; // , expr subst
         lwkopt = fla_max(i__1, i__2);
-        r__1 = sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
@@ -482,7 +494,7 @@ void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEGVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHEGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -499,7 +511,7 @@ void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
         return;
     }
     /* Form a Cholesky factorization of B. */
-    cpotrf_(uplo, n, &b[b_offset], ldb, info);
+    aocl_lapack_cpotrf(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -507,9 +519,9 @@ void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    chegst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    cheevx_(jobz, range, uplo, n, &a[a_offset], lda, vl, vu, il, iu, abstol, m, &w[1],
-            &z__[z_offset], ldz, &work[1], lwork, &rwork[1], &iwork[1], &ifail[1], info);
+    aocl_lapack_chegst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    aocl_lapack_cheevx(jobz, range, uplo, n, &a[a_offset], lda, vl, vu, il, iu, abstol, m, &w[1],
+                       &z__[z_offset], ldz, &work[1], lwork, &rwork[1], &iwork[1], &ifail[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -530,8 +542,8 @@ void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
             {
                 *(unsigned char *)trans = 'C';
             }
-            ctrsm_("Left", uplo, trans, "Non-unit", n, m, &c_b1, &b[b_offset], ldb, &z__[z_offset],
-                   ldz);
+            aocl_blas_ctrsm("Left", uplo, trans, "Non-unit", n, m, &c_b1, &b[b_offset], ldb,
+                            &z__[z_offset], ldz);
         }
         else if(*itype == 3)
         {
@@ -546,14 +558,14 @@ void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
             {
                 *(unsigned char *)trans = 'N';
             }
-            ctrmm_("Left", uplo, trans, "Non-unit", n, m, &c_b1, &b[b_offset], ldb, &z__[z_offset],
-                   ldz);
+            aocl_blas_ctrmm("Left", uplo, trans, "Non-unit", n, m, &c_b1, &b[b_offset], ldb,
+                            &z__[z_offset], ldz);
         }
     }
-    /* Set WORK(1) to optimal complex workspace size. */
-    r__1 = sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    /* Set WORK(1) to optimal scomplex workspace size. */
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHEGVX */

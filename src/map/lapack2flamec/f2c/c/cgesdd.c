@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c_n1 = -1;
-static integer c__0 = 0;
-static integer c__1 = 1;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CGESDD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGESDD computes the singular value decomposition (SVD) of a complex */
+/* > CGESDD computes the singular value decomposition (SVD) of a scomplex */
 /* > M-by-N matrix A, optionally computing the left and/or right singular */
 /* > vectors, by using divide-and-conquer method. The SVD is written */
 /* > */
@@ -238,91 +238,70 @@ see comments inside code. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real *s, complex *u,
-             integer *ldu, complex *vt, integer *ldvt, complex *work, integer *lwork, real *rwork,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void cgesdd_(char *jobz, aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *s,
+             scomplex *u, aocl_int_t *ldu, scomplex *vt, aocl_int_t *ldvt, scomplex *work,
+             aocl_int_t *lwork, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgesdd(jobz, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, rwork, iwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgesdd(jobz, &m_64, &n_64, a, &lda_64, s, u, &ldu_64, vt, &ldvt_64, work, &lwork_64,
+                       rwork, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        real *s, scomplex *u, aocl_int64_t *ldu, scomplex *vt, aocl_int64_t *ldvt,
+                        scomplex *work, aocl_int64_t *lwork, real *rwork, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
                       *jobz, *m, *n, *lda, *ldu, *ldvt, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2, i__3;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer lwork_cunglq_mn__, lwork_cunglq_nn__, lwork_cungqr_mm__, lwork_cungqr_mn__, i__, ie,
-        lwork_cungbr_p_mn__, il, lwork_cungbr_p_nn__, lwork_cungbr_q_mn__, lwork_cungbr_q_mm__, ir,
-        iu, blk;
+    aocl_int64_t lwork_cunglq_mn__, lwork_cunglq_nn__, lwork_cungqr_mm__, lwork_cungqr_mn__, i__,
+        ie, lwork_cungbr_p_mn__, il, lwork_cungbr_p_nn__, lwork_cungbr_q_mn__, lwork_cungbr_q_mm__,
+        ir, iu, blk;
     real dum[1], eps;
-    integer iru, ivt;
-    complex cdum[1];
-    integer iscl, lwork_cunmbr_prc_mm__, lwork_cunmbr_prc_mn__, lwork_cunmbr_prc_nn__;
+    aocl_int64_t iru, ivt;
+    scomplex cdum[1];
+    aocl_int64_t iscl, lwork_cunmbr_prc_mm__, lwork_cunmbr_prc_mn__, lwork_cunmbr_prc_nn__;
     real anrm;
-    integer ierr, itau, lwork_cunmbr_qln_mm__, lwork_cunmbr_qln_mn__, lwork_cunmbr_qln_nn__,
-        idum[1], irvt;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer chunk, minmn, wrkbl, itaup, itauq;
+    aocl_int64_t ierr, itau, lwork_cunmbr_qln_mm__, lwork_cunmbr_qln_mn__, lwork_cunmbr_qln_nn__,
+         irvt;
+    aocl_int_t idum[1];
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t chunk, minmn, wrkbl, itaup, itauq;
     logical wntqa;
-    integer nwork;
-    extern /* Subroutine */
-        void
-        clacp2_(char *, integer *, integer *, real *, integer *, complex *, integer *);
+    aocl_int64_t nwork;
     logical wntqn, wntqo, wntqs;
-    integer mnthr1, mnthr2;
-    extern /* Subroutine */
-        void
-        cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *,
-                complex *, integer *, integer *);
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *),
-        clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *,
-                real *),
-        clarcm_(integer *, integer *, real *, integer *, complex *, integer *, complex *, integer *,
-                real *),
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *),
-        sbdsdc_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *,
-                real *, integer *, real *, integer *, integer *),
-        cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *);
+    aocl_int64_t mnthr1, mnthr2;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cungbr_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *);
     real bignum;
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        cunmbr_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *,
-                complex *, complex *, integer *, complex *, integer *, integer *),
-        cunglq_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *);
     extern logical sisnan_(real *);
-    integer ldwrkl;
-    extern /* Subroutine */
-        void
-        cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *);
-    integer ldwrkr, minwrk, ldwrku, maxwrk, ldwkvt;
+    aocl_int64_t ldwrkl;
+    aocl_int64_t ldwrkr, minwrk, ldwrku, maxwrk, ldwkvt;
     real smlnum;
     logical wntqas, lquery;
-    integer nrwork;
-    extern real sroundup_lwork(integer *);
-    integer lwork_cgebrd_mm__, lwork_cgebrd_mn__, lwork_cgebrd_nn__, lwork_cgelqf_mn__,
+    aocl_int64_t nrwork;
+    aocl_int64_t lwork_cgebrd_mm__, lwork_cgebrd_mn__, lwork_cgebrd_nn__, lwork_cgelqf_mn__,
         lwork_cgeqrf_mn__;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -402,7 +381,7 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     /* Note: Comments in the code beginning "Workspace:" describe the */
     /* minimal amount of workspace allocated at that point in the code, */
     /* as well as the preferred amount for good performance. */
-    /* CWorkspace refers to complex workspace, and RWorkspace to */
+    /* CWorkspace refers to scomplex workspace, and RWorkspace to */
     /* real workspace. NB refers to the optimal block size for the */
     /* immediately following subroutine, as returned by ILAENV.) */
     if(*info == 0)
@@ -411,7 +390,7 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
         maxwrk = 1;
         if(*m >= *n && minmn > 0)
         {
-            /* There is no complex work space needed for bidiagonal SVD */
+            /* There is no scomplex work space needed for bidiagonal SVD */
             /* The real work space needed for bidiagonal SVD (sbdsdc) is */
             /* BDSPAC = 3*N*N + 4*N for singular values and vectors;
              */
@@ -419,30 +398,30 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
              */
             /* not including e, RU, and RVT matrices. */
             /* Compute space preferred for each routine */
-            cgebrd_(m, n, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_cgebrd_mn__ = (integer)cdum[0].r;
-            cgebrd_(n, n, cdum, n, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_cgebrd_nn__ = (integer)cdum[0].r;
-            cgeqrf_(m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cgeqrf_mn__ = (integer)cdum[0].r;
-            cungbr_("P", n, n, n, cdum, n, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_p_nn__ = (integer)cdum[0].r;
-            cungbr_("Q", m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_q_mm__ = (integer)cdum[0].r;
-            cungbr_("Q", m, n, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_q_mn__ = (integer)cdum[0].r;
-            cungqr_(m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cungqr_mm__ = (integer)cdum[0].r;
-            cungqr_(m, n, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cungqr_mn__ = (integer)cdum[0].r;
-            cunmbr_("P", "R", "C", n, n, n, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
-            lwork_cunmbr_prc_nn__ = (integer)cdum[0].r;
-            cunmbr_("Q", "L", "N", m, m, n, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_cunmbr_qln_mm__ = (integer)cdum[0].r;
-            cunmbr_("Q", "L", "N", m, n, n, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_cunmbr_qln_mn__ = (integer)cdum[0].r;
-            cunmbr_("Q", "L", "N", n, n, n, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
-            lwork_cunmbr_qln_nn__ = (integer)cdum[0].r;
+            aocl_lapack_cgebrd(m, n, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
+            lwork_cgebrd_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cgebrd(n, n, cdum, n, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
+            lwork_cgebrd_nn__ = (integer)cdum[0].real;
+            aocl_lapack_cgeqrf(m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cgeqrf_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cungbr("P", n, n, n, cdum, n, cdum, cdum, &c_n1, &ierr);
+            lwork_cungbr_p_nn__ = (integer)cdum[0].real;
+            aocl_lapack_cungbr("Q", m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cungbr_q_mm__ = (integer)cdum[0].real;
+            aocl_lapack_cungbr("Q", m, n, n, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cungbr_q_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cungqr(m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cungqr_mm__ = (integer)cdum[0].real;
+            aocl_lapack_cungqr(m, n, n, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cungqr_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cunmbr("P", "R", "C", n, n, n, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
+            lwork_cunmbr_prc_nn__ = (integer)cdum[0].real;
+            aocl_lapack_cunmbr("Q", "L", "N", m, m, n, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
+            lwork_cunmbr_qln_mm__ = (integer)cdum[0].real;
+            aocl_lapack_cunmbr("Q", "L", "N", m, n, n, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
+            lwork_cunmbr_qln_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cunmbr("Q", "L", "N", n, n, n, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
+            lwork_cunmbr_qln_nn__ = (integer)cdum[0].real;
             if(*m >= mnthr1)
             {
                 if(wntqn)
@@ -619,7 +598,7 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
         }
         else if(minmn > 0)
         {
-            /* There is no complex work space needed for bidiagonal SVD */
+            /* There is no scomplex work space needed for bidiagonal SVD */
             /* The real work space needed for bidiagonal SVD (sbdsdc) is */
             /* BDSPAC = 3*M*M + 4*M for singular values and vectors;
              */
@@ -627,30 +606,30 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
              */
             /* not including e, RU, and RVT matrices. */
             /* Compute space preferred for each routine */
-            cgebrd_(m, n, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_cgebrd_mn__ = (integer)cdum[0].r;
-            cgebrd_(m, m, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_cgebrd_mm__ = (integer)cdum[0].r;
-            cgelqf_(m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cgelqf_mn__ = (integer)cdum[0].r;
-            cungbr_("P", m, n, m, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_p_mn__ = (integer)cdum[0].r;
-            cungbr_("P", n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_p_nn__ = (integer)cdum[0].r;
-            cungbr_("Q", m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_q_mm__ = (integer)cdum[0].r;
-            cunglq_(m, n, m, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_cunglq_mn__ = (integer)cdum[0].r;
-            cunglq_(n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
-            lwork_cunglq_nn__ = (integer)cdum[0].r;
-            cunmbr_("P", "R", "C", m, m, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_cunmbr_prc_mm__ = (integer)cdum[0].r;
-            cunmbr_("P", "R", "C", m, n, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_cunmbr_prc_mn__ = (integer)cdum[0].r;
-            cunmbr_("P", "R", "C", n, n, m, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
-            lwork_cunmbr_prc_nn__ = (integer)cdum[0].r;
-            cunmbr_("Q", "L", "N", m, m, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_cunmbr_qln_mm__ = (integer)cdum[0].r;
+            aocl_lapack_cgebrd(m, n, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
+            lwork_cgebrd_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cgebrd(m, m, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
+            lwork_cgebrd_mm__ = (integer)cdum[0].real;
+            aocl_lapack_cgelqf(m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cgelqf_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cungbr("P", m, n, m, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cungbr_p_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cungbr("P", n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
+            lwork_cungbr_p_nn__ = (integer)cdum[0].real;
+            aocl_lapack_cungbr("Q", m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cungbr_q_mm__ = (integer)cdum[0].real;
+            aocl_lapack_cunglq(m, n, m, cdum, m, cdum, cdum, &c_n1, &ierr);
+            lwork_cunglq_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cunglq(n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
+            lwork_cunglq_nn__ = (integer)cdum[0].real;
+            aocl_lapack_cunmbr("P", "R", "C", m, m, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
+            lwork_cunmbr_prc_mm__ = (integer)cdum[0].real;
+            aocl_lapack_cunmbr("P", "R", "C", m, n, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
+            lwork_cunmbr_prc_mn__ = (integer)cdum[0].real;
+            aocl_lapack_cunmbr("P", "R", "C", n, n, m, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
+            lwork_cunmbr_prc_nn__ = (integer)cdum[0].real;
+            aocl_lapack_cunmbr("Q", "L", "N", m, m, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
+            lwork_cunmbr_qln_mm__ = (integer)cdum[0].real;
             if(*n >= mnthr1)
             {
                 if(wntqn)
@@ -829,9 +808,9 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     }
     if(*info == 0)
     {
-        r__1 = sroundup_lwork(&maxwrk);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -12;
@@ -840,7 +819,7 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGESDD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGESDD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -860,7 +839,7 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     smlnum = sqrt(slamch_("S")) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
-    anrm = clange_("M", m, n, &a[a_offset], lda, dum);
+    anrm = aocl_lapack_clange("M", m, n, &a[a_offset], lda, dum);
     if(sisnan_(&anrm))
     {
         *info = -4;
@@ -871,12 +850,12 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     if(anrm > 0.f && anrm < smlnum)
     {
         iscl = 1;
-        clascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, &ierr);
     }
     else if(anrm > bignum)
     {
         iscl = 1;
-        clascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, &ierr);
     }
     if(*m >= *n)
     {
@@ -896,11 +875,12 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer N [tau] + N*NB [work] */
                 /* RWorkspace: need 0 */
                 i__1 = *lwork - nwork + 1;
-                cgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 /* Zero out below R */
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                claset_("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
                 ie = 1;
                 itauq = 1;
                 itaup = itauq + *n;
@@ -910,14 +890,14 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer 2*N [tauq, taup] + 2*N*NB [work] */
                 /* RWorkspace: need N [e] */
                 i__1 = *lwork - nwork + 1;
-                cgebrd_(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[nwork], &i__1, &ierr);
+                aocl_lapack_cgebrd(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[nwork], &i__1, &ierr);
                 nrwork = ie + *n;
                 /* Perform bidiagonal SVD, compute singular values only */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + BDSPAC */
-                sbdsdc_("U", "N", n, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("U", "N", n, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum,
+                                   idum, &rwork[nrwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -944,18 +924,20 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer N*N [U] + N*N [R] + N [tau] + N*NB [work] */
                 /* RWorkspace: need 0 */
                 i__1 = *lwork - nwork + 1;
-                cgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 /* Copy R to WORK( IR ), zeroing out below it */
-                clacpy_("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                claset_("L", &i__1, &i__2, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
+                aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
                 /* Generate Q in A */
                 /* CWorkspace: need N*N [U] + N*N [R] + N [tau] + N [work] */
                 /* CWorkspace: prefer N*N [U] + N*N [R] + N [tau] + N*NB [work] */
                 /* RWorkspace: need 0 */
                 i__1 = *lwork - nwork + 1;
-                cungqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cungqr(m, n, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 ie = 1;
                 itauq = itau;
                 itaup = itauq + *n;
@@ -965,8 +947,8 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer N*N [U] + N*N [R] + 2*N [tauq, taup] + 2*N*NB [work] */
                 /* RWorkspace: need N [e] */
                 i__1 = *lwork - nwork + 1;
-                cgebrd_(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[nwork], &i__1, &ierr);
+                aocl_lapack_cgebrd(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[nwork], &i__1, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of R in WORK(IRU) and computing right singular vectors */
                 /* of R in WORK(IRVT) */
@@ -975,26 +957,26 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = ie + *n;
                 irvt = iru + *n * *n;
                 nrwork = irvt + *n * *n;
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix WORK(IU) */
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix WORK(IU) */
                 /* Overwrite WORK(IU) by the left singular vectors of R */
                 /* CWorkspace: need N*N [U] + N*N [R] + 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer N*N [U] + N*N [R] + 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", n, n, &rwork[iru], n, &work[iu], &ldwrku);
+                aocl_lapack_clacp2("F", n, n, &rwork[iru], n, &work[iu], &ldwrku);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", n, n, n, &work[ir], &ldwrkr, &work[itauq], &work[iu],
-                        &ldwrku, &work[nwork], &i__1, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_cunmbr("Q", "L", "N", n, n, n, &work[ir], &ldwrkr, &work[itauq],
+                                   &work[iu], &ldwrku, &work[nwork], &i__1, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by the right singular vectors of R */
                 /* CWorkspace: need N*N [U] + N*N [R] + 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer N*N [U] + N*N [R] + 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", n, n, n, &work[ir], &ldwrkr, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", n, n, n, &work[ir], &ldwrkr, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__1, &ierr);
                 /* Multiply Q in A by left singular vectors of R in */
                 /* WORK(IU), storing result in WORK(IR) and copying to A */
                 /* CWorkspace: need N*N [U] + N*N [R] */
@@ -1007,9 +989,9 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                     /* Computing MIN */
                     i__3 = *m - i__ + 1;
                     chunk = fla_min(i__3, ldwrkr);
-                    cgemm_("N", "N", &chunk, n, n, &c_b2, &a[i__ + a_dim1], lda, &work[iu], &ldwrku,
-                           &c_b1, &work[ir], &ldwrkr);
-                    clacpy_("F", &chunk, n, &work[ir], &ldwrkr, &a[i__ + a_dim1], lda);
+                    aocl_blas_cgemm("N", "N", &chunk, n, n, &c_b2, &a[i__ + a_dim1], lda, &work[iu],
+                                    &ldwrku, &c_b1, &work[ir], &ldwrkr);
+                    aocl_lapack_clacpy("F", &chunk, n, &work[ir], &ldwrkr, &a[i__ + a_dim1], lda);
                     /* L10: */
                 }
             }
@@ -1028,18 +1010,20 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer N*N [R] + N [tau] + N*NB [work] */
                 /* RWorkspace: need 0 */
                 i__2 = *lwork - nwork + 1;
-                cgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 /* Copy R to WORK(IR), zeroing out below it */
-                clacpy_("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
                 i__2 = *n - 1;
                 i__1 = *n - 1;
-                claset_("L", &i__2, &i__1, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
+                aocl_lapack_claset("L", &i__2, &i__1, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
                 /* Generate Q in A */
                 /* CWorkspace: need N*N [R] + N [tau] + N [work] */
                 /* CWorkspace: prefer N*N [R] + N [tau] + N*NB [work] */
                 /* RWorkspace: need 0 */
                 i__2 = *lwork - nwork + 1;
-                cungqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cungqr(m, n, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 ie = 1;
                 itauq = itau;
                 itaup = itauq + *n;
@@ -1049,8 +1033,8 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer N*N [R] + 2*N [tauq, taup] + 2*N*NB [work] */
                 /* RWorkspace: need N [e] */
                 i__2 = *lwork - nwork + 1;
-                cgebrd_(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[nwork], &i__2, &ierr);
+                aocl_lapack_cgebrd(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[nwork], &i__2, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of bidiagonal matrix in RWORK(IRU) and computing right */
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
@@ -1059,33 +1043,33 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = ie + *n;
                 irvt = iru + *n * *n;
                 nrwork = irvt + *n * *n;
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix U */
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix U */
                 /* Overwrite U by left singular vectors of R */
                 /* CWorkspace: need N*N [R] + 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer N*N [R] + 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", n, n, &rwork[iru], n, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", n, n, &rwork[iru], n, &u[u_offset], ldu);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", n, n, n, &work[ir], &ldwrkr, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__2, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_cunmbr("Q", "L", "N", n, n, n, &work[ir], &ldwrkr, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__2, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by right singular vectors of R */
                 /* CWorkspace: need N*N [R] + 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer N*N [R] + 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", n, n, n, &work[ir], &ldwrkr, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__2, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", n, n, n, &work[ir], &ldwrkr, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__2, &ierr);
                 /* Multiply Q in A by left singular vectors of R in */
                 /* WORK(IR), storing result in U */
                 /* CWorkspace: need N*N [R] */
                 /* RWorkspace: need 0 */
-                clacpy_("F", n, n, &u[u_offset], ldu, &work[ir], &ldwrkr);
-                cgemm_("N", "N", m, n, n, &c_b2, &a[a_offset], lda, &work[ir], &ldwrkr, &c_b1,
-                       &u[u_offset], ldu);
+                aocl_lapack_clacpy("F", n, n, &u[u_offset], ldu, &work[ir], &ldwrkr);
+                aocl_blas_cgemm("N", "N", m, n, n, &c_b2, &a[a_offset], lda, &work[ir], &ldwrkr,
+                                &c_b1, &u[u_offset], ldu);
             }
             else if(wntqa)
             {
@@ -1102,18 +1086,20 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer N*N [U] + N [tau] + N*NB [work] */
                 /* RWorkspace: need 0 */
                 i__2 = *lwork - nwork + 1;
-                cgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
-                clacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_cgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
+                aocl_lapack_clacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                 /* Generate Q in U */
                 /* CWorkspace: need N*N [U] + N [tau] + M [work] */
                 /* CWorkspace: prefer N*N [U] + N [tau] + M*NB [work] */
                 /* RWorkspace: need 0 */
                 i__2 = *lwork - nwork + 1;
-                cungqr_(m, m, n, &u[u_offset], ldu, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cungqr(m, m, n, &u[u_offset], ldu, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 /* Produce R in A, zeroing out below it */
                 i__2 = *n - 1;
                 i__1 = *n - 1;
-                claset_("L", &i__2, &i__1, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                aocl_lapack_claset("L", &i__2, &i__1, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
                 ie = 1;
                 itauq = itau;
                 itaup = itauq + *n;
@@ -1123,8 +1109,8 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer N*N [U] + 2*N [tauq, taup] + 2*N*NB [work] */
                 /* RWorkspace: need N [e] */
                 i__2 = *lwork - nwork + 1;
-                cgebrd_(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[nwork], &i__2, &ierr);
+                aocl_lapack_cgebrd(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[nwork], &i__2, &ierr);
                 iru = ie + *n;
                 irvt = iru + *n * *n;
                 nrwork = irvt + *n * *n;
@@ -1133,34 +1119,34 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] + BDSPAC */
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix WORK(IU) */
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix WORK(IU) */
                 /* Overwrite WORK(IU) by left singular vectors of R */
                 /* CWorkspace: need N*N [U] + 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer N*N [U] + 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", n, n, &rwork[iru], n, &work[iu], &ldwrku);
+                aocl_lapack_clacp2("F", n, n, &rwork[iru], n, &work[iu], &ldwrku);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", n, n, n, &a[a_offset], lda, &work[itauq], &work[iu], &ldwrku,
-                        &work[nwork], &i__2, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_cunmbr("Q", "L", "N", n, n, n, &a[a_offset], lda, &work[itauq],
+                                   &work[iu], &ldwrku, &work[nwork], &i__2, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by right singular vectors of R */
                 /* CWorkspace: need N*N [U] + 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer N*N [U] + 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", n, n, n, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__2, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", n, n, n, &a[a_offset], lda, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__2, &ierr);
                 /* Multiply Q in U by left singular vectors of R in */
                 /* WORK(IU), storing result in A */
                 /* CWorkspace: need N*N [U] */
                 /* RWorkspace: need 0 */
-                cgemm_("N", "N", m, n, n, &c_b2, &u[u_offset], ldu, &work[iu], &ldwrku, &c_b1,
-                       &a[a_offset], lda);
+                aocl_blas_cgemm("N", "N", m, n, n, &c_b2, &u[u_offset], ldu, &work[iu], &ldwrku,
+                                &c_b1, &a[a_offset], lda);
                 /* Copy left singular vectors of A from A to U */
-                clacpy_("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacpy("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
             }
         }
         else if(*m >= mnthr2)
@@ -1179,16 +1165,16 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
             /* CWorkspace: prefer 2*N [tauq, taup] + (M+N)*NB [work] */
             /* RWorkspace: need N [e] */
             i__2 = *lwork - nwork + 1;
-            cgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[nwork], &i__2, &ierr);
+            aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[nwork], &i__2, &ierr);
             if(wntqn)
             {
                 /* Path 5n (M >> N, JOBZ='N') */
                 /* Compute singular values only */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + BDSPAC */
-                sbdsdc_("U", "N", n, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("U", "N", n, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum,
+                                   idum, &rwork[nrwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -1201,16 +1187,17 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: need 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 i__2 = *lwork - nwork + 1;
-                cungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[nwork], &i__2,
-                        &ierr);
+                aocl_lapack_cungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[nwork],
+                                   &i__2, &ierr);
                 /* Generate Q in A */
                 /* CWorkspace: need 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
                 i__2 = *lwork - nwork + 1;
-                cungbr_("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cungbr("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[nwork],
+                                   &i__2, &ierr);
                 if(*lwork >= *m * *n + *n * 3)
                 {
                     /* WORK( IU ) is M by N */
@@ -1227,15 +1214,15 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] + BDSPAC */
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
                 /* Multiply real matrix RWORK(IRVT) by P**H in VT, */
                 /* storing the result in WORK(IU), copying to VT */
                 /* CWorkspace: need 2*N [tauq, taup] + N*N [U] */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] + 2*N*N [rwork] */
-                clarcm_(n, n, &rwork[irvt], n, &vt[vt_offset], ldvt, &work[iu], &ldwrku,
-                        &rwork[nrwork]);
-                clacpy_("F", n, n, &work[iu], &ldwrku, &vt[vt_offset], ldvt);
+                aocl_lapack_clarcm(n, n, &rwork[irvt], n, &vt[vt_offset], ldvt, &work[iu], &ldwrku,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", n, n, &work[iu], &ldwrku, &vt[vt_offset], ldvt);
                 /* Multiply Q in A by real matrix RWORK(IRU), storing the */
                 /* result in WORK(IU), copying to A */
                 /* CWorkspace: need 2*N [tauq, taup] + N*N [U] */
@@ -1251,9 +1238,9 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                     /* Computing MIN */
                     i__3 = *m - i__ + 1;
                     chunk = fla_min(i__3, ldwrku);
-                    clacrm_(&chunk, n, &a[i__ + a_dim1], lda, &rwork[iru], n, &work[iu], &ldwrku,
-                            &rwork[nrwork]);
-                    clacpy_("F", &chunk, n, &work[iu], &ldwrku, &a[i__ + a_dim1], lda);
+                    aocl_lapack_clacrm(&chunk, n, &a[i__ + a_dim1], lda, &rwork[iru], n, &work[iu],
+                                       &ldwrku, &rwork[nrwork]);
+                    aocl_lapack_clacpy("F", &chunk, n, &work[iu], &ldwrku, &a[i__ + a_dim1], lda);
                     /* L20: */
                 }
             }
@@ -1264,17 +1251,18 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: need 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 i__1 = *lwork - nwork + 1;
-                cungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[nwork], &i__1,
-                        &ierr);
+                aocl_lapack_cungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[nwork],
+                                   &i__1, &ierr);
                 /* Copy A to U, generate Q */
                 /* CWorkspace: need 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                 i__1 = *lwork - nwork + 1;
-                cungbr_("Q", m, n, n, &u[u_offset], ldu, &work[itauq], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cungbr("Q", m, n, n, &u[u_offset], ldu, &work[itauq], &work[nwork],
+                                   &i__1, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of bidiagonal matrix in RWORK(IRU) and computing right */
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
@@ -1283,23 +1271,24 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = nrwork;
                 irvt = iru + *n * *n;
                 nrwork = irvt + *n * *n;
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
                 /* Multiply real matrix RWORK(IRVT) by P**H in VT, */
                 /* storing the result in A, copying to VT */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] + 2*N*N [rwork] */
-                clarcm_(n, n, &rwork[irvt], n, &vt[vt_offset], ldvt, &a[a_offset], lda,
-                        &rwork[nrwork]);
-                clacpy_("F", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clarcm(n, n, &rwork[irvt], n, &vt[vt_offset], ldvt, &a[a_offset], lda,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 /* Multiply Q in U by real matrix RWORK(IRU), storing the */
                 /* result in A, copying to U */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + N*N [RU] + 2*M*N [rwork] < N + 5*N*N since M < 2*N here
                  */
                 nrwork = irvt;
-                clacrm_(m, n, &u[u_offset], ldu, &rwork[iru], n, &a[a_offset], lda, &rwork[nrwork]);
-                clacpy_("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacrm(m, n, &u[u_offset], ldu, &rwork[iru], n, &a[a_offset], lda,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
             }
             else
             {
@@ -1308,17 +1297,18 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: need 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 i__1 = *lwork - nwork + 1;
-                cungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[nwork], &i__1,
-                        &ierr);
+                aocl_lapack_cungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[nwork],
+                                   &i__1, &ierr);
                 /* Copy A to U, generate Q */
                 /* CWorkspace: need 2*N [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                 i__1 = *lwork - nwork + 1;
-                cungbr_("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cungbr("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[nwork],
+                                   &i__1, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of bidiagonal matrix in RWORK(IRU) and computing right */
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
@@ -1327,23 +1317,24 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = nrwork;
                 irvt = iru + *n * *n;
                 nrwork = irvt + *n * *n;
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
                 /* Multiply real matrix RWORK(IRVT) by P**H in VT, */
                 /* storing the result in A, copying to VT */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] + 2*N*N [rwork] */
-                clarcm_(n, n, &rwork[irvt], n, &vt[vt_offset], ldvt, &a[a_offset], lda,
-                        &rwork[nrwork]);
-                clacpy_("F", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clarcm(n, n, &rwork[irvt], n, &vt[vt_offset], ldvt, &a[a_offset], lda,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 /* Multiply Q in U by real matrix RWORK(IRU), storing the */
                 /* result in A, copying to U */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + N*N [RU] + 2*M*N [rwork] < N + 5*N*N since M < 2*N here
                  */
                 nrwork = irvt;
-                clacrm_(m, n, &u[u_offset], ldu, &rwork[iru], n, &a[a_offset], lda, &rwork[nrwork]);
-                clacpy_("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacrm(m, n, &u[u_offset], ldu, &rwork[iru], n, &a[a_offset], lda,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
             }
         }
         else
@@ -1362,16 +1353,16 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
             /* CWorkspace: prefer 2*N [tauq, taup] + (M+N)*NB [work] */
             /* RWorkspace: need N [e] */
             i__1 = *lwork - nwork + 1;
-            cgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[nwork], &i__1, &ierr);
+            aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[nwork], &i__1, &ierr);
             if(wntqn)
             {
                 /* Path 6n (M >= N, JOBZ='N') */
                 /* Compute singular values only */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + BDSPAC */
-                sbdsdc_("U", "N", n, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("U", "N", n, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum,
+                                   idum, &rwork[nrwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -1396,32 +1387,32 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] + BDSPAC */
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by right singular vectors of A */
                 /* CWorkspace: need 2*N [tauq, taup] + N*N [U] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*N [U] + N*NB [work] */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] */
-                clacp2_("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", n, n, n, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", n, n, n, &a[a_offset], lda, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__1, &ierr);
                 if(*lwork >= *m * *n + *n * 3)
                 {
                     /* Path 6o-fast */
-                    /* Copy real matrix RWORK(IRU) to complex matrix WORK(IU) */
+                    /* Copy real matrix RWORK(IRU) to scomplex matrix WORK(IU) */
                     /* Overwrite WORK(IU) by left singular vectors of A, copying */
                     /* to A */
                     /* CWorkspace: need 2*N [tauq, taup] + M*N [U] + N [work] */
                     /* CWorkspace: prefer 2*N [tauq, taup] + M*N [U] + N*NB [work] */
                     /* RWorkspace: need N [e] + N*N [RU] */
-                    claset_("F", m, n, &c_b1, &c_b1, &work[iu], &ldwrku);
-                    clacp2_("F", n, n, &rwork[iru], n, &work[iu], &ldwrku);
+                    aocl_lapack_claset("F", m, n, &c_b1, &c_b1, &work[iu], &ldwrku);
+                    aocl_lapack_clacp2("F", n, n, &rwork[iru], n, &work[iu], &ldwrku);
                     i__1 = *lwork - nwork + 1;
-                    cunmbr_("Q", "L", "N", m, n, n, &a[a_offset], lda, &work[itauq], &work[iu],
-                            &ldwrku, &work[nwork], &i__1, &ierr);
-                    clacpy_("F", m, n, &work[iu], &ldwrku, &a[a_offset], lda);
+                    aocl_lapack_cunmbr("Q", "L", "N", m, n, n, &a[a_offset], lda, &work[itauq],
+                                       &work[iu], &ldwrku, &work[nwork], &i__1, &ierr);
+                    aocl_lapack_clacpy("F", m, n, &work[iu], &ldwrku, &a[a_offset], lda);
                 }
                 else
                 {
@@ -1431,8 +1422,8 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                     /* CWorkspace: prefer 2*N [tauq, taup] + N*N [U] + N*NB [work] */
                     /* RWorkspace: need 0 */
                     i__1 = *lwork - nwork + 1;
-                    cungbr_("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[nwork], &i__1,
-                            &ierr);
+                    aocl_lapack_cungbr("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[nwork],
+                                       &i__1, &ierr);
                     /* Multiply Q in A by real matrix RWORK(IRU), storing the */
                     /* result in WORK(IU), copying to A */
                     /* CWorkspace: need 2*N [tauq, taup] + N*N [U] */
@@ -1448,9 +1439,10 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                         /* Computing MIN */
                         i__3 = *m - i__ + 1;
                         chunk = fla_min(i__3, ldwrku);
-                        clacrm_(&chunk, n, &a[i__ + a_dim1], lda, &rwork[iru], n, &work[iu],
-                                &ldwrku, &rwork[nrwork]);
-                        clacpy_("F", &chunk, n, &work[iu], &ldwrku, &a[i__ + a_dim1], lda);
+                        aocl_lapack_clacrm(&chunk, n, &a[i__ + a_dim1], lda, &rwork[iru], n,
+                                           &work[iu], &ldwrku, &rwork[nrwork]);
+                        aocl_lapack_clacpy("F", &chunk, n, &work[iu], &ldwrku, &a[i__ + a_dim1],
+                                           lda);
                         /* L30: */
                     }
                 }
@@ -1466,27 +1458,27 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = nrwork;
                 irvt = iru + *n * *n;
                 nrwork = irvt + *n * *n;
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix U */
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix U */
                 /* Overwrite U by left singular vectors of A */
                 /* CWorkspace: need 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] */
-                claset_("F", m, n, &c_b1, &c_b1, &u[u_offset], ldu);
-                clacp2_("F", n, n, &rwork[iru], n, &u[u_offset], ldu);
+                aocl_lapack_claset("F", m, n, &c_b1, &c_b1, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", n, n, &rwork[iru], n, &u[u_offset], ldu);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", m, n, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__2, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_cunmbr("Q", "L", "N", m, n, n, &a[a_offset], lda, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__2, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by right singular vectors of A */
                 /* CWorkspace: need 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] */
-                clacp2_("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", n, n, n, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__2, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", n, n, n, &a[a_offset], lda, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__2, &ierr);
             }
             else
             {
@@ -1499,34 +1491,35 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = nrwork;
                 irvt = iru + *n * *n;
                 nrwork = irvt + *n * *n;
-                sbdsdc_("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("U", "I", n, &s[1], &rwork[ie], &rwork[iru], n, &rwork[irvt], n,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
                 /* Set the right corner of U to identity matrix */
-                claset_("F", m, m, &c_b1, &c_b1, &u[u_offset], ldu);
+                aocl_lapack_claset("F", m, m, &c_b1, &c_b1, &u[u_offset], ldu);
                 if(*m > *n)
                 {
                     i__2 = *m - *n;
                     i__1 = *m - *n;
-                    claset_("F", &i__2, &i__1, &c_b1, &c_b2, &u[*n + 1 + (*n + 1) * u_dim1], ldu);
+                    aocl_lapack_claset("F", &i__2, &i__1, &c_b1, &c_b2,
+                                       &u[*n + 1 + (*n + 1) * u_dim1], ldu);
                 }
-                /* Copy real matrix RWORK(IRU) to complex matrix U */
+                /* Copy real matrix RWORK(IRU) to scomplex matrix U */
                 /* Overwrite U by left singular vectors of A */
                 /* CWorkspace: need 2*N [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] */
-                clacp2_("F", n, n, &rwork[iru], n, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", n, n, &rwork[iru], n, &u[u_offset], ldu);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", m, m, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__2, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_cunmbr("Q", "L", "N", m, m, n, &a[a_offset], lda, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__2, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by right singular vectors of A */
                 /* CWorkspace: need 2*N [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*N [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need N [e] + N*N [RU] + N*N [RVT] */
-                clacp2_("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", n, n, &rwork[irvt], n, &vt[vt_offset], ldvt);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", n, n, n, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__2, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", n, n, n, &a[a_offset], lda, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__2, &ierr);
             }
         }
     }
@@ -1548,11 +1541,12 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer M [tau] + M*NB [work] */
                 /* RWorkspace: need 0 */
                 i__2 = *lwork - nwork + 1;
-                cgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 /* Zero out above L */
                 i__2 = *m - 1;
                 i__1 = *m - 1;
-                claset_("U", &i__2, &i__1, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                aocl_lapack_claset("U", &i__2, &i__1, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
                 ie = 1;
                 itauq = 1;
                 itaup = itauq + *m;
@@ -1562,14 +1556,14 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer 2*M [tauq, taup] + 2*M*NB [work] */
                 /* RWorkspace: need M [e] */
                 i__2 = *lwork - nwork + 1;
-                cgebrd_(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[nwork], &i__2, &ierr);
+                aocl_lapack_cgebrd(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[nwork], &i__2, &ierr);
                 nrwork = ie + *m;
                 /* Perform bidiagonal SVD, compute singular values only */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need M [e] + BDSPAC */
-                sbdsdc_("U", "N", m, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("U", "N", m, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum,
+                                   idum, &rwork[nrwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -1599,18 +1593,20 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer M*M [VT] + M*M [L] + M [tau] + M*NB [work] */
                 /* RWorkspace: need 0 */
                 i__2 = *lwork - nwork + 1;
-                cgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 /* Copy L to WORK(IL), zeroing about above it */
-                clacpy_("L", m, m, &a[a_offset], lda, &work[il], &ldwrkl);
+                aocl_lapack_clacpy("L", m, m, &a[a_offset], lda, &work[il], &ldwrkl);
                 i__2 = *m - 1;
                 i__1 = *m - 1;
-                claset_("U", &i__2, &i__1, &c_b1, &c_b1, &work[il + ldwrkl], &ldwrkl);
+                aocl_lapack_claset("U", &i__2, &i__1, &c_b1, &c_b1, &work[il + ldwrkl], &ldwrkl);
                 /* Generate Q in A */
                 /* CWorkspace: need M*M [VT] + M*M [L] + M [tau] + M [work] */
                 /* CWorkspace: prefer M*M [VT] + M*M [L] + M [tau] + M*NB [work] */
                 /* RWorkspace: need 0 */
                 i__2 = *lwork - nwork + 1;
-                cunglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cunglq(m, n, m, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 ie = 1;
                 itauq = itau;
                 itaup = itauq + *m;
@@ -1620,8 +1616,8 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer M*M [VT] + M*M [L] + 2*M [tauq, taup] + 2*M*NB [work] */
                 /* RWorkspace: need M [e] */
                 i__2 = *lwork - nwork + 1;
-                cgebrd_(m, m, &work[il], &ldwrkl, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[nwork], &i__2, &ierr);
+                aocl_lapack_cgebrd(m, m, &work[il], &ldwrkl, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[nwork], &i__2, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of bidiagonal matrix in RWORK(IRU) and computing right */
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
@@ -1630,26 +1626,26 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = ie + *m;
                 irvt = iru + *m * *m;
                 nrwork = irvt + *m * *m;
-                sbdsdc_("U", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix WORK(IU) */
+                aocl_lapack_sbdsdc("U", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix WORK(IU) */
                 /* Overwrite WORK(IU) by the left singular vectors of L */
                 /* CWorkspace: need M*M [VT] + M*M [L] + 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer M*M [VT] + M*M [L] + 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", m, m, m, &work[il], &ldwrkl, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__2, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix WORK(IVT) */
+                aocl_lapack_cunmbr("Q", "L", "N", m, m, m, &work[il], &ldwrkl, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__2, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix WORK(IVT) */
                 /* Overwrite WORK(IVT) by the right singular vectors of L */
                 /* CWorkspace: need M*M [VT] + M*M [L] + 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer M*M [VT] + M*M [L] + 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", m, m, &rwork[irvt], m, &work[ivt], &ldwkvt);
+                aocl_lapack_clacp2("F", m, m, &rwork[irvt], m, &work[ivt], &ldwkvt);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", m, m, m, &work[il], &ldwrkl, &work[itaup], &work[ivt],
-                        &ldwkvt, &work[nwork], &i__2, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", m, m, m, &work[il], &ldwrkl, &work[itaup],
+                                   &work[ivt], &ldwkvt, &work[nwork], &i__2, &ierr);
                 /* Multiply right singular vectors of L in WORK(IL) by Q */
                 /* in A, storing result in WORK(IL) and copying to A */
                 /* CWorkspace: need M*M [VT] + M*M [L] */
@@ -1662,9 +1658,9 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                     /* Computing MIN */
                     i__3 = *n - i__ + 1;
                     blk = fla_min(i__3, chunk);
-                    cgemm_("N", "N", m, &blk, m, &c_b2, &work[ivt], m, &a[i__ * a_dim1 + 1], lda,
-                           &c_b1, &work[il], &ldwrkl);
-                    clacpy_("F", m, &blk, &work[il], &ldwrkl, &a[i__ * a_dim1 + 1], lda);
+                    aocl_blas_cgemm("N", "N", m, &blk, m, &c_b2, &work[ivt], m,
+                                    &a[i__ * a_dim1 + 1], lda, &c_b1, &work[il], &ldwrkl);
+                    aocl_lapack_clacpy("F", m, &blk, &work[il], &ldwrkl, &a[i__ * a_dim1 + 1], lda);
                     /* L40: */
                 }
             }
@@ -1683,18 +1679,20 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer M*M [L] + M [tau] + M*NB [work] */
                 /* RWorkspace: need 0 */
                 i__1 = *lwork - nwork + 1;
-                cgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 /* Copy L to WORK(IL), zeroing out above it */
-                clacpy_("L", m, m, &a[a_offset], lda, &work[il], &ldwrkl);
+                aocl_lapack_clacpy("L", m, m, &a[a_offset], lda, &work[il], &ldwrkl);
                 i__1 = *m - 1;
                 i__2 = *m - 1;
-                claset_("U", &i__1, &i__2, &c_b1, &c_b1, &work[il + ldwrkl], &ldwrkl);
+                aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &work[il + ldwrkl], &ldwrkl);
                 /* Generate Q in A */
                 /* CWorkspace: need M*M [L] + M [tau] + M [work] */
                 /* CWorkspace: prefer M*M [L] + M [tau] + M*NB [work] */
                 /* RWorkspace: need 0 */
                 i__1 = *lwork - nwork + 1;
-                cunglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunglq(m, n, m, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 ie = 1;
                 itauq = itau;
                 itaup = itauq + *m;
@@ -1704,8 +1702,8 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer M*M [L] + 2*M [tauq, taup] + 2*M*NB [work] */
                 /* RWorkspace: need M [e] */
                 i__1 = *lwork - nwork + 1;
-                cgebrd_(m, m, &work[il], &ldwrkl, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[nwork], &i__1, &ierr);
+                aocl_lapack_cgebrd(m, m, &work[il], &ldwrkl, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[nwork], &i__1, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of bidiagonal matrix in RWORK(IRU) and computing right */
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
@@ -1714,33 +1712,33 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = ie + *m;
                 irvt = iru + *m * *m;
                 nrwork = irvt + *m * *m;
-                sbdsdc_("U", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix U */
+                aocl_lapack_sbdsdc("U", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix U */
                 /* Overwrite U by left singular vectors of L */
                 /* CWorkspace: need M*M [L] + 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer M*M [L] + 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", m, m, m, &work[il], &ldwrkl, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__1, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_cunmbr("Q", "L", "N", m, m, m, &work[il], &ldwrkl, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__1, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by left singular vectors of L */
                 /* CWorkspace: need M*M [L] + 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer M*M [L] + 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", m, m, &rwork[irvt], m, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", m, m, &rwork[irvt], m, &vt[vt_offset], ldvt);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", m, m, m, &work[il], &ldwrkl, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", m, m, m, &work[il], &ldwrkl, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__1, &ierr);
                 /* Copy VT to WORK(IL), multiply right singular vectors of L */
                 /* in WORK(IL) by Q in A, storing result in VT */
                 /* CWorkspace: need M*M [L] */
                 /* RWorkspace: need 0 */
-                clacpy_("F", m, m, &vt[vt_offset], ldvt, &work[il], &ldwrkl);
-                cgemm_("N", "N", m, n, m, &c_b2, &work[il], &ldwrkl, &a[a_offset], lda, &c_b1,
-                       &vt[vt_offset], ldvt);
+                aocl_lapack_clacpy("F", m, m, &vt[vt_offset], ldvt, &work[il], &ldwrkl);
+                aocl_blas_cgemm("N", "N", m, n, m, &c_b2, &work[il], &ldwrkl, &a[a_offset], lda,
+                                &c_b1, &vt[vt_offset], ldvt);
             }
             else if(wntqa)
             {
@@ -1757,18 +1755,20 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer M*M [VT] + M [tau] + M*NB [work] */
                 /* RWorkspace: need 0 */
                 i__1 = *lwork - nwork + 1;
-                cgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
-                clacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_cgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
+                aocl_lapack_clacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 /* Generate Q in VT */
                 /* CWorkspace: need M*M [VT] + M [tau] + N [work] */
                 /* CWorkspace: prefer M*M [VT] + M [tau] + N*NB [work] */
                 /* RWorkspace: need 0 */
                 i__1 = *lwork - nwork + 1;
-                cunglq_(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunglq(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 /* Produce L in A, zeroing out above it */
                 i__1 = *m - 1;
                 i__2 = *m - 1;
-                claset_("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
                 ie = 1;
                 itauq = itau;
                 itaup = itauq + *m;
@@ -1778,8 +1778,8 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: prefer M*M [VT] + 2*M [tauq, taup] + 2*M*NB [work] */
                 /* RWorkspace: need M [e] */
                 i__1 = *lwork - nwork + 1;
-                cgebrd_(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[nwork], &i__1, &ierr);
+                aocl_lapack_cgebrd(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[nwork], &i__1, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of bidiagonal matrix in RWORK(IRU) and computing right */
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
@@ -1788,34 +1788,34 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 iru = ie + *m;
                 irvt = iru + *m * *m;
                 nrwork = irvt + *m * *m;
-                sbdsdc_("U", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix U */
+                aocl_lapack_sbdsdc("U", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix U */
                 /* Overwrite U by left singular vectors of L */
                 /* CWorkspace: need M*M [VT] + 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer M*M [VT] + 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", m, m, m, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__1, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix WORK(IVT) */
+                aocl_lapack_cunmbr("Q", "L", "N", m, m, m, &a[a_offset], lda, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__1, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix WORK(IVT) */
                 /* Overwrite WORK(IVT) by right singular vectors of L */
                 /* CWorkspace: need M*M [VT] + 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer M*M [VT] + 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacp2_("F", m, m, &rwork[irvt], m, &work[ivt], &ldwkvt);
+                aocl_lapack_clacp2("F", m, m, &rwork[irvt], m, &work[ivt], &ldwkvt);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", m, m, m, &a[a_offset], lda, &work[itaup], &work[ivt],
-                        &ldwkvt, &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", m, m, m, &a[a_offset], lda, &work[itaup],
+                                   &work[ivt], &ldwkvt, &work[nwork], &i__1, &ierr);
                 /* Multiply right singular vectors of L in WORK(IVT) by */
                 /* Q in VT, storing result in A */
                 /* CWorkspace: need M*M [VT] */
                 /* RWorkspace: need 0 */
-                cgemm_("N", "N", m, n, m, &c_b2, &work[ivt], &ldwkvt, &vt[vt_offset], ldvt, &c_b1,
-                       &a[a_offset], lda);
+                aocl_blas_cgemm("N", "N", m, n, m, &c_b2, &work[ivt], &ldwkvt, &vt[vt_offset], ldvt,
+                                &c_b1, &a[a_offset], lda);
                 /* Copy right singular vectors of A from A to VT */
-                clacpy_("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clacpy("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
             }
         }
         else if(*n >= mnthr2)
@@ -1834,16 +1834,16 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
             /* CWorkspace: prefer 2*M [tauq, taup] + (M+N)*NB [work] */
             /* RWorkspace: need M [e] */
             i__1 = *lwork - nwork + 1;
-            cgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[nwork], &i__1, &ierr);
+            aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[nwork], &i__1, &ierr);
             if(wntqn)
             {
                 /* Path 5tn (N >> M, JOBZ='N') */
                 /* Compute singular values only */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need M [e] + BDSPAC */
-                sbdsdc_("L", "N", m, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("L", "N", m, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum,
+                                   idum, &rwork[nrwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -1856,15 +1856,17 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: need 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacpy("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                 i__1 = *lwork - nwork + 1;
-                cungbr_("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cungbr("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[nwork],
+                                   &i__1, &ierr);
                 /* Generate P**H in A */
                 /* CWorkspace: need 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
                 i__1 = *lwork - nwork + 1;
-                cungbr_("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[nwork], &i__1, &ierr);
+                aocl_lapack_cungbr("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[nwork],
+                                   &i__1, &ierr);
                 ldwkvt = *m;
                 if(*lwork >= *m * *n + *m * 3)
                 {
@@ -1883,15 +1885,15 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need M [e] + M*M [RVT] + M*M [RU] + BDSPAC */
-                sbdsdc_("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
                 /* Multiply Q in U by real matrix RWORK(IRVT) */
                 /* storing the result in WORK(IVT), copying to U */
                 /* CWorkspace: need 2*M [tauq, taup] + M*M [VT] */
                 /* RWorkspace: need M [e] + M*M [RVT] + M*M [RU] + 2*M*M [rwork] */
-                clacrm_(m, m, &u[u_offset], ldu, &rwork[iru], m, &work[ivt], &ldwkvt,
-                        &rwork[nrwork]);
-                clacpy_("F", m, m, &work[ivt], &ldwkvt, &u[u_offset], ldu);
+                aocl_lapack_clacrm(m, m, &u[u_offset], ldu, &rwork[iru], m, &work[ivt], &ldwkvt,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", m, m, &work[ivt], &ldwkvt, &u[u_offset], ldu);
                 /* Multiply RWORK(IRVT) by P**H in A, storing the */
                 /* result in WORK(IVT), copying to A */
                 /* CWorkspace: need 2*M [tauq, taup] + M*M [VT] */
@@ -1907,9 +1909,10 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                     /* Computing MIN */
                     i__3 = *n - i__ + 1;
                     blk = fla_min(i__3, chunk);
-                    clarcm_(m, &blk, &rwork[irvt], m, &a[i__ * a_dim1 + 1], lda, &work[ivt],
-                            &ldwkvt, &rwork[nrwork]);
-                    clacpy_("F", m, &blk, &work[ivt], &ldwkvt, &a[i__ * a_dim1 + 1], lda);
+                    aocl_lapack_clarcm(m, &blk, &rwork[irvt], m, &a[i__ * a_dim1 + 1], lda,
+                                       &work[ivt], &ldwkvt, &rwork[nrwork]);
+                    aocl_lapack_clacpy("F", m, &blk, &work[ivt], &ldwkvt, &a[i__ * a_dim1 + 1],
+                                       lda);
                     /* L50: */
                 }
             }
@@ -1920,17 +1923,18 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: need 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacpy("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                 i__2 = *lwork - nwork + 1;
-                cungbr_("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cungbr("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[nwork],
+                                   &i__2, &ierr);
                 /* Copy A to VT, generate P**H */
                 /* CWorkspace: need 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 i__2 = *lwork - nwork + 1;
-                cungbr_("P", m, n, m, &vt[vt_offset], ldvt, &work[itaup], &work[nwork], &i__2,
-                        &ierr);
+                aocl_lapack_cungbr("P", m, n, m, &vt[vt_offset], ldvt, &work[itaup], &work[nwork],
+                                   &i__2, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of bidiagonal matrix in RWORK(IRU) and computing right */
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
@@ -1939,23 +1943,24 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 irvt = nrwork;
                 iru = irvt + *m * *m;
                 nrwork = iru + *m * *m;
-                sbdsdc_("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
                 /* Multiply Q in U by real matrix RWORK(IRU), storing the */
                 /* result in A, copying to U */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need M [e] + M*M [RVT] + M*M [RU] + 2*M*M [rwork] */
-                clacrm_(m, m, &u[u_offset], ldu, &rwork[iru], m, &a[a_offset], lda, &rwork[nrwork]);
-                clacpy_("F", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacrm(m, m, &u[u_offset], ldu, &rwork[iru], m, &a[a_offset], lda,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                 /* Multiply real matrix RWORK(IRVT) by P**H in VT, */
                 /* storing the result in A, copying to VT */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need M [e] + M*M [RVT] + 2*M*N [rwork] < M + 5*M*M since N < 2*M here
                  */
                 nrwork = iru;
-                clarcm_(m, n, &rwork[irvt], m, &vt[vt_offset], ldvt, &a[a_offset], lda,
-                        &rwork[nrwork]);
-                clacpy_("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clarcm(m, n, &rwork[irvt], m, &vt[vt_offset], ldvt, &a[a_offset], lda,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
             }
             else
             {
@@ -1964,17 +1969,18 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 /* CWorkspace: need 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacpy("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                 i__2 = *lwork - nwork + 1;
-                cungbr_("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[nwork], &i__2, &ierr);
+                aocl_lapack_cungbr("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[nwork],
+                                   &i__2, &ierr);
                 /* Copy A to VT, generate P**H */
                 /* CWorkspace: need 2*M [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need 0 */
-                clacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 i__2 = *lwork - nwork + 1;
-                cungbr_("P", n, n, m, &vt[vt_offset], ldvt, &work[itaup], &work[nwork], &i__2,
-                        &ierr);
+                aocl_lapack_cungbr("P", n, n, m, &vt[vt_offset], ldvt, &work[itaup], &work[nwork],
+                                   &i__2, &ierr);
                 /* Perform bidiagonal SVD, computing left singular vectors */
                 /* of bidiagonal matrix in RWORK(IRU) and computing right */
                 /* singular vectors of bidiagonal matrix in RWORK(IRVT) */
@@ -1983,23 +1989,24 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 irvt = nrwork;
                 iru = irvt + *m * *m;
                 nrwork = iru + *m * *m;
-                sbdsdc_("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
                 /* Multiply Q in U by real matrix RWORK(IRU), storing the */
                 /* result in A, copying to U */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need M [e] + M*M [RVT] + M*M [RU] + 2*M*M [rwork] */
-                clacrm_(m, m, &u[u_offset], ldu, &rwork[iru], m, &a[a_offset], lda, &rwork[nrwork]);
-                clacpy_("F", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_clacrm(m, m, &u[u_offset], ldu, &rwork[iru], m, &a[a_offset], lda,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                 /* Multiply real matrix RWORK(IRVT) by P**H in VT, */
                 /* storing the result in A, copying to VT */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need M [e] + M*M [RVT] + 2*M*N [rwork] < M + 5*M*M since N < 2*M here
                  */
                 nrwork = iru;
-                clarcm_(m, n, &rwork[irvt], m, &vt[vt_offset], ldvt, &a[a_offset], lda,
-                        &rwork[nrwork]);
-                clacpy_("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_clarcm(m, n, &rwork[irvt], m, &vt[vt_offset], ldvt, &a[a_offset], lda,
+                                   &rwork[nrwork]);
+                aocl_lapack_clacpy("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
             }
         }
         else
@@ -2018,16 +2025,16 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
             /* CWorkspace: prefer 2*M [tauq, taup] + (M+N)*NB [work] */
             /* RWorkspace: need M [e] */
             i__2 = *lwork - nwork + 1;
-            cgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[nwork], &i__2, &ierr);
+            aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[nwork], &i__2, &ierr);
             if(wntqn)
             {
                 /* Path 6tn (N > M, JOBZ='N') */
                 /* Compute singular values only */
                 /* CWorkspace: need 0 */
                 /* RWorkspace: need M [e] + BDSPAC */
-                sbdsdc_("L", "N", m, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
+                aocl_lapack_sbdsdc("L", "N", m, &s[1], &rwork[ie], dum, &c__1, dum, &c__1, dum,
+                                   idum, &rwork[nrwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -2037,7 +2044,7 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 if(*lwork >= *m * *n + *m * 3)
                 {
                     /* WORK( IVT ) is M by N */
-                    claset_("F", m, n, &c_b1, &c_b1, &work[ivt], &ldwkvt);
+                    aocl_lapack_claset("F", m, n, &c_b1, &c_b1, &work[ivt], &ldwkvt);
                     nwork = ivt + ldwkvt * *n;
                 }
                 else
@@ -2054,31 +2061,31 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 irvt = nrwork;
                 iru = irvt + *m * *m;
                 nrwork = iru + *m * *m;
-                sbdsdc_("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix U */
+                aocl_lapack_sbdsdc("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix U */
                 /* Overwrite U by left singular vectors of A */
                 /* CWorkspace: need 2*M [tauq, taup] + M*M [VT] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*M [VT] + M*NB [work] */
                 /* RWorkspace: need M [e] + M*M [RVT] + M*M [RU] */
-                clacp2_("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
                 i__2 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", m, m, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__2, &ierr);
+                aocl_lapack_cunmbr("Q", "L", "N", m, m, n, &a[a_offset], lda, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__2, &ierr);
                 if(*lwork >= *m * *n + *m * 3)
                 {
                     /* Path 6to-fast */
-                    /* Copy real matrix RWORK(IRVT) to complex matrix WORK(IVT) */
+                    /* Copy real matrix RWORK(IRVT) to scomplex matrix WORK(IVT) */
                     /* Overwrite WORK(IVT) by right singular vectors of A, */
                     /* copying to A */
                     /* CWorkspace: need 2*M [tauq, taup] + M*N [VT] + M [work] */
                     /* CWorkspace: prefer 2*M [tauq, taup] + M*N [VT] + M*NB [work] */
                     /* RWorkspace: need M [e] + M*M [RVT] */
-                    clacp2_("F", m, m, &rwork[irvt], m, &work[ivt], &ldwkvt);
+                    aocl_lapack_clacp2("F", m, m, &rwork[irvt], m, &work[ivt], &ldwkvt);
                     i__2 = *lwork - nwork + 1;
-                    cunmbr_("P", "R", "C", m, n, m, &a[a_offset], lda, &work[itaup], &work[ivt],
-                            &ldwkvt, &work[nwork], &i__2, &ierr);
-                    clacpy_("F", m, n, &work[ivt], &ldwkvt, &a[a_offset], lda);
+                    aocl_lapack_cunmbr("P", "R", "C", m, n, m, &a[a_offset], lda, &work[itaup],
+                                       &work[ivt], &ldwkvt, &work[nwork], &i__2, &ierr);
+                    aocl_lapack_clacpy("F", m, n, &work[ivt], &ldwkvt, &a[a_offset], lda);
                 }
                 else
                 {
@@ -2088,8 +2095,8 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                     /* CWorkspace: prefer 2*M [tauq, taup] + M*M [VT] + M*NB [work] */
                     /* RWorkspace: need 0 */
                     i__2 = *lwork - nwork + 1;
-                    cungbr_("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[nwork], &i__2,
-                            &ierr);
+                    aocl_lapack_cungbr("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[nwork],
+                                       &i__2, &ierr);
                     /* Multiply Q in A by real matrix RWORK(IRU), storing the */
                     /* result in WORK(IU), copying to A */
                     /* CWorkspace: need 2*M [tauq, taup] + M*M [VT] */
@@ -2105,9 +2112,10 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                         /* Computing MIN */
                         i__3 = *n - i__ + 1;
                         blk = fla_min(i__3, chunk);
-                        clarcm_(m, &blk, &rwork[irvt], m, &a[i__ * a_dim1 + 1], lda, &work[ivt],
-                                &ldwkvt, &rwork[nrwork]);
-                        clacpy_("F", m, &blk, &work[ivt], &ldwkvt, &a[i__ * a_dim1 + 1], lda);
+                        aocl_lapack_clarcm(m, &blk, &rwork[irvt], m, &a[i__ * a_dim1 + 1], lda,
+                                           &work[ivt], &ldwkvt, &rwork[nrwork]);
+                        aocl_lapack_clacpy("F", m, &blk, &work[ivt], &ldwkvt, &a[i__ * a_dim1 + 1],
+                                           lda);
                         /* L60: */
                     }
                 }
@@ -2123,27 +2131,27 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 irvt = nrwork;
                 iru = irvt + *m * *m;
                 nrwork = iru + *m * *m;
-                sbdsdc_("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix U */
+                aocl_lapack_sbdsdc("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix U */
                 /* Overwrite U by left singular vectors of A */
                 /* CWorkspace: need 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need M [e] + M*M [RVT] + M*M [RU] */
-                clacp2_("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", m, m, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__1, &ierr);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_cunmbr("Q", "L", "N", m, m, n, &a[a_offset], lda, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__1, &ierr);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by right singular vectors of A */
                 /* CWorkspace: need 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need M [e] + M*M [RVT] */
-                claset_("F", m, n, &c_b1, &c_b1, &vt[vt_offset], ldvt);
-                clacp2_("F", m, m, &rwork[irvt], m, &vt[vt_offset], ldvt);
+                aocl_lapack_claset("F", m, n, &c_b1, &c_b1, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", m, m, &rwork[irvt], m, &vt[vt_offset], ldvt);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", m, n, m, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", m, n, m, &a[a_offset], lda, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__1, &ierr);
             }
             else
             {
@@ -2156,28 +2164,28 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
                 irvt = nrwork;
                 iru = irvt + *m * *m;
                 nrwork = iru + *m * *m;
-                sbdsdc_("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m, dum, idum,
-                        &rwork[nrwork], &iwork[1], info);
-                /* Copy real matrix RWORK(IRU) to complex matrix U */
+                aocl_lapack_sbdsdc("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &rwork[irvt], m,
+                                   dum, idum, &rwork[nrwork], &iwork[1], info);
+                /* Copy real matrix RWORK(IRU) to scomplex matrix U */
                 /* Overwrite U by left singular vectors of A */
                 /* CWorkspace: need 2*M [tauq, taup] + M [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + M*NB [work] */
                 /* RWorkspace: need M [e] + M*M [RVT] + M*M [RU] */
-                clacp2_("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
+                aocl_lapack_clacp2("F", m, m, &rwork[iru], m, &u[u_offset], ldu);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("Q", "L", "N", m, m, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
-                        &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunmbr("Q", "L", "N", m, m, n, &a[a_offset], lda, &work[itauq],
+                                   &u[u_offset], ldu, &work[nwork], &i__1, &ierr);
                 /* Set all of VT to identity matrix */
-                claset_("F", n, n, &c_b1, &c_b2, &vt[vt_offset], ldvt);
-                /* Copy real matrix RWORK(IRVT) to complex matrix VT */
+                aocl_lapack_claset("F", n, n, &c_b1, &c_b2, &vt[vt_offset], ldvt);
+                /* Copy real matrix RWORK(IRVT) to scomplex matrix VT */
                 /* Overwrite VT by right singular vectors of A */
                 /* CWorkspace: need 2*M [tauq, taup] + N [work] */
                 /* CWorkspace: prefer 2*M [tauq, taup] + N*NB [work] */
                 /* RWorkspace: need M [e] + M*M [RVT] */
-                clacp2_("F", m, m, &rwork[irvt], m, &vt[vt_offset], ldvt);
+                aocl_lapack_clacp2("F", m, m, &rwork[irvt], m, &vt[vt_offset], ldvt);
                 i__1 = *lwork - nwork + 1;
-                cunmbr_("P", "R", "C", n, n, m, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[nwork], &i__1, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", n, n, m, &a[a_offset], lda, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[nwork], &i__1, &ierr);
             }
         }
     }
@@ -2186,27 +2194,31 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     {
         if(anrm > bignum)
         {
-            slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, &ierr);
+            aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn,
+                               &ierr);
         }
         if(*info != 0 && anrm > bignum)
         {
             i__1 = minmn - 1;
-            slascl_("G", &c__0, &c__0, &bignum, &anrm, &i__1, &c__1, &rwork[ie], &minmn, &ierr);
+            aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &anrm, &i__1, &c__1, &rwork[ie], &minmn,
+                               &ierr);
         }
         if(anrm < smlnum)
         {
-            slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, &ierr);
+            aocl_lapack_slascl("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn,
+                               &ierr);
         }
         if(*info != 0 && anrm < smlnum)
         {
             i__1 = minmn - 1;
-            slascl_("G", &c__0, &c__0, &smlnum, &anrm, &i__1, &c__1, &rwork[ie], &minmn, &ierr);
+            aocl_lapack_slascl("G", &c__0, &c__0, &smlnum, &anrm, &i__1, &c__1, &rwork[ie], &minmn,
+                               &ierr);
         }
     }
     /* Return optimal workspace in WORK(1) */
-    r__1 = sroundup_lwork(&maxwrk);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGESDD */

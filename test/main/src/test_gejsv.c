@@ -75,6 +75,12 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     integer num_ranges, i;
 
+    /* Arrays to save original range values */
+    integer *orig_m_range_start = NULL;
+    integer *orig_m_range_end = NULL;
+    integer *orig_n_range_start = NULL;
+    integer *orig_n_range_end = NULL;
+
     if(argc == 1)
     {
         /* Test with parameters from config */
@@ -87,8 +93,41 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
            Need to map these special sizes to the standard size
            variables used by test op driver. */
         num_ranges = params->svd_paramslist[0].num_ranges;
+
+        /* Save original range values before modifying them */
+        orig_m_range_start = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
+        orig_m_range_end = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
+        orig_n_range_start = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
+        orig_n_range_end = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
+
+        /* Check for allocation failures */
+        if(orig_m_range_start == NULL || orig_m_range_end == NULL || orig_n_range_start == NULL
+           || orig_n_range_end == NULL)
+        {
+            printf("\nError: Memory allocation failed for range arrays in GEJSV test\n");
+
+            /* Clean up any successfully allocated memory */
+            if(orig_m_range_start != NULL)
+                free(orig_m_range_start);
+            if(orig_m_range_end != NULL)
+                free(orig_m_range_end);
+            if(orig_n_range_start != NULL)
+                free(orig_n_range_start);
+            if(orig_n_range_end != NULL)
+                free(orig_n_range_end);
+
+            return;
+        }
+
         for(i = 0; i < num_ranges; i++)
         {
+            /* Save original values */
+            orig_m_range_start[i] = params->svd_paramslist[i].m_range_start;
+            orig_m_range_end[i] = params->svd_paramslist[i].m_range_end;
+            orig_n_range_start[i] = params->svd_paramslist[i].n_range_start;
+            orig_n_range_end[i] = params->svd_paramslist[i].n_range_end;
+
+            /* Set GEJSV-specific values */
             params->svd_paramslist[i].m_range_start = params->svd_paramslist[i].m_gejsv;
             params->svd_paramslist[i].m_range_end = params->svd_paramslist[i].m_gejsv;
             params->svd_paramslist[i].n_range_start = params->svd_paramslist[i].n_gejsv;
@@ -99,6 +138,21 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, SVD, fla_test_gejsv_experiment);
         tests_not_run = 0;
+
+        /* Restore original range values after GEJSV completes */
+        for(i = 0; i < num_ranges; i++)
+        {
+            params->svd_paramslist[i].m_range_start = orig_m_range_start[i];
+            params->svd_paramslist[i].m_range_end = orig_m_range_end[i];
+            params->svd_paramslist[i].n_range_start = orig_n_range_start[i];
+            params->svd_paramslist[i].n_range_end = orig_n_range_end[i];
+        }
+
+        /* Free temporary storage */
+        free(orig_m_range_start);
+        free(orig_m_range_end);
+        free(orig_n_range_start);
+        free(orig_n_range_end);
     }
     if(argc == 19)
     {
@@ -251,11 +305,10 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(get_realtype(datatype), &S_test, n);
     create_vector(get_realtype(datatype), &stat, 7);
     create_vector(INTEGER, &istat, 4);
-    create_vector(get_realtype(datatype), &scal, 1);
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
             init_matrix(get_realtype(datatype), S, n, 1, lda, g_ext_fptr, params->imatrix_char);
@@ -266,6 +319,7 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
             generate_gejsv_test_matrix(datatype, joba, jobu, jobv, m, n, A, lda, S);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
+                create_vector(get_realtype(datatype), &scal, 1);
                 scale_matrix_overflow_underflow_gejsv(datatype, m, n, A, lda, S, imatrix, scal);
             }
         }
@@ -305,6 +359,11 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
         check_bit_reproducibility_gejsv(filename, datatype, joba, jobu, jobv, jobr, jobt, jobp, m,
                                         n, A, lda, S, U, ldu, V, ldv, g_lwork, g_lrwork, g_liwork,
                                         params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gejsv(tst_api, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S, S_test, U, ldu,
@@ -325,6 +384,11 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            free_vector(scal);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
@@ -333,7 +397,6 @@ free_buffers:
     free_vector(S_test);
     free_vector(stat);
     free_vector(istat);
-    free_vector(scal);
     if(!same_char(jobu, 'N'))
     {
         free_matrix(U);
@@ -717,7 +780,7 @@ void store_gejsv_outputs(void *filename, integer datatype, char joba, char jobu,
         FLA_STORE_BRT_MATRIX(datatype, n, n, V, ldv)
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 
 integer check_bit_reproducibility_gejsv(void *filename, integer datatype, char joba, char jobu,

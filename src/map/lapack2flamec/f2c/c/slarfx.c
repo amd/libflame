@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLARFX applies an elementary reflector to a general rectangular matrix, with loop
  * unrolling whe n the reflector has order ≤ 10. */
 /* =========== DOCUMENTATION =========== */
@@ -118,21 +118,33 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, integer *ldc,
-             real *work)
+/** Generated wrapper function */
+void slarfx_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, real *tau, real *c__,
+             aocl_int_t *ldc, real *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarfx(side, m, n, v, tau, c__, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_slarfx(side, &m_64, &n_64, v, tau, c__, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, real *tau, real *c__,
+                        aocl_int64_t *ldc, real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarfx inputs: side %c ,m %" FLA_IS ",n %" FLA_IS ",ldc %" FLA_IS "", *side,
                       *m, *n, *ldc);
     /* System generated locals */
-    integer c_dim1, c_offset, i__1;
+    aocl_int64_t c_dim1, c_offset, i__1;
     /* Local variables */
-    integer j;
+    aocl_int64_t j;
     real t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +202,7 @@ void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, 
                 goto L190;
         }
         /* Code for general M */
-        slarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
+        aocl_lapack_slarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L10: /* Special code for 1 x 1 Householder */
         t1 = 1.f - *tau * v[1] * v[1];
@@ -475,7 +487,7 @@ void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, 
                 goto L390;
         }
         /* Code for general N */
-        slarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
+        aocl_lapack_slarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L210: /* Special code for 1 x 1 Householder */
         t1 = 1.f - *tau * v[1] * v[1];

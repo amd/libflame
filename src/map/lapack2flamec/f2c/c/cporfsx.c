@@ -396,10 +396,10 @@ defaults */
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, complex *a, integer *lda,
-              complex *af, integer *ldaf, real *s, complex *b, integer *ldb, complex *x,
+void cporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, scomplex *a, integer *lda,
+              scomplex *af, integer *ldaf, real *s, scomplex *b, integer *ldb, scomplex *x,
               integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__,
-              real *err_bnds_comp__, integer *nparams, real *params, complex *work, real *rwork,
+              real *err_bnds_comp__, integer *nparams, real *params, scomplex *work, real *rwork,
               integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
@@ -432,27 +432,27 @@ void cporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, complex *a, in
     real cwise_wrong__;
     extern /* Subroutine */
         void
-        cla_porfsx_extended_(integer *, char *, integer *, integer *, complex *, integer *,
-                             complex *, integer *, logical *, real *, complex *, integer *,
-                             complex *, integer *, real *, integer *, real *, real *, complex *,
-                             real *, complex *, real *, real *, integer *, real *, real *,
+        cla_porfsx_extended_(integer *, char *, integer *, integer *, scomplex *, integer *,
+                             scomplex *, integer *, logical *, real *, scomplex *, integer *,
+                             scomplex *, integer *, real *, integer *, real *, real *, scomplex *,
+                             real *, scomplex *, real *, real *, integer *, real *, real *,
                              logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     logical rcequ;
-    extern real cla_porcond_c_(char *, integer *, complex *, integer *, complex *, integer *,
-                               real *, logical *, integer *, complex *, real *),
-        cla_porcond_x_(char *, integer *, complex *, integer *, complex *, integer *, complex *,
-                       integer *, complex *, real *),
-        clanhe_(char *, char *, integer *, complex *, integer *, real *), slamch_(char *);
+    extern real cla_porcond_c_(char *, integer *, scomplex *, integer *, scomplex *, integer *,
+                               real *, logical *, integer *, scomplex *, real *),
+        cla_porcond_x_(char *, integer *, scomplex *, integer *, scomplex *, integer *, scomplex *,
+                       integer *, scomplex *, real *),
+        clanhe_(char *, char *, integer *, scomplex *, integer *, real *), slamch_(char *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern /* Subroutine */
         void
-        cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
+        cpocon_(char *, integer *, scomplex *, integer *, real *, real *, scomplex *, real *,
                 integer *);
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;

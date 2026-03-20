@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__10 = 10;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__10 = 10;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 /* > \brief \b DLASQ2 computes all the eigenvalues of the symmetric positive definite tridiagonal
  * matrix assoc iated with the qd Array Z to high relative accuracy. Used by sbdsqr and sstegr. */
 /* =========== DOCUMENTATION =========== */
@@ -113,54 +113,56 @@ static integer c__4 = 4;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasq2_(integer *n, doublereal *z__, integer *info)
+/** Generated wrapper function */
+void dlasq2_(aocl_int_t *n, doublereal *z__, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasq2(n, z__, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasq2(&n_64, z__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasq2(aocl_int64_t *n, doublereal *z__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq2 inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal d__, e, g;
-    integer k;
+    aocl_int64_t k;
     doublereal s, t;
-    integer i0, i1, i4, n0, n1;
+    aocl_int64_t i0, i1, i4, n0, n1;
     doublereal dn;
-    integer pp;
+    aocl_int64_t pp;
     doublereal dn1, dn2, dee, eps, tau, tol;
-    integer ipn4;
+    aocl_int64_t ipn4;
     doublereal tol2;
     logical ieee;
-    integer nbig;
+    aocl_int64_t nbig;
     doublereal dmin__, emin, emax;
-    integer kmin, ndiv, iter;
+    aocl_int64_t kmin, ndiv, iter;
     doublereal qmin, temp, qmax, zmax;
-    integer splt;
+    aocl_int64_t splt;
     doublereal dmin1, dmin2;
-    integer nfail;
+    aocl_int64_t nfail;
     doublereal desig, trace, sigma;
-    integer iinfo;
+    aocl_int64_t iinfo;
     doublereal tempe, tempq;
-    integer ttype;
-    extern /* Subroutine */
-        void
-        dlasq3_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, integer *, integer *, integer *, logical *, integer *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *);
+    aocl_int64_t ttype;
     extern doublereal dlamch_(char *);
     doublereal deemin;
-    integer iwhila, iwhilb;
+    aocl_int64_t iwhila, iwhilb;
     doublereal oldemn, safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dlasrt_(char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,7 +197,7 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
     if(*n < 0)
     {
         *info = -1;
-        xerbla_("DLASQ2", &c__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASQ2", &c__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -210,7 +212,7 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
         if(z__[1] < 0.)
         {
             *info = -201;
-            xerbla_("DLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("DLASQ2", &c__2, (ftnlen)6);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -221,21 +223,21 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
         if(z__[1] < 0.)
         {
             *info = -201;
-            xerbla_("DLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(z__[2] < 0.)
         {
             *info = -202;
-            xerbla_("DLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(z__[3] < 0.)
         {
             *info = -203;
-            xerbla_("DLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -280,14 +282,14 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
         if(z__[k] < 0.)
         {
             *info = -(k + 200);
-            xerbla_("DLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(z__[k + 1] < 0.)
         {
             *info = -(k + 201);
-            xerbla_("DLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -310,7 +312,7 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
     if(z__[(*n << 1) - 1] < 0.)
     {
         *info = -((*n << 1) + 199);
-        xerbla_("DLASQ2", &c__2, (ftnlen)6);
+        aocl_blas_xerbla("DLASQ2", &c__2, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -329,7 +331,7 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
             z__[k] = z__[(k << 1) - 1];
             /* L20: */
         }
-        dlasrt_("D", n, &z__[1], &iinfo);
+        aocl_lapack_dlasrt("D", n, &z__[1], &iinfo);
         z__[(*n << 1) - 1] = d__;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -343,7 +345,7 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
         return;
     }
     /* Check whether the machine is IEEE conformable. */
-    ieee = ilaenv_(&c__10, "DLASQ2", "N", &c__1, &c__2, &c__3, &c__4) == 1;
+    ieee = aocl_lapack_ilaenv(&c__10, "DLASQ2", "N", &c__1, &c__2, &c__3, &c__4) == 1;
     /* Rearrange data for locality: Z=(q1,qq1,e1,ee1,q2,qq2,e2,ee2,...). */
     for(k = *n << 1; k >= 2; k += -2)
     {
@@ -577,8 +579,9 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
                 goto L150;
             }
             /* While submatrix unfinished take a good dqds step. */
-            dlasq3_(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, &nfail, &iter, &ndiv,
-                    &ieee, &ttype, &dmin1, &dmin2, &dn, &dn1, &dn2, &g, &tau);
+            aocl_lapack_dlasq3(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, &nfail,
+                               &iter, &ndiv, &ieee, &ttype, &dmin1, &dmin2, &dn, &dn1, &dn2, &g,
+                               &tau);
             pp = 1 - pp;
             /* When EMIN is very small check for splits. */
             if(pp == 0 && n0 - i0 >= 3)
@@ -672,7 +675,7 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
         return;
         /* end IWHILB */
     L150: /* L160: */
-          ;
+        ;
     }
     *info = 3;
     AOCL_DTL_TRACE_LOG_EXIT
@@ -686,7 +689,7 @@ L170: /* Move q's to the front. */
         /* L180: */
     }
     /* Sort and compute sum of eigenvalues. */
-    dlasrt_("D", n, &z__[1], &iinfo);
+    aocl_lapack_dlasrt("D", n, &z__[1], &iinfo);
     e = 0.;
     for(k = *n; k >= 1; --k)
     {

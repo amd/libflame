@@ -156,24 +156,39 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal *c__,
-             doublereal *d__, integer *in, doublereal *y, doublereal *tol, integer *info)
+/** Generated wrapper function */
+void dlagts_(aocl_int_t *job, aocl_int_t *n, doublereal *a, doublereal *b, doublereal *c__,
+             doublereal *d__, aocl_int_t *in, doublereal *y, doublereal *tol, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlagts(job, n, a, b, c__, d__, in, y, tol, info);
+#else
+    aocl_int64_t job_64 = *job;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlagts(&job_64, &n_64, a, b, c__, d__, in, y, tol, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlagts(aocl_int64_t *job, aocl_int64_t *n, doublereal *a, doublereal *b,
+                        doublereal *c__, doublereal *d__, aocl_int_t *in, doublereal *y,
+                        doublereal *tol, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlagts inputs: job %" FLA_IS ", n %" FLA_IS ", in %" FLA_IS "", *job, *n,
                       *in);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2, d__3, d__4, d__5;
     /* Builtin functions */
     double d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer k;
+    aocl_int64_t k;
     doublereal ak, eps, temp, pert, absak, sfmin;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,7 +230,7 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAGTS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLAGTS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

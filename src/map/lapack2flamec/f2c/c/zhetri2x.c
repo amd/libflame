@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
 /* > \brief \b ZHETRI2X */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -121,56 +121,54 @@ the matrix is singular and its */
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
-               doublecomplex *work, integer *nb, integer *info)
+/** Generated wrapper function */
+void zhetri2x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+               dcomplex *work, aocl_int_t *nb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetri2x(uplo, n, a, lda, ipiv, work, nb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetri2x(uplo, &n_64, a, &lda_64, ipiv, work, &nb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetri2x(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                          aocl_int_t *ipiv, dcomplex *work, aocl_int64_t *nb,
+                          aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetri2x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",
                       *uplo, *n, *lda, *nb);
 
     /* System generated locals */
-    integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *),
-        d_cnjg(doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *),
+        d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    extern /* Subroutine */
-        void
-        zheswapr_(char *, integer *, doublecomplex *, integer *, integer *, integer *);
-    doublecomplex d__;
-    integer i__, j, k;
-    doublecomplex t, ak;
-    integer u11, ip, nnb, cut;
-    doublecomplex akp1;
-    integer invd;
-    doublecomplex akkp1;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer count;
+    dcomplex d__;
+    aocl_int64_t i__, j, k;
+    dcomplex t, ak;
+    aocl_int64_t u11, ip, nnb, cut;
+    dcomplex akp1;
+    aocl_int64_t invd;
+    dcomplex akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *);
-    doublecomplex u01_i_j__, u11_i_j__;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        ztrtri_(char *, char *, integer *, doublecomplex *, integer *, integer *);
-    doublecomplex u01_ip1_j__, u11_ip1_j__;
-    extern /* Subroutine */
-        void
-        zsyconv_(char *, char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
-                 integer *);
+    dcomplex u01_i_j__, u11_i_j__;
+    dcomplex u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,7 +217,7 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRI2X", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("ZHETRI2X", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -230,7 +228,7 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     }
     /* Convert A */
     /* Workspace got Non-diag elements of D */
-    zsyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], &iinfo);
+    aocl_lapack_zsyconv(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], &iinfo);
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
     {
@@ -238,7 +236,7 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
         for(*info = *n; *info >= 1; --(*info))
         {
             i__1 = *info + *info * a_dim1;
-            if(ipiv[*info] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
+            if(ipiv[*info] > 0 && (a[i__1].real == 0. && a[i__1].imag == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -252,7 +250,7 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
         for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = *info + *info * a_dim1;
-            if(ipiv[*info] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
+            if(ipiv[*info] > 0 && (a[i__2].real == 0. && a[i__2].imag == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -272,7 +270,7 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     if(upper)
     {
         /* invA = P * inv(U**H)*inv(D)*inv(U)*P**H. */
-        ztrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ztrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D)*inv(U) */
         k = 1;
         while(k <= *n)
@@ -282,63 +280,63 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 /* 1 x 1 diagonal NNB */
                 i__1 = k + invd * work_dim1;
                 i__2 = k + k * a_dim1;
-                d__1 = 1. / a[i__2].r;
-                work[i__1].r = d__1;
-                work[i__1].i = 0.; // , expr subst
+                d__1 = 1. / a[i__2].real;
+                work[i__1].real = d__1;
+                work[i__1].imag = 0.; // , expr subst
                 i__1 = k + (invd + 1) * work_dim1;
-                work[i__1].r = 0.;
-                work[i__1].i = 0.; // , expr subst
+                work[i__1].real = 0.;
+                work[i__1].imag = 0.; // , expr subst
                 ++k;
             }
             else
             {
                 /* 2 x 2 diagonal NNB */
                 d__1 = z_abs(&work[k + 1 + work_dim1]);
-                t.r = d__1;
-                t.i = 0.; // , expr subst
+                t.real = d__1;
+                t.imag = 0.; // , expr subst
                 i__1 = k + k * a_dim1;
-                d__1 = a[i__1].r;
-                z__2.r = d__1;
-                z__2.i = 0.; // , expr subst
+                d__1 = a[i__1].real;
+                z__2.real = d__1;
+                z__2.imag = 0.; // , expr subst
                 z_div(&z__1, &z__2, &t);
-                ak.r = z__1.r;
-                ak.i = z__1.i; // , expr subst
+                ak.real = z__1.real;
+                ak.imag = z__1.imag; // , expr subst
                 i__1 = k + 1 + (k + 1) * a_dim1;
-                d__1 = a[i__1].r;
-                z__2.r = d__1;
-                z__2.i = 0.; // , expr subst
+                d__1 = a[i__1].real;
+                z__2.real = d__1;
+                z__2.imag = 0.; // , expr subst
                 z_div(&z__1, &z__2, &t);
-                akp1.r = z__1.r;
-                akp1.i = z__1.i; // , expr subst
+                akp1.real = z__1.real;
+                akp1.imag = z__1.imag; // , expr subst
                 z_div(&z__1, &work[k + 1 + work_dim1], &t);
-                akkp1.r = z__1.r;
-                akkp1.i = z__1.i; // , expr subst
-                z__3.r = ak.r * akp1.r - ak.i * akp1.i;
-                z__3.i = ak.r * akp1.i + ak.i * akp1.r; // , expr subst
-                z__2.r = z__3.r - 1.;
-                z__2.i = z__3.i; // , expr subst
-                z__1.r = t.r * z__2.r - t.i * z__2.i;
-                z__1.i = t.r * z__2.i + t.i * z__2.r; // , expr subst
-                d__.r = z__1.r;
-                d__.i = z__1.i; // , expr subst
+                akkp1.real = z__1.real;
+                akkp1.imag = z__1.imag; // , expr subst
+                z__3.real = ak.real * akp1.real - ak.imag * akp1.imag;
+                z__3.imag = ak.real * akp1.imag + ak.imag * akp1.real; // , expr subst
+                z__2.real = z__3.real - 1.;
+                z__2.imag = z__3.imag; // , expr subst
+                z__1.real = t.real * z__2.real - t.imag * z__2.imag;
+                z__1.imag = t.real * z__2.imag + t.imag * z__2.real; // , expr subst
+                d__.real = z__1.real;
+                d__.imag = z__1.imag; // , expr subst
                 i__1 = k + invd * work_dim1;
                 z_div(&z__1, &akp1, &d__);
-                work[i__1].r = z__1.r;
-                work[i__1].i = z__1.i; // , expr subst
+                work[i__1].real = z__1.real;
+                work[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k + 1 + (invd + 1) * work_dim1;
                 z_div(&z__1, &ak, &d__);
-                work[i__1].r = z__1.r;
-                work[i__1].i = z__1.i; // , expr subst
+                work[i__1].real = z__1.real;
+                work[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k + (invd + 1) * work_dim1;
-                z__2.r = -akkp1.r;
-                z__2.i = -akkp1.i; // , expr subst
+                z__2.real = -akkp1.real;
+                z__2.imag = -akkp1.imag; // , expr subst
                 z_div(&z__1, &z__2, &d__);
-                work[i__1].r = z__1.r;
-                work[i__1].i = z__1.i; // , expr subst
+                work[i__1].real = z__1.real;
+                work[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k + 1 + invd * work_dim1;
                 d_cnjg(&z__1, &work[k + (invd + 1) * work_dim1]);
-                work[i__1].r = z__1.r;
-                work[i__1].i = z__1.i; // , expr subst
+                work[i__1].real = z__1.real;
+                work[i__1].imag = z__1.imag; // , expr subst
                 k += 2;
             }
         }
@@ -380,8 +378,8 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 {
                     i__3 = i__ + j * work_dim1;
                     i__4 = i__ + (cut + j) * a_dim1;
-                    work[i__3].r = a[i__4].r;
-                    work[i__3].i = a[i__4].i; // , expr subst
+                    work[i__3].real = a[i__4].real;
+                    work[i__3].imag = a[i__4].imag; // , expr subst
                 }
             }
             /* U11 Block */
@@ -389,22 +387,22 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = u11 + i__ + i__ * work_dim1;
-                work[i__2].r = 1.;
-                work[i__2].i = 0.; // , expr subst
+                work[i__2].real = 1.;
+                work[i__2].imag = 0.; // , expr subst
                 i__2 = i__ - 1;
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
-                    work[i__3].r = 0.;
-                    work[i__3].i = 0.; // , expr subst
+                    work[i__3].real = 0.;
+                    work[i__3].imag = 0.; // , expr subst
                 }
                 i__2 = nnb;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
-                    work[i__3].r = a[i__4].r;
-                    work[i__3].i = a[i__4].i; // , expr subst
+                    work[i__3].real = a[i__4].real;
+                    work[i__3].imag = a[i__4].imag; // , expr subst
                 }
             }
             /* invD*U01 */
@@ -419,11 +417,11 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                         i__2 = i__ + j * work_dim1;
                         i__3 = i__ + invd * work_dim1;
                         i__4 = i__ + j * work_dim1;
-                        z__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__1.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__1.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        z__1.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                     }
                     ++i__;
                 }
@@ -433,37 +431,37 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = i__ + j * work_dim1;
-                        u01_i_j__.r = work[i__2].r;
-                        u01_i_j__.i = work[i__2].i; // , expr subst
+                        u01_i_j__.real = work[i__2].real;
+                        u01_i_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = i__ + 1 + j * work_dim1;
-                        u01_ip1_j__.r = work[i__2].r;
-                        u01_ip1_j__.i = work[i__2].i; // , expr subst
+                        u01_ip1_j__.real = work[i__2].real;
+                        u01_ip1_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = i__ + j * work_dim1;
                         i__3 = i__ + invd * work_dim1;
-                        z__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        z__2.i = work[i__3].r * u01_i_j__.i
-                                 + work[i__3].i * u01_i_j__.r; // , expr subst
+                        z__2.real = work[i__3].real * u01_i_j__.real - work[i__3].imag * u01_i_j__.imag;
+                        z__2.imag = work[i__3].real * u01_i_j__.imag
+                                 + work[i__3].imag * u01_i_j__.real; // , expr subst
                         i__4 = i__ + (invd + 1) * work_dim1;
-                        z__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        z__3.i = work[i__4].r * u01_ip1_j__.i
-                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__3.real = work[i__4].real * u01_ip1_j__.real - work[i__4].imag * u01_ip1_j__.imag;
+                        z__3.imag = work[i__4].real * u01_ip1_j__.imag
+                                 + work[i__4].imag * u01_ip1_j__.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                         i__2 = i__ + 1 + j * work_dim1;
                         i__3 = i__ + 1 + invd * work_dim1;
-                        z__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        z__2.i = work[i__3].r * u01_i_j__.i
-                                 + work[i__3].i * u01_i_j__.r; // , expr subst
+                        z__2.real = work[i__3].real * u01_i_j__.real - work[i__3].imag * u01_i_j__.imag;
+                        z__2.imag = work[i__3].real * u01_i_j__.imag
+                                 + work[i__3].imag * u01_i_j__.real; // , expr subst
                         i__4 = i__ + 1 + (invd + 1) * work_dim1;
-                        z__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        z__3.i = work[i__4].r * u01_ip1_j__.i
-                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__3.real = work[i__4].real * u01_ip1_j__.real - work[i__4].imag * u01_ip1_j__.imag;
+                        z__3.imag = work[i__4].real * u01_ip1_j__.imag
+                                 + work[i__4].imag * u01_ip1_j__.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                     }
                     i__ += 2;
                 }
@@ -480,11 +478,11 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        z__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__1.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__1.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        z__1.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                     }
                     ++i__;
                 }
@@ -494,47 +492,47 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                     for(j = i__; j <= i__1; ++j)
                     {
                         i__2 = u11 + i__ + j * work_dim1;
-                        u11_i_j__.r = work[i__2].r;
-                        u11_i_j__.i = work[i__2].i; // , expr subst
+                        u11_i_j__.real = work[i__2].real;
+                        u11_i_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = u11 + i__ + 1 + j * work_dim1;
-                        u11_ip1_j__.r = work[i__2].r;
-                        u11_ip1_j__.i = work[i__2].i; // , expr subst
+                        u11_ip1_j__.real = work[i__2].real;
+                        u11_ip1_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        z__2.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__2.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
+                        z__2.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        z__2.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
                         i__5 = cut + i__ + (invd + 1) * work_dim1;
                         i__6 = u11 + i__ + 1 + j * work_dim1;
-                        z__3.r = work[i__5].r * work[i__6].r - work[i__5].i * work[i__6].i;
-                        z__3.i = work[i__5].r * work[i__6].i
-                                 + work[i__5].i * work[i__6].r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__3.real = work[i__5].real * work[i__6].real - work[i__5].imag * work[i__6].imag;
+                        z__3.imag = work[i__5].real * work[i__6].imag
+                                 + work[i__5].imag * work[i__6].real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                         i__2 = u11 + i__ + 1 + j * work_dim1;
                         i__3 = cut + i__ + 1 + invd * work_dim1;
-                        z__2.r = work[i__3].r * u11_i_j__.r - work[i__3].i * u11_i_j__.i;
-                        z__2.i = work[i__3].r * u11_i_j__.i
-                                 + work[i__3].i * u11_i_j__.r; // , expr subst
+                        z__2.real = work[i__3].real * u11_i_j__.real - work[i__3].imag * u11_i_j__.imag;
+                        z__2.imag = work[i__3].real * u11_i_j__.imag
+                                 + work[i__3].imag * u11_i_j__.real; // , expr subst
                         i__4 = cut + i__ + 1 + (invd + 1) * work_dim1;
-                        z__3.r = work[i__4].r * u11_ip1_j__.r - work[i__4].i * u11_ip1_j__.i;
-                        z__3.i = work[i__4].r * u11_ip1_j__.i
-                                 + work[i__4].i * u11_ip1_j__.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__3.real = work[i__4].real * u11_ip1_j__.real - work[i__4].imag * u11_ip1_j__.imag;
+                        z__3.imag = work[i__4].real * u11_ip1_j__.imag
+                                 + work[i__4].imag * u11_ip1_j__.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                     }
                     i__ += 2;
                 }
             }
             /* U11**H*invD1*U11->U11 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", "U", "C", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ztrmm("L", "U", "C", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1],
+                            lda, &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -543,15 +541,15 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 {
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = u11 + i__ + j * work_dim1;
-                    a[i__3].r = work[i__4].r;
-                    a[i__3].i = work[i__4].i; // , expr subst
+                    a[i__3].real = work[i__4].real;
+                    a[i__3].imag = work[i__4].imag; // , expr subst
                 }
             }
             /* U01**H*invD*U01->A(CUT+I,CUT+J) */
             i__1 = *n + *nb + 1;
             i__2 = *n + *nb + 1;
-            zgemm_("C", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
-                   &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
+            aocl_blas_zgemm("C", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
+                            &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
             /* U11 = U11**H*invD1*U11 + U01**H*invD*U01 */
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -562,16 +560,16 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
                     i__5 = u11 + i__ + j * work_dim1;
-                    z__1.r = a[i__4].r + work[i__5].r;
-                    z__1.i = a[i__4].i + work[i__5].i; // , expr subst
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    z__1.real = a[i__4].real + work[i__5].real;
+                    z__1.imag = a[i__4].imag + work[i__5].imag; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                 }
             }
             /* U01 = U00**H*invD0*U01 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", uplo, "C", "U", &cut, &nnb, &c_b1, &a[a_offset], lda, &work[work_offset],
-                   &i__1);
+            aocl_blas_ztrmm("L", uplo, "C", "U", &cut, &nnb, &c_b1, &a[a_offset], lda,
+                            &work[work_offset], &i__1);
             /* Update U01 */
             i__1 = cut;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -581,8 +579,8 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 {
                     i__3 = i__ + (cut + j) * a_dim1;
                     i__4 = i__ + j * work_dim1;
-                    a[i__3].r = work[i__4].r;
-                    a[i__3].i = work[i__4].i; // , expr subst
+                    a[i__3].real = work[i__4].real;
+                    a[i__3].imag = work[i__4].imag; // , expr subst
                 }
             }
             /* Next Block */
@@ -596,11 +594,11 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 ip = ipiv[i__];
                 if(i__ < ip)
                 {
-                    zheswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_zheswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    zheswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_zheswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
             else
@@ -610,12 +608,12 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 if(i__ - 1 < ip)
                 {
                     i__1 = i__ - 1;
-                    zheswapr_(uplo, n, &a[a_offset], lda, &i__1, &ip);
+                    aocl_lapack_zheswapr(uplo, n, &a[a_offset], lda, &i__1, &ip);
                 }
                 if(i__ - 1 > ip)
                 {
                     i__1 = i__ - 1;
-                    zheswapr_(uplo, n, &a[a_offset], lda, &ip, &i__1);
+                    aocl_lapack_zheswapr(uplo, n, &a[a_offset], lda, &ip, &i__1);
                 }
             }
             ++i__;
@@ -625,7 +623,7 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     {
         /* LOWER... */
         /* invA = P * inv(U**H)*inv(D)*inv(U)*P**H. */
-        ztrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ztrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D)*inv(U) */
         k = *n;
         while(k >= 1)
@@ -635,63 +633,63 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 /* 1 x 1 diagonal NNB */
                 i__1 = k + invd * work_dim1;
                 i__2 = k + k * a_dim1;
-                d__1 = 1. / a[i__2].r;
-                work[i__1].r = d__1;
-                work[i__1].i = 0.; // , expr subst
+                d__1 = 1. / a[i__2].real;
+                work[i__1].real = d__1;
+                work[i__1].imag = 0.; // , expr subst
                 i__1 = k + (invd + 1) * work_dim1;
-                work[i__1].r = 0.;
-                work[i__1].i = 0.; // , expr subst
+                work[i__1].real = 0.;
+                work[i__1].imag = 0.; // , expr subst
                 --k;
             }
             else
             {
                 /* 2 x 2 diagonal NNB */
                 d__1 = z_abs(&work[k - 1 + work_dim1]);
-                t.r = d__1;
-                t.i = 0.; // , expr subst
+                t.real = d__1;
+                t.imag = 0.; // , expr subst
                 i__1 = k - 1 + (k - 1) * a_dim1;
-                d__1 = a[i__1].r;
-                z__2.r = d__1;
-                z__2.i = 0.; // , expr subst
+                d__1 = a[i__1].real;
+                z__2.real = d__1;
+                z__2.imag = 0.; // , expr subst
                 z_div(&z__1, &z__2, &t);
-                ak.r = z__1.r;
-                ak.i = z__1.i; // , expr subst
+                ak.real = z__1.real;
+                ak.imag = z__1.imag; // , expr subst
                 i__1 = k + k * a_dim1;
-                d__1 = a[i__1].r;
-                z__2.r = d__1;
-                z__2.i = 0.; // , expr subst
+                d__1 = a[i__1].real;
+                z__2.real = d__1;
+                z__2.imag = 0.; // , expr subst
                 z_div(&z__1, &z__2, &t);
-                akp1.r = z__1.r;
-                akp1.i = z__1.i; // , expr subst
+                akp1.real = z__1.real;
+                akp1.imag = z__1.imag; // , expr subst
                 z_div(&z__1, &work[k - 1 + work_dim1], &t);
-                akkp1.r = z__1.r;
-                akkp1.i = z__1.i; // , expr subst
-                z__3.r = ak.r * akp1.r - ak.i * akp1.i;
-                z__3.i = ak.r * akp1.i + ak.i * akp1.r; // , expr subst
-                z__2.r = z__3.r - 1.;
-                z__2.i = z__3.i; // , expr subst
-                z__1.r = t.r * z__2.r - t.i * z__2.i;
-                z__1.i = t.r * z__2.i + t.i * z__2.r; // , expr subst
-                d__.r = z__1.r;
-                d__.i = z__1.i; // , expr subst
+                akkp1.real = z__1.real;
+                akkp1.imag = z__1.imag; // , expr subst
+                z__3.real = ak.real * akp1.real - ak.imag * akp1.imag;
+                z__3.imag = ak.real * akp1.imag + ak.imag * akp1.real; // , expr subst
+                z__2.real = z__3.real - 1.;
+                z__2.imag = z__3.imag; // , expr subst
+                z__1.real = t.real * z__2.real - t.imag * z__2.imag;
+                z__1.imag = t.real * z__2.imag + t.imag * z__2.real; // , expr subst
+                d__.real = z__1.real;
+                d__.imag = z__1.imag; // , expr subst
                 i__1 = k - 1 + invd * work_dim1;
                 z_div(&z__1, &akp1, &d__);
-                work[i__1].r = z__1.r;
-                work[i__1].i = z__1.i; // , expr subst
+                work[i__1].real = z__1.real;
+                work[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k + invd * work_dim1;
                 z_div(&z__1, &ak, &d__);
-                work[i__1].r = z__1.r;
-                work[i__1].i = z__1.i; // , expr subst
+                work[i__1].real = z__1.real;
+                work[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k + (invd + 1) * work_dim1;
-                z__2.r = -akkp1.r;
-                z__2.i = -akkp1.i; // , expr subst
+                z__2.real = -akkp1.real;
+                z__2.imag = -akkp1.imag; // , expr subst
                 z_div(&z__1, &z__2, &d__);
-                work[i__1].r = z__1.r;
-                work[i__1].i = z__1.i; // , expr subst
+                work[i__1].real = z__1.real;
+                work[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k - 1 + (invd + 1) * work_dim1;
                 d_cnjg(&z__1, &work[k + (invd + 1) * work_dim1]);
-                work[i__1].r = z__1.r;
-                work[i__1].i = z__1.i; // , expr subst
+                work[i__1].real = z__1.real;
+                work[i__1].imag = z__1.imag; // , expr subst
                 k += -2;
             }
         }
@@ -732,8 +730,8 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 {
                     i__3 = i__ + j * work_dim1;
                     i__4 = cut + nnb + i__ + (cut + j) * a_dim1;
-                    work[i__3].r = a[i__4].r;
-                    work[i__3].i = a[i__4].i; // , expr subst
+                    work[i__3].real = a[i__4].real;
+                    work[i__3].imag = a[i__4].imag; // , expr subst
                 }
             }
             /* L11 Block */
@@ -741,22 +739,22 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = u11 + i__ + i__ * work_dim1;
-                work[i__2].r = 1.;
-                work[i__2].i = 0.; // , expr subst
+                work[i__2].real = 1.;
+                work[i__2].imag = 0.; // , expr subst
                 i__2 = nnb;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
-                    work[i__3].r = 0.;
-                    work[i__3].i = 0.; // , expr subst
+                    work[i__3].real = 0.;
+                    work[i__3].imag = 0.; // , expr subst
                 }
                 i__2 = i__ - 1;
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
-                    work[i__3].r = a[i__4].r;
-                    work[i__3].i = a[i__4].i; // , expr subst
+                    work[i__3].real = a[i__4].real;
+                    work[i__3].imag = a[i__4].imag; // , expr subst
                 }
             }
             /* invD*L21 */
@@ -771,11 +769,11 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                         i__2 = i__ + j * work_dim1;
                         i__3 = cut + nnb + i__ + invd * work_dim1;
                         i__4 = i__ + j * work_dim1;
-                        z__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__1.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__1.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        z__1.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                     }
                     --i__;
                 }
@@ -785,37 +783,37 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = i__ + j * work_dim1;
-                        u01_i_j__.r = work[i__2].r;
-                        u01_i_j__.i = work[i__2].i; // , expr subst
+                        u01_i_j__.real = work[i__2].real;
+                        u01_i_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = i__ - 1 + j * work_dim1;
-                        u01_ip1_j__.r = work[i__2].r;
-                        u01_ip1_j__.i = work[i__2].i; // , expr subst
+                        u01_ip1_j__.real = work[i__2].real;
+                        u01_ip1_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = i__ + j * work_dim1;
                         i__3 = cut + nnb + i__ + invd * work_dim1;
-                        z__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        z__2.i = work[i__3].r * u01_i_j__.i
-                                 + work[i__3].i * u01_i_j__.r; // , expr subst
+                        z__2.real = work[i__3].real * u01_i_j__.real - work[i__3].imag * u01_i_j__.imag;
+                        z__2.imag = work[i__3].real * u01_i_j__.imag
+                                 + work[i__3].imag * u01_i_j__.real; // , expr subst
                         i__4 = cut + nnb + i__ + (invd + 1) * work_dim1;
-                        z__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        z__3.i = work[i__4].r * u01_ip1_j__.i
-                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__3.real = work[i__4].real * u01_ip1_j__.real - work[i__4].imag * u01_ip1_j__.imag;
+                        z__3.imag = work[i__4].real * u01_ip1_j__.imag
+                                 + work[i__4].imag * u01_ip1_j__.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                         i__2 = i__ - 1 + j * work_dim1;
                         i__3 = cut + nnb + i__ - 1 + (invd + 1) * work_dim1;
-                        z__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        z__2.i = work[i__3].r * u01_i_j__.i
-                                 + work[i__3].i * u01_i_j__.r; // , expr subst
+                        z__2.real = work[i__3].real * u01_i_j__.real - work[i__3].imag * u01_i_j__.imag;
+                        z__2.imag = work[i__3].real * u01_i_j__.imag
+                                 + work[i__3].imag * u01_i_j__.real; // , expr subst
                         i__4 = cut + nnb + i__ - 1 + invd * work_dim1;
-                        z__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        z__3.i = work[i__4].r * u01_ip1_j__.i
-                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__3.real = work[i__4].real * u01_ip1_j__.real - work[i__4].imag * u01_ip1_j__.imag;
+                        z__3.imag = work[i__4].real * u01_ip1_j__.imag
+                                 + work[i__4].imag * u01_ip1_j__.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                     }
                     i__ += -2;
                 }
@@ -832,11 +830,11 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        z__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__1.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__1.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        z__1.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                     }
                     --i__;
                 }
@@ -846,46 +844,47 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = u11 + i__ + j * work_dim1;
-                        u11_i_j__.r = work[i__2].r;
-                        u11_i_j__.i = work[i__2].i; // , expr subst
+                        u11_i_j__.real = work[i__2].real;
+                        u11_i_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = u11 + i__ - 1 + j * work_dim1;
-                        u11_ip1_j__.r = work[i__2].r;
-                        u11_ip1_j__.i = work[i__2].i; // , expr subst
+                        u11_ip1_j__.real = work[i__2].real;
+                        u11_ip1_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        z__2.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__2.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
+                        z__2.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        z__2.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
                         i__5 = cut + i__ + (invd + 1) * work_dim1;
-                        z__3.r = work[i__5].r * u11_ip1_j__.r - work[i__5].i * u11_ip1_j__.i;
-                        z__3.i = work[i__5].r * u11_ip1_j__.i
-                                 + work[i__5].i * u11_ip1_j__.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__3.real = work[i__5].real * u11_ip1_j__.real - work[i__5].imag * u11_ip1_j__.imag;
+                        z__3.imag = work[i__5].real * u11_ip1_j__.imag
+                                 + work[i__5].imag * u11_ip1_j__.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                         i__2 = u11 + i__ - 1 + j * work_dim1;
                         i__3 = cut + i__ - 1 + (invd + 1) * work_dim1;
-                        z__2.r = work[i__3].r * u11_i_j__.r - work[i__3].i * u11_i_j__.i;
-                        z__2.i = work[i__3].r * u11_i_j__.i
-                                 + work[i__3].i * u11_i_j__.r; // , expr subst
+                        z__2.real = work[i__3].real * u11_i_j__.real - work[i__3].imag * u11_i_j__.imag;
+                        z__2.imag = work[i__3].real * u11_i_j__.imag
+                                 + work[i__3].imag * u11_i_j__.real; // , expr subst
                         i__4 = cut + i__ - 1 + invd * work_dim1;
-                        z__3.r = work[i__4].r * u11_ip1_j__.r - work[i__4].i * u11_ip1_j__.i;
-                        z__3.i = work[i__4].r * u11_ip1_j__.i
-                                 + work[i__4].i * u11_ip1_j__.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        work[i__2].r = z__1.r;
-                        work[i__2].i = z__1.i; // , expr subst
+                        z__3.real = work[i__4].real * u11_ip1_j__.real - work[i__4].imag * u11_ip1_j__.imag;
+                        z__3.imag = work[i__4].real * u11_ip1_j__.imag
+                                 + work[i__4].imag * u11_ip1_j__.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        work[i__2].real = z__1.real;
+                        work[i__2].imag = z__1.imag; // , expr subst
                     }
                     i__ += -2;
                 }
             }
             /* L11**H*invD1*L11->L11 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", uplo, "C", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ztrmm("L", uplo, "C", "U", &nnb, &nnb, &c_b1,
+                            &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1],
+                            &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -894,8 +893,8 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 {
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = u11 + i__ + j * work_dim1;
-                    a[i__3].r = work[i__4].r;
-                    a[i__3].i = work[i__4].i; // , expr subst
+                    a[i__3].real = work[i__4].real;
+                    a[i__3].imag = work[i__4].imag; // , expr subst
                 }
             }
             if(cut + nnb < *n)
@@ -904,8 +903,9 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
                 i__3 = *n + *nb + 1;
-                zgemm_("C", "N", &nnb, &nnb, &i__1, &c_b1, &a[cut + nnb + 1 + (cut + 1) * a_dim1],
-                       lda, &work[work_offset], &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
+                aocl_blas_zgemm("C", "N", &nnb, &nnb, &i__1, &c_b1,
+                                &a[cut + nnb + 1 + (cut + 1) * a_dim1], lda, &work[work_offset],
+                                &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
                 /* L11 = L11**H*invD1*L11 + U01**H*invD*U01 */
                 i__1 = nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -916,18 +916,18 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                         i__3 = cut + i__ + (cut + j) * a_dim1;
                         i__4 = cut + i__ + (cut + j) * a_dim1;
                         i__5 = u11 + i__ + j * work_dim1;
-                        z__1.r = a[i__4].r + work[i__5].r;
-                        z__1.i = a[i__4].i + work[i__5].i; // , expr subst
-                        a[i__3].r = z__1.r;
-                        a[i__3].i = z__1.i; // , expr subst
+                        z__1.real = a[i__4].real + work[i__5].real;
+                        z__1.imag = a[i__4].imag + work[i__5].imag; // , expr subst
+                        a[i__3].real = z__1.real;
+                        a[i__3].imag = z__1.imag; // , expr subst
                     }
                 }
                 /* L01 = L22**H*invD2*L21 */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
-                ztrmm_("L", uplo, "C", "U", &i__1, &nnb, &c_b1,
-                       &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[work_offset],
-                       &i__2);
+                aocl_blas_ztrmm("L", uplo, "C", "U", &i__1, &nnb, &c_b1,
+                                &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda,
+                                &work[work_offset], &i__2);
                 /* Update L21 */
                 i__1 = *n - cut - nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -937,8 +937,8 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                     {
                         i__3 = cut + nnb + i__ + (cut + j) * a_dim1;
                         i__4 = i__ + j * work_dim1;
-                        a[i__3].r = work[i__4].r;
-                        a[i__3].i = work[i__4].i; // , expr subst
+                        a[i__3].real = work[i__4].real;
+                        a[i__3].imag = work[i__4].imag; // , expr subst
                     }
                 }
             }
@@ -953,8 +953,8 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                     {
                         i__3 = cut + i__ + (cut + j) * a_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        a[i__3].r = work[i__4].r;
-                        a[i__3].i = work[i__4].i; // , expr subst
+                        a[i__3].real = work[i__4].real;
+                        a[i__3].imag = work[i__4].imag; // , expr subst
                     }
                 }
             }
@@ -970,11 +970,11 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 ip = ipiv[i__];
                 if(i__ < ip)
                 {
-                    zheswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_zheswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    zheswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_zheswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
             else
@@ -982,11 +982,11 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 ip = -ipiv[i__];
                 if(i__ < ip)
                 {
-                    zheswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_zheswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    zheswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_zheswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
                 --i__;
             }

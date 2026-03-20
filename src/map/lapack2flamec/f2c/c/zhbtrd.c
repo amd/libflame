@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHBTRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZHBTRD reduces a complex Hermitian band matrix A to real symmetric */
+/* > ZHBTRD reduces a scomplex Hermitian band matrix A to real symmetric */
 /* > tridiagonal form T by a unitary similarity transformation: */
 /* > Q**H * A * Q = T. */
 /* > \endverbatim */
@@ -171,56 +171,53 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab,
-             doublereal *d__, doublereal *e, doublecomplex *q, integer *ldq, doublecomplex *work,
-             integer *info)
+/** Generated wrapper function */
+void zhbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
+             aocl_int_t *ldab, doublereal *d__, doublereal *e, dcomplex *q, aocl_int_t *ldq,
+             dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhbtrd(vect, uplo, n, kd, ab, ldab, d__, e, q, ldq, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhbtrd(vect, uplo, &n_64, &kd_64, ab, &ldab_64, d__, e, q, &ldq_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *kd,
+                        dcomplex *ab, aocl_int64_t *ldab, doublereal *d__, doublereal *e,
+                        dcomplex *q, aocl_int64_t *ldq, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
                       ", ldab %" FLA_IS ", ldq %" FLA_IS "",
                       *vect, *uplo, *n, *kd, *ldab, *ldq);
     /* System generated locals */
-    integer ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    integer i__, j, k, l;
-    doublecomplex t;
-    integer i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend, jinc;
+    aocl_int64_t i__, j, k, l;
+    dcomplex t;
+    aocl_int64_t i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend, jinc;
     doublereal abst;
-    integer incx, last;
-    doublecomplex temp;
-    extern /* Subroutine */
-        void
-        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-              doublecomplex *);
-    integer j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t incx, last;
+    dcomplex temp;
+    aocl_int64_t j1end, j1inc, iqend;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical initq, wantq, upper;
-    extern /* Subroutine */
-        void
-        zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
-                doublereal *, doublecomplex *, integer *);
-    integer iqaend;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlacgv_(integer *, doublecomplex *, integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *),
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *),
-        zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                integer *),
-        zlartv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                doublecomplex *, integer *);
+    aocl_int64_t iqaend;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,7 +285,7 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHBTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHBTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -301,11 +298,11 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
     /* Initialize Q to the unit matrix, if needed */
     if(initq)
     {
-        zlaset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
+        aocl_lapack_zlaset("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
     }
     /* Wherever possible, plane rotations are generated and applied in */
     /* vector operations of length NR over the index set J1:J2:KD1. */
-    /* The real cosines and complex sines of the plane rotations are */
+    /* The real cosines and scomplex sines of the plane rotations are */
     /* stored in the arrays D and WORK. */
     inca = kd1 * *ldab;
     /* Computing MIN */
@@ -315,16 +312,16 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
     {
         if(*kd > 1)
         {
-            /* Reduce to complex Hermitian tridiagonal form, working with */
+            /* Reduce to scomplex Hermitian tridiagonal form, working with */
             /* the upper triangle */
             nr = 0;
             j1 = kdn + 2;
             j2 = 1;
             i__1 = kd1 + ab_dim1;
             i__2 = kd1 + ab_dim1;
-            d__1 = ab[i__2].r;
-            ab[i__1].r = d__1;
-            ab[i__1].i = 0.; // , expr subst
+            d__1 = ab[i__2].real;
+            ab[i__1].real = d__1;
+            ab[i__1].imag = 0.; // , expr subst
             i__1 = *n - 2;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -337,8 +334,8 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                     {
                         /* generate plane rotations to annihilate nonzero */
                         /* elements which have been created outside the band */
-                        zlargv_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &work[j1], &kd1, &d__[j1],
-                                &kd1);
+                        aocl_lapack_zlargv(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &work[j1], &kd1,
+                                           &d__[j1], &kd1);
                         /* apply rotations from the right */
                         /* Dependent on the the number of diagonals either */
                         /* ZLARTV or ZROT is used */
@@ -347,8 +344,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             i__2 = *kd - 1;
                             for(l = 1; l <= i__2; ++l)
                             {
-                                zlartv_(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], &inca,
-                                        &ab[l + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
+                                aocl_lapack_zlartv(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], &inca,
+                                                   &ab[l + j1 * ab_dim1], &inca, &d__[j1],
+                                                   &work[j1], &kd1);
                                 /* L10: */
                             }
                         }
@@ -359,8 +357,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             i__3 = kd1;
                             for(jinc = j1; i__3 < 0 ? jinc >= i__2 : jinc <= i__2; jinc += i__3)
                             {
-                                zrot_(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &c__1,
-                                      &ab[jinc * ab_dim1 + 1], &c__1, &d__[jinc], &work[jinc]);
+                                aocl_lapack_zrot(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &c__1,
+                                                 &ab[jinc * ab_dim1 + 1], &c__1, &d__[jinc],
+                                                 &work[jinc]);
                                 /* L20: */
                             }
                         }
@@ -375,13 +374,13 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                                     &ab[*kd - k + 2 + (i__ + k - 1) * ab_dim1], &d__[i__ + k - 1],
                                     &work[i__ + k - 1], &temp);
                             i__3 = *kd - k + 3 + (i__ + k - 2) * ab_dim1;
-                            ab[i__3].r = temp.r;
-                            ab[i__3].i = temp.i; // , expr subst
+                            ab[i__3].real = temp.real;
+                            ab[i__3].imag = temp.imag; // , expr subst
                             /* apply rotation from the right */
                             i__3 = k - 3;
-                            zrot_(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * ab_dim1], &c__1,
-                                  &ab[*kd - k + 3 + (i__ + k - 1) * ab_dim1], &c__1,
-                                  &d__[i__ + k - 1], &work[i__ + k - 1]);
+                            aocl_lapack_zrot(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * ab_dim1],
+                                             &c__1, &ab[*kd - k + 3 + (i__ + k - 1) * ab_dim1],
+                                             &c__1, &d__[i__ + k - 1], &work[i__ + k - 1]);
                         }
                         ++nr;
                         j1 = j1 - kdn - 1;
@@ -390,13 +389,14 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                     /* blocks */
                     if(nr > 0)
                     {
-                        zlar2v_(&nr, &ab[kd1 + (j1 - 1) * ab_dim1], &ab[kd1 + j1 * ab_dim1],
-                                &ab[*kd + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
+                        aocl_lapack_zlar2v(&nr, &ab[kd1 + (j1 - 1) * ab_dim1],
+                                           &ab[kd1 + j1 * ab_dim1], &ab[*kd + j1 * ab_dim1], &inca,
+                                           &d__[j1], &work[j1], &kd1);
                     }
                     /* apply plane rotations from the left */
                     if(nr > 0)
                     {
-                        zlacgv_(&nr, &work[j1], &kd1);
+                        aocl_lapack_zlacgv(&nr, &work[j1], &kd1);
                         if((*kd << 1) - 1 < nr)
                         {
                             /* Dependent on the the number of diagonals either */
@@ -414,9 +414,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                                 }
                                 if(nrt > 0)
                                 {
-                                    zlartv_(&nrt, &ab[*kd - l + (j1 + l) * ab_dim1], &inca,
-                                            &ab[*kd - l + 1 + (j1 + l) * ab_dim1], &inca, &d__[j1],
-                                            &work[j1], &kd1);
+                                    aocl_lapack_zlartv(&nrt, &ab[*kd - l + (j1 + l) * ab_dim1],
+                                                       &inca, &ab[*kd - l + 1 + (j1 + l) * ab_dim1],
+                                                       &inca, &d__[j1], &work[j1], &kd1);
                                 }
                                 /* L30: */
                             }
@@ -431,9 +431,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                                 for(jin = j1; i__2 < 0 ? jin >= i__3 : jin <= i__3; jin += i__2)
                                 {
                                     i__4 = *kd - 1;
-                                    zrot_(&i__4, &ab[*kd - 1 + (jin + 1) * ab_dim1], &incx,
-                                          &ab[*kd + (jin + 1) * ab_dim1], &incx, &d__[jin],
-                                          &work[jin]);
+                                    aocl_lapack_zrot(&i__4, &ab[*kd - 1 + (jin + 1) * ab_dim1],
+                                                     &incx, &ab[*kd + (jin + 1) * ab_dim1], &incx,
+                                                     &d__[jin], &work[jin]);
                                     /* L40: */
                                 }
                             }
@@ -444,9 +444,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             last = j1end + kd1;
                             if(lend > 0)
                             {
-                                zrot_(&lend, &ab[*kd - 1 + (last + 1) * ab_dim1], &incx,
-                                      &ab[*kd + (last + 1) * ab_dim1], &incx, &d__[last],
-                                      &work[last]);
+                                aocl_lapack_zrot(&lend, &ab[*kd - 1 + (last + 1) * ab_dim1], &incx,
+                                                 &ab[*kd + (last + 1) * ab_dim1], &incx, &d__[last],
+                                                 &work[last]);
                             }
                         }
                     }
@@ -483,8 +483,8 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                                 i__4 = iqaend + *kd;
                                 iqaend = fla_min(i__4, iqend);
                                 d_cnjg(&z__1, &work[j]);
-                                zrot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1],
-                                      &c__1, &d__[j], &z__1);
+                                aocl_lapack_zrot(&nq, &q[iqb + (j - 1) * q_dim1], &c__1,
+                                                 &q[iqb + j * q_dim1], &c__1, &d__[j], &z__1);
                                 /* L50: */
                             }
                         }
@@ -495,8 +495,8 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             for(j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2)
                             {
                                 d_cnjg(&z__1, &work[j]);
-                                zrot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
-                                      &d__[j], &z__1);
+                                aocl_lapack_zrot(n, &q[(j - 1) * q_dim1 + 1], &c__1,
+                                                 &q[j * q_dim1 + 1], &c__1, &d__[j], &z__1);
                                 /* L60: */
                             }
                         }
@@ -516,18 +516,18 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                         i__4 = j + *kd;
                         i__5 = j;
                         i__6 = (j + *kd) * ab_dim1 + 1;
-                        z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                        z__1.i
-                            = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                        work[i__4].r = z__1.r;
-                        work[i__4].i = z__1.i; // , expr subst
+                        z__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                        z__1.imag
+                            = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                        work[i__4].real = z__1.real;
+                        work[i__4].imag = z__1.imag; // , expr subst
                         i__4 = (j + *kd) * ab_dim1 + 1;
                         i__5 = j;
                         i__6 = (j + *kd) * ab_dim1 + 1;
-                        z__1.r = d__[i__5] * ab[i__6].r;
-                        z__1.i = d__[i__5] * ab[i__6].i; // , expr subst
-                        ab[i__4].r = z__1.r;
-                        ab[i__4].i = z__1.i; // , expr subst
+                        z__1.real = d__[i__5] * ab[i__6].real;
+                        z__1.imag = d__[i__5] * ab[i__6].imag; // , expr subst
+                        ab[i__4].real = z__1.real;
+                        ab[i__4].imag = z__1.imag; // , expr subst
                         /* L70: */
                     }
                     /* L80: */
@@ -542,38 +542,38 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__3 = *kd + (i__ + 1) * ab_dim1;
-                t.r = ab[i__3].r;
-                t.i = ab[i__3].i; // , expr subst
+                t.real = ab[i__3].real;
+                t.imag = ab[i__3].imag; // , expr subst
                 abst = z_abs(&t);
                 i__3 = *kd + (i__ + 1) * ab_dim1;
-                ab[i__3].r = abst;
-                ab[i__3].i = 0.; // , expr subst
+                ab[i__3].real = abst;
+                ab[i__3].imag = 0.; // , expr subst
                 e[i__] = abst;
                 if(abst != 0.)
                 {
-                    z__1.r = t.r / abst;
-                    z__1.i = t.i / abst; // , expr subst
-                    t.r = z__1.r;
-                    t.i = z__1.i; // , expr subst
+                    z__1.real = t.real / abst;
+                    z__1.imag = t.imag / abst; // , expr subst
+                    t.real = z__1.real;
+                    t.imag = z__1.imag; // , expr subst
                 }
                 else
                 {
-                    t.r = 1.;
-                    t.i = 0.; // , expr subst
+                    t.real = 1.;
+                    t.imag = 0.; // , expr subst
                 }
                 if(i__ < *n - 1)
                 {
                     i__3 = *kd + (i__ + 2) * ab_dim1;
                     i__2 = *kd + (i__ + 2) * ab_dim1;
-                    z__1.r = ab[i__2].r * t.r - ab[i__2].i * t.i;
-                    z__1.i = ab[i__2].r * t.i + ab[i__2].i * t.r; // , expr subst
-                    ab[i__3].r = z__1.r;
-                    ab[i__3].i = z__1.i; // , expr subst
+                    z__1.real = ab[i__2].real * t.real - ab[i__2].imag * t.imag;
+                    z__1.imag = ab[i__2].real * t.imag + ab[i__2].imag * t.real; // , expr subst
+                    ab[i__3].real = z__1.real;
+                    ab[i__3].imag = z__1.imag; // , expr subst
                 }
                 if(wantq)
                 {
                     d_cnjg(&z__1, &t);
-                    zscal_(n, &z__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                    aocl_blas_zscal(n, &z__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
                 }
                 /* L100: */
             }
@@ -594,7 +594,7 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
         {
             i__3 = i__;
             i__2 = kd1 + i__ * ab_dim1;
-            d__[i__3] = ab[i__2].r;
+            d__[i__3] = ab[i__2].real;
             /* L120: */
         }
     }
@@ -602,16 +602,16 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
     {
         if(*kd > 1)
         {
-            /* Reduce to complex Hermitian tridiagonal form, working with */
+            /* Reduce to scomplex Hermitian tridiagonal form, working with */
             /* the lower triangle */
             nr = 0;
             j1 = kdn + 2;
             j2 = 1;
             i__1 = ab_dim1 + 1;
             i__3 = ab_dim1 + 1;
-            d__1 = ab[i__3].r;
-            ab[i__1].r = d__1;
-            ab[i__1].i = 0.; // , expr subst
+            d__1 = ab[i__3].real;
+            ab[i__1].real = d__1;
+            ab[i__1].imag = 0.; // , expr subst
             i__1 = *n - 2;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -624,8 +624,8 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                     {
                         /* generate plane rotations to annihilate nonzero */
                         /* elements which have been created outside the band */
-                        zlargv_(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &work[j1], &kd1,
-                                &d__[j1], &kd1);
+                        aocl_lapack_zlargv(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &work[j1],
+                                           &kd1, &d__[j1], &kd1);
                         /* apply plane rotations from one side */
                         /* Dependent on the the number of diagonals either */
                         /* ZLARTV or ZROT is used */
@@ -634,9 +634,10 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             i__3 = *kd - 1;
                             for(l = 1; l <= i__3; ++l)
                             {
-                                zlartv_(&nr, &ab[kd1 - l + (j1 - kd1 + l) * ab_dim1], &inca,
-                                        &ab[kd1 - l + 1 + (j1 - kd1 + l) * ab_dim1], &inca,
-                                        &d__[j1], &work[j1], &kd1);
+                                aocl_lapack_zlartv(&nr, &ab[kd1 - l + (j1 - kd1 + l) * ab_dim1],
+                                                   &inca,
+                                                   &ab[kd1 - l + 1 + (j1 - kd1 + l) * ab_dim1],
+                                                   &inca, &d__[j1], &work[j1], &kd1);
                                 /* L130: */
                             }
                         }
@@ -647,9 +648,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             i__2 = kd1;
                             for(jinc = j1; i__2 < 0 ? jinc >= i__3 : jinc <= i__3; jinc += i__2)
                             {
-                                zrot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
-                                      &ab[kd1 + (jinc - *kd) * ab_dim1], &incx, &d__[jinc],
-                                      &work[jinc]);
+                                aocl_lapack_zrot(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
+                                                 &ab[kd1 + (jinc - *kd) * ab_dim1], &incx,
+                                                 &d__[jinc], &work[jinc]);
                                 /* L140: */
                             }
                         }
@@ -663,15 +664,15 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             zlartg_(&ab[k - 1 + i__ * ab_dim1], &ab[k + i__ * ab_dim1],
                                     &d__[i__ + k - 1], &work[i__ + k - 1], &temp);
                             i__2 = k - 1 + i__ * ab_dim1;
-                            ab[i__2].r = temp.r;
-                            ab[i__2].i = temp.i; // , expr subst
+                            ab[i__2].real = temp.real;
+                            ab[i__2].imag = temp.imag; // , expr subst
                             /* apply rotation from the left */
                             i__2 = k - 3;
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            zrot_(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &i__3,
-                                  &ab[k - 1 + (i__ + 1) * ab_dim1], &i__4, &d__[i__ + k - 1],
-                                  &work[i__ + k - 1]);
+                            aocl_lapack_zrot(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &i__3,
+                                             &ab[k - 1 + (i__ + 1) * ab_dim1], &i__4,
+                                             &d__[i__ + k - 1], &work[i__ + k - 1]);
                         }
                         ++nr;
                         j1 = j1 - kdn - 1;
@@ -680,15 +681,16 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                     /* blocks */
                     if(nr > 0)
                     {
-                        zlar2v_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * ab_dim1 + 1],
-                                &ab[(j1 - 1) * ab_dim1 + 2], &inca, &d__[j1], &work[j1], &kd1);
+                        aocl_lapack_zlar2v(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * ab_dim1 + 1],
+                                           &ab[(j1 - 1) * ab_dim1 + 2], &inca, &d__[j1], &work[j1],
+                                           &kd1);
                     }
                     /* apply plane rotations from the right */
                     /* Dependent on the the number of diagonals either */
                     /* ZLARTV or ZROT is used */
                     if(nr > 0)
                     {
-                        zlacgv_(&nr, &work[j1], &kd1);
+                        aocl_lapack_zlacgv(&nr, &work[j1], &kd1);
                         if(nr > (*kd << 1) - 1)
                         {
                             i__2 = *kd - 1;
@@ -704,9 +706,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                                 }
                                 if(nrt > 0)
                                 {
-                                    zlartv_(&nrt, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca,
-                                            &ab[l + 1 + j1 * ab_dim1], &inca, &d__[j1], &work[j1],
-                                            &kd1);
+                                    aocl_lapack_zlartv(&nrt, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca,
+                                                       &ab[l + 1 + j1 * ab_dim1], &inca, &d__[j1],
+                                                       &work[j1], &kd1);
                                 }
                                 /* L150: */
                             }
@@ -721,9 +723,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                                 for(j1inc = j1; i__3 < 0 ? j1inc >= i__2 : j1inc <= i__2;
                                     j1inc += i__3)
                                 {
-                                    zrot_(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 3], &c__1,
-                                          &ab[j1inc * ab_dim1 + 2], &c__1, &d__[j1inc],
-                                          &work[j1inc]);
+                                    aocl_lapack_zrot(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 3], &c__1,
+                                                     &ab[j1inc * ab_dim1 + 2], &c__1, &d__[j1inc],
+                                                     &work[j1inc]);
                                     /* L160: */
                                 }
                             }
@@ -734,8 +736,9 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             last = j1end + kd1;
                             if(lend > 0)
                             {
-                                zrot_(&lend, &ab[(last - 1) * ab_dim1 + 3], &c__1,
-                                      &ab[last * ab_dim1 + 2], &c__1, &d__[last], &work[last]);
+                                aocl_lapack_zrot(&lend, &ab[(last - 1) * ab_dim1 + 3], &c__1,
+                                                 &ab[last * ab_dim1 + 2], &c__1, &d__[last],
+                                                 &work[last]);
                             }
                         }
                     }
@@ -771,8 +774,8 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                                 /* Computing MIN */
                                 i__4 = iqaend + *kd;
                                 iqaend = fla_min(i__4, iqend);
-                                zrot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1],
-                                      &c__1, &d__[j], &work[j]);
+                                aocl_lapack_zrot(&nq, &q[iqb + (j - 1) * q_dim1], &c__1,
+                                                 &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
                                 /* L170: */
                             }
                         }
@@ -782,8 +785,8 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                             i__3 = kd1;
                             for(j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3)
                             {
-                                zrot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
-                                      &d__[j], &work[j]);
+                                aocl_lapack_zrot(n, &q[(j - 1) * q_dim1 + 1], &c__1,
+                                                 &q[j * q_dim1 + 1], &c__1, &d__[j], &work[j]);
                                 /* L180: */
                             }
                         }
@@ -803,18 +806,18 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
                         i__4 = j + *kd;
                         i__5 = j;
                         i__6 = kd1 + j * ab_dim1;
-                        z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                        z__1.i
-                            = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                        work[i__4].r = z__1.r;
-                        work[i__4].i = z__1.i; // , expr subst
+                        z__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                        z__1.imag
+                            = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                        work[i__4].real = z__1.real;
+                        work[i__4].imag = z__1.imag; // , expr subst
                         i__4 = kd1 + j * ab_dim1;
                         i__5 = j;
                         i__6 = kd1 + j * ab_dim1;
-                        z__1.r = d__[i__5] * ab[i__6].r;
-                        z__1.i = d__[i__5] * ab[i__6].i; // , expr subst
-                        ab[i__4].r = z__1.r;
-                        ab[i__4].i = z__1.i; // , expr subst
+                        z__1.real = d__[i__5] * ab[i__6].real;
+                        z__1.imag = d__[i__5] * ab[i__6].imag; // , expr subst
+                        ab[i__4].real = z__1.real;
+                        ab[i__4].imag = z__1.imag; // , expr subst
                         /* L190: */
                     }
                     /* L200: */
@@ -829,37 +832,37 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__ * ab_dim1 + 2;
-                t.r = ab[i__2].r;
-                t.i = ab[i__2].i; // , expr subst
+                t.real = ab[i__2].real;
+                t.imag = ab[i__2].imag; // , expr subst
                 abst = z_abs(&t);
                 i__2 = i__ * ab_dim1 + 2;
-                ab[i__2].r = abst;
-                ab[i__2].i = 0.; // , expr subst
+                ab[i__2].real = abst;
+                ab[i__2].imag = 0.; // , expr subst
                 e[i__] = abst;
                 if(abst != 0.)
                 {
-                    z__1.r = t.r / abst;
-                    z__1.i = t.i / abst; // , expr subst
-                    t.r = z__1.r;
-                    t.i = z__1.i; // , expr subst
+                    z__1.real = t.real / abst;
+                    z__1.imag = t.imag / abst; // , expr subst
+                    t.real = z__1.real;
+                    t.imag = z__1.imag; // , expr subst
                 }
                 else
                 {
-                    t.r = 1.;
-                    t.i = 0.; // , expr subst
+                    t.real = 1.;
+                    t.imag = 0.; // , expr subst
                 }
                 if(i__ < *n - 1)
                 {
                     i__2 = (i__ + 1) * ab_dim1 + 2;
                     i__3 = (i__ + 1) * ab_dim1 + 2;
-                    z__1.r = ab[i__3].r * t.r - ab[i__3].i * t.i;
-                    z__1.i = ab[i__3].r * t.i + ab[i__3].i * t.r; // , expr subst
-                    ab[i__2].r = z__1.r;
-                    ab[i__2].i = z__1.i; // , expr subst
+                    z__1.real = ab[i__3].real * t.real - ab[i__3].imag * t.imag;
+                    z__1.imag = ab[i__3].real * t.imag + ab[i__3].imag * t.real; // , expr subst
+                    ab[i__2].real = z__1.real;
+                    ab[i__2].imag = z__1.imag; // , expr subst
                 }
                 if(wantq)
                 {
-                    zscal_(n, &t, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                    aocl_blas_zscal(n, &t, &q[(i__ + 1) * q_dim1 + 1], &c__1);
                 }
                 /* L220: */
             }
@@ -880,7 +883,7 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
         {
             i__2 = i__;
             i__3 = i__ * ab_dim1 + 1;
-            d__[i__2] = ab[i__3].r;
+            d__[i__2] = ab[i__3].real;
             /* L240: */
         }
     }

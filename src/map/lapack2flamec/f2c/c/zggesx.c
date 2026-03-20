@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c_n1 = -1;
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> ZGGESX computes the eigenvalues, the Schur form, and, optionally, the matrix of
  * Schur vectors for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -57,8 +57,8 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGGESX computes for a pair of N-by-N complex nonsymmetric matrices */
-/* > (A,B), the generalized eigenvalues, the complex Schur form (S,T), */
+/* > ZGGESX computes for a pair of N-by-N scomplex nonsymmetric matrices */
+/* > (A,B), the generalized eigenvalues, the scomplex Schur form (S,T), */
 /* > and, optionally, the left and/or right matrices of Schur vectors (VSL */
 /* > and VSR). This gives the generalized Schur factorization */
 /* > */
@@ -83,7 +83,7 @@ and computes a reciprocal condition number for */
 /* > usually represented as the pair (alpha,beta), as there is a */
 /* > reasonable interpretation for beta=0 or for both being zero. */
 /* > */
-/* > A pair of matrices (S,T) is in generalized complex Schur form if T is */
+/* > A pair of matrices (S,T) is in generalized scomplex Schur form if T is */
 /* > upper triangular with non-negative diagonal and S is upper */
 /* > triangular. */
 /* > \endverbatim */
@@ -122,9 +122,9 @@ and computes a reciprocal condition number for */
 /* > If SORT = 'N', SELCTG is not referenced. */
 /* > If SORT = 'S', SELCTG is used to select eigenvalues to sort */
 /* > to the top left of the Schur form. */
-/* > Note that a selected complex eigenvalue may no longer satisfy */
+/* > Note that a selected scomplex eigenvalue may no longer satisfy */
 /* > SELCTG(ALPHA(j),BETA(j)) = .TRUE. after ordering, since */
-/* > ordering may change the value of complex eigenvalues */
+/* > ordering may change the value of scomplex eigenvalues */
 /* > (especially if the eigenvalue is ill-conditioned), in this */
 /* > case INFO is set to N+3 see INFO below). */
 /* > \endverbatim */
@@ -195,7 +195,7 @@ and computes a reciprocal condition number for */
 /* > BETA is COMPLEX*16 array, dimension (N) */
 /* > On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the */
 /* > generalized eigenvalues. ALPHA(j) and BETA(j),j=1,...,N are */
-/* > the diagonals of the complex Schur form (S,T). BETA(j) will */
+/* > the diagonals of the scomplex Schur form (S,T). BETA(j) will */
 /* > be non-negative real. */
 /* > */
 /* > Note: the quotients ALPHA(j)/BETA(j) may easily over- or */
@@ -323,7 +323,7 @@ the */
 /* > j=INFO+1,...,N. */
 /* > > N: =N+1: other than QZ iteration failed in ZHGEQZ */
 /* > =N+2: after reordering, roundoff changed values of */
-/* > some complex eigenvalues so that leading */
+/* > some scomplex eigenvalues so that leading */
 /* > eigenvalues in the Generalized Schur form no */
 /* > longer satisfy SELCTG=.TRUE. This could also */
 /* > be caused due to scaling. */
@@ -338,12 +338,46 @@ the */
 /* > \ingroup ggesx */
 /* ===================================================================== */
 /* Subroutine */
-void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense, integer *n,
-             doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *sdim,
-             doublecomplex *alpha, doublecomplex *beta, doublecomplex *vsl, integer *ldvsl,
-             doublecomplex *vsr, integer *ldvsr, doublereal *rconde, doublereal *rcondv,
-             doublecomplex *work, integer *lwork, doublereal *rwork, integer *iwork,
-             integer *liwork, logical *bwork, integer *info)
+/** Generated wrapper function */
+void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense, aocl_int_t *n,
+             dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, aocl_int_t *sdim,
+             dcomplex *alpha, dcomplex *beta, dcomplex *vsl, aocl_int_t *ldvsl,
+             dcomplex *vsr, aocl_int_t *ldvsr, doublereal *rconde, doublereal *rcondv,
+             dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *iwork,
+             aocl_int_t *liwork, logical *bwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zggesx(jobvsl, jobvsr, sort, selctg, sense, n, a, lda, b, ldb, sdim, alpha, beta,
+                       vsl, ldvsl, vsr, ldvsr, rconde, rcondv, work, lwork, rwork, iwork, liwork,
+                       bwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t sdim_64 = *sdim;
+    aocl_int64_t ldvsl_64 = *ldvsl;
+    aocl_int64_t ldvsr_64 = *ldvsr;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zggesx(jobvsl, jobvsr, sort, selctg, sense, &n_64, a, &lda_64, b, &ldb_64, &sdim_64,
+                       alpha, beta, vsl, &ldvsl_64, vsr, &ldvsr_64, rconde, rcondv, work, &lwork_64,
+                       rwork, iwork, &liwork_64, bwork, &info_64);
+
+    *sdim = (aocl_int_t)sdim_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zggesx(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
+                        aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                        aocl_int64_t *ldb, aocl_int64_t *sdim, dcomplex *alpha,
+                        dcomplex *beta, dcomplex *vsl, aocl_int64_t *ldvsl,
+                        dcomplex *vsr, aocl_int64_t *ldvsr, doublereal *rconde,
+                        doublereal *rcondv, dcomplex *work, aocl_int64_t *lwork,
+                        doublereal *rwork, aocl_int_t *iwork, aocl_int64_t *liwork, logical *bwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %" FLA_IS
@@ -351,79 +385,36 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
                       ", ldvsr %" FLA_IS "",
                       *jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *sdim, *ldvsl, *ldvsr);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1,
-        i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset,
+        i__1, i__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal pl, pr, dif[2];
-    integer ihi, ilo;
+    aocl_int64_t ihi, ilo;
     doublereal eps;
-    integer ijob;
+    aocl_int64_t ijob;
     doublereal anrm, bnrm;
-    integer ierr, itau, iwrk, lwrk;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer ileft, icols;
+    aocl_int64_t ierr, itau, iwrk, lwrk;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t ileft, icols;
     logical cursl, ilvsl, ilvsr;
-    integer irwrk, irows;
+    aocl_int64_t irwrk, irows;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-                integer *, doublecomplex *, integer *, integer *),
-        zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
     doublereal bignum;
-    integer ijobvl, iright;
-    extern /* Subroutine */
-        void
-        zgghrd_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *);
-    integer ijobvr;
+    aocl_int64_t ijobvl, iright;
+    aocl_int64_t ijobvr;
     logical wantsb;
-    integer liwmin;
+    aocl_int64_t liwmin;
     logical wantse, lastsl;
     doublereal anrmto, bnrmto;
-    extern /* Subroutine */
-        void
-        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *);
-    integer maxwrk;
+    aocl_int64_t maxwrk;
     logical wantsn;
-    integer minwrk;
+    aocl_int64_t minwrk;
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                integer *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
     logical wantst, lquery, wantsv;
-    extern /* Subroutine */
-        void
-        ztgsen_(integer *, logical *, logical *, logical *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *,
-                doublereal *, doublecomplex *, integer *, integer *, integer *, integer *),
-        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *),
-        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -571,16 +562,20 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
         if(*n > 0)
         {
             minwrk = *n << 1;
-            maxwrk = *n * (ilaenv_(&c__1, "ZGEQRF", " ", n, &c__1, n, &c__0) + 1);
+            maxwrk = *n * (aocl_lapack_ilaenv(&c__1, "ZGEQRF", " ", n, &c__1, n, &c__0) + 1);
             /* Computing MAX */
             i__1 = maxwrk;
-            i__2 = *n * (ilaenv_(&c__1, "ZUNMQR", " ", n, &c__1, n, &c_n1) + 1); // , expr subst
+            i__2 = *n
+                   * (aocl_lapack_ilaenv(&c__1, "ZUNMQR", " ", n, &c__1, n, &c_n1)
+                      + 1); // , expr subst
             maxwrk = fla_max(i__1, i__2);
             if(ilvsl)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n * (ilaenv_(&c__1, "ZUNGQR", " ", n, &c__1, n, &c_n1) + 1); // , expr subst
+                i__2 = *n
+                       * (aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", n, &c__1, n, &c_n1)
+                          + 1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
             }
             lwrk = maxwrk;
@@ -598,8 +593,8 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
             maxwrk = 1;
             lwrk = 1;
         }
-        work[1].r = (doublereal)lwrk;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwrk;
+        work[1].imag = 0.; // , expr subst
         if(wantsn || *n == 0)
         {
             liwmin = 1;
@@ -608,7 +603,7 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
         {
             liwmin = *n + 2;
         }
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < minwrk && !lquery)
         {
             *info = -21;
@@ -621,7 +616,7 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGESX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGGESX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -644,7 +639,7 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
-    anrm = zlange_("M", n, n, &a[a_offset], lda, &rwork[1]);
+    anrm = aocl_lapack_zlange("M", n, n, &a[a_offset], lda, &rwork[1]);
     ilascl = FALSE_;
     if(anrm > 0. && anrm < smlnum)
     {
@@ -658,10 +653,10 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
     }
     if(ilascl)
     {
-        zlascl_("G", &c__0, &c__0, &anrm, &anrmto, n, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_zlascl("G", &c__0, &c__0, &anrm, &anrmto, n, n, &a[a_offset], lda, &ierr);
     }
     /* Scale B if max element outside range [SMLNUM,BIGNUM] */
-    bnrm = zlange_("M", n, n, &b[b_offset], ldb, &rwork[1]);
+    bnrm = aocl_lapack_zlange("M", n, n, &b[b_offset], ldb, &rwork[1]);
     ilbscl = FALSE_;
     if(bnrm > 0. && bnrm < smlnum)
     {
@@ -675,15 +670,15 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
     }
     if(ilbscl)
     {
-        zlascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, &ierr);
+        aocl_lapack_zlascl("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, &ierr);
     }
     /* Permute the matrix to make it more nearly triangular */
     /* (Real Workspace: need 6*N) */
     ileft = 1;
     iright = *n + 1;
     irwrk = iright + *n;
-    zggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &rwork[ileft], &rwork[iright],
-            &rwork[irwrk], &ierr);
+    aocl_lapack_zggbal("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &rwork[ileft],
+                       &rwork[iright], &rwork[irwrk], &ierr);
     /* Reduce B to triangular form (QR decomposition of B) */
     /* (Complex Workspace: need N, prefer N*NB) */
     irows = ihi + 1 - ilo;
@@ -691,46 +686,47 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
     itau = 1;
     iwrk = itau + irows;
     i__1 = *lwork + 1 - iwrk;
-    zgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwrk], &i__1, &ierr);
+    aocl_lapack_zgeqrf(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwrk], &i__1,
+                       &ierr);
     /* Apply the unitary transformation to matrix A */
     /* (Complex Workspace: need N, prefer N*NB) */
     i__1 = *lwork + 1 - iwrk;
-    zunmqr_("L", "C", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
-            &a[ilo + ilo * a_dim1], lda, &work[iwrk], &i__1, &ierr);
+    aocl_lapack_zunmqr("L", "C", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
+                       &a[ilo + ilo * a_dim1], lda, &work[iwrk], &i__1, &ierr);
     /* Initialize VSL */
     /* (Complex Workspace: need N, prefer N*NB) */
     if(ilvsl)
     {
-        zlaset_("Full", n, n, &c_b1, &c_b2, &vsl[vsl_offset], ldvsl);
+        aocl_lapack_zlaset("Full", n, n, &c_b1, &c_b2, &vsl[vsl_offset], ldvsl);
         if(irows > 1)
         {
             i__1 = irows - 1;
             i__2 = irows - 1;
-            zlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb,
-                    &vsl[ilo + 1 + ilo * vsl_dim1], ldvsl);
+            aocl_lapack_zlacpy("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb,
+                               &vsl[ilo + 1 + ilo * vsl_dim1], ldvsl);
         }
         i__1 = *lwork + 1 - iwrk;
-        zungqr_(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, &work[itau], &work[iwrk],
-                &i__1, &ierr);
+        aocl_lapack_zungqr(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, &work[itau],
+                           &work[iwrk], &i__1, &ierr);
     }
     /* Initialize VSR */
     if(ilvsr)
     {
-        zlaset_("Full", n, n, &c_b1, &c_b2, &vsr[vsr_offset], ldvsr);
+        aocl_lapack_zlaset("Full", n, n, &c_b1, &c_b2, &vsr[vsr_offset], ldvsr);
     }
     /* Reduce to generalized Hessenberg form */
     /* (Workspace: none needed) */
-    zgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &vsl[vsl_offset],
-            ldvsl, &vsr[vsr_offset], ldvsr, &ierr);
+    aocl_lapack_zgghrd(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                       &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &ierr);
     *sdim = 0;
     /* Perform QZ algorithm, computing Schur vectors if desired */
     /* (Complex Workspace: need N) */
     /* (Real Workspace: need N) */
     iwrk = itau;
     i__1 = *lwork + 1 - iwrk;
-    zhgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
-            &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &work[iwrk], &i__1,
-            &rwork[irwrk], &ierr);
+    aocl_lapack_zhgeqz("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                       &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr,
+                       &work[iwrk], &i__1, &rwork[irwrk], &ierr);
     if(ierr != 0)
     {
         if(ierr > 0 && ierr <= *n)
@@ -754,11 +750,11 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
         /* Undo scaling on eigenvalues before SELCTGing */
         if(ilascl)
         {
-            zlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, &ierr);
+            aocl_lapack_zlascl("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, &ierr);
         }
         if(ilbscl)
         {
-            zlascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
+            aocl_lapack_zlascl("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
         }
         /* Select eigenvalues */
         i__1 = *n;
@@ -772,9 +768,10 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
         /* (Complex Workspace: If IJOB >= 1, need MAX(1, 2*SDIM*(N-SDIM)) */
         /* otherwise, need 1 ) */
         i__1 = *lwork - iwrk + 1;
-        ztgsen_(&ijob, &ilvsl, &ilvsr, &bwork[1], n, &a[a_offset], lda, &b[b_offset], ldb,
-                &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, sdim, &pl,
-                &pr, dif, &work[iwrk], &i__1, &iwork[1], liwork, &ierr);
+        aocl_lapack_ztgsen(&ijob, &ilvsl, &ilvsr, &bwork[1], n, &a[a_offset], lda, &b[b_offset],
+                           ldb, &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset],
+                           ldvsr, sdim, &pl, &pr, dif, &work[iwrk], &i__1, &iwork[1], liwork,
+                           &ierr);
         if(ijob >= 1)
         {
             /* Computing MAX */
@@ -784,7 +781,7 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
         }
         if(ierr == -21)
         {
-            /* not enough complex workspace */
+            /* not enough scomplex workspace */
             *info = -21;
         }
         else
@@ -809,24 +806,24 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
     /* (Workspace: none needed) */
     if(ilvsl)
     {
-        zggbak_("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &vsl[vsl_offset], ldvsl,
-                &ierr);
+        aocl_lapack_zggbak("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n,
+                           &vsl[vsl_offset], ldvsl, &ierr);
     }
     if(ilvsr)
     {
-        zggbak_("P", "R", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &vsr[vsr_offset], ldvsr,
-                &ierr);
+        aocl_lapack_zggbak("P", "R", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n,
+                           &vsr[vsr_offset], ldvsr, &ierr);
     }
     /* Undo scaling */
     if(ilascl)
     {
-        zlascl_("U", &c__0, &c__0, &anrmto, &anrm, n, n, &a[a_offset], lda, &ierr);
-        zlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, &ierr);
+        aocl_lapack_zlascl("U", &c__0, &c__0, &anrmto, &anrm, n, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_zlascl("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, &ierr);
     }
     if(ilbscl)
     {
-        zlascl_("U", &c__0, &c__0, &bnrmto, &bnrm, n, n, &b[b_offset], ldb, &ierr);
-        zlascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
+        aocl_lapack_zlascl("U", &c__0, &c__0, &bnrmto, &bnrm, n, n, &b[b_offset], ldb, &ierr);
+        aocl_lapack_zlascl("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
     if(wantst)
     {
@@ -850,9 +847,9 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
         }
     }
 L40:
-    work[1].r = (doublereal)maxwrk;
-    work[1].i = 0.; // , expr subst
-    iwork[1] = liwmin;
+    work[1].real = (doublereal)maxwrk;
+    work[1].imag = 0.; // , expr subst
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGGESX */

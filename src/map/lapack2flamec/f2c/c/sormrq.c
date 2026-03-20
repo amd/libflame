@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__65 = 65;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__65 = 65;
 /* > \brief \b SORMRQ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -171,41 +171,53 @@ the routine */
 /* > \ingroup unmrq */
 /* ===================================================================== */
 /* Subroutine */
-void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
-             real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sormrq_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a,
+             aocl_int_t *lda, real *tau, real *c__, aocl_int_t *ldc, real *work, aocl_int_t *lwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sormrq(side, trans, m, n, k, a, lda, tau, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sormrq(side, trans, &m_64, &n_64, &k_64, a, &lda_64, tau, c__, &ldc_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sormrq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                        real *a, aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc,
+                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sormrq inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *lda, *ldc);
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i__, i1, i2, i3, ib, nb, mi, ni, nq, nw, iwt;
+    aocl_int64_t i__, i1, i2, i3, ib, nb, mi, ni, nq, nw, iwt;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *),
-        slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *,
-                real *, integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical notran;
-    integer ldwork;
+    aocl_int64_t ldwork;
     char transt[1];
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -284,7 +296,7 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
         *info = -12;
     }
     i__1 = 64;
-    i__2 = ilaenv_(&c__1, "SORMRQ", ch__1, m, n, k, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__1, "SORMRQ", ch__1, m, n, k, &c_n1); // , expr subst
     nb = fla_min(i__1, i__2);
     if(*info == 0)
     {
@@ -298,12 +310,12 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
             /* Computing MIN */
             lwkopt = nw * nb + 4160;
         }
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORMRQ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORMRQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -327,15 +339,15 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
             nb = (*lwork - 4160) / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "SORMRQ", ch__1, m, n, k, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__2, "SORMRQ", ch__1, m, n, k, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
     if(nb < nbmin || nb >= *k)
     {
         /* Use unblocked code */
-        sormr2_(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc, &work[1],
-                &iinfo);
+        aocl_lapack_sormr2(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc,
+                           &work[1], &iinfo);
     }
     else
     {
@@ -380,8 +392,8 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
             /* Form the triangular factor of the block reflector */
             /* H = H(i+ib-1) . . . H(i+1) H(i) */
             i__4 = nq - *k + i__ + ib - 1;
-            slarft_("Backward", "Rowwise", &i__4, &ib, &a[i__ + a_dim1], lda, &tau[i__], &work[iwt],
-                    &c__65);
+            aocl_lapack_slarft("Backward", "Rowwise", &i__4, &ib, &a[i__ + a_dim1], lda, &tau[i__],
+                               &work[iwt], &c__65);
             if(left)
             {
                 /* H or H**T is applied to C(1:m-k+i+ib-1,1:n) */
@@ -393,12 +405,12 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
                 ni = *n - *k + i__ + ib - 1;
             }
             /* Apply H or H**T */
-            slarfb_(side, transt, "Backward", "Rowwise", &mi, &ni, &ib, &a[i__ + a_dim1], lda,
-                    &work[iwt], &c__65, &c__[c_offset], ldc, &work[1], &ldwork);
+            aocl_lapack_slarfb(side, transt, "Backward", "Rowwise", &mi, &ni, &ib, &a[i__ + a_dim1],
+                               lda, &work[iwt], &c__65, &c__[c_offset], ldc, &work[1], &ldwork);
             /* L10: */
         }
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORMRQ */

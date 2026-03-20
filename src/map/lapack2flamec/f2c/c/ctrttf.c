@@ -214,8 +214,25 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, complex *arf,
-             integer *info)
+/** Generated wrapper function */
+void ctrttf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *arf,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrttf(transr, uplo, n, a, lda, arf, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrttf(transr, uplo, &n_64, a, &lda_64, arf, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctrttf(char *transr, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        scomplex *arf, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -230,18 +247,15 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
+    aocl_int64_t i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -291,7 +305,7 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTRTTF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTRTTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -302,14 +316,14 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
         {
             if(normaltransr)
             {
-                arf[0].r = a[0].r;
-                arf[0].i = a[0].i; // , expr subst
+                arf[0].real = a[0].real;
+                arf[0].imag = a[0].imag; // , expr subst
             }
             else
             {
                 r_cnjg(&q__1, a);
-                arf[0].r = q__1.r;
-                arf[0].i = q__1.i; // , expr subst
+                arf[0].real = q__1.real;
+                arf[0].imag = q__1.imag; // , expr subst
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -369,8 +383,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[n2 + j + i__ * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                     i__2 = *n - 1;
@@ -378,8 +392,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         i__4 = i__ + j * a_dim1;
-                        arf[i__3].r = a[i__4].r;
-                        arf[i__3].i = a[i__4].i; // , expr subst
+                        arf[i__3].real = a[i__4].real;
+                        arf[i__3].imag = a[i__4].imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -399,8 +413,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         i__4 = i__ + j * a_dim1;
-                        arf[i__3].r = a[i__4].r;
-                        arf[i__3].i = a[i__4].i; // , expr subst
+                        arf[i__3].real = a[i__4].real;
+                        arf[i__3].imag = a[i__4].imag; // , expr subst
                         ++ij;
                     }
                     i__2 = n1 - 1;
@@ -408,8 +422,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[j - n1 + l * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                     ij -= nx2;
@@ -434,8 +448,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[j + i__ * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                     i__2 = *n - 1;
@@ -443,8 +457,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         i__4 = i__ + (n1 + j) * a_dim1;
-                        arf[i__3].r = a[i__4].r;
-                        arf[i__3].i = a[i__4].i; // , expr subst
+                        arf[i__3].real = a[i__4].real;
+                        arf[i__3].imag = a[i__4].imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -456,8 +470,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[j + i__ * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -477,8 +491,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[j + i__ * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -490,8 +504,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         i__4 = i__ + j * a_dim1;
-                        arf[i__3].r = a[i__4].r;
-                        arf[i__3].i = a[i__4].i; // , expr subst
+                        arf[i__3].real = a[i__4].real;
+                        arf[i__3].imag = a[i__4].imag; // , expr subst
                         ++ij;
                     }
                     i__2 = *n - 1;
@@ -499,8 +513,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[n2 + j + l * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -528,8 +542,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[k + j + i__ * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                     i__2 = *n - 1;
@@ -537,8 +551,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         i__4 = i__ + j * a_dim1;
-                        arf[i__3].r = a[i__4].r;
-                        arf[i__3].i = a[i__4].i; // , expr subst
+                        arf[i__3].real = a[i__4].real;
+                        arf[i__3].imag = a[i__4].imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -558,8 +572,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         i__4 = i__ + j * a_dim1;
-                        arf[i__3].r = a[i__4].r;
-                        arf[i__3].i = a[i__4].i; // , expr subst
+                        arf[i__3].real = a[i__4].real;
+                        arf[i__3].imag = a[i__4].imag; // , expr subst
                         ++ij;
                     }
                     i__2 = k - 1;
@@ -567,8 +581,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[j - k + l * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                     ij -= np1x2;
@@ -591,8 +605,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                 {
                     i__2 = ij;
                     i__3 = i__ + j * a_dim1;
-                    arf[i__2].r = a[i__3].r;
-                    arf[i__2].i = a[i__3].i; // , expr subst
+                    arf[i__2].real = a[i__3].real;
+                    arf[i__2].imag = a[i__3].imag; // , expr subst
                     ++ij;
                 }
                 i__1 = k - 2;
@@ -603,8 +617,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[j + i__ * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                     i__2 = *n - 1;
@@ -612,8 +626,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         i__4 = i__ + (k + 1 + j) * a_dim1;
-                        arf[i__3].r = a[i__4].r;
-                        arf[i__3].i = a[i__4].i; // , expr subst
+                        arf[i__3].real = a[i__4].real;
+                        arf[i__3].imag = a[i__4].imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -625,8 +639,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[j + i__ * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -646,8 +660,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[j + i__ * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -659,8 +673,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         i__4 = i__ + j * a_dim1;
-                        arf[i__3].r = a[i__4].r;
-                        arf[i__3].i = a[i__4].i; // , expr subst
+                        arf[i__3].real = a[i__4].real;
+                        arf[i__3].imag = a[i__4].imag; // , expr subst
                         ++ij;
                     }
                     i__2 = *n - 1;
@@ -668,8 +682,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                     {
                         i__3 = ij;
                         r_cnjg(&q__1, &a[k + 1 + j + l * a_dim1]);
-                        arf[i__3].r = q__1.r;
-                        arf[i__3].i = q__1.i; // , expr subst
+                        arf[i__3].real = q__1.real;
+                        arf[i__3].imag = q__1.imag; // , expr subst
                         ++ij;
                     }
                 }
@@ -679,8 +693,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
                 {
                     i__2 = ij;
                     i__3 = i__ + j * a_dim1;
-                    arf[i__2].r = a[i__3].r;
-                    arf[i__2].i = a[i__3].i; // , expr subst
+                    arf[i__2].real = a[i__3].real;
+                    arf[i__2].imag = a[i__3].imag; // , expr subst
                     ++ij;
                 }
             }

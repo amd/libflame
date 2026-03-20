@@ -121,19 +121,33 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgttrf_(integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void sgttrf_(aocl_int_t *n, real *dl, real *d__, real *du, real *du2, aocl_int_t *ipiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgttrf(n, dl, d__, du, du2, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgttrf(&n_64, dl, d__, du, du2, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgttrf(aocl_int64_t *n, real *dl, real *d__, real *du, real *du2, aocl_int_t *ipiv,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgttrf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2;
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real fact, temp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,7 +178,7 @@ void sgttrf_(integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("SGTTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -178,7 +192,7 @@ void sgttrf_(integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        ipiv[i__] = i__;
+        ipiv[i__] = (aocl_int_t)(i__);
         /* L10: */
     }
     i__1 = *n - 2;
@@ -211,7 +225,7 @@ void sgttrf_(integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv
             d__[i__ + 1] = temp - fact * d__[i__ + 1];
             du2[i__] = du[i__ + 1];
             du[i__ + 1] = -fact * du[i__ + 1];
-            ipiv[i__] = i__ + 1;
+            ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
         /* L30: */
     }
@@ -235,7 +249,7 @@ void sgttrf_(integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv
             temp = du[i__];
             du[i__] = d__[i__ + 1];
             d__[i__ + 1] = temp - fact * d__[i__ + 1];
-            ipiv[i__] = i__ + 1;
+            ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
     }
     /* Check for a zero on the diagonal of U. */

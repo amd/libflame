@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNG2R */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -38,7 +38,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNG2R generates an m by n complex matrix Q with orthonormal columns, */
+/* > CUNG2R generates an m by n scomplex matrix Q with orthonormal columns, */
 /* > which is defined as the first n columns of a product of k elementary */
 /* > reflectors of order m */
 /* > */
@@ -111,20 +111,14 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
-                complex *work, integer *info)
+void cung2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, aocl_int64_t *lda,
+                scomplex *tau, scomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +165,7 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNG2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNG2R", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -187,13 +181,13 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
         for(l = 1; l <= i__2; ++l)
         {
             i__3 = l + j * a_dim1;
-            a[i__3].r = 0.f;
-            a[i__3].i = 0.f; // , expr subst
+            a[i__3].real = 0.f;
+            a[i__3].imag = 0.f; // , expr subst
             /* L10: */
         }
         i__2 = j + j * a_dim1;
-        a[i__2].r = 1.f;
-        a[i__2].i = 0.f; // , expr subst
+        a[i__2].real = 1.f;
+        a[i__2].imag = 0.f; // , expr subst
         /* L20: */
     }
     for(i__ = *k; i__ >= 1; --i__)
@@ -202,34 +196,34 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
         if(i__ < *n)
         {
             i__1 = i__ + i__ * a_dim1;
-            a[i__1].r = 1.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 1.f;
+            a[i__1].imag = 0.f; // , expr subst
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            clarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_clarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
         if(i__ < *m)
         {
             i__1 = *m - i__;
             i__2 = i__;
-            q__1.r = -tau[i__2].r;
-            q__1.i = -tau[i__2].i; // , expr subst
-            cscal_(&i__1, &q__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+            q__1.real = -tau[i__2].real;
+            q__1.imag = -tau[i__2].imag; // , expr subst
+            aocl_blas_cscal(&i__1, &q__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
         }
         i__1 = i__ + i__ * a_dim1;
         i__2 = i__;
-        q__1.r = 1.f - tau[i__2].r;
-        q__1.i = 0.f - tau[i__2].i; // , expr subst
-        a[i__1].r = q__1.r;
-        a[i__1].i = q__1.i; // , expr subst
+        q__1.real = 1.f - tau[i__2].real;
+        q__1.imag = 0.f - tau[i__2].imag; // , expr subst
+        a[i__1].real = q__1.real;
+        a[i__1].imag = q__1.imag; // , expr subst
         /* Set A(1:i-1,i) to zero */
         i__1 = i__ - 1;
         for(l = 1; l <= i__1; ++l)
         {
             i__2 = l + i__ * a_dim1;
-            a[i__2].r = 0.f;
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = 0.f;
+            a[i__2].imag = 0.f; // , expr subst
             /* L30: */
         }
         /* L40: */

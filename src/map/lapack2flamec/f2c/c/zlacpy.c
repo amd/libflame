@@ -99,18 +99,34 @@ if UPLO = 'L', only the lower trapezium is */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *b,
-             integer *ldb)
+/** Generated wrapper function */
+void zlacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+             dcomplex *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlacpy(uplo, m, n, a, lda, b, ldb);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_zlacpy(uplo, &m_64, &n_64, a, &lda_64, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_zlacpy(char *uplo, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *uplo, *m, *n, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -145,8 +161,8 @@ void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda,
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4].r;
-                b[i__3].i = a[i__4].i; // , expr subst
+                b[i__3].real = a[i__4].real;
+                b[i__3].imag = a[i__4].imag; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -162,8 +178,8 @@ void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda,
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4].r;
-                b[i__3].i = a[i__4].i; // , expr subst
+                b[i__3].real = a[i__4].real;
+                b[i__3].imag = a[i__4].imag; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -179,8 +195,8 @@ void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda,
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4].r;
-                b[i__3].i = a[i__4].i; // , expr subst
+                b[i__3].real = a[i__4].real;
+                b[i__3].imag = a[i__4].imag; // , expr subst
                 /* L50: */
             }
             /* L60: */

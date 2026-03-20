@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHBGVX */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -49,7 +49,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CHBGVX computes all the eigenvalues, and optionally, the eigenvectors */
-/* > of a complex generalized Hermitian-definite banded eigenproblem, of */
+/* > of a scomplex generalized Hermitian-definite banded eigenproblem, of */
 /* > the form A*x=(lambda)*B*x. Here A and B are assumed to be Hermitian */
 /* > and banded, and B is also positive definite. Eigenvalues and */
 /* > eigenvectors can be selected by specifying either all eigenvalues, */
@@ -303,11 +303,44 @@ IL = 1 and IU = 0 if N = 0. */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void chbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integer *kb, complex *ab,
-             integer *ldab, complex *bb, integer *ldbb, complex *q, integer *ldq, real *vl,
-             real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, complex *z__,
-             integer *ldz, complex *work, real *rwork, integer *iwork, integer *ifail,
-             integer *info)
+/** Generated wrapper function */
+void chbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *kb,
+             scomplex *ab, aocl_int_t *ldab, scomplex *bb, aocl_int_t *ldbb, scomplex *q,
+             aocl_int_t *ldq, real *vl, real *vu, aocl_int_t *il, aocl_int_t *iu, real *abstol,
+             aocl_int_t *m, real *w, scomplex *z__, aocl_int_t *ldz, scomplex *work, real *rwork,
+             aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chbgvx(jobz, range, uplo, n, ka, kb, ab, ldab, bb, ldbb, q, ldq, vl, vu, il, iu,
+                       abstol, m, w, z__, ldz, work, rwork, iwork, ifail, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ka_64 = *ka;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldbb_64 = *ldbb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chbgvx(jobz, range, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, q,
+                       &ldq_64, vl, vu, &il_64, &iu_64, abstol, &m_64, w, z__, &ldz_64, work, rwork,
+                       iwork, ifail, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chbgvx(char *jobz, char *range, char *uplo, aocl_int64_t *n, aocl_int64_t *ka,
+                        aocl_int64_t *kb, scomplex *ab, aocl_int64_t *ldab, scomplex *bb,
+                        aocl_int64_t *ldbb, scomplex *q, aocl_int64_t *ldq, real *vl, real *vu,
+                        aocl_int64_t *il, aocl_int64_t *iu, real *abstol, aocl_int64_t *m, real *w,
+                        scomplex *z__, aocl_int64_t *ldz, scomplex *work, real *rwork,
+                        aocl_int_t *iwork, aocl_int_t *ifail, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -326,58 +359,24 @@ void chbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, bb_dim1, bb_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, q_dim1, q_offset, z_dim1, z_offset, i__1,
+        i__2;
     /* Local variables */
-    integer i__, j, jj;
+    aocl_int64_t i__, j, jj;
     real tmp1;
-    integer indd, inde;
+    aocl_int64_t indd, inde;
     char vect[1];
     logical test;
-    integer itmp1, indee;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    integer iinfo;
+    aocl_int64_t itmp1, indee;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     char order[1];
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
     logical wantz, alleig, indeig;
-    extern /* Subroutine */
-        void
-        chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *,
-                complex *, integer *, complex *, integer *);
     logical valeig;
-    extern /* Subroutine */
-        void
-        chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                integer *, complex *, integer *, complex *, real *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
-    integer indiwk, indisp;
-    extern /* Subroutine */
-        void
-        cstein_(integer *, real *, real *, integer *, real *, integer *, integer *, complex *,
-                integer *, real *, integer *, integer *, integer *);
-    integer indrwk, indwrk;
-    extern /* Subroutine */
-        void
-        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
-        ssterf_(integer *, real *, real *, integer *);
-    integer nsplit;
-    extern /* Subroutine */
-        void
-        sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *,
-                real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
-                integer *);
+    aocl_int64_t indiwk, indisp;
+    aocl_int64_t indrwk, indwrk;
+    aocl_int64_t nsplit;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -490,7 +489,7 @@ void chbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHBGVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHBGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -502,7 +501,7 @@ void chbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         return;
     }
     /* Form a split Cholesky factorization of B. */
-    cpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
+    aocl_lapack_cpbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -510,8 +509,8 @@ void chbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         return;
     }
     /* Transform problem to standard eigenvalue problem. */
-    chbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &q[q_offset], ldq,
-            &work[1], &rwork[1], &iinfo);
+    aocl_lapack_chbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
+                       &q[q_offset], ldq, &work[1], &rwork[1], &iinfo);
     /* Solve the standard eigenvalue problem. */
     /* Reduce Hermitian band matrix to tridiagonal form. */
     indd = 1;
@@ -526,8 +525,8 @@ void chbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *(unsigned char *)vect = 'N';
     }
-    chbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &rwork[indd], &rwork[inde], &q[q_offset], ldq,
-            &work[indwrk], &iinfo);
+    aocl_lapack_chbtrd(vect, uplo, n, ka, &ab[ab_offset], ldab, &rwork[indd], &rwork[inde],
+                       &q[q_offset], ldq, &work[indwrk], &iinfo);
     /* If all eigenvalues are desired and ABSTOL is less than or equal */
     /* to zero, then call SSTERF or CSTEQR. If this fails for some */
     /* eigenvalue, then try SSTEBZ. */
@@ -541,18 +540,19 @@ void chbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     }
     if((alleig || test) && *abstol <= 0.f)
     {
-        scopy_(n, &rwork[indd], &c__1, &w[1], &c__1);
+        aocl_blas_scopy(n, &rwork[indd], &c__1, &w[1], &c__1);
         indee = indrwk + (*n << 1);
         i__1 = *n - 1;
-        scopy_(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
+        aocl_blas_scopy(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
         if(!wantz)
         {
-            ssterf_(n, &w[1], &rwork[indee], info);
+            aocl_lapack_ssterf(n, &w[1], &rwork[indee], info);
         }
         else
         {
-            clacpy_("A", n, n, &q[q_offset], ldq, &z__[z_offset], ldz);
-            csteqr_(jobz, n, &w[1], &rwork[indee], &z__[z_offset], ldz, &rwork[indrwk], info);
+            aocl_lapack_clacpy("A", n, n, &q[q_offset], ldq, &z__[z_offset], ldz);
+            aocl_lapack_csteqr(jobz, n, &w[1], &rwork[indee], &z__[z_offset], ldz, &rwork[indrwk],
+                               info);
             if(*info == 0)
             {
                 i__1 = *n;
@@ -582,20 +582,21 @@ void chbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     }
     indisp = *n + 1;
     indiwk = indisp + *n;
-    sstebz_(range, order, n, vl, vu, il, iu, abstol, &rwork[indd], &rwork[inde], m, &nsplit, &w[1],
-            &iwork[1], &iwork[indisp], &rwork[indrwk], &iwork[indiwk], info);
+    aocl_lapack_sstebz(range, order, n, vl, vu, il, iu, abstol, &rwork[indd], &rwork[inde], m,
+                       &nsplit, &w[1], &iwork[1], &iwork[indisp], &rwork[indrwk], &iwork[indiwk],
+                       info);
     if(wantz)
     {
-        cstein_(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
-                ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
+        aocl_lapack_cstein(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[1], &iwork[indisp],
+                           &z__[z_offset], ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
         /* Apply unitary matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by CSTEIN. */
         i__1 = *m;
         for(j = 1; j <= i__1; ++j)
         {
-            ccopy_(n, &z__[j * z_dim1 + 1], &c__1, &work[1], &c__1);
-            cgemv_("N", n, n, &c_b2, &q[q_offset], ldq, &work[1], &c__1, &c_b1,
-                   &z__[j * z_dim1 + 1], &c__1);
+            aocl_blas_ccopy(n, &z__[j * z_dim1 + 1], &c__1, &work[1], &c__1);
+            aocl_blas_cgemv("N", n, n, &c_b2, &q[q_offset], ldq, &work[1], &c__1, &c_b1,
+                            &z__[j * z_dim1 + 1], &c__1);
             /* L20: */
         }
     }
@@ -624,13 +625,13 @@ L30: /* If eigenvalues are not in order, then sort them, along with */
                 w[i__] = w[j];
                 iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[j] = itmp1;
-                cswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                iwork[j] = (aocl_int_t)(itmp1);
+                aocl_blas_cswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {
                     itmp1 = ifail[i__];
                     ifail[i__] = ifail[j];
-                    ifail[j] = itmp1;
+                    ifail[j] = (aocl_int_t)(itmp1);
                 }
             }
             /* L50: */

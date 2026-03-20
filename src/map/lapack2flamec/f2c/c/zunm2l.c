@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNM2L multiplies a general matrix by the unitary matrix from a QL factorization
  * determined by cgeqlf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNM2L overwrites the general complex m-by-n matrix C with */
+/* > ZUNM2L overwrites the general scomplex m-by-n matrix C with */
 /* > */
 /* > Q * C if SIDE = 'L' and TRANS = 'N', or */
 /* > */
@@ -51,7 +51,7 @@ static integer c__1 = 1;
 /* > */
 /* > C * Q**H if SIDE = 'R' and TRANS = 'C', */
 /* > */
-/* > where Q is a complex unitary matrix defined as the product of k */
+/* > where Q is a scomplex unitary matrix defined as the product of k */
 /* > elementary reflectors */
 /* > */
 /* > Q = H(k) . . . H(2) H(1) */
@@ -158,30 +158,47 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a,
-             integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
-             doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zunm2l_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a,
+             aocl_int_t *lda, dcomplex *tau, dcomplex *c__, aocl_int_t *ldc,
+             dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zunm2l(side, trans, m, n, k, a, lda, tau, c__, ldc, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zunm2l(side, trans, &m_64, &n_64, &k_64, a, &lda_64, tau, c__, &ldc_64, work,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zunm2l(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                        dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
+                        aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunm2l inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *lda, *ldc);
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, i1, i2, i3, mi, ni, nq;
-    doublecomplex aii;
+    aocl_int64_t i__, i1, i2, i3, mi, ni, nq;
+    dcomplex aii;
     logical left;
-    doublecomplex taui;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    dcomplex taui;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -257,7 +274,7 @@ void zunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNM2L", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNM2L", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -305,25 +322,26 @@ void zunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, double
         if(notran)
         {
             i__3 = i__;
-            taui.r = tau[i__3].r;
-            taui.i = tau[i__3].i; // , expr subst
+            taui.real = tau[i__3].real;
+            taui.imag = tau[i__3].imag; // , expr subst
         }
         else
         {
             d_cnjg(&z__1, &tau[i__]);
-            taui.r = z__1.r;
-            taui.i = z__1.i; // , expr subst
+            taui.real = z__1.real;
+            taui.imag = z__1.imag; // , expr subst
         }
         i__3 = nq - *k + i__ + i__ * a_dim1;
-        aii.r = a[i__3].r;
-        aii.i = a[i__3].i; // , expr subst
+        aii.real = a[i__3].real;
+        aii.imag = a[i__3].imag; // , expr subst
         i__3 = nq - *k + i__ + i__ * a_dim1;
-        a[i__3].r = 1.;
-        a[i__3].i = 0.; // , expr subst
-        zlarf_(side, &mi, &ni, &a[i__ * a_dim1 + 1], &c__1, &taui, &c__[c_offset], ldc, &work[1]);
+        a[i__3].real = 1.;
+        a[i__3].imag = 0.; // , expr subst
+        aocl_lapack_zlarf(side, &mi, &ni, &a[i__ * a_dim1 + 1], &c__1, &taui, &c__[c_offset], ldc,
+                          &work[1]);
         i__3 = nq - *k + i__ + i__ * a_dim1;
-        a[i__3].r = aii.r;
-        a[i__3].i = aii.i; // , expr subst
+        a[i__3].real = aii.real;
+        a[i__3].imag = aii.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

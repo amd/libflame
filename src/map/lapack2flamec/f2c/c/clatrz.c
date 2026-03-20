@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLATRZ factors the M-by-(M+L) complex upper trapezoidal matrix */
+/* > CLATRZ factors the M-by-(M+L) scomplex upper trapezoidal matrix */
 /* > [ A1 A2 ] = [ A(1:M,1:M) A(1:M,N-L+1:N) ] as ( R 0 ) * Z by means */
 /* > of unitary transformations, where Z is an (M+L)-by-(M+L) unitary */
 /* > matrix and, R and A1 are M-by-M upper triangular matrices. */
@@ -134,8 +134,24 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *tau,
-             complex *work)
+/** Generated wrapper function */
+void clatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *tau,
+             scomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clatrz(m, n, l, a, lda, tau, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_clatrz(&m_64, &n_64, &l_64, a, &lda_64, tau, work);
+#endif
+}
+
+void aocl_lapack_clatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scomplex *a,
+                        aocl_int64_t *lda, scomplex *tau, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -148,19 +164,13 @@ void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__;
-    complex alpha;
-    extern /* Subroutine */
-        void
-        clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-               integer *, complex *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        clacgv_(integer *, complex *, integer *);
+    aocl_int64_t i__;
+    scomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,8 +208,8 @@ void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            tau[i__2].r = 0.f;
-            tau[i__2].i = 0.f; // , expr subst
+            tau[i__2].real = 0.f;
+            tau[i__2].imag = 0.f; // , expr subst
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -209,26 +219,26 @@ void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* [ A(i,i) A(i,n-l+1:n) ] */
-        clacgv_(l, &a[i__ + (*n - *l + 1) * a_dim1], lda);
+        aocl_lapack_clacgv(l, &a[i__ + (*n - *l + 1) * a_dim1], lda);
         r_cnjg(&q__1, &a[i__ + i__ * a_dim1]);
-        alpha.r = q__1.r;
-        alpha.i = q__1.i; // , expr subst
+        alpha.real = q__1.real;
+        alpha.imag = q__1.imag; // , expr subst
         i__1 = *l + 1;
-        clarfg_(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
+        aocl_lapack_clarfg(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
         i__1 = i__;
         r_cnjg(&q__1, &tau[i__]);
-        tau[i__1].r = q__1.r;
-        tau[i__1].i = q__1.i; // , expr subst
+        tau[i__1].real = q__1.real;
+        tau[i__1].imag = q__1.imag; // , expr subst
         /* Apply H(i) to A(1:i-1,i:n) from the right */
         i__1 = i__ - 1;
         i__2 = *n - i__ + 1;
         r_cnjg(&q__1, &tau[i__]);
-        clarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &q__1,
-               &a[i__ * a_dim1 + 1], lda, &work[1]);
+        aocl_lapack_clarz("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &q__1,
+                          &a[i__ * a_dim1 + 1], lda, &work[1]);
         i__1 = i__ + i__ * a_dim1;
         r_cnjg(&q__1, &alpha);
-        a[i__1].r = q__1.r;
-        a[i__1].i = q__1.i; // , expr subst
+        a[i__1].real = q__1.real;
+        a[i__1].imag = q__1.imag; // , expr subst
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

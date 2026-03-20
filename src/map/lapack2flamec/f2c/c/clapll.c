@@ -95,7 +95,22 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clapll_(integer *n, complex *x, integer *incx, complex *y, integer *incy, real *ssmin)
+/** Generated wrapper function */
+void clapll_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *ssmin)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clapll(n, x, incx, y, incy, ssmin);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_clapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
+#endif
+}
+
+void aocl_lapack_clapll(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scomplex *y,
+                        aocl_int64_t *incy, real *ssmin)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -108,27 +123,18 @@ void clapll_(integer *n, complex *x, integer *incx, complex *y, integer *incy, r
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2, r__3;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    complex c__, a11, a12, a22, tau;
+    scomplex c__, a11, a12, a22, tau;
     extern /* Subroutine */
         void
         slas2_(real *, real *, real *, real *, real *);
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real ssmax;
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -161,27 +167,27 @@ void clapll_(integer *n, complex *x, integer *incx, complex *y, integer *incy, r
         return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
-    clarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
-    a11.r = x[1].r;
-    a11.i = x[1].i; // , expr subst
-    x[1].r = 1.f;
-    x[1].i = 0.f; // , expr subst
+    aocl_lapack_clarfg(n, &x[1], &x[*incx + 1], incx, &tau);
+    a11.real = x[1].real;
+    a11.imag = x[1].imag; // , expr subst
+    x[1].real = 1.f;
+    x[1].imag = 0.f; // , expr subst
     r_cnjg(&q__3, &tau);
-    q__2.r = -q__3.r;
-    q__2.i = -q__3.i; // , expr subst
-    cdotc_f2c_(&q__4, n, &x[1], incx, &y[1], incy);
-    q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
-    q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
-    c__.r = q__1.r;
-    c__.i = q__1.i; // , expr subst
-    caxpy_(n, &c__, &x[1], incx, &y[1], incy);
+    q__2.real = -q__3.real;
+    q__2.imag = -q__3.imag; // , expr subst
+    aocl_lapack_cdotc_f2c(&q__4, n, &x[1], incx, &y[1], incy);
+    q__1.real = q__2.real * q__4.real - q__2.imag * q__4.imag;
+    q__1.imag = q__2.real * q__4.imag + q__2.imag * q__4.real; // , expr subst
+    c__.real = q__1.real;
+    c__.imag = q__1.imag; // , expr subst
+    aocl_blas_caxpy(n, &c__, &x[1], incx, &y[1], incy);
     i__1 = *n - 1;
-    clarfg_(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
-    a12.r = y[1].r;
-    a12.i = y[1].i; // , expr subst
+    aocl_lapack_clarfg(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
+    a12.real = y[1].real;
+    a12.imag = y[1].imag; // , expr subst
     i__1 = *incy + 1;
-    a22.r = y[i__1].r;
-    a22.i = y[i__1].i; // , expr subst
+    a22.real = y[i__1].real;
+    a22.imag = y[i__1].imag; // , expr subst
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     r__1 = c_abs(&a11);
     r__2 = c_abs(&a12);

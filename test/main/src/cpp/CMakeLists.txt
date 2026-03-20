@@ -69,5 +69,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_potri.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gebrd.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_trtri.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_trtrs.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_geqpf.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_bdsqr.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_common.hh
 )

@@ -110,23 +110,37 @@
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
-              doublecomplex *e, integer *info)
+/** Generated wrapper function */
+void zsyconv_(char *uplo, char *way, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+              aocl_int_t *ipiv, dcomplex *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsyconv(uplo, way, n, a, lda, ipiv, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsyconv(uplo, way, &n_64, a, &lda_64, ipiv, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
+                         aocl_int64_t *lda, aocl_int_t *ipiv, dcomplex *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsyconv inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
                       *way, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, ip;
-    doublecomplex temp;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j, ip;
+    dcomplex temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -173,7 +187,7 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYCONV", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZSYCONV", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -191,29 +205,29 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             /* Convert A (A is upper) */
             /* Convert VALUE */
             i__ = *n;
-            e[1].r = 0.;
-            e[1].i = 0.; // , expr subst
+            e[1].real = 0.;
+            e[1].imag = 0.; // , expr subst
             while(i__ > 1)
             {
                 if(ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ - 1 + i__ * a_dim1;
-                    e[i__1].r = a[i__2].r;
-                    e[i__1].i = a[i__2].i; // , expr subst
+                    e[i__1].real = a[i__2].real;
+                    e[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = i__ - 1;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                     i__1 = i__ - 1 + i__ * a_dim1;
-                    a[i__1].r = 0.;
-                    a[i__1].i = 0.; // , expr subst
+                    a[i__1].real = 0.;
+                    a[i__1].imag = 0.; // , expr subst
                     --i__;
                 }
                 else
                 {
                     i__1 = i__;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
                 --i__;
             }
@@ -230,15 +244,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                         for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                             /* L12: */
                         }
                     }
@@ -252,15 +266,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                         for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ - 1 + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ - 1 + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                             /* L13: */
                         }
                     }
@@ -285,15 +299,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                         for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                         }
                     }
                 }
@@ -307,15 +321,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                         for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ - 1 + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ - 1 + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                         }
                     }
                 }
@@ -329,8 +343,8 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                 {
                     i__1 = i__ - 1 + i__ * a_dim1;
                     i__2 = i__;
-                    a[i__1].r = e[i__2].r;
-                    a[i__1].i = e[i__2].i; // , expr subst
+                    a[i__1].real = e[i__2].real;
+                    a[i__1].imag = e[i__2].imag; // , expr subst
                     --i__;
                 }
                 --i__;
@@ -346,29 +360,29 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             /* Convert VALUE */
             i__ = 1;
             i__1 = *n;
-            e[i__1].r = 0.;
-            e[i__1].i = 0.; // , expr subst
+            e[i__1].real = 0.;
+            e[i__1].imag = 0.; // , expr subst
             while(i__ <= *n)
             {
                 if(i__ < *n && ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ + 1 + i__ * a_dim1;
-                    e[i__1].r = a[i__2].r;
-                    e[i__1].i = a[i__2].i; // , expr subst
+                    e[i__1].real = a[i__2].real;
+                    e[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = i__ + 1;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                     i__1 = i__ + 1 + i__ * a_dim1;
-                    a[i__1].r = 0.;
-                    a[i__1].i = 0.; // , expr subst
+                    a[i__1].real = 0.;
+                    a[i__1].imag = 0.; // , expr subst
                     ++i__;
                 }
                 else
                 {
                     i__1 = i__;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
                 ++i__;
             }
@@ -385,15 +399,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                         for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                             /* L22: */
                         }
                     }
@@ -407,15 +421,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                         for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ + 1 + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ + 1 + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                             /* L23: */
                         }
                     }
@@ -440,15 +454,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                         for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = i__ + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
                             i__3 = ip + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                         }
                     }
                 }
@@ -462,15 +476,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                         for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = i__ + 1 + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + 1 + j * a_dim1;
                             i__3 = ip + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                         }
                     }
                 }
@@ -484,8 +498,8 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                 {
                     i__1 = i__ + 1 + i__ * a_dim1;
                     i__2 = i__;
-                    a[i__1].r = e[i__2].r;
-                    a[i__1].i = e[i__2].i; // , expr subst
+                    a[i__1].real = e[i__2].real;
+                    a[i__1].imag = e[i__2].imag; // , expr subst
                     ++i__;
                 }
                 ++i__;

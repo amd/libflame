@@ -38,7 +38,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNMR3 overwrites the general complex m by n matrix C with */
+/* > CUNMR3 overwrites the general scomplex m by n matrix C with */
 /* > */
 /* > Q * C if SIDE = 'L' and TRANS = 'N', or */
 /* > */
@@ -48,7 +48,7 @@
 /* > */
 /* > C * Q**H if SIDE = 'R' and TRANS = 'C', */
 /* > */
-/* > where Q is a complex unitary matrix defined as the product of k */
+/* > where Q is a scomplex unitary matrix defined as the product of k */
 /* > elementary reflectors */
 /* > */
 /* > Q = H(1) H(2) . . . H(k) */
@@ -172,8 +172,32 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, complex *a,
-             integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
+/** Generated wrapper function */
+void cunmr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, aocl_int_t *l,
+             scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc,
+             scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cunmr3(side, trans, m, n, k, l, a, lda, tau, c__, ldc, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cunmr3(side, trans, &m_64, &n_64, &k_64, &l_64, a, &lda_64, tau, c__, &ldc_64, work,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cunmr3(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                        aocl_int64_t *l, scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *c__,
+                        aocl_int64_t *ldc, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -185,20 +209,15 @@ void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, i1, i2, i3, ja, ic, jc, mi, ni, nq;
+    aocl_int64_t i__, i1, i2, i3, ja, ic, jc, mi, ni, nq;
     logical left;
-    complex taui;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-               integer *, complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    scomplex taui;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -276,7 +295,7 @@ void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNMR3", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNMR3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -330,17 +349,17 @@ void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         if(notran)
         {
             i__3 = i__;
-            taui.r = tau[i__3].r;
-            taui.i = tau[i__3].i; // , expr subst
+            taui.real = tau[i__3].real;
+            taui.imag = tau[i__3].imag; // , expr subst
         }
         else
         {
             r_cnjg(&q__1, &tau[i__]);
-            taui.r = q__1.r;
-            taui.i = q__1.i; // , expr subst
+            taui.real = q__1.real;
+            taui.imag = q__1.imag; // , expr subst
         }
-        clarz_(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &taui, &c__[ic + jc * c_dim1], ldc,
-               &work[1]);
+        aocl_lapack_clarz(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &taui,
+                          &c__[ic + jc * c_dim1], ldc, &work[1]);
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

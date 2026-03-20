@@ -15,17 +15,17 @@
 
 FLA_Error REF_Hess_UT( FLA_Obj A, FLA_Obj t );
 void time_Hess_UT(
-                 integer variant, integer type, integer nrepeats, integer m,
+                 aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                  FLA_Obj A, FLA_Obj A_ref, FLA_Obj t, FLA_Obj T, FLA_Obj W,
                  double *dtime, double *diff, double *gflops );
 
 
 void time_Hess_UT(
-                 integer variant, integer type, integer nrepeats, integer m,
+                 aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                  FLA_Obj A, FLA_Obj A_ref, FLA_Obj t, FLA_Obj T, FLA_Obj W,
                  double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

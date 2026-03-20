@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
+static dcomplex c_b2 = {0., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHPTRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZHPTRD reduces a complex Hermitian matrix A stored in packed form to */
+/* > ZHPTRD reduces a scomplex Hermitian matrix A stored in packed form to */
 /* > real symmetric tridiagonal form T by a unitary similarity */
 /* > transformation: Q**H * A * Q = T. */
 /* > \endverbatim */
@@ -132,7 +132,7 @@ if UPLO */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(i+1:n) = 0 and v(i) = 1;
 v(1:i-1) is stored on exit in AP, */
 /* > overwriting A(1:i-1,i+1), and tau is stored in TAU(i). */
@@ -146,7 +146,7 @@ v(1:i-1) is stored on exit in AP, */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i) = 0 and v(i+1) = 1;
 v(i+2:n) is stored on exit in AP, */
 /* > overwriting A(i+2:n,i), and tau is stored in TAU(i). */
@@ -154,36 +154,37 @@ v(i+2:n) is stored on exit in AP, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doublereal *e,
-             doublecomplex *tau, integer *info)
+/** Generated wrapper function */
+void zhptrd_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *d__, doublereal *e,
+             dcomplex *tau, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhptrd(uplo, n, ap, d__, e, tau, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhptrd(uplo, &n_64, ap, d__, e, tau, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhptrd(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *d__,
+                        doublereal *e, dcomplex *tau, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhptrd inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Local variables */
-    integer i__, i1, ii, i1i1;
-    doublecomplex taui;
-    extern /* Subroutine */
-        void
-        zhpr2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *);
-    doublecomplex alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
+    aocl_int64_t i__, i1, ii, i1i1;
+    dcomplex taui;
+    dcomplex alpha;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,7 +225,7 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHPTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -241,67 +242,67 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
         i1 = *n * (*n - 1) / 2 + 1;
         i__1 = i1 + *n - 1;
         i__2 = i1 + *n - 1;
-        d__1 = ap[i__2].r;
-        ap[i__1].r = d__1;
-        ap[i__1].i = 0.; // , expr subst
+        d__1 = ap[i__2].real;
+        ap[i__1].real = d__1;
+        ap[i__1].imag = 0.; // , expr subst
         for(i__ = *n - 1; i__ >= 1; --i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
             /* to annihilate A(1:i-1,i+1) */
             i__1 = i1 + i__ - 1;
-            alpha.r = ap[i__1].r;
-            alpha.i = ap[i__1].i; // , expr subst
-            zlarfg_(&i__, &alpha, &ap[i1], &c__1, &taui);
+            alpha.real = ap[i__1].real;
+            alpha.imag = ap[i__1].imag; // , expr subst
+            aocl_lapack_zlarfg(&i__, &alpha, &ap[i1], &c__1, &taui);
             i__1 = i__;
-            e[i__1] = alpha.r;
-            if(taui.r != 0. || taui.i != 0.)
+            e[i__1] = alpha.real;
+            if(taui.real != 0. || taui.imag != 0.)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 i__1 = i1 + i__ - 1;
-                ap[i__1].r = 1.;
-                ap[i__1].i = 0.; // , expr subst
+                ap[i__1].real = 1.;
+                ap[i__1].imag = 0.; // , expr subst
                 /* Compute y := tau * A * v storing y in TAU(1:i) */
-                zhpmv_(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b2, &tau[1], &c__1);
+                aocl_blas_zhpmv(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**H *v) * v */
-                z__3.r = -.5;
-                z__3.i = -0.; // , expr subst
-                z__2.r = z__3.r * taui.r - z__3.i * taui.i;
-                z__2.i = z__3.r * taui.i + z__3.i * taui.r; // , expr subst
-                zdotc_f2c_(&z__4, &i__, &tau[1], &c__1, &ap[i1], &c__1);
-                z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
-                z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
-                zaxpy_(&i__, &alpha, &ap[i1], &c__1, &tau[1], &c__1);
+                z__3.real = -.5;
+                z__3.imag = -0.; // , expr subst
+                z__2.real = z__3.real * taui.real - z__3.imag * taui.imag;
+                z__2.imag = z__3.real * taui.imag + z__3.imag * taui.real; // , expr subst
+                aocl_lapack_zdotc_f2c(&z__4, &i__, &tau[1], &c__1, &ap[i1], &c__1);
+                z__1.real = z__2.real * z__4.real - z__2.imag * z__4.imag;
+                z__1.imag = z__2.real * z__4.imag + z__2.imag * z__4.real; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
+                aocl_blas_zaxpy(&i__, &alpha, &ap[i1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zhpr2_(uplo, &i__, &z__1, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zhpr2(uplo, &i__, &z__1, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
             }
             i__1 = i1 + i__ - 1;
             i__2 = i__;
-            ap[i__1].r = e[i__2];
-            ap[i__1].i = 0.; // , expr subst
+            ap[i__1].real = e[i__2];
+            ap[i__1].imag = 0.; // , expr subst
             i__1 = i__ + 1;
             i__2 = i1 + i__;
-            d__[i__1] = ap[i__2].r;
+            d__[i__1] = ap[i__2].real;
             i__1 = i__;
-            tau[i__1].r = taui.r;
-            tau[i__1].i = taui.i; // , expr subst
+            tau[i__1].real = taui.real;
+            tau[i__1].imag = taui.imag; // , expr subst
             i1 -= i__;
             /* L10: */
         }
-        d__[1] = ap[1].r;
+        d__[1] = ap[1].real;
     }
     else
     {
         /* Reduce the lower triangle of A. II is the index in AP of */
         /* A(i,i) and I1I1 is the index of A(i+1,i+1). */
         ii = 1;
-        d__1 = ap[1].r;
-        ap[1].r = d__1;
-        ap[1].i = 0.; // , expr subst
+        d__1 = ap[1].real;
+        ap[1].real = d__1;
+        ap[1].imag = 0.; // , expr subst
         i__1 = *n - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
@@ -309,57 +310,59 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
             /* to annihilate A(i+2:n,i) */
             i__2 = ii + 1;
-            alpha.r = ap[i__2].r;
-            alpha.i = ap[i__2].i; // , expr subst
+            alpha.real = ap[i__2].real;
+            alpha.imag = ap[i__2].imag; // , expr subst
             i__2 = *n - i__;
-            zlarfg_(&i__2, &alpha, &ap[ii + 2], &c__1, &taui);
+            aocl_lapack_zlarfg(&i__2, &alpha, &ap[ii + 2], &c__1, &taui);
             i__2 = i__;
-            e[i__2] = alpha.r;
-            if(taui.r != 0. || taui.i != 0.)
+            e[i__2] = alpha.real;
+            if(taui.real != 0. || taui.imag != 0.)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 i__2 = ii + 1;
-                ap[i__2].r = 1.;
-                ap[i__2].i = 0.; // , expr subst
+                ap[i__2].real = 1.;
+                ap[i__2].imag = 0.; // , expr subst
                 /* Compute y := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                zhpmv_(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b2, &tau[i__], &c__1);
+                aocl_blas_zhpmv(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b2, &tau[i__],
+                                &c__1);
                 /* Compute w := y - 1/2 * tau * (y**H *v) * v */
-                z__3.r = -.5;
-                z__3.i = -0.; // , expr subst
-                z__2.r = z__3.r * taui.r - z__3.i * taui.i;
-                z__2.i = z__3.r * taui.i + z__3.i * taui.r; // , expr subst
+                z__3.real = -.5;
+                z__3.imag = -0.; // , expr subst
+                z__2.real = z__3.real * taui.real - z__3.imag * taui.imag;
+                z__2.imag = z__3.real * taui.imag + z__3.imag * taui.real; // , expr subst
                 i__2 = *n - i__;
-                zdotc_f2c_(&z__4, &i__2, &tau[i__], &c__1, &ap[ii + 1], &c__1);
-                z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
-                z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                aocl_lapack_zdotc_f2c(&z__4, &i__2, &tau[i__], &c__1, &ap[ii + 1], &c__1);
+                z__1.real = z__2.real * z__4.real - z__2.imag * z__4.imag;
+                z__1.imag = z__2.real * z__4.imag + z__2.imag * z__4.real; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 i__2 = *n - i__;
-                zaxpy_(&i__2, &alpha, &ap[ii + 1], &c__1, &tau[i__], &c__1);
+                aocl_blas_zaxpy(&i__2, &alpha, &ap[ii + 1], &c__1, &tau[i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 i__2 = *n - i__;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zhpr2_(uplo, &i__2, &z__1, &ap[ii + 1], &c__1, &tau[i__], &c__1, &ap[i1i1]);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zhpr2(uplo, &i__2, &z__1, &ap[ii + 1], &c__1, &tau[i__], &c__1,
+                                &ap[i1i1]);
             }
             i__2 = ii + 1;
             i__3 = i__;
-            ap[i__2].r = e[i__3];
-            ap[i__2].i = 0.; // , expr subst
+            ap[i__2].real = e[i__3];
+            ap[i__2].imag = 0.; // , expr subst
             i__2 = i__;
             i__3 = ii;
-            d__[i__2] = ap[i__3].r;
+            d__[i__2] = ap[i__3].real;
             i__2 = i__;
-            tau[i__2].r = taui.r;
-            tau[i__2].i = taui.i; // , expr subst
+            tau[i__2].real = taui.real;
+            tau[i__2].imag = taui.imag; // , expr subst
             ii = i1i1;
             /* L20: */
         }
         i__1 = *n;
         i__2 = ii;
-        d__[i__1] = ap[i__2].r;
+        d__[i__1] = ap[i__2].real;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

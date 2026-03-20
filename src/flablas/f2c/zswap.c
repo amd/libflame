@@ -1,13 +1,13 @@
 /* zswap.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zswap_(integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
+int zswap_(integer *n, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     /* Local variables */
     integer i__;
-    doublecomplex ztemp;
+    dcomplex ztemp;
     integer ix, iy;
     /* interchanges two vectors. */
     /* jack dongarra, 3/11/78. */
@@ -42,12 +42,12 @@ int zswap_(integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, inte
             ++i__)
     {
         i__2 = ix;
-        ztemp.r = zx[i__2].r, ztemp.i = zx[i__2].i;
+        ztemp.real = zx[i__2].real, ztemp.imag = zx[i__2].imag;
         i__2 = ix;
         i__3 = iy;
-        zx[i__2].r = zy[i__3].r, zx[i__2].i = zy[i__3].i;
+        zx[i__2].real = zy[i__3].real, zx[i__2].imag = zy[i__3].imag;
         i__2 = iy;
-        zy[i__2].r = ztemp.r, zy[i__2].i = ztemp.i;
+        zy[i__2].real = ztemp.real, zy[i__2].imag = ztemp.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -61,12 +61,12 @@ L20:
             ++i__)
     {
         i__2 = i__;
-        ztemp.r = zx[i__2].r, ztemp.i = zx[i__2].i;
+        ztemp.real = zx[i__2].real, ztemp.imag = zx[i__2].imag;
         i__2 = i__;
         i__3 = i__;
-        zx[i__2].r = zy[i__3].r, zx[i__2].i = zy[i__3].i;
+        zx[i__2].real = zy[i__3].real, zx[i__2].imag = zy[i__3].imag;
         i__2 = i__;
-        zy[i__2].r = ztemp.r, zy[i__2].i = ztemp.i;
+        zy[i__2].real = ztemp.real, zy[i__2].imag = ztemp.imag;
         /* L30: */
     }
     return 0;

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static doublecomplex c_b16 = {1., 0.};
+static aocl_int64_t c__1 = 1;
+static dcomplex c_b16 = {1., 0.};
 /* > \brief \b ZPTRFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -180,10 +180,34 @@ static doublecomplex c_b16 = {1., 0.};
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e,
-             doublereal *df, doublecomplex *ef, doublecomplex *b, integer *ldb, doublecomplex *x,
-             integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work,
-             doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e,
+             doublereal *df, dcomplex *ef, dcomplex *b, aocl_int_t *ldb, dcomplex *x,
+             aocl_int_t *ldx, doublereal *ferr, doublereal *berr, dcomplex *work,
+             doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zptrfs(uplo, n, nrhs, d__, e, df, ef, b, ldb, x, ldx, ferr, berr, work, rwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zptrfs(uplo, &n_64, &nrhs_64, d__, e, df, ef, b, &ldb_64, x, &ldx_64, ferr, berr,
+                       work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zptrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__,
+                        dcomplex *e, doublereal *df, dcomplex *ef, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *x, aocl_int64_t *ldx, doublereal *ferr,
+                        doublereal *berr, dcomplex *work, doublereal *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptrfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
@@ -191,36 +215,25 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
                       *uplo, *n, *nrhs, *ldb, *ldx);
 
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8, d__9, d__10, d__11, d__12;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
+    double d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal s;
-    doublecomplex bi, cx, dx, ex;
-    integer ix, nz;
+    dcomplex bi, cx, dx, ex;
+    aocl_int64_t ix, nz;
     doublereal eps, safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer count;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
-    extern /* Subroutine */
-        void
-        zpttrs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *,
-                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -287,7 +300,7 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPTRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -324,129 +337,129 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
             if(*n == 1)
             {
                 i__2 = j * b_dim1 + 1;
-                bi.r = b[i__2].r;
-                bi.i = b[i__2].i; // , expr subst
+                bi.real = b[i__2].real;
+                bi.imag = b[i__2].imag; // , expr subst
                 i__2 = j * x_dim1 + 1;
-                z__1.r = d__[1] * x[i__2].r;
-                z__1.i = d__[1] * x[i__2].i; // , expr subst
-                dx.r = z__1.r;
-                dx.i = z__1.i; // , expr subst
-                z__1.r = bi.r - dx.r;
-                z__1.i = bi.i - dx.i; // , expr subst
-                work[1].r = z__1.r;
-                work[1].i = z__1.i; // , expr subst
-                rwork[1] = (d__1 = bi.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
-                           + ((d__3 = dx.r, f2c_dabs(d__3)) + (d__4 = d_imag(&dx), f2c_dabs(d__4)));
+                z__1.real = d__[1] * x[i__2].real;
+                z__1.imag = d__[1] * x[i__2].imag; // , expr subst
+                dx.real = z__1.real;
+                dx.imag = z__1.imag; // , expr subst
+                z__1.real = bi.real - dx.real;
+                z__1.imag = bi.imag - dx.imag; // , expr subst
+                work[1].real = z__1.real;
+                work[1].imag = z__1.imag; // , expr subst
+                rwork[1] = (d__1 = bi.real, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
+                           + ((d__3 = dx.real, f2c_dabs(d__3)) + (d__4 = d_imag(&dx), f2c_dabs(d__4)));
             }
             else
             {
                 i__2 = j * b_dim1 + 1;
-                bi.r = b[i__2].r;
-                bi.i = b[i__2].i; // , expr subst
+                bi.real = b[i__2].real;
+                bi.imag = b[i__2].imag; // , expr subst
                 i__2 = j * x_dim1 + 1;
-                z__1.r = d__[1] * x[i__2].r;
-                z__1.i = d__[1] * x[i__2].i; // , expr subst
-                dx.r = z__1.r;
-                dx.i = z__1.i; // , expr subst
+                z__1.real = d__[1] * x[i__2].real;
+                z__1.imag = d__[1] * x[i__2].imag; // , expr subst
+                dx.real = z__1.real;
+                dx.imag = z__1.imag; // , expr subst
                 i__2 = j * x_dim1 + 2;
-                z__1.r = e[1].r * x[i__2].r - e[1].i * x[i__2].i;
-                z__1.i = e[1].r * x[i__2].i + e[1].i * x[i__2].r; // , expr subst
-                ex.r = z__1.r;
-                ex.i = z__1.i; // , expr subst
-                z__2.r = bi.r - dx.r;
-                z__2.i = bi.i - dx.i; // , expr subst
-                z__1.r = z__2.r - ex.r;
-                z__1.i = z__2.i - ex.i; // , expr subst
-                work[1].r = z__1.r;
-                work[1].i = z__1.i; // , expr subst
+                z__1.real = e[1].real * x[i__2].real - e[1].imag * x[i__2].imag;
+                z__1.imag = e[1].real * x[i__2].imag + e[1].imag * x[i__2].real; // , expr subst
+                ex.real = z__1.real;
+                ex.imag = z__1.imag; // , expr subst
+                z__2.real = bi.real - dx.real;
+                z__2.imag = bi.imag - dx.imag; // , expr subst
+                z__1.real = z__2.real - ex.real;
+                z__1.imag = z__2.imag - ex.imag; // , expr subst
+                work[1].real = z__1.real;
+                work[1].imag = z__1.imag; // , expr subst
                 i__2 = j * x_dim1 + 2;
                 rwork[1]
-                    = (d__1 = bi.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
-                      + ((d__3 = dx.r, f2c_dabs(d__3)) + (d__4 = d_imag(&dx), f2c_dabs(d__4)))
-                      + ((d__5 = e[1].r, f2c_dabs(d__5)) + (d__6 = d_imag(&e[1]), f2c_dabs(d__6)))
-                            * ((d__7 = x[i__2].r, f2c_dabs(d__7))
+                    = (d__1 = bi.real, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
+                      + ((d__3 = dx.real, f2c_dabs(d__3)) + (d__4 = d_imag(&dx), f2c_dabs(d__4)))
+                      + ((d__5 = e[1].real, f2c_dabs(d__5)) + (d__6 = d_imag(&e[1]), f2c_dabs(d__6)))
+                            * ((d__7 = x[i__2].real, f2c_dabs(d__7))
                                + (d__8 = d_imag(&x[j * x_dim1 + 2]), f2c_dabs(d__8)));
                 i__2 = *n - 1;
                 for(i__ = 2; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
-                    bi.r = b[i__3].r;
-                    bi.i = b[i__3].i; // , expr subst
+                    bi.real = b[i__3].real;
+                    bi.imag = b[i__3].imag; // , expr subst
                     d_cnjg(&z__2, &e[i__ - 1]);
                     i__3 = i__ - 1 + j * x_dim1;
-                    z__1.r = z__2.r * x[i__3].r - z__2.i * x[i__3].i;
-                    z__1.i = z__2.r * x[i__3].i + z__2.i * x[i__3].r; // , expr subst
-                    cx.r = z__1.r;
-                    cx.i = z__1.i; // , expr subst
+                    z__1.real = z__2.real * x[i__3].real - z__2.imag * x[i__3].imag;
+                    z__1.imag = z__2.real * x[i__3].imag + z__2.imag * x[i__3].real; // , expr subst
+                    cx.real = z__1.real;
+                    cx.imag = z__1.imag; // , expr subst
                     i__3 = i__;
                     i__4 = i__ + j * x_dim1;
-                    z__1.r = d__[i__3] * x[i__4].r;
-                    z__1.i = d__[i__3] * x[i__4].i; // , expr subst
-                    dx.r = z__1.r;
-                    dx.i = z__1.i; // , expr subst
+                    z__1.real = d__[i__3] * x[i__4].real;
+                    z__1.imag = d__[i__3] * x[i__4].imag; // , expr subst
+                    dx.real = z__1.real;
+                    dx.imag = z__1.imag; // , expr subst
                     i__3 = i__;
                     i__4 = i__ + 1 + j * x_dim1;
-                    z__1.r = e[i__3].r * x[i__4].r - e[i__3].i * x[i__4].i;
-                    z__1.i = e[i__3].r * x[i__4].i + e[i__3].i * x[i__4].r; // , expr subst
-                    ex.r = z__1.r;
-                    ex.i = z__1.i; // , expr subst
+                    z__1.real = e[i__3].real * x[i__4].real - e[i__3].imag * x[i__4].imag;
+                    z__1.imag = e[i__3].real * x[i__4].imag + e[i__3].imag * x[i__4].real; // , expr subst
+                    ex.real = z__1.real;
+                    ex.imag = z__1.imag; // , expr subst
                     i__3 = i__;
-                    z__3.r = bi.r - cx.r;
-                    z__3.i = bi.i - cx.i; // , expr subst
-                    z__2.r = z__3.r - dx.r;
-                    z__2.i = z__3.i - dx.i; // , expr subst
-                    z__1.r = z__2.r - ex.r;
-                    z__1.i = z__2.i - ex.i; // , expr subst
-                    work[i__3].r = z__1.r;
-                    work[i__3].i = z__1.i; // , expr subst
+                    z__3.real = bi.real - cx.real;
+                    z__3.imag = bi.imag - cx.imag; // , expr subst
+                    z__2.real = z__3.real - dx.real;
+                    z__2.imag = z__3.imag - dx.imag; // , expr subst
+                    z__1.real = z__2.real - ex.real;
+                    z__1.imag = z__2.imag - ex.imag; // , expr subst
+                    work[i__3].real = z__1.real;
+                    work[i__3].imag = z__1.imag; // , expr subst
                     i__3 = i__ - 1;
                     i__4 = i__ - 1 + j * x_dim1;
                     i__5 = i__;
                     i__6 = i__ + 1 + j * x_dim1;
                     rwork[i__]
-                        = (d__1 = bi.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
-                          + ((d__3 = e[i__3].r, f2c_dabs(d__3))
+                        = (d__1 = bi.real, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
+                          + ((d__3 = e[i__3].real, f2c_dabs(d__3))
                              + (d__4 = d_imag(&e[i__ - 1]), f2c_dabs(d__4)))
-                                * ((d__5 = x[i__4].r, f2c_dabs(d__5))
+                                * ((d__5 = x[i__4].real, f2c_dabs(d__5))
                                    + (d__6 = d_imag(&x[i__ - 1 + j * x_dim1]), f2c_dabs(d__6)))
-                          + ((d__7 = dx.r, f2c_dabs(d__7)) + (d__8 = d_imag(&dx), f2c_dabs(d__8)))
-                          + ((d__9 = e[i__5].r, f2c_dabs(d__9))
+                          + ((d__7 = dx.real, f2c_dabs(d__7)) + (d__8 = d_imag(&dx), f2c_dabs(d__8)))
+                          + ((d__9 = e[i__5].real, f2c_dabs(d__9))
                              + (d__10 = d_imag(&e[i__]), f2c_dabs(d__10)))
-                                * ((d__11 = x[i__6].r, f2c_dabs(d__11))
+                                * ((d__11 = x[i__6].real, f2c_dabs(d__11))
                                    + (d__12 = d_imag(&x[i__ + 1 + j * x_dim1]), f2c_dabs(d__12)));
                     /* L30: */
                 }
                 i__2 = *n + j * b_dim1;
-                bi.r = b[i__2].r;
-                bi.i = b[i__2].i; // , expr subst
+                bi.real = b[i__2].real;
+                bi.imag = b[i__2].imag; // , expr subst
                 d_cnjg(&z__2, &e[*n - 1]);
                 i__2 = *n - 1 + j * x_dim1;
-                z__1.r = z__2.r * x[i__2].r - z__2.i * x[i__2].i;
-                z__1.i = z__2.r * x[i__2].i + z__2.i * x[i__2].r; // , expr subst
-                cx.r = z__1.r;
-                cx.i = z__1.i; // , expr subst
+                z__1.real = z__2.real * x[i__2].real - z__2.imag * x[i__2].imag;
+                z__1.imag = z__2.real * x[i__2].imag + z__2.imag * x[i__2].real; // , expr subst
+                cx.real = z__1.real;
+                cx.imag = z__1.imag; // , expr subst
                 i__2 = *n;
                 i__3 = *n + j * x_dim1;
-                z__1.r = d__[i__2] * x[i__3].r;
-                z__1.i = d__[i__2] * x[i__3].i; // , expr subst
-                dx.r = z__1.r;
-                dx.i = z__1.i; // , expr subst
+                z__1.real = d__[i__2] * x[i__3].real;
+                z__1.imag = d__[i__2] * x[i__3].imag; // , expr subst
+                dx.real = z__1.real;
+                dx.imag = z__1.imag; // , expr subst
                 i__2 = *n;
-                z__2.r = bi.r - cx.r;
-                z__2.i = bi.i - cx.i; // , expr subst
-                z__1.r = z__2.r - dx.r;
-                z__1.i = z__2.i - dx.i; // , expr subst
-                work[i__2].r = z__1.r;
-                work[i__2].i = z__1.i; // , expr subst
+                z__2.real = bi.real - cx.real;
+                z__2.imag = bi.imag - cx.imag; // , expr subst
+                z__1.real = z__2.real - dx.real;
+                z__1.imag = z__2.imag - dx.imag; // , expr subst
+                work[i__2].real = z__1.real;
+                work[i__2].imag = z__1.imag; // , expr subst
                 i__2 = *n - 1;
                 i__3 = *n - 1 + j * x_dim1;
                 rwork[*n]
-                    = (d__1 = bi.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
-                      + ((d__3 = e[i__2].r, f2c_dabs(d__3))
+                    = (d__1 = bi.real, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
+                      + ((d__3 = e[i__2].real, f2c_dabs(d__3))
                          + (d__4 = d_imag(&e[*n - 1]), f2c_dabs(d__4)))
-                            * ((d__5 = x[i__3].r, f2c_dabs(d__5))
+                            * ((d__5 = x[i__3].real, f2c_dabs(d__5))
                                + (d__6 = d_imag(&x[*n - 1 + j * x_dim1]), f2c_dabs(d__6)))
-                      + ((d__7 = dx.r, f2c_dabs(d__7)) + (d__8 = d_imag(&dx), f2c_dabs(d__8)));
+                      + ((d__7 = dx.real, f2c_dabs(d__7)) + (d__8 = d_imag(&dx), f2c_dabs(d__8)));
             }
         }
         else
@@ -454,130 +467,130 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
             if(*n == 1)
             {
                 i__2 = j * b_dim1 + 1;
-                bi.r = b[i__2].r;
-                bi.i = b[i__2].i; // , expr subst
+                bi.real = b[i__2].real;
+                bi.imag = b[i__2].imag; // , expr subst
                 i__2 = j * x_dim1 + 1;
-                z__1.r = d__[1] * x[i__2].r;
-                z__1.i = d__[1] * x[i__2].i; // , expr subst
-                dx.r = z__1.r;
-                dx.i = z__1.i; // , expr subst
-                z__1.r = bi.r - dx.r;
-                z__1.i = bi.i - dx.i; // , expr subst
-                work[1].r = z__1.r;
-                work[1].i = z__1.i; // , expr subst
-                rwork[1] = (d__1 = bi.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
-                           + ((d__3 = dx.r, f2c_dabs(d__3)) + (d__4 = d_imag(&dx), f2c_dabs(d__4)));
+                z__1.real = d__[1] * x[i__2].real;
+                z__1.imag = d__[1] * x[i__2].imag; // , expr subst
+                dx.real = z__1.real;
+                dx.imag = z__1.imag; // , expr subst
+                z__1.real = bi.real - dx.real;
+                z__1.imag = bi.imag - dx.imag; // , expr subst
+                work[1].real = z__1.real;
+                work[1].imag = z__1.imag; // , expr subst
+                rwork[1] = (d__1 = bi.real, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
+                           + ((d__3 = dx.real, f2c_dabs(d__3)) + (d__4 = d_imag(&dx), f2c_dabs(d__4)));
             }
             else
             {
                 i__2 = j * b_dim1 + 1;
-                bi.r = b[i__2].r;
-                bi.i = b[i__2].i; // , expr subst
+                bi.real = b[i__2].real;
+                bi.imag = b[i__2].imag; // , expr subst
                 i__2 = j * x_dim1 + 1;
-                z__1.r = d__[1] * x[i__2].r;
-                z__1.i = d__[1] * x[i__2].i; // , expr subst
-                dx.r = z__1.r;
-                dx.i = z__1.i; // , expr subst
+                z__1.real = d__[1] * x[i__2].real;
+                z__1.imag = d__[1] * x[i__2].imag; // , expr subst
+                dx.real = z__1.real;
+                dx.imag = z__1.imag; // , expr subst
                 d_cnjg(&z__2, &e[1]);
                 i__2 = j * x_dim1 + 2;
-                z__1.r = z__2.r * x[i__2].r - z__2.i * x[i__2].i;
-                z__1.i = z__2.r * x[i__2].i + z__2.i * x[i__2].r; // , expr subst
-                ex.r = z__1.r;
-                ex.i = z__1.i; // , expr subst
-                z__2.r = bi.r - dx.r;
-                z__2.i = bi.i - dx.i; // , expr subst
-                z__1.r = z__2.r - ex.r;
-                z__1.i = z__2.i - ex.i; // , expr subst
-                work[1].r = z__1.r;
-                work[1].i = z__1.i; // , expr subst
+                z__1.real = z__2.real * x[i__2].real - z__2.imag * x[i__2].imag;
+                z__1.imag = z__2.real * x[i__2].imag + z__2.imag * x[i__2].real; // , expr subst
+                ex.real = z__1.real;
+                ex.imag = z__1.imag; // , expr subst
+                z__2.real = bi.real - dx.real;
+                z__2.imag = bi.imag - dx.imag; // , expr subst
+                z__1.real = z__2.real - ex.real;
+                z__1.imag = z__2.imag - ex.imag; // , expr subst
+                work[1].real = z__1.real;
+                work[1].imag = z__1.imag; // , expr subst
                 i__2 = j * x_dim1 + 2;
                 rwork[1]
-                    = (d__1 = bi.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
-                      + ((d__3 = dx.r, f2c_dabs(d__3)) + (d__4 = d_imag(&dx), f2c_dabs(d__4)))
-                      + ((d__5 = e[1].r, f2c_dabs(d__5)) + (d__6 = d_imag(&e[1]), f2c_dabs(d__6)))
-                            * ((d__7 = x[i__2].r, f2c_dabs(d__7))
+                    = (d__1 = bi.real, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
+                      + ((d__3 = dx.real, f2c_dabs(d__3)) + (d__4 = d_imag(&dx), f2c_dabs(d__4)))
+                      + ((d__5 = e[1].real, f2c_dabs(d__5)) + (d__6 = d_imag(&e[1]), f2c_dabs(d__6)))
+                            * ((d__7 = x[i__2].real, f2c_dabs(d__7))
                                + (d__8 = d_imag(&x[j * x_dim1 + 2]), f2c_dabs(d__8)));
                 i__2 = *n - 1;
                 for(i__ = 2; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
-                    bi.r = b[i__3].r;
-                    bi.i = b[i__3].i; // , expr subst
+                    bi.real = b[i__3].real;
+                    bi.imag = b[i__3].imag; // , expr subst
                     i__3 = i__ - 1;
                     i__4 = i__ - 1 + j * x_dim1;
-                    z__1.r = e[i__3].r * x[i__4].r - e[i__3].i * x[i__4].i;
-                    z__1.i = e[i__3].r * x[i__4].i + e[i__3].i * x[i__4].r; // , expr subst
-                    cx.r = z__1.r;
-                    cx.i = z__1.i; // , expr subst
+                    z__1.real = e[i__3].real * x[i__4].real - e[i__3].imag * x[i__4].imag;
+                    z__1.imag = e[i__3].real * x[i__4].imag + e[i__3].imag * x[i__4].real; // , expr subst
+                    cx.real = z__1.real;
+                    cx.imag = z__1.imag; // , expr subst
                     i__3 = i__;
                     i__4 = i__ + j * x_dim1;
-                    z__1.r = d__[i__3] * x[i__4].r;
-                    z__1.i = d__[i__3] * x[i__4].i; // , expr subst
-                    dx.r = z__1.r;
-                    dx.i = z__1.i; // , expr subst
+                    z__1.real = d__[i__3] * x[i__4].real;
+                    z__1.imag = d__[i__3] * x[i__4].imag; // , expr subst
+                    dx.real = z__1.real;
+                    dx.imag = z__1.imag; // , expr subst
                     d_cnjg(&z__2, &e[i__]);
                     i__3 = i__ + 1 + j * x_dim1;
-                    z__1.r = z__2.r * x[i__3].r - z__2.i * x[i__3].i;
-                    z__1.i = z__2.r * x[i__3].i + z__2.i * x[i__3].r; // , expr subst
-                    ex.r = z__1.r;
-                    ex.i = z__1.i; // , expr subst
+                    z__1.real = z__2.real * x[i__3].real - z__2.imag * x[i__3].imag;
+                    z__1.imag = z__2.real * x[i__3].imag + z__2.imag * x[i__3].real; // , expr subst
+                    ex.real = z__1.real;
+                    ex.imag = z__1.imag; // , expr subst
                     i__3 = i__;
-                    z__3.r = bi.r - cx.r;
-                    z__3.i = bi.i - cx.i; // , expr subst
-                    z__2.r = z__3.r - dx.r;
-                    z__2.i = z__3.i - dx.i; // , expr subst
-                    z__1.r = z__2.r - ex.r;
-                    z__1.i = z__2.i - ex.i; // , expr subst
-                    work[i__3].r = z__1.r;
-                    work[i__3].i = z__1.i; // , expr subst
+                    z__3.real = bi.real - cx.real;
+                    z__3.imag = bi.imag - cx.imag; // , expr subst
+                    z__2.real = z__3.real - dx.real;
+                    z__2.imag = z__3.imag - dx.imag; // , expr subst
+                    z__1.real = z__2.real - ex.real;
+                    z__1.imag = z__2.imag - ex.imag; // , expr subst
+                    work[i__3].real = z__1.real;
+                    work[i__3].imag = z__1.imag; // , expr subst
                     i__3 = i__ - 1;
                     i__4 = i__ - 1 + j * x_dim1;
                     i__5 = i__;
                     i__6 = i__ + 1 + j * x_dim1;
                     rwork[i__]
-                        = (d__1 = bi.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
-                          + ((d__3 = e[i__3].r, f2c_dabs(d__3))
+                        = (d__1 = bi.real, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
+                          + ((d__3 = e[i__3].real, f2c_dabs(d__3))
                              + (d__4 = d_imag(&e[i__ - 1]), f2c_dabs(d__4)))
-                                * ((d__5 = x[i__4].r, f2c_dabs(d__5))
+                                * ((d__5 = x[i__4].real, f2c_dabs(d__5))
                                    + (d__6 = d_imag(&x[i__ - 1 + j * x_dim1]), f2c_dabs(d__6)))
-                          + ((d__7 = dx.r, f2c_dabs(d__7)) + (d__8 = d_imag(&dx), f2c_dabs(d__8)))
-                          + ((d__9 = e[i__5].r, f2c_dabs(d__9))
+                          + ((d__7 = dx.real, f2c_dabs(d__7)) + (d__8 = d_imag(&dx), f2c_dabs(d__8)))
+                          + ((d__9 = e[i__5].real, f2c_dabs(d__9))
                              + (d__10 = d_imag(&e[i__]), f2c_dabs(d__10)))
-                                * ((d__11 = x[i__6].r, f2c_dabs(d__11))
+                                * ((d__11 = x[i__6].real, f2c_dabs(d__11))
                                    + (d__12 = d_imag(&x[i__ + 1 + j * x_dim1]), f2c_dabs(d__12)));
                     /* L40: */
                 }
                 i__2 = *n + j * b_dim1;
-                bi.r = b[i__2].r;
-                bi.i = b[i__2].i; // , expr subst
+                bi.real = b[i__2].real;
+                bi.imag = b[i__2].imag; // , expr subst
                 i__2 = *n - 1;
                 i__3 = *n - 1 + j * x_dim1;
-                z__1.r = e[i__2].r * x[i__3].r - e[i__2].i * x[i__3].i;
-                z__1.i = e[i__2].r * x[i__3].i + e[i__2].i * x[i__3].r; // , expr subst
-                cx.r = z__1.r;
-                cx.i = z__1.i; // , expr subst
+                z__1.real = e[i__2].real * x[i__3].real - e[i__2].imag * x[i__3].imag;
+                z__1.imag = e[i__2].real * x[i__3].imag + e[i__2].imag * x[i__3].real; // , expr subst
+                cx.real = z__1.real;
+                cx.imag = z__1.imag; // , expr subst
                 i__2 = *n;
                 i__3 = *n + j * x_dim1;
-                z__1.r = d__[i__2] * x[i__3].r;
-                z__1.i = d__[i__2] * x[i__3].i; // , expr subst
-                dx.r = z__1.r;
-                dx.i = z__1.i; // , expr subst
+                z__1.real = d__[i__2] * x[i__3].real;
+                z__1.imag = d__[i__2] * x[i__3].imag; // , expr subst
+                dx.real = z__1.real;
+                dx.imag = z__1.imag; // , expr subst
                 i__2 = *n;
-                z__2.r = bi.r - cx.r;
-                z__2.i = bi.i - cx.i; // , expr subst
-                z__1.r = z__2.r - dx.r;
-                z__1.i = z__2.i - dx.i; // , expr subst
-                work[i__2].r = z__1.r;
-                work[i__2].i = z__1.i; // , expr subst
+                z__2.real = bi.real - cx.real;
+                z__2.imag = bi.imag - cx.imag; // , expr subst
+                z__1.real = z__2.real - dx.real;
+                z__1.imag = z__2.imag - dx.imag; // , expr subst
+                work[i__2].real = z__1.real;
+                work[i__2].imag = z__1.imag; // , expr subst
                 i__2 = *n - 1;
                 i__3 = *n - 1 + j * x_dim1;
                 rwork[*n]
-                    = (d__1 = bi.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
-                      + ((d__3 = e[i__2].r, f2c_dabs(d__3))
+                    = (d__1 = bi.real, f2c_dabs(d__1)) + (d__2 = d_imag(&bi), f2c_dabs(d__2))
+                      + ((d__3 = e[i__2].real, f2c_dabs(d__3))
                          + (d__4 = d_imag(&e[*n - 1]), f2c_dabs(d__4)))
-                            * ((d__5 = x[i__3].r, f2c_dabs(d__5))
+                            * ((d__5 = x[i__3].real, f2c_dabs(d__5))
                                + (d__6 = d_imag(&x[*n - 1 + j * x_dim1]), f2c_dabs(d__6)))
-                      + ((d__7 = dx.r, f2c_dabs(d__7)) + (d__8 = d_imag(&dx), f2c_dabs(d__8)));
+                      + ((d__7 = dx.real, f2c_dabs(d__7)) + (d__8 = d_imag(&dx), f2c_dabs(d__8)));
             }
         }
         /* Compute componentwise relative backward error from formula */
@@ -595,7 +608,7 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                d__4 = ((d__1 = work[i__3].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)))
                        / rwork[i__]; // , expr subst
                 s = fla_max(d__3, d__4);
@@ -605,7 +618,7 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                d__4 = ((d__1 = work[i__3].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1)
                        / (rwork[i__] + safe1); // , expr subst
                 s = fla_max(d__3, d__4);
@@ -621,8 +634,8 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            zpttrs_(uplo, n, &c__1, &df[1], &ef[1], &work[1], n, info);
-            zaxpy_(n, &c_b16, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_zpttrs(uplo, n, &c__1, &df[1], &ef[1], &work[1], n, info);
+            aocl_blas_zaxpy(n, &c_b16, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -647,19 +660,19 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
             if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                rwork[i__] = (d__1 = work[i__3].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                rwork[i__] = (d__1 = work[i__3].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__]
                              + safe1;
             }
             /* L60: */
         }
-        ix = idamax_(n, &rwork[1], &c__1);
+        ix = aocl_blas_idamax(n, &rwork[1], &c__1);
         ferr[j] = rwork[ix];
         /* Estimate the norm of inv(A). */
         /* Solve M(A) * x = e, where M(A) = (m(i,j)) is given by */
@@ -682,7 +695,7 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
             /* L80: */
         }
         /* Compute norm(inv(A)) = fla_max(x(i)), 1<=i<=n. */
-        ix = idamax_(n, &rwork[1], &c__1);
+        ix = aocl_blas_idamax(n, &rwork[1], &c__1);
         ferr[j] *= (d__1 = rwork[ix], f2c_dabs(d__1));
         /* Normalize error. */
         lstres = 0.;

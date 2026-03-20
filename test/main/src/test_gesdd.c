@@ -231,7 +231,7 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
         }
@@ -239,6 +239,7 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
         {
             create_realtype_vector(datatype, &s_in, fla_min(m, n));
             /* Generate matrix A from known singular values */
+            create_realtype_vector(datatype, &s_in, fla_min(m, n));
             create_svd_matrix(datatype, 'A', m, n, A, lda, s_in, s_one, s_one, i_one, i_one, info);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
@@ -287,6 +288,11 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
                                          params),
                           check_bit_reproducibility_gesdd(filename, datatype, jobz, m, n, A, lda, s,
                                                           U, ldu, V, ldvt, g_lwork, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesdd(tst_api, &jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype,
@@ -307,6 +313,10 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_vector(s_in);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
@@ -320,7 +330,6 @@ free_buffers:
         free_matrix(V);
     }
     free_vector(s);
-    free_vector(s_in);
     free_vector(scal);
 }
 
@@ -666,7 +675,7 @@ void store_gesdd_outputs(void *filename, integer datatype, char jobz, integer m,
         }
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 integer check_bit_reproducibility_gesdd(void *filename, integer datatype, char jobz, integer m,
                                         integer n, void *A, integer lda, void *s, void *U,

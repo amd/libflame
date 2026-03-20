@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> CGGLSE solves overdetermined or underdetermined systems for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -180,44 +180,47 @@ the least squares solution could not */
 /* > \ingroup gglse */
 /* ===================================================================== */
 /* Subroutine */
-void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, complex *b, integer *ldb,
-             complex *c__, complex *d__, complex *x, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, scomplex *a, aocl_int_t *lda, scomplex *b,
+             aocl_int_t *ldb, scomplex *c__, scomplex *d__, scomplex *x, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgglse(m, n, p, a, lda, b, ldb, c__, d__, x, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgglse(&m_64, &n_64, &p_64, a, &lda_64, b, &ldb_64, c__, d__, x, work, &lwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, scomplex *a,
+                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *c__,
+                        scomplex *d__, scomplex *x, scomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgglse inputs: m %" FLA_IS ",n %" FLA_IS ",p %" FLA_IS ",lda %" FLA_IS
                       ",ldb %" FLA_IS ",lwork %" FLA_IS ",info %" FLA_IS "",
                       *m, *n, *p, *lda, *ldb, *lwork, *info);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer nb, mn, nr, nb1, nb2, nb3, nb4, lopt;
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
-        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
-        cggrqf_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, complex *, complex *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkmin;
-    extern /* Subroutine */
-        void
-        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *),
-        cunmrq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t nb, mn, nr, nb1, nb2, nb3, nb4, lopt;
+    aocl_int64_t lwkmin;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
-                integer *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -283,10 +286,10 @@ void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, compl
         }
         else
         {
-            nb1 = ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
-            nb2 = ilaenv_(&c__1, "CGERQF", " ", m, n, &c_n1, &c_n1);
-            nb3 = ilaenv_(&c__1, "CUNMQR", " ", m, n, p, &c_n1);
-            nb4 = ilaenv_(&c__1, "CUNMRQ", " ", m, n, p, &c_n1);
+            nb1 = aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+            nb2 = aocl_lapack_ilaenv(&c__1, "CGERQF", " ", m, n, &c_n1, &c_n1);
+            nb3 = aocl_lapack_ilaenv(&c__1, "CUNMQR", " ", m, n, p, &c_n1);
+            nb4 = aocl_lapack_ilaenv(&c__1, "CUNMRQ", " ", m, n, p, &c_n1);
             /* Computing MAX */
             i__1 = fla_max(nb1, nb2);
             i__1 = fla_max(i__1, nb3); // , expr subst
@@ -294,9 +297,9 @@ void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, compl
             lwkmin = *m + *n + *p;
             lwkopt = *p + mn + fla_max(*m, *n) * nb;
         }
-        r__1 = sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
@@ -305,7 +308,7 @@ void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, compl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGGLSE", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGGLSE", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -327,26 +330,26 @@ void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, compl
     /* where T12 and R11 are upper triangular, and Q and Z are */
     /* unitary. */
     i__1 = *lwork - *p - mn;
-    cggrqf_(p, m, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda, &work[*p + 1],
-            &work[*p + mn + 1], &i__1, info);
+    aocl_lapack_cggrqf(p, m, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda, &work[*p + 1],
+                       &work[*p + mn + 1], &i__1, info);
     i__1 = *p + mn + 1;
-    lopt = (integer)work[i__1].r;
+    lopt = (integer)work[i__1].real;
     /* Update c = Z**H *c = ( c1 ) N-P */
     /* ( c2 ) M+P-N */
     i__1 = fla_max(1, *m);
     i__2 = *lwork - *p - mn;
-    cunmqr_("Left", "Conjugate Transpose", m, &c__1, &mn, &a[a_offset], lda, &work[*p + 1], &c__[1],
-            &i__1, &work[*p + mn + 1], &i__2, info);
+    aocl_lapack_cunmqr("Left", "Conjugate Transpose", m, &c__1, &mn, &a[a_offset], lda,
+                       &work[*p + 1], &c__[1], &i__1, &work[*p + mn + 1], &i__2, info);
     /* Computing MAX */
     i__3 = *p + mn + 1;
     i__1 = lopt;
-    i__2 = (integer)work[i__3].r; // , expr subst
+    i__2 = (integer)work[i__3].real; // , expr subst
     lopt = fla_max(i__1, i__2);
     /* Solve T12*x2 = d for x2 */
     if(*p > 0)
     {
-        ctrtrs_("Upper", "No transpose", "Non-unit", p, &c__1, &b[(*n - *p + 1) * b_dim1 + 1], ldb,
-                &d__[1], p, info);
+        aocl_lapack_ctrtrs("Upper", "No transpose", "Non-unit", p, &c__1,
+                           &b[(*n - *p + 1) * b_dim1 + 1], ldb, &d__[1], p, info);
         if(*info > 0)
         {
             *info = 1;
@@ -354,21 +357,21 @@ void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, compl
             return;
         }
         /* Put the solution in X */
-        ccopy_(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
+        aocl_blas_ccopy(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
         /* Update c1 */
         i__1 = *n - *p;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        cgemv_("No transpose", &i__1, p, &q__1, &a[(*n - *p + 1) * a_dim1 + 1], lda, &d__[1], &c__1,
-               &c_b1, &c__[1], &c__1);
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_cgemv("No transpose", &i__1, p, &q__1, &a[(*n - *p + 1) * a_dim1 + 1], lda,
+                        &d__[1], &c__1, &c_b1, &c__[1], &c__1);
     }
     /* Solve R11*x1 = c1 for x1 */
     if(*n > *p)
     {
         i__1 = *n - *p;
         i__2 = *n - *p;
-        ctrtrs_("Upper", "No transpose", "Non-unit", &i__1, &c__1, &a[a_offset], lda, &c__[1],
-                &i__2, info);
+        aocl_lapack_ctrtrs("Upper", "No transpose", "Non-unit", &i__1, &c__1, &a[a_offset], lda,
+                           &c__[1], &i__2, info);
         if(*info > 0)
         {
             *info = 2;
@@ -377,7 +380,7 @@ void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, compl
         }
         /* Put the solutions in X */
         i__1 = *n - *p;
-        ccopy_(&i__1, &c__[1], &c__1, &x[1], &c__1);
+        aocl_blas_ccopy(&i__1, &c__[1], &c__1, &x[1], &c__1);
     }
     /* Compute the residual vector: */
     if(*m < *n)
@@ -386,10 +389,10 @@ void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, compl
         if(nr > 0)
         {
             i__1 = *n - *m;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", &nr, &i__1, &q__1, &a[*n - *p + 1 + (*m + 1) * a_dim1], lda,
-                   &d__[nr + 1], &c__1, &c_b1, &c__[*n - *p + 1], &c__1);
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
+            aocl_blas_cgemv("No transpose", &nr, &i__1, &q__1, &a[*n - *p + 1 + (*m + 1) * a_dim1],
+                            lda, &d__[nr + 1], &c__1, &c_b1, &c__[*n - *p + 1], &c__1);
         }
     }
     else
@@ -398,23 +401,23 @@ void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, compl
     }
     if(nr > 0)
     {
-        ctrmv_("Upper", "No transpose", "Non unit", &nr, &a[*n - *p + 1 + (*n - *p + 1) * a_dim1],
-               lda, &d__[1], &c__1);
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        caxpy_(&nr, &q__1, &d__[1], &c__1, &c__[*n - *p + 1], &c__1);
+        aocl_blas_ctrmv("Upper", "No transpose", "Non unit", &nr,
+                        &a[*n - *p + 1 + (*n - *p + 1) * a_dim1], lda, &d__[1], &c__1);
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_caxpy(&nr, &q__1, &d__[1], &c__1, &c__[*n - *p + 1], &c__1);
     }
     /* Backward transformation x = Q**H*x */
     i__1 = *lwork - *p - mn;
-    cunmrq_("Left", "Conjugate Transpose", n, &c__1, p, &b[b_offset], ldb, &work[1], &x[1], n,
-            &work[*p + mn + 1], &i__1, info);
+    aocl_lapack_cunmrq("Left", "Conjugate Transpose", n, &c__1, p, &b[b_offset], ldb, &work[1],
+                       &x[1], n, &work[*p + mn + 1], &i__1, info);
     /* Computing MAX */
     i__4 = *p + mn + 1;
     i__2 = lopt;
-    i__3 = (integer)work[i__4].r; // , expr subst
+    i__3 = (integer)work[i__4].real; // , expr subst
     i__1 = *p + mn + fla_max(i__2, i__3);
-    work[1].r = (real)i__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)i__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGGLSE */

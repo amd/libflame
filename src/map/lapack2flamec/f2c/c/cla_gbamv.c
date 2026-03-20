@@ -180,9 +180,31 @@
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha,
-                complex *ab, integer *ldab, complex *x, integer *incx, real *beta, real *y,
-                integer *incy)
+/** Generated wrapper function */
+void cla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
+                real *alpha, scomplex *ab, aocl_int_t *ldab, scomplex *x, aocl_int_t *incx,
+                real *beta, real *y, aocl_int_t *incy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cla_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
+#else
+    aocl_int64_t trans_64 = *trans;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_cla_gbamv(&trans_64, &m_64, &n_64, &kl_64, &ku_64, alpha, ab, &ldab_64, x, &incx_64,
+                          beta, y, &incy_64);
+#endif
+}
+
+void aocl_lapack_cla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl,
+                           aocl_int64_t *ku, real *alpha, scomplex *ab, aocl_int64_t *ldab,
+                           scomplex *x, aocl_int64_t *incx, real *beta, real *y, aocl_int64_t *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -200,22 +222,19 @@ void cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2;
     /* Builtin functions */
-    double r_imag(complex *), r_sign(real *, real *);
+    double r_imag(scomplex *), r_sign(real *, real *);
     /* Local variables */
     extern integer ilatrans_(char *);
-    integer i__, j;
+    aocl_int64_t i__, j;
     logical symb_zero__;
-    integer kd, ke, iy, jx, kx, ky, info;
+    aocl_int64_t kd, ke, iy, jx, kx, ky, info;
     real temp;
-    integer lenx, leny;
+    aocl_int64_t lenx, leny;
     real safe1;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -283,7 +302,7 @@ void cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
     }
     if(info != 0)
     {
-        xerbla_("CLA_GBAMV ", &info, (ftnlen)10);
+        aocl_blas_xerbla("CLA_GBAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -363,14 +382,14 @@ void cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
                         i__2 = kd + i__ - j + j * ab_dim1;
-                        temp = (r__1 = ab[i__2].r, f2c_abs(r__1))
+                        temp = (r__1 = ab[i__2].real, f2c_abs(r__1))
                                + (r__2 = r_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2));
                         i__2 = j;
                         symb_zero__
-                            = symb_zero__ && (x[i__2].r == 0.f && x[i__2].i == 0.f || temp == 0.f);
+                            = symb_zero__ && (x[i__2].real == 0.f && x[i__2].imag == 0.f || temp == 0.f);
                         i__2 = j;
                         y[iy] += *alpha
-                                 * ((r__1 = x[i__2].r, f2c_abs(r__1))
+                                 * ((r__1 = x[i__2].real, f2c_abs(r__1))
                                     + (r__2 = r_imag(&x[j]), f2c_abs(r__2)))
                                  * temp;
                     }
@@ -411,14 +430,14 @@ void cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
                         i__3 = ke - i__ + j + i__ * ab_dim1;
-                        temp = (r__1 = ab[i__3].r, f2c_abs(r__1))
+                        temp = (r__1 = ab[i__3].real, f2c_abs(r__1))
                                + (r__2 = r_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(r__2));
                         i__3 = j;
                         symb_zero__
-                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
+                            = symb_zero__ && (x[i__3].real == 0.f && x[i__3].imag == 0.f || temp == 0.f);
                         i__3 = j;
                         y[iy] += *alpha
-                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                 * ((r__1 = x[i__3].real, f2c_abs(r__1))
                                     + (r__2 = r_imag(&x[j]), f2c_abs(r__2)))
                                  * temp;
                     }
@@ -463,14 +482,14 @@ void cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
                         i__2 = kd + i__ - j + j * ab_dim1;
-                        temp = (r__1 = ab[i__2].r, f2c_abs(r__1))
+                        temp = (r__1 = ab[i__2].real, f2c_abs(r__1))
                                + (r__2 = r_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2));
                         i__2 = jx;
                         symb_zero__
-                            = symb_zero__ && (x[i__2].r == 0.f && x[i__2].i == 0.f || temp == 0.f);
+                            = symb_zero__ && (x[i__2].real == 0.f && x[i__2].imag == 0.f || temp == 0.f);
                         i__2 = jx;
                         y[iy] += *alpha
-                                 * ((r__1 = x[i__2].r, f2c_abs(r__1))
+                                 * ((r__1 = x[i__2].real, f2c_abs(r__1))
                                     + (r__2 = r_imag(&x[jx]), f2c_abs(r__2)))
                                  * temp;
                         jx += *incx;
@@ -513,14 +532,14 @@ void cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
                         i__3 = ke - i__ + j + i__ * ab_dim1;
-                        temp = (r__1 = ab[i__3].r, f2c_abs(r__1))
+                        temp = (r__1 = ab[i__3].real, f2c_abs(r__1))
                                + (r__2 = r_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(r__2));
                         i__3 = jx;
                         symb_zero__
-                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
+                            = symb_zero__ && (x[i__3].real == 0.f && x[i__3].imag == 0.f || temp == 0.f);
                         i__3 = jx;
                         y[iy] += *alpha
-                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                 * ((r__1 = x[i__3].real, f2c_abs(r__1))
                                     + (r__2 = r_imag(&x[jx]), f2c_abs(r__2)))
                                  * temp;
                         jx += *incx;

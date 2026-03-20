@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGBTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -136,8 +136,32 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, doublecomplex *ab,
-             integer *ldab, integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void zgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs,
+             dcomplex *ab, aocl_int_t *ldab, aocl_int_t *ipiv, dcomplex *b,
+             aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgbtrs(trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgbtrs(trans, &n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, ipiv, b, &ldb_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgbtrs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        aocl_int64_t *nrhs, dcomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv,
+                        dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbtrs inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
@@ -145,23 +169,12 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
                       *trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
 
     /* System generated locals */
-    integer ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j, l, kd, lm;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j, l, kd, lm;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lnoti;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-               doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlacgv_(integer *, doublecomplex *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -226,7 +239,7 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -258,12 +271,12 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
                 l = ipiv[j];
                 if(l != j)
                 {
-                    zswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgeru_(&lm, nrhs, &z__1, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1], ldb,
-                       &b[j + 1 + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgeru(&lm, nrhs, &z__1, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1],
+                                ldb, &b[j + 1 + b_dim1], ldb);
                 /* L10: */
             }
         }
@@ -272,8 +285,8 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
         {
             /* Solve U*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            ztbsv_("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                   &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_ztbsv("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                            &b[i__ * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }
@@ -285,8 +298,8 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
         {
             /* Solve U**T * X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            ztbsv_("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                   &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_ztbsv("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                            &b[i__ * b_dim1 + 1], &c__1);
             /* L30: */
         }
         /* Solve L**T * X = B, overwriting B with X. */
@@ -298,14 +311,14 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
                 lm = fla_min(i__1, i__2);
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("Transpose", &lm, nrhs, &z__1, &b[j + 1 + b_dim1], ldb,
-                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("Transpose", &lm, nrhs, &z__1, &b[j + 1 + b_dim1], ldb,
+                                &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {
-                    zswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
                 /* L40: */
             }
@@ -319,8 +332,8 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
         {
             /* Solve U**H * X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            ztbsv_("Upper", "Conjugate transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                   &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_ztbsv("Upper", "Conjugate transpose", "Non-unit", n, &i__2, &ab[ab_offset],
+                            ldab, &b[i__ * b_dim1 + 1], &c__1);
             /* L50: */
         }
         /* Solve L**H * X = B, overwriting B with X. */
@@ -332,16 +345,16 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
                 lm = fla_min(i__1, i__2);
-                zlacgv_(nrhs, &b[j + b_dim1], ldb);
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("Conjugate transpose", &lm, nrhs, &z__1, &b[j + 1 + b_dim1], ldb,
-                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
-                zlacgv_(nrhs, &b[j + b_dim1], ldb);
+                aocl_lapack_zlacgv(nrhs, &b[j + b_dim1], ldb);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("Conjugate transpose", &lm, nrhs, &z__1, &b[j + 1 + b_dim1], ldb,
+                                &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
+                aocl_lapack_zlacgv(nrhs, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {
-                    zswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
                 /* L60: */
             }

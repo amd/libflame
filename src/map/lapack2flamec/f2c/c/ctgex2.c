@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c__1 = 1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by
  * an unitary equivalence transformation. */
 /* =========== DOCUMENTATION =========== */
@@ -192,45 +192,60 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b,
-             integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *j1,
-             integer *info)
+/** Generated wrapper function */
+void ctgex2_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b,
+             aocl_int_t *ldb, scomplex *q, aocl_int_t *ldq, scomplex *z__, aocl_int_t *ldz,
+             aocl_int_t *j1, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctgex2(wantq, wantz, n, a, lda, b, ldb, q, ldq, z__, ldz, j1, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t j1_64 = *j1;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctgex2(wantq, wantz, &n_64, a, &lda_64, b, &ldb_64, q, &ldq_64, z__, &ldz_64,
+                       &j1_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctgex2(logical *wantq, logical *wantz, aocl_int64_t *n, scomplex *a,
+                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *q,
+                        aocl_int64_t *ldq, scomplex *z__, aocl_int64_t *ldz, aocl_int64_t *j1,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ctgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
                       ", ldz %" FLA_IS ", j1 %" FLA_IS "",
                       *n, *lda, *ldb, *ldq, *ldz, *j1);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
     real r__1;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double sqrt(doublereal), c_abs(complex *);
-    void r_cnjg(complex *, complex *);
+    double sqrt(doublereal), c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    complex f, g;
-    integer i__, m;
-    complex s[4] /* was [2][2] */
+    scomplex f, g;
+    aocl_int64_t i__, m;
+    scomplex s[4] /* was [2][2] */
         ,
         t[4] /* was [2][2] */
         ;
     real cq, sa, sb, cz;
-    complex sq, sz;
+    scomplex sq, sz;
     real eps, sum;
     logical weak;
-    complex cdum;
-    extern /* Subroutine */
-        void
-        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
-    complex work[8];
+    scomplex cdum;
+    scomplex work[8];
     real scale;
-    extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        clartg_(complex *, complex *, real *, complex *, complex *),
-        classq_(integer *, complex *, integer *, real *, real *);
     real smlnum;
     logical strong;
     real thresha, threshb;
@@ -280,22 +295,22 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     weak = FALSE_;
     strong = FALSE_;
     /* Make a local copy of selected block in (A, B) */
-    clacpy_("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, s, &c__2);
-    clacpy_("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, t, &c__2);
+    aocl_lapack_clacpy("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, s, &c__2);
+    aocl_lapack_clacpy("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, t, &c__2);
     /* Compute the threshold for testing the acceptance of swapping. */
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
     scale = 0.f;
     sum = 1.f;
-    clacpy_("Full", &m, &m, s, &c__2, work, &m);
-    clacpy_("Full", &m, &m, t, &c__2, &work[m * m], &m);
+    aocl_lapack_clacpy("Full", &m, &m, s, &c__2, work, &m);
+    aocl_lapack_clacpy("Full", &m, &m, t, &c__2, &work[m * m], &m);
     i__1 = m * m;
-    classq_(&i__1, work, &c__1, &scale, &sum);
+    aocl_lapack_classq(&i__1, work, &c__1, &scale, &sum);
     sa = scale * sqrt(sum);
     scale = 0.f;
     sum = 1.f;
     i__1 = m * m;
-    classq_(&i__1, &work[m * m], &c__1, &scale, &sum);
+    aocl_lapack_classq(&i__1, &work[m * m], &c__1, &scale, &sum);
     sb = scale * sqrt(sum);
     /* THRES has been changed from */
     /* THRESH = MAX( TEN*EPS*SA, SMLNUM ) */
@@ -312,33 +327,33 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     threshb = fla_max(r__1, smlnum);
     /* Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks */
     /* using Givens rotations and perform the swap tentatively. */
-    q__2.r = s[3].r * t[0].r - s[3].i * t[0].i;
-    q__2.i = s[3].r * t[0].i + s[3].i * t[0].r; // , expr subst
-    q__3.r = t[3].r * s[0].r - t[3].i * s[0].i;
-    q__3.i = t[3].r * s[0].i + t[3].i * s[0].r; // , expr subst
-    q__1.r = q__2.r - q__3.r;
-    q__1.i = q__2.i - q__3.i; // , expr subst
-    f.r = q__1.r;
-    f.i = q__1.i; // , expr subst
-    q__2.r = s[3].r * t[2].r - s[3].i * t[2].i;
-    q__2.i = s[3].r * t[2].i + s[3].i * t[2].r; // , expr subst
-    q__3.r = t[3].r * s[2].r - t[3].i * s[2].i;
-    q__3.i = t[3].r * s[2].i + t[3].i * s[2].r; // , expr subst
-    q__1.r = q__2.r - q__3.r;
-    q__1.i = q__2.i - q__3.i; // , expr subst
-    g.r = q__1.r;
-    g.i = q__1.i; // , expr subst
+    q__2.real = s[3].real * t[0].real - s[3].imag * t[0].imag;
+    q__2.imag = s[3].real * t[0].imag + s[3].imag * t[0].real; // , expr subst
+    q__3.real = t[3].real * s[0].real - t[3].imag * s[0].imag;
+    q__3.imag = t[3].real * s[0].imag + t[3].imag * s[0].real; // , expr subst
+    q__1.real = q__2.real - q__3.real;
+    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+    f.real = q__1.real;
+    f.imag = q__1.imag; // , expr subst
+    q__2.real = s[3].real * t[2].real - s[3].imag * t[2].imag;
+    q__2.imag = s[3].real * t[2].imag + s[3].imag * t[2].real; // , expr subst
+    q__3.real = t[3].real * s[2].real - t[3].imag * s[2].imag;
+    q__3.imag = t[3].real * s[2].imag + t[3].imag * s[2].real; // , expr subst
+    q__1.real = q__2.real - q__3.real;
+    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+    g.real = q__1.real;
+    g.imag = q__1.imag; // , expr subst
     sa = c_abs(&s[3]) * c_abs(t);
     sb = c_abs(s) * c_abs(&t[3]);
     clartg_(&g, &f, &cz, &sz, &cdum);
-    q__1.r = -sz.r;
-    q__1.i = -sz.i; // , expr subst
-    sz.r = q__1.r;
-    sz.i = q__1.i; // , expr subst
+    q__1.real = -sz.real;
+    q__1.imag = -sz.imag; // , expr subst
+    sz.real = q__1.real;
+    sz.imag = q__1.imag; // , expr subst
     r_cnjg(&q__1, &sz);
-    crot_(&c__2, s, &c__1, &s[2], &c__1, &cz, &q__1);
+    aocl_lapack_crot(&c__2, s, &c__1, &s[2], &c__1, &cz, &q__1);
     r_cnjg(&q__1, &sz);
-    crot_(&c__2, t, &c__1, &t[2], &c__1, &cz, &q__1);
+    aocl_lapack_crot(&c__2, t, &c__1, &t[2], &c__1, &cz, &q__1);
     if(sa >= sb)
     {
         clartg_(s, &s[1], &cq, &sq, &cdum);
@@ -347,8 +362,8 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     {
         clartg_(t, &t[1], &cq, &sq, &cdum);
     }
-    crot_(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
-    crot_(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
+    aocl_lapack_crot(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
+    aocl_lapack_crot(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
     /* Weak stability test: |S21| <= O(EPS F-norm((A))) */
     /* and |T21| <= O(EPS F-norm((B))) */
     weak = c_abs(&s[1]) <= thresha && c_abs(&t[1]) <= threshb;
@@ -360,63 +375,63 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     {
         /* Strong stability test: */
         /* F-norm((A-QL**H*S*QR, B-QL**H*T*QR)) <= O(EPS*F-norm((A, B))) */
-        clacpy_("Full", &m, &m, s, &c__2, work, &m);
-        clacpy_("Full", &m, &m, t, &c__2, &work[m * m], &m);
+        aocl_lapack_clacpy("Full", &m, &m, s, &c__2, work, &m);
+        aocl_lapack_clacpy("Full", &m, &m, t, &c__2, &work[m * m], &m);
         r_cnjg(&q__2, &sz);
-        q__1.r = -q__2.r;
-        q__1.i = -q__2.i; // , expr subst
-        crot_(&c__2, work, &c__1, &work[2], &c__1, &cz, &q__1);
+        q__1.real = -q__2.real;
+        q__1.imag = -q__2.imag; // , expr subst
+        aocl_lapack_crot(&c__2, work, &c__1, &work[2], &c__1, &cz, &q__1);
         r_cnjg(&q__2, &sz);
-        q__1.r = -q__2.r;
-        q__1.i = -q__2.i; // , expr subst
-        crot_(&c__2, &work[4], &c__1, &work[6], &c__1, &cz, &q__1);
-        q__1.r = -sq.r;
-        q__1.i = -sq.i; // , expr subst
-        crot_(&c__2, work, &c__2, &work[1], &c__2, &cq, &q__1);
-        q__1.r = -sq.r;
-        q__1.i = -sq.i; // , expr subst
-        crot_(&c__2, &work[4], &c__2, &work[5], &c__2, &cq, &q__1);
+        q__1.real = -q__2.real;
+        q__1.imag = -q__2.imag; // , expr subst
+        aocl_lapack_crot(&c__2, &work[4], &c__1, &work[6], &c__1, &cz, &q__1);
+        q__1.real = -sq.real;
+        q__1.imag = -sq.imag; // , expr subst
+        aocl_lapack_crot(&c__2, work, &c__2, &work[1], &c__2, &cq, &q__1);
+        q__1.real = -sq.real;
+        q__1.imag = -sq.imag; // , expr subst
+        aocl_lapack_crot(&c__2, &work[4], &c__2, &work[5], &c__2, &cq, &q__1);
         for(i__ = 1; i__ <= 2; ++i__)
         {
             i__1 = i__ - 1;
             i__2 = i__ - 1;
             i__3 = *j1 + i__ - 1 + *j1 * a_dim1;
-            q__1.r = work[i__2].r - a[i__3].r;
-            q__1.i = work[i__2].i - a[i__3].i; // , expr subst
-            work[i__1].r = q__1.r;
-            work[i__1].i = q__1.i; // , expr subst
+            q__1.real = work[i__2].real - a[i__3].real;
+            q__1.imag = work[i__2].imag - a[i__3].imag; // , expr subst
+            work[i__1].real = q__1.real;
+            work[i__1].imag = q__1.imag; // , expr subst
             i__1 = i__ + 1;
             i__2 = i__ + 1;
             i__3 = *j1 + i__ - 1 + (*j1 + 1) * a_dim1;
-            q__1.r = work[i__2].r - a[i__3].r;
-            q__1.i = work[i__2].i - a[i__3].i; // , expr subst
-            work[i__1].r = q__1.r;
-            work[i__1].i = q__1.i; // , expr subst
+            q__1.real = work[i__2].real - a[i__3].real;
+            q__1.imag = work[i__2].imag - a[i__3].imag; // , expr subst
+            work[i__1].real = q__1.real;
+            work[i__1].imag = q__1.imag; // , expr subst
             i__1 = i__ + 3;
             i__2 = i__ + 3;
             i__3 = *j1 + i__ - 1 + *j1 * b_dim1;
-            q__1.r = work[i__2].r - b[i__3].r;
-            q__1.i = work[i__2].i - b[i__3].i; // , expr subst
-            work[i__1].r = q__1.r;
-            work[i__1].i = q__1.i; // , expr subst
+            q__1.real = work[i__2].real - b[i__3].real;
+            q__1.imag = work[i__2].imag - b[i__3].imag; // , expr subst
+            work[i__1].real = q__1.real;
+            work[i__1].imag = q__1.imag; // , expr subst
             i__1 = i__ + 5;
             i__2 = i__ + 5;
             i__3 = *j1 + i__ - 1 + (*j1 + 1) * b_dim1;
-            q__1.r = work[i__2].r - b[i__3].r;
-            q__1.i = work[i__2].i - b[i__3].i; // , expr subst
-            work[i__1].r = q__1.r;
-            work[i__1].i = q__1.i; // , expr subst
+            q__1.real = work[i__2].real - b[i__3].real;
+            q__1.imag = work[i__2].imag - b[i__3].imag; // , expr subst
+            work[i__1].real = q__1.real;
+            work[i__1].imag = q__1.imag; // , expr subst
             /* L10: */
         }
         scale = 0.f;
         sum = 1.f;
         i__1 = m * m;
-        classq_(&i__1, work, &c__1, &scale, &sum);
+        aocl_lapack_classq(&i__1, work, &c__1, &scale, &sum);
         sa = scale * sqrt(sum);
         scale = 0.f;
         sum = 1.f;
         i__1 = m * m;
-        classq_(&i__1, &work[m * m], &c__1, &scale, &sum);
+        aocl_lapack_classq(&i__1, &work[m * m], &c__1, &scale, &sum);
         sb = scale * sqrt(sum);
         strong = sa <= thresha && sb <= threshb;
         if(!strong)
@@ -428,31 +443,35 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     /* equivalence transformations to the original matrix pair (A,B) */
     i__1 = *j1 + 1;
     r_cnjg(&q__1, &sz);
-    crot_(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], &c__1, &cz, &q__1);
+    aocl_lapack_crot(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], &c__1, &cz,
+                     &q__1);
     i__1 = *j1 + 1;
     r_cnjg(&q__1, &sz);
-    crot_(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], &c__1, &cz, &q__1);
+    aocl_lapack_crot(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], &c__1, &cz,
+                     &q__1);
     i__1 = *n - *j1 + 1;
-    crot_(&i__1, &a[*j1 + *j1 * a_dim1], lda, &a[*j1 + 1 + *j1 * a_dim1], lda, &cq, &sq);
+    aocl_lapack_crot(&i__1, &a[*j1 + *j1 * a_dim1], lda, &a[*j1 + 1 + *j1 * a_dim1], lda, &cq, &sq);
     i__1 = *n - *j1 + 1;
-    crot_(&i__1, &b[*j1 + *j1 * b_dim1], ldb, &b[*j1 + 1 + *j1 * b_dim1], ldb, &cq, &sq);
+    aocl_lapack_crot(&i__1, &b[*j1 + *j1 * b_dim1], ldb, &b[*j1 + 1 + *j1 * b_dim1], ldb, &cq, &sq);
     /* Set N1 by N2 (2,1) blocks to 0 */
     i__1 = *j1 + 1 + *j1 * a_dim1;
-    a[i__1].r = 0.f;
-    a[i__1].i = 0.f; // , expr subst
+    a[i__1].real = 0.f;
+    a[i__1].imag = 0.f; // , expr subst
     i__1 = *j1 + 1 + *j1 * b_dim1;
-    b[i__1].r = 0.f;
-    b[i__1].i = 0.f; // , expr subst
+    b[i__1].real = 0.f;
+    b[i__1].imag = 0.f; // , expr subst
     /* Accumulate transformations into Q and Z if requested. */
     if(*wantz)
     {
         r_cnjg(&q__1, &sz);
-        crot_(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1], &c__1, &cz, &q__1);
+        aocl_lapack_crot(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1], &c__1, &cz,
+                         &q__1);
     }
     if(*wantq)
     {
         r_cnjg(&q__1, &sq);
-        crot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &c__1, &cq, &q__1);
+        aocl_lapack_crot(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &c__1, &cq,
+                         &q__1);
     }
     /* Exit with INFO = 0 if swap was successfully performed. */
     AOCL_DTL_TRACE_LOG_EXIT

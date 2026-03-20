@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b14 = {1., 0.};
-static doublecomplex c_b22 = {0., 0.};
-static doublecomplex c_b29 = {-1., -0.};
-/* > \brief \b ZTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real
- * or complex matrix, which is composed of two blocks. */
+static dcomplex c_b14 = {1., 0.};
+static dcomplex c_b22 = {0., 0.};
+static dcomplex c_b29 = {-1., -0.};
+/* > \brief \b ZTPRFB applies a real or scomplex "triangular-pentagonal" blocked reflector to a real
+ * or scomplex matrix, which is composed of two blocks. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -44,8 +44,8 @@ static doublecomplex c_b29 = {-1., -0.};
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZTPRFB applies a complex "triangular-pentagonal" block reflector H or its */
-/* > conjugate transpose H**H to a complex matrix C, which is composed of two */
+/* > ZTPRFB applies a scomplex "triangular-pentagonal" block reflector H or its */
+/* > conjugate transpose H**H to a scomplex matrix C, which is composed of two */
 /* > blocks A and B, either from the left or right. */
 /* > */
 /* > \endverbatim */
@@ -256,10 +256,36 @@ if SIDE = 'R', A is of size M-by-K, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
-             integer *k, integer *l, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt,
-             doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work,
-             integer *ldwork)
+/** Generated wrapper function */
+void ztprfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m, aocl_int_t *n,
+             aocl_int_t *k, aocl_int_t *l, dcomplex *v, aocl_int_t *ldv, dcomplex *t,
+             aocl_int_t *ldt, dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb,
+             dcomplex *work, aocl_int_t *ldwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztprfb(side, trans, direct, storev, m, n, k, l, v, ldv, t, ldt, a, lda, b, ldb,
+                       work, ldwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldwork_64 = *ldwork;
+
+    aocl_lapack_ztprfb(side, trans, direct, storev, &m_64, &n_64, &k_64, &l_64, v, &ldv_64, t,
+                       &ldt_64, a, &lda_64, b, &ldb_64, work, &ldwork_64);
+#endif
+}
+
+void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aocl_int64_t *m,
+                        aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *l, dcomplex *v,
+                        aocl_int64_t *ldv, dcomplex *t, aocl_int64_t *ldt, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, dcomplex *work,
+                        aocl_int64_t *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztprfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
@@ -267,21 +293,15 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                       ", lda %" FLA_IS ", ldb %" FLA_IS "",
                       *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1,
         work_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
     logical backward;
-    integer i__, j, kp, mp, np;
+    aocl_int64_t i__, j, kp, mp, np;
     logical row, left;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *);
     logical column, forward;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -397,17 +417,18 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
-        ztrmm_("L", "U", "C", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("L", "U", "C", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[work_offset],
+                        ldwork);
         i__1 = *m - *l;
-        zgemm_("C", "N", l, n, &i__1, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b14,
-               &work[work_offset], ldwork);
+        aocl_blas_zgemm("C", "N", l, n, &i__1, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b14,
+                        &work[work_offset], ldwork);
         i__1 = *k - *l;
-        zgemm_("C", "N", &i__1, n, m, &c_b14, &v[kp * v_dim1 + 1], ldv, &b[b_offset], ldb, &c_b22,
-               &work[kp + work_dim1], ldwork);
+        aocl_blas_zgemm("C", "N", &i__1, n, m, &c_b14, &v[kp * v_dim1 + 1], ldv, &b[b_offset], ldb,
+                        &c_b22, &work[kp + work_dim1], ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -417,13 +438,14 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
-        ztrmm_("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -433,19 +455,20 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
-        zgemm_("N", "N", &i__1, n, k, &c_b29, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b14,
-               &b[b_offset], ldb);
+        aocl_blas_zgemm("N", "N", &i__1, n, k, &c_b29, &v[v_offset], ldv, &work[work_offset],
+                        ldwork, &c_b14, &b[b_offset], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "N", l, n, &i__1, &c_b29, &v[mp + kp * v_dim1], ldv, &work[kp + work_dim1],
-               ldwork, &c_b14, &b[mp + b_dim1], ldb);
-        ztrmm_("L", "U", "N", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[work_offset], ldwork);
+        aocl_blas_zgemm("N", "N", l, n, &i__1, &c_b29, &v[mp + kp * v_dim1], ldv,
+                        &work[kp + work_dim1], ldwork, &c_b14, &b[mp + b_dim1], ldb);
+        aocl_blas_ztrmm("L", "U", "N", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[work_offset],
+                        ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -455,10 +478,10 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -487,17 +510,18 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
-        ztrmm_("R", "U", "N", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("R", "U", "N", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[work_offset],
+                        ldwork);
         i__1 = *n - *l;
-        zgemm_("N", "N", m, l, &i__1, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b14,
-               &work[work_offset], ldwork);
+        aocl_blas_zgemm("N", "N", m, l, &i__1, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b14,
+                        &work[work_offset], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "N", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[kp * v_dim1 + 1], ldv, &c_b22,
-               &work[kp * work_dim1 + 1], ldwork);
+        aocl_blas_zgemm("N", "N", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[kp * v_dim1 + 1], ldv,
+                        &c_b22, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
@@ -507,13 +531,14 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
-        ztrmm_("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
@@ -523,19 +548,20 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
-        zgemm_("N", "C", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
-               &b[b_offset], ldb);
+        aocl_blas_zgemm("N", "C", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[v_offset],
+                        ldv, &c_b14, &b[b_offset], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "C", m, l, &i__1, &c_b29, &work[kp * work_dim1 + 1], ldwork,
-               &v[np + kp * v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
-        ztrmm_("R", "U", "C", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[work_offset], ldwork);
+        aocl_blas_zgemm("N", "C", m, l, &i__1, &c_b29, &work[kp * work_dim1 + 1], ldwork,
+                        &v[np + kp * v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
+        aocl_blas_ztrmm("R", "U", "C", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[work_offset],
+                        ldwork);
         i__1 = *l;
         for(j = 1; j <= i__1; ++j)
         {
@@ -545,10 +571,10 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -578,18 +604,18 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
-        ztrmm_("L", "L", "C", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv, &work[kp + work_dim1],
-               ldwork);
+        aocl_blas_ztrmm("L", "L", "C", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv,
+                        &work[kp + work_dim1], ldwork);
         i__1 = *m - *l;
-        zgemm_("C", "N", l, n, &i__1, &c_b14, &v[mp + kp * v_dim1], ldv, &b[mp + b_dim1], ldb,
-               &c_b14, &work[kp + work_dim1], ldwork);
+        aocl_blas_zgemm("C", "N", l, n, &i__1, &c_b14, &v[mp + kp * v_dim1], ldv, &b[mp + b_dim1],
+                        ldb, &c_b14, &work[kp + work_dim1], ldwork);
         i__1 = *k - *l;
-        zgemm_("C", "N", &i__1, n, m, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b22,
-               &work[work_offset], ldwork);
+        aocl_blas_zgemm("C", "N", &i__1, n, m, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b22,
+                        &work[work_offset], ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -599,13 +625,14 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
-        ztrmm_("L", "L", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("L", "L", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -615,20 +642,20 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
-        zgemm_("N", "N", &i__1, n, k, &c_b29, &v[mp + v_dim1], ldv, &work[work_offset], ldwork,
-               &c_b14, &b[mp + b_dim1], ldb);
+        aocl_blas_zgemm("N", "N", &i__1, n, k, &c_b29, &v[mp + v_dim1], ldv, &work[work_offset],
+                        ldwork, &c_b14, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "N", l, n, &i__1, &c_b29, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b14,
-               &b[b_offset], ldb);
-        ztrmm_("L", "L", "N", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv, &work[kp + work_dim1],
-               ldwork);
+        aocl_blas_zgemm("N", "N", l, n, &i__1, &c_b29, &v[v_offset], ldv, &work[work_offset],
+                        ldwork, &c_b14, &b[b_offset], ldb);
+        aocl_blas_ztrmm("L", "L", "N", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv,
+                        &work[kp + work_dim1], ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -638,10 +665,10 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -670,18 +697,18 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
-        ztrmm_("R", "L", "N", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv,
-               &work[kp * work_dim1 + 1], ldwork);
+        aocl_blas_ztrmm("R", "L", "N", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv,
+                        &work[kp * work_dim1 + 1], ldwork);
         i__1 = *n - *l;
-        zgemm_("N", "N", m, l, &i__1, &c_b14, &b[np * b_dim1 + 1], ldb, &v[np + kp * v_dim1], ldv,
-               &c_b14, &work[kp * work_dim1 + 1], ldwork);
+        aocl_blas_zgemm("N", "N", m, l, &i__1, &c_b14, &b[np * b_dim1 + 1], ldb,
+                        &v[np + kp * v_dim1], ldv, &c_b14, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "N", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b22,
-               &work[work_offset], ldwork);
+        aocl_blas_zgemm("N", "N", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b22,
+                        &work[work_offset], ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
@@ -691,13 +718,14 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
-        ztrmm_("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
@@ -707,20 +735,20 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
-        zgemm_("N", "C", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[np + v_dim1], ldv,
-               &c_b14, &b[np * b_dim1 + 1], ldb);
+        aocl_blas_zgemm("N", "C", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[np + v_dim1],
+                        ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "C", m, l, &i__1, &c_b29, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
-               &b[b_offset], ldb);
-        ztrmm_("R", "L", "C", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv,
-               &work[kp * work_dim1 + 1], ldwork);
+        aocl_blas_zgemm("N", "C", m, l, &i__1, &c_b29, &work[work_offset], ldwork, &v[v_offset],
+                        ldv, &c_b14, &b[b_offset], ldb);
+        aocl_blas_ztrmm("R", "L", "C", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv,
+                        &work[kp * work_dim1 + 1], ldwork);
         i__1 = *l;
         for(j = 1; j <= i__1; ++j)
         {
@@ -730,10 +758,10 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -762,17 +790,18 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
-        ztrmm_("L", "L", "N", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv, &work[work_offset], ldb);
+        aocl_blas_ztrmm("L", "L", "N", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv,
+                        &work[work_offset], ldb);
         i__1 = *m - *l;
-        zgemm_("N", "N", l, n, &i__1, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b14,
-               &work[work_offset], ldwork);
+        aocl_blas_zgemm("N", "N", l, n, &i__1, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b14,
+                        &work[work_offset], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "N", &i__1, n, m, &c_b14, &v[kp + v_dim1], ldv, &b[b_offset], ldb, &c_b22,
-               &work[kp + work_dim1], ldwork);
+        aocl_blas_zgemm("N", "N", &i__1, n, m, &c_b14, &v[kp + v_dim1], ldv, &b[b_offset], ldb,
+                        &c_b22, &work[kp + work_dim1], ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -782,13 +811,14 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
-        ztrmm_("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -798,20 +828,20 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
-        zgemm_("C", "N", &i__1, n, k, &c_b29, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b14,
-               &b[b_offset], ldb);
+        aocl_blas_zgemm("C", "N", &i__1, n, k, &c_b29, &v[v_offset], ldv, &work[work_offset],
+                        ldwork, &c_b14, &b[b_offset], ldb);
         i__1 = *k - *l;
-        zgemm_("C", "N", l, n, &i__1, &c_b29, &v[kp + mp * v_dim1], ldv, &work[kp + work_dim1],
-               ldwork, &c_b14, &b[mp + b_dim1], ldb);
-        ztrmm_("L", "L", "C", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv, &work[work_offset],
-               ldwork);
+        aocl_blas_zgemm("C", "N", l, n, &i__1, &c_b29, &v[kp + mp * v_dim1], ldv,
+                        &work[kp + work_dim1], ldwork, &c_b14, &b[mp + b_dim1], ldb);
+        aocl_blas_ztrmm("L", "L", "C", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv,
+                        &work[work_offset], ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -821,10 +851,10 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -852,18 +882,18 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
-        ztrmm_("R", "L", "C", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv, &work[work_offset],
-               ldwork);
+        aocl_blas_ztrmm("R", "L", "C", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv,
+                        &work[work_offset], ldwork);
         i__1 = *n - *l;
-        zgemm_("N", "C", m, l, &i__1, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b14,
-               &work[work_offset], ldwork);
+        aocl_blas_zgemm("N", "C", m, l, &i__1, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b14,
+                        &work[work_offset], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "C", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[kp + v_dim1], ldv, &c_b22,
-               &work[kp * work_dim1 + 1], ldwork);
+        aocl_blas_zgemm("N", "C", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[kp + v_dim1], ldv,
+                        &c_b22, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
@@ -873,13 +903,14 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
-        ztrmm_("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
@@ -889,20 +920,20 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
-        zgemm_("N", "N", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
-               &b[b_offset], ldb);
+        aocl_blas_zgemm("N", "N", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[v_offset],
+                        ldv, &c_b14, &b[b_offset], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "N", m, l, &i__1, &c_b29, &work[kp * work_dim1 + 1], ldwork,
-               &v[kp + np * v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
-        ztrmm_("R", "L", "N", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv, &work[work_offset],
-               ldwork);
+        aocl_blas_zgemm("N", "N", m, l, &i__1, &c_b29, &work[kp * work_dim1 + 1], ldwork,
+                        &v[kp + np * v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
+        aocl_blas_ztrmm("R", "L", "N", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv,
+                        &work[work_offset], ldwork);
         i__1 = *l;
         for(j = 1; j <= i__1; ++j)
         {
@@ -912,10 +943,10 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -944,18 +975,18 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
-        ztrmm_("L", "U", "N", "N", l, n, &c_b14, &v[kp + v_dim1], ldv, &work[kp + work_dim1],
-               ldwork);
+        aocl_blas_ztrmm("L", "U", "N", "N", l, n, &c_b14, &v[kp + v_dim1], ldv,
+                        &work[kp + work_dim1], ldwork);
         i__1 = *m - *l;
-        zgemm_("N", "N", l, n, &i__1, &c_b14, &v[kp + mp * v_dim1], ldv, &b[mp + b_dim1], ldb,
-               &c_b14, &work[kp + work_dim1], ldwork);
+        aocl_blas_zgemm("N", "N", l, n, &i__1, &c_b14, &v[kp + mp * v_dim1], ldv, &b[mp + b_dim1],
+                        ldb, &c_b14, &work[kp + work_dim1], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "N", &i__1, n, m, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b22,
-               &work[work_offset], ldwork);
+        aocl_blas_zgemm("N", "N", &i__1, n, m, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b22,
+                        &work[work_offset], ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -965,13 +996,14 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
-        ztrmm_("L", "L ", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("L", "L ", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -981,20 +1013,20 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
-        zgemm_("C", "N", &i__1, n, k, &c_b29, &v[mp * v_dim1 + 1], ldv, &work[work_offset], ldwork,
-               &c_b14, &b[mp + b_dim1], ldb);
+        aocl_blas_zgemm("C", "N", &i__1, n, k, &c_b29, &v[mp * v_dim1 + 1], ldv, &work[work_offset],
+                        ldwork, &c_b14, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
-        zgemm_("C", "N", l, n, &i__1, &c_b29, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b14,
-               &b[b_offset], ldb);
-        ztrmm_("L", "U", "C", "N", l, n, &c_b14, &v[kp + v_dim1], ldv, &work[kp + work_dim1],
-               ldwork);
+        aocl_blas_zgemm("C", "N", l, n, &i__1, &c_b29, &v[v_offset], ldv, &work[work_offset],
+                        ldwork, &c_b14, &b[b_offset], ldb);
+        aocl_blas_ztrmm("L", "U", "C", "N", l, n, &c_b14, &v[kp + v_dim1], ldv,
+                        &work[kp + work_dim1], ldwork);
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
@@ -1004,10 +1036,10 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -1035,18 +1067,18 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
-        ztrmm_("R", "U", "C", "N", m, l, &c_b14, &v[kp + v_dim1], ldv, &work[kp * work_dim1 + 1],
-               ldwork);
+        aocl_blas_ztrmm("R", "U", "C", "N", m, l, &c_b14, &v[kp + v_dim1], ldv,
+                        &work[kp * work_dim1 + 1], ldwork);
         i__1 = *n - *l;
-        zgemm_("N", "C", m, l, &i__1, &c_b14, &b[np * b_dim1 + 1], ldb, &v[kp + np * v_dim1], ldv,
-               &c_b14, &work[kp * work_dim1 + 1], ldwork);
+        aocl_blas_zgemm("N", "C", m, l, &i__1, &c_b14, &b[np * b_dim1 + 1], ldb,
+                        &v[kp + np * v_dim1], ldv, &c_b14, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "C", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b22,
-               &work[work_offset], ldwork);
+        aocl_blas_zgemm("N", "C", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b22,
+                        &work[work_offset], ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
@@ -1056,13 +1088,14 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
-        ztrmm_("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
@@ -1072,20 +1105,20 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
-        zgemm_("N", "N", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[np * v_dim1 + 1], ldv,
-               &c_b14, &b[np * b_dim1 + 1], ldb);
+        aocl_blas_zgemm("N", "N", m, &i__1, k, &c_b29, &work[work_offset], ldwork,
+                        &v[np * v_dim1 + 1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "N", m, l, &i__1, &c_b29, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
-               &b[b_offset], ldb);
-        ztrmm_("R", "U", "N", "N", m, l, &c_b14, &v[kp + v_dim1], ldv, &work[kp * work_dim1 + 1],
-               ldwork);
+        aocl_blas_zgemm("N", "N", m, l, &i__1, &c_b29, &work[work_offset], ldwork, &v[v_offset],
+                        ldv, &c_b14, &b[b_offset], ldb);
+        aocl_blas_ztrmm("R", "U", "N", "N", m, l, &c_b14, &v[kp + v_dim1], ldv,
+                        &work[kp * work_dim1 + 1], ldwork);
         i__1 = *l;
         for(j = 1; j <= i__1; ++j)
         {
@@ -1095,10 +1128,10 @@ void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
     }

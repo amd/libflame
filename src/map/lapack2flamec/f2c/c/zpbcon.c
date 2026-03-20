@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZPBCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZPBCON estimates the reciprocal of the condition number (in the */
-/* > 1-norm) of a complex Hermitian positive definite band matrix using */
+/* > 1-norm) of a scomplex Hermitian positive definite band matrix using */
 /* > the Cholesky factorization A = U**H*U or A = L*L**H computed by */
 /* > ZPBTRF. */
 /* > */
@@ -131,40 +131,47 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab,
-             doublereal *anorm, doublereal *rcond, doublecomplex *work, doublereal *rwork,
-             integer *info)
+/** Generated wrapper function */
+void zpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t *ldab,
+             doublereal *anorm, doublereal *rcond, dcomplex *work, doublereal *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpbcon(uplo, n, kd, ab, ldab, anorm, rcond, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpbcon(uplo, &n_64, &kd_64, ab, &ldab_64, anorm, rcond, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpbcon(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex *ab,
+                        aocl_int64_t *ldab, doublereal *anorm, doublereal *rcond,
+                        dcomplex *work, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpbcon inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
                       *uplo, *n, *kd, *ldab);
 
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer ix, kase;
+    aocl_int64_t ix, kase;
     doublereal scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
-    extern /* Subroutine */
-        void
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal scalel, scaleu;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
-    extern integer izamax_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        zlatbs_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublereal *, doublereal *, integer *),
-        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -226,7 +233,7 @@ void zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPBCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -248,43 +255,43 @@ void zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     kase = 0;
     *(unsigned char *)normin = 'N';
 L10:
-    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(upper)
         {
             /* Multiply by inv(U**H). */
-            zlatbs_("Upper", "Conjugate transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scalel, &rwork[1], info);
+            aocl_lapack_zlatbs("Upper", "Conjugate transpose", "Non-unit", normin, n, kd,
+                               &ab[ab_offset], ldab, &work[1], &scalel, &rwork[1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            zlatbs_("Upper", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scaleu, &rwork[1], info);
+            aocl_lapack_zlatbs("Upper", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset],
+                               ldab, &work[1], &scaleu, &rwork[1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            zlatbs_("Lower", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scalel, &rwork[1], info);
+            aocl_lapack_zlatbs("Lower", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset],
+                               ldab, &work[1], &scalel, &rwork[1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**H). */
-            zlatbs_("Lower", "Conjugate transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scaleu, &rwork[1], info);
+            aocl_lapack_zlatbs("Lower", "Conjugate transpose", "Non-unit", normin, n, kd,
+                               &ab[ab_offset], ldab, &work[1], &scaleu, &rwork[1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;
         if(scale != 1.)
         {
-            ix = izamax_(n, &work[1], &c__1);
+            ix = aocl_blas_izamax(n, &work[1], &c__1);
             i__1 = ix;
-            if(scale < ((d__1 = work[i__1].r, f2c_dabs(d__1))
+            if(scale < ((d__1 = work[i__1].real, f2c_dabs(d__1))
                         + (d__2 = d_imag(&work[ix]), f2c_dabs(d__2)))
                            * smlnum
                || scale == 0.)
             {
                 goto L20;
             }
-            zdrscl_(n, &scale, &work[1], &c__1);
+            aocl_lapack_zdrscl(n, &scale, &work[1], &c__1);
         }
         goto L10;
     }

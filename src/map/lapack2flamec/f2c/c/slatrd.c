@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b5 = -1.f;
 static real c_b6 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b16 = 0.f;
 /* > \brief \b SLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to
  * real tridiago nal form by an orthogonal similarity transformation. */
@@ -206,29 +206,35 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e, real *tau,
-             real *w, integer *ldw)
+/** Generated wrapper function */
+void slatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, real *a, aocl_int_t *lda, real *e,
+             real *tau, real *w, aocl_int_t *ldw)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slatrd(uplo, n, nb, a, lda, e, tau, w, ldw);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldw_64 = *ldw;
+
+    aocl_lapack_slatrd(uplo, &n_64, &nb_64, a, &lda_64, e, tau, w, &ldw_64);
+#endif
+}
+
+void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, aocl_int64_t *lda,
+                        real *e, real *tau, real *w, aocl_int64_t *ldw)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatrd inputs: uplo %c ,n %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
                       ",ldw %" FLA_IS "",
                       *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
-    integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, iw;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t i__, iw;
     real alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *,
-               integer *),
-        slarfg_(integer *, real *, real *, integer *, real *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -276,51 +282,59 @@ void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e
             {
                 /* Update A(1:i,i) */
                 i__2 = *n - i__;
-                sgemv_("No transpose", &i__, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
-                       &w[i__ + (iw + 1) * w_dim1], ldw, &c_b6, &a[i__ * a_dim1 + 1], &c__1);
+                aocl_blas_sgemv("No transpose", &i__, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
+                                &w[i__ + (iw + 1) * w_dim1], ldw, &c_b6, &a[i__ * a_dim1 + 1],
+                                &c__1);
                 i__2 = *n - i__;
-                sgemv_("No transpose", &i__, &i__2, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw,
-                       &a[i__ + (i__ + 1) * a_dim1], lda, &c_b6, &a[i__ * a_dim1 + 1], &c__1);
+                aocl_blas_sgemv("No transpose", &i__, &i__2, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw,
+                                &a[i__ + (i__ + 1) * a_dim1], lda, &c_b6, &a[i__ * a_dim1 + 1],
+                                &c__1);
             }
             if(i__ > 1)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(1:i-2,i) */
                 i__2 = i__ - 1;
-                slarfg_(&i__2, &a[i__ - 1 + i__ * a_dim1], &a[i__ * a_dim1 + 1], &c__1,
-                        &tau[i__ - 1]);
+                aocl_lapack_slarfg(&i__2, &a[i__ - 1 + i__ * a_dim1], &a[i__ * a_dim1 + 1], &c__1,
+                                   &tau[i__ - 1]);
                 e[i__ - 1] = a[i__ - 1 + i__ * a_dim1];
                 a[i__ - 1 + i__ * a_dim1] = 1.f;
                 /* Compute W(1:i-1,i) */
                 i__2 = i__ - 1;
-                ssymv_("Upper", &i__2, &c_b6, &a[a_offset], lda, &a[i__ * a_dim1 + 1], &c__1,
-                       &c_b16, &w[iw * w_dim1 + 1], &c__1);
+                aocl_blas_ssymv("Upper", &i__2, &c_b6, &a[a_offset], lda, &a[i__ * a_dim1 + 1],
+                                &c__1, &c_b16, &w[iw * w_dim1 + 1], &c__1);
                 if(i__ < *n)
                 {
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    sgemv_("Transpose", &i__2, &i__3, &c_b6, &w[(iw + 1) * w_dim1 + 1], ldw,
-                           &a[i__ * a_dim1 + 1], &c__1, &c_b16, &w[i__ + 1 + iw * w_dim1], &c__1);
+                    aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b6, &w[(iw + 1) * w_dim1 + 1],
+                                    ldw, &a[i__ * a_dim1 + 1], &c__1, &c_b16,
+                                    &w[i__ + 1 + iw * w_dim1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
-                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6, &w[iw * w_dim1 + 1], &c__1);
+                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1],
+                                    lda, &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6,
+                                    &w[iw * w_dim1 + 1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    sgemv_("Transpose", &i__2, &i__3, &c_b6, &a[(i__ + 1) * a_dim1 + 1], lda,
-                           &a[i__ * a_dim1 + 1], &c__1, &c_b16, &w[i__ + 1 + iw * w_dim1], &c__1);
+                    aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b6, &a[(i__ + 1) * a_dim1 + 1],
+                                    lda, &a[i__ * a_dim1 + 1], &c__1, &c_b16,
+                                    &w[i__ + 1 + iw * w_dim1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    sgemv_("No transpose", &i__2, &i__3, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw,
-                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6, &w[iw * w_dim1 + 1], &c__1);
+                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &w[(iw + 1) * w_dim1 + 1],
+                                    ldw, &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6,
+                                    &w[iw * w_dim1 + 1], &c__1);
                 }
                 i__2 = i__ - 1;
-                sscal_(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
+                aocl_blas_sscal(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
                 i__2 = i__ - 1;
                 alpha = tau[i__ - 1] * -.5f
-                        * sdot_(&i__2, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+                        * aocl_blas_sdot(&i__2, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1],
+                                         &c__1);
                 i__2 = i__ - 1;
-                saxpy_(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &w[iw * w_dim1 + 1], &c__1);
+                aocl_blas_saxpy(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &w[iw * w_dim1 + 1],
+                                &c__1);
             }
             /* L10: */
         }
@@ -334,12 +348,12 @@ void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e
             /* Update A(i:n,i) */
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda, &w[i__ + w_dim1],
-                   ldw, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
+            aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda,
+                            &w[i__ + w_dim1], ldw, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            sgemv_("No transpose", &i__2, &i__3, &c_b5, &w[i__ + w_dim1], ldw, &a[i__ + a_dim1],
-                   lda, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
+            aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &w[i__ + w_dim1], ldw,
+                            &a[i__ + a_dim1], lda, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
             if(i__ < *n)
             {
                 /* Generate elementary reflector H(i) to annihilate */
@@ -347,40 +361,44 @@ void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
-                        &c__1, &tau[i__]);
+                aocl_lapack_slarfg(&i__2, &a[i__ + 1 + i__ * a_dim1],
+                                   &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
                 e[i__] = a[i__ + 1 + i__ * a_dim1];
                 a[i__ + 1 + i__ * a_dim1] = 1.f;
                 /* Compute W(i+1:n,i) */
                 i__2 = *n - i__;
-                ssymv_("Lower", &i__2, &c_b6, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ + 1 + i__ * w_dim1],
-                       &c__1);
+                aocl_blas_ssymv("Lower", &i__2, &c_b6, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16,
+                                &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                sgemv_("Transpose", &i__2, &i__3, &c_b6, &w[i__ + 1 + w_dim1], ldw,
-                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1], &c__1);
+                aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b6, &w[i__ + 1 + w_dim1], ldw,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1],
+                                &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda,
-                       &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1], &c__1);
+                aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda,
+                                &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1],
+                                &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                sgemv_("Transpose", &i__2, &i__3, &c_b6, &a[i__ + 1 + a_dim1], lda,
-                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1], &c__1);
+                aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b6, &a[i__ + 1 + a_dim1], lda,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1],
+                                &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                sgemv_("No transpose", &i__2, &i__3, &c_b5, &w[i__ + 1 + w_dim1], ldw,
-                       &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1], &c__1);
+                aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &w[i__ + 1 + w_dim1], ldw,
+                                &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1],
+                                &c__1);
                 i__2 = *n - i__;
-                sscal_(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
+                aocl_blas_sscal(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 alpha = tau[i__] * -.5f
-                        * sdot_(&i__2, &w[i__ + 1 + i__ * w_dim1], &c__1,
-                                &a[i__ + 1 + i__ * a_dim1], &c__1);
+                        * aocl_blas_sdot(&i__2, &w[i__ + 1 + i__ * w_dim1], &c__1,
+                                         &a[i__ + 1 + i__ * a_dim1], &c__1);
                 i__2 = *n - i__;
-                saxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &w[i__ + 1 + i__ * w_dim1],
-                       &c__1);
+                aocl_blas_saxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1,
+                                &w[i__ + 1 + i__ * w_dim1], &c__1);
             }
             /* L20: */
         }

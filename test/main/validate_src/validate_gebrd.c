@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gebrd.c
@@ -88,7 +88,7 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
                     double err_thresh, void *params)
 {
     double residual = err_thresh;
-    double resid1, resid2, resid3;
+    double resid1 = 0., resid2, resid3;
     integer k = fla_min(m, n);
     integer kq, kp;
     void *Q = NULL, *P = NULL, *B = NULL, *A_recon = NULL;
@@ -132,56 +132,51 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
     void *temp1 = NULL;
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_recon, m);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, k, &temp1, m);
-    fla_invoke_gemm(datatype, "N", "N", &m, &k, &k, Q, &m, B, &k, temp1, &m);
-    fla_invoke_gemm(datatype, "N", "N", &m, &n, &k, temp1, &m, P, &k, A_recon, &m);
+    fla_invoke_gemm(datatype, "N", "N", &m, &k, &k, d_one, Q, &m, B, &k, d_zero, temp1, &m);
+    fla_invoke_gemm(datatype, "N", "N", &m, &n, &k, d_one, temp1, &m, P, &k, d_zero, A_recon, &m);
     free_matrix(temp1);
 
     /* Compute residual: norm(A_recon - A) / (eps * norm(A) * n) */
-    double norm, norm_A, eps;
+    double norm, norm_A;
     matrix_difference(datatype, m, n, A_recon, m, A, lda);
     switch(datatype)
     {
         case FLOAT:
         {
-            eps = fla_lapack_slamch("P");
             norm_A = fla_lapack_slange("1", &m, &n, A, &lda, NULL);
             norm = fla_lapack_slange("1", &m, &n, A_recon, &m, NULL);
             break;
         }
         case DOUBLE:
         {
-            eps = fla_lapack_dlamch("P");
             norm_A = fla_lapack_dlange("1", &m, &n, A, &lda, NULL);
             norm = fla_lapack_dlange("1", &m, &n, A_recon, &m, NULL);
             break;
         }
         case COMPLEX:
         {
-            eps = fla_lapack_slamch("P");
             norm_A = fla_lapack_clange("1", &m, &n, A, &lda, NULL);
             norm = fla_lapack_clange("1", &m, &n, A_recon, &m, NULL);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            eps = fla_lapack_dlamch("P");
             norm_A = fla_lapack_zlange("1", &m, &n, A, &lda, NULL);
             norm = fla_lapack_zlange("1", &m, &n, A_recon, &m, NULL);
             break;
         }
         default:
         {
-            eps = 1.0;
             norm_A = 1.0;
             norm = 0.0;
             break;
         }
     }
-    resid1 = norm / (eps * norm_A * n);
+    resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
     /* Check orthogonality of Q and P */
-    resid2 = check_orthogonality(datatype, Q, m, k, m);
-    resid3 = (double)check_orthogonal_matrix('N', datatype, P, k, n, k, k);
+    resid2 = check_orthogonality(datatype, Q, m, k, m, params);
+    resid3 = (double)check_orthogonal_matrix('N', datatype, P, k, n, k, k, params);
 
     residual = fla_max(resid1, resid2);
     residual = fla_max(residual, resid3);
@@ -195,4 +190,3 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
     free_matrix(B);
     free_matrix(A_recon);
 }
-

@@ -130,9 +130,9 @@ void libfla_test_apqutinc_experiment( test_params_t params,
 	}
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur * abs(m_input);
+	if ( m_input < 0 ) m = p_cur * -m_input;
 	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur * abs(n_input);
+	if ( n_input < 0 ) n = p_cur * -n_input;
 	else               n = p_cur;
 
 	// Compute the minimum dimension.
@@ -155,8 +155,13 @@ void libfla_test_apqutinc_experiment( test_params_t params,
 	// Use hierarchical matrices since we're testing the FLASH front-end.
 	if ( storev == FLA_COLUMNWISE )
 		FLASH_QR_UT_inc_create_hier_matrices( A, 1, &b_flash, b_alg_hier, &A_test, &TW_test );
-	//else // if ( storev == FLA_ROWWISE )
-		//FLASH_LQ_UT_inc_create_hier_matrices( A, 1, &b_flash, b_alg_hier, &A_test, &TW_test );
+	else // if ( storev == FLA_ROWWISE )
+	{
+		// FLASH_LQ_UT_inc_create_hier_matrices( A, 1, &b_flash, b_alg_hier, &A_test, &TW_test );
+		// For now, create placeholder objects to avoid uninitialized variable warnings
+		FLASH_Obj_create_hier_copy_of_flat( A, 1, &b_flash, &A_test );
+		FLASH_Obj_create_hier_copy_of_flat( A, 1, &b_flash, &TW_test );  // placeholder
+	}
 	FLASH_Obj_create_hier_copy_of_flat( B, 1, &b_flash, &B_test );
 	FLASH_Apply_Q_UT_inc_create_workspace( TW_test, B_test, &W_test );
 

@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CUNGTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,7 +40,7 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNGTR generates a complex unitary matrix Q which is defined as the */
+/* > CUNGTR generates a scomplex unitary matrix Q which is defined as the */
 /* > product of n-1 elementary reflectors of order N, as returned by */
 /* > CHETRD: */
 /* > */
@@ -122,8 +122,26 @@ the routine */
 /* > \ingroup ungtr */
 /* ===================================================================== */
 /* Subroutine */
-void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void cungtr_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cungtr(uplo, n, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cungtr(uplo, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cungtr(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau,
+                        scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -134,26 +152,15 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Local variables */
-    integer i__, j, nb;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t i__, j, nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *),
-        cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -213,27 +220,27 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = ilaenv_(&c__1, "CUNGQL", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CUNGQL", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         else
         {
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = ilaenv_(&c__1, "CUNGQR", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
-        r__1 = sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNGTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -245,8 +252,8 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -264,31 +271,32 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + (j + 1) * a_dim1;
-                a[i__3].r = a[i__4].r;
-                a[i__3].i = a[i__4].i; // , expr subst
+                a[i__3].real = a[i__4].real;
+                a[i__3].imag = a[i__4].imag; // , expr subst
                 /* L10: */
             }
             i__2 = *n + j * a_dim1;
-            a[i__2].r = 0.f;
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = 0.f;
+            a[i__2].imag = 0.f; // , expr subst
             /* L20: */
         }
         i__1 = *n - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + *n * a_dim1;
-            a[i__2].r = 0.f;
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = 0.f;
+            a[i__2].imag = 0.f; // , expr subst
             /* L30: */
         }
         i__1 = *n + *n * a_dim1;
-        a[i__1].r = 1.f;
-        a[i__1].i = 0.f; // , expr subst
+        a[i__1].real = 1.f;
+        a[i__1].imag = 0.f; // , expr subst
         /* Generate Q(1:n-1,1:n-1) */
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        cungql_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+        aocl_lapack_cungql(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], lwork,
+                           &iinfo);
     }
     else
     {
@@ -299,28 +307,28 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
         for(j = *n; j >= 2; --j)
         {
             i__1 = j * a_dim1 + 1;
-            a[i__1].r = 0.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 0.f;
+            a[i__1].imag = 0.f; // , expr subst
             i__1 = *n;
             for(i__ = j + 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + j * a_dim1;
                 i__3 = i__ + (j - 1) * a_dim1;
-                a[i__2].r = a[i__3].r;
-                a[i__2].i = a[i__3].i; // , expr subst
+                a[i__2].real = a[i__3].real;
+                a[i__2].imag = a[i__3].imag; // , expr subst
                 /* L40: */
             }
             /* L50: */
         }
         i__1 = a_dim1 + 1;
-        a[i__1].r = 1.f;
-        a[i__1].i = 0.f; // , expr subst
+        a[i__1].real = 1.f;
+        a[i__1].imag = 0.f; // , expr subst
         i__1 = *n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
             i__2 = i__ + a_dim1;
-            a[i__2].r = 0.f;
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = 0.f;
+            a[i__2].imag = 0.f; // , expr subst
             /* L60: */
         }
         if(*n > 1)
@@ -329,13 +337,13 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            cungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
-                    &iinfo);
+            aocl_lapack_cungqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
+                               lwork, &iinfo);
         }
     }
-    r__1 = sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CUNGTR */

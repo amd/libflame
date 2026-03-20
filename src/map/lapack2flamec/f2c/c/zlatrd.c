@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to
  * real tridiago nal form by an unitary similarity transformation. */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLATRD reduces NB rows and columns of a complex Hermitian matrix A to */
+/* > ZLATRD reduces NB rows and columns of a scomplex Hermitian matrix A to */
 /* > Hermitian tridiagonal form by a unitary similarity */
 /* > transformation Q**H * A * Q, and returns the matrices V and W which are */
 /* > needed to apply the transformation to the unreduced part of A. */
@@ -164,7 +164,7 @@ the elements below the diagonal */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(i:n) = 0 and v(i-1) = 1;
 v(1:i-1) is stored on exit in A(1:i-1,i), */
 /* > and tau in TAU(i-1). */
@@ -178,7 +178,7 @@ v(1:i-1) is stored on exit in A(1:i-1,i), */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i) = 0 and v(i+1) = 1;
 v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > and tau in TAU(i). */
@@ -206,37 +206,38 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda, doublereal *e,
-             doublecomplex *tau, doublecomplex *w, integer *ldw)
+/** Generated wrapper function */
+void zlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, dcomplex *a, aocl_int_t *lda,
+             doublereal *e, dcomplex *tau, dcomplex *w, aocl_int_t *ldw)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlatrd(uplo, n, nb, a, lda, e, tau, w, ldw);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldw_64 = *ldw;
+
+    aocl_lapack_zlatrd(uplo, &n_64, &nb_64, a, &lda_64, e, tau, w, &ldw_64);
+#endif
+}
+
+void aocl_lapack_zlatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, dcomplex *a,
+                        aocl_int64_t *lda, doublereal *e, dcomplex *tau, dcomplex *w,
+                        aocl_int64_t *ldw)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
                       ", ldw %" FLA_IS "",
                       *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
-    integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Local variables */
-    integer i__, iw;
-    doublecomplex alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__, iw;
+    dcomplex alpha;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -285,91 +286,96 @@ void zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda
                 /* Update A(1:i,i) */
                 i__2 = i__ + i__ * a_dim1;
                 i__3 = i__ + i__ * a_dim1;
-                d__1 = a[i__3].r;
-                a[i__2].r = d__1;
-                a[i__2].i = 0.; // , expr subst
+                d__1 = a[i__3].real;
+                a[i__2].real = d__1;
+                a[i__2].imag = 0.; // , expr subst
                 i__2 = *n - i__;
-                zlacgv_(&i__2, &w[i__ + (iw + 1) * w_dim1], ldw);
+                aocl_lapack_zlacgv(&i__2, &w[i__ + (iw + 1) * w_dim1], ldw);
                 i__2 = *n - i__;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__, &i__2, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda,
-                       &w[i__ + (iw + 1) * w_dim1], ldw, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No transpose", &i__, &i__2, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda,
+                                &w[i__ + (iw + 1) * w_dim1], ldw, &c_b2, &a[i__ * a_dim1 + 1],
+                                &c__1);
                 i__2 = *n - i__;
-                zlacgv_(&i__2, &w[i__ + (iw + 1) * w_dim1], ldw);
+                aocl_lapack_zlacgv(&i__2, &w[i__ + (iw + 1) * w_dim1], ldw);
                 i__2 = *n - i__;
-                zlacgv_(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
+                aocl_lapack_zlacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = *n - i__;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__, &i__2, &z__1, &w[(iw + 1) * w_dim1 + 1], ldw,
-                       &a[i__ + (i__ + 1) * a_dim1], lda, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No transpose", &i__, &i__2, &z__1, &w[(iw + 1) * w_dim1 + 1], ldw,
+                                &a[i__ + (i__ + 1) * a_dim1], lda, &c_b2, &a[i__ * a_dim1 + 1],
+                                &c__1);
                 i__2 = *n - i__;
-                zlacgv_(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
+                aocl_lapack_zlacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = i__ + i__ * a_dim1;
                 i__3 = i__ + i__ * a_dim1;
-                d__1 = a[i__3].r;
-                a[i__2].r = d__1;
-                a[i__2].i = 0.; // , expr subst
+                d__1 = a[i__3].real;
+                a[i__2].real = d__1;
+                a[i__2].imag = 0.; // , expr subst
             }
             if(i__ > 1)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(1:i-2,i) */
                 i__2 = i__ - 1 + i__ * a_dim1;
-                alpha.r = a[i__2].r;
-                alpha.i = a[i__2].i; // , expr subst
+                alpha.real = a[i__2].real;
+                alpha.imag = a[i__2].imag; // , expr subst
                 i__2 = i__ - 1;
-                zlarfg_(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &tau[i__ - 1]);
+                aocl_lapack_zlarfg(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &tau[i__ - 1]);
                 i__2 = i__ - 1;
-                e[i__2] = alpha.r;
+                e[i__2] = alpha.real;
                 i__2 = i__ - 1 + i__ * a_dim1;
-                a[i__2].r = 1.;
-                a[i__2].i = 0.; // , expr subst
+                a[i__2].real = 1.;
+                a[i__2].imag = 0.; // , expr subst
                 /* Compute W(1:i-1,i) */
                 i__2 = i__ - 1;
-                zhemv_("Upper", &i__2, &c_b2, &a[a_offset], lda, &a[i__ * a_dim1 + 1], &c__1, &c_b1,
-                       &w[iw * w_dim1 + 1], &c__1);
+                aocl_blas_zhemv("Upper", &i__2, &c_b2, &a[a_offset], lda, &a[i__ * a_dim1 + 1],
+                                &c__1, &c_b1, &w[iw * w_dim1 + 1], &c__1);
                 if(i__ < *n)
                 {
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &w[(iw + 1) * w_dim1 + 1],
-                           ldw, &a[i__ * a_dim1 + 1], &c__1, &c_b1, &w[i__ + 1 + iw * w_dim1],
-                           &c__1);
+                    aocl_blas_zgemv("Conjugate transpose", &i__2, &i__3, &c_b2,
+                                    &w[(iw + 1) * w_dim1 + 1], ldw, &a[i__ * a_dim1 + 1], &c__1,
+                                    &c_b1, &w[i__ + 1 + iw * w_dim1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__2, &i__3, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda,
-                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2, &w[iw * w_dim1 + 1], &c__1);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemv("No transpose", &i__2, &i__3, &z__1, &a[(i__ + 1) * a_dim1 + 1],
+                                    lda, &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2,
+                                    &w[iw * w_dim1 + 1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[(i__ + 1) * a_dim1 + 1],
-                           lda, &a[i__ * a_dim1 + 1], &c__1, &c_b1, &w[i__ + 1 + iw * w_dim1],
-                           &c__1);
+                    aocl_blas_zgemv("Conjugate transpose", &i__2, &i__3, &c_b2,
+                                    &a[(i__ + 1) * a_dim1 + 1], lda, &a[i__ * a_dim1 + 1], &c__1,
+                                    &c_b1, &w[i__ + 1 + iw * w_dim1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__2, &i__3, &z__1, &w[(iw + 1) * w_dim1 + 1], ldw,
-                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2, &w[iw * w_dim1 + 1], &c__1);
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
+                    aocl_blas_zgemv("No transpose", &i__2, &i__3, &z__1, &w[(iw + 1) * w_dim1 + 1],
+                                    ldw, &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2,
+                                    &w[iw * w_dim1 + 1], &c__1);
                 }
                 i__2 = i__ - 1;
-                zscal_(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
-                z__3.r = -.5;
-                z__3.i = -0.; // , expr subst
+                aocl_blas_zscal(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
+                z__3.real = -.5;
+                z__3.imag = -0.; // , expr subst
                 i__2 = i__ - 1;
-                z__2.r = z__3.r * tau[i__2].r - z__3.i * tau[i__2].i;
-                z__2.i = z__3.r * tau[i__2].i + z__3.i * tau[i__2].r; // , expr subst
+                z__2.real = z__3.real * tau[i__2].real - z__3.imag * tau[i__2].imag;
+                z__2.imag = z__3.real * tau[i__2].imag + z__3.imag * tau[i__2].real; // , expr subst
                 i__3 = i__ - 1;
-                zdotc_f2c_(&z__4, &i__3, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
-                z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
-                z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                aocl_lapack_zdotc_f2c(&z__4, &i__3, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+                z__1.real = z__2.real * z__4.real - z__2.imag * z__4.imag;
+                z__1.imag = z__2.real * z__4.imag + z__2.imag * z__4.real; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 i__2 = i__ - 1;
-                zaxpy_(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &w[iw * w_dim1 + 1], &c__1);
+                aocl_blas_zaxpy(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &w[iw * w_dim1 + 1],
+                                &c__1);
             }
             /* L10: */
         }
@@ -383,91 +389,97 @@ void zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda
             /* Update A(i:n,i) */
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__ + i__ * a_dim1;
-            d__1 = a[i__3].r;
-            a[i__2].r = d__1;
-            a[i__2].i = 0.; // , expr subst
+            d__1 = a[i__3].real;
+            a[i__2].real = d__1;
+            a[i__2].imag = 0.; // , expr subst
             i__2 = i__ - 1;
-            zlacgv_(&i__2, &w[i__ + w_dim1], ldw);
+            aocl_lapack_zlacgv(&i__2, &w[i__ + w_dim1], ldw);
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + a_dim1], lda, &w[i__ + w_dim1],
-                   ldw, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("No transpose", &i__2, &i__3, &z__1, &a[i__ + a_dim1], lda,
+                            &w[i__ + w_dim1], ldw, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = i__ - 1;
-            zlacgv_(&i__2, &w[i__ + w_dim1], ldw);
+            aocl_lapack_zlacgv(&i__2, &w[i__ + w_dim1], ldw);
             i__2 = i__ - 1;
-            zlacgv_(&i__2, &a[i__ + a_dim1], lda);
+            aocl_lapack_zlacgv(&i__2, &a[i__ + a_dim1], lda);
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &i__2, &i__3, &z__1, &w[i__ + w_dim1], ldw, &a[i__ + a_dim1],
-                   lda, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
+            aocl_blas_zgemv("No transpose", &i__2, &i__3, &z__1, &w[i__ + w_dim1], ldw,
+                            &a[i__ + a_dim1], lda, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = i__ - 1;
-            zlacgv_(&i__2, &a[i__ + a_dim1], lda);
+            aocl_lapack_zlacgv(&i__2, &a[i__ + a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__ + i__ * a_dim1;
-            d__1 = a[i__3].r;
-            a[i__2].r = d__1;
-            a[i__2].i = 0.; // , expr subst
+            d__1 = a[i__3].real;
+            a[i__2].real = d__1;
+            a[i__2].imag = 0.; // , expr subst
             if(i__ < *n)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(i+2:n,i) */
                 i__2 = i__ + 1 + i__ * a_dim1;
-                alpha.r = a[i__2].r;
-                alpha.i = a[i__2].i; // , expr subst
+                alpha.real = a[i__2].real;
+                alpha.imag = a[i__2].imag; // , expr subst
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                zlarfg_(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
+                aocl_lapack_zlarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1,
+                                   &tau[i__]);
                 i__2 = i__;
-                e[i__2] = alpha.r;
+                e[i__2] = alpha.real;
                 i__2 = i__ + 1 + i__ * a_dim1;
-                a[i__2].r = 1.;
-                a[i__2].i = 0.; // , expr subst
+                a[i__2].real = 1.;
+                a[i__2].imag = 0.; // , expr subst
                 /* Compute W(i+1:n,i) */
                 i__2 = *n - i__;
-                zhemv_("Lower", &i__2, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ + 1 + i__ * w_dim1], &c__1);
+                aocl_blas_zhemv("Lower", &i__2, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1,
+                                &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &w[i__ + 1 + w_dim1], ldw,
-                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1], &c__1);
+                aocl_blas_zgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &w[i__ + 1 + w_dim1],
+                                ldw, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1],
+                                &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + 1 + a_dim1], lda,
-                       &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No transpose", &i__2, &i__3, &z__1, &a[i__ + 1 + a_dim1], lda,
+                                &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1],
+                                &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1], lda,
-                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1], &c__1);
+                aocl_blas_zgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1],
+                                lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1],
+                                &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__2, &i__3, &z__1, &w[i__ + 1 + w_dim1], ldw,
-                       &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1], &c__1);
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                aocl_blas_zgemv("No transpose", &i__2, &i__3, &z__1, &w[i__ + 1 + w_dim1], ldw,
+                                &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1],
+                                &c__1);
                 i__2 = *n - i__;
-                zscal_(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
-                z__3.r = -.5;
-                z__3.i = -0.; // , expr subst
+                aocl_blas_zscal(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
+                z__3.real = -.5;
+                z__3.imag = -0.; // , expr subst
                 i__2 = i__;
-                z__2.r = z__3.r * tau[i__2].r - z__3.i * tau[i__2].i;
-                z__2.i = z__3.r * tau[i__2].i + z__3.i * tau[i__2].r; // , expr subst
+                z__2.real = z__3.real * tau[i__2].real - z__3.imag * tau[i__2].imag;
+                z__2.imag = z__3.real * tau[i__2].imag + z__3.imag * tau[i__2].real; // , expr subst
                 i__3 = *n - i__;
-                zdotc_f2c_(&z__4, &i__3, &w[i__ + 1 + i__ * w_dim1], &c__1,
+                aocl_lapack_zdotc_f2c(&z__4, &i__3, &w[i__ + 1 + i__ * w_dim1], &c__1,
                            &a[i__ + 1 + i__ * a_dim1], &c__1);
-                z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
-                z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                z__1.real = z__2.real * z__4.real - z__2.imag * z__4.imag;
+                z__1.imag = z__2.real * z__4.imag + z__2.imag * z__4.real; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 i__2 = *n - i__;
-                zaxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &w[i__ + 1 + i__ * w_dim1],
-                       &c__1);
+                aocl_blas_zaxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1,
+                                &w[i__ + 1 + i__ * w_dim1], &c__1);
             }
             /* L20: */
         }

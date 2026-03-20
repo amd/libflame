@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
-/* > \brief \b ZGEQRT2 computes a QR factorization of a general real or complex matrix using the
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b ZGEQRT2 computes a QR factorization of a general real or scomplex matrix using the
  * compact WY re presentation of Q. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGEQRT2 computes a QR factorization of a complex M-by-N matrix A, */
+/* > ZGEQRT2 computes a QR factorization of a scomplex M-by-N matrix A, */
 /* > using the compact WY representation of Q. */
 /* > \endverbatim */
 /* Arguments: */
@@ -61,7 +61,7 @@ static integer c__1 = 1;
 /* > \param[in,out] A */
 /* > \verbatim */
 /* > A is COMPLEX*16 array, dimension (LDA,N) */
-/* > On entry, the complex M-by-N matrix A. On exit, the elements on and */
+/* > On entry, the scomplex M-by-N matrix A. On exit, the elements on and */
 /* > above the diagonal contain the N-by-N upper triangular matrix R;
 the */
 /* > elements below the diagonal are the columns of V. See below for */
@@ -128,31 +128,40 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgeqrt2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t,
-              integer *ldt, integer *info)
+/** Generated wrapper function */
+void zgeqrt2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *t,
+              aocl_int_t *ldt, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgeqrt2(m, n, a, lda, t, ldt, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgeqrt2(&m_64, &n_64, a, &lda_64, t, &ldt_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgeqrt2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                         dcomplex *t, aocl_int64_t *ldt, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS
                       "",
                       *m, *n, *lda, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
-    doublecomplex z__1, z__2;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, k;
-    doublecomplex aii, alpha;
-    extern /* Subroutine */
-        void
-        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, integer *),
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
-               integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    aocl_int64_t i__, k;
+    dcomplex aii, alpha;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -197,7 +206,7 @@ void zgeqrt2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEQRT2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZGEQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -209,70 +218,70 @@ void zgeqrt2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        zlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
-                &t[i__ + t_dim1]);
+        aocl_lapack_zlarfg(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
+                           &c__1, &t[i__ + t_dim1]);
         if(i__ < *n)
         {
             /* Apply H(i) to A(I:M,I+1:N) from the left */
             i__2 = i__ + i__ * a_dim1;
-            aii.r = a[i__2].r;
-            aii.i = a[i__2].i; // , expr subst
+            aii.real = a[i__2].real;
+            aii.imag = a[i__2].imag; // , expr subst
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = 1.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 1.;
+            a[i__2].imag = 0.; // , expr subst
             /* W(1:N-I) := A(I:M,I+1:N)^H * A(I:M,I) [W = T(:,N)] */
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
-            zgemv_("C", &i__2, &i__3, &c_b1, &a[i__ + (i__ + 1) * a_dim1], lda,
-                   &a[i__ + i__ * a_dim1], &c__1, &c_b2, &t[*n * t_dim1 + 1], &c__1);
+            aocl_blas_zgemv("C", &i__2, &i__3, &c_b1, &a[i__ + (i__ + 1) * a_dim1], lda,
+                            &a[i__ + i__ * a_dim1], &c__1, &c_b2, &t[*n * t_dim1 + 1], &c__1);
             /* A(I:M,I+1:N) = A(I:m,I+1:N) + alpha*A(I:M,I)*W(1:N-1)^H */
             d_cnjg(&z__2, &t[i__ + t_dim1]);
-            z__1.r = -z__2.r;
-            z__1.i = -z__2.i; // , expr subst
-            alpha.r = z__1.r;
-            alpha.i = z__1.i; // , expr subst
+            z__1.real = -z__2.real;
+            z__1.imag = -z__2.imag; // , expr subst
+            alpha.real = z__1.real;
+            alpha.imag = z__1.imag; // , expr subst
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
-            zgerc_(&i__2, &i__3, &alpha, &a[i__ + i__ * a_dim1], &c__1, &t[*n * t_dim1 + 1], &c__1,
-                   &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_blas_zgerc(&i__2, &i__3, &alpha, &a[i__ + i__ * a_dim1], &c__1,
+                            &t[*n * t_dim1 + 1], &c__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = aii.r;
-            a[i__2].i = aii.i; // , expr subst
+            a[i__2].real = aii.real;
+            a[i__2].imag = aii.imag; // , expr subst
         }
     }
     i__1 = *n;
     for(i__ = 2; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * a_dim1;
-        aii.r = a[i__2].r;
-        aii.i = a[i__2].i; // , expr subst
+        aii.real = a[i__2].real;
+        aii.imag = a[i__2].imag; // , expr subst
         i__2 = i__ + i__ * a_dim1;
-        a[i__2].r = 1.;
-        a[i__2].i = 0.; // , expr subst
+        a[i__2].real = 1.;
+        a[i__2].imag = 0.; // , expr subst
         /* T(1:I-1,I) := alpha * A(I:M,1:I-1)**H * A(I:M,I) */
         i__2 = i__ + t_dim1;
-        z__1.r = -t[i__2].r;
-        z__1.i = -t[i__2].i; // , expr subst
-        alpha.r = z__1.r;
-        alpha.i = z__1.i; // , expr subst
+        z__1.real = -t[i__2].real;
+        z__1.imag = -t[i__2].imag; // , expr subst
+        alpha.real = z__1.real;
+        alpha.imag = z__1.imag; // , expr subst
         i__2 = *m - i__ + 1;
         i__3 = i__ - 1;
-        zgemv_("C", &i__2, &i__3, &alpha, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1,
-               &c_b2, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_zgemv("C", &i__2, &i__3, &alpha, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1],
+                        &c__1, &c_b2, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ + i__ * a_dim1;
-        a[i__2].r = aii.r;
-        a[i__2].i = aii.i; // , expr subst
+        a[i__2].real = aii.real;
+        a[i__2].imag = aii.imag; // , expr subst
         /* T(1:I-1,I) := T(1:I-1,1:I-1) * T(1:I-1,I) */
         i__2 = i__ - 1;
-        ztrmv_("U", "N", "N", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_ztrmv("U", "N", "N", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
         /* T(I,I) = tau(I) */
         i__2 = i__ + i__ * t_dim1;
         i__3 = i__ + t_dim1;
-        t[i__2].r = t[i__3].r;
-        t[i__2].i = t[i__3].i; // , expr subst
+        t[i__2].real = t[i__3].real;
+        t[i__2].imag = t[i__3].imag; // , expr subst
         i__2 = i__ + t_dim1;
-        t[i__2].r = 0.;
-        t[i__2].i = 0.; // , expr subst
+        t[i__2].real = 0.;
+        t[i__2].imag = 0.; // , expr subst
     }
     /* End of ZGEQRT2 */
     AOCL_DTL_TRACE_LOG_EXIT

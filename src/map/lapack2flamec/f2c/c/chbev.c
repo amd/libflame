@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> CHBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -44,7 +44,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CHBEV computes all the eigenvalues and, optionally, eigenvectors of */
-/* > a complex Hermitian band matrix A. */
+/* > a scomplex Hermitian band matrix A. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -154,8 +154,29 @@ i */
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w,
-            complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void chbev_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab,
+            real *w, scomplex *z__, aocl_int_t *ldz, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chbev(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chbev(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work, rwork,
+                      &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
+                       aocl_int64_t *ldab, real *w, scomplex *z__, aocl_int64_t *ldz, scomplex *work,
+                       real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -170,41 +191,24 @@ void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, z_dim1, z_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real eps;
-    integer inde;
+    aocl_int64_t inde;
     real anrm;
-    integer imax;
+    aocl_int64_t imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical lower, wantz;
-    extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
-    integer iscale;
-    extern /* Subroutine */
-        void
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *),
-        chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *,
-                complex *, integer *, complex *, integer *);
+    aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    integer indrwk;
-    extern /* Subroutine */
-        void
-        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
-        ssterf_(integer *, real *, real *, integer *);
+    aocl_int64_t indrwk;
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -268,7 +272,7 @@ void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHBEV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHBEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -283,18 +287,18 @@ void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
         if(lower)
         {
             i__1 = ab_dim1 + 1;
-            w[1] = ab[i__1].r;
+            w[1] = ab[i__1].real;
         }
         else
         {
             i__1 = *kd + 1 + ab_dim1;
-            w[1] = ab[i__1].r;
+            w[1] = ab[i__1].real;
         }
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -307,7 +311,7 @@ void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = clanhb_("M", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
+    anrm = aocl_lapack_clanhb("M", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
     iscale = 0;
     if(anrm > 0.f && anrm < rmin)
     {
@@ -323,26 +327,26 @@ void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
     {
         if(lower)
         {
-            clascl_("B", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_clascl("B", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
         else
         {
-            clascl_("Q", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_clascl("Q", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
     }
     /* Call CHBTRD to reduce Hermitian band matrix to tridiagonal form. */
     inde = 1;
-    chbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
-            &work[1], &iinfo);
+    aocl_lapack_chbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset],
+                       ldz, &work[1], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call CSTEQR. */
     if(!wantz)
     {
-        ssterf_(n, &w[1], &rwork[inde], info);
+        aocl_lapack_ssterf(n, &w[1], &rwork[inde], info);
     }
     else
     {
         indrwk = inde + *n;
-        csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
+        aocl_lapack_csteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -356,7 +360,7 @@ void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
             imax = *info - 1;
         }
         r__1 = 1.f / sigma;
-        sscal_(&imax, &r__1, &w[1], &c__1);
+        aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

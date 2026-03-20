@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gehrd.c
@@ -40,8 +40,7 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
     {
         case FLOAT:
         {
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
 
             /* Test 1
                 | A - Q H Q**T | / ( |A| n ulp ) */
@@ -59,21 +58,20 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             fla_lapack_sorghr(&n, &ilo, &ihi, Q, &lda, tau, work, &lwork, &info);
             if(info < 0)
                 break;
-            extract_upper_hessenberg_matrix(datatype, n, A_test, lda);
+            extract_upper_hessenberg_matrix(datatype, n, A_test, lda, ilo, ihi);
             sgemm_("N", "N", &n, &n, &n, &s_one, Q, &lda, A_test, &lda, &s_zero, lambda, &n);
             sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Q, &lda, &s_n_one, A, &lda);
             norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-            resid1 = norm / (eps * norm_A * (float)n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, n, n, lda);
+            resid2 = (float)check_orthogonality(datatype, Q, n, n, lda, params);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A;
 
             /* Test 1
                 | A - Q H Q**T | / ( |A| n ulp ) */
@@ -91,21 +89,20 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             fla_lapack_dorghr(&n, &ilo, &ihi, Q, &lda, tau, work, &lwork, &info);
             if(info < 0)
                 break;
-            extract_upper_hessenberg_matrix(datatype, n, A_test, lda);
+            extract_upper_hessenberg_matrix(datatype, n, A_test, lda, ilo, ihi);
             dgemm_("N", "N", &n, &n, &n, &d_one, Q, &lda, A_test, &lda, &d_zero, lambda, &n);
             dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Q, &lda, &d_n_one, A, &lda);
             norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-            resid1 = norm / (eps * norm_A * (float)n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, n, n, lda);
+            resid2 = check_orthogonality(datatype, Q, n, n, lda, params);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
 
             /* Test 1
                 | A - Q H Q**T | / ( |A| n ulp ) */
@@ -123,21 +120,20 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             fla_lapack_cunghr(&n, &ilo, &ihi, Q, &lda, tau, work, &lwork, &info);
             if(info < 0)
                 break;
-            extract_upper_hessenberg_matrix(datatype, n, A_test, lda);
+            extract_upper_hessenberg_matrix(datatype, n, A_test, lda, ilo, ihi);
             cgemm_("N", "N", &n, &n, &n, &c_one, Q, &lda, A_test, &lda, &c_zero, lambda, &n);
             cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Q, &lda, &c_n_one, A, &lda);
             norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-            resid1 = norm / (eps * norm_A * (float)n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, n, n, lda);
+            resid2 = (float)check_orthogonality(datatype, Q, n, n, lda, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A;
 
             /* Test 1
                 | A - Q H Q**T | / ( |A| n ulp ) */
@@ -155,15 +151,15 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             fla_lapack_zunghr(&n, &ilo, &ihi, Q, &lda, tau, work, &lwork, &info);
             if(info < 0)
                 break;
-            extract_upper_hessenberg_matrix(datatype, n, A_test, lda);
+            extract_upper_hessenberg_matrix(datatype, n, A_test, lda, ilo, ihi);
             zgemm_("N", "N", &n, &n, &n, &z_one, Q, &lda, A_test, &lda, &z_zero, lambda, &n);
             zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Q, &lda, &z_n_one, A, &lda);
             norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-            resid1 = norm / (eps * norm_A * (float)n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, n, n, lda);
+            resid2 = check_orthogonality(datatype, Q, n, n, lda, params);
             break;
         }
     }

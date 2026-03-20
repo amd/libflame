@@ -138,34 +138,47 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam,
-             integer *info)
+/** Generated wrapper function */
+void slaed4_(aocl_int_t *n, aocl_int_t *i__, real *d__, real *z__, real *delta, real *rho,
+             real *dlam, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaed4(n, i__, d__, z__, delta, rho, dlam, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t i___64 = *i__;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaed4(&n_64, &i___64, d__, z__, delta, rho, dlam, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__, real *delta,
+                        real *rho, real *dlam, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real a, b, c__;
-    integer j;
+    aocl_int64_t j;
     real w;
-    integer ii;
+    aocl_int64_t ii;
     real dw, zz[3];
-    integer ip1;
+    aocl_int64_t ip1;
     real del, eta, phi, eps, tau, psi;
-    integer iim1, iip1;
+    aocl_int64_t iim1, iip1;
     real dphi, dpsi;
-    integer iter;
+    aocl_int64_t iter;
     real temp, prew, temp1, dltlb, dltub, midpt;
-    integer niter;
+    aocl_int64_t niter;
     logical swtch;
-    extern /* Subroutine */
-        void
-        slaed5_(integer *, real *, real *, real *, real *, real *),
-        slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
     logical swtch3;
     extern real slamch_(char *);
     logical orgati;
@@ -210,7 +223,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
     }
     if(*n == 2)
     {
-        slaed5_(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
+        aocl_lapack_slaed5(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -718,7 +731,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 zz[2] = z__[iip1] * z__[iip1];
             }
             zz[1] = z__[ii] * z__[ii];
-            slaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
+            aocl_lapack_slaed6(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
             if(*info != 0)
             {
                 goto L250;
@@ -918,7 +931,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                         zz[2] = z__[iip1] * z__[iip1];
                     }
                 }
-                slaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
+                aocl_lapack_slaed6(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
                 if(*info != 0)
                 {
                     goto L250;

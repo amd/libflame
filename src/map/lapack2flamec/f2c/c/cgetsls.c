@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static integer c_n1 = -1;
-static integer c_n2 = -2;
-static integer c__0 = 0;
+static scomplex c_b1 = {0.f, 0.f};
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c_n2 = -2;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b CGETSLS */
 /* Definition: */
 /* =========== */
@@ -25,7 +25,7 @@ static integer c__0 = 0;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGETSLS solves overdetermined or underdetermined complex linear systems */
+/* > CGETSLS solves overdetermined or underdetermined scomplex linear systems */
 /* > involving an M-by-N matrix A, using a tall skinny QR or short wide LQ */
 /* > factorization of A. It is assumed that A has full rank. */
 /* > */
@@ -163,8 +163,32 @@ the least squares solution could not be */
 /* > \ingroup getsls */
 /* ===================================================================== */
 /* Subroutine */
-void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, integer *lda,
-              complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cgetsls_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a,
+              aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *lwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgetsls(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgetsls(trans, &m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, work, &lwork_64,
+                        &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
+                         scomplex *a, aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb,
+                         scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -180,51 +204,25 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-    integer i__, j;
-    complex tq[5];
-    integer lw1, lw2;
+    aocl_int64_t i__, j;
+    scomplex tq[5];
+    aocl_int64_t lw1, lw2;
     real dum[1];
-    integer lwm, lwo;
+    aocl_int64_t lwm, lwo;
     real anrm, bnrm;
     logical tran;
-    integer brow, tszm, tszo, info2, iascl, ibscl;
-    extern /* Subroutine */
-        void
-        cgelq_(integer *, integer *, complex *, integer *, complex *, integer *, complex *,
-               integer *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgeqr_(integer *, integer *, complex *, integer *, complex *, integer *, complex *,
-               integer *, integer *);
-    integer maxmn;
-    complex workq[1];
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *);
+    aocl_int64_t brow, tszm, tszo, info2, iascl, ibscl;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t maxmn;
+    scomplex workq[1];
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        cgemlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                integer *, complex *, integer *, complex *, integer *, integer *),
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cgemqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                integer *, complex *, integer *, complex *, integer *, integer *);
-    integer scllen;
+    aocl_int64_t scllen;
     real bignum, smlnum;
-    integer wsizem, wsizeo;
+    aocl_int64_t wsizem, wsizeo;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
-                integer *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -292,46 +290,46 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
         /* Determine the optimum and minimum LWORK */
         if(*m >= *n)
         {
-            cgeqr_(m, n, &a[a_offset], lda, tq, &c_n1, workq, &c_n1, &info2);
-            tszo = (integer)tq[0].r;
-            lwo = (integer)workq[0].r;
-            cgemqr_("L", trans, m, nrhs, n, &a[a_offset], lda, tq, &tszo, &b[b_offset], ldb, workq,
-                    &c_n1, &info2);
+            aocl_lapack_cgeqr(m, n, &a[a_offset], lda, tq, &c_n1, workq, &c_n1, &info2);
+            tszo = (integer)tq[0].real;
+            lwo = (integer)workq[0].real;
+            aocl_lapack_cgemqr("L", trans, m, nrhs, n, &a[a_offset], lda, tq, &tszo, &b[b_offset],
+                               ldb, workq, &c_n1, &info2);
             /* Computing MAX */
             i__1 = lwo;
-            i__2 = (integer)workq[0].r; // , expr subst
+            i__2 = (integer)workq[0].real; // , expr subst
             lwo = fla_max(i__1, i__2);
-            cgeqr_(m, n, &a[a_offset], lda, tq, &c_n2, workq, &c_n2, &info2);
-            tszm = (integer)tq[0].r;
-            lwm = (integer)workq[0].r;
-            cgemqr_("L", trans, m, nrhs, n, &a[a_offset], lda, tq, &tszm, &b[b_offset], ldb, workq,
-                    &c_n1, &info2);
+            aocl_lapack_cgeqr(m, n, &a[a_offset], lda, tq, &c_n2, workq, &c_n2, &info2);
+            tszm = (integer)tq[0].real;
+            lwm = (integer)workq[0].real;
+            aocl_lapack_cgemqr("L", trans, m, nrhs, n, &a[a_offset], lda, tq, &tszm, &b[b_offset],
+                               ldb, workq, &c_n1, &info2);
             /* Computing MAX */
             i__1 = lwm;
-            i__2 = (integer)workq[0].r; // , expr subst
+            i__2 = (integer)workq[0].real; // , expr subst
             lwm = fla_max(i__1, i__2);
             wsizeo = tszo + lwo;
             wsizem = tszm + lwm;
         }
         else
         {
-            cgelq_(m, n, &a[a_offset], lda, tq, &c_n1, workq, &c_n1, &info2);
-            tszo = (integer)tq[0].r;
-            lwo = (integer)workq[0].r;
-            cgemlq_("L", trans, n, nrhs, m, &a[a_offset], lda, tq, &tszo, &b[b_offset], ldb, workq,
-                    &c_n1, &info2);
+            aocl_lapack_cgelq(m, n, &a[a_offset], lda, tq, &c_n1, workq, &c_n1, &info2);
+            tszo = (integer)tq[0].real;
+            lwo = (integer)workq[0].real;
+            aocl_lapack_cgemlq("L", trans, n, nrhs, m, &a[a_offset], lda, tq, &tszo, &b[b_offset],
+                               ldb, workq, &c_n1, &info2);
             /* Computing MAX */
             i__1 = lwo;
-            i__2 = (integer)workq[0].r; // , expr subst
+            i__2 = (integer)workq[0].real; // , expr subst
             lwo = fla_max(i__1, i__2);
-            cgelq_(m, n, &a[a_offset], lda, tq, &c_n2, workq, &c_n2, &info2);
-            tszm = (integer)tq[0].r;
-            lwm = (integer)workq[0].r;
-            cgemlq_("L", trans, n, nrhs, m, &a[a_offset], lda, tq, &tszm, &b[b_offset], ldb, workq,
-                    &c_n1, &info2);
+            aocl_lapack_cgelq(m, n, &a[a_offset], lda, tq, &c_n2, workq, &c_n2, &info2);
+            tszm = (integer)tq[0].real;
+            lwm = (integer)workq[0].real;
+            aocl_lapack_cgemlq("L", trans, n, nrhs, m, &a[a_offset], lda, tq, &tszm, &b[b_offset],
+                               ldb, workq, &c_n1, &info2);
             /* Computing MAX */
             i__1 = lwm;
-            i__2 = (integer)workq[0].r; // , expr subst
+            i__2 = (integer)workq[0].real; // , expr subst
             lwm = fla_max(i__1, i__2);
             wsizeo = tszo + lwo;
             wsizem = tszm + lwm;
@@ -340,14 +338,14 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
         {
             *info = -10;
         }
-        r__1 = sroundup_lwork(&wsizeo);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&wsizeo);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGETSLS", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CGETSLS", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -355,9 +353,9 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
     {
         if(*lwork == -2)
         {
-            r__1 = sroundup_lwork(&wsizem);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            r__1 = aocl_lapack_sroundup_lwork(&wsizem);
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -378,7 +376,7 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
     if(fla_min(i__1, *nrhs) == 0)
     {
         i__1 = fla_max(*m, *n);
-        claset_("FULL", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        aocl_lapack_claset("FULL", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -386,24 +384,24 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
     /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
-    anrm = clange_("M", m, n, &a[a_offset], lda, dum);
+    anrm = aocl_lapack_clange("M", m, n, &a[a_offset], lda, dum);
     iascl = 0;
     if(anrm > 0.f && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        clascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
     else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        clascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        claset_("F", &maxmn, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        aocl_lapack_claset("F", &maxmn, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         goto L50;
     }
     brow = *m;
@@ -411,32 +409,32 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
     {
         brow = *n;
     }
-    bnrm = clange_("M", &brow, nrhs, &b[b_offset], ldb, dum);
+    bnrm = aocl_lapack_clange("M", &brow, nrhs, &b[b_offset], ldb, dum);
     ibscl = 0;
     if(bnrm > 0.f && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        clascl_("G", &c__0, &c__0, &bnrm, &smlnum, &brow, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &bnrm, &smlnum, &brow, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
     else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        clascl_("G", &c__0, &c__0, &bnrm, &bignum, &brow, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &bnrm, &bignum, &brow, nrhs, &b[b_offset], ldb, info);
         ibscl = 2;
     }
     if(*m >= *n)
     {
         /* compute QR factorization of A */
-        cgeqr_(m, n, &a[a_offset], lda, &work[lw2 + 1], &lw1, &work[1], &lw2, info);
+        aocl_lapack_cgeqr(m, n, &a[a_offset], lda, &work[lw2 + 1], &lw1, &work[1], &lw2, info);
         if(!tran)
         {
             /* Least-Squares Problem min || A * X - B || */
             /* B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS) */
-            cgemqr_("L", "C", m, nrhs, n, &a[a_offset], lda, &work[lw2 + 1], &lw1, &b[b_offset],
-                    ldb, &work[1], &lw2, info);
+            aocl_lapack_cgemqr("L", "C", m, nrhs, n, &a[a_offset], lda, &work[lw2 + 1], &lw1,
+                               &b[b_offset], ldb, &work[1], &lw2, info);
             /* B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
-            ctrtrs_("U", "N", "N", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
+            aocl_lapack_ctrtrs("U", "N", "N", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -448,7 +446,7 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
         {
             /* Overdetermined system of equations A**T * X = B */
             /* B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS) */
-            ctrtrs_("U", "C", "N", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
+            aocl_lapack_ctrtrs("U", "C", "N", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -462,28 +460,28 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
                 for(i__ = *n + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
             }
             /* B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS) */
-            cgemqr_("L", "N", m, nrhs, n, &a[a_offset], lda, &work[lw2 + 1], &lw1, &b[b_offset],
-                    ldb, &work[1], &lw2, info);
+            aocl_lapack_cgemqr("L", "N", m, nrhs, n, &a[a_offset], lda, &work[lw2 + 1], &lw1,
+                               &b[b_offset], ldb, &work[1], &lw2, info);
             scllen = *m;
         }
     }
     else
     {
         /* Compute LQ factorization of A */
-        cgelq_(m, n, &a[a_offset], lda, &work[lw2 + 1], &lw1, &work[1], &lw2, info);
+        aocl_lapack_cgelq(m, n, &a[a_offset], lda, &work[lw2 + 1], &lw1, &work[1], &lw2, info);
         /* workspace at least M, optimally M*NB. */
         if(!tran)
         {
             /* underdetermined system of equations A * X = B */
             /* B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
-            ctrtrs_("L", "N", "N", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
+            aocl_lapack_ctrtrs("L", "N", "N", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -497,15 +495,15 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
                 for(i__ = *m + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
             }
             /* B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS) */
-            cgemlq_("L", "C", n, nrhs, m, &a[a_offset], lda, &work[lw2 + 1], &lw1, &b[b_offset],
-                    ldb, &work[1], &lw2, info);
+            aocl_lapack_cgemlq("L", "C", n, nrhs, m, &a[a_offset], lda, &work[lw2 + 1], &lw1,
+                               &b[b_offset], ldb, &work[1], &lw2, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             scllen = *n;
         }
@@ -513,11 +511,11 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
         {
             /* overdetermined system min || A**T * X - B || */
             /* B(1:N,1:NRHS) := Q * B(1:N,1:NRHS) */
-            cgemlq_("L", "N", n, nrhs, m, &a[a_offset], lda, &work[lw2 + 1], &lw1, &b[b_offset],
-                    ldb, &work[1], &lw2, info);
+            aocl_lapack_cgemlq("L", "N", n, nrhs, m, &a[a_offset], lda, &work[lw2 + 1], &lw1,
+                               &b[b_offset], ldb, &work[1], &lw2, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             /* B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS) */
-            ctrtrs_("L", "C", "N", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
+            aocl_lapack_ctrtrs("L", "C", "N", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -529,25 +527,29 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
     /* Undo scaling */
     if(iascl == 1)
     {
-        clascl_("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb,
+                           info);
     }
     else if(iascl == 2)
     {
-        clascl_("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb,
+                           info);
     }
     if(ibscl == 1)
     {
-        clascl_("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb,
+                           info);
     }
     else if(ibscl == 2)
     {
-        clascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb,
+                           info);
     }
 L50:
     i__1 = tszo + lwo;
-    r__1 = sroundup_lwork(&i__1);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&i__1);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGETSLS */

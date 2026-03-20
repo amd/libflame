@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b SLAED1 used by sstedc. Computes the updated eigensystem of a diagonal matrix after
  * modification by a rank-one symmetric matrix. Used when the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
@@ -161,32 +161,37 @@ static integer c_n1 = -1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real *rho,
-             integer *cutpnt, real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void slaed1_(aocl_int_t *n, real *d__, real *q, aocl_int_t *ldq, aocl_int_t *indxq, real *rho,
+             aocl_int_t *cutpnt, real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaed1(n, d__, q, ldq, indxq, rho, cutpnt, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t cutpnt_64 = *cutpnt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaed1(&n_64, d__, q, &ldq_64, indxq, rho, &cutpnt_64, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaed1(aocl_int64_t *n, real *d__, real *q, aocl_int64_t *ldq, aocl_int_t *indxq,
+                        real *rho, aocl_int64_t *cutpnt, real *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed1 inputs: n %" FLA_IS ",ldq %" FLA_IS ",cutpnt %" FLA_IS "", *n, *ldq,
                       *cutpnt);
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Local variables */
-    integer i__, k, n1, n2, is, iw, iz, iq2, cpp1, indx, indxc, indxp;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        slaed2_(integer *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                real *, real *, real *, real *, integer *, integer *, integer *, integer *,
-                integer *),
-        slaed3_(integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *,
-                integer *, integer *, real *, real *, integer *);
-    integer idlmda;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
-    integer coltyp;
+    aocl_int64_t i__, k, n1, n2, is, iw, iz, iq2, cpp1, indx, indxc, indxp;
+    aocl_int64_t idlmda;
+    aocl_int64_t coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -235,7 +240,7 @@ void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAED1", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLAED1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -258,14 +263,14 @@ void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real 
     indxp = coltyp + *n;
     /* Form the z-vector which consists of the last row of Q_1 and the */
     /* first row of Q_2. */
-    scopy_(cutpnt, &q[*cutpnt + q_dim1], ldq, &work[iz], &c__1);
+    aocl_blas_scopy(cutpnt, &q[*cutpnt + q_dim1], ldq, &work[iz], &c__1);
     cpp1 = *cutpnt + 1;
     i__1 = *n - *cutpnt;
-    scopy_(&i__1, &q[cpp1 + cpp1 * q_dim1], ldq, &work[iz + *cutpnt], &c__1);
+    aocl_blas_scopy(&i__1, &q[cpp1 + cpp1 * q_dim1], ldq, &work[iz + *cutpnt], &c__1);
     /* Deflate eigenvalues. */
-    slaed2_(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, &indxq[1], rho, &work[iz], &work[idlmda],
-            &work[iw], &work[iq2], &iwork[indx], &iwork[indxc], &iwork[indxp], &iwork[coltyp],
-            info);
+    aocl_lapack_slaed2(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, &indxq[1], rho, &work[iz],
+                       &work[idlmda], &work[iw], &work[iq2], &iwork[indx], &iwork[indxc],
+                       &iwork[indxp], &iwork[coltyp], info);
     if(*info != 0)
     {
         goto L20;
@@ -275,8 +280,8 @@ void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real 
     {
         is = (iwork[coltyp] + iwork[coltyp + 1]) * *cutpnt
              + (iwork[coltyp + 1] + iwork[coltyp + 2]) * (*n - *cutpnt) + iq2;
-        slaed3_(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, rho, &work[idlmda], &work[iq2],
-                &iwork[indxc], &iwork[coltyp], &work[iw], &work[is], info);
+        aocl_lapack_slaed3(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, rho, &work[idlmda],
+                           &work[iq2], &iwork[indxc], &iwork[coltyp], &work[iw], &work[is], info);
         if(*info != 0)
         {
             goto L20;
@@ -284,14 +289,14 @@ void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real 
         /* Prepare the INDXQ sorting permutation. */
         n1 = k;
         n2 = *n - k;
-        slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &indxq[1]);
+        aocl_lapack_slamrg(&n1, &n2, &d__[1], &c__1, &c_n1, &indxq[1]);
     }
     else
     {
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            indxq[i__] = i__;
+            indxq[i__] = (aocl_int_t)(i__);
             /* L10: */
         }
     }

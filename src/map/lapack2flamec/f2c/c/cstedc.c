@@ -4,12 +4,12 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__2 = 2;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
 static real c_b17 = 0.f;
 static real c_b18 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CSTEDC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -49,7 +49,7 @@ static integer c__1 = 1;
 /* > */
 /* > CSTEDC computes all eigenvalues and, optionally, eigenvectors of a */
 /* > symmetric tridiagonal matrix using the divide and conquer method. */
-/* > The eigenvectors of a full or band complex Hermitian matrix can also */
+/* > The eigenvectors of a full or band scomplex Hermitian matrix can also */
 /* > be found if CHETRD or CHPTRD or CHBTRD has been used to reduce this */
 /* > matrix to tridiagonal form. */
 /* > */
@@ -208,9 +208,32 @@ the */
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, complex *work,
-             integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork,
-             integer *info)
+/** Generated wrapper function */
+void cstedc_(char *compz, aocl_int_t *n, real *d__, real *e, scomplex *z__, aocl_int_t *ldz,
+             scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *lrwork, aocl_int_t *iwork,
+             aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cstedc(compz, n, d__, e, z__, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cstedc(compz, &n_64, d__, e, z__, &ldz_64, work, &lwork_64, rwork, &lrwork_64,
+                       iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cstedc(char *compz, aocl_int64_t *n, real *d__, real *e, scomplex *z__,
+                        aocl_int64_t *ldz, scomplex *work, aocl_int64_t *lwork, real *rwork,
+                        aocl_int64_t *lrwork, aocl_int_t *iwork, aocl_int64_t *liwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -226,61 +249,27 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2;
     /* Builtin functions */
     double log(doublereal);
-    integer pow_ii(integer *, integer *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, m;
+    aocl_int64_t i__, j, k, m;
     real p;
-    integer ii, ll, lgn;
+    aocl_int64_t ii, ll, lgn;
     real eps, tiny;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer lwmin;
-    extern /* Subroutine */
-        void
-        claed0_(integer *, integer *, real *, real *, complex *, integer *, complex *, integer *,
-                real *, integer *, integer *);
-    integer start;
-    extern /* Subroutine */
-        void
-        clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *,
-                real *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwmin;
+    aocl_int64_t start;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer finish;
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *,
-                integer *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
-    integer liwmin, icompz;
-    extern /* Subroutine */
-        void
-        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *);
+    aocl_int64_t finish;
+    aocl_int64_t liwmin, icompz;
     real orgnrm;
-    extern real slanst_(char *, integer *, real *, real *);
-    extern /* Subroutine */
-        void
-        ssterf_(integer *, real *, real *, integer *);
-    integer lrwmin;
+    aocl_int64_t lrwmin;
     logical lquery;
-    integer smlsiz;
-    extern /* Subroutine */
-        void
-        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t smlsiz;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -347,7 +336,7 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     if(*info == 0)
     {
         /* Compute the workspace requirements */
-        smlsiz = ilaenv_(&c__9, "CSTEDC", " ", &c__0, &c__0, &c__0, &c__0);
+        smlsiz = aocl_lapack_ilaenv(&c__9, "CSTEDC", " ", &c__0, &c__0, &c__0, &c__0);
         if(*n <= 1 || icompz == 0)
         {
             lwmin = 1;
@@ -385,11 +374,11 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
             lrwmin = (*n << 2) + 1 + (i__1 * i__1 << 1);
             liwmin = *n * 5 + 3;
         }
-        r__1 = sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -8;
@@ -406,7 +395,7 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSTEDC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSTEDC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -426,8 +415,8 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         if(icompz != 0)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -443,25 +432,25 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     /* If COMPZ = 'N', use SSTERF to compute the eigenvalues. */
     if(icompz == 0)
     {
-        ssterf_(n, &d__[1], &e[1], info);
+        aocl_lapack_ssterf(n, &d__[1], &e[1], info);
         goto L70;
     }
     /* If N is smaller than the minimum divide size (SMLSIZ+1), then */
     /* solve the problem with another solver. */
     if(*n <= smlsiz)
     {
-        csteqr_(compz, n, &d__[1], &e[1], &z__[z_offset], ldz, &rwork[1], info);
+        aocl_lapack_csteqr(compz, n, &d__[1], &e[1], &z__[z_offset], ldz, &rwork[1], info);
     }
     else
     {
         /* If COMPZ = 'I', we simply call SSTEDC instead. */
         if(icompz == 2)
         {
-            slaset_("Full", n, n, &c_b17, &c_b18, &rwork[1], n);
+            aocl_lapack_slaset("Full", n, n, &c_b17, &c_b18, &rwork[1], n);
             ll = *n * *n + 1;
             i__1 = *lrwork - ll + 1;
-            sstedc_("I", n, &d__[1], &e[1], &rwork[1], n, &rwork[ll], &i__1, &iwork[1], liwork,
-                    info);
+            aocl_lapack_sstedc("I", n, &d__[1], &e[1], &rwork[1], n, &rwork[ll], &i__1, &iwork[1],
+                               liwork, info);
             i__1 = *n;
             for(j = 1; j <= i__1; ++j)
             {
@@ -470,8 +459,8 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
                 {
                     i__3 = i__ + j * z_dim1;
                     i__4 = (j - 1) * *n + i__;
-                    z__[i__3].r = rwork[i__4];
-                    z__[i__3].i = 0.f; // , expr subst
+                    z__[i__3].real = rwork[i__4];
+                    z__[i__3].imag = 0.f; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -481,7 +470,7 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         /* From now on, only option left to be handled is COMPZ = 'V', */
         /* i.e. ICOMPZ = 1. */
         /* Scale. */
-        orgnrm = slanst_("M", n, &d__[1], &e[1]);
+        orgnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
         if(orgnrm == 0.f)
         {
             goto L70;
@@ -514,27 +503,31 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
             if(m > smlsiz)
             {
                 /* Scale. */
-                orgnrm = slanst_("M", &m, &d__[start], &e[start]);
-                slascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &m, &c__1, &d__[start], &m, info);
+                orgnrm = aocl_lapack_slanst("M", &m, &d__[start], &e[start]);
+                aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b18, &m, &c__1, &d__[start], &m,
+                                   info);
                 i__1 = m - 1;
                 i__2 = m - 1;
-                slascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &i__1, &c__1, &e[start], &i__2, info);
-                claed0_(n, &m, &d__[start], &e[start], &z__[start * z_dim1 + 1], ldz, &work[1], n,
-                        &rwork[1], &iwork[1], info);
+                aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b18, &i__1, &c__1, &e[start],
+                                   &i__2, info);
+                aocl_lapack_claed0(n, &m, &d__[start], &e[start], &z__[start * z_dim1 + 1], ldz,
+                                   &work[1], n, &rwork[1], &iwork[1], info);
                 if(*info > 0)
                 {
                     *info = (*info / (m + 1) + start - 1) * (*n + 1) + *info % (m + 1) + start - 1;
                     goto L70;
                 }
                 /* Scale back. */
-                slascl_("G", &c__0, &c__0, &c_b18, &orgnrm, &m, &c__1, &d__[start], &m, info);
+                aocl_lapack_slascl("G", &c__0, &c__0, &c_b18, &orgnrm, &m, &c__1, &d__[start], &m,
+                                   info);
             }
             else
             {
-                ssteqr_("I", &m, &d__[start], &e[start], &rwork[1], &m, &rwork[m * m + 1], info);
-                clacrm_(n, &m, &z__[start * z_dim1 + 1], ldz, &rwork[1], &m, &work[1], n,
-                        &rwork[m * m + 1]);
-                clacpy_("A", n, &m, &work[1], n, &z__[start * z_dim1 + 1], ldz);
+                aocl_lapack_ssteqr("I", &m, &d__[start], &e[start], &rwork[1], &m,
+                                   &rwork[m * m + 1], info);
+                aocl_lapack_clacrm(n, &m, &z__[start * z_dim1 + 1], ldz, &rwork[1], &m, &work[1], n,
+                                   &rwork[m * m + 1]);
+                aocl_lapack_clacpy("A", n, &m, &work[1], n, &z__[start * z_dim1 + 1], ldz);
                 if(*info > 0)
                 {
                     *info = start * (*n + 1) + finish;
@@ -566,17 +559,17 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
             {
                 d__[k] = d__[i__];
                 d__[i__] = p;
-                cswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
+                aocl_blas_cswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
             }
             /* L60: */
         }
     }
 L70:
-    r__1 = sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CSTEDC */

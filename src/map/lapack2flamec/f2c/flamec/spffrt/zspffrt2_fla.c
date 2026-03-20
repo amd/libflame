@@ -4,21 +4,11 @@
 
 #include "FLA_f2c.h"
 
-extern void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
-extern void zspr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
-extern void zgemm_(char *transa, char *transb, integer *m, integer *n, integer *k,
-                   doublecomplex *alpha, doublecomplex *a, integer *lda, doublecomplex *b,
-                   integer *ldb, doublecomplex *beta, doublecomplex *c__, integer *ldc);
+extern void z_div(dcomplex *, dcomplex *, dcomplex *);
 
-#ifdef FLA_ENABLE_BLAS_EXT_GEMMT
-extern void zgemmt_(char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *,
-                    integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                    integer *);
-#endif
-
-void zspffrt2_fla_def(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work);
-static void zspffrt2_fla_unp_var2(doublecomplex *ap, integer *n, integer *ncolm,
-                                  doublecomplex *work);
+void zspffrt2_fla_def(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcomplex *work);
+static void zspffrt2_fla_unp_var2(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
+                                  dcomplex *work);
 
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
@@ -28,7 +18,7 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
     * @details
     * \b Purpose:
     * \verbatim
-        ZSPFFRT2 computes the partial factorization of a complex symmetric matrix A
+        ZSPFFRT2 computes the partial factorization of a scomplex symmetric matrix A
         stored in packed format.
         The factorization has the form
             A = L*D*L**T
@@ -84,14 +74,14 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
 
     \endverbatim
     *  */
-void zspffrt2_fla(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work,
-                  doublecomplex *work2)
+void zspffrt2_fla(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcomplex *work,
+                  dcomplex *work2)
 {
     /* ncolm as fraction of n */
-    integer ncolm_pc = (integer)((*ncolm * 100) / *n);
+    aocl_int64_t ncolm_pc = (integer)((*ncolm * 100) / *n);
     if((*n > (FLA_SPFFRT2__NTHRESH1 - 1)) && (ncolm_pc >= FLA_SPFFRT2__NCOLFRAC_THRESH3))
     {
-        /* Unpacking/packing based variant for small n &  ncolm values */
+        /* Unpacking/packing based variant for small n & ncolm values */
         zspffrt2_fla_unp_var2(ap, n, ncolm, work);
     }
     else if(*n > FLA_SPFFRT2__NTHRESH3)
@@ -112,10 +102,11 @@ void zspffrt2_fla(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *
  *  triangular part of unpacked full matrix.
  *  The strictly upper triangular part is left untouched.
  */
-void zunpack_fla(doublecomplex *ap, doublecomplex *a, integer m, integer n, integer lda)
+void zunpack_fla(dcomplex *ap, dcomplex *a, aocl_int64_t m, aocl_int64_t n,
+                 aocl_int64_t lda)
 {
-    integer i, j;
-    doublecomplex *aptr = ap;
+    aocl_int64_t i, j;
+    dcomplex *aptr = ap;
 
     for(i = 0; i < n; i++)
     {
@@ -134,10 +125,11 @@ void zunpack_fla(doublecomplex *ap, doublecomplex *a, integer m, integer n, inte
  *  The strictly upper triangular parts of the input and output are
  *  left unused and untouched respectiely.
  */
-void zpack_fla(doublecomplex *a, doublecomplex *ap, integer m, integer n, integer lda)
+void zpack_fla(dcomplex *a, dcomplex *ap, aocl_int64_t m, aocl_int64_t n,
+               aocl_int64_t lda)
 {
-    integer i, j;
-    doublecomplex *aptr = ap;
+    aocl_int64_t i, j;
+    dcomplex *aptr = ap;
 
     for(i = 0; i < n; i++)
     {
@@ -157,21 +149,15 @@ void zpack_fla(doublecomplex *a, doublecomplex *ap, integer m, integer n, intege
  * Only the lower trapezoidal part of the matrix is updated.
  * The strictly upper triangular part is left untouched.
  */
-void zsffrk2_fla(doublecomplex *au, integer *m, integer *n, integer *lda, doublecomplex *bt,
-                 integer *ldbt)
+void zsffrk2_fla(dcomplex *au, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *lda,
+                 dcomplex *bt, aocl_int64_t *ldbt)
 {
-    doublecomplex z__1;
-    integer i__1, i__2, i__3;
-    integer k, kc, kcn;
-    integer c__1 = 1;
-    doublecomplex r1;
-    doublecomplex c_b1 = {1., 0.};
-    extern void zgeru_(integer * m, integer * n, doublecomplex * alpha, doublecomplex * x,
-                       integer * incx, doublecomplex * y, integer * incy, doublecomplex * a,
-                       integer * lda);
-    extern void zcopy_(integer * n, doublecomplex * zx, integer * incx, doublecomplex * zy,
-                       integer * incy);
-    extern void zscal_(integer * n, doublecomplex * za, doublecomplex * zx, integer * incx);
+    dcomplex z__1;
+    aocl_int64_t i__1, i__2, i__3;
+    aocl_int64_t k, kc, kcn;
+    aocl_int64_t c__1 = 1;
+    dcomplex r1;
+    dcomplex c_b1 = {1., 0.};
 
     --au;
     --bt;
@@ -182,32 +168,32 @@ void zsffrk2_fla(doublecomplex *au, integer *m, integer *n, integer *lda, double
         /* D(k) = -1/A(k,k) */
 
         /* Skip trailing matrix update if zero diagonal element is encountered */
-        if(au[kc].r == 0 && au[kc].i == 0)
+        if(au[kc].real == 0 && au[kc].imag == 0)
         {
-            z__1.r = 0;
-            z__1.i = 0;
+            z__1.real = 0;
+            z__1.imag = 0;
         }
         else
         {
             z_div(&z__1, &c_b1, &au[kc]);
         }
 
-        r1.r = -z__1.r;
-        r1.i = -z__1.i;
+        r1.real = -z__1.real;
+        r1.imag = -z__1.imag;
 
         i__1 = *n - k;
         i__2 = *m - k;
         kcn = kc + *lda + 1;
 
         /* Update trailing matrix with rank-1 operation */
-        zgeru_(&i__2, &i__1, &r1, &au[kc + 1], &c__1, &au[kc + 1], &c__1, &au[kcn], lda);
+        aocl_blas_zgeru(&i__2, &i__1, &r1, &au[kc + 1], &c__1, &au[kc + 1], &c__1, &au[kcn], lda);
 
         /* Compute b**T/a */
-        zcopy_(&i__3, &au[kc + *n - k + 1], &c__1, &bt[k], ldbt);
-        zscal_(&i__3, &r1, &bt[k], ldbt);
+        aocl_blas_zcopy(&i__3, &au[kc + *n - k + 1], &c__1, &bt[k], ldbt);
+        aocl_blas_zscal(&i__3, &r1, &bt[k], ldbt);
 
-        au[kc].r = z__1.r;
-        au[kc].i = z__1.i;
+        au[kc].real = z__1.real;
+        au[kc].imag = z__1.imag;
         kc = kcn;
     }
 
@@ -226,14 +212,15 @@ void zsffrk2_fla(doublecomplex *au, integer *m, integer *n, integer *lda, double
  * Variant 2 does factorization of (N x ncolm) in the main loop
  * and the trailing matrix is updated outside the main loop
  */
-void zspffrt2_fla_unp_var2(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work)
+void zspffrt2_fla_unp_var2(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
+                           dcomplex *work)
 {
-    doublecomplex d__1 = {1., 0.};
-    integer kc, mg, nb;
-    integer k, ni, mp;
+    dcomplex d__1 = {1., 0.};
+    aocl_int64_t kc, mg, nb;
+    aocl_int64_t k, ni, mp;
 
-    doublecomplex *au;
-    doublecomplex *mau;
+    dcomplex *au;
+    dcomplex *mau;
 
     /* Choose block size for the blocked variant */
     if(*n < FLA_SPFFRT2__BSIZE_NL1)
@@ -245,7 +232,14 @@ void zspffrt2_fla_unp_var2(doublecomplex *ap, integer *n, integer *ncolm, double
     nb = (nb > *ncolm) ? *ncolm : nb;
 
     /* Allocate unpacked matrix and do the unpacking */
-    mau = (doublecomplex *)malloc(*n * *n * sizeof(doublecomplex));
+    mau = NULL;
+    mau = (dcomplex *) malloc(*n * *n * sizeof(dcomplex));
+    if(mau == NULL)
+    {
+        /* call default version */
+        zspffrt2_fla_def(ap, n, ncolm, work);
+        return;
+    }
 
     zunpack_fla(ap, mau, *n, *n, *n);
 
@@ -269,13 +263,14 @@ void zspffrt2_fla_unp_var2(doublecomplex *ap, integer *n, integer *ncolm, double
         /* Update trailing matrix within the panel */
 #ifndef FLA_ENABLE_BLAS_EXT_GEMMT
         mg = *n - *ncolm + ni;
-        zgemm_("N", "N", &mg, &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n, &d__1,
+        aocl_blas_zgemm("N", "N", &mg, &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n,
+                        &d__1,
                &au[kc + nb * *n + nb], n);
 #else
-        zgemmt_("L", "N", "N", &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n, &d__1,
+        aocl_blas_zgemmt("L", "N", "N", &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n, &d__1,
                 &au[kc + nb * *n + nb], n);
-        zgemm_("N", "N", &mg, &ni, &nb, &d__1, &au[kc + ni + nb], n, &au[kc + nb * *n], n, &d__1,
-               &au[kc + nb * *n + nb + ni], n);
+        aocl_blas_zgemm("N", "N", &mg, &ni, &nb, &d__1, &au[kc + ni + nb], n, &au[kc + nb * *n], n,
+                &d__1, &au[kc + nb * *n + nb + ni], n);
 #endif
     }
 
@@ -293,10 +288,10 @@ void zspffrt2_fla_unp_var2(doublecomplex *ap, integer *n, integer *ncolm, double
     /* Update trailing matrix */
 #ifndef FLA_ENABLE_BLAS_EXT_GEMMT
     mg = *n - *ncolm;
-    zgemm_("N", "N", &mg, &mg, ncolm, &d__1, &au[*ncolm + 1], n, &au[*ncolm * *n + 1], n, &d__1,
+    aocl_blas_zgemm("N", "N", &mg, &mg, ncolm, &d__1, &au[*ncolm + 1], n, &au[*ncolm * *n + 1], n, &d__1,
            &au[*ncolm + *ncolm * *n + 1], n);
 #else
-    zgemmt_("L", "N", "N", &mg, ncolm, &d__1, &au[*ncolm + 1], n, &au[*ncolm * *n + 1], n, &d__1,
+    aocl_blas_zgemmt("L", "N", "N", &mg, ncolm, &d__1, &au[*ncolm + 1], n, &au[*ncolm * *n + 1], n, &d__1,
             &au[*ncolm + *ncolm * *n + 1], n);
 #endif
 
@@ -312,13 +307,11 @@ void zspffrt2_fla_unp_var2(doublecomplex *ap, integer *n, integer *ncolm, double
  * matrices.
  */
 
-int lzspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
-           doublecomplex *ap, doublecomplex *work)
+int lzspr_(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int64_t *incx,
+           dcomplex *ap, dcomplex *work)
 {
-    integer incw = 1;
-    integer k, kn, nz;
-    extern void zaxpy_(integer * n, doublecomplex * za, doublecomplex * zx, integer * incx,
-                       doublecomplex * zy, integer * incy);
+    aocl_int64_t incw = 1;
+    aocl_int64_t k, kn, nz;
 
     ap--;
     work--;
@@ -326,28 +319,28 @@ int lzspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
 
     for(k = 1; k <= *n; k++)
     {
-        work[k].r = alpha->r * x[k].r - alpha->i * x[k].i;
-        work[k].i = alpha->r * x[k].i + alpha->i * x[k].r;
+        work[k].real = alpha->real * x[k].real - alpha->imag * x[k].imag;
+        work[k].imag = alpha->real * x[k].imag + alpha->imag * x[k].real;
     }
 
     kn = 1;
     for(k = 1; k <= *n; k++)
     {
         nz = *n - k + 1;
-        zaxpy_(&nz, &work[k], &x[k], &incw, &ap[kn], &incw);
+        aocl_blas_zaxpy(&nz, &work[k], &x[k], &incw, &ap[kn], &incw);
         kn = kn + *n - k + 1;
     }
 
     return 0;
 }
 
-void zspffrt2_fla_def(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work)
+void zspffrt2_fla_def(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcomplex *work)
 {
-    doublecomplex z__1;
-    integer i__1, k, kc;
-    integer c__1 = 1;
-    doublecomplex r1;
-    doublecomplex c_b1 = {1., 0.};
+    dcomplex z__1;
+    aocl_int64_t i__1, k, kc;
+    aocl_int64_t c__1 = 1;
+    dcomplex r1;
+    dcomplex c_b1 = {1., 0.};
 
     --ap;
     /* Factorize A as L*D*L**T using the lower triangle of A */
@@ -360,26 +353,26 @@ void zspffrt2_fla_def(doublecomplex *ap, integer *n, integer *ncolm, doublecompl
         /* where L(k) is the k-th column of L */
 
         /* Skip trailing matrix update if zero diagonal element is encountered */
-        if(ap[kc].r == 0 && ap[kc].i == 0)
+        if(ap[kc].real == 0 && ap[kc].imag == 0)
         {
-            z__1.r = 0;
-            z__1.i = 0;
+            z__1.real = 0;
+            z__1.imag = 0;
         }
         else
         {
             z_div(&z__1, &c_b1, &ap[kc]);
         }
 
-        r1.r = -z__1.r;
-        r1.i = -z__1.i;
+        r1.real = -z__1.real;
+        r1.imag = -z__1.imag;
 
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
         /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
         i__1 = *n - k;
         lzspr_("Lower", &i__1, &r1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1], work);
 
-        ap[kc].r = z__1.r;
-        ap[kc].i = z__1.i;
+        ap[kc].real = z__1.real;
+        ap[kc].imag = z__1.imag;
 
         kc = kc + *n - k + 1;
     }

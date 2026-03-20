@@ -6,7 +6,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLADIV performs complex division in real arithmetic, avoiding unnecessary overflow. */
+#include "FLA_f2c.h" /* > \brief \b ZLADIV performs scomplex division in real arithmetic, avoiding unnecessary overflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLADIV := X / Y, where X and Y are complex. The computation of X / Y */
+/* > ZLADIV := X / Y, where X and Y are scomplex. The computation of X / Y */
 /* > will not overflow on an intermediary step unless the results */
 /* > overflows. */
 /* > \endverbatim */
@@ -50,7 +50,7 @@
 /* > \param[in] Y */
 /* > \verbatim */
 /* > Y is COMPLEX*16 */
-/* > The complex scalars X and Y. */
+/* > The scomplex scalars X and Y. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -63,12 +63,12 @@
 /* ===================================================================== */
 /* Double Complex */
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
-void zladiv_(doublecomplex *ret_val, doublecomplex *x, doublecomplex *y)
+void zladiv_(dcomplex *ret_val, dcomplex *x, dcomplex *y)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
     doublereal zi, zr;
     extern /* Subroutine */
@@ -88,25 +88,25 @@ void zladiv_(doublecomplex *ret_val, doublecomplex *x, doublecomplex *y)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    d__1 = x->r;
-    d__2 = x->i;
-    d__3 = y->r;
-    d__4 = y->i;
+    d__1 = x->real;
+    d__2 = x->imag;
+    d__3 = y->real;
+    d__4 = y->imag;
     dladiv_(&d__1, &d__2, &d__3, &d__4, &zr, &zi);
-    z__1.r = zr;
-    z__1.i = zi; // , expr subst
-    ret_val->r = z__1.r, ret_val->i = z__1.i;
+    z__1.real = zr;
+    z__1.imag = zi; // , expr subst
+    ret_val->real = z__1.real, ret_val->imag = z__1.imag;
     AOCL_DTL_TRACE_EXIT_INDENT
     return;
     /* End of ZLADIV */
 }
 #else
-doublecomplex zladiv_(doublecomplex *x, doublecomplex *y)
+dcomplex zladiv_(dcomplex *x, dcomplex *y)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
     doublereal zi, zr;
     extern /* Subroutine */
@@ -126,14 +126,14 @@ doublecomplex zladiv_(doublecomplex *x, doublecomplex *y)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    d__1 = x->r;
-    d__2 = x->i;
-    d__3 = y->r;
-    d__4 = y->i;
+    d__1 = x->real;
+    d__2 = x->imag;
+    d__3 = y->real;
+    d__4 = y->imag;
     dladiv_(&d__1, &d__2, &d__3, &d__4, &zr, &zi);
-    z__1.r = zr;
-    z__1.i = zi; // , expr subst
-    // ret_val->r = z__1.r, ret_val->i = z__1.i;
+    z__1.real = zr;
+    z__1.imag = zi; // , expr subst
+    // ret_val->real = z__1.real, ret_val->imag = z__1.imag;
     AOCL_DTL_TRACE_EXIT_INDENT
     return z__1;
     /* End of ZLADIV */
@@ -141,7 +141,7 @@ doublecomplex zladiv_(doublecomplex *x, doublecomplex *y)
 
 #endif
 
-void zladiv_f2c_(doublecomplex *ret_val, doublecomplex *x, doublecomplex *y)
+void zladiv_f2c_(dcomplex *ret_val, dcomplex *x, dcomplex *y)
 {
 
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION

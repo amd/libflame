@@ -76,16 +76,28 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_wwaddw_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *w)
+/** Generated wrapper function */
+void zla_wwaddw_(aocl_int_t *n, dcomplex *x, dcomplex *y, dcomplex *w)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zla_wwaddw(n, x, y, w);
+#else
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_zla_wwaddw(&n_64, x, y, w);
+#endif
+}
+
+void aocl_lapack_zla_wwaddw(aocl_int64_t *n, dcomplex *x, dcomplex *y, dcomplex *w)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_wwaddw inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
+    dcomplex z__1, z__2, z__3;
     /* Local variables */
-    integer i__;
-    doublecomplex s;
+    aocl_int64_t i__;
+    dcomplex s;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -108,31 +120,31 @@ void zla_wwaddw_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *
     {
         i__2 = i__;
         i__3 = i__;
-        z__1.r = x[i__2].r + w[i__3].r;
-        z__1.i = x[i__2].i + w[i__3].i; // , expr subst
-        s.r = z__1.r;
-        s.i = z__1.i; // , expr subst
-        z__2.r = s.r + s.r;
-        z__2.i = s.i + s.i; // , expr subst
-        z__1.r = z__2.r - s.r;
-        z__1.i = z__2.i - s.i; // , expr subst
-        s.r = z__1.r;
-        s.i = z__1.i; // , expr subst
+        z__1.real = x[i__2].real + w[i__3].real;
+        z__1.imag = x[i__2].imag + w[i__3].imag; // , expr subst
+        s.real = z__1.real;
+        s.imag = z__1.imag; // , expr subst
+        z__2.real = s.real + s.real;
+        z__2.imag = s.imag + s.imag; // , expr subst
+        z__1.real = z__2.real - s.real;
+        z__1.imag = z__2.imag - s.imag; // , expr subst
+        s.real = z__1.real;
+        s.imag = z__1.imag; // , expr subst
         i__2 = i__;
         i__3 = i__;
-        z__3.r = x[i__3].r - s.r;
-        z__3.i = x[i__3].i - s.i; // , expr subst
+        z__3.real = x[i__3].real - s.real;
+        z__3.imag = x[i__3].imag - s.imag; // , expr subst
         i__4 = i__;
-        z__2.r = z__3.r + w[i__4].r;
-        z__2.i = z__3.i + w[i__4].i; // , expr subst
+        z__2.real = z__3.real + w[i__4].real;
+        z__2.imag = z__3.imag + w[i__4].imag; // , expr subst
         i__5 = i__;
-        z__1.r = z__2.r + y[i__5].r;
-        z__1.i = z__2.i + y[i__5].i; // , expr subst
-        y[i__2].r = z__1.r;
-        y[i__2].i = z__1.i; // , expr subst
+        z__1.real = z__2.real + y[i__5].real;
+        z__1.imag = z__2.imag + y[i__5].imag; // , expr subst
+        y[i__2].real = z__1.real;
+        y[i__2].imag = z__1.imag; // , expr subst
         i__2 = i__;
-        x[i__2].r = s.r;
-        x[i__2].i = s.i; // , expr subst
+        x[i__2].real = s.real;
+        x[i__2].imag = s.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

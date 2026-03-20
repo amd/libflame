@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {0.f, 0.f};
 /* > \brief \b CSYTRI_3X */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,7 +40,7 @@ static complex c_b2 = {0.f, 0.f};
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > CSYTRI_3X computes the inverse of a complex symmetric indefinite */
+/* > CSYTRI_3X computes the inverse of a scomplex symmetric indefinite */
 /* > matrix A using the factorization computed by CSYTRF_RK or CSYTRF_BK: */
 /* > */
 /* > A = P*U*D*(U**T)*(P**T) or A = P*L*D*(L**T)*(P**T), */
@@ -161,8 +161,26 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, integer *ipiv,
-                complex *work, integer *nb, integer *info)
+/** Generated wrapper function */
+void csytri_3x_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *e,
+                aocl_int_t *ipiv, scomplex *work, aocl_int_t *nb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csytri_3x(uplo, n, a, lda, e, ipiv, work, nb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csytri_3x(uplo, &n_64, a, &lda_64, e, ipiv, work, &nb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csytri_3x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *e,
+                           aocl_int_t *ipiv, scomplex *work, aocl_int64_t *nb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -176,40 +194,23 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    complex q__1, q__2, q__3;
+    aocl_int64_t a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    extern /* Subroutine */
-        void
-        csyswapr_(char *, integer *, complex *, integer *, integer *, integer *);
-    complex d__;
-    integer i__, j, k;
-    complex t, ak;
-    integer u11, ip, nnb, cut;
-    complex akp1;
-    integer invd;
-    complex akkp1;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    scomplex d__;
+    aocl_int64_t i__, j, k;
+    scomplex t, ak;
+    aocl_int64_t u11, ip, nnb, cut;
+    scomplex akp1;
+    aocl_int64_t invd;
+    scomplex akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    complex u01_i_j__, u11_i_j__;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer icount;
-    extern /* Subroutine */
-        void
-        ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
-    complex u01_ip1_j__, u11_ip1_j__;
+    scomplex u01_i_j__, u11_i_j__;
+    aocl_int64_t icount;
+    scomplex u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -259,7 +260,7 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTRI_3X", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("CSYTRI_3X", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -274,8 +275,8 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     {
         i__2 = k + work_dim1;
         i__3 = k;
-        work[i__2].r = e[i__3].r;
-        work[i__2].i = e[i__3].i; // , expr subst
+        work[i__2].real = e[i__3].real;
+        work[i__2].imag = e[i__3].imag; // , expr subst
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -284,7 +285,7 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
         for(*info = *n; *info >= 1; --(*info))
         {
             i__1 = *info + *info * a_dim1;
-            if(ipiv[*info] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
+            if(ipiv[*info] > 0 && (a[i__1].real == 0.f && a[i__1].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -298,7 +299,7 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
         for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = *info + *info * a_dim1;
-            if(ipiv[*info] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
+            if(ipiv[*info] > 0 && (a[i__2].real == 0.f && a[i__2].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -319,7 +320,7 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     {
         /* Begin Upper */
         /* invA = P * inv(U**T) * inv(D) * inv(U) * P**T. */
-        ctrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ctrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D) * inv(U) */
         k = 1;
         while(k <= *n)
@@ -329,53 +330,53 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 /* 1 x 1 diagonal NNB */
                 i__1 = k + invd * work_dim1;
                 c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = k + (invd + 1) * work_dim1;
-                work[i__1].r = 0.f;
-                work[i__1].i = 0.f; // , expr subst
+                work[i__1].real = 0.f;
+                work[i__1].imag = 0.f; // , expr subst
             }
             else
             {
                 /* 2 x 2 diagonal NNB */
                 i__1 = k + 1 + work_dim1;
-                t.r = work[i__1].r;
-                t.i = work[i__1].i; // , expr subst
+                t.real = work[i__1].real;
+                t.imag = work[i__1].imag; // , expr subst
                 c_div(&q__1, &a[k + k * a_dim1], &t);
-                ak.r = q__1.r;
-                ak.i = q__1.i; // , expr subst
+                ak.real = q__1.real;
+                ak.imag = q__1.imag; // , expr subst
                 c_div(&q__1, &a[k + 1 + (k + 1) * a_dim1], &t);
-                akp1.r = q__1.r;
-                akp1.i = q__1.i; // , expr subst
+                akp1.real = q__1.real;
+                akp1.imag = q__1.imag; // , expr subst
                 c_div(&q__1, &work[k + 1 + work_dim1], &t);
-                akkp1.r = q__1.r;
-                akkp1.i = q__1.i; // , expr subst
-                q__3.r = ak.r * akp1.r - ak.i * akp1.i;
-                q__3.i = ak.r * akp1.i + ak.i * akp1.r; // , expr subst
-                q__2.r = q__3.r - 1.f;
-                q__2.i = q__3.i - 0.f; // , expr subst
-                q__1.r = t.r * q__2.r - t.i * q__2.i;
-                q__1.i = t.r * q__2.i + t.i * q__2.r; // , expr subst
-                d__.r = q__1.r;
-                d__.i = q__1.i; // , expr subst
+                akkp1.real = q__1.real;
+                akkp1.imag = q__1.imag; // , expr subst
+                q__3.real = ak.real * akp1.real - ak.imag * akp1.imag;
+                q__3.imag = ak.real * akp1.imag + ak.imag * akp1.real; // , expr subst
+                q__2.real = q__3.real - 1.f;
+                q__2.imag = q__3.imag - 0.f; // , expr subst
+                q__1.real = t.real * q__2.real - t.imag * q__2.imag;
+                q__1.imag = t.real * q__2.imag + t.imag * q__2.real; // , expr subst
+                d__.real = q__1.real;
+                d__.imag = q__1.imag; // , expr subst
                 i__1 = k + invd * work_dim1;
                 c_div(&q__1, &akp1, &d__);
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = k + 1 + (invd + 1) * work_dim1;
                 c_div(&q__1, &ak, &d__);
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = k + (invd + 1) * work_dim1;
-                q__2.r = -akkp1.r;
-                q__2.i = -akkp1.i; // , expr subst
+                q__2.real = -akkp1.real;
+                q__2.imag = -akkp1.imag; // , expr subst
                 c_div(&q__1, &q__2, &d__);
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = k + 1 + invd * work_dim1;
                 i__2 = k + (invd + 1) * work_dim1;
-                work[i__1].r = work[i__2].r;
-                work[i__1].i = work[i__2].i; // , expr subst
+                work[i__1].real = work[i__2].real;
+                work[i__1].imag = work[i__2].imag; // , expr subst
                 ++k;
             }
             ++k;
@@ -418,8 +419,8 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 {
                     i__3 = i__ + j * work_dim1;
                     i__4 = i__ + (cut + j) * a_dim1;
-                    work[i__3].r = a[i__4].r;
-                    work[i__3].i = a[i__4].i; // , expr subst
+                    work[i__3].real = a[i__4].real;
+                    work[i__3].imag = a[i__4].imag; // , expr subst
                 }
             }
             /* U11 Block */
@@ -427,22 +428,22 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = u11 + i__ + i__ * work_dim1;
-                work[i__2].r = 1.f;
-                work[i__2].i = 0.f; // , expr subst
+                work[i__2].real = 1.f;
+                work[i__2].imag = 0.f; // , expr subst
                 i__2 = i__ - 1;
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
-                    work[i__3].r = 0.f;
-                    work[i__3].i = 0.f; // , expr subst
+                    work[i__3].real = 0.f;
+                    work[i__3].imag = 0.f; // , expr subst
                 }
                 i__2 = nnb;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
-                    work[i__3].r = a[i__4].r;
-                    work[i__3].i = a[i__4].i; // , expr subst
+                    work[i__3].real = a[i__4].real;
+                    work[i__3].imag = a[i__4].imag; // , expr subst
                 }
             }
             /* invD * U01 */
@@ -457,11 +458,11 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                         i__2 = i__ + j * work_dim1;
                         i__3 = i__ + invd * work_dim1;
                         i__4 = i__ + j * work_dim1;
-                        q__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        q__1.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__1.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        q__1.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                     }
                 }
                 else
@@ -470,37 +471,37 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = i__ + j * work_dim1;
-                        u01_i_j__.r = work[i__2].r;
-                        u01_i_j__.i = work[i__2].i; // , expr subst
+                        u01_i_j__.real = work[i__2].real;
+                        u01_i_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = i__ + 1 + j * work_dim1;
-                        u01_ip1_j__.r = work[i__2].r;
-                        u01_ip1_j__.i = work[i__2].i; // , expr subst
+                        u01_ip1_j__.real = work[i__2].real;
+                        u01_ip1_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = i__ + j * work_dim1;
                         i__3 = i__ + invd * work_dim1;
-                        q__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        q__2.i = work[i__3].r * u01_i_j__.i
-                                 + work[i__3].i * u01_i_j__.r; // , expr subst
+                        q__2.real = work[i__3].real * u01_i_j__.real - work[i__3].imag * u01_i_j__.imag;
+                        q__2.imag = work[i__3].real * u01_i_j__.imag
+                                 + work[i__3].imag * u01_i_j__.real; // , expr subst
                         i__4 = i__ + (invd + 1) * work_dim1;
-                        q__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        q__3.i = work[i__4].r * u01_ip1_j__.i
-                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
-                        q__1.r = q__2.r + q__3.r;
-                        q__1.i = q__2.i + q__3.i; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__3.real = work[i__4].real * u01_ip1_j__.real - work[i__4].imag * u01_ip1_j__.imag;
+                        q__3.imag = work[i__4].real * u01_ip1_j__.imag
+                                 + work[i__4].imag * u01_ip1_j__.real; // , expr subst
+                        q__1.real = q__2.real + q__3.real;
+                        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                         i__2 = i__ + 1 + j * work_dim1;
                         i__3 = i__ + 1 + invd * work_dim1;
-                        q__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        q__2.i = work[i__3].r * u01_i_j__.i
-                                 + work[i__3].i * u01_i_j__.r; // , expr subst
+                        q__2.real = work[i__3].real * u01_i_j__.real - work[i__3].imag * u01_i_j__.imag;
+                        q__2.imag = work[i__3].real * u01_i_j__.imag
+                                 + work[i__3].imag * u01_i_j__.real; // , expr subst
                         i__4 = i__ + 1 + (invd + 1) * work_dim1;
-                        q__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        q__3.i = work[i__4].r * u01_ip1_j__.i
-                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
-                        q__1.r = q__2.r + q__3.r;
-                        q__1.i = q__2.i + q__3.i; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__3.real = work[i__4].real * u01_ip1_j__.real - work[i__4].imag * u01_ip1_j__.imag;
+                        q__3.imag = work[i__4].real * u01_ip1_j__.imag
+                                 + work[i__4].imag * u01_ip1_j__.real; // , expr subst
+                        q__1.real = q__2.real + q__3.real;
+                        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                     }
                     ++i__;
                 }
@@ -518,11 +519,11 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        q__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        q__1.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__1.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        q__1.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                     }
                 }
                 else
@@ -531,39 +532,39 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                     for(j = i__; j <= i__1; ++j)
                     {
                         i__2 = u11 + i__ + j * work_dim1;
-                        u11_i_j__.r = work[i__2].r;
-                        u11_i_j__.i = work[i__2].i; // , expr subst
+                        u11_i_j__.real = work[i__2].real;
+                        u11_i_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = u11 + i__ + 1 + j * work_dim1;
-                        u11_ip1_j__.r = work[i__2].r;
-                        u11_ip1_j__.i = work[i__2].i; // , expr subst
+                        u11_ip1_j__.real = work[i__2].real;
+                        u11_ip1_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        q__2.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        q__2.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
+                        q__2.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        q__2.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
                         i__5 = cut + i__ + (invd + 1) * work_dim1;
                         i__6 = u11 + i__ + 1 + j * work_dim1;
-                        q__3.r = work[i__5].r * work[i__6].r - work[i__5].i * work[i__6].i;
-                        q__3.i = work[i__5].r * work[i__6].i
-                                 + work[i__5].i * work[i__6].r; // , expr subst
-                        q__1.r = q__2.r + q__3.r;
-                        q__1.i = q__2.i + q__3.i; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__3.real = work[i__5].real * work[i__6].real - work[i__5].imag * work[i__6].imag;
+                        q__3.imag = work[i__5].real * work[i__6].imag
+                                 + work[i__5].imag * work[i__6].real; // , expr subst
+                        q__1.real = q__2.real + q__3.real;
+                        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                         i__2 = u11 + i__ + 1 + j * work_dim1;
                         i__3 = cut + i__ + 1 + invd * work_dim1;
-                        q__2.r = work[i__3].r * u11_i_j__.r - work[i__3].i * u11_i_j__.i;
-                        q__2.i = work[i__3].r * u11_i_j__.i
-                                 + work[i__3].i * u11_i_j__.r; // , expr subst
+                        q__2.real = work[i__3].real * u11_i_j__.real - work[i__3].imag * u11_i_j__.imag;
+                        q__2.imag = work[i__3].real * u11_i_j__.imag
+                                 + work[i__3].imag * u11_i_j__.real; // , expr subst
                         i__4 = cut + i__ + 1 + (invd + 1) * work_dim1;
-                        q__3.r = work[i__4].r * u11_ip1_j__.r - work[i__4].i * u11_ip1_j__.i;
-                        q__3.i = work[i__4].r * u11_ip1_j__.i
-                                 + work[i__4].i * u11_ip1_j__.r; // , expr subst
-                        q__1.r = q__2.r + q__3.r;
-                        q__1.i = q__2.i + q__3.i; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__3.real = work[i__4].real * u11_ip1_j__.real - work[i__4].imag * u11_ip1_j__.imag;
+                        q__3.imag = work[i__4].real * u11_ip1_j__.imag
+                                 + work[i__4].imag * u11_ip1_j__.real; // , expr subst
+                        q__1.real = q__2.real + q__3.real;
+                        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                     }
                     ++i__;
                 }
@@ -571,8 +572,8 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             }
             /* U11**T * invD1 * U11 -> U11 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", "U", "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ctrmm("L", "U", "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1],
+                            lda, &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -581,15 +582,15 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 {
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = u11 + i__ + j * work_dim1;
-                    a[i__3].r = work[i__4].r;
-                    a[i__3].i = work[i__4].i; // , expr subst
+                    a[i__3].real = work[i__4].real;
+                    a[i__3].imag = work[i__4].imag; // , expr subst
                 }
             }
             /* U01**T * invD * U01 -> A( CUT+I, CUT+J ) */
             i__1 = *n + *nb + 1;
             i__2 = *n + *nb + 1;
-            cgemm_("T", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
-                   &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
+            aocl_blas_cgemm("T", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
+                            &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
             /* U11 = U11**T * invD1 * U11 + U01**T * invD * U01 */
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -600,16 +601,16 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
                     i__5 = u11 + i__ + j * work_dim1;
-                    q__1.r = a[i__4].r + work[i__5].r;
-                    q__1.i = a[i__4].i + work[i__5].i; // , expr subst
-                    a[i__3].r = q__1.r;
-                    a[i__3].i = q__1.i; // , expr subst
+                    q__1.real = a[i__4].real + work[i__5].real;
+                    q__1.imag = a[i__4].imag + work[i__5].imag; // , expr subst
+                    a[i__3].real = q__1.real;
+                    a[i__3].imag = q__1.imag; // , expr subst
                 }
             }
             /* U01 = U00**T * invD0 * U01 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", uplo, "T", "U", &cut, &nnb, &c_b1, &a[a_offset], lda, &work[work_offset],
-                   &i__1);
+            aocl_blas_ctrmm("L", uplo, "T", "U", &cut, &nnb, &c_b1, &a[a_offset], lda,
+                            &work[work_offset], &i__1);
             /* Update U01 */
             i__1 = cut;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -619,8 +620,8 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 {
                     i__3 = i__ + (cut + j) * a_dim1;
                     i__4 = i__ + j * work_dim1;
-                    a[i__3].r = work[i__4].r;
-                    a[i__3].i = work[i__4].i; // , expr subst
+                    a[i__3].real = work[i__4].real;
+                    a[i__3].imag = work[i__4].imag; // , expr subst
                 }
             }
             /* Next Block */
@@ -642,11 +643,11 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             {
                 if(i__ < ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
         }
@@ -655,7 +656,7 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     {
         /* Begin Lower */
         /* inv A = P * inv(L**T) * inv(D) * inv(L) * P**T. */
-        ctrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ctrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D) * inv(L) */
         k = *n;
         while(k >= 1)
@@ -665,53 +666,53 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 /* 1 x 1 diagonal NNB */
                 i__1 = k + invd * work_dim1;
                 c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = k + (invd + 1) * work_dim1;
-                work[i__1].r = 0.f;
-                work[i__1].i = 0.f; // , expr subst
+                work[i__1].real = 0.f;
+                work[i__1].imag = 0.f; // , expr subst
             }
             else
             {
                 /* 2 x 2 diagonal NNB */
                 i__1 = k - 1 + work_dim1;
-                t.r = work[i__1].r;
-                t.i = work[i__1].i; // , expr subst
+                t.real = work[i__1].real;
+                t.imag = work[i__1].imag; // , expr subst
                 c_div(&q__1, &a[k - 1 + (k - 1) * a_dim1], &t);
-                ak.r = q__1.r;
-                ak.i = q__1.i; // , expr subst
+                ak.real = q__1.real;
+                ak.imag = q__1.imag; // , expr subst
                 c_div(&q__1, &a[k + k * a_dim1], &t);
-                akp1.r = q__1.r;
-                akp1.i = q__1.i; // , expr subst
+                akp1.real = q__1.real;
+                akp1.imag = q__1.imag; // , expr subst
                 c_div(&q__1, &work[k - 1 + work_dim1], &t);
-                akkp1.r = q__1.r;
-                akkp1.i = q__1.i; // , expr subst
-                q__3.r = ak.r * akp1.r - ak.i * akp1.i;
-                q__3.i = ak.r * akp1.i + ak.i * akp1.r; // , expr subst
-                q__2.r = q__3.r - 1.f;
-                q__2.i = q__3.i - 0.f; // , expr subst
-                q__1.r = t.r * q__2.r - t.i * q__2.i;
-                q__1.i = t.r * q__2.i + t.i * q__2.r; // , expr subst
-                d__.r = q__1.r;
-                d__.i = q__1.i; // , expr subst
+                akkp1.real = q__1.real;
+                akkp1.imag = q__1.imag; // , expr subst
+                q__3.real = ak.real * akp1.real - ak.imag * akp1.imag;
+                q__3.imag = ak.real * akp1.imag + ak.imag * akp1.real; // , expr subst
+                q__2.real = q__3.real - 1.f;
+                q__2.imag = q__3.imag - 0.f; // , expr subst
+                q__1.real = t.real * q__2.real - t.imag * q__2.imag;
+                q__1.imag = t.real * q__2.imag + t.imag * q__2.real; // , expr subst
+                d__.real = q__1.real;
+                d__.imag = q__1.imag; // , expr subst
                 i__1 = k - 1 + invd * work_dim1;
                 c_div(&q__1, &akp1, &d__);
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = k + invd * work_dim1;
                 c_div(&q__1, &ak, &d__);
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = k + (invd + 1) * work_dim1;
-                q__2.r = -akkp1.r;
-                q__2.i = -akkp1.i; // , expr subst
+                q__2.real = -akkp1.real;
+                q__2.imag = -akkp1.imag; // , expr subst
                 c_div(&q__1, &q__2, &d__);
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = k - 1 + (invd + 1) * work_dim1;
                 i__2 = k + (invd + 1) * work_dim1;
-                work[i__1].r = work[i__2].r;
-                work[i__1].i = work[i__2].i; // , expr subst
+                work[i__1].real = work[i__2].real;
+                work[i__1].imag = work[i__2].imag; // , expr subst
                 --k;
             }
             --k;
@@ -753,8 +754,8 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 {
                     i__3 = i__ + j * work_dim1;
                     i__4 = cut + nnb + i__ + (cut + j) * a_dim1;
-                    work[i__3].r = a[i__4].r;
-                    work[i__3].i = a[i__4].i; // , expr subst
+                    work[i__3].real = a[i__4].real;
+                    work[i__3].imag = a[i__4].imag; // , expr subst
                 }
             }
             /* L11 Block */
@@ -762,22 +763,22 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = u11 + i__ + i__ * work_dim1;
-                work[i__2].r = 1.f;
-                work[i__2].i = 0.f; // , expr subst
+                work[i__2].real = 1.f;
+                work[i__2].imag = 0.f; // , expr subst
                 i__2 = nnb;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
-                    work[i__3].r = 0.f;
-                    work[i__3].i = 0.f; // , expr subst
+                    work[i__3].real = 0.f;
+                    work[i__3].imag = 0.f; // , expr subst
                 }
                 i__2 = i__ - 1;
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
-                    work[i__3].r = a[i__4].r;
-                    work[i__3].i = a[i__4].i; // , expr subst
+                    work[i__3].real = a[i__4].real;
+                    work[i__3].imag = a[i__4].imag; // , expr subst
                 }
             }
             /* invD*L21 */
@@ -792,11 +793,11 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                         i__2 = i__ + j * work_dim1;
                         i__3 = cut + nnb + i__ + invd * work_dim1;
                         i__4 = i__ + j * work_dim1;
-                        q__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        q__1.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__1.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        q__1.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                     }
                 }
                 else
@@ -805,37 +806,37 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = i__ + j * work_dim1;
-                        u01_i_j__.r = work[i__2].r;
-                        u01_i_j__.i = work[i__2].i; // , expr subst
+                        u01_i_j__.real = work[i__2].real;
+                        u01_i_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = i__ - 1 + j * work_dim1;
-                        u01_ip1_j__.r = work[i__2].r;
-                        u01_ip1_j__.i = work[i__2].i; // , expr subst
+                        u01_ip1_j__.real = work[i__2].real;
+                        u01_ip1_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = i__ + j * work_dim1;
                         i__3 = cut + nnb + i__ + invd * work_dim1;
-                        q__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        q__2.i = work[i__3].r * u01_i_j__.i
-                                 + work[i__3].i * u01_i_j__.r; // , expr subst
+                        q__2.real = work[i__3].real * u01_i_j__.real - work[i__3].imag * u01_i_j__.imag;
+                        q__2.imag = work[i__3].real * u01_i_j__.imag
+                                 + work[i__3].imag * u01_i_j__.real; // , expr subst
                         i__4 = cut + nnb + i__ + (invd + 1) * work_dim1;
-                        q__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        q__3.i = work[i__4].r * u01_ip1_j__.i
-                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
-                        q__1.r = q__2.r + q__3.r;
-                        q__1.i = q__2.i + q__3.i; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__3.real = work[i__4].real * u01_ip1_j__.real - work[i__4].imag * u01_ip1_j__.imag;
+                        q__3.imag = work[i__4].real * u01_ip1_j__.imag
+                                 + work[i__4].imag * u01_ip1_j__.real; // , expr subst
+                        q__1.real = q__2.real + q__3.real;
+                        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                         i__2 = i__ - 1 + j * work_dim1;
                         i__3 = cut + nnb + i__ - 1 + (invd + 1) * work_dim1;
-                        q__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        q__2.i = work[i__3].r * u01_i_j__.i
-                                 + work[i__3].i * u01_i_j__.r; // , expr subst
+                        q__2.real = work[i__3].real * u01_i_j__.real - work[i__3].imag * u01_i_j__.imag;
+                        q__2.imag = work[i__3].real * u01_i_j__.imag
+                                 + work[i__3].imag * u01_i_j__.real; // , expr subst
                         i__4 = cut + nnb + i__ - 1 + invd * work_dim1;
-                        q__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        q__3.i = work[i__4].r * u01_ip1_j__.i
-                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
-                        q__1.r = q__2.r + q__3.r;
-                        q__1.i = q__2.i + q__3.i; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__3.real = work[i__4].real * u01_ip1_j__.real - work[i__4].imag * u01_ip1_j__.imag;
+                        q__3.imag = work[i__4].real * u01_ip1_j__.imag
+                                 + work[i__4].imag * u01_ip1_j__.real; // , expr subst
+                        q__1.real = q__2.real + q__3.real;
+                        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                     }
                     --i__;
                 }
@@ -853,11 +854,11 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        q__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        q__1.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__1.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        q__1.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                     }
                 }
                 else
@@ -866,38 +867,38 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = u11 + i__ + j * work_dim1;
-                        u11_i_j__.r = work[i__2].r;
-                        u11_i_j__.i = work[i__2].i; // , expr subst
+                        u11_i_j__.real = work[i__2].real;
+                        u11_i_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = u11 + i__ - 1 + j * work_dim1;
-                        u11_ip1_j__.r = work[i__2].r;
-                        u11_ip1_j__.i = work[i__2].i; // , expr subst
+                        u11_ip1_j__.real = work[i__2].real;
+                        u11_ip1_j__.imag = work[i__2].imag; // , expr subst
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        q__2.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        q__2.i = work[i__3].r * work[i__4].i
-                                 + work[i__3].i * work[i__4].r; // , expr subst
+                        q__2.real = work[i__3].real * work[i__4].real - work[i__3].imag * work[i__4].imag;
+                        q__2.imag = work[i__3].real * work[i__4].imag
+                                 + work[i__3].imag * work[i__4].real; // , expr subst
                         i__5 = cut + i__ + (invd + 1) * work_dim1;
-                        q__3.r = work[i__5].r * u11_ip1_j__.r - work[i__5].i * u11_ip1_j__.i;
-                        q__3.i = work[i__5].r * u11_ip1_j__.i
-                                 + work[i__5].i * u11_ip1_j__.r; // , expr subst
-                        q__1.r = q__2.r + q__3.r;
-                        q__1.i = q__2.i + q__3.i; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__3.real = work[i__5].real * u11_ip1_j__.real - work[i__5].imag * u11_ip1_j__.imag;
+                        q__3.imag = work[i__5].real * u11_ip1_j__.imag
+                                 + work[i__5].imag * u11_ip1_j__.real; // , expr subst
+                        q__1.real = q__2.real + q__3.real;
+                        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                         i__2 = u11 + i__ - 1 + j * work_dim1;
                         i__3 = cut + i__ - 1 + (invd + 1) * work_dim1;
-                        q__2.r = work[i__3].r * u11_i_j__.r - work[i__3].i * u11_i_j__.i;
-                        q__2.i = work[i__3].r * u11_i_j__.i
-                                 + work[i__3].i * u11_i_j__.r; // , expr subst
+                        q__2.real = work[i__3].real * u11_i_j__.real - work[i__3].imag * u11_i_j__.imag;
+                        q__2.imag = work[i__3].real * u11_i_j__.imag
+                                 + work[i__3].imag * u11_i_j__.real; // , expr subst
                         i__4 = cut + i__ - 1 + invd * work_dim1;
-                        q__3.r = work[i__4].r * u11_ip1_j__.r - work[i__4].i * u11_ip1_j__.i;
-                        q__3.i = work[i__4].r * u11_ip1_j__.i
-                                 + work[i__4].i * u11_ip1_j__.r; // , expr subst
-                        q__1.r = q__2.r + q__3.r;
-                        q__1.i = q__2.i + q__3.i; // , expr subst
-                        work[i__2].r = q__1.r;
-                        work[i__2].i = q__1.i; // , expr subst
+                        q__3.real = work[i__4].real * u11_ip1_j__.real - work[i__4].imag * u11_ip1_j__.imag;
+                        q__3.imag = work[i__4].real * u11_ip1_j__.imag
+                                 + work[i__4].imag * u11_ip1_j__.real; // , expr subst
+                        q__1.real = q__2.real + q__3.real;
+                        q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                        work[i__2].real = q__1.real;
+                        work[i__2].imag = q__1.imag; // , expr subst
                     }
                     --i__;
                 }
@@ -905,8 +906,9 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             }
             /* L11**T * invD1 * L11 -> L11 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", uplo, "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ctrmm("L", uplo, "T", "U", &nnb, &nnb, &c_b1,
+                            &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1],
+                            &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -915,8 +917,8 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 {
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = u11 + i__ + j * work_dim1;
-                    a[i__3].r = work[i__4].r;
-                    a[i__3].i = work[i__4].i; // , expr subst
+                    a[i__3].real = work[i__4].real;
+                    a[i__3].imag = work[i__4].imag; // , expr subst
                 }
             }
             if(cut + nnb < *n)
@@ -925,8 +927,9 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
                 i__3 = *n + *nb + 1;
-                cgemm_("T", "N", &nnb, &nnb, &i__1, &c_b1, &a[cut + nnb + 1 + (cut + 1) * a_dim1],
-                       lda, &work[work_offset], &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
+                aocl_blas_cgemm("T", "N", &nnb, &nnb, &i__1, &c_b1,
+                                &a[cut + nnb + 1 + (cut + 1) * a_dim1], lda, &work[work_offset],
+                                &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
                 /* L11 = L11**T * invD1 * L11 + U01**T * invD * U01 */
                 i__1 = nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -937,18 +940,18 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                         i__3 = cut + i__ + (cut + j) * a_dim1;
                         i__4 = cut + i__ + (cut + j) * a_dim1;
                         i__5 = u11 + i__ + j * work_dim1;
-                        q__1.r = a[i__4].r + work[i__5].r;
-                        q__1.i = a[i__4].i + work[i__5].i; // , expr subst
-                        a[i__3].r = q__1.r;
-                        a[i__3].i = q__1.i; // , expr subst
+                        q__1.real = a[i__4].real + work[i__5].real;
+                        q__1.imag = a[i__4].imag + work[i__5].imag; // , expr subst
+                        a[i__3].real = q__1.real;
+                        a[i__3].imag = q__1.imag; // , expr subst
                     }
                 }
                 /* L01 = L22**T * invD2 * L21 */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
-                ctrmm_("L", uplo, "T", "U", &i__1, &nnb, &c_b1,
-                       &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[work_offset],
-                       &i__2);
+                aocl_blas_ctrmm("L", uplo, "T", "U", &i__1, &nnb, &c_b1,
+                                &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda,
+                                &work[work_offset], &i__2);
                 /* Update L21 */
                 i__1 = *n - cut - nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -958,8 +961,8 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                     {
                         i__3 = cut + nnb + i__ + (cut + j) * a_dim1;
                         i__4 = i__ + j * work_dim1;
-                        a[i__3].r = work[i__4].r;
-                        a[i__3].i = work[i__4].i; // , expr subst
+                        a[i__3].real = work[i__4].real;
+                        a[i__3].imag = work[i__4].imag; // , expr subst
                     }
                 }
             }
@@ -974,8 +977,8 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                     {
                         i__3 = cut + i__ + (cut + j) * a_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
-                        a[i__3].r = work[i__4].r;
-                        a[i__3].i = work[i__4].i; // , expr subst
+                        a[i__3].real = work[i__4].real;
+                        a[i__3].imag = work[i__4].imag; // , expr subst
                     }
                 }
             }
@@ -998,11 +1001,11 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             {
                 if(i__ < ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
         }

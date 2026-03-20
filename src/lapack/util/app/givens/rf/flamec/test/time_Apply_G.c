@@ -16,16 +16,16 @@
 #define FLA_ALG_BLOCKED       4
 
 void time_Apply_G_rf(
-               integer variant, integer type, integer n_repeats, integer m, integer k, integer n, integer b_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t k, aocl_int64_t n, aocl_int64_t b_alg,
                FLA_Obj A, FLA_Obj A_ref, FLA_Obj G, FLA_Obj P,
                double *dtime, double *diff, double *gflops );
 
 void time_Apply_G_rf(
-               integer variant, integer type, integer n_repeats, integer m, integer k, integer n, integer b_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t k, aocl_int64_t n, aocl_int64_t b_alg,
                FLA_Obj A, FLA_Obj A_ref, FLA_Obj G, FLA_Obj P,
                double *dtime, double *diff, double *gflops )
 {
-  integer irep;
+  aocl_int64_t irep;
 
   double
     dtime_old = 1.0e9;

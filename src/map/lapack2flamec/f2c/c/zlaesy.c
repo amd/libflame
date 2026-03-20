@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__2 = 2;
-/* > \brief \b ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric
+static dcomplex c_b1 = {1., 0.};
+static aocl_int64_t c__2 = 2;
+/* > \brief \b ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 scomplex symmetric
  * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -86,7 +86,7 @@ static integer c__2 = 2;
 /* > \param[out] EVSCAL */
 /* > \verbatim */
 /* > EVSCAL is COMPLEX*16 */
-/* > The complex value by which the eigenvector matrix was scaled */
+/* > The scomplex value by which the eigenvector matrix was scaled */
 /* > to make it orthonormal. If EVSCAL is zero, the eigenvectors */
 /* > were not computed. This means one of two things: the 2-by-2 */
 /* > matrix could not be diagonalized, or the norm of the matrix */
@@ -115,22 +115,22 @@ static integer c__2 = 2;
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomplex *rt1,
-             doublecomplex *rt2, doublecomplex *evscal, doublecomplex *cs1, doublecomplex *sn1)
+void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
+             dcomplex *rt2, dcomplex *evscal, dcomplex *cs1, dcomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void pow_zi(doublecomplex *, doublecomplex *, integer *),
-        z_sqrt(doublecomplex *, doublecomplex *),
-        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void pow_zi(dcomplex *, dcomplex *, aocl_int64_t *),
+        z_sqrt(dcomplex *, dcomplex *),
+        z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    doublecomplex s, t;
+    dcomplex s, t;
     doublereal z__;
-    doublecomplex tmp;
+    dcomplex tmp;
     doublereal babs, tabs, evnorm;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -150,21 +150,21 @@ void zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecompl
     /* To avoid divide by zero later, we treat this case separately. */
     if(z_abs(b) == 0.)
     {
-        rt1->r = a->r, rt1->i = a->i;
-        rt2->r = c__->r, rt2->i = c__->i;
+        rt1->real = a->real, rt1->imag = a->imag;
+        rt2->real = c__->real, rt2->imag = c__->imag;
         if(z_abs(rt1) < z_abs(rt2))
         {
-            tmp.r = rt1->r;
-            tmp.i = rt1->i; // , expr subst
-            rt1->r = rt2->r, rt1->i = rt2->i;
-            rt2->r = tmp.r, rt2->i = tmp.i;
-            cs1->r = 0., cs1->i = 0.;
-            sn1->r = 1., sn1->i = 0.;
+            tmp.real = rt1->real;
+            tmp.imag = rt1->imag; // , expr subst
+            rt1->real = rt2->real, rt1->imag = rt2->imag;
+            rt2->real = tmp.real, rt2->imag = tmp.imag;
+            cs1->real = 0., cs1->imag = 0.;
+            sn1->real = 1., sn1->imag = 0.;
         }
         else
         {
-            cs1->r = 1., cs1->i = 0.;
-            sn1->r = 0., sn1->i = 0.;
+            cs1->real = 1., cs1->imag = 0.;
+            sn1->real = 0., sn1->imag = 0.;
         }
     }
     else
@@ -173,101 +173,101 @@ void zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecompl
         /* The characteristic equation is */
         /* lambda **2 - (A+C) lambda + (A*C - B*B) */
         /* and we solve it using the quadratic formula. */
-        z__2.r = a->r + c__->r;
-        z__2.i = a->i + c__->i; // , expr subst
-        z__1.r = z__2.r * .5;
-        z__1.i = z__2.i * .5; // , expr subst
-        s.r = z__1.r;
-        s.i = z__1.i; // , expr subst
-        z__2.r = a->r - c__->r;
-        z__2.i = a->i - c__->i; // , expr subst
-        z__1.r = z__2.r * .5;
-        z__1.i = z__2.i * .5; // , expr subst
-        t.r = z__1.r;
-        t.i = z__1.i; // , expr subst
+        z__2.real = a->real + c__->real;
+        z__2.imag = a->imag + c__->imag; // , expr subst
+        z__1.real = z__2.real * .5;
+        z__1.imag = z__2.imag * .5; // , expr subst
+        s.real = z__1.real;
+        s.imag = z__1.imag; // , expr subst
+        z__2.real = a->real - c__->real;
+        z__2.imag = a->imag - c__->imag; // , expr subst
+        z__1.real = z__2.real * .5;
+        z__1.imag = z__2.imag * .5; // , expr subst
+        t.real = z__1.real;
+        t.imag = z__1.imag; // , expr subst
         /* Take the square root carefully to avoid over/under flow. */
         babs = z_abs(b);
         tabs = z_abs(&t);
         z__ = fla_max(babs, tabs);
         if(z__ > 0.)
         {
-            z__5.r = t.r / z__;
-            z__5.i = t.i / z__; // , expr subst
+            z__5.real = t.real / z__;
+            z__5.imag = t.imag / z__; // , expr subst
             pow_zi(&z__4, &z__5, &c__2);
-            z__7.r = b->r / z__;
-            z__7.i = b->i / z__; // , expr subst
+            z__7.real = b->real / z__;
+            z__7.imag = b->imag / z__; // , expr subst
             pow_zi(&z__6, &z__7, &c__2);
-            z__3.r = z__4.r + z__6.r;
-            z__3.i = z__4.i + z__6.i; // , expr subst
+            z__3.real = z__4.real + z__6.real;
+            z__3.imag = z__4.imag + z__6.imag; // , expr subst
             z_sqrt(&z__2, &z__3);
-            z__1.r = z__ * z__2.r;
-            z__1.i = z__ * z__2.i; // , expr subst
-            t.r = z__1.r;
-            t.i = z__1.i; // , expr subst
+            z__1.real = z__ * z__2.real;
+            z__1.imag = z__ * z__2.imag; // , expr subst
+            t.real = z__1.real;
+            t.imag = z__1.imag; // , expr subst
         }
         /* Compute the two eigenvalues. RT1 and RT2 are exchanged */
         /* if necessary so that RT1 will have the greater magnitude. */
-        z__1.r = s.r + t.r;
-        z__1.i = s.i + t.i; // , expr subst
-        rt1->r = z__1.r, rt1->i = z__1.i;
-        z__1.r = s.r - t.r;
-        z__1.i = s.i - t.i; // , expr subst
-        rt2->r = z__1.r, rt2->i = z__1.i;
+        z__1.real = s.real + t.real;
+        z__1.imag = s.imag + t.imag; // , expr subst
+        rt1->real = z__1.real, rt1->imag = z__1.imag;
+        z__1.real = s.real - t.real;
+        z__1.imag = s.imag - t.imag; // , expr subst
+        rt2->real = z__1.real, rt2->imag = z__1.imag;
         if(z_abs(rt1) < z_abs(rt2))
         {
-            tmp.r = rt1->r;
-            tmp.i = rt1->i; // , expr subst
-            rt1->r = rt2->r, rt1->i = rt2->i;
-            rt2->r = tmp.r, rt2->i = tmp.i;
+            tmp.real = rt1->real;
+            tmp.imag = rt1->imag; // , expr subst
+            rt1->real = rt2->real, rt1->imag = rt2->imag;
+            rt2->real = tmp.real, rt2->imag = tmp.imag;
         }
         /* Choose CS1 = 1 and SN1 to satisfy the first equation, then */
         /* scale the components of this eigenvector so that the matrix */
         /* of eigenvectors X satisfies X * X**T = I . (No scaling is */
         /* done if the norm of the eigenvalue matrix is less than THRESH.) */
-        z__2.r = rt1->r - a->r;
-        z__2.i = rt1->i - a->i; // , expr subst
+        z__2.real = rt1->real - a->real;
+        z__2.imag = rt1->imag - a->imag; // , expr subst
         z_div(&z__1, &z__2, b);
-        sn1->r = z__1.r, sn1->i = z__1.i;
+        sn1->real = z__1.real, sn1->imag = z__1.imag;
         tabs = z_abs(sn1);
         if(tabs > 1.)
         {
             /* Computing 2nd power */
             d__2 = 1. / tabs;
             d__1 = d__2 * d__2;
-            z__5.r = sn1->r / tabs;
-            z__5.i = sn1->i / tabs; // , expr subst
+            z__5.real = sn1->real / tabs;
+            z__5.imag = sn1->imag / tabs; // , expr subst
             pow_zi(&z__4, &z__5, &c__2);
-            z__3.r = d__1 + z__4.r;
-            z__3.i = z__4.i; // , expr subst
+            z__3.real = d__1 + z__4.real;
+            z__3.imag = z__4.imag; // , expr subst
             z_sqrt(&z__2, &z__3);
-            z__1.r = tabs * z__2.r;
-            z__1.i = tabs * z__2.i; // , expr subst
-            t.r = z__1.r;
-            t.i = z__1.i; // , expr subst
+            z__1.real = tabs * z__2.real;
+            z__1.imag = tabs * z__2.imag; // , expr subst
+            t.real = z__1.real;
+            t.imag = z__1.imag; // , expr subst
         }
         else
         {
-            z__3.r = sn1->r * sn1->r - sn1->i * sn1->i;
-            z__3.i = sn1->r * sn1->i + sn1->i * sn1->r; // , expr subst
-            z__2.r = z__3.r + 1.;
-            z__2.i = z__3.i + 0.; // , expr subst
+            z__3.real = sn1->real * sn1->real - sn1->imag * sn1->imag;
+            z__3.imag = sn1->real * sn1->imag + sn1->imag * sn1->real; // , expr subst
+            z__2.real = z__3.real + 1.;
+            z__2.imag = z__3.imag + 0.; // , expr subst
             z_sqrt(&z__1, &z__2);
-            t.r = z__1.r;
-            t.i = z__1.i; // , expr subst
+            t.real = z__1.real;
+            t.imag = z__1.imag; // , expr subst
         }
         evnorm = z_abs(&t);
         if(evnorm >= .1)
         {
             z_div(&z__1, &c_b1, &t);
-            evscal->r = z__1.r, evscal->i = z__1.i;
-            cs1->r = evscal->r, cs1->i = evscal->i;
-            z__1.r = sn1->r * evscal->r - sn1->i * evscal->i;
-            z__1.i = sn1->r * evscal->i + sn1->i * evscal->r; // , expr subst
-            sn1->r = z__1.r, sn1->i = z__1.i;
+            evscal->real = z__1.real, evscal->imag = z__1.imag;
+            cs1->real = evscal->real, cs1->imag = evscal->imag;
+            z__1.real = sn1->real * evscal->real - sn1->imag * evscal->imag;
+            z__1.imag = sn1->real * evscal->imag + sn1->imag * evscal->real; // , expr subst
+            sn1->real = z__1.real, sn1->imag = z__1.imag;
         }
         else
         {
-            evscal->r = 0., evscal->i = 0.;
+            evscal->real = 0., evscal->imag = 0.;
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT

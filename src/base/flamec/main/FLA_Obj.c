@@ -16,7 +16,7 @@
 typedef volatile unsigned char* t_vcharp;
 t_vcharp RCCE_shmalloc(size_t);
 void     RCCE_shfree(t_vcharp);
-integer      RCCE_ue(void);
+fla_dim_t      RCCE_ue(void);
 
 
 void* FLA_shmalloc( size_t size )
@@ -411,7 +411,7 @@ FLA_Error FLA_Obj_create_without_buffer( FLA_Datatype datatype, fla_dim_t m, fla
 
 FLA_Error FLA_Obj_create_constant( double const_real, FLA_Obj *obj )
 {
-  integer*      temp_i;
+  fla_dim_t*      temp_i;
   float*    temp_s;
   double*   temp_d;
   scomplex* temp_c;
@@ -433,7 +433,7 @@ FLA_Error FLA_Obj_create_constant( double const_real, FLA_Obj *obj )
   temp_c       = FLA_COMPLEX_PTR( *obj );
   temp_z       = FLA_DOUBLE_COMPLEX_PTR( *obj );
 
-  *temp_i      = ( integer   ) const_real;
+  *temp_i      = ( fla_dim_t   ) const_real;
   *temp_s      = ( float ) const_real;
   *temp_d      =           const_real;
   temp_c->real = ( float ) const_real;
@@ -448,7 +448,7 @@ FLA_Error FLA_Obj_create_constant( double const_real, FLA_Obj *obj )
 
 FLA_Error FLA_Obj_create_constant_ext( float const_s, double const_d, FLA_Obj *obj )
 {
-  integer*      temp_i;
+  fla_dim_t*      temp_i;
   float*    temp_s;
   double*   temp_d;
   scomplex* temp_c;
@@ -470,14 +470,14 @@ FLA_Error FLA_Obj_create_constant_ext( float const_s, double const_d, FLA_Obj *o
   temp_c       = FLA_COMPLEX_PTR( *obj );
   temp_z       = FLA_DOUBLE_COMPLEX_PTR( *obj );
 
-  // This check safely allows the float to integer typecast by saturation check
+  // This check safely allows the float to fla_dim_t typecast by saturation check
   if( const_s >= (float)(INT_MAX - 64)) // Comparing with float value equal to 0x7FFFFFFF
   {
       *temp_i      = INT_MAX;// equal to 0x7FFFFFFF
   }
   else
   {
-      *temp_i      = ( integer   ) const_s;
+      *temp_i      = ( fla_dim_t   ) const_s;
   }
   *temp_s      =           const_s;
   *temp_d      =           const_d;
@@ -493,7 +493,7 @@ FLA_Error FLA_Obj_create_constant_ext( float const_s, double const_d, FLA_Obj *o
 
 FLA_Error FLA_Obj_create_complex_constant( double const_real, double const_imag, FLA_Obj *obj )
 {
-  integer*      temp_i;
+  fla_dim_t*      temp_i;
   float*    temp_s;
   double*   temp_d;
   scomplex* temp_c;
@@ -515,7 +515,7 @@ FLA_Error FLA_Obj_create_complex_constant( double const_real, double const_imag,
   temp_c       = FLA_COMPLEX_PTR( *obj );
   temp_z       = FLA_DOUBLE_COMPLEX_PTR( *obj );
 
-  *temp_i      = ( integer   ) const_real;
+  *temp_i      = ( fla_dim_t   ) const_real;
   *temp_s      = ( float ) const_real;
   *temp_d      =           const_real;
   temp_c->real = ( float ) const_real;
@@ -691,4 +691,30 @@ FLA_Error FLA_Obj_flip_view( FLA_Obj *obj )
   exchange( obj->m_inner, obj->n_inner, temp );
 
   return FLA_SUCCESS;
+}
+
+aocl_int_t* FLA_Intlp_get_array( fla_dim_t *src, fla_dim_t len )
+{
+#ifdef FLA_ENABLE_ILP64
+  return src;
+#else
+  aocl_int_t* dst = (aocl_int_t*)FLA_malloc(len * sizeof(aocl_int_t));
+
+  for (fla_dim_t i = 0; i < len; i++)
+  {
+    dst[i] = (aocl_int_t)src[i];
+  }
+  return dst;
+#endif
+}
+
+void FLA_Intlp_free_array( aocl_int_t *lparr, fla_dim_t *src, fla_dim_t len )
+{
+#ifndef FLA_ENABLE_ILP64
+  for (fla_dim_t i = 0; i < len; i++)
+  {
+    src[i] = lparr[i];
+  }
+  FLA_free(lparr);
+#endif
 }

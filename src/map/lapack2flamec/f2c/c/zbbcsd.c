@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {-1., 0.};
+static dcomplex c_b1 = {-1., 0.};
 static doublereal c_b11 = -.125;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZBBCSD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -339,12 +339,46 @@ the */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, integer *m,
-             integer *p, integer *q, doublereal *theta, doublereal *phi, doublecomplex *u1,
-             integer *ldu1, doublecomplex *u2, integer *ldu2, doublecomplex *v1t, integer *ldv1t,
-             doublecomplex *v2t, integer *ldv2t, doublereal *b11d, doublereal *b11e,
-             doublereal *b12d, doublereal *b12e, doublereal *b21d, doublereal *b21e,
-             doublereal *b22d, doublereal *b22e, doublereal *rwork, integer *lrwork, integer *info)
+/** Generated wrapper function */
+void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, aocl_int_t *m,
+             aocl_int_t *p, aocl_int_t *q, doublereal *theta, doublereal *phi, dcomplex *u1,
+             aocl_int_t *ldu1, dcomplex *u2, aocl_int_t *ldu2, dcomplex *v1t,
+             aocl_int_t *ldv1t, dcomplex *v2t, aocl_int_t *ldv2t, doublereal *b11d,
+             doublereal *b11e, doublereal *b12d, doublereal *b12e, doublereal *b21d,
+             doublereal *b21e, doublereal *b22d, doublereal *b22e, doublereal *rwork,
+             aocl_int_t *lrwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
+                       v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e,
+                       rwork, lrwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t q_64 = *q;
+    aocl_int64_t ldu1_64 = *ldu1;
+    aocl_int64_t ldu2_64 = *ldu2;
+    aocl_int64_t ldv1t_64 = *ldv1t;
+    aocl_int64_t ldv2t_64 = *ldv2t;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, &m_64, &p_64, &q_64, theta, phi, u1,
+                       &ldu1_64, u2, &ldu2_64, v1t, &ldv1t_64, v2t, &ldv2t_64, b11d, b11e, b12d,
+                       b12e, b21d, b21e, b22d, b22e, rwork, &lrwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans,
+                        aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, doublereal *theta,
+                        doublereal *phi, dcomplex *u1, aocl_int64_t *ldu1, dcomplex *u2,
+                        aocl_int64_t *ldu2, dcomplex *v1t, aocl_int64_t *ldv1t,
+                        dcomplex *v2t, aocl_int64_t *ldv2t, doublereal *b11d, doublereal *b11e,
+                        doublereal *b12d, doublereal *b12e, doublereal *b21d, doublereal *b21e,
+                        doublereal *b22d, doublereal *b22e, doublereal *rwork, aocl_int64_t *lrwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -353,7 +387,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         ", ldv2t %" FLA_IS "",
         *jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
     /* System generated locals */
-    integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
+    aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
@@ -363,35 +397,24 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     logical colmajor;
     doublereal thetamin, thetamax;
     logical restart11, restart12, restart21, restart22;
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal r__, x1, x2, y1, y2;
-    integer lrworkmin, lrworkopt;
+    aocl_int64_t lrworkmin, lrworkopt;
     doublereal mu, nu, eps, tol;
-    integer imin, mini, imax, iter;
+    aocl_int64_t imin, mini, imax, iter;
     doublereal unfl, temp;
     extern /* Subroutine */
         void
         dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    integer iu1cs, iu2cs, iu1sn, iu2sn;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    integer maxit;
+    aocl_int64_t iu1cs, iu2cs, iu1sn, iu2sn;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t maxit;
     doublereal dummy;
-    extern /* Subroutine */
-        void
-        zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    integer iv1tcs, iv2tcs;
+    aocl_int64_t iv1tcs, iv2tcs;
     logical wantu1, wantu2;
-    integer iv1tsn, iv2tsn;
+    aocl_int64_t iv1tsn, iv2tsn;
     extern doublereal dlamch_(char *);
     doublereal sigma11, sigma21;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal thresh, tolmul;
     logical lquery;
     doublereal b11bulge, b12bulge;
@@ -513,7 +536,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZBBCSD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZBBCSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -1102,14 +1125,14 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             if(colmajor)
             {
                 i__1 = imax - imin + 1;
-                zlasr_("R", "V", "F", p, &i__1, &rwork[iu1cs + imin - 1], &rwork[iu1sn + imin - 1],
-                       &u1[imin * u1_dim1 + 1], ldu1);
+                aocl_lapack_zlasr("R", "V", "F", p, &i__1, &rwork[iu1cs + imin - 1],
+                                  &rwork[iu1sn + imin - 1], &u1[imin * u1_dim1 + 1], ldu1);
             }
             else
             {
                 i__1 = imax - imin + 1;
-                zlasr_("L", "V", "F", &i__1, p, &rwork[iu1cs + imin - 1], &rwork[iu1sn + imin - 1],
-                       &u1[imin + u1_dim1], ldu1);
+                aocl_lapack_zlasr("L", "V", "F", &i__1, p, &rwork[iu1cs + imin - 1],
+                                  &rwork[iu1sn + imin - 1], &u1[imin + u1_dim1], ldu1);
             }
         }
         if(wantu2)
@@ -1118,15 +1141,15 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 i__1 = *m - *p;
                 i__2 = imax - imin + 1;
-                zlasr_("R", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
-                       &rwork[iu2sn + imin - 1], &u2[imin * u2_dim1 + 1], ldu2);
+                aocl_lapack_zlasr("R", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
+                                  &rwork[iu2sn + imin - 1], &u2[imin * u2_dim1 + 1], ldu2);
             }
             else
             {
                 i__1 = imax - imin + 1;
                 i__2 = *m - *p;
-                zlasr_("L", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
-                       &rwork[iu2sn + imin - 1], &u2[imin + u2_dim1], ldu2);
+                aocl_lapack_zlasr("L", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
+                                  &rwork[iu2sn + imin - 1], &u2[imin + u2_dim1], ldu2);
             }
         }
         if(wantv1t)
@@ -1134,14 +1157,14 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             if(colmajor)
             {
                 i__1 = imax - imin + 1;
-                zlasr_("L", "V", "F", &i__1, q, &rwork[iv1tcs + imin - 1],
-                       &rwork[iv1tsn + imin - 1], &v1t[imin + v1t_dim1], ldv1t);
+                aocl_lapack_zlasr("L", "V", "F", &i__1, q, &rwork[iv1tcs + imin - 1],
+                                  &rwork[iv1tsn + imin - 1], &v1t[imin + v1t_dim1], ldv1t);
             }
             else
             {
                 i__1 = imax - imin + 1;
-                zlasr_("R", "V", "F", q, &i__1, &rwork[iv1tcs + imin - 1],
-                       &rwork[iv1tsn + imin - 1], &v1t[imin * v1t_dim1 + 1], ldv1t);
+                aocl_lapack_zlasr("R", "V", "F", q, &i__1, &rwork[iv1tcs + imin - 1],
+                                  &rwork[iv1tsn + imin - 1], &v1t[imin * v1t_dim1 + 1], ldv1t);
             }
         }
         if(wantv2t)
@@ -1150,15 +1173,15 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 i__1 = imax - imin + 1;
                 i__2 = *m - *q;
-                zlasr_("L", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
-                       &rwork[iv2tsn + imin - 1], &v2t[imin + v2t_dim1], ldv2t);
+                aocl_lapack_zlasr("L", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
+                                  &rwork[iv2tsn + imin - 1], &v2t[imin + v2t_dim1], ldv2t);
             }
             else
             {
                 i__1 = *m - *q;
                 i__2 = imax - imin + 1;
-                zlasr_("R", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
-                       &rwork[iv2tsn + imin - 1], &v2t[imin * v2t_dim1 + 1], ldv2t);
+                aocl_lapack_zlasr("R", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
+                                  &rwork[iv2tsn + imin - 1], &v2t[imin * v2t_dim1 + 1], ldv2t);
             }
         }
         /* Fix signs on B11(IMAX-1,IMAX) and B21(IMAX-1,IMAX) */
@@ -1170,11 +1193,11 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 if(colmajor)
                 {
-                    zscal_(q, &c_b1, &v1t[imax + v1t_dim1], ldv1t);
+                    aocl_blas_zscal(q, &c_b1, &v1t[imax + v1t_dim1], ldv1t);
                 }
                 else
                 {
-                    zscal_(q, &c_b1, &v1t[imax * v1t_dim1 + 1], &c__1);
+                    aocl_blas_zscal(q, &c_b1, &v1t[imax * v1t_dim1 + 1], &c__1);
                 }
             }
         }
@@ -1191,11 +1214,11 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 if(colmajor)
                 {
-                    zscal_(p, &c_b1, &u1[imax * u1_dim1 + 1], &c__1);
+                    aocl_blas_zscal(p, &c_b1, &u1[imax * u1_dim1 + 1], &c__1);
                 }
                 else
                 {
-                    zscal_(p, &c_b1, &u1[imax + u1_dim1], ldu1);
+                    aocl_blas_zscal(p, &c_b1, &u1[imax + u1_dim1], ldu1);
                 }
             }
         }
@@ -1207,12 +1230,12 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 if(colmajor)
                 {
                     i__1 = *m - *p;
-                    zscal_(&i__1, &c_b1, &u2[imax * u2_dim1 + 1], &c__1);
+                    aocl_blas_zscal(&i__1, &c_b1, &u2[imax * u2_dim1 + 1], &c__1);
                 }
                 else
                 {
                     i__1 = *m - *p;
-                    zscal_(&i__1, &c_b1, &u2[imax + u2_dim1], ldu2);
+                    aocl_blas_zscal(&i__1, &c_b1, &u2[imax + u2_dim1], ldu2);
                 }
             }
         }
@@ -1224,12 +1247,12 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 if(colmajor)
                 {
                     i__1 = *m - *q;
-                    zscal_(&i__1, &c_b1, &v2t[imax + v2t_dim1], ldv2t);
+                    aocl_blas_zscal(&i__1, &c_b1, &v2t[imax + v2t_dim1], ldv2t);
                 }
                 else
                 {
                     i__1 = *m - *q;
-                    zscal_(&i__1, &c_b1, &v2t[imax * v2t_dim1 + 1], &c__1);
+                    aocl_blas_zscal(&i__1, &c_b1, &v2t[imax * v2t_dim1 + 1], &c__1);
                 }
             }
         }
@@ -1310,43 +1333,47 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 if(wantu1)
                 {
-                    zswap_(p, &u1[i__ * u1_dim1 + 1], &c__1, &u1[mini * u1_dim1 + 1], &c__1);
+                    aocl_blas_zswap(p, &u1[i__ * u1_dim1 + 1], &c__1, &u1[mini * u1_dim1 + 1],
+                                    &c__1);
                 }
                 if(wantu2)
                 {
                     i__2 = *m - *p;
-                    zswap_(&i__2, &u2[i__ * u2_dim1 + 1], &c__1, &u2[mini * u2_dim1 + 1], &c__1);
+                    aocl_blas_zswap(&i__2, &u2[i__ * u2_dim1 + 1], &c__1, &u2[mini * u2_dim1 + 1],
+                                    &c__1);
                 }
                 if(wantv1t)
                 {
-                    zswap_(q, &v1t[i__ + v1t_dim1], ldv1t, &v1t[mini + v1t_dim1], ldv1t);
+                    aocl_blas_zswap(q, &v1t[i__ + v1t_dim1], ldv1t, &v1t[mini + v1t_dim1], ldv1t);
                 }
                 if(wantv2t)
                 {
                     i__2 = *m - *q;
-                    zswap_(&i__2, &v2t[i__ + v2t_dim1], ldv2t, &v2t[mini + v2t_dim1], ldv2t);
+                    aocl_blas_zswap(&i__2, &v2t[i__ + v2t_dim1], ldv2t, &v2t[mini + v2t_dim1],
+                                    ldv2t);
                 }
             }
             else
             {
                 if(wantu1)
                 {
-                    zswap_(p, &u1[i__ + u1_dim1], ldu1, &u1[mini + u1_dim1], ldu1);
+                    aocl_blas_zswap(p, &u1[i__ + u1_dim1], ldu1, &u1[mini + u1_dim1], ldu1);
                 }
                 if(wantu2)
                 {
                     i__2 = *m - *p;
-                    zswap_(&i__2, &u2[i__ + u2_dim1], ldu2, &u2[mini + u2_dim1], ldu2);
+                    aocl_blas_zswap(&i__2, &u2[i__ + u2_dim1], ldu2, &u2[mini + u2_dim1], ldu2);
                 }
                 if(wantv1t)
                 {
-                    zswap_(q, &v1t[i__ * v1t_dim1 + 1], &c__1, &v1t[mini * v1t_dim1 + 1], &c__1);
+                    aocl_blas_zswap(q, &v1t[i__ * v1t_dim1 + 1], &c__1, &v1t[mini * v1t_dim1 + 1],
+                                    &c__1);
                 }
                 if(wantv2t)
                 {
                     i__2 = *m - *q;
-                    zswap_(&i__2, &v2t[i__ * v2t_dim1 + 1], &c__1, &v2t[mini * v2t_dim1 + 1],
-                           &c__1);
+                    aocl_blas_zswap(&i__2, &v2t[i__ * v2t_dim1 + 1], &c__1,
+                                    &v2t[mini * v2t_dim1 + 1], &c__1);
                 }
             }
         }

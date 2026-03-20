@@ -20,25 +20,95 @@
    GELQF computes an LQ factorization of a M-by-N matrix A: A = L * Q.
 */
 
-extern int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
-                         integer *lwork, integer *info);
-extern int lapack_dgelqf(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                         doublereal *work, integer *lwork, integer *info);
-extern int lapack_sgelq2(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
-                         integer *info);
-extern int lapack_dgelq2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                         doublereal *work, integer *info);
+/** Generated wrapper function */
+void sgelqf_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgelqf(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgelqf(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgelqf_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgelqf(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgelqf(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sgelq2_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgelq2(m, n, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgelq2(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgelq2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgelq2(m, n, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgelq2(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+extern int lapack_sgelqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info);
+extern int lapack_dgelqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                         doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern int lapack_sgelq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                         aocl_int64_t *info);
+extern int lapack_dgelq2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                         doublereal *work, aocl_int64_t *info);
 
 #define LAPACK_gelqf(prefix)                                                                 \
-    void F77_##prefix##gelqf(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,        \
-                             integer * info)
+    void aocl_lapack_##prefix##gelqf(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,        \
+                             aocl_int64_t * info)
 
 #define LAPACK_gelqf_body(prefix)                            \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);   \
     FLA_Obj A, t, T;                                         \
-    integer min_m_n = fla_min(*m, *n);                       \
+    aocl_int64_t min_m_n = fla_min(*m, *n);                  \
     FLA_Error init_result;                                   \
                                                              \
     FLA_Init_safe(&init_result);                             \
@@ -164,9 +234,9 @@ LAPACK_gelqf(z)
 #endif
 
 #define LAPACK_gelq2(prefix)                                                                 \
-    void F77_##prefix##gelq2(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+    void aocl_lapack_##prefix##gelq2(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
 
 LAPACK_gelq2(s)
 {

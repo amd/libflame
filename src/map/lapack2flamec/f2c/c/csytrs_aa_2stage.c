@@ -4,9 +4,9 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CSYTRS_AA_2STAGE */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CSYTRS_AA_2STAGE solves a system of linear equations A*X = B with a complex */
+/* > CSYTRS_AA_2STAGE solves a system of linear equations A*X = B with a scomplex */
 /* > symmetric matrix A using the factorization A = U**T*T*U or */
 /* > A = L*T*L**T computed by CSYTRF_AA_2STAGE. */
 /* > \endverbatim */
@@ -139,9 +139,32 @@ static integer c_n1 = -1;
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *tb,
-                       integer *ltb, integer *ipiv, integer *ipiv2, complex *b, integer *ldb,
-                       integer *info)
+/** Generated wrapper function */
+void csytrs_aa_2stage_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
+                       scomplex *tb, aocl_int_t *ltb, aocl_int_t *ipiv, aocl_int_t *ipiv2,
+                       scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csytrs_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ltb_64 = *ltb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csytrs_aa_2stage(uplo, &n_64, &nrhs_64, a, &lda_64, tb, &ltb_64, ipiv, ipiv2, b,
+                                 &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csytrs_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                                  aocl_int64_t *lda, scomplex *tb, aocl_int64_t *ltb,
+                                  aocl_int_t *ipiv, aocl_int_t *ipiv2, scomplex *b,
+                                  aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -157,23 +180,11 @@ void csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, intege
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    integer nb, ldtb;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    aocl_int64_t nb, ldtb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
-                complex *, integer *, integer *),
-        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,7 +244,7 @@ void csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTRS_AA_2STAGE", &i__1, (ftnlen)16);
+        aocl_blas_xerbla("CSYTRS_AA_2STAGE", &i__1, (ftnlen)16);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -244,7 +255,7 @@ void csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, intege
         return;
     }
     /* Read NB and compute LDTB */
-    nb = (integer)tb[1].r;
+    nb = (integer)tb[1].real;
     ldtb = *ltb / *n;
     if(upper)
     {
@@ -253,23 +264,24 @@ void csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, intege
         {
             /* Pivot, P**T * B -> B */
             i__1 = nb + 1;
-            claswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
+            aocl_lapack_claswp(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
             /* Compute (U**T \ B) -> B [ (U**T \P**T * B) ] */
             i__1 = *n - nb;
-            ctrsm_("L", "U", "T", "U", &i__1, nrhs, &c_b1, &a[(nb + 1) * a_dim1 + 1], lda,
-                   &b[nb + 1 + b_dim1], ldb);
+            aocl_blas_ctrsm("L", "U", "T", "U", &i__1, nrhs, &c_b1, &a[(nb + 1) * a_dim1 + 1], lda,
+                            &b[nb + 1 + b_dim1], ldb);
         }
         /* Compute T \ B -> B [ T \ (U**T \P**T * B) ] */
-        cgbtrs_("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb, info);
+        aocl_lapack_cgbtrs("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb,
+                           info);
         if(*n > nb)
         {
             /* Compute (U \ B) -> B [ U \ (T \ (U**T \P**T * B) ) ] */
             i__1 = *n - nb;
-            ctrsm_("L", "U", "N", "U", &i__1, nrhs, &c_b1, &a[(nb + 1) * a_dim1 + 1], lda,
-                   &b[nb + 1 + b_dim1], ldb);
+            aocl_blas_ctrsm("L", "U", "N", "U", &i__1, nrhs, &c_b1, &a[(nb + 1) * a_dim1 + 1], lda,
+                            &b[nb + 1 + b_dim1], ldb);
             /* Pivot, P * B -> B [ P * (U \ (T \ (U**T \P**T * B) )) ] */
             i__1 = nb + 1;
-            claswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
+            aocl_lapack_claswp(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
         }
     }
     else
@@ -279,23 +291,24 @@ void csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, intege
         {
             /* Pivot, P**T * B -> B */
             i__1 = nb + 1;
-            claswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
+            aocl_lapack_claswp(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
             /* Compute (L \ B) -> B [ (L \P**T * B) ] */
             i__1 = *n - nb;
-            ctrsm_("L", "L", "N", "U", &i__1, nrhs, &c_b1, &a[nb + 1 + a_dim1], lda,
-                   &b[nb + 1 + b_dim1], ldb);
+            aocl_blas_ctrsm("L", "L", "N", "U", &i__1, nrhs, &c_b1, &a[nb + 1 + a_dim1], lda,
+                            &b[nb + 1 + b_dim1], ldb);
         }
         /* Compute T \ B -> B [ T \ (L \P**T * B) ] */
-        cgbtrs_("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb, info);
+        aocl_lapack_cgbtrs("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb,
+                           info);
         if(*n > nb)
         {
             /* Compute (L**T \ B) -> B [ L**T \ (T \ (L \P**T * B) ) ] */
             i__1 = *n - nb;
-            ctrsm_("L", "L", "T", "U", &i__1, nrhs, &c_b1, &a[nb + 1 + a_dim1], lda,
-                   &b[nb + 1 + b_dim1], ldb);
+            aocl_blas_ctrsm("L", "L", "T", "U", &i__1, nrhs, &c_b1, &a[nb + 1 + a_dim1], lda,
+                            &b[nb + 1 + b_dim1], ldb);
             /* Pivot, P * B -> B [ P * (L**T \ (T \ (L \P**T * B) )) ] */
             i__1 = nb + 1;
-            claswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
+            aocl_lapack_claswp(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

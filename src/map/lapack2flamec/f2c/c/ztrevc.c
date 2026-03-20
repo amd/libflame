@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b2 = {1., 0.};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTREVC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -45,9 +45,9 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZTREVC computes some or all of the right and/or left eigenvectors of */
-/* > a complex upper triangular matrix T. */
+/* > a scomplex upper triangular matrix T. */
 /* > Matrices of this type are produced by the Schur factorization of */
-/* > a complex general matrix: A = Q*T*Q**H, as computed by ZHSEQR. */
+/* > a scomplex general matrix: A = Q*T*Q**H, as computed by ZHSEQR. */
 /* > */
 /* > The right eigenvector x and the left eigenvector y of T corresponding */
 /* > to an eigenvalue w are defined by: */
@@ -218,58 +218,69 @@ LDVR >= N. */
 /* > */
 /* > Each eigenvector is normalized so that the element of largest */
 /* > magnitude has magnitude 1;
-here the magnitude of a complex number */
+here the magnitude of a scomplex number */
 /* > (x,y) is taken to be |x| + |y|. */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex *t, integer *ldt,
-             doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer *ldvr, integer *mm,
-             integer *m, doublecomplex *work, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void ztrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, dcomplex *t,
+             aocl_int_t *ldt, dcomplex *vl, aocl_int_t *ldvl, dcomplex *vr,
+             aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, dcomplex *work,
+             doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztrevc(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, rwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztrevc(side, howmny, select, &n_64, t, &ldt_64, vl, &ldvl_64, vr, &ldvr_64, &mm_64,
+                       &m_64, work, rwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztrevc(char *side, char *howmny, logical *select, aocl_int64_t *n,
+                        dcomplex *t, aocl_int64_t *ldt, dcomplex *vl, aocl_int64_t *ldvl,
+                        dcomplex *vr, aocl_int64_t *ldvr, aocl_int64_t *mm, aocl_int64_t *m,
+                        dcomplex *work, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrevc inputs: side %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
                       ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",
                       *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3, i__4,
+        i__5;
     doublereal d__1, d__2, d__3;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, k, ii, ki, is;
+    aocl_int64_t i__, j, k, ii, ki, is;
     doublereal ulp;
     logical allv;
     doublereal unfl, smin;
     logical over;
     doublereal scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal remax;
     logical leftv, bothv;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical somev;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     logical rightv;
-    extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -365,7 +376,7 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTREVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTREVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -385,8 +396,8 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     {
         i__2 = i__ + *n;
         i__3 = i__ + i__ * t_dim1;
-        work[i__2].r = t[i__3].r;
-        work[i__2].i = t[i__3].i; // , expr subst
+        work[i__2].real = t[i__3].real;
+        work[i__2].imag = t[i__3].imag; // , expr subst
         /* L20: */
     }
     /* Compute 1-norm of each column of strictly upper triangular */
@@ -396,7 +407,7 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     for(j = 2; j <= i__1; ++j)
     {
         i__2 = j - 1;
-        rwork[j] = dzasum_(&i__2, &t[j * t_dim1 + 1], &c__1);
+        rwork[j] = aocl_blas_dzasum(&i__2, &t[j * t_dim1 + 1], &c__1);
         /* L30: */
     }
     if(rightv)
@@ -415,21 +426,21 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
             /* Computing MAX */
             i__1 = ki + ki * t_dim1;
             d__3 = ulp
-                   * ((d__1 = t[i__1].r, f2c_abs(d__1))
+                   * ((d__1 = t[i__1].real, f2c_abs(d__1))
                       + (d__2 = d_imag(&t[ki + ki * t_dim1]), f2c_abs(d__2)));
             smin = fla_max(d__3, smlnum);
-            work[1].r = 1.;
-            work[1].i = 0.; // , expr subst
+            work[1].real = 1.;
+            work[1].imag = 0.; // , expr subst
             /* Form right-hand side. */
             i__1 = ki - 1;
             for(k = 1; k <= i__1; ++k)
             {
                 i__2 = k;
                 i__3 = k + ki * t_dim1;
-                z__1.r = -t[i__3].r;
-                z__1.i = -t[i__3].i; // , expr subst
-                work[i__2].r = z__1.r;
-                work[i__2].i = z__1.i; // , expr subst
+                z__1.real = -t[i__3].real;
+                z__1.imag = -t[i__3].imag; // , expr subst
+                work[i__2].real = z__1.real;
+                work[i__2].imag = z__1.imag; // , expr subst
                 /* L40: */
             }
             /* Solve the triangular system: */
@@ -440,46 +451,46 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 i__2 = k + k * t_dim1;
                 i__3 = k + k * t_dim1;
                 i__4 = ki + ki * t_dim1;
-                z__1.r = t[i__3].r - t[i__4].r;
-                z__1.i = t[i__3].i - t[i__4].i; // , expr subst
-                t[i__2].r = z__1.r;
-                t[i__2].i = z__1.i; // , expr subst
+                z__1.real = t[i__3].real - t[i__4].real;
+                z__1.imag = t[i__3].imag - t[i__4].imag; // , expr subst
+                t[i__2].real = z__1.real;
+                t[i__2].imag = z__1.imag; // , expr subst
                 i__2 = k + k * t_dim1;
-                if((d__1 = t[i__2].r, f2c_abs(d__1))
+                if((d__1 = t[i__2].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&t[k + k * t_dim1]), f2c_abs(d__2))
                    < smin)
                 {
                     i__3 = k + k * t_dim1;
-                    t[i__3].r = smin;
-                    t[i__3].i = 0.; // , expr subst
+                    t[i__3].real = smin;
+                    t[i__3].imag = 0.; // , expr subst
                 }
                 /* L50: */
             }
             if(ki > 1)
             {
                 i__1 = ki - 1;
-                zlatrs_("Upper", "No transpose", "Non-unit", "Y", &i__1, &t[t_offset], ldt,
-                        &work[1], &scale, &rwork[1], info);
+                aocl_lapack_zlatrs("Upper", "No transpose", "Non-unit", "Y", &i__1, &t[t_offset],
+                                   ldt, &work[1], &scale, &rwork[1], info);
                 i__1 = ki;
-                work[i__1].r = scale;
-                work[i__1].i = 0.; // , expr subst
+                work[i__1].real = scale;
+                work[i__1].imag = 0.; // , expr subst
             }
             /* Copy the vector x or Q*x to VR and normalize. */
             if(!over)
             {
-                zcopy_(&ki, &work[1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
-                ii = izamax_(&ki, &vr[is * vr_dim1 + 1], &c__1);
+                aocl_blas_zcopy(&ki, &work[1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
+                ii = aocl_blas_izamax(&ki, &vr[is * vr_dim1 + 1], &c__1);
                 i__1 = ii + is * vr_dim1;
                 remax = 1.
-                        / ((d__1 = vr[i__1].r, f2c_abs(d__1))
+                        / ((d__1 = vr[i__1].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&vr[ii + is * vr_dim1]), f2c_abs(d__2)));
-                zdscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
+                aocl_blas_zdscal(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                 i__1 = *n;
                 for(k = ki + 1; k <= i__1; ++k)
                 {
                     i__2 = k + is * vr_dim1;
-                    vr[i__2].r = 0.;
-                    vr[i__2].i = 0.; // , expr subst
+                    vr[i__2].real = 0.;
+                    vr[i__2].imag = 0.; // , expr subst
                     /* L60: */
                 }
             }
@@ -488,17 +499,17 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 if(ki > 1)
                 {
                     i__1 = ki - 1;
-                    z__1.r = scale;
-                    z__1.i = 0.; // , expr subst
-                    zgemv_("N", n, &i__1, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1, &z__1,
-                           &vr[ki * vr_dim1 + 1], &c__1);
+                    z__1.real = scale;
+                    z__1.imag = 0.; // , expr subst
+                    aocl_blas_zgemv("N", n, &i__1, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1,
+                                    &z__1, &vr[ki * vr_dim1 + 1], &c__1);
                 }
-                ii = izamax_(n, &vr[ki * vr_dim1 + 1], &c__1);
+                ii = aocl_blas_izamax(n, &vr[ki * vr_dim1 + 1], &c__1);
                 i__1 = ii + ki * vr_dim1;
                 remax = 1.
-                        / ((d__1 = vr[i__1].r, f2c_abs(d__1))
+                        / ((d__1 = vr[i__1].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&vr[ii + ki * vr_dim1]), f2c_abs(d__2)));
-                zdscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
+                aocl_blas_zdscal(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
             }
             /* Set back the original diagonal elements of T. */
             i__1 = ki - 1;
@@ -506,8 +517,8 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
             {
                 i__2 = k + k * t_dim1;
                 i__3 = k + *n;
-                t[i__2].r = work[i__3].r;
-                t[i__2].i = work[i__3].i; // , expr subst
+                t[i__2].real = work[i__3].real;
+                t[i__2].imag = work[i__3].imag; // , expr subst
                 /* L70: */
             }
             --is;
@@ -531,22 +542,22 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
             /* Computing MAX */
             i__2 = ki + ki * t_dim1;
             d__3 = ulp
-                   * ((d__1 = t[i__2].r, f2c_abs(d__1))
+                   * ((d__1 = t[i__2].real, f2c_abs(d__1))
                       + (d__2 = d_imag(&t[ki + ki * t_dim1]), f2c_abs(d__2)));
             smin = fla_max(d__3, smlnum);
             i__2 = *n;
-            work[i__2].r = 1.;
-            work[i__2].i = 0.; // , expr subst
+            work[i__2].real = 1.;
+            work[i__2].imag = 0.; // , expr subst
             /* Form right-hand side. */
             i__2 = *n;
             for(k = ki + 1; k <= i__2; ++k)
             {
                 i__3 = k;
                 d_cnjg(&z__2, &t[ki + k * t_dim1]);
-                z__1.r = -z__2.r;
-                z__1.i = -z__2.i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = -z__2.real;
+                z__1.imag = -z__2.imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
                 /* L90: */
             }
             /* Solve the triangular system: */
@@ -557,50 +568,50 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 i__3 = k + k * t_dim1;
                 i__4 = k + k * t_dim1;
                 i__5 = ki + ki * t_dim1;
-                z__1.r = t[i__4].r - t[i__5].r;
-                z__1.i = t[i__4].i - t[i__5].i; // , expr subst
-                t[i__3].r = z__1.r;
-                t[i__3].i = z__1.i; // , expr subst
+                z__1.real = t[i__4].real - t[i__5].real;
+                z__1.imag = t[i__4].imag - t[i__5].imag; // , expr subst
+                t[i__3].real = z__1.real;
+                t[i__3].imag = z__1.imag; // , expr subst
                 i__3 = k + k * t_dim1;
-                if((d__1 = t[i__3].r, f2c_abs(d__1))
+                if((d__1 = t[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&t[k + k * t_dim1]), f2c_abs(d__2))
                    < smin)
                 {
                     i__4 = k + k * t_dim1;
-                    t[i__4].r = smin;
-                    t[i__4].i = 0.; // , expr subst
+                    t[i__4].real = smin;
+                    t[i__4].imag = 0.; // , expr subst
                 }
                 /* L100: */
             }
             if(ki < *n)
             {
                 i__2 = *n - ki;
-                zlatrs_("Upper", "Conjugate transpose", "Non-unit", "Y", &i__2,
-                        &t[ki + 1 + (ki + 1) * t_dim1], ldt, &work[ki + 1], &scale, &rwork[1],
-                        info);
+                aocl_lapack_zlatrs("Upper", "Conjugate transpose", "Non-unit", "Y", &i__2,
+                                   &t[ki + 1 + (ki + 1) * t_dim1], ldt, &work[ki + 1], &scale,
+                                   &rwork[1], info);
                 i__2 = ki;
-                work[i__2].r = scale;
-                work[i__2].i = 0.; // , expr subst
+                work[i__2].real = scale;
+                work[i__2].imag = 0.; // , expr subst
             }
             /* Copy the vector x or Q*x to VL and normalize. */
             if(!over)
             {
                 i__2 = *n - ki + 1;
-                zcopy_(&i__2, &work[ki], &c__1, &vl[ki + is * vl_dim1], &c__1);
+                aocl_blas_zcopy(&i__2, &work[ki], &c__1, &vl[ki + is * vl_dim1], &c__1);
                 i__2 = *n - ki + 1;
-                ii = izamax_(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
+                ii = aocl_blas_izamax(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
                 i__2 = ii + is * vl_dim1;
                 remax = 1.
-                        / ((d__1 = vl[i__2].r, f2c_abs(d__1))
+                        / ((d__1 = vl[i__2].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&vl[ii + is * vl_dim1]), f2c_abs(d__2)));
                 i__2 = *n - ki + 1;
-                zdscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
+                aocl_blas_zdscal(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
                 i__2 = ki - 1;
                 for(k = 1; k <= i__2; ++k)
                 {
                     i__3 = k + is * vl_dim1;
-                    vl[i__3].r = 0.;
-                    vl[i__3].i = 0.; // , expr subst
+                    vl[i__3].real = 0.;
+                    vl[i__3].imag = 0.; // , expr subst
                     /* L110: */
                 }
             }
@@ -609,17 +620,17 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 if(ki < *n)
                 {
                     i__2 = *n - ki;
-                    z__1.r = scale;
-                    z__1.i = 0.; // , expr subst
-                    zgemv_("N", n, &i__2, &c_b2, &vl[(ki + 1) * vl_dim1 + 1], ldvl, &work[ki + 1],
-                           &c__1, &z__1, &vl[ki * vl_dim1 + 1], &c__1);
+                    z__1.real = scale;
+                    z__1.imag = 0.; // , expr subst
+                    aocl_blas_zgemv("N", n, &i__2, &c_b2, &vl[(ki + 1) * vl_dim1 + 1], ldvl,
+                                    &work[ki + 1], &c__1, &z__1, &vl[ki * vl_dim1 + 1], &c__1);
                 }
-                ii = izamax_(n, &vl[ki * vl_dim1 + 1], &c__1);
+                ii = aocl_blas_izamax(n, &vl[ki * vl_dim1 + 1], &c__1);
                 i__2 = ii + ki * vl_dim1;
                 remax = 1.
-                        / ((d__1 = vl[i__2].r, f2c_abs(d__1))
+                        / ((d__1 = vl[i__2].real, f2c_abs(d__1))
                            + (d__2 = d_imag(&vl[ii + ki * vl_dim1]), f2c_abs(d__2)));
-                zdscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
+                aocl_blas_zdscal(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
             }
             /* Set back the original diagonal elements of T. */
             i__2 = *n;
@@ -627,8 +638,8 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
             {
                 i__3 = k + k * t_dim1;
                 i__4 = k + *n;
-                t[i__3].r = work[i__4].r;
-                t[i__3].i = work[i__4].i; // , expr subst
+                t[i__3].real = work[i__4].real;
+                t[i__3].imag = work[i__4].imag; // , expr subst
                 /* L120: */
             }
             ++is;

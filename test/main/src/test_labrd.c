@@ -236,6 +236,11 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
                           check_bit_reproducibility_labrd(filename, datatype, m, n, nb, A_test, lda,
                                                           d, e, tauq, taup, X, ldx, Y, ldy, params))
     /* API functionality validation */
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, err_thresh, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_labrd(tst_api, m, n, nb, A, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy,
@@ -388,7 +393,7 @@ void store_labrd_outputs(void *filename, integer datatype, integer m, integer n,
     FLA_STORE_BRT_MATRIX_NB_DIAG(datatype, m, nb, nb, X, ldx)
     FLA_STORE_BRT_MATRIX_NB_DIAG(datatype, n, nb, nb, Y, ldy)
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 
 integer check_bit_reproducibility_labrd(void *filename, integer datatype, integer m, integer n,

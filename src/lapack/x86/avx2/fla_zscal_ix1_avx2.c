@@ -11,10 +11,10 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
-int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
+int fla_zscal_ix1_avx2(aocl_int64_t *n, dcomplex *alpha, dcomplex *x)
 {
     /* Local variables */
-    integer i__1, i;
+    aocl_int64_t i__1, i;
     __m256d alpha256_real, alpha256_img, ar256, ai256;
     __m128d alpha128_real, alpha128_img, ar128, ai128;
     __m256d xv256[4], yv256[4], sv256[4], pv256[4];
@@ -27,21 +27,21 @@ int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
     }
 
     /* load scale factor in 256 bit register */
-    alpha256_real = _mm256_broadcast_sd((double const *)&alpha->r);
-    alpha256_img = _mm256_broadcast_sd((double const *)&alpha->i);
+    alpha256_real = _mm256_broadcast_sd((double const *)&alpha->real);
+    alpha256_img = _mm256_broadcast_sd((double const *)&alpha->imag);
     ai256 = _mm256_shuffle_pd(alpha256_real, alpha256_img, 0xA);
     ar256 = _mm256_shuffle_pd(alpha256_img, alpha256_real, 0x5);
 
     /* load scale factor in 128 bit register */
-    alpha128_real = _mm_loaddup_pd((double const *)&alpha->r);
-    alpha128_img = _mm_loaddup_pd((double const *)&alpha->i);
+    alpha128_real = _mm_loaddup_pd((double const *)&alpha->real);
+    alpha128_img = _mm_loaddup_pd((double const *)&alpha->imag);
     ai128 = _mm_shuffle_pd(alpha128_real, alpha128_img, 0x2);
     ar128 = _mm_shuffle_pd(alpha128_img, alpha128_real, 0x1);
 
     /* Code for increments equal to 1 only */
     for(i = 0; i < (i__1 - 7); i += 8)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv256[0] = _mm256_loadu_pd((double const *)&x[i]);
         xv256[1] = _mm256_loadu_pd((double const *)&x[i + 2]);
         xv256[2] = _mm256_loadu_pd((double const *)&x[i + 4]);
@@ -76,7 +76,7 @@ int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
 
     for(; i < (i__1 - 3); i += 4)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv256[0] = _mm256_loadu_pd((double const *)&x[i]);
         xv256[1] = _mm256_loadu_pd((double const *)&x[i + 2]);
 

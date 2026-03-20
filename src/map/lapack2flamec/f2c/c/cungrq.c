@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CUNGRQ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNGRQ generates an M-by-N complex matrix Q with orthonormal rows, */
+/* > CUNGRQ generates an M-by-N scomplex matrix Q with orthonormal rows, */
 /* > which is defined as the last M rows of a product of K elementary */
 /* > reflectors of order N */
 /* > */
@@ -128,8 +128,29 @@ the routine */
 /* > \ingroup ungrq */
 /* ===================================================================== */
 /* Subroutine */
-void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
-             complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cungrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a, aocl_int_t *lda, scomplex *tau,
+             scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cungrq(m, n, k, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cungrq(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cungrq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a,
+                        aocl_int64_t *lda, scomplex *tau, scomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -141,23 +162,12 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
     /* Local variables */
-    integer i__, j, l, ib, nb, ii, kk, nx, iws, nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        cungr2_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
-                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
-        clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, j, l, ib, nb, ii, kk, nx, iws, nbmin, iinfo;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -212,12 +222,12 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         }
         else
         {
-            nb = ilaenv_(&c__1, "CUNGRQ", " ", m, n, k, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CUNGRQ", " ", m, n, k, &c_n1);
             lwkopt = *m * nb;
         }
-        r__1 = sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < fla_max(1, *m) && !lquery)
         {
             *info = -8;
@@ -226,7 +236,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGRQ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNGRQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -249,7 +259,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "CUNGRQ", " ", m, n, k, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "CUNGRQ", " ", m, n, k, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *k)
         {
@@ -263,7 +273,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "CUNGRQ", " ", m, n, k, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "CUNGRQ", " ", m, n, k, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -284,8 +294,8 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -299,7 +309,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     i__1 = *m - kk;
     i__2 = *n - kk;
     i__3 = *k - kk;
-    cungr2_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
+    aocl_lapack_cungr2(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     if(kk > 0)
     {
         /* Use blocked code */
@@ -317,18 +327,18 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *n - *k + i__ + ib - 1;
-                clarft_("Backward", "Rowwise", &i__3, &ib, &a[ii + a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_clarft("Backward", "Rowwise", &i__3, &ib, &a[ii + a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H**H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right */
                 i__3 = ii - 1;
                 i__4 = *n - *k + i__ + ib - 1;
-                clarfb_("Right", "Conjugate transpose", "Backward", "Rowwise", &i__3, &i__4, &ib,
-                        &a[ii + a_dim1], lda, &work[1], &ldwork, &a[a_offset], lda, &work[ib + 1],
-                        &ldwork);
+                aocl_lapack_clarfb("Right", "Conjugate transpose", "Backward", "Rowwise", &i__3,
+                                   &i__4, &ib, &a[ii + a_dim1], lda, &work[1], &ldwork,
+                                   &a[a_offset], lda, &work[ib + 1], &ldwork);
             }
             /* Apply H**H to columns 1:n-k+i+ib-1 of current block */
             i__3 = *n - *k + i__ + ib - 1;
-            cungr2_(&ib, &i__3, &ib, &a[ii + a_dim1], lda, &tau[i__], &work[1], &iinfo);
+            aocl_lapack_cungr2(&ib, &i__3, &ib, &a[ii + a_dim1], lda, &tau[i__], &work[1], &iinfo);
             /* Set columns n-k+i+ib:n of current block to zero */
             i__3 = *n;
             for(l = *n - *k + i__ + ib; l <= i__3; ++l)
@@ -337,8 +347,8 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
                 for(j = ii; j <= i__4; ++j)
                 {
                     i__5 = j + l * a_dim1;
-                    a[i__5].r = 0.f;
-                    a[i__5].i = 0.f; // , expr subst
+                    a[i__5].real = 0.f;
+                    a[i__5].imag = 0.f; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -346,9 +356,9 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
             /* L50: */
         }
     }
-    r__1 = sroundup_lwork(&iws);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&iws);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CUNGRQ */

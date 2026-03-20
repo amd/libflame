@@ -4,15 +4,15 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__13 = 13;
-static integer c__15 = 15;
-static integer c_n1 = -1;
-static integer c__12 = 12;
-static integer c__14 = 14;
-static integer c__16 = 16;
+static aocl_int64_t c__13 = 13;
+static aocl_int64_t c__15 = 15;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__12 = 12;
+static aocl_int64_t c__14 = 14;
+static aocl_int64_t c__16 = 16;
 static logical c_false = FALSE_;
-static integer c__1 = 1;
-static integer c__3 = 3;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__3 = 3;
 /* > \brief \b DLAQR4 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices
  * from the Sc hur decomposition. */
 /* =========== DOCUMENTATION =========== */
@@ -117,7 +117,7 @@ static integer c__3 = 3;
 /* > the upper quasi-triangular matrix T from the Schur */
 /* > decomposition (the Schur form);
 2-by-2 diagonal blocks */
-/* > (corresponding to complex conjugate pairs of eigenvalues) */
+/* > (corresponding to scomplex conjugate pairs of eigenvalues) */
 /* > are returned in standard form, with H(i,i) = H(i+1,i+1) */
 /* > and H(i+1,i)*H(i,i+1) < 0. If INFO = 0 and WANTT is */
 /* > .FALSE., then the contents of H are unspecified on exit. */
@@ -145,7 +145,7 @@ static integer c__3 = 3;
 /* > The real and imaginary parts, respectively, of the computed */
 /* > eigenvalues of H(ILO:IHI,ILO:IHI) are stored in WR(ILO:IHI) */
 /* > and WI(ILO:IHI). If two eigenvalues are computed as a */
-/* > complex conjugate pair, they are stored in consecutive */
+/* > scomplex conjugate pair, they are stored in consecutive */
 /* > elements of WR and WI, say the i-th and (i+1)th, with */
 /* > WI(i) > 0 and WI(i+1) < 0. If WANTT is .TRUE., then */
 /* > the eigenvalues are stored in the same order as on the */
@@ -270,57 +270,66 @@ IHI <= IHIZ <= N. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi,
-             doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, integer *iloz,
-             integer *ihiz, doublereal *z__, integer *ldz, doublereal *work, integer *lwork,
-             integer *info)
+/** Generated wrapper function */
+void dlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             doublereal *h__, aocl_int_t *ldh, doublereal *wr, doublereal *wi, aocl_int_t *iloz,
+             aocl_int_t *ihiz, doublereal *z__, aocl_int_t *ldz, doublereal *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaqr4(wantt, wantz, n, ilo, ihi, h__, ldh, wr, wi, iloz, ihiz, z__, ldz, work,
+                       lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaqr4(wantt, wantz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, wr, wi, &iloz_64,
+                       &ihiz_64, z__, &ldz_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, doublereal *h__, aocl_int64_t *ldh, doublereal *wr,
+                        doublereal *wi, aocl_int64_t *iloz, aocl_int64_t *ihiz, doublereal *z__,
+                        aocl_int64_t *ldz, doublereal *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqr4 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS
                       ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",
                       *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
     /* Local variables */
-    integer i__, k;
+    aocl_int64_t i__, k;
     doublereal aa, bb, cc, dd;
-    integer ld;
+    aocl_int64_t ld;
     doublereal cs;
-    integer nh, it, ks, kt;
+    aocl_int64_t nh, it, ks, kt;
     doublereal sn;
-    integer ku, kv, ls, ns;
+    aocl_int64_t ku, kv, ls, ns;
     doublereal ss;
-    integer nw, inf, kdu, nho, nve, kwh, nsr, nwr, kwv, ndec, ndfl, kbot, nmin;
+    aocl_int64_t nw, inf, kdu, nho, nve, kwh, nsr, nwr, kwv, ndec, ndfl, kbot, nmin;
     doublereal swap;
-    integer ktop;
+    aocl_int64_t ktop;
     doublereal zdum[1] /* was [1][1] */
         ;
-    integer kacc22, itmax, nsmax, nwmax, kwtop;
-    extern /* Subroutine */
-        void
-        dlaqr2_(logical *, logical *, integer *, integer *, integer *, integer *, doublereal *,
-                integer *, integer *, integer *, doublereal *, integer *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *),
-        dlaqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *, integer *, integer *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                integer *, doublereal *, integer *, integer *, doublereal *, integer *);
-    integer nibble;
-    extern /* Subroutine */
-        void
-        dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
-                integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    aocl_int64_t kacc22, itmax, nsmax, nwmax, kwtop;
+    aocl_int64_t nibble;
     char jbcmpz[2];
-    integer nwupbd;
+    aocl_int64_t nwupbd;
     logical sorted;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -379,8 +388,8 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         lwkopt = 1;
         if(*lwork != -1)
         {
-            dlahqr_(wantt, wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], iloz, ihiz,
-                    &z__[z_offset], ldz, info);
+            aocl_lapack_dlahqr(wantt, wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], iloz,
+                               ihiz, &z__[z_offset], ldz, info);
         }
     }
     else
@@ -411,7 +420,7 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* . subdiagonal workspace for NWR.GE.2 as required. */
         /* . (In fact, there is enough subdiagonal space for */
         /* . NWR.GE.4.) ==== */
-        nwr = ilaenv_(&c__13, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
+        nwr = aocl_lapack_ilaenv(&c__13, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
         nwr = fla_max(2, nwr);
         /* Computing MIN */
         i__1 = *ihi - *ilo + 1;
@@ -422,7 +431,7 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* . At this point N .GT. NTINY = 15, so there is at */
         /* . enough subdiagonal workspace for NSR to be even */
         /* . and greater than or equal to two as required. ==== */
-        nsr = ilaenv_(&c__15, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
+        nsr = aocl_lapack_ilaenv(&c__15, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
         /* Computing MIN */
         i__1 = nsr, i__2 = (*n - 3) / 6;
         i__1 = fla_min(i__1, i__2);
@@ -435,9 +444,9 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* ==== Estimate optimal workspace ==== */
         /* ==== Workspace query call to DLAQR2 ==== */
         i__1 = nwr + 1;
-        dlaqr2_(wantt, wantz, n, ilo, ihi, &i__1, &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset],
-                ldz, &ls, &ld, &wr[1], &wi[1], &h__[h_offset], ldh, n, &h__[h_offset], ldh, n,
-                &h__[h_offset], ldh, &work[1], &c_n1);
+        aocl_lapack_dlaqr2(wantt, wantz, n, ilo, ihi, &i__1, &h__[h_offset], ldh, iloz, ihiz,
+                           &z__[z_offset], ldz, &ls, &ld, &wr[1], &wi[1], &h__[h_offset], ldh, n,
+                           &h__[h_offset], ldh, n, &h__[h_offset], ldh, &work[1], &c_n1);
         /* ==== Optimal workspace = MAX(DLAQR5, DLAQR2) ==== */
         /* Computing MAX */
         i__1 = nsr * 3 / 2;
@@ -451,14 +460,14 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
             return;
         }
         /* ==== DLAHQR/DLAQR0 crossover point ==== */
-        nmin = ilaenv_(&c__12, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
+        nmin = aocl_lapack_ilaenv(&c__12, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
         nmin = fla_max(15, nmin);
         /* ==== Nibble crossover point ==== */
-        nibble = ilaenv_(&c__14, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
+        nibble = aocl_lapack_ilaenv(&c__14, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
         nibble = fla_max(0, nibble);
         /* ==== Accumulate reflections during ttswp? Use block */
         /* . 2-by-2 structure during matrix-matrix multiply? ==== */
-        kacc22 = ilaenv_(&c__16, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
+        kacc22 = aocl_lapack_ilaenv(&c__16, "DLAQR4", jbcmpz, n, ilo, ihi, lwork);
         kacc22 = fla_max(0, kacc22);
         kacc22 = fla_min(2, kacc22);
         /* ==== NWMAX = the largest possible deflation window for */
@@ -579,9 +588,10 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
             kwv = nw + 2;
             nve = *n - nw - kwv + 1;
             /* ==== Aggressive early deflation ==== */
-            dlaqr2_(wantt, wantz, n, &ktop, &kbot, &nw, &h__[h_offset], ldh, iloz, ihiz,
-                    &z__[z_offset], ldz, &ls, &ld, &wr[1], &wi[1], &h__[kv + h_dim1], ldh, &nho,
-                    &h__[kv + kt * h_dim1], ldh, &nve, &h__[kwv + h_dim1], ldh, &work[1], lwork);
+            aocl_lapack_dlaqr2(wantt, wantz, n, &ktop, &kbot, &nw, &h__[h_offset], ldh, iloz, ihiz,
+                               &z__[z_offset], ldz, &ls, &ld, &wr[1], &wi[1], &h__[kv + h_dim1],
+                               ldh, &nho, &h__[kv + kt * h_dim1], ldh, &nve, &h__[kwv + h_dim1],
+                               ldh, &work[1], lwork);
             /* ==== Adjust KBOT accounting for new deflations. ==== */
             kbot -= ld;
             /* ==== KS points to the shifts. ==== */
@@ -648,9 +658,10 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
                     {
                         ks = kbot - ns + 1;
                         kt = *n - ns + 1;
-                        dlacpy_("A", &ns, &ns, &h__[ks + ks * h_dim1], ldh, &h__[kt + h_dim1], ldh);
-                        dlahqr_(&c_false, &c_false, &ns, &c__1, &ns, &h__[kt + h_dim1], ldh,
-                                &wr[ks], &wi[ks], &c__1, &c__1, zdum, &c__1, &inf);
+                        aocl_lapack_dlacpy("A", &ns, &ns, &h__[ks + ks * h_dim1], ldh,
+                                           &h__[kt + h_dim1], ldh);
+                        aocl_lapack_dlahqr(&c_false, &c_false, &ns, &c__1, &ns, &h__[kt + h_dim1],
+                                           ldh, &wr[ks], &wi[ks], &c__1, &c__1, zdum, &c__1, &inf);
                         ks += inf;
                         /* ==== In case of a rare QR failure use */
                         /* . eigenvalues of the trailing 2-by-2 */
@@ -669,7 +680,7 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
                     if(kbot - ks + 1 > ns)
                     {
                         /* ==== Sort the shifts (Helps a little) */
-                        /* . Bubble sort keeps complex conjugate */
+                        /* . Bubble sort keeps scomplex conjugate */
                         /* . pairs together. ==== */
                         sorted = FALSE_;
                         i__2 = ks + 1;
@@ -703,8 +714,8 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
                     L60:;
                     }
                     /* ==== Shuffle shifts into pairs of real shifts */
-                    /* . and pairs of complex conjugate shifts */
-                    /* . assuming complex conjugate shifts are */
+                    /* . and pairs of scomplex conjugate shifts */
+                    /* . assuming scomplex conjugate shifts are */
                     /* . already adjacent to one another. (Yes, */
                     /* . they are.) ==== */
                     i__2 = ks + 2;
@@ -768,10 +779,10 @@ void dlaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
                 kwv = kdu + 4;
                 nve = *n - kdu - kwv + 1;
                 /* ==== Small-bulge multi-shift QR sweep ==== */
-                dlaqr5_(wantt, wantz, &kacc22, n, &ktop, &kbot, &ns, &wr[ks], &wi[ks],
-                        &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset], ldz, &work[1], &c__3,
-                        &h__[ku + h_dim1], ldh, &nve, &h__[kwv + h_dim1], ldh, &nho,
-                        &h__[ku + kwh * h_dim1], ldh);
+                aocl_lapack_dlaqr5(wantt, wantz, &kacc22, n, &ktop, &kbot, &ns, &wr[ks], &wi[ks],
+                                   &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset], ldz, &work[1],
+                                   &c__3, &h__[ku + h_dim1], ldh, &nve, &h__[kwv + h_dim1], ldh,
+                                   &nho, &h__[ku + kwh * h_dim1], ldh);
             }
             /* ==== Note progress (or the lack of it). ==== */
             if(ld > 0)

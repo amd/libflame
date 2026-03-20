@@ -1,14 +1,14 @@
 /* zaxpy.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zaxpy_(integer *n, doublecomplex *za, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
+int zaxpy_(integer *n, dcomplex *za, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Local variables */
     integer i__;
-    extern doublereal dcabs1_(doublecomplex *);
+    extern doublereal dcabs1_(dcomplex *);
     integer ix, iy;
     /* constant times a vector plus a vector. */
     /* jack dongarra, 3/11/78. */
@@ -49,9 +49,9 @@ int zaxpy_(integer *n, doublecomplex *za, doublecomplex *zx, integer *incx, doub
         i__2 = iy;
         i__3 = iy;
         i__4 = ix;
-        z__2.r = za->r * zx[i__4].r - za->i * zx[i__4].i, z__2.i = za->r * zx[ i__4].i + za->i * zx[i__4].r;
-        z__1.r = zy[i__3].r + z__2.r, z__1.i = zy[i__3].i + z__2.i;
-        zy[i__2].r = z__1.r, zy[i__2].i = z__1.i;
+        z__2.real = za->real * zx[i__4].real - za->imag * zx[i__4].imag, z__2.imag = za->real * zx[ i__4].imag + za->imag * zx[i__4].real;
+        z__1.real = zy[i__3].real + z__2.real, z__1.imag = zy[i__3].imag + z__2.imag;
+        zy[i__2].real = z__1.real, zy[i__2].imag = z__1.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -67,9 +67,9 @@ L20:
         i__2 = i__;
         i__3 = i__;
         i__4 = i__;
-        z__2.r = za->r * zx[i__4].r - za->i * zx[i__4].i, z__2.i = za->r * zx[ i__4].i + za->i * zx[i__4].r;
-        z__1.r = zy[i__3].r + z__2.r, z__1.i = zy[i__3].i + z__2.i;
-        zy[i__2].r = z__1.r, zy[i__2].i = z__1.i;
+        z__2.real = za->real * zx[i__4].real - za->imag * zx[i__4].imag, z__2.imag = za->real * zx[ i__4].imag + za->imag * zx[i__4].real;
+        z__1.real = zy[i__3].real + z__2.real, z__1.imag = zy[i__3].imag + z__2.imag;
+        zy[i__2].real = z__1.real, zy[i__2].imag = z__1.imag;
         /* L30: */
     }
     return 0;

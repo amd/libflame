@@ -214,7 +214,7 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         }
@@ -243,6 +243,7 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
                 reset_vector(datatype, wi_in, n, 1);
                 get_subdiagonal(datatype, L, n, n, n, wi_in);
             }
+            free_matrix(L);
         }
     }
 
@@ -282,6 +283,11 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
                       datatype, params->imatrix_char, scal, residual, wr_in, wi_in, params),
         check_bit_reproducibility_geev(filename, datatype, jobvl, jobvr, n, A_test, lda, VL, ldvl,
                                        VR, ldvr, w, wr, wi, g_lwork, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geev(tst_api, &jobvl, &jobvr, n, A, A_test, lda, VL, ldvl, VR, ldvr, w, wr, wi,
@@ -293,6 +299,19 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if((g_ext_fptr == NULL) && !(FLA_EXTREME_CASE_TEST))
+        {
+            free_vector(wr_in);
+            if(datatype == FLOAT || datatype == DOUBLE)
+            {
+                free_vector(wi_in);
+            }
+        }
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            free_vector(scal);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
@@ -308,17 +327,6 @@ free_buffers:
         free_vector(wr);
         free_vector(wi);
     }
-    if((g_ext_fptr == NULL) && !(FLA_EXTREME_CASE_TEST))
-    {
-        free_matrix(L);
-        free_vector(wr_in);
-        if(datatype == FLOAT || datatype == DOUBLE)
-        {
-            free_vector(wi_in);
-        }
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        free_vector(scal);
 }
 
 void prepare_geev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer lda, void *wr,
@@ -558,7 +566,7 @@ void store_geev_outputs(void *filename, integer datatype, char jobvl, char jobvr
         FLA_STORE_BRT_VECTOR(datatype, n, wi)
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 
 integer check_bit_reproducibility_geev(void *filename, integer datatype, char jobvl, char jobvr,

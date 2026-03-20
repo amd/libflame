@@ -120,6 +120,7 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_test = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -143,29 +144,39 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A, lda);
 
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
+    /* Skip input generation for BRT verification runs */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input matrix with custom data */
-        init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
-        if(params->imatrix_char != '\0')
+
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
         {
-            char *type = "C";
-            if(datatype == FLOAT || datatype == DOUBLE)
+            /* NOTE: POTRF requires structured input;
+               Random matrix initialization is incompatible */
+            /* Initialize input matrix with custom data */
+            init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
+            if(params->imatrix_char != '\0')
             {
-                type = "S";
+                char *type = "C";
+                if(datatype == FLOAT || datatype == DOUBLE)
+                {
+                    type = "S";
+                }
+                form_symmetric_matrix(datatype, m, A, lda, type, 'U');
             }
-            form_symmetric_matrix(datatype, m, A, lda, type, 'U');
         }
-    }
-    else
-    {
-        rand_spd_matrix(datatype, &uplo, A, m, lda);
-        /* Oveflow or underflow test initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        else
         {
-            scale_matrix_overflow_underflow_potrf(datatype, m, A, lda, params->imatrix_char);
+            rand_spd_matrix(datatype, &uplo, A, m, lda);
+            /* Oveflow or underflow test initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_overflow_underflow_potrf(datatype, m, A, lda, params->imatrix_char);
+            }
         }
     }
+
+    /* BRT input processing */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, m, A, lda, "cdd", uplo, m, lda)
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
@@ -174,13 +185,24 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     prepare_potrf_run(&uplo, m, A_test, lda, datatype, &info, interfacetype, layout, params);
 
     /* Compute the performance of the best experiment repeat */
-    /* (1/3)m^3 for real and (4/3)m^3 for complex*/
+    /* (1/3)m^3 for real and (4/3)m^3 for scomplex*/
     perf = (double)(1.0 / 3.0 * m * m * m) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+
+    /* BRT validation */
+    IF_FLA_BRT_VALIDATION(
+        m, m, store_outputs_base(filename, params, 1, 0, datatype, m, m, A_test, lda),
+        validate_potrf(tst_api, &uplo, m, A, A_test, lda, datatype, residual, params),
+        check_reproducibility_base(filename, params, 1, 0, datatype, m, m, A_test, lda))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
+    }
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_potrf(tst_api, &uplo, m, A, A_test, lda, datatype, residual, params);
     }
@@ -198,8 +220,10 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
-    free_matrix(A);
     free_matrix(A_test);
+free_buffers:
+    FLA_FREE_FILENAME(filename)
+    free_matrix(A);
 }
 
 void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype, integer *info,

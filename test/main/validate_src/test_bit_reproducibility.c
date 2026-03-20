@@ -123,8 +123,7 @@ void generate_filename(void **buffer, char *tst_api, int seed, char datatype, ch
 
     /* The filetype, api name, seed and datatype are used for organizing the generated artifacts
      * into folders */
-    strncpy((char *)(*buffer), "/", buffer_len);
-    strncat((char *)(*buffer), tst_api, buffer_len - strlen((char *)(*buffer)) - 1);
+    strncpy((char *)(*buffer), tst_api, buffer_len);
     strncat((char *)(*buffer), "/", buffer_len - strlen((char *)(*buffer)) - 1);
     strncat((char *)(*buffer), seed_char, buffer_len - strlen((char *)(*buffer)) - 1);
     strncat((char *)(*buffer), "/", buffer_len - strlen((char *)(*buffer)) - 1);
@@ -303,7 +302,7 @@ integer store_load_input_matrices(char BRT_char, char *filename, integer num_mat
         }                                                \
         case COMPLEX:                                    \
         {                                                \
-            mul = (sizeof(complex) / sizeof(uint32_t));  \
+            mul = (sizeof(scomplex) / sizeof(uint32_t));  \
             break;                                       \
         }                                                \
         case DOUBLE_COMPLEX:                             \
@@ -518,4 +517,63 @@ uint32_t generate_crc_matrix_no_nb_diag(integer datatype, integer m, integer n, 
         }
     }
     return remainder;
+}
+
+/* Base function used to store the outputs of an API which are to be verified */
+void store_outputs_base(void *filename, void *params, int nMatrix, int nVector, ...)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    va_list args;
+    va_start(args, nVector);
+    for(int i = 0; i < nMatrix; i++)
+    {
+        integer datatype = va_arg(args, integer);
+        integer m = va_arg(args, integer);
+        integer n = va_arg(args, integer);
+        void *A = va_arg(args, void *);
+        integer lda = va_arg(args, integer);
+        FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    }
+    for(int i = 0; i < nVector; i++)
+    {
+        integer datatype = va_arg(args, integer);
+        integer m = va_arg(args, integer);
+        void *A = va_arg(args, void *);
+        FLA_STORE_BRT_VECTOR(datatype, m, A)
+    }
+    va_end(args);
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+
+/* Base function used to load and verify bit exact match of the outputs of an API */
+integer check_reproducibility_base(void *filename, void *params, int nMatrix, int nVector, ...)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    va_list args;
+    va_start(args, nVector);
+    for(int i = 0; i < nMatrix; i++)
+    {
+        integer datatype = va_arg(args, integer);
+        integer m = va_arg(args, integer);
+        integer n = va_arg(args, integer);
+        void *A = va_arg(args, void *);
+        integer lda = va_arg(args, integer);
+        FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    }
+    for(int i = 0; i < nVector; i++)
+    {
+        integer datatype = va_arg(args, integer);
+        integer m = va_arg(args, integer);
+        void *A = va_arg(args, void *);
+        FLA_VERIFY_BRT_VECTOR(datatype, m, A)
+    }
+    va_end(args);
+
+    fclose(gt_file);
+    return 1;
 }

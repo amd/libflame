@@ -6,9 +6,9 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b9 = 0.f;
 static real c_b10 = 1.f;
-static integer c__0 = 0;
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b SSTEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -134,63 +134,60 @@ on exit, D */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work,
-             integer *info)
+/** Generated wrapper function */
+void ssteqr_(char *compz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int_t *ldz, real *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssteqr(compz, n, d__, e, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssteqr(char *compz, aocl_int64_t *n, real *d__, real *e, real *z__,
+                        aocl_int64_t *ldz, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n,
-             *ldz);
+    AOCL_DTL_SNPRINTF("ssteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal), r_sign(real *, real *);
     /* Local variables */
     real b, c__, f, g;
-    integer i__, j, k, l, m;
+    aocl_int64_t i__, j, k, l, m;
     real p, r__, s;
-    integer l1, ii, mm, lm1, mm1, nm1;
+    aocl_int64_t l1, ii, mm, lm1, mm1, nm1;
     real rt1, rt2, eps;
-    integer lsv;
+    aocl_int64_t lsv;
     real tst, eps2;
-    integer lend, jtot;
+    aocl_int64_t lend, jtot;
     extern /* Subroutine */
         void
         slae2_(real *, real *, real *, real *, real *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
-    extern /* Subroutine */
-        void
-        slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *);
-    integer lendm1, lendp1;
+    aocl_int64_t lendm1, lendp1;
     extern /* Subroutine */
         void
         slaev2_(real *, real *, real *, real *, real *, real *, real *);
     extern real slapy2_(real *, real *);
-    integer iscale;
+    aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    integer lendsv;
-    extern /* Subroutine */
-        void
-        slartg_(real *, real *, real *, real *, real *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    aocl_int64_t lendsv;
     real ssfmin;
-    integer nmaxit, icompz;
+    aocl_int64_t nmaxit, icompz;
     real ssfmax;
-    extern real slanst_(char *, integer *, real *, real *);
-    extern /* Subroutine */
-        void
-        slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -252,7 +249,7 @@ void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSTEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -284,7 +281,7 @@ void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     /* matrix. */
     if(icompz == 2)
     {
-        slaset_("Full", n, n, &c_b9, &c_b10, &z__[z_offset], ldz);
+        aocl_lapack_slaset("Full", n, n, &c_b9, &c_b10, &z__[z_offset], ldz);
     }
     nmaxit = *n * 30;
     jtot = 0;
@@ -334,7 +331,7 @@ L30:
     }
     /* Scale submatrix in rows and columns L to LEND */
     i__1 = lend - l + 1;
-    anorm = slanst_("M", &i__1, &d__[l], &e[l]);
+    anorm = aocl_lapack_slanst("M", &i__1, &d__[l], &e[l]);
     iscale = 0;
     if(anorm == 0.f)
     {
@@ -344,17 +341,17 @@ L30:
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        slascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
         i__1 = lend - l;
-        slascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
     }
     else if(anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        slascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
         i__1 = lend - l;
-        slascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
     if((r__1 = d__[lend], f2c_abs(r__1)) < (r__2 = d__[l], f2c_abs(r__2)))
@@ -404,8 +401,8 @@ L30:
                 slaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                slasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1],
-                       ldz);
+                aocl_lapack_slasr("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l],
+                                  &z__[l * z_dim1 + 1], ldz);
             }
             else
             {
@@ -462,7 +459,8 @@ L30:
         if(icompz > 0)
         {
             mm = m - l + 1;
-            slasr_("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1], ldz);
+            aocl_lapack_slasr("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l],
+                              &z__[l * z_dim1 + 1], ldz);
         }
         d__[l] -= p;
         e[l] = g;
@@ -519,8 +517,8 @@ L30:
                 slaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                slasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
-                       &z__[(l - 1) * z_dim1 + 1], ldz);
+                aocl_lapack_slasr("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
+                                  &z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {
@@ -577,7 +575,8 @@ L30:
         if(icompz > 0)
         {
             mm = l - m + 1;
-            slasr_("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m], &z__[m * z_dim1 + 1], ldz);
+            aocl_lapack_slasr("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m],
+                              &z__[m * z_dim1 + 1], ldz);
         }
         d__[l] -= p;
         e[lm1] = g;
@@ -597,16 +596,16 @@ L140:
     if(iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        slascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
         i__1 = lendsv - lsv;
-        slascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info);
     }
     else if(iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        slascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
         i__1 = lendsv - lsv;
-        slascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &e[lsv], n, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &e[lsv], n, info);
     }
     /* Check for no convergence to an eigenvalue after a total */
     /* of N*MAXIT iterations. */
@@ -629,7 +628,7 @@ L160:
     if(icompz == 0)
     {
         /* Use Quick Sort */
-        slasrt_("I", n, &d__[1], info);
+        aocl_lapack_slasrt("I", n, &d__[1], info);
     }
     else
     {
@@ -654,7 +653,7 @@ L160:
             {
                 d__[k] = d__[i__];
                 d__[i__] = p;
-                sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
+                aocl_blas_sswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
             }
             /* L180: */
         }

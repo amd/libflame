@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DGGRQF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -217,31 +217,42 @@ v(i+1:p) is stored on exit in B(i+1:p,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dggrqf_(integer *m, integer *p, integer *n, doublereal *a, integer *lda, doublereal *taua,
-             doublereal *b, integer *ldb, doublereal *taub, doublereal *work, integer *lwork,
-             integer *info)
+/** Generated wrapper function */
+void dggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
+             doublereal *taua, doublereal *b, aocl_int_t *ldb, doublereal *taub, doublereal *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dggrqf(m, p, n, a, lda, taua, b, ldb, taub, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dggrqf(&m_64, &p_64, &n_64, a, &lda_64, taua, b, &ldb_64, taub, work, &lwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dggrqf(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *n, doublereal *a,
+                        aocl_int64_t *lda, doublereal *taua, doublereal *b, aocl_int64_t *ldb,
+                        doublereal *taub, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS ", lwork %" FLA_IS "",
                       *m, *p, *n, *lda, *ldb, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer nb, nb1, nb2, nb3, lopt;
-    extern /* Subroutine */
-        void
-        dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, integer *),
-        dgerqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t nb, nb1, nb2, nb3, lopt;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -274,9 +285,9 @@ void dggrqf_(integer *m, integer *p, integer *n, doublereal *a, integer *lda, do
     --work;
     /* Function Body */
     *info = 0;
-    nb1 = ilaenv_(&c__1, "DGERQF", " ", m, n, &c_n1, &c_n1);
-    nb2 = ilaenv_(&c__1, "DGEQRF", " ", p, n, &c_n1, &c_n1);
-    nb3 = ilaenv_(&c__1, "DORMRQ", " ", m, n, p, &c_n1);
+    nb1 = aocl_lapack_ilaenv(&c__1, "DGERQF", " ", m, n, &c_n1, &c_n1);
+    nb2 = aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", p, n, &c_n1, &c_n1);
+    nb3 = aocl_lapack_ilaenv(&c__1, "DORMRQ", " ", m, n, p, &c_n1);
     /* Computing MAX */
     i__1 = fla_max(nb1, nb2);
     nb = fla_max(i__1, nb3);
@@ -318,7 +329,7 @@ void dggrqf_(integer *m, integer *p, integer *n, doublereal *a, integer *lda, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGGRQF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGGRQF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -328,21 +339,21 @@ void dggrqf_(integer *m, integer *p, integer *n, doublereal *a, integer *lda, do
         return;
     }
     /* RQ factorization of M-by-N matrix A: A = R*Q */
-    dgerqf_(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
+    aocl_lapack_dgerqf(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
     lopt = (integer)work[1];
     /* Update B := B*Q**T */
     i__1 = fla_min(*m, *n);
     /* Computing MAX */
     i__2 = 1;
     i__3 = *m - *n + 1; // , expr subst
-    dormrq_("Right", "Transpose", p, n, &i__1, &a[fla_max(i__2, i__3) + a_dim1], lda, &taua[1],
-            &b[b_offset], ldb, &work[1], lwork, info);
+    aocl_lapack_dormrq("Right", "Transpose", p, n, &i__1, &a[fla_max(i__2, i__3) + a_dim1], lda,
+                       &taua[1], &b[b_offset], ldb, &work[1], lwork, info);
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[1]; // , expr subst
     lopt = fla_max(i__1, i__2);
     /* QR factorization of P-by-N matrix B: B = Z*T */
-    dgeqrf_(p, n, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
+    aocl_lapack_dgeqrf(p, n, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[1]; // , expr subst

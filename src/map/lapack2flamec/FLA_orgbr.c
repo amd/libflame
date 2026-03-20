@@ -35,11 +35,49 @@
   P**T as an N-by-N matrix.
 */
 
+/** Generated wrapper function */
+void sorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorgbr(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorgbr(vect, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorgbr(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorgbr(vect, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_orgbr(prefix, name)                                                              \
-    void F77_##prefix##name##br(                                                                \
-        char *vect, integer *m, integer *n, integer *k, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                               \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+    void aocl_lapack_##prefix##name##br(                                                                \
+        char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+        aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                               \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 // buff_t shoud not include any zero. if it has one, that is the right dimension to go.
 #define LAPACK_orgbr_body(prefix)                                               \
@@ -128,7 +166,7 @@
         FLA_Obj_create(datatype, m_t, 1, 0, 0, &rL);                            \
         FLA_Obj_create(datatype, m_t, 1, 0, 0, &rR);                            \
                                                                                 \
-        /* Extract diagonals (complex) and realify them. */                     \
+        /* Extract diagonals (scomplex) and realify them. */                     \
         /* This is tricky as the shape of A is explicitly */                    \
         /* assumed by m, n, k. */                                               \
         if(uplo == FLA_UPPER_TRIANGULAR)                                        \
@@ -204,12 +242,19 @@ LAPACK_orgbr(s, org)
 }
 LAPACK_orgbr(d, org)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorgbr inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS "",
                       *vect, *m, *n, *k, *ldim_A);
+#if FLA_ENABLE_AMD_OPT
     {
+        lapack_dorgbr(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+#else
+    {
+        int fla_error = LAPACK_SUCCESS;
         LAPACK_RETURN_CHECK_VAR1(
             dorgbr_check(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info), fla_error)
     }
@@ -222,6 +267,7 @@ LAPACK_orgbr(d, org)
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
+#endif
 }
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_orgbr(c, ung)

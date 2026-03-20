@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b8 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SPPTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -93,30 +93,33 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spptri_(char *uplo, integer *n, real *ap, integer *info)
+/** Generated wrapper function */
+void spptri_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spptri(uplo, n, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spptri(uplo, &n_64, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_spptri(char *uplo, aocl_int64_t *n, real *ap, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer j, jc, jj;
+    aocl_int64_t j, jc, jj;
     real ajj;
-    integer jjn;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        sspr_(char *, integer *, real *, real *, integer *, real *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    aocl_int64_t jjn;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        stptri_(char *, char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -152,7 +155,7 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPPTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -163,7 +166,7 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    stptri_(uplo, "Non-unit", n, &ap[1], info);
+    aocl_lapack_stptri(uplo, "Non-unit", n, &ap[1], info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -181,10 +184,10 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
             if(j > 1)
             {
                 i__2 = j - 1;
-                sspr_("Upper", &i__2, &c_b8, &ap[jc], &c__1, &ap[1]);
+                aocl_blas_sspr("Upper", &i__2, &c_b8, &ap[jc], &c__1, &ap[1]);
             }
             ajj = ap[jj];
-            sscal_(&j, &ajj, &ap[jc], &c__1);
+            aocl_blas_sscal(&j, &ajj, &ap[jc], &c__1);
             /* L10: */
         }
     }
@@ -197,11 +200,12 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
         {
             jjn = jj + *n - j + 1;
             i__2 = *n - j + 1;
-            ap[jj] = sdot_(&i__2, &ap[jj], &c__1, &ap[jj], &c__1);
+            ap[jj] = aocl_blas_sdot(&i__2, &ap[jj], &c__1, &ap[jj], &c__1);
             if(j < *n)
             {
                 i__2 = *n - j;
-                stpmv_("Lower", "Transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1], &c__1);
+                aocl_blas_stpmv("Lower", "Transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1],
+                                &c__1);
             }
             jj = jjn;
             /* L20: */

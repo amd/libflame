@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-static TLS_CLASS_SPEC integer      fla_mem_leak_counter;
+static TLS_CLASS_SPEC fla_dim_t      fla_mem_leak_counter;
 static TLS_CLASS_SPEC FLA_Bool fla_mem_leak_counter_status;
 #ifdef FLA_ENABLE_MULTITHREADING
 static TLS_CLASS_SPEC FLA_Lock fla_mem_leak_counter_lock;
@@ -108,7 +108,7 @@ FLA_Bool FLA_Memory_leak_counter_set( FLA_Bool new_status )
 
  *************************************************************************** */
 
-void* FLA_memset( void* str, integer c, uinteger len )                               // The memalign perf issue will not come here because we are taking void* (casting is expensive)
+void* FLA_memset( void* str, fla_dim_t c, fla_dim_t len )                               // The memalign perf issue will not come here because we are taking void* (casting is expensive)
 {
   unsigned char* ptr = str;
   while( len-- )
@@ -128,7 +128,7 @@ void* FLA_malloc( size_t size )
   void*     ptr = NULL;
   FLA_Error e_val;
 #ifdef FLA_ENABLE_MEMORY_ALIGNMENT
-  integer       r_val;
+  fla_dim_t       r_val;
 #endif
 
   // In practice, the size argument should very rarely be zero. However, if the

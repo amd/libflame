@@ -26,3 +26,8 @@
         LAPACK_TEST_DIR : netlib lapack test directory name. Default=lapack-3.12.0
 
   Usage for AOCC is on similar lines. Just replace script name from "run-netlib-test.sh" to "run-netlib-test-aocc.sh" 
+
+Note: Netlib tests override certain symbols in the libFLAME library (ilaenv_, ilaenv2stage_, iparmq_, slarfy_, clarfy_, dlarfy_, zlarfy_).
+   Since the latest aocl-lapack code uses aocl_lapack_* functions internally across function calls, wrapper functions that override these symbols
+   are also required. The latest 3.12 test suites include C files for these wrappers. Makefiles and CMakeLists are updated
+   to properly compile and link these symbols.

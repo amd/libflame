@@ -1,3 +1,47 @@
+# Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+function(get_obj_filepaths obj_var)
+  set(_obj_files "")
+  foreach(source_file ${ARGN})
+    get_filename_component(source_file_we ${source_file} NAME_WE)
+    list(APPEND _obj_files "${CMAKE_CURRENT_BINARY_DIR}/${source_file_we}${CMAKE_C_OUTPUT_EXTENSION}")
+  endforeach()
+  set(${obj_var} ${_obj_files} PARENT_SCOPE)
+endfunction()
+
+function(compile_c_files obj_var)
+  set(c_compiler_flags "")
+  if (ENABLE_ILP64)
+    if(MSVC)
+      set(c_compiler_flags "/DINT_64BIT")
+    else()
+      set(c_compiler_flags "-DINT_64BIT")
+    endif()
+  endif()
+
+  set(_obj_files "")
+
+  foreach(c_file ${ARGN})
+    get_obj_filepaths(obj_file ${c_file})
+    list(APPEND _obj_files ${obj_file})
+    if(MSVC)
+      set(output_flag "/Fo${obj_file}")
+      set(compile_flag "/c")
+    else()
+      set(output_flag "-o" "${obj_file}")
+      set(compile_flag "-c")
+    endif()
+    add_custom_command(
+      OUTPUT ${obj_file}
+      COMMAND ${CMAKE_C_COMPILER} ${CMAKE_C_FLAGS} ${c_compiler_flags} ${compile_flag} ${CMAKE_CURRENT_SOURCE_DIR}/${c_file} ${output_flag}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${c_file}
+      COMMENT "Compiling ${c_file} with ${c_compiler_flags} to ${obj_file}"
+    )
+  endforeach()
+
+  set(${obj_var} ${_obj_files} PARENT_SCOPE)
+endfunction()
+
 if(MSVC_VERSION)
 #  string(REPLACE "/STACK:10000000" "/STACK:900000000000000000"
 #    CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
@@ -189,4 +233,3 @@ if(BUILD_COMPLEX AND BUILD_COMPLEX16)
 # ======== COMPLEX-COMPLEX16 LIN TESTS ========================
   add_lapack_test(zctest.out zctest.in xlintstzc)
 endif()
-

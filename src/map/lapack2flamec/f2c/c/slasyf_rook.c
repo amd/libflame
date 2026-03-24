@@ -236,7 +236,7 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
     real absakk;
     extern real slamch_(char *);
     real colmax, rowmax;
-#if !FLA_ENABLE_AOCL_BLAS
+#if !FLA_ENABLE_AMD_OPT
     aocl_int64_t jb, i__3, i__4, i__5;
 #endif
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -522,7 +522,7 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         goto L10;
     L30: /* Update the upper triangle of A11 (= A(1:k,1:k)) as */
         /* A11 := A11 - U12*D*U12**T = A11 - U12*W**T */
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AMD_OPT
         i__1 = *n - k;
         aocl_blas_sgemmtr("Upper", "No transpose", "Transpose", &k, &i__1, &c_b9,
                           &a[(k + 1) * a_dim1 + 1], lda, &w[(kw + 1) * w_dim1 + 1], ldw, &c_b10,
@@ -838,7 +838,7 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         goto L70;
     L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
         /* A22 := A22 - L21*D*L21**T = A22 - L21*W**T */
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AMD_OPT
         i__1 = *n - k + 1;
         i__2 = k - 1;
         aocl_blas_sgemmtr("Lower", "No transpose", "Transpose", &i__1, &i__2, &c_b9, &a[k + a_dim1],

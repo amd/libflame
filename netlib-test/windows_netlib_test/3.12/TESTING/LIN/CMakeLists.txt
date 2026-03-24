@@ -1,3 +1,5 @@
+# Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
 set(ALINTST
    aladhd.f alaerh.f alaesm.f alahd.f alareq.f
    alasum.f alasvm.f chkxer.f icopy.f ilaenv.f xlaenv.f xerbla.f)
@@ -237,6 +239,10 @@ set(ZLINTSTRFP zchkrfp.f zdrvrfp.f zdrvrf1.f zdrvrf2.f zdrvrf3.f zdrvrf4.f zerrr
   zlatb4.f zlaipd.f zlarhs.f zsbmv.f zget04.f zpot01.f zpot03.f zpot02.f
   chkxer.f xerbla.f alaerh.f aladhd.f alahd.f alasvm.f)
 
+set(ALINTST_C_FILES aocl_lapack_ilaenv.c)
+
+compile_c_files(ALINTST_C_OBJS ${ALINTST_C_FILES})
+
 macro(add_lin_executable name)
   add_executable(${name} ${ARGN})
 if(ENABLE_WINDOWS_BUILD)
@@ -247,12 +253,12 @@ endif()
 endmacro()
 
 if(BUILD_SINGLE)
-  add_lin_executable(xlintsts ${ALINTST} ${SLINTST} ${SCLNTST})
+  add_lin_executable(xlintsts ${ALINTST} ${SLINTST} ${SCLNTST} ${ALINTST_C_OBJS})
   add_lin_executable(xlintstrfs ${SLINTSTRFP})
 endif()
 
 if(BUILD_DOUBLE)
-  add_lin_executable(xlintstd ${ALINTST} ${DLINTST} ${DZLNTST})
+  add_lin_executable(xlintstd ${ALINTST} ${DLINTST} ${DZLNTST} ${ALINTST_C_OBJS})
   add_lin_executable(xlintstrfd ${DLINTSTRFP})
 endif()
 
@@ -261,12 +267,12 @@ if(BUILD_SINGLE AND BUILD_DOUBLE)
 endif()
 
 if(BUILD_COMPLEX)
-  add_lin_executable(xlintstc ${ALINTST} ${CLINTST} ${SCLNTST})
+  add_lin_executable(xlintstc ${ALINTST} ${CLINTST} ${SCLNTST} ${ALINTST_C_OBJS})
   add_lin_executable(xlintstrfc ${CLINTSTRFP})
 endif()
 
 if(BUILD_COMPLEX16)
-  add_lin_executable(xlintstz ${ALINTST} ${ZLINTST} ${DZLNTST})
+  add_lin_executable(xlintstz ${ALINTST} ${ZLINTST} ${DZLNTST} ${ALINTST_C_OBJS})
   add_lin_executable(xlintstrfz ${ZLINTSTRFP})
 endif()
 

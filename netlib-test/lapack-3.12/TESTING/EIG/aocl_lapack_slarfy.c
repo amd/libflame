@@ -3,8 +3,6 @@
  */
 
 #include <stdint.h>
-#include <stdio.h>
-#include <string.h>
 
 #ifdef INT_64BIT
 typedef int64_t aocl_int_t;

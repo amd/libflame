@@ -1,6 +1,9 @@
+# Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
 set(ALINTST
    aladhd.f alaerh.f alaesm.f alahd.f alareq.f
-   alasum.f alasvm.f chkxer.f icopy.f ilaenv.f xlaenv.f xerbla.f)
+   alasum.f alasvm.f chkxer.f icopy.f ilaenv.f xlaenv.f xerbla.f
+   aocl_lapack_ilaenv.c)
 
 set(SCLNTST slaord.f)
 
@@ -236,6 +239,10 @@ set(CLINTSTRFP cchkrfp.f cdrvrfp.f cdrvrf1.f cdrvrf2.f cdrvrf3.f cdrvrf4.f cerrr
 set(ZLINTSTRFP zchkrfp.f zdrvrfp.f zdrvrf1.f zdrvrf2.f zdrvrf3.f zdrvrf4.f zerrrfp.f
   zlatb4.f zlaipd.f zlarhs.f zsbmv.f zget04.f zpot01.f zpot03.f zpot02.f
   chkxer.f xerbla.f alaerh.f aladhd.f alahd.f alasvm.f)
+
+if(ENABLE_ILP64)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DINT_64BIT") 
+endif()
 
 macro(add_lin_executable name)
   add_executable(${name} ${ARGN})

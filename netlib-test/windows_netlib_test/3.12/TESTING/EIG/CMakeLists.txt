@@ -1,3 +1,5 @@
+# Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
 ########################################################################
 #  This is the makefile for the eigenvalue test program from LAPACK.
 #  The test files are organized as follows:
@@ -104,6 +106,18 @@ set(ZEIGTST zchkee.F
 
 set(ZDMDEIGTST zchkdmd.f90)
 
+set(AEIGTST_C_FILES aocl_lapack_ilaenv.c)
+set(SEIGTST_C_FILES aocl_lapack_slarfy.c)
+set(CEIGTST_C_FILES aocl_lapack_clarfy.c)
+set(DEIGTST_C_FILES aocl_lapack_dlarfy.c)
+set(ZEIGTST_C_FILES aocl_lapack_zlarfy.c)
+
+compile_c_files(AEIGTST_C_OBJS ${AEIGTST_C_FILES})
+compile_c_files(SEIGTST_C_OBJS ${SEIGTST_C_FILES})
+compile_c_files(CEIGTST_C_OBJS ${CEIGTST_C_FILES})
+compile_c_files(DEIGTST_C_OBJS ${DEIGTST_C_FILES})
+compile_c_files(ZEIGTST_C_OBJS ${ZEIGTST_C_FILES})
+
 macro(add_eig_executable name)
   add_executable(${name} ${ARGN})
   if(ENABLE_WINDOWS_BUILD)
@@ -114,22 +128,22 @@ macro(add_eig_executable name)
 endmacro()
 
 if(BUILD_SINGLE)
-add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST})
+add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST} ${SEIGTST_C_OBJS} ${AEIGTST_C_OBJS})
 add_eig_executable(xdmdeigtsts ${SDMDEIGTST})
 endif()
 
 if(BUILD_COMPLEX)
-add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST})
+add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST} ${CEIGTST_C_OBJS} ${AEIGTST_C_OBJS})
 add_eig_executable(xdmdeigtstc ${CDMDEIGTST})
 endif()
 
 if(BUILD_COMPLEX16)
-add_eig_executable(xeigtstz ${ZEIGTST} ${DZIGTST} ${AEIGTST})
+add_eig_executable(xeigtstz ${ZEIGTST} ${DZIGTST} ${AEIGTST} ${ZEIGTST_C_OBJS} ${AEIGTST_C_OBJS})
 add_eig_executable(xdmdeigtstz ${ZDMDEIGTST})
 endif()
 
 if(BUILD_DOUBLE)
-add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST})
+add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST} ${DEIGTST_C_OBJS} ${AEIGTST_C_OBJS})
 add_eig_executable(xdmdeigtstd ${DDMDEIGTST})
 endif()
 

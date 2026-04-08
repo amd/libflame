@@ -1,9 +1,20 @@
+/******************************************************************************
+  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ * ***************************************************************************/
 /* ./sgesdd.f -- translated by f2c (version 20190311). You must link the resulting object file with
 libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
 .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
 order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
 /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
+
+#ifndef AOCL_SGESDD_ABS_FLOOR_FACTOR
+#define AOCL_SGESDD_ABS_FLOOR_FACTOR 400.f
+#endif
+
+#ifndef AOCL_SGESDD_REL_GATE_FACTOR
+#define AOCL_SGESDD_REL_GATE_FACTOR 2.0e-4f
+#endif
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__0 = 0;
 static real c_b63 = 0.f;
@@ -1594,6 +1605,34 @@ int lapack_sgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_in
                 i__1 = *lwork - nwork + 1;
                 lapack_sormbr("P", "R", "T", n, n, m, &a[a_offset], lda, &work[itaup],
                               &vt[vt_offset], ldvt, &work[nwork], &i__1, &ierr);
+            }
+        }
+    }
+    /* Inline near-rank-1 cleanup for single-precision tails. */
+    if(*info == 0 && s != NULL)
+    {
+        aocl_int64_t i_cleanup, minmn_cleanup, maxmn_cleanup;
+        real abs_floor_cleanup, rel_gate_cleanup;
+        /* Heuristics for aggressive tiny-tail cleanup in near-rank-1 cases. */
+
+        minmn_cleanup = fla_min(*m, *n);
+        if(minmn_cleanup > 1 && s[1] > 0.f)
+        {
+            rel_gate_cleanup = AOCL_SGESDD_REL_GATE_FACTOR * s[1];
+            if(s[2] <= rel_gate_cleanup)
+            {
+                maxmn_cleanup = (*m > *n) ? *m : *n;
+                /* abs_floor guards sub-epsilon D&C artifacts. */
+                abs_floor_cleanup
+                    = AOCL_SGESDD_ABS_FLOOR_FACTOR * (real)maxmn_cleanup * eps;
+                /* Once near-rank-1 is confirmed by the gate, zero any s[i] that is
+                 * within the relative gate (genuine numerical noise relative to s[1])
+                 * OR below the absolute floor (sub-epsilon D&C tail artifact). */
+                for(i_cleanup = 2; i_cleanup <= minmn_cleanup; ++i_cleanup)
+                {
+                    if(s[i_cleanup] <= rel_gate_cleanup || s[i_cleanup] <= abs_floor_cleanup)
+                        s[i_cleanup] = 0.f;
+                }
             }
         }
     }

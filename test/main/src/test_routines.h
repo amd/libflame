@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /* Test API function declaration */
@@ -67,6 +67,7 @@ void fla_test_trtrs(integer argc, char **argv, test_params_t *params);
 void fla_test_geqpf(integer argc, char **argv, test_params_t *params);
 void fla_test_bdsqr(integer argc, char **argv, test_params_t *params);
 /* only performance benchmarking */
+void fla_test_sygv(integer argc, char **argv, test_params_t *params);
 void fla_test_gbsv(integer argc, char **argv, test_params_t *params);
 void fla_test_getrf2(integer argc, char **argv, test_params_t *params);
 void fla_test_getf2(integer argc, char **argv, test_params_t *params);
@@ -123,6 +124,7 @@ OPERATIONS API_test_functions[]
        {LIN_ID, "trtri", fla_test_trtri},     {LIN_ID, "trtrs", fla_test_trtrs},
        {LIN_ID, "geqpf", fla_test_geqpf},     {SVD_ID, "bdsqr", fla_test_bdsqr},
        /* only performance benchmarking */
+       {EIG_ID, "sygv", fla_test_sygv},       {EIG_ID, "hegv", fla_test_sygv},
        {LIN_ID, "gbsv", fla_test_gbsv},       {LIN_ID, "getrf2", fla_test_getrf2},
        {LIN_ID, "getf2", fla_test_getf2},     {LIN_ID, "gbtf2", fla_test_gbtf2},
        {LIN_ID, "gbsvx", fla_test_gbsvx},     {LIN_ID, "getc2", fla_test_getc2},

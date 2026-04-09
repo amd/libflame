@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_PROTOTYPE_H
@@ -439,6 +439,11 @@
 #define fla_lapack_cbdsqr CBDSQR_
 #define fla_lapack_zbdsqr ZBDSQR_
 /* Benchmark only APIs */
+#define fla_lapack_ssygv SSYGV_
+#define fla_lapack_dsygv DSYGV_
+#define fla_lapack_chegv CHEGV_
+#define fla_lapack_zhegv ZHEGV_
+
 #define fla_lapack_sgbsv SGBSV_
 #define fla_lapack_dgbsv DGBSV_
 #define fla_lapack_cgbsv CGBSV_
@@ -853,6 +858,11 @@
 #define fla_lapack_zbdsqr ZBDSQR
 
 /* Benchmark only APIs */
+#define fla_lapack_ssygv SSYGV
+#define fla_lapack_dsygv DSYGV
+#define fla_lapack_chegv CHEGV
+#define fla_lapack_zhegv ZHEGV
+
 #define fla_lapack_sgbsv SGBSV
 #define fla_lapack_dgbsv DGBSV
 #define fla_lapack_cgbsv CGBSV
@@ -1267,6 +1277,11 @@
 #define fla_lapack_zbdsqr zbdsqr
 
 /* Benchmark only APIs */
+#define fla_lapack_ssygv ssygv
+#define fla_lapack_dsygv dsygv
+#define fla_lapack_chegv chegv
+#define fla_lapack_zhegv zhegv
+
 #define fla_lapack_sgbsv sgbsv
 #define fla_lapack_dgbsv dgbsv
 #define fla_lapack_cgbsv cgbsv
@@ -1682,6 +1697,11 @@
 #define fla_lapack_zbdsqr zbdsqr_
 
 /* Benchmark only APIs */
+#define fla_lapack_ssygv ssygv_
+#define fla_lapack_dsygv dsygv_
+#define fla_lapack_chegv chegv_
+#define fla_lapack_zhegv zhegv_
+
 #define fla_lapack_sgbsv sgbsv_
 #define fla_lapack_dgbsv dgbsv_
 #define fla_lapack_cgbsv cgbsv_

@@ -268,6 +268,8 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
             func_str = "UNG2R";                               \
         else if(strcmp(func_str, "SYGVD") == 0)               \
             func_str = "HEGVD";                               \
+        else if(strcmp(func_str, "SYGV") == 0)                \
+            func_str = "HEGV";                                \
         else if(strcmp(func_str, "ORMQR") == 0)               \
             func_str = "UNMQR";                               \
         else if(strcmp(func_str, "SYTRD") == 0)               \

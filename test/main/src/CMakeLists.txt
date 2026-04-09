@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_sources(${PROJECT_NAME}
@@ -72,6 +72,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_trtrs.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_bdsqr.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_orgbr.c
 # only performance benchmarking
+${CMAKE_CURRENT_SOURCE_DIR}/test_sygv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gbsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getrf2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getf2.c

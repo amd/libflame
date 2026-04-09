@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -51,11 +51,11 @@ void fla_test_sygvd(integer argc, char **argv, test_params_t *params)
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_sygvd_experiment);
         tests_not_run = 0;
     }
-    if(argc == 13)
+    if(argc == 14)
     {
-        FLA_TEST_PARSE_LAST_ARG(argv[12]);
+        FLA_TEST_PARSE_LAST_ARG(argv[13]);
     }
-    if(argc >= 12 && argc <= 13)
+    if(argc >= 13 && argc <= 14)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
@@ -69,12 +69,13 @@ void fla_test_sygvd(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].uplo = argv[5][0];
         N = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->eig_sym_paramslist[0].lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->eig_sym_paramslist[0].ldb = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
 
-        g_lwork = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        g_liwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-        g_lrwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+        g_liwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        g_lrwork = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
 
-        n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+        n_repeats = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
         params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
@@ -110,9 +111,9 @@ void fla_test_sygvd(integer argc, char **argv, test_params_t *params)
     {
         printf("\nIllegal arguments for sygvd/hegvd\n");
         printf("./<EXE> sygvd <precisions - sd> <ITYPE> <JOBZ> <UPLO> <N> <LDA>"
-               " <LWORK> <LIWORK> <LRWORK> <repeats>\n");
+               " <LDB> <LWORK> <LIWORK> <LRWORK> <repeats>\n");
         printf("./<EXE> hegvd <precisions - cz> <ITYPE> <JOBZ> <UPLO> <N> <LDA>"
-               " <LWORK> <LIWORK> <LRWORK> <repeats>\n");
+               " <LDB> <LWORK> <LIWORK> <LRWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -130,7 +131,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo)
 {
-    integer n, lda, info = 0, itype = 1;
+    integer n, lda, ldb, info = 0, itype = 1;
     char jobz, uplo, range = 'R';
     void *A = NULL, *w = NULL, *A_test = NULL, *EVals = NULL;
     void *B = NULL, *B_test = NULL, *U = NULL, *C = NULL;
@@ -148,6 +149,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
 
     n = p_cur;
     lda = params->eig_sym_paramslist[pci].lda;
+    ldb = params->eig_sym_paramslist[pci].ldb;
 
     itype = params->eig_sym_paramslist[pci].itype;
 
@@ -159,11 +161,15 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
         {
             lda = fla_max(1, n);
         }
+        if(ldb == -1)
+        {
+            ldb = fla_max(1, n);
+        }
     }
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B, ldb);
 
     create_realtype_vector(datatype, &w, n);
 
@@ -189,7 +195,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
         {
             /* Initialize input matrix with custom data */
             init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-            init_matrix(datatype, B, n, n, lda, g_ext_fptr, params->imatrix_char);
+            init_matrix(datatype, B, n, n, ldb, g_ext_fptr, params->imatrix_char);
         }
         else
         {
@@ -207,7 +213,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
 
             /* B = U**{T|C} U */
             fla_invoke_gemm(datatype, GET_TRANS_STR(datatype), "N", &n, &n, &n, d_one, U, &lda, U,
-                            &lda, d_zero, B, &lda);
+                            &lda, d_zero, B, &ldb);
 
             /* Genarate matrix C such that C = Q * lambda * Q'
                where L is a diagonal matrix with diagonal values as eigen values
@@ -267,7 +273,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
 
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
-            scale_matrix_underflow_overflow_sygvd(datatype, n, A, lda, B, lda, itype,
+            scale_matrix_underflow_overflow_sygvd(datatype, n, A, lda, B, ldb, itype,
                                                   params->imatrix_char, scal);
         }
     }
@@ -278,17 +284,17 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
      *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
      * passed as input to the API
      * */
-    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, n, B, lda, "dccddddd", itype,
-                              jobz, uplo, n, lda, g_lwork, g_liwork, g_lrwork)
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, n, B, ldb, "dccdddddd", itype,
+                              jobz, uplo, n, lda, ldb, g_lwork, g_liwork, g_lrwork)
 
     /* Make a copy of input matrix A and B. This is required to validate the API functionality.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, lda);
-    copy_matrix(datatype, "full", n, n, B, lda, B_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, ldb);
+    copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
 
-    prepare_sygvd_run(itype, &jobz, &uplo, n, A_test, lda, B_test, lda, w, datatype, &info,
+    prepare_sygvd_run(itype, &jobz, &uplo, n, A_test, lda, B_test, ldb, w, datatype, &info,
                       interfacetype, layout, params);
 
     /* performance computation
@@ -304,14 +310,14 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     IF_FLA_BRT_VALIDATION(
-        n, n, store_sygvd_outputs(filename, datatype, jobz, n, A_test, lda, B_test, lda, w, params),
-        validate_sygvd(tst_api, itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, lda, 0,
+        n, n, store_sygvd_outputs(filename, datatype, jobz, n, A_test, lda, B_test, ldb, w, params),
+        validate_sygvd(tst_api, itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, ldb, 0,
                        0, EVals, w, NULL, datatype, residual, params->imatrix_char, scal, params),
-        check_bit_reproducibility_sygvd(filename, datatype, jobz, n, A_test, lda, B_test, lda, w,
+        check_bit_reproducibility_sygvd(filename, datatype, jobz, n, A_test, lda, B_test, ldb, w,
                                         params))
     else if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_sygvd(tst_api, itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, lda, 0,
+        validate_sygvd(tst_api, itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, ldb, 0,
                        0, EVals, w, NULL, datatype, residual, params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
@@ -423,13 +429,13 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
         if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_sygvd_run(datatype, itype, layout, jobz, uplo, n, A, lda, B,
-                                                 lda, w, info);
+                                                 ldb, w, info);
         }
 #if ENABLE_CPP_TEST
         else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP SYGVD API */
         {
             exe_time = fla_test_clock();
-            invoke_cpp_sygvd(datatype, &itype, jobz, uplo, &n, A, &lda, B, &lda, w, work, &lwork,
+            invoke_cpp_sygvd(datatype, &itype, jobz, uplo, &n, A, &lda, B, &ldb, w, work, &lwork,
                              rwork, &lrwork, iwork, &liwork, info);
             exe_time = fla_test_clock() - exe_time;
         }
@@ -438,7 +444,7 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
         {
             exe_time = fla_test_clock();
             /* Call LAPACK API */
-            invoke_sygvd(datatype, &itype, jobz, uplo, &n, A, &lda, B, &lda, w, work, &lwork, rwork,
+            invoke_sygvd(datatype, &itype, jobz, uplo, &n, A, &lda, B, &ldb, w, work, &lwork, rwork,
                          &lrwork, iwork, &liwork, info);
             exe_time = fla_test_clock() - exe_time;
         }

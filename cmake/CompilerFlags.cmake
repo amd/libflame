@@ -119,14 +119,7 @@ endfunction()
 function(set_security_flags)
     if(UNIX)
         set(COMPILE_FLAGS "-fstack-protector-strong -fpie -Wformat -Wformat-security" PARENT_SCOPE)
-        
-        # Exclude -pie linker flag for AOCC/Clang compilers to avoid unused argument warning
-        if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-            set(LINKER_FLAGS "-Wl,-z,relro -Wl,-z,now" PARENT_SCOPE)
-            message(STATUS "Excluding -pie linker flag for Clang compiler to avoid unused argument warning")
-        else()
-            set(LINKER_FLAGS "-pie -Wl,-z,relro -Wl,-z,now" PARENT_SCOPE)
-        endif()
+        set(LINKER_FLAGS "-Wl,-z,relro -Wl,-z,now" PARENT_SCOPE)
     endif()
 endfunction()
 

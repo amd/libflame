@@ -5,7 +5,7 @@
  *               These functions are invoked though macros by
  *               end user.
  *
- * Copyright (C) 2020, Advanced Micro Devices, Inc
+ * Copyright (C) 2020-2026, Advanced Micro Devices, Inc. All rights reserved.
  *
  *==================================================================*/
 
@@ -28,7 +28,7 @@
 uint32 gui32TraceLogLevel = AOCL_DTL_TRACE_LEVEL;
 
 /* The user can configure the file name in which he wants to dump the data */
-#if AOCL_DTL_TRACE_ENABLE
+#if LF_AOCL_DTL_TRACE_ENABLE
 /* The file name for storing traced log added manually in the code */
 static char *pchDTL_TRACE_FILE = AOCL_DTL_TRACE_FILE;
 
@@ -37,7 +37,7 @@ AOCL_FLIST_Node *gpTraceFileList = NULL;
 
 #endif
 
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
 /* The file name for storing log data */
 static char *pchDTL_LOG_FILE = AOCL_DTL_LOG_FILE;
 
@@ -80,7 +80,7 @@ void DTL_Initialize(uint32 ui32CurrentLogLevel)
         gui32TraceLogLevel = ui32CurrentLogLevel;
     }
 
-#if AOCL_DTL_TRACE_ENABLE
+#if LF_AOCL_DTL_TRACE_ENABLE
     /* Create/Open the file to log the traced data */
     AOCL_FLIST_AddFile(pchDTL_TRACE_FILE, &gpTraceFileList, AOCL_gettid());
 
@@ -92,7 +92,7 @@ void DTL_Initialize(uint32 ui32CurrentLogLevel)
     }
 #endif
 
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     /* Create/Open the file to log the log data */
     AOCL_FLIST_AddFile(pchDTL_LOG_FILE, &gpLogFileList, AOCL_gettid());
 
@@ -129,12 +129,12 @@ void DTL_Initialize(uint32 ui32CurrentLogLevel)
 #ifdef AOCL_DTL_INITIALIZE_ENABLE
 void DTL_Uninitialize(void)
 {
-#if AOCL_DTL_TRACE_ENABLE
+#if LF_AOCL_DTL_TRACE_ENABLE
     /* Close the trace file */
     AOCL_FLIST_CloseAll(gpTraceFileList);
 #endif
 
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     /* Close the log file */
     AOCL_FLIST_CloseAll(gpLogFileList);
 #endif
@@ -164,7 +164,7 @@ void DTL_Uninitialize(void)
 *  Output Parameter(s)     :  None
 *  Return parameter(s)     :  None
 *==================================================================*/
-#if(AOCL_DTL_TRACE_ENABLE || AOCL_DTL_LOG_ENABLE)
+#if(LF_AOCL_DTL_TRACE_ENABLE || LF_AOCL_DTL_LOG_ENABLE)
 void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message)
 {
@@ -173,7 +173,7 @@ void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
 
     if(ui8LogType == TRACE_TYPE_LOG || ui8LogType == TRACE_TYPE_RAW)
     {
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
         pOutFile = AOCL_FLIST_GetFile(gpLogFileList, AOCL_gettid());
 
         /* If trace file pointer is equal to NULL then return with out dumping data
@@ -194,7 +194,7 @@ void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
     }
     else
     {
-#if AOCL_DTL_TRACE_ENABLE
+#if LF_AOCL_DTL_TRACE_ENABLE
         pOutFile = AOCL_FLIST_GetFile(gpTraceFileList, AOCL_gettid());
 
         /* If trace file pointer is equal to NULL then return with out dumping data

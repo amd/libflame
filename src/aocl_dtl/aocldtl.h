@@ -44,7 +44,7 @@ extern "C" {
 #define AOCL_DTL_TRACE_ENTRY(LogLevel) \
     DTL_Trace(LogLevel, TRACE_TYPE_FENTRY, __FILE__, __FUNCTION__, __LINE__, NULL);
 #else
-/* Dummy macro definition if the AOCL_DTL_TRACE_ENABLE macro is not enabled */
+/* Dummy macro definition if the LF_AOCL_DTL_TRACE_ENABLE macro is not enabled */
 #define AOCL_DTL_TRACE_ENTRY(LogLevel)
 #endif
 
@@ -58,7 +58,7 @@ extern "C" {
 #define AOCL_DTL_TRACE_EXIT_ERR(LogLevel, Message) \
     DTL_Trace(LogLevel, TRACE_TYPE_FEXIT, __FILE__, __FUNCTION__, __LINE__, Message);
 #else
-/* Dummy macro definition if the AOCL_DTL_TRACE_ENABLE macro is not enabled */
+/* Dummy macro definition if the LF_AOCL_DTL_TRACE_ENABLE macro is not enabled */
 #define AOCL_DTL_TRACE_EXIT(LogLevel)
 #define AOCL_DTL_TRACE_EXIT_ERR(LogLevel, Message)
 #endif
@@ -81,7 +81,7 @@ extern "C" {
 #define AOCL_DTL_LOG(LogLevel, Message) \
     DTL_Trace(LogLevel, TRACE_TYPE_LOG, __FILE__, __FUNCTION__, __LINE__, Message);
 #else
-/* Dummy macro definition if the AOCL_DTL_LOG_ENABLE macro is not enabled */
+/* Dummy macro definition if the LF_AOCL_DTL_LOG_ENABLE macro is not enabled */
 #define AOCL_DTL_LOG(LogLevel, Message)
 #endif
 

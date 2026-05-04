@@ -5,46 +5,34 @@
  *               libaray, all debug features (except auto trace)
  *               can be enabled/disabled in this file.
  *
- * Copyright (C) 2020, Advanced Micro Devices, Inc
+ * Copyright (C) 2020-2026, Advanced Micro Devices, Inc. All rights reserved.
  *
  *==================================================================*/
 
 #ifndef _AOCLDTLCF_H_
 #define _AOCLDTLCF_H_
 
-/* Macro for tracing the log If the user wants to enable tracing he has to
-   enable this macro by making it to 1 else 0 */
-#define AOCL_DTL_TRACE_ENABLE 0
-
-/* Macro for dumping the log If the user wants to enable dumping he has to
-   enable this macro by making it to 1 else 0 */
-#define AOCL_DTL_DUMP_ENABLE 0
-
-/* Macro for logging the logs If the user wants to enable loging information he
-   has to enable this macro by making it to 1 else 0 */
-#define AOCL_DTL_LOG_ENABLE 0
-
-/* Select the trace level till which you want to log the data */
-/* By default it will log for all levels */
-#define AOCL_DTL_TRACE_LEVEL AOCL_DTL_LEVEL_TRACE_5
-
-// A workaround for autotools and cmake to work together. To be removed on complete migration to
-// cmake and defauilt values of AOCL_DTL_LOG_ENABLE and AOCL_DTL_TRACE_ENABLE to be set to 1. In
-// order to fully allow enabling and disbling of logs and trace from cmake commandline
-#if AOCL_DTL_LOG_ENABLE
-#define LF_AOCL_DTL_LOG_ENABLE 1
-#else
-#define LF_AOCL_DTL_LOG_ENABLE 0
-#endif
-
-#if AOCL_DTL_TRACE_ENABLE
-#define LF_AOCL_DTL_TRACE_ENABLE 1
-#else
+/* Macro for tracing the log. The user can enable tracing by setting this
+   macro to 1 (typically via -DLF_AOCL_DTL_TRACE_ENABLE=1 from CMake). */
+#ifndef LF_AOCL_DTL_TRACE_ENABLE
 #define LF_AOCL_DTL_TRACE_ENABLE 0
 #endif
 
+/* Macro for dumping the log. Enable by setting this macro to 1. */
+#define AOCL_DTL_DUMP_ENABLE 0
+
+/* Macro for logging the inputs. The user can enable logging by setting this
+   macro to 1 (typically via -DLF_AOCL_DTL_LOG_ENABLE=1 from CMake). */
+#ifndef LF_AOCL_DTL_LOG_ENABLE
+#define LF_AOCL_DTL_LOG_ENABLE 0
+#endif
+
+/* Select the trace level till which you want to log the data */
+/* By default it will log up to trace level 5 */
+#define AOCL_DTL_TRACE_LEVEL AOCL_DTL_LEVEL_TRACE_5
+
 /* user has to explicitly use the below macros to identify
-   ciriticality of the logged message */
+   criticality of the logged message */
 #define AOCL_DTL_LEVEL_ALL (14)
 #define AOCL_DTL_LEVEL_TRACE_8 (13)
 #define AOCL_DTL_LEVEL_TRACE_7 (12) /* Kernels */

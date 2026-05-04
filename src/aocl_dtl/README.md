@@ -6,9 +6,9 @@ Following are the steps to enable Trace and Log.
 
 1.  Open header file "libflame/src/aocl_dtl/aocldtlcf.h"
       i.  Enable Trace by making the following macro as 1 :
-            #define AOCL_DTL_TRACE_ENABLE       1
+            #define LF_AOCL_DTL_TRACE_ENABLE       1
       ii.  Enable Log by making the following macro as 1 :
-            #define AOCL_DTL_LOG_ENABLE         1
+            #define LF_AOCL_DTL_LOG_ENABLE         1
     
 2.  After Step 1, build and install libFLAME. AOCL DTL library, "libaocldtl.a", "libaocldtl.so" along with libflame gets installed in the specified            directory. 
 

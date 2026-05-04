@@ -133,7 +133,7 @@ Note: Windows requires running create_new_testdir.bat script before running netl
 ## 5. ENABLE TRACE and LOGS
     
 User may also enable trace and logs by passing `-DENABLE_AOCL_DTL=[OPTION]`
-along with setting the value of Macros `AOCL_DTL_TRACE_ENABLE` and `AOCL_DTL_LOG_ENABLE` to 1 in file `libflame/src/aocl_dtl/aocldtlcf.h`
+along with setting the value of Macros `LF_AOCL_DTL_TRACE_ENABLE` and `LF_AOCL_DTL_LOG_ENABLE` to 1 in file `libflame/src/aocl_dtl/aocldtlcf.h`
 
 e.g.
     

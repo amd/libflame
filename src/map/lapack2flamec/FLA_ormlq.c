@@ -16,12 +16,13 @@
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
 
-extern void sormlq_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
-                       aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *lwork,
-                       aocl_int64_t *info);
-extern void dormlq_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a,
-                       aocl_int64_t *lda, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
-                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern int lapack_dormlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                  doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
+                  aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+
+extern int lapack_sormlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                  real *a, aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
+                  aocl_int64_t *lwork, aocl_int64_t *info);
 /*
   DORMLQ overwrites the general real M-by-N matrix C with
   SIDE = 'L' SIDE = 'R'
@@ -199,7 +200,7 @@ LAPACK_ormlq(s, orm)
     return;
 #else
     {
-        sormlq_fla(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork,
+        lapack_sormlq(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork,
                    info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -230,8 +231,7 @@ LAPACK_ormlq(d, orm)
     return;
 #else
     {
-        dormlq_fla(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork,
-                   info);
+        lapack_dormlq(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

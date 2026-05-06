@@ -1,4 +1,4 @@
-##Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.## 
+##Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.## 
 add_library(FLA_LAPACK_AVX2
      OBJECT
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_lapack_avx2_kernels.h

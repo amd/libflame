@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2023-25, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #ifndef FLA_LAPACK_AVX512_KERNELS_DEFS_H
 #define FLA_LAPACK_AVX512_KERNELS_DEFS_H

@@ -32,12 +32,12 @@
   if SIDE = 'R'.
 */
 
-extern void dormqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a,
-                       aocl_int64_t *lda, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
-                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void sormqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
-                       aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *lwork,
-                       aocl_int64_t *info);
+extern int lapack_sormqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+    real *a, aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
+    aocl_int64_t *lwork, aocl_int64_t *info);
+extern int lapack_dormqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+        doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
+        aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
 
 /** Generated wrapper function */
 void sormqr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_B, aocl_int_t *ldim_B, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
@@ -201,8 +201,7 @@ LAPACK_ormqr(s, orm)
     return;
 #else
     {
-        sormqr_fla(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork,
-                   info);
+        lapack_sormqr(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -232,8 +231,7 @@ LAPACK_ormqr(d, orm)
     return;
 #else
     {
-        dormqr_fla(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork,
-                   info);
+        lapack_dormqr(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

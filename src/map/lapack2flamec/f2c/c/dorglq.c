@@ -2,39 +2,38 @@
  *     Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
  */
 
-/* dorgqr.f -- translated by f2c (version 20160102). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLAME.h"
+/* ../netlib/dorglq.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__3 = 3;
 static aocl_int64_t c__2 = 2;
-/* > \brief \b DORGQR */
+/* > \brief \b DORGLQ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
-/* > Download DORGQR + dependencies */
+/* > Download DORGLQ + dependencies */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorgqr.
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorglq.
  * f"> */
 /* > [TGZ]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorgqr.
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorglq.
  * f"> */
 /* > [ZIP]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgqr.
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorglq.
  * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE DORGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO ) */
+/* SUBROUTINE DORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO ) */
 /* .. Scalar Arguments .. */
 /* INTEGER INFO, K, LDA, LWORK, M, N */
 /* .. */
@@ -46,13 +45,13 @@ static aocl_int64_t c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > DORGQR generates an M-by-N real matrix Q with orthonormal columns, */
-/* > which is defined as the first N columns of a product of K elementary */
-/* > reflectors of order M */
+/* > DORGLQ generates an M-by-N real matrix Q with orthonormal rows, */
+/* > which is defined as the first M rows of a product of K elementary */
+/* > reflectors of order N */
 /* > */
-/* > Q = H(1) H(2) . . . H(k) */
+/* > Q = H(k) . . . H(2) H(1) */
 /* > */
-/* > as returned by DGEQRF. */
+/* > as returned by DGELQF. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -65,23 +64,22 @@ static aocl_int64_t c__2 = 2;
 /* > \param[in] N */
 /* > \verbatim */
 /* > N is INTEGER */
-/* > The number of columns of the matrix Q. M >= N >= 0. */
+/* > The number of columns of the matrix Q. N >= M. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] K */
 /* > \verbatim */
 /* > K is INTEGER */
 /* > The number of elementary reflectors whose product defines the */
-/* > matrix Q. N >= K >= 0. */
+/* > matrix Q. M >= K >= 0. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] A */
 /* > \verbatim */
 /* > A is DOUBLE PRECISION array, dimension (LDA,N) */
-/* > On entry, the i-th column must contain the vector which */
-/* > defines the elementary reflector H(i), for i = 1,2,...,k, as */
-/* > returned by DGEQRF in the first k columns of its array */
-/* > argument A. */
+/* > On entry, the i-th row must contain the vector which defines */
+/* > the elementary reflector H(i), for i = 1,2,...,k, as returned */
+/* > by DGELQF in the first k rows of its array argument A. */
 /* > On exit, the M-by-N matrix Q. */
 /* > \endverbatim */
 /* > */
@@ -95,7 +93,7 @@ static aocl_int64_t c__2 = 2;
 /* > \verbatim */
 /* > TAU is DOUBLE PRECISION array, dimension (K) */
 /* > TAU(i) must contain the scalar factor of the elementary */
-/* > reflector H(i), as returned by DGEQRF. */
+/* > reflector H(i), as returned by DGELQF. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -107,9 +105,9 @@ static aocl_int64_t c__2 = 2;
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK >= fla_max(1,N). */
-/* > For optimum performance LWORK >= N*NB, where NB is the */
-/* > optimal blocksize. */
+/* > The dimension of the array WORK. LWORK >= fla_max(1,M). */
+/* > For optimum performance LWORK >= M*NB, where NB is */
+/* > the optimal blocksize. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
 the routine */
@@ -130,24 +128,23 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
+/* > \date November 2011 */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a,
-                  aocl_int64_t *lda, doublereal *tau, doublereal *work, aocl_int64_t *lwork,
-                  aocl_int64_t *info)
+void dorglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
+                doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     aocl_int64_t i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
-    extern void dorg2r_fla(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *,
-                             aocl_int64_t *, doublereal *, doublereal *, aocl_int64_t *);
     aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine -- */
+    /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -173,38 +170,19 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     --work;
     /* Function Body */
     *info = 0;
-    nb = 0;
-#ifdef FLA_ENABLE_AMD_OPT
-    /* precomputed workspace size */
-    if(*n == 1)
-    {
-        work[1] = 32;
-    }
-    else if(*n <= 6)
-    {
-        work[1] = 192;
-    }
-    else
-    {
-        nb = aocl_lapack_ilaenv(&c__1, "DORGQR", " ", m, n, k, &c_n1);
-        lwkopt = fla_max(1, *n) * nb;
-        work[1] = (doublereal)lwkopt;
-    }
-#else
-    nb = aocl_lapack_ilaenv(&c__1, "DORGQR", " ", m, n, k, &c_n1);
-    lwkopt = fla_max(1, *n) * nb;
+    nb = aocl_lapack_ilaenv(&c__1, "DORGLQ", " ", m, n, k, &c_n1);
+    lwkopt = fla_max(1, *m) * nb;
     work[1] = (doublereal)lwkopt;
-#endif
     lquery = *lwork == -1;
     if(*m < 0)
     {
         *info = -1;
     }
-    else if(*n < 0 || *n > *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if(*k < 0 || *k > *n)
+    else if(*k < 0 || *k > *m)
     {
         *info = -3;
     }
@@ -212,40 +190,40 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     {
         *info = -5;
     }
-    else if(*lwork < fla_max(1, *n) && !lquery)
+    else if(*lwork < fla_max(1, *m) && !lquery)
     {
         *info = -8;
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORGQR", &i__1, (ftnlen)6);
-        return 0;
+        aocl_blas_xerbla("DORGLQ", &i__1, (ftnlen)6);
+        return;
     }
     else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if(*n <= 0)
+    if(*m <= 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     nbmin = 2;
     nx = 0;
-    iws = *n;
+    iws = *m;
     if(nb > 1 && nb < *k)
     {
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "DORGQR", " ", m, n, k, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "DORGLQ", " ", m, n, k, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *k)
         {
             /* Determine if workspace is large enough for blocked code. */
-            ldwork = *n;
+            ldwork = *m;
             iws = ldwork * nb;
             if(*lwork < iws)
             {
@@ -254,7 +232,7 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "DORGQR", " ", m, n, k, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "DORGLQ", " ", m, n, k, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -262,18 +240,18 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     if(nb >= nbmin && nb < *k && nx < *k)
     {
         /* Use blocked code after the last block. */
-        /* The first kk columns are handled by the block method. */
+        /* The first kk rows are handled by the block method. */
         ki = (*k - nx - 1) / nb * nb;
         /* Computing MIN */
         i__1 = *k;
         i__2 = ki + nb; // , expr subst
         kk = fla_min(i__1, i__2);
-        /* Set A(1:kk,kk+1:n) to zero. */
-        i__1 = *n;
-        for(j = kk + 1; j <= i__1; ++j)
+        /* Set A(kk+1:m,1:kk) to zero. */
+        i__1 = kk;
+        for(j = 1; j <= i__1; ++j)
         {
-            i__2 = kk;
-            for(i__ = 1; i__ <= i__2; ++i__)
+            i__2 = *m;
+            for(i__ = kk + 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] = 0.;
                 /* L10: */
@@ -286,13 +264,13 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
         kk = 0;
     }
     /* Use unblocked code for the last or only block. */
-    if(kk < *n)
+    if(kk < *m)
     {
         i__1 = *m - kk;
         i__2 = *n - kk;
         i__3 = *k - kk;
-        dorg2r_fla(&i__1, &i__2, &i__3, &a[kk + 1 + (kk + 1) * a_dim1], lda, &tau[kk + 1],
-                      &work[1], &iinfo);
+        dorgl2_fla(&i__1, &i__2, &i__3, &a[kk + 1 + (kk + 1) * a_dim1], lda, &tau[kk + 1], &work[1],
+                   &iinfo);
     }
     if(kk > 0)
     {
@@ -304,30 +282,29 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
             i__2 = nb;
             i__3 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__2, i__3);
-            if(i__ + ib <= *n)
+            if(i__ + ib <= *m)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
-                i__2 = *m - i__ + 1;
-                aocl_lapack_dlarft("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda,
+                i__2 = *n - i__ + 1;
+                aocl_lapack_dlarft("Forward", "Rowwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda,
                                    &tau[i__], &work[1], &ldwork);
-                /* Apply H to A(i:m,i+ib:n) from the left */
-                i__2 = *m - i__ + 1;
-                i__3 = *n - i__ - ib + 1;
-                aocl_lapack_dlarfb("Left", "No transpose", "Forward", "Columnwise", &i__2, &i__3,
-                                   &ib, &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                                   &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                /* Apply H**T to A(i+ib:m,i:n) from the right */
+                i__2 = *m - i__ - ib + 1;
+                i__3 = *n - i__ + 1;
+                aocl_lapack_dlarfb("Right", "Transpose", "Forward", "Rowwise", &i__2, &i__3, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + ib + i__ * a_dim1], lda, &work[ib + 1], &ldwork);
             }
-            /* Apply H to rows i:m of current block */
-            i__2 = *m - i__ + 1;
-            dorg2r_fla(&i__2, &ib, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1],
-                          &iinfo);
-            /* Set rows 1:i-1 of current block to zero */
-            i__2 = i__ + ib - 1;
-            for(j = i__; j <= i__2; ++j)
+            /* Apply H**T to columns i:n of current block */
+            i__2 = *n - i__ + 1;
+            dorgl2_fla(&ib, &i__2, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
+            /* Set columns 1:i-1 of current block to zero */
+            i__2 = i__ - 1;
+            for(j = 1; j <= i__2; ++j)
             {
-                i__3 = i__ - 1;
-                for(l = 1; l <= i__3; ++l)
+                i__3 = i__ + ib - 1;
+                for(l = i__; l <= i__3; ++l)
                 {
                     a[l + j * a_dim1] = 0.;
                     /* L30: */
@@ -338,7 +315,7 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
         }
     }
     work[1] = (doublereal)iws;
-    return 0;
-    /* End of DORGQR */
+    return;
+    /* End of DORGLQ */
 }
-/* lapack_dorgqr */
+/* dorglq_ */

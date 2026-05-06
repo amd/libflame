@@ -1,3 +1,6 @@
+/*
+   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
 /* ../netlib/dormhr.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -222,8 +225,8 @@ void aocl_lapack_dormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     extern /* Subroutine */
-        void
-        dormqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *,
+        int
+        lapack_dormqr(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *,
                    aocl_int64_t *, doublereal *, doublereal *, aocl_int64_t *, doublereal *,
                    aocl_int64_t *, aocl_int64_t *);
     aocl_int64_t lwkopt;
@@ -351,7 +354,7 @@ void aocl_lapack_dormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         i1 = 1;
         i2 = *ilo + 1;
     }
-    dormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
+    lapack_dormqr(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
                &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     work[1] = (doublereal)lwkopt;
     return;

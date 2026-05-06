@@ -1,7 +1,8 @@
 /*
-   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
-/* ../netlib/sormhr.f -- translated by f2c (version 20100827). You must link the resulting object
+ *     Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
+/* ../netlib/sormtr.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
@@ -9,32 +10,32 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
-/* > \brief \b SORMHR */
+/* > \brief \b SORMTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
-/* > Download SORMHR + dependencies */
+/* > Download SORMTR + dependencies */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormhr.
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormtr.
  * f"> */
 /* > [TGZ]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormhr.
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormtr.
  * f"> */
 /* > [ZIP]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormhr.
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormtr.
  * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE SORMHR( SIDE, TRANS, M, N, ILO, IHI, A, LDA, TAU, C, */
-/* LDC, WORK, LWORK, INFO ) */
+/* SUBROUTINE SORMTR( SIDE, UPLO, TRANS, M, N, A, LDA, TAU, C, LDC, */
+/* WORK, LWORK, INFO ) */
 /* .. Scalar Arguments .. */
-/* CHARACTER SIDE, TRANS */
-/* INTEGER IHI, ILO, INFO, LDA, LDC, LWORK, M, N */
+/* CHARACTER SIDE, TRANS, UPLO */
+/* INTEGER INFO, LDA, LDC, LWORK, M, N */
 /* .. */
 /* .. Array Arguments .. */
 /* REAL A( LDA, * ), C( LDC, * ), TAU( * ), */
@@ -45,7 +46,7 @@ static aocl_int64_t c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > SORMHR overwrites the general real M-by-N matrix C with */
+/* > SORMTR overwrites the general real M-by-N matrix C with */
 /* > */
 /* > SIDE = 'L' SIDE = 'R' */
 /* > TRANS = 'N': Q * C C * Q */
@@ -53,9 +54,12 @@ static aocl_int64_t c_n1 = -1;
 /* > */
 /* > where Q is a real orthogonal matrix of order nq, with nq = m if */
 /* > SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of */
-/* > IHI-ILO elementary reflectors, as returned by SGEHRD: */
+/* > nq-1 elementary reflectors, as returned by SSYTRD: */
 /* > */
-/* > Q = H(ilo) H(ilo+1) . . . H(ihi-1). */
+/* > if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);
+ */
+/* > */
+/* > if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1). */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -65,6 +69,16 @@ static aocl_int64_t c_n1 = -1;
 /* > = 'L': apply Q or Q**T from the Left;
  */
 /* > = 'R': apply Q or Q**T from the Right. */
+/* > \endverbatim */
+/* > */
+/* > \param[in] UPLO */
+/* > \verbatim */
+/* > UPLO is CHARACTER*1 */
+/* > = 'U': Upper triangle of A contains elementary reflectors */
+/* > from SSYTRD;
+ */
+/* > = 'L': Lower triangle of A contains elementary reflectors */
+/* > from SSYTRD. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TRANS */
@@ -87,32 +101,13 @@ static aocl_int64_t c_n1 = -1;
 /* > The number of columns of the matrix C. N >= 0. */
 /* > \endverbatim */
 /* > */
-/* > \param[in] ILO */
-/* > \verbatim */
-/* > ILO is INTEGER */
-/* > \endverbatim */
-/* > */
-/* > \param[in] IHI */
-/* > \verbatim */
-/* > IHI is INTEGER */
-/* > */
-/* > ILO and IHI must have the same values as in the previous call */
-/* > of SGEHRD. Q is equal to the unit matrix except in the */
-/* > submatrix Q(ilo+1:ihi,ilo+1:ihi). */
-/* > If SIDE = 'L', then 1 <= ILO <= IHI <= M, if M > 0, and */
-/* > ILO = 1 and IHI = 0, if M = 0;
- */
-/* > if SIDE = 'R', then 1 <= ILO <= IHI <= N, if N > 0, and */
-/* > ILO = 1 and IHI = 0, if N = 0. */
-/* > \endverbatim */
-/* > */
 /* > \param[in] A */
 /* > \verbatim */
 /* > A is REAL array, dimension */
 /* > (LDA,M) if SIDE = 'L' */
 /* > (LDA,N) if SIDE = 'R' */
 /* > The vectors which define the elementary reflectors, as */
-/* > returned by SGEHRD. */
+/* > returned by SSYTRD. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDA */
@@ -129,7 +124,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > (M-1) if SIDE = 'L' */
 /* > (N-1) if SIDE = 'R' */
 /* > TAU(i) must contain the scalar factor of the elementary */
-/* > reflector H(i), as returned by SGEHRD. */
+/* > reflector H(i), as returned by SSYTRD. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] C */
@@ -185,46 +180,22 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sormhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ilo,
-             aocl_int_t *ihi, real *a, aocl_int_t *lda, real *tau, real *c__, aocl_int_t *ldc,
-             real *work, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sormhr(side, trans, m, n, ilo, ihi, a, lda, tau, c__, ldc, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sormhr(side, trans, &m_64, &n_64, &ilo_64, &ihi_64, a, &lda_64, tau, c__, &ldc_64,
-                       work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                        aocl_int64_t *ilo, aocl_int64_t *ihi, real *a, aocl_int64_t *lda, real *tau,
-                        real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
+void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, real *a,
+                aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
+                aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    aocl_int64_t i1, i2, nb, mi, nh, ni, nq, nw;
+    aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
     logical left;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
+    logical upper;
     aocl_int64_t lwkopt;
     logical lquery;
     extern /* Subroutine */
@@ -262,8 +233,8 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     --work;
     /* Function Body */
     *info = 0;
-    nh = *ihi - *ilo;
     left = lsame_(side, "L", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
     if(left)
@@ -280,47 +251,65 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         *info = -1;
     }
-    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if(*m < 0)
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
-    else if(*n < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, nq))
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if(*ihi < fla_min(*ilo, nq) || *ihi > nq)
-    {
-        *info = -6;
-    }
     else if(*lda < fla_max(1, nq))
     {
-        *info = -8;
+        *info = -7;
     }
     else if(*ldc < fla_max(1, *m))
     {
-        *info = -11;
+        *info = -10;
     }
     else if(*lwork < fla_max(1, nw) && !lquery)
     {
-        *info = -13;
+        *info = -12;
     }
     if(*info == 0)
     {
-        if(left)
+        if(upper)
         {
-            nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, &nh, n, &nh, &c_n1);
+            if(left)
+            {
+                i__2 = *m - 1;
+                i__3 = *m - 1;
+                nb = aocl_lapack_ilaenv(&c__1, "SORMQL", ch__1, &i__2, n, &i__3, &c_n1);
+            }
+            else
+            {
+                i__2 = *n - 1;
+                i__3 = *n - 1;
+                nb = aocl_lapack_ilaenv(&c__1, "SORMQL", ch__1, m, &i__2, &i__3, &c_n1);
+            }
         }
         else
         {
-            nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, m, &nh, &nh, &c_n1);
+            if(left)
+            {
+                i__2 = *m - 1;
+                i__3 = *m - 1;
+                nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, &i__2, n, &i__3, &c_n1);
+            }
+            else
+            {
+                i__2 = *n - 1;
+                i__3 = *n - 1;
+                nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, m, &i__2, &i__3, &c_n1);
+            }
         }
         lwkopt = fla_max(1, nw) * nb;
         work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
@@ -328,7 +317,7 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     if(*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("SORMHR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("SORMTR", &i__2, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -336,29 +325,47 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         return;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0 || nh == 0)
+    if(*m == 0 || *n == 0 || nq == 1)
     {
         work[1] = 1.f;
         return;
     }
     if(left)
     {
-        mi = nh;
+        mi = *m - 1;
         ni = *n;
-        i1 = *ilo + 1;
-        i2 = 1;
     }
     else
     {
         mi = *m;
-        ni = nh;
-        i1 = 1;
-        i2 = *ilo + 1;
+        ni = *n - 1;
     }
-    lapack_sormqr(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
-               &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+    if(upper)
+    {
+        /* Q was determined by a call to SSYTRD with UPLO = 'U' */
+        i__2 = nq - 1;
+        aocl_lapack_sormql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
+                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
+    }
+    else
+    {
+        /* Q was determined by a call to SSYTRD with UPLO = 'L' */
+        if(left)
+        {
+            i1 = 2;
+            i2 = 1;
+        }
+        else
+        {
+            i1 = 1;
+            i2 = 2;
+        }
+        i__2 = nq - 1;
+        lapack_sormqr(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
+                   &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+    }
     work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     return;
-    /* End of SORMHR */
+    /* End of SORMTR */
 }
-/* sormhr_ */
+/* sormtr_ */

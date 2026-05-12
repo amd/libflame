@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -33,6 +33,7 @@ void fla_test_lartg(integer argc, char **argv, test_params_t *params)
         fla_test_output_info("\n");
         num_types = params->aux_paramslist[0].num_data_types;
         n_repeats = params->aux_paramslist[0].num_repeats;
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {

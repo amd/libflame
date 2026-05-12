@@ -8,11 +8,153 @@ else()
     set(CTEST_WORKING_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 endif()
 
-# Added test to run main test suite
+# ── Per-API parallel tests ───────────────────────────────────────────────────
+# Each API gets its own CTest entry so that 'ctest -j N' can run them in
+# parallel.  For each API we generate a small operations file that marks
+# only that API with "2" (run-only-this) and everything else with "0".
+# The test binary's existing check_flag=2 logic picks it up.
+
+# Parses an operations file and returns the list of enabled APIs (flag 1 or 2)
+# found under the "Individual API's" section.
+#   OPS_FILE    - path to the operations file
+#   OUT_VAR     - variable name to store the resulting API list in the parent scope
+macro(parse_operations_file OPS_FILE OUT_VAR)
+    if(NOT EXISTS "${OPS_FILE}")
+        message(FATAL_ERROR "Missing operations file: ${OPS_FILE}")
+    endif()
+
+    set(${OUT_VAR})
+    file(STRINGS "${OPS_FILE}" _OPS_LINES)
+    set(_FOUND_INDIVIDUAL OFF)
+    foreach(_LINE IN LISTS _OPS_LINES)
+        if(NOT _FOUND_INDIVIDUAL)
+            if(_LINE MATCHES "#.*[Ii]ndividual API")
+                set(_FOUND_INDIVIDUAL ON)
+            endif()
+        else()
+            if(_LINE MATCHES "^[ \t]*#")
+                continue()
+            endif()
+            if(_LINE MATCHES "^[ \t]*[12][ \t]+([^ \t#]+)")
+                list(APPEND ${OUT_VAR} "${CMAKE_MATCH_1}")
+            endif()
+        endif()
+    endforeach()
+
+    list(REMOVE_DUPLICATES ${OUT_VAR})
+    if(NOT ${OUT_VAR})
+        message(FATAL_ERROR
+            "Failed to derive ${OUT_VAR} from ${OPS_FILE} "
+            "(no enabled APIs found under the 'Individual API's' section)")
+    endif()
+endmacro()
+
+parse_operations_file("${CMAKE_CURRENT_LIST_DIR}/input.global.operations" MAIN_TEST_API_LIST)
+parse_operations_file("${CMAKE_CURRENT_LIST_DIR}/input.global.operations.lapacke" LAPACKE_API_LIST)
+
+set(MAIN_TEST_OPS_DIR "${CMAKE_CURRENT_BINARY_DIR}/per_api_ops")
+file(MAKE_DIRECTORY "${MAIN_TEST_OPS_DIR}")
+
+# Group headers (always disabled for per-API runs)
+set(OPS_GROUP_HEADER
+"#   Enable/Disable group of API's
+0   LIN
+0   EIG
+0   SVD
+0   AUX
+#   Individual API's\n")
+
+# Creates a symlink at LINK_PATH pointing to TARGET_PATH.
+# On Windows without admin/Developer Mode, symlinks fail for directories,
+# so we fall back to a full directory copy.
+macro(create_link_or_copy TARGET_PATH LINK_PATH)
+    if(NOT EXISTS "${LINK_PATH}")
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E create_symlink
+                "${TARGET_PATH}"
+                "${LINK_PATH}"
+            RESULT_VARIABLE _SYMLINK_RESULT
+        )
+        if(NOT _SYMLINK_RESULT EQUAL 0)
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    "${TARGET_PATH}"
+                    "${LINK_PATH}"
+            )
+        endif()
+    endif()
+endmacro()
+
+# Creates a per-API working directory with an ops file and config symlink.
+macro(setup_per_api_dir DIR_PATH API_LIST_VAR TARGET_API OPS_FILENAME SHARED_CONFIG_DIR)
+    file(MAKE_DIRECTORY "${DIR_PATH}")
+    set(_OPS_CONTENT "${OPS_GROUP_HEADER}")
+    foreach(_OTHER_API IN LISTS ${API_LIST_VAR})
+        if("${_OTHER_API}" STREQUAL "${TARGET_API}")
+            string(APPEND _OPS_CONTENT "2   ${_OTHER_API}\n")
+        else()
+            string(APPEND _OPS_CONTENT "0   ${_OTHER_API}\n")
+        endif()
+    endforeach()
+    file(WRITE "${DIR_PATH}/${OPS_FILENAME}" "${_OPS_CONTENT}")
+    create_link_or_copy("${SHARED_CONFIG_DIR}" "${DIR_PATH}/config")
+endmacro()
+
 foreach(CONFIG_TYPE "long" "medium" "short" "micro")
-    add_test(NAME main_test_${CONFIG_TYPE} COMMAND ${CTEST_RUN_WRAPPER} ${CTEST_MAIN_COMMAND}  --config-dir=${CONFIG_TYPE} WORKING_DIRECTORY ${CTEST_WORKING_DIR})
-    add_test(NAME lapacke_test_col_major_${CONFIG_TYPE} COMMAND ${CTEST_RUN_WRAPPER} ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --interface=lapacke_column WORKING_DIRECTORY ${CTEST_WORKING_DIR})
-    add_test(NAME lapacke_test_row_major_${CONFIG_TYPE} COMMAND ${CTEST_RUN_WRAPPER} ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --interface=lapacke_row WORKING_DIRECTORY ${CTEST_WORKING_DIR})
+
+    # Create shared config symlink once per CONFIG_TYPE; all per-API dirs link to it
+    file(MAKE_DIRECTORY "${MAIN_TEST_OPS_DIR}/${CONFIG_TYPE}")
+    set(SHARED_CONFIG_DIR "${MAIN_TEST_OPS_DIR}/${CONFIG_TYPE}/_shared_config")
+    create_link_or_copy("${CMAKE_CURRENT_SOURCE_DIR}/config" "${SHARED_CONFIG_DIR}")
+
+    # LAPACK interface tests (per-API)
+    foreach(API_NAME IN LISTS MAIN_TEST_API_LIST)
+        set(API_OPS_DIR "${MAIN_TEST_OPS_DIR}/${CONFIG_TYPE}/${API_NAME}")
+        setup_per_api_dir("${API_OPS_DIR}" MAIN_TEST_API_LIST "${API_NAME}" "input.global.operations" "${SHARED_CONFIG_DIR}")
+
+        add_test(
+            NAME main_test_${CONFIG_TYPE}_${API_NAME}
+            COMMAND ${CTEST_RUN_WRAPPER} ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE}
+            WORKING_DIRECTORY "${API_OPS_DIR}"
+        )
+        set_tests_properties(main_test_${CONFIG_TYPE}_${API_NAME} PROPERTIES
+            LABELS "main_test;main_test_${CONFIG_TYPE};${API_NAME}"
+            FAIL_REGULAR_EXPRESSION "FAIL"
+        )
+    endforeach()
+
+    # LAPACKE interface tests (per-API, using LAPACKE-specific API list)
+    # Column-major and row-major tests get separate working directories so
+    # that ctest -j cannot race on files the binary writes (BRT artifacts, etc.).
+    foreach(API_NAME IN LISTS LAPACKE_API_LIST)
+        set(LAPACKE_COL_DIR "${MAIN_TEST_OPS_DIR}/${CONFIG_TYPE}/lapacke_${API_NAME}/col")
+        set(LAPACKE_ROW_DIR "${MAIN_TEST_OPS_DIR}/${CONFIG_TYPE}/lapacke_${API_NAME}/row")
+        setup_per_api_dir("${LAPACKE_COL_DIR}" LAPACKE_API_LIST "${API_NAME}" "input.global.operations.lapacke" "${SHARED_CONFIG_DIR}")
+        setup_per_api_dir("${LAPACKE_ROW_DIR}" LAPACKE_API_LIST "${API_NAME}" "input.global.operations.lapacke" "${SHARED_CONFIG_DIR}")
+
+        # LAPACKE column-major
+        add_test(
+            NAME lapacke_test_col_major_${CONFIG_TYPE}_${API_NAME}
+            COMMAND ${CTEST_RUN_WRAPPER} ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --interface=lapacke_column
+            WORKING_DIRECTORY "${LAPACKE_COL_DIR}"
+        )
+        set_tests_properties(lapacke_test_col_major_${CONFIG_TYPE}_${API_NAME} PROPERTIES
+            LABELS "lapacke_test;lapacke_col_${CONFIG_TYPE};${API_NAME}"
+            FAIL_REGULAR_EXPRESSION "FAIL"
+        )
+
+        # LAPACKE row-major
+        add_test(
+            NAME lapacke_test_row_major_${CONFIG_TYPE}_${API_NAME}
+            COMMAND ${CTEST_RUN_WRAPPER} ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --interface=lapacke_row
+            WORKING_DIRECTORY "${LAPACKE_ROW_DIR}"
+        )
+        set_tests_properties(lapacke_test_row_major_${CONFIG_TYPE}_${API_NAME} PROPERTIES
+            LABELS "lapacke_test;lapacke_row_${CONFIG_TYPE};${API_NAME}"
+            FAIL_REGULAR_EXPRESSION "FAIL"
+        )
+    endforeach()
+
 endforeach()
 
 #Example to add further tests to ctest

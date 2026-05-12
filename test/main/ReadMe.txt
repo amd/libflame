@@ -512,6 +512,7 @@ NOTE:
 
    NOTE: For detailed documentation, see test/main/validation_ctests/ReadMe.txt
 
+
 17. Runtime Test Arguments (extra_args.txt)
 
    This feature adds extra command-line flags to main-suite CTest runs (for example
@@ -545,3 +546,56 @@ NOTE:
      ./test_lapack.x directly).
    - Does not apply to repeatability or Bit Reproducibility CTest flows (section 14).
    - Avoid duplicating flags already present on a given CTest.
+
+18. Parallel CTest Execution (Per-API Test Splitting)
+
+   The test suite supports parallel execution of config-based tests at the per-API
+   granularity through CTest. Instead of running one monolithic test per config type
+   (long/medium/short/micro), each API is registered as a separate CTest entry, allowing
+   `ctest -j N` to run multiple APIs in parallel and significantly reducing wall-clock
+   test time.
+
+   How it works:
+   At CMake configure time, the file `main_ctest.cmake` parses `input.global.operations`
+   and `input.global.operations.lapacke` to extract the list of enabled APIs. For each
+   API and each config type (long, medium, short, micro), a dedicated working directory
+   is created under `<build_dir>/test/main/per_api_ops/` with an operations file that
+   enables only that single API (flag=2). The shared `config/` directory is symlinked
+   (or copied as fallback) into each per-API directory.
+
+   Limitation:
+   The per-API CTest splitting logic currently derives its API list only from APIs that
+   are individually enabled in `input.global.operations` / `input.global.operations.lapacke`.
+   If those files enable only a subgroup such as LIN, EIG, SVD, or AUX, that subgroup is
+   not expanded into per-API CTest entries by the current `main_ctest.cmake` logic.
+   To use per-API CTest splitting, enable the desired APIs explicitly in the operations
+   files rather than relying only on subgroup selection.
+
+   Running parallel tests:
+
+     # Run all long-config tests in parallel with 4 jobs (Linux)
+     $ ctest -R main_test_long -j4 -V
+
+     # On Windows, specify the build configuration with -C
+     $ ctest -C Release -R main_test_long -j4 -V
+
+   Controlling threads per API:
+   The environment variable OMP_NUM_THREADS can be used to control the number of
+   threads each API test uses. This is especially useful with parallel jobs (-jN)
+   to balance total CPU utilisation.
+
+     # Run 8 API tests in parallel, each limited to 4 OpenMP threads
+     $ OMP_NUM_THREADS=4 ctest -R main_test_long -j8 -V
+
+   Notes:
+   - The number of parallel jobs (-jN) can be tuned based on available CPU cores
+     and memory. Each API test runs the full test binary for that single API, so
+     memory usage scales with the number of parallel jobs.
+   - When using ctest -j with OMP_NUM_THREADS, ensure that the product of parallel
+     jobs and threads per job does not exceed available CPU cores to avoid
+     oversubscription (e.g., on a 32-core machine: -j8 with OMP_NUM_THREADS=4).
+   - The per-API operations files and symlinks are generated during CMake configure
+     time. A reconfigure (re-run cmake) is needed if `input.global.operations` or
+     `input.global.operations.lapacke` is modified.
+   - On Windows, the config directory is copied instead of symlinked if symlink
+     creation fails.

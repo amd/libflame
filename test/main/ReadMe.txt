@@ -511,3 +511,37 @@ NOTE:
      $ ctest -L getrf -R medium # Run all GETRF medium size tests
 
    NOTE: For detailed documentation, see test/main/validation_ctests/ReadMe.txt
+
+17. Runtime Test Arguments (extra_args.txt)
+
+   This feature adds extra command-line flags to main-suite CTest runs (for example
+   runtime selection of --interface= as in section 11) without CMake reconfigure or
+   rebuild. Flags are read from test/main/extra_args.txt and appended after each test's
+   normal arguments.
+
+   Usage:
+   1. Edit test/main/extra_args.txt in the libFLAME source tree.
+   2. Add one or more lines of flags (blank lines and
+      lines starting with # are ignored).
+   3. From the build directory, run ctest again.
+
+   Example:
+   In extra_args.txt:
+     --interface=lapacke_column --test-mode=perf
+
+   Running tests:
+     $ ctest -R main_test_short
+
+   The above appends those flags to each matching main-suite CTest that uses this
+   mechanism.
+
+   Benefits:
+   - Change behavior at ctest time with no CMake reconfigure.
+   - One file applies the same flags across many main-suite tests (interface, perf mode,
+     benchmark options; see sections 11, 12, and 15).
+
+   Note:
+   - Applies only to main-suite CTests wired through test/main (not when you run
+     ./test_lapack.x directly).
+   - Does not apply to repeatability or Bit Reproducibility CTest flows (section 14).
+   - Avoid duplicating flags already present on a given CTest.

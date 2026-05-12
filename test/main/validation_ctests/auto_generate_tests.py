@@ -551,8 +551,8 @@ def generate_cmake_tests_for_api(api_name, api_def, output_file, global_config=N
                 # Write test definition
                 out.write(f"add_test(NAME {test_name}\n")
                 out.write(
-                    f"         COMMAND ${{CTEST_MAIN_COMMAND}} {api_name} "
-                    f"{prec_string} {cmd_params}\n"
+                    f"         COMMAND ${{CTEST_RUN_WRAPPER}} ${{CTEST_MAIN_COMMAND}} "
+                    f"{api_name} {prec_string} {cmd_params}\n"
                 )
                 out.write(f"         WORKING_DIRECTORY ${{CTEST_WORKING_DIR}})\n")
                 out.write(f"set_tests_properties({test_name} PROPERTIES\n")

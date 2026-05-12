@@ -1,0 +1,18 @@
+###############################################################################
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+###############################################################################
+# Runtime extra CLI tokens for CTest runs that launch the main test binary through
+# scripts/run_with_extra_args.py (yaml_generated and other main-suite tests; not BRT).
+# Edit this file, then run ctest again; CMake reconfigure is not required.
+# Not read when you invoke test_lapack.x directly from the shell.
+#
+# Put space-separated flags on each non-comment line (see test/main/ReadMe.txt).
+# Typical use: one line selecting interface or test mode for all those CTests, e.g.
+#   --interface=lapacke_column --test-mode=perf
+#
+# Examples (uncomment or replace with your own line):
+# --interface=lapacke_column
+# --interface=lapacke_row
+# --interface=lapack --test-mode=perf
+# --interface=cpp
+# --test-mode=perf

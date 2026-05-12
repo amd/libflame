@@ -145,6 +145,9 @@ target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 add_subdirectory(src)
 add_subdirectory(validate_src)
 
+# Wrapper prepends args from test/main/extra_args.txt at runtime (see ReadMe.txt).
+set(CTEST_RUN_WRAPPER "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_with_extra_args.py")
+
 include(main_ctest.cmake)
 include(conformance_test.cmake)
 include(overflow_underflow_test.cmake)

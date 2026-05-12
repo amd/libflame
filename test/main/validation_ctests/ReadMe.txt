@@ -175,3 +175,13 @@ Generated CMake test files are in
 The test generation is integrated into the CMake build system via test/main/CMakeLists.txt.
 Tests are generated at configure time in the build directory and are not committed to
 the source tree.
+
+
+## Optional extra args file (runtime)
+
+Main-suite CTests under test/main that launch the main test binary use
+`scripts/run_with_extra_args.py` (via Python3), including yaml_generated tests.
+Repeatability (BRT) CTests invoke the binary directly, so `extra_args.txt` does
+not apply to them.
+Tokens from `test/main/extra_args.txt` are appended after each test's normal
+arguments. Re-run ctest after editing; CMake reconfigure is not required.

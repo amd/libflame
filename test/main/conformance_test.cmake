@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 set(NEGATIVE_TEST_CASES
             "potri sdcz X 10 10 1 --einfo=-1"
@@ -594,7 +594,7 @@ set(CORNER_TEST_CASES
             "bdsqr sdcz U 5 5 5 5 5 5 5 1"
         )
 
-set(MIN_WORK_TEST_CASES 
+set(MIN_WORK_TEST_CASES
                 "gehrd sdcz 10 1 5 10 10 1 --einfo=0"
                 "gehrd sdcz 80 5 45 80 100 1 --einfo=0"
                 "gesvd d A S 124 15 124 124 15 169 1"
@@ -602,7 +602,7 @@ set(MIN_WORK_TEST_CASES
                 "gesvd d A N 20 17 20 20 17 85 1"
                 "gesvd d S A 85 21 85 85 21 148 1"
                 "gesvd d S S 124 15 124 124 15 169 1"
-                "gesvd d S N 20 17 20 20 17 85 1" 
+                "gesvd d S N 20 17 20 20 17 85 1"
                 "gesvd d O A 85 21 85 85 21 148 1"
                 "gesvd d O S 124 15 124 124 15 169 1"
                 "gesvd d O N 20 17 20 20 17 85 1"
@@ -1665,7 +1665,7 @@ foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${neg_test_cases})
     string(REGEX MATCH "^([^ ]+)" TEST_NAME ${neg_test_cases})
     set(TEST_NAME CONF_NEGATIVE_TEST_CASE_${TEST_NUM}_${TEST_NAME})
-    add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
+    add_test(${TEST_NAME} ${CTEST_RUN_WRAPPER} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
     set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")
 endforeach()
@@ -1674,7 +1674,7 @@ foreach(corner_test_cases IN LISTS CORNER_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${corner_test_cases})
     string(REGEX MATCH "^([^ ]+)" TEST_NAME ${corner_test_cases})
     set(TEST_NAME CONF_CORNER_TEST_CASE_${TEST_NUM}_${TEST_NAME})
-    add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
+    add_test(${TEST_NAME} ${CTEST_RUN_WRAPPER} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
     set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")
 endforeach()
@@ -1683,7 +1683,7 @@ foreach(min_work_test_cases IN LISTS MIN_WORK_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${min_work_test_cases})
     string(REGEX MATCH "^([^ ]+)" TEST_NAME ${min_work_test_cases})
     set(TEST_NAME CONF_MIN_WORK_TEST_CASE_${TEST_NUM}_${TEST_NAME})
-    add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
+    add_test(${TEST_NAME} ${CTEST_RUN_WRAPPER} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
     set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")
 endforeach()
@@ -1692,7 +1692,7 @@ foreach(extremevalue_test_cases IN LISTS EXTREMEVALUE_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${extremevalue_test_cases})
     string(REGEX MATCH "^([^ ]+)" TEST_NAME ${extremevalue_test_cases})
     set(TEST_NAME CONF_EXTREMEVALUE_TEST_CASE_${TEST_NUM}_${TEST_NAME})
-    add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
+    add_test(${TEST_NAME} ${CTEST_RUN_WRAPPER} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
     set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")
 endforeach()

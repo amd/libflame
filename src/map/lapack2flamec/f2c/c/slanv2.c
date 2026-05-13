@@ -1,3 +1,6 @@
+/******************************************************************************
+  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ * ***************************************************************************/
 /* slanv2.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -135,7 +138,7 @@ void slanv2_(real *a, real *b, real *c__, real *d__, real *rt1r, real *rt1i, rea
     /* Local variables */
     real p, z__, aa, bb, cc, dd, cs1, sn1, sab, sac, eps, tau, temp, scale, bcmax, bcmis, sigma;
     aocl_int64_t count, i__1;
-    real safmn2, safmx2;
+    real safmn2, safmx2, t1, t2;
     extern real slapy2_(real *, real *), slamch_(char *);
     real safmin;
     /* -- LAPACK auxiliary routine -- */
@@ -248,16 +251,36 @@ void slanv2_(real *a, real *b, real *c__, real *d__, real *rt1r, real *rt1i, rea
             *sn = -(p / (tau * *cs)) * r_sign(&c_b6, &sigma);
             /* Compute [ AA BB ] = [ A B ] [ CS -SN ] */
             /* [ CC DD ] [ C D ] [ SN CS ] */
-            aa = *a * *cs + *b * *sn;
-            bb = -(*a) * *sn + *b * *cs;
-            cc = *c__ * *cs + *d__ * *sn;
-            dd = -(*c__) * *sn + *d__ * *cs;
+            /* Separate multiply operations, Each multiply result is rounded once
+              Addition happens only after the two rounded intermediates exist
+              This prevents the compiler from doing:
+              FMA contraction (fused multiply add) */
+            t1 = *a * *cs;
+            t2 = *b * *sn;
+            aa = t1 + t2;
+            t1 = *b * *cs;
+            t2 = *a * *sn;
+            bb = t1 - t2;
+            t1 = *c__ * *cs;
+            t2 = *d__ * *sn;
+            cc = t1 + t2;
+            t1 = *d__ * *cs;
+            t2 = *c__ * *sn;
+            dd = t1 - t2;
             /* Compute [ A B ] = [ CS SN ] [ AA BB ] */
             /* [ C D ] [-SN CS ] [ CC DD ] */
-            *a = aa * *cs + cc * *sn;
-            *b = bb * *cs + dd * *sn;
-            *c__ = -aa * *sn + cc * *cs;
-            *d__ = -bb * *sn + dd * *cs;
+            t1 = aa * *cs;
+            t2 = cc * *sn;
+            *a = t1 + t2;
+            t1 = bb * *cs;
+            t2 = dd * *sn;
+            *b = t1 + t2;
+            t1 = cc * *cs;
+            t2 = aa * *sn;
+            *c__ = t1 - t2;
+            t1 = dd * *cs;
+            t2 = bb * *sn;
+            *d__ = t1 - t2;
             temp = (*a + *d__) * .5f;
             *a = temp;
             *d__ = temp;

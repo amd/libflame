@@ -23,7 +23,7 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
     integer nrhs = 1, incx = 1, incy = 1;
     char trans_A, trans_B;
     integer info = 0;
-    double residual, resid1 = 0., resid2 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
 
     /* Early return conditions */
     if(m == 0)
@@ -57,7 +57,7 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
     /* Copy lower or upper triangular matrix based on uplo to buff_A, buff_B */
     copy_matrix(datatype, uplo, m, m, A_test, lda, buff_A, m);
     copy_matrix(datatype, uplo, m, m, A_test, lda, buff_B, m);
-    copy_matrix(datatype, "full", m, m, A, lda, A_save, lda);
+    copy_matrix(datatype, "full", lda, m, A, lda, A_save, lda);
 
     copy_vector(datatype, m, b, 1, b_test, 1);
 
@@ -204,6 +204,13 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
             break;
         }
     }
+
+    /* Test 3: Ensure unused triangle was not modified */
+    resid3 = compare_matrix(datatype, same_char(*uplo, 'U') ? "L" : "U", m, m, A_save, lda, A_test, lda);
+
+    /* Test 4: Check padding rows not modified */
+    resid4 = check_padding(datatype, m, m, A_test, lda);
+
     /* Free up buffers */
     free_matrix(b);
     free_matrix(x);
@@ -214,7 +221,11 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
     free_matrix(buff_B);
 
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
     FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

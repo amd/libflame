@@ -266,7 +266,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
                     integer ldz, integer datatype, double err_thresh, char imatrix, void *params)
 {
     double residual = err_thresh, resid1 = 0., resid2 = 0.;
-    double resid3 = 0., resid4 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.;
     double res_gghrd[6];
 
     res_gghrd[0] = res_gghrd[1] = res_gghrd[2] = 0.;
@@ -552,9 +552,16 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
         }
     }
 
+    /* Test 5: Check padding rows of H not modified */
+    resid5 = check_padding(datatype, n, n, H_test, ldh);
+    /* Test 6: Check padding rows of T not modified */
+    resid6 = check_padding(datatype, n, n, T_test, ldt);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
+    residual = fla_test_max(resid6, residual);
 /* TODO: Enable GGHRD Test case */
 #if 0
     if(same_char(*compq, 'I') && same_char(*compz, 'I'))
@@ -573,6 +580,8 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
+    FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
 
 #if 0
     FLA_PRINT_SUBTEST_STATUS(res_gghrd[0], err_thresh, "5.01");

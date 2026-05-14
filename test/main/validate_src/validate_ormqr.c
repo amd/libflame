@@ -10,10 +10,10 @@
 #include "test_prototype.h"
 
 void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
-                    integer lda, void *C, void *Tau, integer ldc, void *C_test, integer datatype,
-                    double err_thresh, char imatrix, void *params)
+                    void *A_save, integer lda, void *C, void *Tau, void *Tau_save, integer ldc,
+                    void *C_test, integer datatype, double err_thresh, char imatrix, void *params)
 {
-    double residual = 0.;
+    double residual = 0., resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
     char norm = '1';
     char trans_g;
     integer lwork = -1;
@@ -275,5 +275,24 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
     free_matrix(Q);
     free_matrix(CC);
     free_vector(work);
+
+    /* Test 2: Check padding rows not modified on output matrix C */
+    resid2 = check_padding(datatype, m, n, C, ldc);
+
+    /* Test 3: Ensure input matrix A (reflectors) was not modified. */
+    resid3 = compare_matrix(datatype, "full", same_char(side, 'L') ? m : n, k,
+                            A_save, lda, A, lda);
+
+    /* Test 4: Ensure input vector TAU was not modified. */
+    resid4 = compare_vector(datatype, k, Tau, 1, 1, Tau_save, 1);
+
+    resid1 = residual;
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
+    residual = fla_test_max(residual, resid4);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

@@ -48,7 +48,7 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
     integer ldx, norm_rows = *rank < n ? n : m;
     ldx = ldb;
     double residual, resid1 = 0., resid2 = 0.;
-    double resid3 = 0., resid4 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0.;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B_res, n);
 
@@ -115,13 +115,19 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
      */
 
     free_matrix(B_res);
+
+    /* Test 5: Check padding rows not modified */
+    resid5 = check_padding(datatype, fla_max(m, n), nrhs, X, ldb);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
 
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
 }

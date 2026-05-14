@@ -17,7 +17,7 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
 {
     void *I_mat = NULL;
     char NORM = '1';
-    double residual = 0;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
     if(n == 0)
     {
         FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
@@ -48,7 +48,7 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
                 fla_lapack_slaset("U", &n, &n, &s_zero, &s_zero, I_mat, &lda);
             }
             compute_matrix_norm(datatype, NORM, n, n, I_mat, lda, &norm, imatrix, NULL);
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
             break;
         }
         case DOUBLE:
@@ -70,7 +70,7 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
                 fla_lapack_dlaset("U", &n, &n, &d_zero, &d_zero, I_mat, &lda);
             }
             compute_matrix_norm(datatype, NORM, n, n, I_mat, lda, &norm, imatrix, NULL);
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
             break;
         }
         case COMPLEX:
@@ -92,7 +92,7 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
                 fla_lapack_claset("U", &n, &n, &c_zero, &c_zero, I_mat, &lda);
             }
             compute_matrix_norm(datatype, NORM, n, n, I_mat, lda, &norm, imatrix, NULL);
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
@@ -114,13 +114,23 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
                 fla_lapack_zlaset("U", &n, &n, &z_zero, &z_zero, I_mat, &lda);
             }
             compute_matrix_norm(datatype, NORM, n, n, I_mat, lda, &norm, imatrix, NULL);
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
             break;
         }
     }
 
+    /* Test 2: Ensure unused triangle was not modified */
+    resid2 = compare_matrix(datatype, same_char(uplo, 'U') ? "L" : "U", n, n, A, lda, A_inv, lda);
+
+    /* Test 3: Check padding rows not modified */
+    resid3 = check_padding(datatype, n, n, A_inv, lda);
+
     free_vector(I_mat);
 
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

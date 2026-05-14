@@ -88,7 +88,7 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
                     double err_thresh, void *params)
 {
     double residual = err_thresh;
-    double resid1 = 0., resid2, resid3;
+    double resid1 = 0., resid2, resid3, resid4 = 0.;
     integer k = fla_min(m, n);
     integer kq, kp;
     void *Q = NULL, *P = NULL, *B = NULL, *A_recon = NULL;
@@ -178,12 +178,17 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
     resid2 = check_orthogonality(datatype, Q, m, k, m, params);
     resid3 = (double)check_orthogonal_matrix('N', datatype, P, k, n, k, k, params);
 
+    /* Test 4: Check padding rows not modified */
+    resid4 = check_padding(datatype, m, n, A_test, ldat);
+
     residual = fla_max(resid1, resid2);
     residual = fla_max(residual, resid3);
+    residual = fla_max(residual, resid4);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 
     free_matrix(Q);
     free_matrix(P);

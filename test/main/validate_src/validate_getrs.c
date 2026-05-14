@@ -13,12 +13,14 @@ extern double perf;
 extern double time_min;
 
 void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A, integer lda,
-                    void *B, integer ldb, void *X, integer datatype, double err_thresh,
-                    char imatrix, void *scal, void *params)
+                    void *A_fact, void *A_fact_save, integer *IPIV, integer *IPIV_save, void *B,
+                    integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
+                    void *scal, void *params)
 {
     void *work = NULL, *Y = NULL;
     char NORM = '1';
-    double residual = 0.;
+    integer i;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -61,7 +63,7 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
 
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case DOUBLE:
@@ -88,7 +90,7 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
 
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case COMPLEX:
@@ -115,7 +117,7 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
 
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
@@ -142,11 +144,11 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
 
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         default:
-            residual = err_thresh;
+            resid1 = err_thresh;
             break;
     }
 
@@ -155,6 +157,26 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
         free_vector(Y);
     }
 
+    /* Test 2: Ensure factored input matrix A was not modified by GETRS */
+    resid2 = compare_matrix(datatype, "full", n, n, A_fact_save, lda, A_fact, lda);
+
+    /* Test 3: Ensure IPIV was not modified by GETRS */
+    if(IPIV != NULL && IPIV_save != NULL)
+    {
+        for(i = 0; i < n; i++)
+        {
+            if(IPIV[i] != IPIV_save[i])
+            {
+                resid3 = DBL_MAX;
+                break;
+            }
+        }
+    }
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

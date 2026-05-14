@@ -13,12 +13,12 @@ extern double perf;
 extern double time_min;
 
 void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, char *diag, integer n,
-                    integer nrhs, void *A, integer lda, void *X, void *B, integer ldb,
+                    integer nrhs, void *A, void *A_save, integer lda, void *X, void *B, integer ldb,
                     double err_thresh, char imatrix, void *params)
 {
     void *work = NULL;
     char NORM = '1';
-    double residual = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -48,7 +48,7 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
             matrix_difference(datatype, n, nrhs, X, ldb, B, ldb);
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm, imatrix, work);
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case DOUBLE:
@@ -67,7 +67,7 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
             matrix_difference(datatype, n, nrhs, X, ldb, B, ldb);
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm, imatrix, work);
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case COMPLEX:
@@ -86,7 +86,7 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
             matrix_difference(datatype, n, nrhs, X, ldb, B, ldb);
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm, imatrix, work);
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case DOUBLE_COMPLEX:
@@ -105,14 +105,29 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
             matrix_difference(datatype, n, nrhs, X, ldb, B, ldb);
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm, imatrix, work);
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            resid1 = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         default:
-            residual = err_thresh;
+            resid1 = err_thresh;
             break;
     }
 
+    /* Test 2: Check padding rows of A not modified */
+    resid2 = check_padding(datatype, n, n, A, lda);
+
+    /* Test 3: Check padding rows of X not modified */
+    resid3 = check_padding(datatype, n, nrhs, X, ldb);
+
+    /* Test 4: Ensure input matrix A was not modified by TRTRS */
+    resid4 = compare_matrix(datatype, "full", n, n, A_save, lda, A, lda);
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

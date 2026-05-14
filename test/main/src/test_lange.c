@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -125,7 +125,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo)
 {
-    void *A, *scal;
+    void *A, *A_save, *scal;
     void *result;
     integer m = p_cur;
     integer n = q_cur;
@@ -150,6 +150,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_vector(get_realtype(datatype), &result, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
@@ -186,6 +187,9 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
         }
         FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "cddd", test_norm_type, m, n, lda)
 
+        /* Save A before API call for input arg preservation check */
+        copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
+
         prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, interfacetype, params);
 
         if(time_min == d_zero)
@@ -203,13 +207,13 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
         /* output validation */
         IF_FLA_BRT_VALIDATION(
             m, n, store_outputs_base(filename, params, 0, 1, get_realtype(datatype), 1, result),
-            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual,
-                           params),
+            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, A_save, result,
+                           residual, params),
             check_reproducibility_base(filename, params, 0, 1, get_realtype(datatype), 1, result))
         else if(!FLA_EXTREME_CASE_TEST)
         {
-            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual,
-                           params);
+            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, A_save, result,
+                           residual, params);
         }
         else
         {
@@ -230,6 +234,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
+    free_matrix(A_save);
     free_vector(result);
     free_vector(scal);
 }

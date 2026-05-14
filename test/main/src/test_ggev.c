@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -276,8 +276,8 @@ void fla_test_ggev_experiment(char *tst_api, test_params_t *params, integer data
         m, m,
         store_ggev_outputs(filename, datatype, JOBVL, JOBVR, m, A, lda, B, ldb, alpha, alphar,
                            alphai, beta, VL, ldvl, VR, ldvr, params),
-        validate_ggev(tst_api, &JOBVL, &JOBVR, m, A, lda, B, ldb, alpha, alphar, alphai, beta, VL,
-                      ldvl, VR, ldvr, datatype, residual, params),
+        validate_ggev(tst_api, &JOBVL, &JOBVR, m, A, A_test, lda, B, B_test, ldb, alpha, alphar,
+                      alphai, beta, VL, ldvl, VR, ldvr, datatype, residual, params),
         check_bit_reproducibility_ggev(filename, datatype, JOBVL, JOBVR, m, A, lda, B, ldb, alpha,
                                        alphar, alphai, beta, VL, ldvl, VR, ldvr, params))
     else if(FLA_SKIP_VALIDATION_MODE)
@@ -289,8 +289,8 @@ void fla_test_ggev_experiment(char *tst_api, test_params_t *params, integer data
     {
         if(same_char(JOBVL, 'V') || same_char(JOBVR, 'V'))
         {
-            validate_ggev(tst_api, &JOBVL, &JOBVR, m, A, lda, B, ldb, alpha, alphar, alphai, beta,
-                          VL, ldvl, VR, ldvr, datatype, residual, params);
+            validate_ggev(tst_api, &JOBVL, &JOBVR, m, A, A_test, lda, B, B_test, ldb, alpha,
+                          alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual, params);
         }
         else
         { /* For JOBVL = JOBVR = N, eigen values are validated by comparing them with

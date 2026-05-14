@@ -109,7 +109,8 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
                     integer test_eliminated_svds, integer datatype, double err_thresh, void *scal,
                     char imatrix, void *params)
 {
-    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.,
+           resid7 = 0., resid8 = 0., resid9 = 0.;
     void *S_scaled = NULL;
     integer validate_singular_values;
     integer svd_len = same_char(jobu, 'F') ? m : n; /* Early return conditions */
@@ -154,11 +155,21 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
 
     free_vector(S_scaled);
 
+    /* Test 7: Check padding rows of A not modified */
+    resid7 = check_padding(datatype, m, n, A, lda);
+    /* Test 8: Check padding rows of U not modified */
+    resid8 = check_padding(datatype, m, svd_len, U, ldu);
+    /* Test 9: Check padding rows of V not modified */
+    resid9 = check_padding(datatype, n, n, V, ldv);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(residual, resid3);
     residual = fla_test_max(residual, resid4);
     residual = fla_test_max(residual, resid5);
     residual = fla_test_max(residual, resid6);
+    residual = fla_test_max(residual, resid7);
+    residual = fla_test_max(residual, resid8);
+    residual = fla_test_max(residual, resid9);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
@@ -166,4 +177,7 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
     FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
     FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
+    FLA_PRINT_SUBTEST_STATUS(resid7, err_thresh, "07");
+    FLA_PRINT_SUBTEST_STATUS(resid8, err_thresh, "08");
+    FLA_PRINT_SUBTEST_STATUS(resid9, err_thresh, "09");
 }

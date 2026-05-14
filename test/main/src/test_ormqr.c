@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -134,8 +134,8 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo)
 {
     integer m, n, k, lda, ldc, m_A, n_A;
-    void *A = NULL, *A_test = NULL, *T_test = NULL, *C = NULL, *C_test = NULL;
-    void *work = NULL, *qwork = NULL, *tau = NULL;
+    void *A = NULL, *A_test = NULL, *A_test_save = NULL, *T_test = NULL, *C = NULL, *C_test = NULL;
+    void *work = NULL, *qwork = NULL, *tau = NULL, *tau_save = NULL;
     integer lwork = -1, info = 0;
     char side, trans;
     double residual, err_thresh;
@@ -244,6 +244,12 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
                                 datatype, m, n, C, ldc, "ccdddddd", side, trans, m, n, k, lda, ldc,
                                 g_lwork)
 
+    /* Save A_test and tau before API call for input arg preservation check */
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, k, &A_test_save, lda);
+    copy_matrix(datatype, "full", m_A, k, A_test, lda, A_test_save, lda);
+    create_vector(datatype, &tau_save, k);
+    copy_vector(datatype, k, tau, 1, tau_save, 1);
+
     /*invoke ormqr API */
     prepare_ormqr_run(side, trans, m, n, k, m_A, n_A, A_test, lda, tau, C, ldc, datatype, &info,
                       interfacetype, layout, params);
@@ -259,13 +265,13 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     IF_FLA_BRT_VALIDATION(
         m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, C, lda),
-        validate_ormqr(tst_api, side, trans, m, n, k, A_test, lda, C, tau, ldc, C_test, datatype,
-                       residual, params->imatrix_char, params),
+        validate_ormqr(tst_api, side, trans, m, n, k, A_test, A_test_save, lda, C, tau, tau_save,
+                       ldc, C_test, datatype, residual, params->imatrix_char, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, m, n, C, lda))
     else if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_ormqr(tst_api, side, trans, m, n, k, A_test, lda, C, tau, ldc, C_test, datatype,
-                       residual, params->imatrix_char, params);
+        validate_ormqr(tst_api, side, trans, m, n, k, A_test, A_test_save, lda, C, tau, tau_save,
+                       ldc, C_test, datatype, residual, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -291,6 +297,8 @@ free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
+    free_matrix(A_test_save);
+    free_vector(tau_save);
     free_vector(tau);
     free_matrix(C);
 }

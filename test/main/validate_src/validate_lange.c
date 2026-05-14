@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_lange.c
@@ -341,10 +341,11 @@
     }
 
 void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, integer n,
-                    integer lda, void *A, void *result, double err_thresh, void *params)
+                    integer lda, void *A, void *A_save, void *result, double err_thresh,
+                    void *params)
 {
     void *calculated_value;
-    double residual;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
 
     /* Early return conditions */
     if(m == 0 || n == 0)
@@ -423,6 +424,17 @@ void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, 
 
     free_vector(calculated_value);
 
+    /* Test 2: Check padding rows not modified */
+    resid2 = check_padding(datatype, m, n, A, lda);
+
+    /* Test 3: Ensure input matrix A was not modified by LANGE */
+    resid3 = compare_matrix(datatype, "full", m, n, A_save, lda, A, lda);
+
+    resid1 = residual;
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

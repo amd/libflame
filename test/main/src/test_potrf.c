@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -180,7 +180,7 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
-    copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
+    copy_matrix(datatype, "full", lda, m, A, lda, A_test, lda);
 
     prepare_potrf_run(&uplo, m, A_test, lda, datatype, &info, interfacetype, layout, params);
 
@@ -233,7 +233,7 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
     double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
-       each itertaion.*/
+       each iteration.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_save, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_save, lda);
 

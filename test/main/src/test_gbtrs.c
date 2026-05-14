@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -27,14 +27,6 @@ double prepare_lapacke_gbtrs_run(integer datatype, integer matrix_layout, char t
                                  integer kl, integer ku, integer nrhs, void *ab, integer ldab,
                                  integer *ipiv, void *b, integer ldb, integer *info);
 
-/* Macro used for validating GBTRS */
-#define VALIDATE_GBTRS                                                            \
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);                       \
-    reset_matrix(datatype, n, n, A, n);                                           \
-    get_band_matrix_from_band_storage(datatype, n, n, kl, ku, AB, ldab, A, n);    \
-    validate_getrs(tst_api, &trans, n, nrhs, A, n, B, ldb, X, datatype, residual, \
-                   params->imatrix_char, NULL, params);                           \
-    free_matrix(A);
 
 void fla_test_gbtrs(integer argc, char **argv, test_params_t *params)
 {
@@ -128,8 +120,8 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
     integer n, kl, ku, nrhs, ldab, ldb;
     integer info = 0;
     char trans;
-    void *IPIV;
-    void *AB, *AB_test;
+    void *IPIV, *IPIV_save = NULL;
+    void *AB, *AB_test, *AB_test_save = NULL;
     void *B, *X, *A = NULL;
     double residual, err_thresh;
     void *filename = NULL;
@@ -246,6 +238,12 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
     /* Save the original matrix B */
     copy_matrix(datatype, "full", n, nrhs, B, ldb, X, ldb);
 
+    /* Save AB_test and IPIV before API call for input arg preservation check */
+    create_matrix(datatype, LAPACK_COL_MAJOR, ldab, n, &AB_test_save, ldab);
+    copy_matrix(datatype, "full", ldab, n, AB_test, ldab, AB_test_save, ldab);
+    create_vector(INTEGER, &IPIV_save, n);
+    copy_vector(INTEGER, n, IPIV, 1, IPIV_save, 1);
+
     /* call to API */
     prepare_gbtrs_run(trans, n, kl, ku, nrhs, AB_test, ldab, IPIV, X, ldb, datatype, &info,
                       interfacetype, layout, params);
@@ -260,7 +258,9 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     IF_FLA_BRT_VALIDATION(
-        n, n, store_outputs_base(filename, params, 1, 0, datatype, n, nrhs, X, ldb), VALIDATE_GBTRS,
+        n, n, store_outputs_base(filename, params, 1, 0, datatype, n, nrhs, X, ldb),
+        validate_gbtrs(tst_api, &trans, n, kl, ku, nrhs, AB, AB_test, AB_test_save, ldab, IPIV,
+                       IPIV_save, B, ldb, X, datatype, residual, params->imatrix_char, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, n, nrhs, X, ldb))
     else if(FLA_SKIP_VALIDATION_MODE)
     {
@@ -269,7 +269,8 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
     }
     else if(!FLA_EXTREME_CASE_TEST)
     {
-        VALIDATE_GBTRS
+        validate_gbtrs(tst_api, &trans, n, kl, ku, nrhs, AB, AB_test, AB_test_save, ldab, IPIV,
+                       IPIV_save, B, ldb, X, datatype, residual, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -290,7 +291,9 @@ free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(AB);
     free_matrix(AB_test);
+    free_matrix(AB_test_save);
     free_vector(IPIV);
+    free_vector(IPIV_save);
     free_matrix(B);
     free_matrix(X);
 }

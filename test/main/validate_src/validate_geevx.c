@@ -24,7 +24,8 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
     char NORM = 'F';
     integer incr = m + 1;
     double residual;
-    double resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
+    double resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.,
+           resid7 = 0.;
 
     /* Early return conditions */
     if(m == 0)
@@ -268,13 +269,26 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
     free_matrix(lambda);
     free_matrix(Vlambda);
 
+    /* Test 5: Check padding rows of A not modified */
+    resid5 = check_padding(datatype, m, m, A_test, lda);
+    /* Test 6: Check padding rows of VL not modified */
+    resid6 = check_padding(datatype, m, m, VL, ldvl);
+    /* Test 7: Check padding rows of VR not modified */
+    resid7 = check_padding(datatype, m, m, VR, ldvr);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
+    residual = fla_test_max(resid6, residual);
+    residual = fla_test_max(resid7, residual);
 
     FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
+    FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
+    FLA_PRINT_SUBTEST_STATUS(resid7, err_thresh, "07");
 }

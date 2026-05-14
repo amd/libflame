@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -182,8 +182,8 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), NRHS, &B, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), NRHS, &B_save, ldb);
-    reset_matrix(datatype, ldb, NRHS, B, ldb);
-    reset_matrix(datatype, ldb, NRHS, B_save, ldb);
+    reset_matrix(datatype, fla_max(m, n), NRHS, B, ldb);
+    reset_matrix(datatype, fla_max(m, n), NRHS, B_save, ldb);
     create_realtype_vector(datatype, &S, fla_min(m, n));
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
@@ -231,7 +231,7 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
                                   n, NRHS, lda, ldb, *(doublereal *)rcond, g_lwork)
     }
 
-    /* Save the original matrix*/
+    /* Save the original matrix */
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", m, NRHS, B, ldb, B_save, ldb);
 

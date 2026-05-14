@@ -22,7 +22,7 @@ void validate_gtsv(char *tst_api, integer datatype, integer n, integer nrhs, voi
     integer dl_size, du_size, inc, lda;
     char NORM = '1';
     integer info;
-    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -241,11 +241,15 @@ void validate_gtsv(char *tst_api, integer datatype, integer n, integer nrhs, voi
     free_vector(ipiv);
     free_matrix(A);
 
+    resid4 = check_padding(datatype, n, nrhs, X, ldx);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
 
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

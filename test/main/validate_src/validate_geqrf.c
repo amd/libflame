@@ -19,7 +19,7 @@ void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
     integer min_A;
     integer lwork = -1;
     integer info = 0;
-    double residual, resid1 = 0., resid2 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
 
     /* Early return conditions */
     if(m_A == 0 || n_A == 0)
@@ -176,13 +176,18 @@ void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
         }
     }
 
+    /* Test 3: Check padding rows not modified */
+    resid3 = check_padding(datatype, m_A, n_A, A_test, lda);
+
     // Free up buffers
     free_matrix(R);
     free_matrix(Q);
     free_vector(work);
 
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
     FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

@@ -15,7 +15,7 @@ extern double time_min;
 void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test, integer lda,
                     void *w, integer datatype, double err_thresh, void *params)
 {
-    double residual, resid1 = 0., resid2 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -122,8 +122,13 @@ void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test,
         free_matrix(Z);
     }
 
+    /* Test 3: Check padding rows not modified */
+    resid3 = check_padding(datatype, n, n, A_test, lda);
+
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

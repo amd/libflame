@@ -17,7 +17,7 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
 {
     void *a_temp, *work;
     char NORM = '1';
-    double residual = 0.;
+    double residual = 0., resid1 = 0., resid2 = 0.;
 
     /* Early return conditions */
     if(m_A == 0 || n_A == 0)
@@ -108,6 +108,12 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
     free_vector(work);
     free_vector(a_temp);
 
+    /* Test 2: Check padding rows not modified */
+    resid2 = check_padding(datatype, m_A, n_A, A_inv, lda);
+
+    resid1 = residual;
+    residual = fla_test_max(resid1, resid2);
     FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

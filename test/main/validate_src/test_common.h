@@ -283,7 +283,8 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
 /* orthgonality property of matrix */
 double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, integer n, integer k,
                                integer lda, void *params);
-double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda, void *params);
+double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda,
+                           void *params);
 void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Diag);
 void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Subdiag);
 /*Tridiagonal matrix functions*/
@@ -491,9 +492,10 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
 /* Generate asymmetric square matrix of size n x n using Eigen decomposition(ED) */
 void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
                                   void *lambda);
-/* Compare two vectors starting from offset_A in A vector with B vector */
-integer compare_vector(integer datatype, integer vect_len, void *A, integer inca, integer offset_A,
-                       void *B, integer incb);
+/* Compare two vectors starting from offset_A in A vector with B vector.
+   Returns 0.0 if the vectors are bit-identical, DBL_MAX otherwise. */
+double compare_vector(integer datatype, integer vect_len, void *A, integer inca, integer offset_A,
+                      void *B, integer incb);
 /* Create diagonal matrix by copying elements from a vector to matrix */
 void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA);
 /* Find negative value of each element and store in next location
@@ -534,10 +536,11 @@ void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, inte
                                       integer position);
 /* Validates and parses norm types to be tested for lange API */
 integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, integer max_len);
-/* Comparison of matrix
- * Compare matrix A with matrix B*/
-integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
-                       void *B, integer ldb);
+/* Comparison of matrix.  Compare matrix A with matrix B (uplo restricts to
+   strict upper/lower triangle).  Returns 0.0 if the selected slice is
+   bit-identical, DBL_MAX otherwise. */
+double compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
+                      void *B, integer ldb);
 /* Swap rows of the matrix as per permutation vector */
 void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integer lda,
                           integer *ipiv);
@@ -607,11 +610,29 @@ integer compute_matrix_inverse(integer datatype, integer n, void *A, integer lda
 
 /* Computes residual value based on input norms & size given.
    If norm_base <= 0, then residual is 0*/
-double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params);
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base,
+                            integer m, void *params);
 
 /* This function computes the residual normalized by the matrix norm.
  * If the matrix norm is less than or equal to the safe minimum, the residual is set to 0.
  * Otherwise, the residual is computed as norm / norm_a.
  */
 double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params);
+
+/* Initialize padding region (rows m to lda-1) with pattern using optimized memcpy.
+   Layout contract: assumes column-major storage, i.e. matrix has m rows, n columns,
+   with leading dimension lda (lda >= m). The padded region is rows [m..lda-1] of
+   each of the n columns.
+   For row-major callers: pass (n, m) in place of (m, n) so the same byte layout
+   is interpreted correctly as n columns x m rows with leading dim lda.
+   create_matrix() performs this swap internally; direct callers that use the
+   row-major layout must do it themselves. */
+void init_padding(integer datatype, integer m, integer n, void *A, integer lda);
+
+/* Check if padding region contains expected pattern.
+   Returns 0.0 if the padding is intact (or there is nothing to check),
+   DBL_MAX if any word differs from the sentinel.
+   Same column-major layout contract as init_padding (see note above). */
+double check_padding(integer datatype, integer m, integer n, void *A, integer lda);
+
 #endif // TEST_COMMON_H

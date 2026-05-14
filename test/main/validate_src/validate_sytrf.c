@@ -19,7 +19,7 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
     void *X = NULL;
     void *B = NULL;
     integer info = 0;
-    double residual, resid1 = 0., resid2 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -149,6 +149,10 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
                             temp, &n);
         }
     }
+
+    /* Test 3: Ensure unused triangle was not modified */
+    resid3 = compare_matrix(datatype, same_char(*uplo, 'U') ? "L" : "U", n, n, A, lda, A_res, lda);
+
     switch(datatype)
     {
         case FLOAT:
@@ -297,8 +301,15 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
     free_matrix(D);
     free_matrix(work);
 
+    /* Test 4: Check padding rows not modified */
+    resid4 = check_padding(datatype, n, n, A_res, lda);
+
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

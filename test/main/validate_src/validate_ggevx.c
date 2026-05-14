@@ -13,13 +13,13 @@ extern double perf;
 extern double time_min;
 
 void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char *sense, integer n,
-                    void *A, integer lda, void *B, integer ldb, void *alpha, void *alphar,
-                    void *alphai, void *beta, void *VL, integer ldvl, void *VR, integer ldvr,
-                    integer datatype, double err_thresh, void *params)
+                    void *A, void *A_test, integer lda, void *B, void *B_test, integer ldb,
+                    void *alpha, void *alphar, void *alphai, void *beta, void *VL, integer ldvl,
+                    void *VR, integer ldvr, integer datatype, double err_thresh, void *params)
 {
     integer i, j;
     void *work = NULL;
-    double residual = 0.;
+    double residual = 0., resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -452,6 +452,25 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
             break;
     }
 
+    resid1 = residual;
+
+    /* Test 2: Check padding rows of A not modified */
+    resid2 = check_padding(datatype, n, n, A_test, lda);
+    /* Test 3: Check padding rows of B not modified */
+    resid3 = check_padding(datatype, n, n, B_test, ldb);
+    /* Test 4: Check padding rows of VL not modified */
+    resid4 = check_padding(datatype, n, n, VL, ldvl);
+    /* Test 5: Check padding rows of VR not modified */
+    resid5 = check_padding(datatype, n, n, VR, ldvr);
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
+    residual = fla_test_max(residual, resid4);
+    residual = fla_test_max(residual, resid5);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -127,7 +127,7 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
     integer n, nrhs, lda, ldb, info = 0, matrix_layout;
     char uplo, trans, diag;
     double residual, err_thresh;
-    void *A = NULL, *B = NULL, *B_test = NULL;
+    void *A = NULL, *A_save = NULL, *B = NULL, *B_test = NULL;
     void *scal = NULL;
     void *filename = NULL;
 
@@ -205,6 +205,8 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Make a copy of the input matrices for testing */
     copy_matrix(datatype, "full", n, nrhs, B, ldb, B_test, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
+    copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
     /* Prepare and run trtrs call */
     prepare_trtrs_run(&uplo, &trans, &diag, n, nrhs, A, lda, datatype, B_test, ldb, &info,
@@ -218,13 +220,13 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     IF_FLA_BRT_VALIDATION(
         n, nrhs, store_outputs_base(filename, params, 1, 0, datatype, n, nrhs, B_test, ldb),
-        validate_trtrs(tst_api, datatype, &uplo, &trans, &diag, n, nrhs, A, lda, B_test, B, ldb,
-                       residual, params->imatrix_char, params),
+        validate_trtrs(tst_api, datatype, &uplo, &trans, &diag, n, nrhs, A, A_save, lda, B_test, B,
+                       ldb, residual, params->imatrix_char, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, n, nrhs, B_test, ldb))
     else if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_trtrs(tst_api, datatype, &uplo, &trans, &diag, n, nrhs, A, lda, B_test, B, ldb,
-                       residual, params->imatrix_char, params);
+        validate_trtrs(tst_api, datatype, &uplo, &trans, &diag, n, nrhs, A, A_save, lda, B_test, B,
+                       ldb, residual, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -244,6 +246,7 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
+    free_matrix(A_save);
     free_matrix(B_test);
     free_matrix(B);
     if(FLA_OVERFLOW_UNDERFLOW_TEST)

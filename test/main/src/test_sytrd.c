@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -147,8 +147,8 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
 
-    reset_matrix(datatype, lda, n, A, lda);
-    reset_matrix(datatype, lda, n, A_test, lda);
+    reset_matrix(datatype, n, n, A, lda);
+    reset_matrix(datatype, n, n, A_test, lda);
 
     realtype = get_realtype(datatype);
     create_vector(realtype, &D, n);

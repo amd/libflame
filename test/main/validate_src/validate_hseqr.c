@@ -20,7 +20,7 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
     char NORM = '1';
     void *Y = NULL;
     double residual, resid1 = 0., resid2 = 0.;
-    double resid3 = 0., resid4 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -139,9 +139,23 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
 
     if(same_char(*job, 'E') || same_char(*compz, 'N'))
     {
+        /* When job='E' (eigenvalues only) or compz='N' (no Schur vectors),
+           Z_test is not computed, so the following subtests do not apply
+           and are intentionally omitted from this code path:
+             - Test 03: Schur decomposition reconstruction residual
+                        (needs Z and Z_test)
+             - Test 04: orthogonality of Z  (needs Z_test)
+             - Test 06: padding rows of Z  (Z_test is not modified)
+           Subtest numbering is kept consistent with the full path below so
+           that 01, 02, and 05 always map to the same checks. */
+
+        /* Test 5: Check padding rows of H not modified */
+        resid5 = check_padding(datatype, n, n, H_test, ldh);
+        residual = fla_test_max(resid5, residual);
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
         FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
         FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+        FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
         return;
     }
 
@@ -234,12 +248,20 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
     free_matrix(zlambda);
     free_matrix(lambda);
 
+    /* Test 5: Check padding rows of H not modified */
+    resid5 = check_padding(datatype, n, n, H_test, ldh);
+    /* Test 6: Check padding rows of Z not modified */
+    resid6 = check_padding(datatype, n, n, Z_test, ldz);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
+    residual = fla_test_max(resid6, residual);
 
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
+    FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -180,8 +180,8 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B_test, ldb);
-    reset_matrix(datatype, ldb, nrhs, B, ldb);
-    reset_matrix(datatype, ldb, nrhs, B_test, ldb);
+    reset_matrix(datatype, m_b, nrhs, B, ldb);
+    reset_matrix(datatype, m_b, nrhs, B_test, ldb);
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
      * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT

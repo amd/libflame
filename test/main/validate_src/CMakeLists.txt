@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_sources(${PROJECT_NAME}
@@ -9,6 +9,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_overflow_underflow.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_output_routines.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_bit_reproducibility.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gbtrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gbtrs.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_geqrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gerq2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gerqf.c

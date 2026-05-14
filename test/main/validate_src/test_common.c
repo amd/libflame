@@ -5,6 +5,32 @@
 #include "test_common.h"
 #include "test_prototype.h"
 
+/* Padding pattern for memory corruption detection */
+#define FLA_PADDING_PATTERN_32 0xFACEFEED
+#define FLA_PADDING_PATTERN_64 0xFACEFEEDFACEFEED
+
+/* Number of bytes per matrix element for each supported datatype.
+   Returns 0 for unsupported types so callers can early-return.
+   Byte-level addressing is used in the bitwise compare/padding primitives
+   below to stay well-defined under C's strict-aliasing/effective-type rules
+   (only unsigned char access into arbitrary object storage is guaranteed). */
+static inline size_t fla_bytes_per_elem(integer datatype)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+            return sizeof(float);
+        case DOUBLE:
+            return sizeof(double);
+        case COMPLEX:
+            return sizeof(scomplex);
+        case DOUBLE_COMPLEX:
+            return sizeof(dcomplex);
+        default:
+            return 0;
+    }
+}
+
 // Global variables
 double perf;
 double time_min;
@@ -533,6 +559,21 @@ void create_matrix(integer datatype, int matrix_layout, integer M, integer N, vo
         {
             *A = (dcomplex *)fla_mem_alloc(fla_max(1, rs) * fla_max(1, cs) * sizeof(dcomplex));
             break;
+        }
+    }
+
+    /* Initialize padding with pattern for memory corruption detection */
+    if(*A != NULL)
+    {
+        if(matrix_layout == LAPACK_COL_MAJOR)
+        {
+            /* Column-major: padding is rows M to lda-1 in each column */
+            init_padding(datatype, M, N, *A, lda);
+        }
+        else
+        {
+            /* Row-major: padding is columns N to lda-1 in each row */
+            init_padding(datatype, N, M, *A, lda);
         }
     }
 }
@@ -1161,7 +1202,7 @@ void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer l
     {
         type = "S";
     }
-    form_symmetric_matrix(datatype, m, A, lda, type, 'U');
+    form_symmetric_matrix(datatype, m, A, lda, type, *uplo);
 
     free_vector(L);
 }
@@ -5390,8 +5431,11 @@ void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, int
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &ABfac, ldab);
     copy_matrix(datatype, "full", ldab, n, AB, ldab, ABfac, ldab);
 
-    /* Reset matrix A to store reconstructed band matrix*/
-    reset_matrix(datatype, ldab, n, AB, ldab);
+    /* Reset matrix A to store reconstructed band matrix.  Only the actual
+       band-storage rows (2*kl+ku+1) are zeroed so that any padding sentinels
+       stamped in rows m_band..ldab-1 by the caller are preserved for later
+       check_padding(). */
+    reset_matrix(datatype, 2 * kl + ku + 1, n, AB, ldab);
 
     /* Iterate over each column */
     diag_offset = kl + ku;
@@ -6936,75 +6980,46 @@ void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer 
 }
 
 /* Compare two vectors starting from offset_A in A vector with B vector
-   (starting from offset 0 in B) */
-integer compare_vector(integer datatype, integer vect_len, void *A, integer inca, integer offset_A,
-                       void *B, integer incb)
+   (starting from offset 0 in B).
+   Uses bitwise comparison via integer type-punning so that NaN==NaN
+   and +0.0 != -0.0, which is correct for input preservation checks. */
+double compare_vector(integer datatype, integer vect_len, void *A, integer inca, integer offset_A,
+                      void *B, integer incb)
 {
     aocl_int64_t i;
+    size_t esize;
+    const unsigned char *pa, *pb;
 
-    /* early return */
+    /* Nothing to compare: degenerate or NULL inputs -> pass. */
     if((vect_len <= 0) || (A == NULL) || (B == NULL) || (inca <= 0) || (incb <= 0)
        || (offset_A <= 0))
     {
-        return 1; /* return non-zero value to indicate error */
+        return 0.0;
     }
 
-    switch(datatype)
+    /* Address each element through unsigned char and compare raw bytes via memcmp.
+       This is bit-exact (NaN- and signed-zero-safe) and well-defined under strict
+       aliasing because byte access into any object's storage is always allowed. */
+    esize = fla_bytes_per_elem(datatype);
+    if(esize == 0)
     {
-        case FLOAT:
+        return 0.0; /* unsupported datatype: no meaningful comparison -> pass */
+    }
+
+    pa = (const unsigned char *)A;
+    pb = (const unsigned char *)B;
+
+    for(i = 0; i < vect_len; i++)
+    {
+        const unsigned char *ea
+            = pa + ((size_t)i * (size_t)inca + (size_t)(offset_A - 1)) * esize;
+        const unsigned char *eb = pb + (size_t)i * (size_t)incb * esize;
+        if(memcmp(ea, eb, esize) != 0)
         {
-            float *a = (float *)A;
-            float *b = (float *)B;
-            for(i = 0; i < vect_len; i++)
-            {
-                if(f2c_abs(a[(i * inca) + (offset_A - 1)] - b[i * incb]) > MAX_FLT_DIFF)
-                {
-                    return 1;
-                }
-            }
-            break;
-        }
-        case DOUBLE:
-        {
-            double *a = (double *)A;
-            double *b = (double *)B;
-            for(i = 0; i < vect_len; i++)
-            {
-                if(f2c_abs(a[(i * inca) + (offset_A - 1)] - b[i * incb]) > MAX_DBL_DIFF)
-                {
-                    return 1;
-                }
-            }
-            break;
-        }
-        case COMPLEX:
-        {
-            scomplex *a = (scomplex *)A;
-            scomplex *b = (scomplex *)B;
-            for(i = 0; i < vect_len; i++)
-            {
-                if(f2c_abs(a[(i * inca) + (offset_A - 1)].real - b[i * incb].real) > MAX_FLT_DIFF)
-                {
-                    return 1;
-                }
-            }
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            dcomplex *a = (dcomplex *)A;
-            dcomplex *b = (dcomplex *)B;
-            for(i = 0; i < vect_len; i++)
-            {
-                if(f2c_abs(a[(i * inca) + (offset_A - 1)].real - b[i * incb].real) > MAX_DBL_DIFF)
-                {
-                    return 1;
-                }
-            }
-            break;
+            return DBL_MAX;
         }
     }
-    return 0;
+    return 0.0;
 }
 
 /* Create diagonal matrix by copying elements from a vector to matrix */
@@ -7594,7 +7609,10 @@ integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, in
     return idx > 0 ? 0 : -1;
 }
 
-/* Sets the matrix index bounds for the given uplo and i values for compare_matrix function*/
+/* Sets the row index bounds for column i in compare_matrix.
+ * 'U' -> rows [0, i) i.e. strict upper triangle (diagonal excluded).
+ * 'L' -> rows [i+1, m) i.e. strict lower triangle (diagonal excluded).
+ * else -> rows [0, m) i.e. full column. */
 void set_matrix_bounds(char *uplo, integer i, integer m, integer *j_start, integer *j_end)
 {
     /* check for NULL pointers */
@@ -7608,7 +7626,7 @@ void set_matrix_bounds(char *uplo, integer i, integer m, integer *j_start, integ
     }
     else if(same_char(*uplo, 'L'))
     {
-        *j_start = i;
+        *j_start = i + 1;
         *j_end = m;
     }
     else
@@ -7618,92 +7636,57 @@ void set_matrix_bounds(char *uplo, integer i, integer m, integer *j_start, integ
     }
 }
 
-/* Comparison of matrix
- * Compare matrix A with matrix B
- * if uplo = 'U' upper triangular part is compared.
- * if uplo = 'L' lower triangular part is compared.
+/* Bitwise comparison of matrix A with matrix B.
+ * if uplo = 'U' strict upper triangle is compared (diagonal excluded).
+ * if uplo = 'L' strict lower triangle is compared (diagonal excluded).
  * else full matrix is compared.
- * Retruns 0 if there is a mismatch
- * Returns 1 if A and B are identical */
-integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
-                       void *B, integer ldb)
+ * Uses integer type-punning via memcpy so that NaN==NaN and +0.0 != -0.0,
+ * which is correct for input preservation checks.
+ * Returns 0 if there is a mismatch.
+ * Returns 1 if the compared regions of A and B are identical. */
+double compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
+                      void *B, integer ldb)
 {
-    aocl_int64_t i, j;
+    aocl_int64_t i;
     integer j_start = 0, j_end = m;
+    size_t esize, slice_bytes;
+    const unsigned char *pa, *pb;
 
-    /* early return */
+    /* Nothing to compare: degenerate, invalid or NULL inputs -> pass. */
     if((m <= 0) || (n <= 0) || (lda < m) || (ldb < m) || (A == NULL) || (B == NULL)
        || (uplo == NULL))
     {
-        return 0; /* return non-zero value to indicate error */
+        return 0.0;
     }
 
-    switch(datatype)
+    /* Address through unsigned char; the [j_start, j_end) slice in column-major
+       storage is physically contiguous, so a single memcmp per column gives a
+       bit-exact (NaN/signed-zero-safe) comparison without violating strict
+       aliasing rules. */
+    esize = fla_bytes_per_elem(datatype);
+    if(esize == 0)
     {
-        case FLOAT:
+        return 0.0; /* unsupported datatype: no meaningful comparison -> pass */
+    }
+
+    pa = (const unsigned char *)A;
+    pb = (const unsigned char *)B;
+
+    for(i = 0; i < n; i++)
+    {
+        set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+        if(j_end > j_start)
         {
-            for(i = 0; i < n; i++)
+            slice_bytes = (size_t)(j_end - j_start) * esize;
+            if(memcmp(pa + ((size_t)i * (size_t)lda + (size_t)j_start) * esize,
+                      pb + ((size_t)i * (size_t)ldb + (size_t)j_start) * esize, slice_bytes)
+               != 0)
             {
-                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
-                for(j = j_start; j < j_end; j++)
-                {
-                    if(((float *)A)[i * lda + j] != ((float *)B)[i * ldb + j])
-                    {
-                        return 0;
-                    }
-                }
+                return DBL_MAX;
             }
-            break;
-        }
-        case DOUBLE:
-        {
-            for(i = 0; i < n; i++)
-            {
-                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
-                for(j = j_start; j < j_end; j++)
-                {
-                    if(((double *)A)[i * lda + j] != ((double *)B)[i * ldb + j])
-                    {
-                        return 0;
-                    }
-                }
-            }
-            break;
-        }
-        case COMPLEX:
-        {
-            for(i = 0; i < n; i++)
-            {
-                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
-                for(j = j_start; j < j_end; j++)
-                {
-                    if((((scomplex *)A)[i * lda + j].real != ((scomplex *)B)[i * ldb + j].real)
-                       && (((scomplex *)A)[i * lda + j].imag != ((scomplex *)B)[i * ldb + j].imag))
-                    {
-                        return 0;
-                    }
-                }
-            }
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            for(i = 0; i < n; i++)
-            {
-                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
-                for(j = j_start; j < j_end; j++)
-                {
-                    if((((dcomplex *)A)[i * lda + j].real != ((dcomplex *)B)[i * ldb + j].real)
-                       && (((dcomplex *)A)[i * lda + j].imag != ((dcomplex *)B)[i * ldb + j].imag))
-                    {
-                        return 0;
-                    }
-                }
-            }
-            break;
         }
     }
-    return 1;
+    return 0.0;
 }
 
 /* Swap rows of the matrix as per permutation vector */
@@ -8605,4 +8588,100 @@ integer compute_matrix_inverse(integer datatype, integer n, void *A, integer lda
     free_vector(ipiv);
 
     return info_getri;
+}
+
+/* Check padding region against the expected sentinel pattern.
+   Returns 0.0 if the padding is intact, DBL_MAX if any word differs.
+
+   Implementation note: every supported element type is a multiple of 4 bytes,
+   so the padding region is walked 4 bytes at a time as raw bytes (via
+   unsigned char *) and each 4-byte word is matched against the sentinel via
+   memcmp.  This stays well-defined under strict-aliasing rules and is
+   bit-identical to writing FLA_PADDING_PATTERN_32 / _64 into 32/64-bit slots,
+   because the 64-bit pattern is just the 32-bit pattern repeated. */
+double check_padding(integer datatype, integer m, integer n, void *A, integer lda)
+{
+    integer j;
+    size_t i, esize, stride, start;
+    const unsigned char *p;
+    const uint32_t pat = FLA_PADDING_PATTERN_32;
+
+    /* Nothing to check: no padding rows, degenerate sizes, or NULL buffer. */
+    if(lda <= m || m <= 0 || n <= 0 || A == NULL)
+    {
+        return 0.0;
+    }
+
+    esize = fla_bytes_per_elem(datatype);
+    if(esize == 0)
+    {
+        return DBL_MAX; /* unsupported datatype: cannot verify -> fail loudly */
+    }
+
+    p = (const unsigned char *)A;
+    stride = (size_t)lda * esize; /* bytes per column                  */
+    start = (size_t)m * esize; /* byte offset where padding begins  */
+
+    for(j = 0; j < n; j++)
+    {
+        const unsigned char *col = p + (size_t)j * stride;
+        for(i = start; i < stride; i += sizeof(pat))
+        {
+            if(memcmp(col + i, &pat, sizeof(pat)) != 0)
+            {
+                return DBL_MAX;
+            }
+        }
+    }
+
+    return 0.0;
+}
+
+/* Initialize padding region (rows m to lda-1) with a pattern.
+   Uses optimized approach: fill first column, then memcpy to remaining columns.
+
+   Implementation note: addressing is done through unsigned char so that the
+   stores are well-defined under strict-aliasing rules even when the underlying
+   storage type is float/double/complex.  The 4-byte sentinel is laid down with
+   memcpy (no integer lvalue access through a non-character pointer); since
+   every supported element type is a multiple of 4 bytes, the padding region is
+   exactly tiled by repeated 4-byte patterns.  The on-disk byte layout matches
+   the legacy implementation, which also wrote the same FLA_PADDING_PATTERN_32
+   bit pattern through memcpy. */
+void init_padding(integer datatype, integer m, integer n, void *A, integer lda)
+{
+    integer j;
+    size_t i, esize, stride, start, pad_bytes;
+    unsigned char *p;
+    const unsigned char *src;
+    const uint32_t pat = FLA_PADDING_PATTERN_32;
+
+    if(lda <= m || m <= 0 || n <= 0 || A == NULL)
+    {
+        return;
+    }
+
+    esize = fla_bytes_per_elem(datatype);
+    if(esize == 0)
+    {
+        return;
+    }
+
+    p = (unsigned char *)A;
+    stride = (size_t)lda * esize; /* bytes per column                  */
+    start = (size_t)m * esize; /* byte offset where padding begins  */
+    pad_bytes = stride - start;
+
+    /* Fill the padding region of the first column with repeated 4-byte sentinels. */
+    for(i = start; i < stride; i += sizeof(pat))
+    {
+        memcpy(p + i, &pat, sizeof(pat));
+    }
+
+    /* Replicate the first column's padding into every remaining column. */
+    src = p + start;
+    for(j = 1; j < n; j++)
+    {
+        memcpy(p + (size_t)j * stride + start, src, pad_bytes);
+    }
 }

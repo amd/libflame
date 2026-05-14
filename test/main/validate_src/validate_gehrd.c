@@ -19,7 +19,7 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
     integer lwork = -1;
     integer info = 0;
     double residual;
-    double resid1 = 0., resid2 = 0.;
+    double resid1 = 0., resid2 = 0., resid3 = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -163,12 +163,18 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             break;
         }
     }
+
+    /* Test 3: Check padding rows not modified */
+    resid3 = check_padding(datatype, n, n, A_test, lda);
+
     free_vector(work);
     free_matrix(Q);
     free_matrix(lambda);
 
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

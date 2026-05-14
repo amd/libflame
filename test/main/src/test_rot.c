@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -108,6 +108,7 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     void *cx = NULL, *cy = NULL, *s = NULL, *c = NULL;
     void *f = NULL, *g = NULL, *r = NULL;
     void *cx_test = NULL, *cy_test = NULL;
+    void *c_save = NULL, *s_save = NULL;
     integer interfacetype = params->interfacetype;
     double err_thresh;
     void *filename = NULL;
@@ -169,6 +170,11 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, i_one, cx_test, i_one);
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, i_one, cy_test, i_one);
 
+    create_vector(realtype, &c_save, 1);
+    create_vector(datatype, &s_save, 1);
+    copy_vector(realtype, 1, c, i_one, c_save, i_one);
+    copy_vector(datatype, 1, s, i_one, s_save, i_one);
+
     /* call to API */
     prepare_rot_run(datatype, n, cx, incx, cy, incy, c, s, interfacetype, params);
 
@@ -186,14 +192,14 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     IF_FLA_BRT_VALIDATION(
         cx_size, cy_size,
         store_outputs_base(filename, params, 0, 2, datatype, cx_size, cx, datatype, cy_size, cy),
-        validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, err_thresh,
-                     params),
+        validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, c_save,
+                     s_save, err_thresh, params),
         check_reproducibility_base(filename, params, 0, 2, datatype, cx_size, cx, datatype, cy_size,
                                    cy))
     else
     {
-        validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, err_thresh,
-                     params);
+        validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, c_save,
+                     s_save, err_thresh, params);
     }
 
     /* Free up the buffers */
@@ -205,6 +211,8 @@ free_buffers:
     free_vector(cy_test);
     free_vector(c);
     free_vector(s);
+    free_vector(c_save);
+    free_vector(s_save);
 }
 
 void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void *cy, integer incy,

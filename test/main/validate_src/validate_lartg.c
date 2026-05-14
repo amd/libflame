@@ -12,11 +12,11 @@
 extern double perf;
 extern double time_min;
 
-void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, void *c, void *s,
-                    double err_thresh, void *params)
+void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *f_save, void *g_save,
+                    void *r, void *c, void *s, double err_thresh, void *params)
 {
     void *out_zero = NULL;
-    double residual, resid1 = 0., resid2 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
 
     /* print overall status if incoming threshold is
      * an extreme value indicating that API returned
@@ -154,8 +154,17 @@ void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, 
     }
     free_vector(out_zero);
 
+    /* Test 3: Ensure input scalar f was not modified by LARTG */
+    resid3 = compare_vector(datatype, 1, f, 1, 1, f_save, 1);
+    /* Test 4: Ensure input scalar g was not modified by LARTG */
+    resid4 = compare_vector(datatype, 1, g, 1, 1, g_save, 1);
+
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
+    residual = fla_test_max(residual, resid4);
     FLA_PRINT_TEST_STATUS(2, 1, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

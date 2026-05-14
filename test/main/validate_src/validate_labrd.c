@@ -25,7 +25,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                     void *Y, integer ldy, integer datatype, double err_thresh, FILE *g_ext_fptr,
                     char imatrix, void *params)
 {
-    double residual = err_thresh;
+    double residual = err_thresh, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
     /* Early return conditions */
     if(m == 0 || n == 0)
     {
@@ -159,7 +159,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
             norm_A = fla_lapack_slange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_slange("1", &m, &n, A, &lda, NULL);
-            residual = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
             break;
         }
 
@@ -209,7 +209,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
             norm_A = fla_lapack_dlange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_dlange("1", &m, &n, A, &lda, NULL);
-            residual = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
             break;
         }
 
@@ -268,7 +268,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
             norm_A = fla_lapack_clange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_clange("1", &m, &n, A, &lda, NULL);
-            residual = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
             break;
         }
 
@@ -327,7 +327,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
             norm_A = fla_lapack_zlange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_zlange("1", &m, &n, A, &lda, NULL);
-            residual = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
             break;
         }
     }
@@ -336,7 +336,22 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
     free_matrix(XU);
     free_matrix(VY);
     free_matrix(A_BD);
+
+    /* Test 2: Check padding rows of A not modified */
+    resid2 = check_padding(datatype, m, n, A_test, lda);
+    /* Test 3: Check padding rows of X not modified */
+    resid3 = check_padding(datatype, m, nb, X, ldx);
+    /* Test 4: Check padding rows of Y not modified */
+    resid4 = check_padding(datatype, n, nb, Y, ldy);
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
+    residual = fla_test_max(residual, resid4);
+
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }
 void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, void *A_test,
                           integer lda, void *X, integer ldx, void *Y, integer ldy, void *U, void *V,

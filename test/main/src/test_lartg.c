@@ -118,6 +118,7 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
 {
     void *s = NULL, *c = NULL;
     void *f = NULL, *g = NULL, *r = NULL;
+    void *f_save = NULL, *g_save = NULL;
     double err_thresh;
     integer interfacetype = params->interfacetype;
     void *filename = NULL;
@@ -149,6 +150,11 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
         }
     }
     FLA_BRT_PROCESS_TWO_INPUT(datatype, 1, 1, f, 1, datatype, 1, 1, g, 1, "s", "no_args")
+    create_vector(datatype, &f_save, 1);
+    create_vector(datatype, &g_save, 1);
+    copy_vector(datatype, 1, f, i_one, f_save, i_one);
+    copy_vector(datatype, 1, g, i_one, g_save, i_one);
+
     /* call to API */
     prepare_lartg_run(datatype, f, g, r, c, s, interfacetype, params);
 
@@ -164,10 +170,10 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
     IF_FLA_BRT_VALIDATION(
         2, 1,
         store_outputs_base(filename, params, 0, 3, realtype, 1, c, datatype, 1, s, datatype, 1, r),
-        validate_lartg(tst_api, datatype, f, g, r, c, s, err_thresh, params),
+        validate_lartg(tst_api, datatype, f, g, f_save, g_save, r, c, s, err_thresh, params),
         check_reproducibility_base(filename, params, 0, 3, realtype, 1, c, datatype, 1, s, datatype,
                                    1, r))
-    else validate_lartg(tst_api, datatype, f, g, r, c, s, err_thresh, params);
+    else validate_lartg(tst_api, datatype, f, g, f_save, g_save, r, c, s, err_thresh, params);
 
     /* Free up the buffers */
 free_buffers:
@@ -177,6 +183,8 @@ free_buffers:
     free_vector(f);
     free_vector(g);
     free_vector(r);
+    free_vector(f_save);
+    free_vector(g_save);
 }
 
 void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s,

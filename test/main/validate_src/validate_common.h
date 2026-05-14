@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_common.h
@@ -49,8 +49,13 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
                     integer *IPIV, integer datatype, double err_thresh, char imatrix, void *params);
 
 void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A, integer lda,
-                    void *B, integer ldb, void *X, integer datatype, double err_thresh,
-                    char imatrix, void *scal, void *params);
+                    void *A_fact, void *A_fact_save, integer *IPIV, integer *IPIV_save, void *B,
+                    integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
+                    void *scal, void *params);
+void validate_gbtrs(char *tst_api, char *trans, integer n, integer kl, integer ku, integer nrhs,
+                    void *AB_orig, void *AB, void *AB_save, integer ldab, integer *IPIV,
+                    integer *IPIV_save, void *B, integer ldb, void *X, integer datatype,
+                    double err_thresh, char imatrix, void *params);
 
 void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, void *Q, void *R,
                     integer datatype, double err_thresh, char imatrix, void *params);
@@ -58,8 +63,9 @@ void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, v
 void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test, integer lda,
                     integer datatype, double err_thresh, void *params);
 
-void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *X, void *B,
-                    integer ldb, integer datatype, double err_thresh, char imatrix, void *params);
+void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *A_fact,
+                    void *A_save, void *X, void *B, void *B_test, integer ldb, integer datatype,
+                    double err_thresh, char imatrix, void *params);
 
 void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test, integer lda,
                     void *w, integer datatype, double err_thresh, void *params);
@@ -83,15 +89,15 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
                    integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
                    void *scal, void *params);
 
-void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, integer lda,
-                   void *B, integer ldb, void *alpha, void *alphar, void *alphai, void *beta,
-                   void *VL, integer ldvl, void *VR, integer ldvr, integer datatype,
-                   double err_thresh, void *params);
+void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, void *A_test,
+                   integer lda, void *B, void *B_test, integer ldb, void *alpha, void *alphar,
+                   void *alphai, void *beta, void *VL, integer ldvl, void *VR, integer ldvr,
+                   integer datatype, double err_thresh, void *params);
 
 void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char *sense, integer n,
-                    void *A, integer lda, void *B, integer ldb, void *alpha, void *alphar,
-                    void *alphai, void *beta, void *VL, integer ldvl, void *VR, integer ldvr,
-                    integer datatype, double err_thresh, void *params);
+                    void *A, void *A_test, integer lda, void *B, void *B_test, integer ldb,
+                    void *alpha, void *alphar, void *alphai, void *beta, void *VL, integer ldvl,
+                    void *VR, integer ldvr, integer datatype, double err_thresh, void *params);
 
 /* This function will validate STEDC() output eigenvectors and orthogonal
    matrices only if compz != N, as output will not be generated
@@ -139,11 +145,11 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
                     integer lda, void *tau, integer datatype, double err_thresh, void *params);
 
 void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx_test, integer incx,
-                  void *cy, void *cy_test, integer incy, void *c, void *s, double err_thresh,
-                  void *params);
+                  void *cy, void *cy_test, integer incy, void *c, void *s, void *c_save,
+                  void *s_save, double err_thresh, void *params);
 
-void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, void *c, void *s,
-                    double err_thresh, void *params);
+void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *f_save, void *g_save,
+                    void *r, void *c, void *s, double err_thresh, void *params);
 
 void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrhs, void *A,
                    integer lda, void *B, integer ldb, void *x, integer datatype, double err_thresh,
@@ -199,7 +205,8 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
 
 /* Validate function for lange */
 void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, integer n,
-                    integer lda, void *A, void *result, double err_thresh, void *params);
+                    integer lda, void *A, void *A_save, void *result, double err_thresh,
+                    void *params);
 
 void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void *A, void *A_save,
                     integer lda, double err_thresh, char imatrix_char, void *params);
@@ -211,8 +218,8 @@ void validate_hetri_rook(char *tst_api, char uplo, integer n, void *A, void *A_i
                          integer *ipiv, integer datatype, double err_thresh, char imatrix,
                          void *params);
 void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
-                    integer lda, void *C, void *Tau, integer ldc, void *C_test, integer datatype,
-                    double err_thresh, char imatrix, void *params);
+                    void *A_save, integer lda, void *C, void *Tau, void *Tau_save, integer ldc,
+                    void *C_test, integer datatype, double err_thresh, char imatrix, void *params);
 void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, void *A_test,
                     integer lda, void *d, void *e, void *tauq, void *taup, void *X, integer ldx,
                     void *Y, integer ldy, integer datatype, double err_thresh, FILE *g_ext_fptr,
@@ -230,12 +237,11 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
 void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, void *A_inv,
                     integer lda, integer datatype, double err_thresh, char imatrix, void *params);
 void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, char *diag, integer n,
-                    integer nrhs, void *A, integer lda, void *X, void *B, integer ldb,
+                    integer nrhs, void *A, void *A_save, integer lda, void *X, void *B, integer ldb,
                     double err_thresh, char imatrix, void *params);
-void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_in,
-                    void *U_out, integer ldu, void *VT_out, integer ldvt,
-                    void *U_in, void *VT_in, integer ncvt, integer nru, integer ncc,
-                    void *C_out, integer ldc, void *C_in, char uplo,
+void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_in, void *U_out,
+                    integer ldu, void *VT_out, integer ldvt, void *U_in, void *VT_in, integer ncvt,
+                    integer nru, integer ncc, void *C_out, integer ldc, void *C_in, char uplo,
                     integer datatype, double residual_in, double err_thresh, FILE *g_ext_fptr,
                     char imatrix_char, void *params);
 

@@ -20,7 +20,7 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
     char NORM = '1';
     integer ldx;
     ldx = ldb;
-    double residual = 0.;
+    double residual = 0., resid1 = 0., resid2 = 0.;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -107,6 +107,12 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
             break;
     }
 
+    /* Test 2: Check padding rows not modified */
+    resid2 = check_padding(datatype, n, nrhs, X, ldb);
+
+    resid1 = residual;
+    residual = fla_test_max(resid1, resid2);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

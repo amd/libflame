@@ -21,7 +21,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
     void *work = NULL, *U_temp = NULL, *V_temp = NULL;
     integer n_U, m_V, ns = fla_min(m, n), ldu_t = ldu, ldvt_t = ldvt;
     double residual, resid1 = 0., resid2 = 0.;
-    double resid3 = 0., resid4 = 0., resid5 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0., resid7 = 0., resid8 = 0.;
 
     /* Early return conditions */
     if(m == 0 || n == 0)
@@ -374,10 +374,20 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
     free_matrix(sigma);
     free_matrix(Usigma);
 
+    /* Test 6: Check padding rows of A not modified */
+    resid6 = check_padding(datatype, m, n, A_test, lda);
+    /* Test 7: Check padding rows of U not modified */
+    resid7 = check_padding(datatype, m, n_U, U, ldu);
+    /* Test 8: Check padding rows of V not modified */
+    resid8 = check_padding(datatype, m_V, n, V, ldvt);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
     residual = fla_test_max(resid5, residual);
+    residual = fla_test_max(resid6, residual);
+    residual = fla_test_max(resid7, residual);
+    residual = fla_test_max(resid8, residual);
 
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
@@ -385,4 +395,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
     FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
+    FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
+    FLA_PRINT_SUBTEST_STATUS(resid7, err_thresh, "07");
+    FLA_PRINT_SUBTEST_STATUS(resid8, err_thresh, "08");
 }

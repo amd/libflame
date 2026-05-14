@@ -13,10 +13,11 @@ extern double perf;
 extern double time_min;
 
 void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx_test, integer incx,
-                  void *cy, void *cy_test, integer incy, void *c, void *s, double err_thresh,
-                  void *params)
+                  void *cy, void *cy_test, integer incy, void *c, void *s, void *c_save,
+                  void *s_save, double err_thresh, void *params)
 {
-    double residual, resid1 = 0., resid2 = 0.;
+    integer realtype = get_realtype(datatype);
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
     /* Early return conditions */
     if(n == 0)
     {
@@ -26,6 +27,13 @@ void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx
      * an extreme value indicating that API returned
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
+
+    /* Test 3: Ensure input scalar c was not modified by ROT.
+       Test 4: Ensure input scalar s was not modified by ROT.
+       Both checks happen here (before the residual computations) because the
+       switch below negates s in-place as part of the test-2 derivation. */
+    resid3 = compare_vector(realtype, 1, c, 1, 1, c_save, 1);
+    resid4 = compare_vector(datatype, 1, s, 1, 1, s_save, 1);
 
     switch(datatype)
     {
@@ -125,7 +133,11 @@ void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx
     }
 
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
+    residual = fla_test_max(residual, resid4);
     FLA_PRINT_TEST_STATUS(n, 2, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

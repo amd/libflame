@@ -412,7 +412,7 @@ void validate_gghrd(char *tst_api, char *compq, char *compz, integer n, void *A,
                     integer ldq, void *Z, void *Z_test, integer ldz, integer datatype,
                     double err_thresh, void *params)
 {
-    double residual, resid[6];
+    double residual, resid[10];
 
     /* Early return conditions */
     if(n == 0)
@@ -425,15 +425,29 @@ void validate_gghrd(char *tst_api, char *compq, char *compz, integer n, void *A,
     FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
     resid[0] = resid[1] = resid[2] = 0.;
-    resid[3] = resid[4] = resid[5] = 0.;
+    resid[3] = resid[4] = resid[5] = resid[6] = 0.;
+    resid[7] = resid[8] = resid[9] = 0.;
     validate_gghrd_int(tst_api, compq, compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z,
                        Z_test, ldz, datatype, resid, params);
+
+    /* Test 7: Check padding rows of A not modified */
+    resid[6] = check_padding(datatype, n, n, A_test, lda);
+    /* Test 8: Check padding rows of B not modified */
+    resid[7] = check_padding(datatype, n, n, B_test, ldb);
+    /* Test 9: Check padding rows of Q not modified */
+    resid[8] = check_padding(datatype, n, n, Q_test, ldq);
+    /* Test 10: Check padding rows of Z not modified */
+    resid[9] = check_padding(datatype, n, n, Z_test, ldz);
 
     residual = fla_test_max(resid[0], resid[1]);
     residual = fla_test_max(residual, resid[2]);
     residual = fla_test_max(residual, resid[3]);
     residual = fla_test_max(residual, resid[4]);
     residual = fla_test_max(residual, resid[5]);
+    residual = fla_test_max(residual, resid[6]);
+    residual = fla_test_max(residual, resid[7]);
+    residual = fla_test_max(residual, resid[8]);
+    residual = fla_test_max(residual, resid[9]);
 
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid[0], err_thresh, "01");
@@ -442,4 +456,8 @@ void validate_gghrd(char *tst_api, char *compq, char *compz, integer n, void *A,
     FLA_PRINT_SUBTEST_STATUS(resid[3], err_thresh, "04");
     FLA_PRINT_SUBTEST_STATUS(resid[4], err_thresh, "05");
     FLA_PRINT_SUBTEST_STATUS(resid[5], err_thresh, "06");
+    FLA_PRINT_SUBTEST_STATUS(resid[6], err_thresh, "07");
+    FLA_PRINT_SUBTEST_STATUS(resid[7], err_thresh, "08");
+    FLA_PRINT_SUBTEST_STATUS(resid[8], err_thresh, "09");
+    FLA_PRINT_SUBTEST_STATUS(resid[9], err_thresh, "10");
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -126,7 +126,7 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo)
 {
     integer n, info = 0, nrhs, lda, ldb;
-    void *A = NULL, *A_test = NULL, *scal = NULL;
+    void *A = NULL, *A_test = NULL, *A_save = NULL, *scal = NULL;
     void *B = NULL, *X = NULL;
     void *B_test = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
@@ -160,6 +160,7 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &X, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B_test, ldb);
@@ -201,6 +202,8 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     /* cholesky factorisation of A as input to potrs */
     invoke_potrf(&uplo, datatype, &n, A, &lda, &info);
+    /* Save factored A for validating it is not modified by POTRS */
+    copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
     copy_matrix(datatype, "full", n, nrhs, B, ldb, B_test, ldb);
 
@@ -228,8 +231,8 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
     }
     else if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_potrs(tst_api, n, nrhs, A_test, lda, X, B, ldb, datatype, residual,
-                       params->imatrix_char, params);
+        validate_potrs(tst_api, n, nrhs, A_test, lda, A, A_save, X, B, B_test, ldb, datatype,
+                       residual, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -250,6 +253,7 @@ free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
+    free_matrix(A_save);
     free_matrix(B_test);
     free_matrix(B);
     free_matrix(X);

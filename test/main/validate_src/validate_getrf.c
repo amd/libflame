@@ -16,7 +16,7 @@ void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
                     integer lda, integer *IPIV, integer datatype, double err_thresh, char imatrix,
                     void *params)
 {
-    double residual, resid1 = 0., resid2 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
 
     /* Early return conditions */
     if(m_A == 0 || n_A == 0)
@@ -31,10 +31,15 @@ void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
     validate_getrf_internal(m_A, n_A, A, A_test, lda, IPIV, datatype, imatrix, &resid1, &resid2,
                             params);
 
+    /* Test 3: Check padding rows not modified */
+    resid3 = check_padding(datatype, m_A, n_A, A_test, lda);
+
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
     FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }
 
 void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/

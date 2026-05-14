@@ -158,7 +158,7 @@ void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, v
     integer m_BR, n_BR, m_BL, n_BL, m_TR, n_TR;
     void *A_BR, *L_BL, *U_TR;
     double residual, resid1 = 0., resid2 = 0.;
-    double resid3 = 0., resid4 = 0., resid5 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.;
 
     /* Early return conditions */
     if(m_A == 0 || n_A == 0 || nfact == 0)
@@ -208,10 +208,14 @@ void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, v
             break;
     }
 
+    /* Test 6: Check padding rows not modified */
+    resid6 = check_padding(datatype, m_A, n_A, A_test, lda);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
     residual = fla_test_max(resid5, residual);
+    residual = fla_test_max(resid6, residual);
 
     FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
@@ -219,4 +223,5 @@ void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, v
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
     FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
+    FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
 }

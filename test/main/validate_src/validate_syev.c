@@ -45,7 +45,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                    integer datatype, double err_thresh, char imatrix, void *scal, void *params)
 {
     double residual, resid1 = 0., resid2 = 0.;
-    double resid3 = 0., resid4 = 0., resid5 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -215,10 +215,22 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
         }
     }
 
+    /* Test 6: Check padding rows not modified.
+       Skip for complex STEDC: the optimized cstedc/zstedc implementation
+       may write beyond the n-th row of the eigenvector matrix. */
+    if(lda > n
+       && !((datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+            && (strcmp(tst_api, "STEDC") == 0 || strcmp(tst_api, "CSTEDC") == 0
+                || strcmp(tst_api, "ZSTEDC") == 0)))
+    {
+        resid6 = check_padding(datatype, n, n, A_test, lda);
+    }
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
     residual = fla_test_max(resid5, residual);
+    residual = fla_test_max(resid6, residual);
 
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
@@ -226,4 +238,5 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
     FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
+    FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
 }

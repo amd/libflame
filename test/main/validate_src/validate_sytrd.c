@@ -12,7 +12,7 @@
 void validate_sytrd(char *tst_api, integer datatype, char uplo, integer n, void *A_test, void *A_in,
                     integer lda, void *D, void *E, void *tau, double err_thresh, void *params)
 {
-    double residual = 0., resid1 = 0., resid2 = 0.;
+    double residual = 0., resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
     void *A_save = NULL, *work = NULL, *Q_temp = NULL;
     void *Q = NULL, *T = NULL;
     integer lwork = -1;
@@ -121,6 +121,12 @@ void validate_sytrd(char *tst_api, integer datatype, char uplo, integer n, void 
         }
     }
 
+    /* Test 3: Ensure unused triangle was not modified */
+    resid3 = compare_matrix(datatype, same_char(uplo, 'U') ? "L" : "U", n, n, A_in, lda, A_test, lda);
+
+    /* Test 4: Check padding rows not modified */
+    resid4 = check_padding(datatype, n, n, A_test, lda);
+
     free_matrix(T);
     free_matrix(A_save);
     free_matrix(Q);
@@ -128,7 +134,11 @@ void validate_sytrd(char *tst_api, integer datatype, char uplo, integer n, void 
     free_vector(work);
 
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

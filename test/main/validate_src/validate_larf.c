@@ -35,7 +35,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
     void *out_validate = NULL;
     void *work = NULL;
     void *c__tmp = NULL;
-    double residual;
+    double residual, resid1 = 0., resid2 = 0.;
 
     /* Early return conditions */
     if(m == 0 || n == 0)
@@ -99,7 +99,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
             matrix_difference(datatype, m, n, c__tmp, m, out_validate, m);
             norm = fla_lapack_slange("1", &m, &n, c__tmp, &m, work);
 
-            residual = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
             break;
         }
         case DOUBLE:
@@ -137,7 +137,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
             matrix_difference(datatype, m, n, c__tmp, m, out_validate, m);
             norm = fla_lapack_dlange("1", &m, &n, c__tmp, &m, work);
 
-            residual = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
             break;
         }
         case COMPLEX:
@@ -177,7 +177,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
             matrix_difference(datatype, m, n, c__tmp, m, out_validate, m);
             norm = fla_lapack_clange("1", &m, &n, c__tmp, &m, work);
 
-            residual = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
             break;
         }
         case DOUBLE_COMPLEX:
@@ -217,11 +217,11 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
             matrix_difference(datatype, m, n, c__tmp, m, out_validate, m);
             norm = fla_lapack_zlange("1", &m, &n, c__tmp, &m, work);
 
-            residual = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, m, params);
             break;
         }
         default:
-            residual = err_thresh;
+            resid1 = err_thresh;
             break;
     }
 
@@ -233,6 +233,11 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
     free_matrix(c__tmp);
     free_vector(work);
 
+    /* Test 2: Check padding rows not modified */
+    resid2 = check_padding(datatype, m, n, c__out, ldc__out);
+    residual = fla_test_max(resid1, resid2);
+
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

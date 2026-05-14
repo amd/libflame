@@ -20,7 +20,7 @@ void validate_stedc(char *tst_api, char compz, integer n, void *D_test, void *Z_
 {
     void *lambda = NULL, *zlambda = NULL;
     void *work = NULL;
-    double residual, resid1 = 0., resid2 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -110,11 +110,16 @@ void validate_stedc(char *tst_api, char compz, integer n, void *D_test, void *Z_
             break;
         }
     }
+    /* Test 3: Check padding rows of Z not modified */
+    resid3 = check_padding(datatype, n, n, Z, ldz);
+
     free_matrix(lambda);
     free_matrix(zlambda);
 
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

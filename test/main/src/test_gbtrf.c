@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -194,6 +194,11 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Save the original matrix*/
     copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_test, ldab);
+
+    /* Restore padding sentinels on AB_test (destroyed by rand_band_storage_matrix's
+       internal reset_matrix). Use 2*kl+ku+1 as the actual band data row count since
+       band storage occupies all 2*kl+ku+1 rows, not just m rows. */
+    init_padding(datatype, 2 * kl + ku + 1, n, AB_test, ldab);
 
     /* call to API */
     prepare_gbtrf_run(m, n, kl, ku, AB_test, ldab, IPIV, datatype, &info, interfacetype, layout,

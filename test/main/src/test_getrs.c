@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -129,7 +129,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
 {
     integer n, lda, ldb, NRHS;
     integer info = 0;
-    void *IPIV, *s_test = NULL;
+    void *IPIV, *IPIV_save = NULL, *s_test = NULL;
     char range = 'U';
     void *A, *A_test, *B, *B_save, *X, *scal = NULL, *A_test_save = NULL;
     char TRANS = params->lin_solver_paramslist[pci].transr;
@@ -218,6 +218,8 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     invoke_getrf(datatype, &n, &n, A_test, &lda, IPIV, &info);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test_save, lda);
     copy_matrix(datatype, "full", n, n, A_test, lda, A_test_save, lda);
+    create_vector(INTEGER, &IPIV_save, n);
+    copy_vector(INTEGER, n, IPIV, 1, IPIV_save, 1);
 
     /* call to API */
     prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, &info, interfacetype,
@@ -241,8 +243,8 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
      *  */
     IF_FLA_BRT_VALIDATION(
         n, n, store_outputs_base(filename, params, 1, 0, datatype, n, NRHS, X, ldb),
-        validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual,
-                       params->imatrix_char, scal, params),
+        validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, A_test, A_test_save, IPIV, IPIV_save,
+                       B_save, ldb, X, datatype, residual, params->imatrix_char, scal, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, n, NRHS, X, ldb))
     else if(FLA_SKIP_VALIDATION_MODE)
     {
@@ -251,8 +253,8 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     }
     else if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual,
-                       params->imatrix_char, scal, params);
+        validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, A_test, A_test_save, IPIV, IPIV_save,
+                       B_save, ldb, X, datatype, residual, params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -270,6 +272,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Free up the buffers */
     free_matrix(A_test_save);
+    free_vector(IPIV_save);
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);

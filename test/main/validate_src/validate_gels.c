@@ -21,7 +21,7 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
     void *work = NULL;
     void *C = NULL;
     double residual;
-    double resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
+    double resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0.;
 
     /* Early return conditions */
     if(m == 0 || n == 0)
@@ -231,13 +231,18 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
     free_vector(work);
     free_matrix(C);
 
+    /* Test 5: Check padding rows not modified */
+    resid5 = check_padding(datatype, fla_max(m, n), nrhs, x, ldb);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
 
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
 }

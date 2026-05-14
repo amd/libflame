@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -299,8 +299,8 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
         store_ggevx_outputs(filename, datatype, BALANC, JOBVL, JOBVR, SENSE, n, A, lda, B, ldb,
                             alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, lscale, rscale, abnrm,
                             bbnrm, rconde, rcondv, params),
-        validate_ggevx(tst_api, &BALANC, &JOBVL, &JOBVR, &SENSE, n, A_test, lda, B_test, ldb, alpha,
-                       alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual, params),
+        validate_ggevx(tst_api, &BALANC, &JOBVL, &JOBVR, &SENSE, n, A_test, A, lda, B_test, B, ldb,
+                       alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual, params),
         check_bit_reproducibility_ggevx(filename, datatype, BALANC, JOBVL, JOBVR, SENSE, n, A, lda,
                                         B, ldb, alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr,
                                         lscale, rscale, abnrm, bbnrm, rconde, rcondv, params))
@@ -313,9 +313,9 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
     {
         if(same_char(JOBVL, 'V') || same_char(JOBVR, 'V'))
         {
-            validate_ggevx(tst_api, &BALANC, &JOBVL, &JOBVR, &SENSE, n, A_test, lda, B_test, ldb,
-                           alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual,
-                           params);
+            validate_ggevx(tst_api, &BALANC, &JOBVL, &JOBVR, &SENSE, n, A_test, A, lda, B_test, B,
+                           ldb, alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype,
+                           residual, params);
         }
         else
         {

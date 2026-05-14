@@ -16,7 +16,7 @@ void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, v
                     integer datatype, double err_thresh, char imatrix, void *params)
 {
     integer k;
-    double residual, resid1 = 0., resid2 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
     void *work = NULL;
 
     /* Early return conditions */
@@ -104,8 +104,13 @@ void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, v
         }
     }
 
+    /* Test 3: Check padding rows not modified */
+    resid3 = check_padding(datatype, m, n, Q, lda);
+
     residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

@@ -12,7 +12,7 @@
 void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void *A, void *A_save,
                     integer lda, double err_thresh, char imatrix_char, void *params)
 {
-    double residual = 0.;
+    double residual, resid1 = 0., resid2 = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -24,13 +24,14 @@ void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void 
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
-    /* Check if matrix A was not modified by the call to GECON
-     */
-    if(compare_matrix(datatype, "Full", n, n, A, lda, A_save, lda) == 0)
-    {
-        residual = DBL_MAX;
-    }
+    /* Test 1: Check if matrix A was not modified by the call to GECON */
+    resid1 = compare_matrix(datatype, "Full", n, n, A, lda, A_save, lda);
 
+    /* Test 2: Check padding rows not modified */
+    resid2 = check_padding(datatype, n, n, A, lda);
+
+    residual = fla_test_max(resid1, resid2);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

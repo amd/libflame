@@ -45,7 +45,7 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
                     char imatrix_char, void *params)
 {
     double resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.,
-           resid7 = 0.;
+           resid7 = 0., resid8 = 0., resid9 = 0., resid10 = 0.;
     double residual = residual_in;
     double safe_min;
     integer realtype = get_realtype(datatype);
@@ -534,6 +534,13 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         free_matrix(Q_mat);
     }
 
+    /* Test 08: Check padding rows of U_out not modified */
+    resid8 = check_padding(datatype, nru, n, U_out, ldu);
+    /* Test 09: Check padding rows of VT_out not modified */
+    resid9 = check_padding(datatype, n, ncvt, VT_out, ldvt);
+    /* Test 10: Check padding rows of C_out not modified */
+    resid10 = check_padding(datatype, n, ncc, C_out, ldc);
+
     /* Combine residuals - take the maximum */
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(residual, resid3);
@@ -541,6 +548,9 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
     residual = fla_test_max(residual, resid5);
     residual = fla_test_max(residual, resid6);
     residual = fla_test_max(residual, resid7);
+    residual = fla_test_max(residual, resid8);
+    residual = fla_test_max(residual, resid9);
+    residual = fla_test_max(residual, resid10);
 
     /* Print results */
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
@@ -551,4 +561,7 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
     FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
     FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
     FLA_PRINT_SUBTEST_STATUS(resid7, err_thresh, "07");
+    FLA_PRINT_SUBTEST_STATUS(resid8, err_thresh, "08");
+    FLA_PRINT_SUBTEST_STATUS(resid9, err_thresh, "09");
+    FLA_PRINT_SUBTEST_STATUS(resid10, err_thresh, "10");
 }

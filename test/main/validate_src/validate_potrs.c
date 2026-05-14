@@ -12,14 +12,15 @@
 extern double perf;
 extern double time_min;
 
-void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *X, void *B,
-                    integer ldb, integer datatype, double err_thresh, char imatrix, void *params)
+void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *A_fact,
+                    void *A_save, void *X, void *B, void *B_test, integer ldb, integer datatype,
+                    double err_thresh, char imatrix, void *params)
 {
     void *work = NULL;
     integer ldx;
     ldx = n;
     char NORM = '1';
-    double residual = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -46,7 +47,8 @@ void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda
             sgemm_("N", "N", &n, &nrhs, &n, &s_one, A, &lda, X, &ldx, &s_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            resid1
+                = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case DOUBLE:
@@ -62,7 +64,8 @@ void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda
             dgemm_("N", "N", &n, &nrhs, &n, &d_one, A, &lda, X, &ldx, &d_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            resid1
+                = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case COMPLEX:
@@ -78,7 +81,8 @@ void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda
             cgemm_("N", "N", &n, &nrhs, &n, &c_one, A, &lda, X, &ldx, &c_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            resid1
+                = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case DOUBLE_COMPLEX:
@@ -94,14 +98,30 @@ void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda
             zgemm_("N", "N", &n, &nrhs, &n, &z_one, A, &lda, X, &ldx, &z_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            resid1
+                = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         default:
-            residual = err_thresh;
+            resid1 = err_thresh;
             break;
     }
 
+    /* Test 2: Ensure input matrix A (factored) was not modified by POTRS */
+    resid2 = compare_matrix(datatype, "full", n, n, A_save, lda, A_fact, lda);
+
+    /* Test 3: Check padding rows of B not modified */
+    resid3 = check_padding(datatype, n, nrhs, B_test, ldb);
+
+    /* Test 4: Check padding rows of A not modified */
+    resid4 = check_padding(datatype, n, n, A_fact, lda);
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

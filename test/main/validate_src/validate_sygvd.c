@@ -191,6 +191,7 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
 {
     double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
     double resid4 = 0., resid5 = 0., resid6 = 0.;
+    double resid7 = 0., resid8 = 0., resid9 = 0., resid10 = 0.;
     /* Early return conditions */
     if(n == 0)
     {
@@ -350,11 +351,31 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
         }
     }
 
+    /* Test 7: Ensure unused triangle of A was not modified.
+       Skip when jobz='V' since eigenvectors overwrite entire A. */
+    if(same_char(*jobz, 'N'))
+    {
+        resid7 = compare_matrix(datatype, same_char(*uplo, 'U') ? "L" : "U", n, n, A, lda, A_test, lda);
+    }
+
+    /* Test 8: Ensure unused triangle of B was not modified */
+    resid8 = compare_matrix(datatype, same_char(*uplo, 'U') ? "L" : "U", n, n, B, ldb, B_test, ldb);
+
+    /* Test 9: Check padding rows of A not modified */
+    resid9 = check_padding(datatype, n, n, A_test, lda);
+
+    /* Test 10: Check padding rows of B not modified */
+    resid10 = check_padding(datatype, n, n, B_test, ldb);
+
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
     residual = fla_test_max(resid4, residual);
     residual = fla_test_max(resid5, residual);
     residual = fla_test_max(resid6, residual);
+    residual = fla_test_max(resid7, residual);
+    residual = fla_test_max(resid8, residual);
+    residual = fla_test_max(resid9, residual);
+    residual = fla_test_max(resid10, residual);
 
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
@@ -363,4 +384,8 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
     FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
     FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
+    FLA_PRINT_SUBTEST_STATUS(resid7, err_thresh, "07");
+    FLA_PRINT_SUBTEST_STATUS(resid8, err_thresh, "08");
+    FLA_PRINT_SUBTEST_STATUS(resid9, err_thresh, "09");
+    FLA_PRINT_SUBTEST_STATUS(resid10, err_thresh, "10");
 }

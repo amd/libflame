@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 set(GROUND_TRUTH_TEST_CASES 
             "labrd scdz 75 110 50 150 150 150 10 --seed=100 --BRT=G"
@@ -228,10 +228,10 @@ set(GROUND_TRUTH_TEST_CASES
             "syevx sdcz V V U 23 35 5 10 1 3 -1 40 -1 1 --seed=100 --BRT=G"
             "syevx sdcz V I L 40 50 10 20 1 10 -1 60 -1 1 --seed=100 --BRT=G"
             "syevx sdcz N A U 150 160 10 20 1 3 -1 170 -1 1 --seed=100 --BRT=G"
-            "sygvd sdcz 1 N U 10 10 -1 -1 -1 1 --seed=100 --BRT=G"
-            "sygvd sdcz 2 N U 20 20 -1 -1 -1 1 --seed=100 --BRT=G"
-            "sygvd sdcz 2 V L 100 300 -1 -1 -1 1 --seed=100 --BRT=G"
-            "sygvd sdcz 1 V L 100 300 -1 -1 -1 1 --seed=100 --BRT=G"
+            "sygvd sdcz 1 N U 10 10 10 -1 -1 -1 1 --seed=100 --BRT=G"
+            "sygvd sdcz 2 N U 20 20 20 -1 -1 -1 1 --seed=100 --BRT=G"
+            "sygvd sdcz 2 V L 100 300 300 -1 -1 -1 1 --seed=100 --BRT=G"
+            "sygvd sdcz 1 V L 100 300 300 -1 -1 -1 1 --seed=100 --BRT=G"
             "sytrd sdcz U 10 10 -1 1 --seed=100 --BRT=G"
             "sytrd sdcz L 10 10 -1 1 --seed=100 --BRT=G"
             "sytrd sdcz U 100 100 -1 1 --seed=100 --BRT=G"
@@ -636,10 +636,10 @@ set(VERIFICATION_TEST_CASES
             "syevx sdcz V V U 23 35 5 10 1 3 -1 40 -1 1 --seed=100 --BRT=V"
             "syevx sdcz V I L 40 50 10 20 1 10 -1 60 -1 1 --seed=100 --BRT=V"
             "syevx sdcz N A U 150 160 10 20 1 3 -1 170 -1 1 --seed=100 --BRT=V"
-            "sygvd sdcz 1 N U 10 10 -1 -1 -1 1 --seed=100 --BRT=V"
-            "sygvd sdcz 2 N U 20 20 -1 -1 -1 1 --seed=100 --BRT=V"
-            "sygvd sdcz 2 V L 100 300 -1 -1 -1 1 --seed=100 --BRT=V"
-            "sygvd sdcz 1 V L 100 300 -1 -1 -1 1 --seed=100 --BRT=V"
+            "sygvd sdcz 1 N U 10 10 10 -1 -1 -1 1 --seed=100 --BRT=V"
+            "sygvd sdcz 2 N U 20 20 20 -1 -1 -1 1 --seed=100 --BRT=V"
+            "sygvd sdcz 2 V L 100 300 300 -1 -1 -1 1 --seed=100 --BRT=V"
+            "sygvd sdcz 1 V L 100 300 300 -1 -1 -1 1 --seed=100 --BRT=V"
             "sytrd sdcz U 10 10 -1 1 --seed=100 --BRT=V"
             "sytrd sdcz L 10 10 -1 1 --seed=100 --BRT=V"
             "sytrd sdcz U 100 100 -1 1 --seed=100 --BRT=V"

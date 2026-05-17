@@ -123,6 +123,24 @@ foreach(CONFIG_TYPE "long" "medium" "short" "micro")
         )
     endforeach()
 
+    # CPP interface tests (per-API, using the same API list as LAPACK)
+    if(ENABLE_CPP_TEST)
+        foreach(API_NAME IN LISTS MAIN_TEST_API_LIST)
+            set(CPP_API_DIR "${MAIN_TEST_OPS_DIR}/${CONFIG_TYPE}/cpp_${API_NAME}")
+            setup_per_api_dir("${CPP_API_DIR}" MAIN_TEST_API_LIST "${API_NAME}" "input.global.operations" "${SHARED_CONFIG_DIR}")
+
+            add_test(
+                NAME cpp_test_${CONFIG_TYPE}_${API_NAME}
+                COMMAND ${CTEST_RUN_WRAPPER} ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --interface=cpp
+                WORKING_DIRECTORY "${CPP_API_DIR}"
+            )
+            set_tests_properties(cpp_test_${CONFIG_TYPE}_${API_NAME} PROPERTIES
+                LABELS "cpp_test;cpp_test_${CONFIG_TYPE};${API_NAME}"
+                FAIL_REGULAR_EXPRESSION "FAIL"
+            )
+        endforeach()
+    endif()
+
     # LAPACKE interface tests (per-API, using LAPACKE-specific API list)
     # Column-major and row-major tests get separate working directories so
     # that ctest -j cannot race on files the binary writes (BRT artifacts, etc.).

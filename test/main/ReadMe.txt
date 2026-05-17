@@ -599,3 +599,12 @@ NOTE:
      `input.global.operations.lapacke` is modified.
    - On Windows, the config directory is copied instead of symlinked if symlink
      creation fails.
+   - For LAPACKE column major interface tests, use `lapacke_test_col_major_long`
+     instead of `main_test_long` (and similarly `lapacke_test_col_major_medium`,
+     `lapacke_test_col_major_short`, `lapacke_test_col_major_micro`). For LAPACKE
+     row major, use `lapacke_test_row_major_long` and so on. For the CPP interface,
+     use `cpp_test_long` and so on.
+     Example:
+       $ ctest -R lapacke_test_col_major_long -j4 -V
+       $ ctest -R lapacke_test_row_major_long -j4 -V
+       $ ctest -R cpp_test_long -j4 -V

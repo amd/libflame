@@ -270,7 +270,7 @@ char*     FLA_Get_AOCL_Version( void )
 
 #ifdef FLA_LIBFLAME_VERSION
 #ifdef FLA_ENABLE_WINDOWS_BUILD
-  char configlfversion[] = VERSION_MAKE_STR(FLA_LIBFLAME_VERSION); //Quotions in CMake are a problem. Hence strinifying
+  char configlfversion[] = VERSION_MAKE_STR(FLA_LIBFLAME_VERSION); // Quotations in CMake are a problem. Hence stringifying
 #else
   char configlfversion[] = FLA_LIBFLAME_VERSION;
 #endif

@@ -365,8 +365,8 @@
 
 #define fla_lapack_ssygvd SSYGVD_
 #define fla_lapack_dsygvd DSYGVD_
-#define fla_lapack_chegvd CSYGVD_
-#define fla_lapack_zhegvd ZSYGVD_
+#define fla_lapack_chegvd CHEGVD_
+#define fla_lapack_zhegvd ZHEGVD_
 
 #define fla_lapack_sgecon SGECON_
 #define fla_lapack_dgecon DGECON_
@@ -784,8 +784,8 @@
 
 #define fla_lapack_ssygvd SSYGVD
 #define fla_lapack_dsygvd DSYGVD
-#define fla_lapack_chegvd CSYGVD
-#define fla_lapack_zhegvd ZSYGVD
+#define fla_lapack_chegvd CHEGVD
+#define fla_lapack_zhegvd ZHEGVD
 
 #define fla_lapack_sgecon SGECON
 #define fla_lapack_dgecon DGECON

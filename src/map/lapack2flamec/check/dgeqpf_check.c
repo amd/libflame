@@ -11,6 +11,7 @@ int dgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda,
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
     a -= a_offset;
+    --jpvt;
     --tau;
     --work;
     /* Function Body */

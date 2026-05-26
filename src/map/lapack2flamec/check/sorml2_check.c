@@ -71,5 +71,6 @@ int sorml2_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
     {
         return LAPACK_QUICK_RETURN;
     }
+
     return LAPACK_SUCCESS;
 }

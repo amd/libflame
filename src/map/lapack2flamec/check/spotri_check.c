@@ -10,7 +10,6 @@ int spotri_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
     a -= a_offset;
-
     /* Function Body */
     *info = 0;
     if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))

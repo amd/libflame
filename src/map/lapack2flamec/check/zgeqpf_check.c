@@ -20,6 +20,7 @@ int zgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *ld
     --jpvt;
     --tau;
     --work;
+    --rwork;
     /* Function Body */
     *info = 0;
     if(*m < 0)

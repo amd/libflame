@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./sggev3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -285,7 +289,9 @@ void aocl_lapack_sggev3(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl
     real bignum;
     aocl_int64_t ijobvl, iright;
     aocl_int64_t ijobvr;
-    real anrmto, bnrmto, smlnum;
+    real anrmto;
+    aocl_int64_t lwkmin;
+    real bnrmto, smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
@@ -362,6 +368,10 @@ void aocl_lapack_sggev3(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl
     /* Test the input arguments */
     *info = 0;
     lquery = *lwork == -1;
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n << 3; // , expr subst
+    lwkmin = fla_max(i__1, i__2);
     if(ijobvl <= 0)
     {
         *info = -1;
@@ -390,24 +400,17 @@ void aocl_lapack_sggev3(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl
     {
         *info = -14;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n << 3; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -16;
-        }
+        *info = -16;
     }
     /* Compute workspace */
     if(*info == 0)
     {
         aocl_lapack_sgeqrf(n, n, &b[b_offset], ldb, &work[1], &work[1], &c_n1, &ierr);
         /* Computing MAX */
-        i__1 = 1, i__2 = *n << 3;
-        i__1 = fla_max(i__1, i__2);
-        i__2 = *n * 3 + (integer)work[1]; // ; expr subst
+        i__1 = lwkmin;
+        i__2 = *n * 3 + (integer)work[1]; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         aocl_lapack_sormqr("L", "T", n, n, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda,
                            &work[1], &c_n1, &ierr);
@@ -446,7 +449,14 @@ void aocl_lapack_sggev3(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl
             i__2 = (*n << 1) + (integer)work[1]; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        if(*n == 0)
+        {
+            work[1] = 1.f;
+        }
+        else
+        {
+            work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        }
     }
     if(*info != 0)
     {

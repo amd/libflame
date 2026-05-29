@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./sggrqf.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -289,8 +293,11 @@ void aocl_lapack_sggrqf(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *n, real 
     i__1 = fla_max(nb1, nb2);
     nb = fla_max(i__1, nb3);
     /* Computing MAX */
-    i__1 = fla_max(*n, *m);
-    lwkopt = fla_max(i__1, *p) * nb;
+    /* Computing MAX */
+    i__3 = fla_max(*n, *m);
+    i__1 = 1;
+    i__2 = fla_max(i__3, *p) * nb; // , expr subst
+    lwkopt = fla_max(i__1, i__2);
     work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if(*m < 0)

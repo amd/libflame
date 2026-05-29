@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/ssytrd_sb2st.f -- translated by f2c (version 20160102). You must link the
  resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
  Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
@@ -324,8 +328,16 @@ void aocl_lapack_ssytrd_sb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
     lquery = *lwork == -1 || *lhous == -1;
     /* Determine the block size, the workspace size and the hous size. */
     ib = aocl_lapack_ilaenv2stage(&c__2, "SSYTRD_SB2ST", vect, n, kd, &c_n1, &c_n1);
-    lhmin = aocl_lapack_ilaenv2stage(&c__3, "SSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
-    lwmin = aocl_lapack_ilaenv2stage(&c__4, "SSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
+    if(*n == 0 || *kd <= 1)
+    {
+        lhmin = 1;
+        lwmin = 1;
+    }
+    else
+    {
+        lhmin = aocl_lapack_ilaenv2stage(&c__3, "SSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
+        lwmin = aocl_lapack_ilaenv2stage(&c__4, "SSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
+    }
     if(!afters1 && !lsame_(stage1, "N", 1, 1))
     {
         *info = -1;
@@ -360,7 +372,7 @@ void aocl_lapack_ssytrd_sb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
     }
     if(*info == 0)
     {
-        hous[1] = (real)lhmin;
+        hous[1] = aocl_lapack_sroundup_lwork(&lhmin);
         work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     }
     if(*info != 0)
@@ -651,7 +663,6 @@ void aocl_lapack_ssytrd_sb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
             /* L170: */
         }
     }
-    hous[1] = (real)lhmin;
     work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;

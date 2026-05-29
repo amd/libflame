@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/sgesvj.f -- translated by f2c (version 20160102). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -388,8 +392,11 @@ void aocl_lapack_sgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
     real theta;
     real small_val, sfmin;
     logical lsvec;
+    aocl_int64_t minmn;
     real fastr[5], epsln;
-    logical applv, rsvec, uctol, lower, upper;
+    logical applv, rsvec;
+    aocl_int64_t lwmin;
+    logical uctol, lower, upper;
     logical rotok;
     extern real slamch_(char *);
     aocl_int64_t ijblsk, swband;
@@ -397,7 +404,9 @@ void aocl_lapack_sgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
     real mxaapq;
     real thsign;
     real mxsinj;
-    aocl_int64_t emptsw, notrot, iswrot, lkahead;
+    aocl_int64_t emptsw;
+    logical lquery;
+    aocl_int64_t notrot, iswrot, lkahead;
     logical goscale, noscale;
     real rootbig, rooteps;
     aocl_int64_t rowskip;
@@ -447,6 +456,19 @@ void aocl_lapack_sgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
     applv = lsame_(jobv, "A", 1, 1);
     upper = lsame_(joba, "U", 1, 1);
     lower = lsame_(joba, "L", 1, 1);
+    minmn = fla_min(*m, *n);
+    if(minmn == 0)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        /* Computing MAX */
+        i__1 = 6;
+        i__2 = *m + *n; // , expr subst
+        lwmin = fla_max(i__1, i__2);
+    }
+    lquery = *lwork == -1;
     if(!(upper || lower || lsame_(joba, "G", 1, 1)))
     {
         *info = -1;
@@ -483,18 +505,13 @@ void aocl_lapack_sgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
     {
         *info = -12;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = *m + *n;
-        if(*lwork < fla_max(i__1, 6))
-        {
-            *info = -13;
-        }
-        else
-        {
-            *info = 0;
-        }
+        *info = -13;
+    }
+    else
+    {
+        *info = 0;
     }
     /* #:( */
     if(*info != 0)
@@ -504,8 +521,14 @@ void aocl_lapack_sgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
+    else if(lquery)
+    {
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
     /* #:) Quick return for void matrix */
-    if(*m == 0 || *n == 0)
+    if(minmn == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;

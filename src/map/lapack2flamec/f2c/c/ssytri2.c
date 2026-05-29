@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/ssytri2.f -- translated by f2c (version 20160102). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -189,7 +193,11 @@ void aocl_lapack_ssytri2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda
     lquery = *lwork == -1;
     /* Get blocksize */
     nbmax = aocl_lapack_ilaenv(&c__1, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
-    if(nbmax >= *n)
+    if(*n == 0)
+    {
+        minsize = 1;
+    }
+    else if(nbmax >= *n)
     {
         minsize = *n;
     }
@@ -213,7 +221,6 @@ void aocl_lapack_ssytri2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda
     {
         *info = -7;
     }
-    /* Quick return if possible */
     if(*info != 0)
     {
         i__1 = -(*info);
@@ -223,10 +230,11 @@ void aocl_lapack_ssytri2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda
     }
     else if(lquery)
     {
-        work[1] = (real)minsize;
+        work[1] = aocl_lapack_sroundup_lwork(&minsize);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
+    /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT

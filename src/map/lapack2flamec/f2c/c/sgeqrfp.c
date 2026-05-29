@@ -164,7 +164,7 @@ void sgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, r
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     aocl_int64_t i__, k, ib, nb, nx, iws, nbmin, iinfo;
-    aocl_int64_t ldwork, lwkopt;
+    aocl_int64_t lwkmin, ldwork, lwkopt;
     logical lquery;
     extern /* Subroutine */
         void
@@ -197,7 +197,17 @@ void sgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, r
     /* Function Body */
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
-    lwkopt = *n * nb;
+    k = fla_min(*m, *n);
+    if(k == 0)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = *n;
+        lwkopt = *n * nb;
+    }
     work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if(*m < 0)
@@ -212,7 +222,7 @@ void sgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, r
     {
         *info = -4;
     }
-    else if(*lwork < fla_max(1, *n) && !lquery)
+    else if(*lwork < lwkmin && !lquery)
     {
         *info = -7;
     }
@@ -235,7 +245,7 @@ void sgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, r
     }
     nbmin = 2;
     nx = 0;
-    iws = *n;
+    iws = lwkmin;
     if(nb > 1 && nb < k)
     {
         /* Determine when to cross over from blocked to unblocked code. */

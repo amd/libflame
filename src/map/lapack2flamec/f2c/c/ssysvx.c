@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./ssysvx.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -327,6 +331,7 @@ void aocl_lapack_ssysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     extern real slamch_(char *);
     logical nofact;
     aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -370,6 +375,10 @@ void aocl_lapack_ssysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     lquery = *lwork == -1;
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n * 3; // , expr subst
+    lwkmin = fla_max(i__1, i__2);
     if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
@@ -402,22 +411,13 @@ void aocl_lapack_ssysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     {
         *info = -13;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n * 3; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -18;
-        }
+        *info = -18;
     }
     if(*info == 0)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n * 3; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        lwkopt = lwkmin;
         if(nofact)
         {
             nb = aocl_lapack_ilaenv(&c__1, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);

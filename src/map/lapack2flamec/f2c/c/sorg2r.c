@@ -196,11 +196,10 @@ void sorg2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl
         /* Apply H(i) to A(i:m,i:n) from the left */
         if(i__ < *n)
         {
-            a[i__ + i__ * a_dim1] = 1.f;
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            aocl_lapack_slarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_slarf1f("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                                &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
         if(i__ < *m)
         {

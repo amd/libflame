@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/sopmtr.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -180,7 +184,6 @@ void aocl_lapack_sopmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
     aocl_int64_t c_dim1, c_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
-    real aii;
     logical left;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
@@ -305,11 +308,8 @@ void aocl_lapack_sopmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
                 ni = i__;
             }
             /* Apply H(i) */
-            aii = ap[ii];
-            ap[ii] = 1.f;
-            aocl_lapack_slarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset],
-                              ldc, &work[1]);
-            ap[ii] = aii;
+            aocl_lapack_slarf1l(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset],
+                                ldc, &work[1]);
             if(forwrd)
             {
                 ii = ii + i__ + 2;
@@ -353,8 +353,6 @@ void aocl_lapack_sopmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
         i__1 = i3;
         for(i__ = i1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
-            aii = ap[ii];
-            ap[ii] = 1.f;
             if(left)
             {
                 /* H(i) is applied to C(i+1:m,1:n) */
@@ -368,9 +366,8 @@ void aocl_lapack_sopmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
                 jc = i__ + 1;
             }
             /* Apply H(i) */
-            aocl_lapack_slarf(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1],
-                              ldc, &work[1]);
-            ap[ii] = aii;
+            aocl_lapack_slarf1f(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1],
+                                ldc, &work[1]);
             if(forwrd)
             {
                 ii = ii + nq - i__ + 1;

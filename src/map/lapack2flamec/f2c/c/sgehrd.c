@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./sgehrd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -259,14 +263,22 @@ void aocl_lapack_sgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     {
         *info = -8;
     }
+    nh = *ihi - *ilo + 1;
     if(*info == 0)
     {
         /* Compute the workspace requirements */
-        /* Computing MIN */
-        i__1 = 64;
-        i__2 = aocl_lapack_ilaenv(&c__1, "SGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
-        nb = fla_min(i__1, i__2);
-        lwkopt = *n * nb + 4160;
+        if(nh <= 1)
+        {
+            lwkopt = 1;
+        }
+        else
+        {
+            /* Computing MIN */
+            i__1 = 64;
+            i__2 = aocl_lapack_ilaenv(&c__1, "SGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
+            nb = fla_min(i__1, i__2);
+            lwkopt = *n * nb + 4160;
+        }
         work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
@@ -295,7 +307,6 @@ void aocl_lapack_sgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
         /* L20: */
     }
     /* Quick return if possible */
-    nh = *ihi - *ilo + 1;
     if(nh <= 1)
     {
         work[1] = 1.f;
@@ -319,7 +330,7 @@ void aocl_lapack_sgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
         if(nx < nh)
         {
             /* Determine if workspace is large enough for blocked code */
-            if(*lwork < *n * nb + 4160)
+            if(*lwork < lwkopt)
             {
                 /* Not enough workspace to use optimal NB: determine the */
                 /* minimum value of NB, and reduce NB or force use of */

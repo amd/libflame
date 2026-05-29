@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./ssyevr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -452,14 +456,16 @@ void aocl_lapack_ssyevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, re
     valeig = lsame_(range, "V", 1, 1);
     indeig = lsame_(range, "I", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = *n * 26; // , expr subst
-    lwmin = fla_max(i__1, i__2);
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = *n * 10; // , expr subst
-    liwmin = fla_max(i__1, i__2);
+    if(*n <= 1)
+    {
+        lwmin = 1;
+        liwmin = 1;
+    }
+    else
+    {
+        lwmin = *n * 26;
+        liwmin = *n * 10;
+    }
     *info = 0;
     if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
@@ -696,7 +702,7 @@ void aocl_lapack_ssyevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, re
             i__1 = *n - 1;
             aocl_blas_scopy(&i__1, &work[inde], &c__1, &work[indee], &c__1);
             aocl_blas_scopy(n, &work[indd], &c__1, &work[inddd], &c__1);
-            if(*abstol <= *n * 2.f * eps)
+            if(*abstol <= (real)(*n) * 2.f * eps)
             {
                 tryrac = TRUE_;
             }

@@ -231,7 +231,7 @@ int lapack_sgebrd(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                       real *, real *, real *, aocl_int64_t *);
     aocl_int64_t nb, nx;
     aocl_int64_t ws;
-    aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin, lwkopt;
     logical lquery;
     aocl_int64_t ldwrkx, ldwrky, j, i__4, i__3;
     static real c_b22 = 1.f;
@@ -269,11 +269,21 @@ int lapack_sgebrd(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     --work;
     /* Function Body */
     *info = 0;
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = aocl_lapack_ilaenv(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
-    nb = fla_max(i__1, i__2);
-    lwkopt = (*m + *n) * nb;
+    minmn = fla_min(*m, *n);
+    if(minmn == 0)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = fla_max(*m, *n);
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = aocl_lapack_ilaenv(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
+        lwkopt = (*m + *n) * nb;
+    }
     work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if(*m < 0)
@@ -288,14 +298,9 @@ int lapack_sgebrd(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         *info = -4;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*lwork < fla_max(i__1, *n) && !lquery)
-        {
-            *info = -10;
-        }
+        *info = -10;
     }
     if(*info < 0)
     {
@@ -308,7 +313,6 @@ int lapack_sgebrd(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         return 0;
     }
     /* Quick return if possible */
-    minmn = fla_min(*m, *n);
     if(minmn == 0)
     {
         work[1] = 1.f;

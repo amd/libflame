@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* slatsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -104,14 +108,18 @@ static aocl_int64_t c__0 = 0;
 /* > \param[out] WORK */
 /* > \verbatim */
 /* > (workspace) REAL array, dimension (MAX(1,LWORK)) */
+/* > On exit, if INFO = 0, WORK(1) returns the minimal LWORK. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
-/* > The dimension of the array WORK. LWORK >= NB*N. */
+/* > LWORK is INTEGER */
+/* > The dimension of the array WORK. */
+/* > LWORK >= 1, if MIN(M,N) = 0, and LWORK >= NB*N, otherwise. */
+/* > */
 /* > If LWORK = -1, then a workspace query is assumed;
 the routine */
-/* > only calculates the optimal size of the WORK array, returns */
+/* > only calculates the minimal size of the WORK array, returns */
 /* > this value as the first entry of the WORK array, and no error */
 /* > message related to LWORK is issued by XERBLA. */
 /* > \endverbatim */
@@ -160,6 +168,8 @@ the routine */
 /* > SIAM J. Sci. Comput, vol. 34, no. 1, 2012 */
 /* > \endverbatim */
 /* > */
+/* > \ingroup latsqr */
+/* > */
 /* ===================================================================== */
 /* Subroutine */
 /** Generated wrapper function */
@@ -197,7 +207,7 @@ void aocl_lapack_slatsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__, ii, kk, ctr;
+    aocl_int64_t i__, ii, kk, ctr, minmn, lwmin;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -227,6 +237,15 @@ void aocl_lapack_slatsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
+    minmn = fla_min(*m, *n);
+    if(minmn == 0)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        lwmin = *n * *nb;
+    }
     if(*m < 0)
     {
         *info = -1;
@@ -251,13 +270,13 @@ void aocl_lapack_slatsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     {
         *info = -8;
     }
-    else if(*lwork < *n * *nb && !lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -10;
     }
     if(*info == 0)
     {
-        work[1] = (real)(*nb * *n);
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     }
     if(*info != 0)
     {
@@ -272,7 +291,7 @@ void aocl_lapack_slatsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
         return;
     }
     /* Quick return if possible */
-    if(fla_min(*m, *n) == 0)
+    if(minmn == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -305,7 +324,7 @@ void aocl_lapack_slatsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
         aocl_lapack_stpqrt(&kk, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[ii + a_dim1], lda,
                            &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
-    work[1] = (real)(*n * *nb);
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATSQR */

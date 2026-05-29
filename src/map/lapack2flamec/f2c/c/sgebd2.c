@@ -267,7 +267,6 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
             aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
                                &c__1, &tauq[i__]);
             d__[i__] = a[i__ + i__ * a_dim1];
-            a[i__ + i__ * a_dim1] = 1.f;
             /* Apply H(i) to A(i:m,i+1:n) from the left */
             if(i__ < *n)
             {
@@ -276,7 +275,6 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                 aocl_lapack_slarf1f("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tauq[i__],
                                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             }
-            a[i__ + i__ * a_dim1] = d__[i__];
             if(i__ < *n)
             {
                 /* Generate elementary reflector G(i) to annihilate */
@@ -287,13 +285,11 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                 aocl_lapack_slarfg(&i__2, &a[i__ + (i__ + 1) * a_dim1],
                                    &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
                 e[i__] = a[i__ + (i__ + 1) * a_dim1];
-                a[i__ + (i__ + 1) * a_dim1] = 1.f;
                 /* Apply G(i) to A(i+1:m,i+1:n) from the right */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
                 aocl_lapack_slarf1f("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda,
                                   &taup[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
-                a[i__ + (i__ + 1) * a_dim1] = e[i__];
             }
             else
             {
@@ -315,7 +311,6 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
             aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3, *n) * a_dim1],
                                lda, &taup[i__]);
             d__[i__] = a[i__ + i__ * a_dim1];
-            a[i__ + i__ * a_dim1] = 1.f;
             /* Apply G(i) to A(i+1:m,i:n) from the right */
             if(i__ < *m)
             {
@@ -324,7 +319,6 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                 aocl_lapack_slarf1f("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
                                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
-            a[i__ + i__ * a_dim1] = d__[i__];
             if(i__ < *m)
             {
                 /* Generate elementary reflector H(i) to annihilate */
@@ -335,13 +329,11 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                 aocl_lapack_slarfg(&i__2, &a[i__ + 1 + i__ * a_dim1],
                                    &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
                 e[i__] = a[i__ + 1 + i__ * a_dim1];
-                a[i__ + 1 + i__ * a_dim1] = 1.f;
                 /* Apply H(i) to A(i+1:m,i+1:n) from the left */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
                 aocl_lapack_slarf1f("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1,
                                   &tauq[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
-                a[i__ + 1 + i__ * a_dim1] = e[i__];
             }
             else
             {

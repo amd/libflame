@@ -1,3 +1,7 @@
+/*
+ *    Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/sgehd2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -179,7 +183,6 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     aocl_int64_t i__;
-    real aii;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -239,18 +242,15 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
         i__3 = i__ + 2;
         aocl_lapack_slarfg(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
                            &c__1, &tau[i__]);
-        aii = a[i__ + 1 + i__ * a_dim1];
-        a[i__ + 1 + i__ * a_dim1] = 1.f;
         /* Apply H(i) to A(1:ihi,i+1:ihi) from the right */
         i__2 = *ihi - i__;
-        aocl_lapack_slarf("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
-                          &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
+        aocl_lapack_slarf1f("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+                            &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
         /* Apply H(i) to A(i+1:ihi,i+1:n) from the left */
         i__2 = *ihi - i__;
         i__3 = *n - i__;
-        aocl_lapack_slarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
-                          &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
-        a[i__ + 1 + i__ * a_dim1] = aii;
+        aocl_lapack_slarf1f("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+                            &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./slaqr2.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -344,7 +348,6 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     aocl_int64_t kln;
     real tau, ulp;
     aocl_int64_t lwk1, lwk2;
-    real beta;
     aocl_int64_t kend, kcol, info, ifst, ilst, ltop, krow;
     logical bulge;
     aocl_int64_t infqr;
@@ -715,17 +718,16 @@ L60:
         {
             /* ==== Reflect spike back into lower triangle ==== */
             aocl_blas_scopy(ns, &v[v_offset], ldv, &work[1], &c__1);
-            beta = work[1];
-            aocl_lapack_slarfg(ns, &beta, &work[2], &c__1, &tau);
-            work[1] = 1.f;
+            aocl_lapack_slarfg(ns, &work[1], &work[2], &c__1, &tau);
             i__1 = jw - 2;
             i__2 = jw - 2;
             aocl_lapack_slaset("L", &i__1, &i__2, &c_b12, &c_b12, &t[t_dim1 + 3], ldt);
-            aocl_lapack_slarf("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt,
-                              &work[jw + 1]);
-            aocl_lapack_slarf("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            aocl_lapack_slarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
-                              &work[jw + 1]);
+            aocl_lapack_slarf1f("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt,
+                                &work[jw + 1]);
+            aocl_lapack_slarf1f("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt,
+                                &work[jw + 1]);
+            aocl_lapack_slarf1f("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
+                                &work[jw + 1]);
             i__1 = *lwork - jw;
             aocl_lapack_sgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,
                                &info);

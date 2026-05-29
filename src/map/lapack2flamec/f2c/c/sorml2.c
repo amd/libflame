@@ -166,7 +166,6 @@ void sorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t i__, i1, i2, i3, ic, jc, mi, ni, nq;
-    real aii;
     logical left;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical notran;
@@ -291,11 +290,8 @@ void sorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
             jc = i__;
         }
         /* Apply H(i) */
-        aii = a[i__ + i__ * a_dim1];
-        a[i__ + i__ * a_dim1] = 1.f;
-        aocl_lapack_slarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
-        a[i__ + i__ * a_dim1] = aii;
+        aocl_lapack_slarf1f(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                            &c__[ic + jc * c_dim1], ldc, &work[1]);
         /* L10: */
     }
     return;

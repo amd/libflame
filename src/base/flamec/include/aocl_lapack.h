@@ -3583,6 +3583,8 @@ void aocl_lapack_slarf(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, ao
                        real *tau, real *c__, aocl_int64_t *ldc, real *work);
 void aocl_lapack_slarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, aocl_int64_t *incv,
                          real *tau, real *c__, aocl_int64_t *ldc, real *work);
+void aocl_lapack_slarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, aocl_int64_t *incv,
+                         real *tau, real *c__, aocl_int64_t *ldc, real *work);
 void aocl_lapack_slarfg(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx, real *tau);
 void aocl_lapack_slarfgp(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx, real *tau);
 void aocl_lapack_slarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_t *k, real *v,

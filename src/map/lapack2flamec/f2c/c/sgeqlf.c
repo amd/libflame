@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./sgeqlf.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -225,9 +229,12 @@ void aocl_lapack_sgeqlf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
             lwkopt = *n * nb;
         }
         work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-        if(*lwork < fla_max(1, *n) && !lquery)
+        if(!lquery)
         {
-            *info = -7;
+            if(*lwork <= 0 || *m > 0 && *lwork < fla_max(1, *n))
+            {
+                *info = -7;
+            }
         }
     }
     if(*info != 0)

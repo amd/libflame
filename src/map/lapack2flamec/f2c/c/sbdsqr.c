@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./sbdsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -958,6 +962,11 @@ L160:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
+        if(d__[i__] == 0.f)
+        {
+            /* Avoid -ZERO */
+            d__[i__] = 0.f;
+        }
         if(d__[i__] < 0.f)
         {
             d__[i__] = -d__[i__];

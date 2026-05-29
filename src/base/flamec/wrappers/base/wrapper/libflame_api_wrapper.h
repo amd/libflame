@@ -4483,6 +4483,14 @@ extern void SLARF(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t
 extern void slarf(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
 extern void SLARF_(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
 
+extern void SLARF1F(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
+extern void slarf1f(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
+extern void SLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
+
+extern void SLARF1L(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
+extern void slarf1l(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
+extern void SLARF1L_(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
+
 extern void SLARFG(aocl_int_t* n, float* alpha, float* x, aocl_int_t* incx, float* tau);
 extern void slarfg(aocl_int_t* n, float* alpha, float* x, aocl_int_t* incx, float* tau);
 extern void SLARFG_(aocl_int_t* n, float* alpha, float* x, aocl_int_t* incx, float* tau);

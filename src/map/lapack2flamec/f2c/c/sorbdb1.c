@@ -1,3 +1,7 @@
+/*
+ *    Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/sorbdb1.f -- translated by f2c (version 20160102). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -356,16 +360,14 @@ void aocl_lapack_sorbdb1(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, real
         theta[i__] = atan2(x21[i__ + i__ * x21_dim1], x11[i__ + i__ * x11_dim1]);
         c__ = cos(theta[i__]);
         s = sin(theta[i__]);
-        x11[i__ + i__ * x11_dim1] = 1.f;
-        x21[i__ + i__ * x21_dim1] = 1.f;
         i__2 = *p - i__ + 1;
         i__3 = *q - i__;
-        aocl_lapack_slarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
-                          &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
+        aocl_lapack_slarf1f("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
+                            &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
         i__2 = *m - *p - i__ + 1;
         i__3 = *q - i__;
-        aocl_lapack_slarf("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
-                          &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
+        aocl_lapack_slarf1f("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
+                            &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
         if(i__ < *q)
         {
             i__2 = *q - i__;
@@ -375,17 +377,16 @@ void aocl_lapack_sorbdb1(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, real
             aocl_lapack_slarfgp(&i__2, &x21[i__ + (i__ + 1) * x21_dim1],
                                 &x21[i__ + (i__ + 2) * x21_dim1], ldx21, &tauq1[i__]);
             s = x21[i__ + (i__ + 1) * x21_dim1];
-            x21[i__ + (i__ + 1) * x21_dim1] = 1.f;
             i__2 = *p - i__;
             i__3 = *q - i__;
-            aocl_lapack_slarf("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
-                              &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11,
-                              &work[ilarf]);
+            aocl_lapack_slarf1f("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                                &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11,
+                                &work[ilarf]);
             i__2 = *m - *p - i__;
             i__3 = *q - i__;
-            aocl_lapack_slarf("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
-                              &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21,
-                              &work[ilarf]);
+            aocl_lapack_slarf1f("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                                &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21,
+                                &work[ilarf]);
             i__2 = *p - i__;
             /* Computing 2nd power */
             r__1 = aocl_blas_snrm2(&i__2, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1);

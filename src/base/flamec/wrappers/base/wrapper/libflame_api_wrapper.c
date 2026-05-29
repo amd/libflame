@@ -16762,6 +16762,21 @@ void SLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* in
 	return slarf1f_( side, m, n, v, incv, tau, c, ldc, work);
 }
 
+void SLARF1L(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work)
+{
+	return slarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void slarf1l(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work)
+{
+	return slarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void SLARF1L_(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work)
+{
+	return slarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
 void SLARFG(aocl_int_t* n, float* alpha, float* x, aocl_int_t* incx, float* tau)
 {
 	return slarfg_( n, alpha, x, incx, tau);

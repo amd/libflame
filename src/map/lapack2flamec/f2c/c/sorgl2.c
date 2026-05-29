@@ -200,11 +200,10 @@ void sorgl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl
         {
             if(i__ < *m)
             {
-                a[i__ + i__ * a_dim1] = 1.f;
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
-                aocl_lapack_slarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                aocl_lapack_slarf1f("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                                    &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             r__1 = -tau[i__];

@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./ssytrd_sy2sb.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -321,7 +325,14 @@ void aocl_lapack_ssytrd_sy2sb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, rea
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    lwmin = aocl_lapack_ilaenv2stage(&c__4, "SSYTRD_SY2SB", "", n, kd, &c_n1, &c_n1);
+    if(*n <= *kd + 1)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        lwmin = aocl_lapack_ilaenv2stage(&c__4, "SSYTRD_SY2SB", "", n, kd, &c_n1, &c_n1);
+    }
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;

@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./ssyevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -417,7 +421,7 @@ void aocl_lapack_ssyevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, re
         if(*n <= 1)
         {
             lwkmin = 1;
-            work[1] = aocl_lapack_sroundup_lwork(&lwkmin);
+            lwkopt = 1;
         }
         else
         {
@@ -432,8 +436,8 @@ void aocl_lapack_ssyevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, re
             i__1 = lwkmin;
             i__2 = (nb + 3) * *n; // , expr subst
             lwkopt = fla_max(i__1, i__2);
-            work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         }
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -17;

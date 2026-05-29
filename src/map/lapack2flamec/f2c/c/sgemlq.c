@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./sgemlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -205,6 +209,7 @@ void aocl_lapack_sgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     logical left, tran;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
+    aocl_int64_t lwmin, minmnk;
     logical notran, lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -254,6 +259,17 @@ void aocl_lapack_sgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         lw = *m * mb;
         mn = *n;
     }
+    /* Computing MIN */
+    i__1 = fla_min(*m, *n);
+    minmnk = fla_min(i__1, *k);
+    if(minmnk == 0)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        lwmin = fla_max(1, lw);
+    }
     *info = 0;
     if(!left && !right)
     {
@@ -287,13 +303,13 @@ void aocl_lapack_sgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         *info = -11;
     }
-    else if(*lwork < fla_max(1, lw) && !lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -13;
     }
     if(*info == 0)
     {
-        work[1] = aocl_lapack_sroundup_lwork(&lw);
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     }
     if(*info != 0)
     {
@@ -308,9 +324,7 @@ void aocl_lapack_sgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         return;
     }
     /* Quick return if possible */
-    /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *k) == 0)
+    if(minmnk == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -327,7 +341,7 @@ void aocl_lapack_sgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         aocl_lapack_slamswlq(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &mb,
                              &c__[c_offset], ldc, &work[1], lwork, info);
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lw);
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEMLQ */

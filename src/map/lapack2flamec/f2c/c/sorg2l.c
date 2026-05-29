@@ -1,3 +1,7 @@
+/*
+ *    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/sorg2l.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -219,8 +223,8 @@ void aocl_lapack_sorg2l(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real 
         a[*m - *n + ii + ii * a_dim1] = 1.f;
         i__2 = *m - *n + ii;
         i__3 = ii - 1;
-        aocl_lapack_slarf("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset],
-                          lda, &work[1]);
+        aocl_lapack_slarf1l("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__],
+                            &a[a_offset], lda, &work[1]);
         i__2 = *m - *n + ii - 1;
         r__1 = -tau[i__];
         aocl_blas_sscal(&i__2, &r__1, &a[ii * a_dim1 + 1], &c__1);

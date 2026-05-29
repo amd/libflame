@@ -1,3 +1,7 @@
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/ssyequb.f -- translated by f2c (version 20160102). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -299,7 +303,7 @@ void aocl_lapack_ssyequb(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda
     {
         s[j] = 1.f / s[j];
     }
-    tol = 1.f / sqrt(*n * 2.f);
+    tol = 1.f / sqrt((real)(*n) * 2.f);
     for(iter = 1; iter <= 100; ++iter)
     {
         scale = 0.f;
@@ -345,7 +349,7 @@ void aocl_lapack_ssyequb(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda
         {
             avg += s[i__] * work[i__];
         }
-        avg /= *n;
+        avg /= (real)(*n);
         std = 0.f;
         i__1 = *n << 1;
         for(i__ = *n + 1; i__ <= i__1; ++i__)
@@ -353,7 +357,7 @@ void aocl_lapack_ssyequb(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda
             work[i__] = s[i__ - *n] * work[i__ - *n] - avg;
         }
         aocl_lapack_slassq(n, &work[*n + 1], &c__1, &scale, &sumsq);
-        std = scale * sqrt(sumsq / *n);
+        std = scale * sqrt(sumsq / (real)(*n));
         if(std < tol * avg)
         {
             goto L999;
@@ -363,9 +367,9 @@ void aocl_lapack_ssyequb(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda
         {
             t = (r__1 = a[i__ + i__ * a_dim1], f2c_abs(r__1));
             si = s[i__];
-            c2 = (*n - 1) * t;
-            c1 = (*n - 2) * (work[i__] - t * si);
-            c0 = -(t * si) * si + work[i__] * 2 * si - *n * avg;
+            c2 = (real)(*n - 1) * t;
+            c1 = (real)(*n - 2) * (work[i__] - t * si);
+            c0 = -(t * si) * si + work[i__] * 2 * si - (real)(*n) * avg;
             d__ = c1 * c1 - c0 * 4 * c2;
             if(d__ <= 0.f)
             {
@@ -410,7 +414,7 @@ void aocl_lapack_ssyequb(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda
                     work[j] += d__ * t;
                 }
             }
-            avg += (u + work[i__]) * d__ / *n;
+            avg += (u + work[i__]) * d__ / (real)(*n);
             s[i__] = si;
         }
     }

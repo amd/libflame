@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./slaswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -198,7 +202,7 @@ void aocl_lapack_slaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__, ii, kk, ctr;
+    aocl_int64_t i__, ii, kk, ctr, minmn, lwmin;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -228,6 +232,15 @@ void aocl_lapack_slaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
+    minmn = fla_min(*m, *n);
+    if(minmn == 0)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        lwmin = *m * *mb;
+    }
     if(*m < 0)
     {
         *info = -1;
@@ -252,13 +265,13 @@ void aocl_lapack_slaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     {
         *info = -8;
     }
-    else if(*lwork < *m * *mb && !lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -10;
     }
     if(*info == 0)
     {
-        work[1] = (real)(*mb * *m);
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     }
     if(*info != 0)
     {
@@ -273,7 +286,7 @@ void aocl_lapack_slaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
         return;
     }
     /* Quick return if possible */
-    if(fla_min(*m, *n) == 0)
+    if(minmn == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -306,8 +319,7 @@ void aocl_lapack_slaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
         aocl_lapack_stplqt(m, &kk, &c__0, mb, &a[a_dim1 + 1], lda, &a[ii * a_dim1 + 1], lda,
                            &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
-    i__2 = *m * *mb;
-    work[1] = aocl_lapack_sroundup_lwork(&i__2);
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASWLQ */

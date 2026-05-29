@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./sgetri.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -176,7 +180,10 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     /* Function Body */
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "SGETRI", " ", n, &c_n1, &c_n1, &c_n1);
-    lwkopt = *n * nb;
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n * nb; // , expr subst
+    lwkopt = fla_max(i__1, i__2);
     work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if(*n < 0)

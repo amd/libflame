@@ -8362,6 +8362,11 @@ inline void larf1f(char *side, integer *m, integer *n, float *v, integer *incv, 
 {
   slarf1f_(side, m, n, v, incv, tau, c, ldc, work);
 }
+
+inline void larf1l(char *side, integer *m, integer *n, float *v, integer *incv, float *tau, float *c, integer *ldc, float *work)
+{
+  slarf1l_(side, m, n, v, incv, tau, c, ldc, work);
+}
 // --- applies an elementary reflector, or Householder matrix, H, to an n x n symmetric matrix C, from both the left and the right ---
 inline void larfy(char *uplo, integer *n, float *v, integer *incv, float *tau, float *c, integer *ldc, float *work)
 {

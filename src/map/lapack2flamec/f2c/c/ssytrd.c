@@ -268,7 +268,10 @@ void ssytrd_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
     {
         /* Determine the block size. */
         nb = aocl_lapack_ilaenv(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
         work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)

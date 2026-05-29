@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* slatrs3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -266,7 +270,7 @@ void aocl_lapack_slatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
     real tmax, xnrm[32];
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real rscal;
-    aocl_int64_t lanrm, ilast, jlast;
+    aocl_int64_t lanrm, ilast, jlast, lwmin;
     logical upper;
     aocl_int64_t lscale;
     real scaloc;
@@ -344,7 +348,15 @@ void aocl_lapack_slatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
     /* the block A( I, J ) is stored as WORK( AWRK + I + J * NBA ). */
     lanrm = nba * nba;
     awrk = lscale;
-    work[1] = (real)(lscale + lanrm);
+    if(fla_min(*n, *nrhs) == 0)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        lwmin = lscale + lanrm;
+    }
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     /* Test the input parameters. */
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
@@ -378,7 +390,7 @@ void aocl_lapack_slatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
     {
         *info = -10;
     }
-    else if(!lquery && (real)(*lwork) < work[1])
+    else if(!lquery && *lwork < lwmin)
     {
         *info = -14;
     }
@@ -790,6 +802,7 @@ void aocl_lapack_slatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
             }
         }
     }
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATRS3 */

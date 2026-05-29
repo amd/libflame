@@ -135,7 +135,6 @@ int lapack_sgelq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     aocl_int64_t i__, k;
-    real aii;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,13 +192,10 @@ int lapack_sgelq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         if(i__ < *m)
         {
             /* Apply H(i) to A(i+1:m,i:n) from the right */
-            aii = a[i__ + i__ * a_dim1];
-            a[i__ + i__ * a_dim1] = 1.f;
             i__2 = *m - i__;
             i__3 = *n - i__ + 1;
-            aocl_lapack_slarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                              &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
-            a[i__ + i__ * a_dim1] = aii;
+            aocl_lapack_slarf1f("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                                &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
         }
         /* L10: */
     }

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/sgeqr.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -204,7 +208,7 @@ void aocl_lapack_sgeqr(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *
     /* Local variables */
     aocl_int64_t mb, nb;
     logical mint, minw;
-    aocl_int64_t nblcks;
+    aocl_int64_t lwmin, lwreq, nblcks;
     logical lminws, lquery;
     aocl_int64_t mintsz;
     /* -- LAPACK computational routine (version 3.9.0) -- */
@@ -287,11 +291,16 @@ void aocl_lapack_sgeqr(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *
         nblcks = 1;
     }
     /* Determine if the workspace size satisfies minimal size */
+    lwmin = fla_max(1, *n);
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n * nb; // , expr subst
+    lwreq = fla_max(i__1, i__2);
     lminws = FALSE_;
     /* Computing MAX */
     i__1 = 1;
     i__2 = nb * *n * nblcks + 5; // , expr subst
-    if((*tsize < fla_max(i__1, i__2) || *lwork < nb * *n) && *lwork >= *n && *tsize >= mintsz
+    if((*tsize < fla_max(i__1, i__2) || *lwork < lwreq) && *lwork >= *n && *tsize >= mintsz
        && !lquery)
     {
         /* Computing MAX */
@@ -303,7 +312,7 @@ void aocl_lapack_sgeqr(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *
             nb = 1;
             mb = *m;
         }
-        if(*lwork < nb * *n)
+        if(*lwork < lwreq)
         {
             lminws = TRUE_;
             nb = 1;
@@ -330,15 +339,9 @@ void aocl_lapack_sgeqr(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *
         {
             *info = -6;
         }
-        else /* if(complicated condition) */
+        else if(*lwork < lwreq && !lquery && !lminws)
         {
-            /* Computing MAX */
-            i__1 = 1;
-            i__2 = *n * nb; // , expr subst
-            if(*lwork < fla_max(i__1, i__2) && !lquery && !lminws)
-            {
-                *info = -8;
-            }
+            *info = -8;
         }
     }
     if(*info == 0)
@@ -355,14 +358,11 @@ void aocl_lapack_sgeqr(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *
         t[3] = (real)nb;
         if(minw)
         {
-            work[1] = (real)fla_max(1, *n);
+            work[1] = aocl_lapack_sroundup_lwork(&lwmin);
         }
         else
         {
-            /* Computing MAX */
-            i__1 = 1;
-            i__2 = nb * *n; // , expr subst
-            work[1] = (real)fla_max(i__1, i__2);
+            work[1] = aocl_lapack_sroundup_lwork(&lwreq);
         }
     }
     if(*info != 0)
@@ -392,10 +392,7 @@ void aocl_lapack_sgeqr(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *
     {
         aocl_lapack_slatsqr(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &work[1], lwork, info);
     }
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = nb * *n; // , expr subst
-    work[1] = (real)fla_max(i__1, i__2);
+    work[1] = aocl_lapack_sroundup_lwork(&lwreq);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEQR */

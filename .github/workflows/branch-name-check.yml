@@ -8,7 +8,7 @@ on:
 
 jobs:
   check_branch_name:
-    runs-on: Linux  # Use the default GitHub-hosted runner with Linux system
+    runs-on: branch_check_linux  # Use the default GitHub-hosted runner with Linux system
 
     steps:
     # Check out the repository code

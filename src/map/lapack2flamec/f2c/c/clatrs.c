@@ -1,3 +1,6 @@
+/*
+    Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
 /* ./clatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -326,6 +329,9 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     --x;
     --cnorm;
     /* Function Body */
+    // initializing as {1, 0} because it is
+    // used as divisor
+    tjjs = (scomplex){.real = 1.f, .imag = 0.f};
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/clahef.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -213,7 +217,7 @@ void aocl_lapack_clahef(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int6
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4;
     scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
@@ -223,7 +227,7 @@ void aocl_lapack_clahef(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int6
     aocl_int64_t j, k;
     real t, r1;
     scomplex d11, d21, d22;
-    aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
+    aocl_int64_t jj, kk, jp, kp, kw, kkw, imax, jmax;
     real alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;
@@ -628,47 +632,13 @@ void aocl_lapack_clahef(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int6
         goto L10;
     L30: /* Update the upper triangle of A11 (= A(1:k,1:k)) as */
         /* A11 := A11 - U12*D*U12**H = A11 - U12*W**H */
-        /* computing blocks of NB columns at a time (note that conjg(W) is */
-        /* actually stored) */
-        i__1 = -(*nb);
-        for(j = (k - 1) / *nb * *nb + 1; i__1 < 0 ? j >= 1 : j <= 1; j += i__1)
-        {
-            /* Computing MIN */
-            i__2 = *nb;
-            i__3 = k - j + 1; // , expr subst
-            jb = fla_min(i__2, i__3);
-            /* Update the upper triangle of the diagonal block */
-            i__2 = j + jb - 1;
-            for(jj = j; jj <= i__2; ++jj)
-            {
-                i__3 = jj + jj * a_dim1;
-                i__4 = jj + jj * a_dim1;
-                r__1 = a[i__4].real;
-                a[i__3].real = r__1;
-                a[i__3].imag = 0.f; // , expr subst
-                i__3 = jj - j + 1;
-                i__4 = *n - k;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("No transpose", &i__3, &i__4, &q__1, &a[j + (k + 1) * a_dim1], lda,
-                                &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
-                i__3 = jj + jj * a_dim1;
-                i__4 = jj + jj * a_dim1;
-                r__1 = a[i__4].real;
-                a[i__3].real = r__1;
-                a[i__3].imag = 0.f; // , expr subst
-                /* L40: */
-            }
-            /* Update the rectangular superdiagonal block */
-            i__2 = j - 1;
-            i__3 = *n - k;
-            q__1.real = -1.f;
-            q__1.imag = -0.f; // , expr subst
-            aocl_blas_cgemm("No transpose", "Transpose", &i__2, &jb, &i__3, &q__1,
-                            &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1,
-                            &a[j * a_dim1 + 1], lda);
-            /* L50: */
-        }
+        /* (note that conjg(W) is actually stored) */
+        i__1 = *n - k;
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_cgemmtr("Upper", "No transpose", "Transpose", &k, &i__1, &q__1,
+                          &a[(k + 1) * a_dim1 + 1], lda, &w[(kw + 1) * w_dim1 + 1], ldw, &c_b1,
+                          &a[a_dim1 + 1], lda);
         /* Put U12 in standard form by partially undoing the interchanges */
         /* in of rows in columns k+1:n looping backwards from k+1 to n */
         j = k + 1;
@@ -1057,51 +1027,13 @@ void aocl_lapack_clahef(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int6
         goto L70;
     L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
         /* A22 := A22 - L21*D*L21**H = A22 - L21*W**H */
-        /* computing blocks of NB columns at a time (note that conjg(W) is */
-        /* actually stored) */
-        i__1 = *n;
-        i__2 = *nb;
-        for(j = k; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
-        {
-            /* Computing MIN */
-            i__3 = *nb;
-            i__4 = *n - j + 1; // , expr subst
-            jb = fla_min(i__3, i__4);
-            /* Update the lower triangle of the diagonal block */
-            i__3 = j + jb - 1;
-            for(jj = j; jj <= i__3; ++jj)
-            {
-                i__4 = jj + jj * a_dim1;
-                i__5 = jj + jj * a_dim1;
-                r__1 = a[i__5].real;
-                a[i__4].real = r__1;
-                a[i__4].imag = 0.f; // , expr subst
-                i__4 = j + jb - jj;
-                i__5 = k - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda,
-                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
-                i__4 = jj + jj * a_dim1;
-                i__5 = jj + jj * a_dim1;
-                r__1 = a[i__5].real;
-                a[i__4].real = r__1;
-                a[i__4].imag = 0.f; // , expr subst
-                /* L100: */
-            }
-            /* Update the rectangular subdiagonal block */
-            if(j + jb <= *n)
-            {
-                i__3 = *n - j - jb + 1;
-                i__4 = k - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &q__1,
-                                &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b1,
-                                &a[j + jb + j * a_dim1], lda);
-            }
-            /* L110: */
-        }
+        /* (note that conjg(W) is actually stored) */
+        i__1 = *n - k + 1;
+        i__2 = k - 1;
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        aocl_blas_cgemmtr("Lower", "No transpose", "Transpose", &i__1, &i__2, &q__1, &a[k + a_dim1],
+                          lda, &w[k + w_dim1], ldw, &c_b1, &a[k + k * a_dim1], lda);
         /* Put L21 in standard form by partially undoing the interchanges */
         /* of rows in columns 1:k-1 looping backwards from k-1 to 1 */
         j = k - 1;

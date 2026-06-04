@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./cgedmd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -900,6 +904,7 @@ void aocl_lapack_cgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* WORK(i) = SCNRM2( M, X(1,i), 1 ) */
+            ssum = 1.f;
             scale = 0.f;
             aocl_lapack_classq(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
             if(sisnan_(&scale) || sisnan_(&ssum))
@@ -1002,6 +1007,7 @@ void aocl_lapack_cgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* RWORK(i) = SCNRM2( M, Y(1,i), 1 ) */
+            ssum = 1.f;
             scale = 0.f;
             aocl_lapack_classq(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
             if(sisnan_(&scale) || sisnan_(&ssum))

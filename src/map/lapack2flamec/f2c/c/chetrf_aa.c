@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./chetrf_aa.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -167,7 +171,7 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
     scomplex alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -200,6 +204,16 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
+    if(*n <= 1)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = *n << 1;
+        lwkopt = (nb + 1) * *n;
+    }
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -212,13 +226,12 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
     {
         *info = -4;
     }
-    else if(*lwork < *n << 1 && !lquery)
+    else if(*lwork < lwkmin && !lquery)
     {
         *info = -7;
     }
     if(*info == 0)
     {
-        lwkopt = (nb + 1) * *n;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].real = r__1;
         work[1].imag = 0.f; // , expr subst

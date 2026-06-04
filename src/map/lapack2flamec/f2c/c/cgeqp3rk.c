@@ -1,7 +1,6 @@
 /**
  * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
  */
-
 /* ./cgeqp3rk.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -150,7 +149,7 @@ P(K) is represented by JPIV, */
 /* > transformation Q(K)**H applied on the left. */
 /* > */
 /* > The N-by-N permutation matrix P(K) is stored in a compact form in */
-/* > the integer array JPIV. For 1 <= j <= N, column j */
+/* > the aocl_int64_t array JPIV. For 1 <= j <= N, column j */
 /* > of the matrix A was interchanged with column JPIV(j). */
 /* > */
 /* > The M-by-M unitary matrix Q is represented as a product */
@@ -260,10 +259,10 @@ P(K) is represented by JPIV, */
 /* > The third factorization stopping criterion, cannot be NaN. */
 /* > */
 /* > The tolerance (stopping threshold) for the ratio */
-/* > f2c_abs(R(K+1,K+1))/f2c_abs(R(1,1)) of the maximum column 2-norm of */
+/* > f2c_abs(R(K+1,K+1))/abs(R(1,1)) of the maximum column 2-norm of */
 /* > the residual matrix R22(K) to the maximum column 2-norm of */
 /* > the original matrix A. The algorithm converges (stops the */
-/* > factorization), when f2c_abs(R(K+1,K+1))/f2c_abs(R(1,1)) A is less */
+/* > factorization), when f2c_abs(R(K+1,K+1))/abs(R(1,1)) A is less */
 /* > than or equal to RELTOL. Let EPS = DLAMCH('E'). */
 /* > */
 /* > a) If RELTOL is NaN, then no computation is performed */
@@ -358,9 +357,9 @@ P(K) is represented by JPIV, */
 /* > */
 /* > NOTE: If K = 0, a) the arrays A and B are not modified;
  */
-/* > b) the array TAU(1:min(M,N)) is set to ZERO, */
+/* > b) the array TAU(1:fla_min(M,N)) is set to ZERO, */
 /* > if the matrix A does not contain NaN, */
-/* > otherwise the elements TAU(1:min(M,N)) */
+/* > otherwise the elements TAU(1:fla_min(M,N)) */
 /* > are undefined;
  */
 /* > c) the elements of the array JPIV are set */
@@ -408,7 +407,7 @@ P(K) is represented by JPIV, */
 /* > then RELMAXC2NRMK = 0.0. */
 /* > */
 /* > NOTE: RELMAXC2NRMK in the factorization step K would equal */
-/* > f2c_abs(R(K+1,K+1))/f2c_abs(R(1,1)) in the next factorization */
+/* > f2c_abs(R(K+1,K+1))/abs(R(1,1)) in the next factorization */
 /* > step K+1. */
 /* > \endverbatim */
 /* > */
@@ -433,8 +432,8 @@ P(K) is represented by JPIV, */
 /* > the array TAU are modified by the factorization. */
 /* > After the factorization computed, if no NaN was found */
 /* > during the factorization, the remaining elements */
-/* > TAU(K+1:min(M,N)) are set to zero, otherwise the */
-/* > elements TAU(K+1:min(M,N)) are not set and therefore */
+/* > TAU(K+1:fla_min(M,N)) are set to zero, otherwise the */
+/* > elements TAU(K+1:fla_min(M,N)) are not set and therefore */
 /* > undefined. */
 /* > ( If K = 0, all elements of TAU are set to zero, if */
 /* > the matrix A does not contain NaN. ) */
@@ -450,7 +449,8 @@ P(K) is represented by JPIV, */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
-/* . LWORK >= N+NRHS-1 */
+/* > LWORK >= 1, if MIN(M,N) = 0, and */
+/* > LWORK >= N+NRHS-1, otherwise. */
 /* > For optimal performance LWORK >= NB*( N+NRHS+1 ), */
 /* > where NB is the optimal block size for CGEQP3RK returned */
 /* > by ILAENV. Minimal block size MINNB=2. */
@@ -502,7 +502,7 @@ P(K) is represented by JPIV, */
 /* > exception. */
 /* > MAXC2NRMK is set to NaN. */
 /* > RELMAXC2NRMK is set to NaN. */
-/* > TAU(K+1:min(M,N)) is not set and contains undefined */
+/* > TAU(K+1:fla_min(M,N)) is not set and contains undefined */
 /* > elements. If j_1=K+1, TAU(K+1) */
 /* > may contain NaN. */
 /* > 4) If INFO = j_2, where N+1 <= j_2 <= 2*N, then no NaN */
@@ -648,7 +648,6 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1, r__2;
-    scomplex q__1;
     /* Local variables */
     real maxc2nrm;
     aocl_int64_t j, jmaxc2nrm, jb, nb, kf, nx, kp1, jbf;
@@ -747,7 +746,7 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
             /* Minimal workspace size in case of using only unblocked */
             /* BLAS 2 code in CLAQP2RK. */
             /* 1) CLAQP2RK: N+NRHS-1 to use in WORK array that is used */
-            /* in CLARF subroutine inside CLAQP2RK to apply an */
+            /* in CLARF1F subroutine inside CLAQP2RK to apply an */
             /* elementary reflector from the left. */
             /* TOTAL_WORK_SIZE = 3*N + NRHS - 1 */
             iws = *n + *nrhs - 1;
@@ -758,7 +757,7 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
             /* 1) CGEQP3RK, CLAQP2RK, CLAQP3RK: 2*N to store full and */
             /* partial column 2-norms. */
             /* 2) CLAQP2RK: N+NRHS-1 to use in WORK array that is used */
-            /* in CLARF subroutine to apply an elementary reflector */
+            /* in CLARF1F subroutine to apply an elementary reflector */
             /* from the left. */
             /* 3) CLAQP3RK: NB*(N+NRHS) to use in the work array F that */
             /* is used to apply a block reflector from */
@@ -768,10 +767,9 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
             /* TOTAL_WORK_SIZE = 2*N + NB*( N+NRHS+1 ), given NBMIN=2. */
             lwkopt = (*n << 1) + nb * (*n + *nrhs + 1);
         }
-        q__1.real = (real)lwkopt;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < iws && !lquery)
         {
             *info = -15;
@@ -797,10 +795,9 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
         *k = 0;
         *maxc2nrmk = 0.f;
         *relmaxc2nrmk = 0.f;
-        q__1.real = (real)lwkopt;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -844,10 +841,9 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
         *maxc2nrmk = maxc2nrm;
         *relmaxc2nrmk = maxc2nrm;
         /* Array TAU is not set and contains undefined elements. */
-        q__1.real = (real)lwkopt;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -866,10 +862,9 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
             tau[i__2].real = 0.f;
             tau[i__2].imag = 0.f; // , expr subst
         }
-        q__1.real = (real)lwkopt;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -897,10 +892,9 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
             tau[i__2].real = 0.f;
             tau[i__2].imag = 0.f; // , expr subst
         }
-        q__1.real = (real)lwkopt;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -941,10 +935,9 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
             tau[i__2].real = 0.f;
             tau[i__2].imag = 0.f; // , expr subst
         }
-        q__1.real = (real)lwkopt;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -1051,10 +1044,9 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
                     *info = ioffset + iinfo;
                 }
                 /* Return from the routine. */
-                q__1.real = (real)lwkopt;
-                q__1.imag = 0.f; // , expr subst
-                work[1].real = q__1.real;
-                work[1].imag = q__1.imag; // , expr subst
+                r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+                work[1].real = r__1;
+                work[1].imag = 0.f; // , expr subst
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -1137,10 +1129,9 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
         }
         /* END IF( J.LE.JMAX ) THEN */
     }
-    q__1.real = (real)lwkopt;
-    q__1.imag = 0.f; // , expr subst
-    work[1].real = q__1.real;
-    work[1].imag = q__1.imag; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGEQP3RK */

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./chetri_3.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -127,16 +131,17 @@ static aocl_int64_t c_n1 = -1;
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is COMPLEX array, dimension (N+NB+1)*(NB+3). */
+/* > WORK is COMPLEX array, dimension (MAX(1,LWORK)). */
 /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The length of WORK. LWORK >= (N+NB+1)*(NB+3). */
+/* > The length of WORK. */
+/* > If N = 0, LWORK >= 1, else LWORK >= (N+NB+1)*(NB+3). */
 /* > */
-/* > If LDWORK = -1, then a workspace query is assumed;
+/* > If LWORK = -1, then a workspace query is assumed;
  */
 /* > the routine only calculates the optimal size of the optimal */
 /* > size of the WORK array, returns this value as the first */
@@ -243,11 +248,21 @@ void aocl_lapack_chetri_3(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* Determine the block size */
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = aocl_lapack_ilaenv(&c__1, "CHETRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-    nb = fla_max(i__1, i__2);
-    lwkopt = (*n + nb + 1) * (nb + 3);
+    if(*n == 0)
+    {
+        lwkopt = 1;
+    }
+    else
+    {
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = aocl_lapack_ilaenv(&c__1, "CHETRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
+        lwkopt = (*n + nb + 1) * (nb + 3);
+    }
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -273,9 +288,6 @@ void aocl_lapack_chetri_3(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t
     }
     else if(lquery)
     {
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

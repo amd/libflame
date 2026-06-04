@@ -228,6 +228,8 @@ void clar1v_(integer *n, integer *b1, integer *bn, real * lambda, real *d__, rea
 void clar2v_(integer *n, complex *x, complex *y, complex *z__, integer *incx, real *c__, complex *s, integer *incc);
 void clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, real *rwork);
 void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau, complex *c__, integer *ldc, complex * work);
+void clarf1f_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau, complex *c__, integer *ldc, complex * work);
+void clarf1l_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau, complex *c__, integer *ldc, complex * work);
 void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, complex *v, integer *ldv, complex *t, integer *ldt, complex *c__, integer *ldc, complex *work, integer *ldwork);
 void clarfg_(integer *n, complex *alpha, complex *x, integer * incx, complex *tau);
 void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau);

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/cupmtr.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -188,7 +192,6 @@ void aocl_lapack_cupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
-    scomplex aii;
     logical left;
     scomplex taui;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
@@ -326,17 +329,8 @@ void aocl_lapack_cupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
                 taui.real = q__1.real;
                 taui.imag = q__1.imag; // , expr subst
             }
-            i__3 = ii;
-            aii.real = ap[i__3].real;
-            aii.imag = ap[i__3].imag; // , expr subst
-            i__3 = ii;
-            ap[i__3].real = 1.f;
-            ap[i__3].imag = 0.f; // , expr subst
-            aocl_lapack_clarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc,
+            aocl_lapack_clarf1l(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc,
                               &work[1]);
-            i__3 = ii;
-            ap[i__3].real = aii.real;
-            ap[i__3].imag = aii.imag; // , expr subst
             if(forwrd)
             {
                 ii = ii + i__ + 2;
@@ -380,12 +374,6 @@ void aocl_lapack_cupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
         i__1 = i3;
         for(i__ = i1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
-            i__3 = ii;
-            aii.real = ap[i__3].real;
-            aii.imag = ap[i__3].imag; // , expr subst
-            i__3 = ii;
-            ap[i__3].real = 1.f;
-            ap[i__3].imag = 0.f; // , expr subst
             if(left)
             {
                 /* H(i) or H(i)**H is applied to C(i+1:m,1:n) */
@@ -411,11 +399,8 @@ void aocl_lapack_cupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
                 taui.real = q__1.real;
                 taui.imag = q__1.imag; // , expr subst
             }
-            aocl_lapack_clarf(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * c_dim1], ldc,
+            aocl_lapack_clarf1f(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * c_dim1], ldc,
                               &work[1]);
-            i__3 = ii;
-            ap[i__3].real = aii.real;
-            ap[i__3].imag = aii.imag; // , expr subst
             if(forwrd)
             {
                 ii = ii + nq - i__ + 1;

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/chetrf_aa_2stage.f -- translated by f2c (version 20160102). You must link the
  resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
  Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
@@ -261,13 +265,19 @@ void aocl_lapack_chetrf_aa_2stage(char *uplo, aocl_int64_t *n, scomplex *a, aocl
     {
         *info = -4;
     }
-    else if(*ltb < *n << 2 && !tquery)
+    else /* if(complicated condition) */
     {
-        *info = -6;
-    }
-    else if(*lwork < *n && !wquery)
-    {
-        *info = -10;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n << 2; // , expr subst
+        if(*ltb < fla_max(i__1, i__2) && !tquery)
+        {
+            *info = -6;
+        }
+        else if(*lwork < fla_max(1, *n) && !wquery)
+        {
+            *info = -10;
+        }
     }
     if(*info != 0)
     {
@@ -282,14 +292,22 @@ void aocl_lapack_chetrf_aa_2stage(char *uplo, aocl_int64_t *n, scomplex *a, aocl
     {
         if(tquery)
         {
-            i__1 = (nb * 3 + 1) * *n;
-            tb[1].real = (real)i__1;
+            /* Computing MAX */
+            i__2 = 1;
+            i__3 = (nb * 3 + 1) * *n; // , expr subst
+            i__1 = fla_max(i__2, i__3);
+            r__1 = aocl_lapack_sroundup_lwork(&i__1);
+            tb[1].real = r__1;
             tb[1].imag = 0.f; // , expr subst
         }
         if(wquery)
         {
-            i__1 = *n * nb;
-            work[1].real = (real)i__1;
+            /* Computing MAX */
+            i__2 = 1;
+            i__3 = *n * nb; // , expr subst
+            i__1 = fla_max(i__2, i__3);
+            r__1 = aocl_lapack_sroundup_lwork(&i__1);
+            work[1].real = r__1;
             work[1].imag = 0.f; // , expr subst
         }
     }

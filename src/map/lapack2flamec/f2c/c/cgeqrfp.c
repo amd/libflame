@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./cgeqrfp.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -106,7 +110,8 @@ the elements below the diagonal, */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK >= fla_max(1,N). */
+/* > The dimension of the array WORK. */
+/* > LWORK >= 1, if MIN(M,N) = 0, and LWORK >= N, otherwise. */
 /* > For optimum performance LWORK >= N*NB, where NB is */
 /* > the optimal blocksize. */
 /* > */
@@ -191,7 +196,7 @@ void aocl_lapack_cgeqrfp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
     real r__1;
     /* Local variables */
     aocl_int64_t i__, k, ib, nb, nx, iws, nbmin, iinfo;
-    aocl_int64_t ldwork, lwkopt;
+    aocl_int64_t lwkmin, ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -220,7 +225,17 @@ void aocl_lapack_cgeqrfp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
     /* Function Body */
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
-    lwkopt = *n * nb;
+    k = fla_min(*m, *n);
+    if(k == 0)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = *n;
+        lwkopt = *n * nb;
+    }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].real = r__1;
     work[1].imag = 0.f; // , expr subst
@@ -237,7 +252,7 @@ void aocl_lapack_cgeqrfp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
     {
         *info = -4;
     }
-    else if(*lwork < fla_max(1, *n) && !lquery)
+    else if(*lwork < lwkmin && !lquery)
     {
         *info = -7;
     }
@@ -254,7 +269,6 @@ void aocl_lapack_cgeqrfp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
         return;
     }
     /* Quick return if possible */
-    k = fla_min(*m, *n);
     if(k == 0)
     {
         work[1].real = 1.f;
@@ -264,7 +278,7 @@ void aocl_lapack_cgeqrfp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
     }
     nbmin = 2;
     nx = 0;
-    iws = *n;
+    iws = lwkmin;
     if(nb > 1 && nb < k)
     {
         /* Determine when to cross over from blocked to unblocked code. */

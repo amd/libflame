@@ -815,6 +815,8 @@ typedef struct Namelist Namelist;
 #define clar2v_                  CLAR2V 
 #define clarcm_                  CLARCM 
 #define clarf_                   CLARF 
+#define clarf1f_                 CLARF1F 
+#define clarf1l_                 CLARF1L 
 #define clarfb_                  CLARFB 
 #define clarfg_                  CLARFG 
 #define clarfgp_                 CLARFGP 
@@ -3005,7 +3007,9 @@ typedef struct Namelist Namelist;
 #define clar1v_                  clar1v 
 #define clar2v_                  clar2v 
 #define clarcm_                  clarcm 
-#define clarf_                   clarf 
+#define clarf_                   clarf
+#define clarf1f_                 clarf1f
+#define clarf1l_                 clarf1l
 #define clarfb_                  clarfb 
 #define clarfg_                  clarfg 
 #define clarfgp_                 clarfgp 

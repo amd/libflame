@@ -1003,6 +1003,14 @@ extern void CLARF(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_in
 extern void clarf(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
 extern void CLARF_(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
 
+extern void CLARF1F(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
+extern void clarf1f(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
+extern void CLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
+
+extern void CLARF1L(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
+extern void clarf1l(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
+extern void CLARF1L_(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
+
 extern void CLARFG(aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* tau);
 extern void clarfg(aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* tau);
 extern void CLARFG_(aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* tau);

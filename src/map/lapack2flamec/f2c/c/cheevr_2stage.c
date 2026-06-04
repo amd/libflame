@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/cheevr_2stage.f -- translated by f2c (version 20160102). You must link the
  resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
  Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
@@ -546,15 +550,18 @@ void aocl_lapack_cheevr_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
     ib = aocl_lapack_ilaenv2stage(&c__2, "CHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
     lhtrd = aocl_lapack_ilaenv2stage(&c__3, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
     lwtrd = aocl_lapack_ilaenv2stage(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
-    lwmin = *n + lhtrd + lwtrd;
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = *n * 24; // , expr subst
-    lrwmin = fla_max(i__1, i__2);
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = *n * 10; // , expr subst
-    liwmin = fla_max(i__1, i__2);
+    if(*n <= 1)
+    {
+        lwmin = 1;
+        lrwmin = 1;
+        liwmin = 1;
+    }
+    else
+    {
+        lwmin = *n + lhtrd + lwtrd;
+        lrwmin = *n * 24;
+        liwmin = *n * 10;
+    }
     *info = 0;
     if(!lsame_(jobz, "N", 1, 1))
     {
@@ -606,9 +613,10 @@ void aocl_lapack_cheevr_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
     }
     if(*info == 0)
     {
-        work[1].real = (real)lwmin;
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+        work[1].real = r__1;
         work[1].imag = 0.f; // , expr subst
-        rwork[1] = (real)lrwmin;
+        rwork[1] = aocl_lapack_sroundup_lwork(&lrwmin);
         iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
@@ -646,7 +654,7 @@ void aocl_lapack_cheevr_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
     }
     if(*n == 1)
     {
-        work[1].real = 2.f;
+        work[1].real = 1.f;
         work[1].imag = 0.f; // , expr subst
         if(alleig || indeig)
         {
@@ -803,7 +811,7 @@ void aocl_lapack_cheevr_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
             i__1 = *n - 1;
             aocl_blas_scopy(&i__1, &rwork[indre], &c__1, &rwork[indree], &c__1);
             aocl_blas_scopy(n, &rwork[indrd], &c__1, &rwork[indrdd], &c__1);
-            if(*abstol <= *n * 2.f * eps)
+            if(*abstol <= (real)(*n) * 2.f * eps)
             {
                 tryrac = TRUE_;
             }
@@ -903,9 +911,10 @@ L30:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1].real = (real)lwmin;
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+    work[1].real = r__1;
     work[1].imag = 0.f; // , expr subst
-    rwork[1] = (real)lrwmin;
+    rwork[1] = aocl_lapack_sroundup_lwork(&lrwmin);
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

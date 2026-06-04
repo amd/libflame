@@ -3670,6 +3670,36 @@ void CLARF_(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* i
 	return clarf_( side, m, n, v, incv, tau, c, ldc, work);
 }
 
+void CLARF1F(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work)
+{
+	return clarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void clarf1f(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work)
+{
+	return clarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void CLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work)
+{
+	return clarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void CLARF1L(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work)
+{
+	return clarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void clarf1l(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work)
+{
+	return clarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void CLARF1L_(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work)
+{
+	return clarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
 void CLARFG(aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* tau)
 {
 	return clarfg_( n, alpha, x, incx, tau);

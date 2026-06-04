@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./chesv_aa_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -105,14 +109,14 @@ static aocl_int64_t c_n1 = -1;
 /* > */
 /* > \param[out] TB */
 /* > \verbatim */
-/* > TB is COMPLEX array, dimension (LTB) */
+/* > TB is COMPLEX array, dimension (MAX(1,LTB)). */
 /* > On exit, details of the LU factorization of the band matrix. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LTB */
 /* > \verbatim */
 /* > LTB is INTEGER */
-/* > The size of the array TB. LTB >= 4*N, internally */
+/* > The size of the array TB. LTB >= MAX(1,4*N), internally */
 /* > used to select NB such that LTB >= (3*NB+1)*N. */
 /* > */
 /* > If LTB = -1, then a workspace query is assumed;
@@ -153,14 +157,15 @@ the */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is COMPLEX workspace of size LWORK */
+/* > WORK is COMPLEX workspace of size (MAX(1,LWORK)) */
+/* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The size of WORK. LWORK >= N, internally used to select NB */
-/* > such that LWORK >= N*NB. */
+/* > The size of WORK. LWORK >= MAX(1,N), internally used to */
+/* > select NB such that LWORK >= N*NB. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
 the */
@@ -230,12 +235,12 @@ void aocl_lapack_chesv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1;
     /* Local variables */
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin, lwkopt;
     logical tquery, wquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -271,6 +276,7 @@ void aocl_lapack_chesv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs
     upper = lsame_(uplo, "U", 1, 1);
     wquery = *lwork == -1;
     tquery = *ltb == -1;
+    lwkmin = fla_max(1, *n);
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -287,23 +293,35 @@ void aocl_lapack_chesv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs
     {
         *info = -5;
     }
-    else if(*ltb < *n << 2 && !tquery)
+    else /* if(complicated condition) */
     {
-        *info = -7;
-    }
-    else if(*ldb < fla_max(1, *n))
-    {
-        *info = -11;
-    }
-    else if(*lwork < *n && !wquery)
-    {
-        *info = -13;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n << 2; // , expr subst
+        if(*ltb < fla_max(i__1, i__2) && !tquery)
+        {
+            *info = -7;
+        }
+        else if(*ldb < fla_max(1, *n))
+        {
+            *info = -11;
+        }
+        else if(*lwork < lwkmin && !wquery)
+        {
+            *info = -13;
+        }
     }
     if(*info == 0)
     {
         aocl_lapack_chetrf_aa_2stage(uplo, n, &a[a_offset], lda, &tb[1], &c_n1, &ipiv[1], &ipiv2[1],
                                      &work[1], &c_n1, info);
-        lwkopt = (integer)work[1].real;
+        /* Computing MAX */
+        i__1 = lwkmin;
+        i__2 = (aocl_int64_t)work[1].real; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/cgeqr.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -104,7 +108,7 @@ static aocl_int64_t c__2 = 2;
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. */
+/* > The dimension of the array WORK. LWORK >= 1. */
 /* > If LWORK = -1 or -2, then a workspace query is assumed. The routine */
 /* > only calculates the sizes of the T and WORK arrays, returns these */
 /* > values as the first entries of the T and WORK arrays, and no error */
@@ -170,6 +174,8 @@ static aocl_int64_t c__2 = 2;
 /* > */
 /* > \endverbatim */
 /* > */
+/* > \ingroup geqr */
+/* > */
 /* ===================================================================== */
 /* Subroutine */
 /** Generated wrapper function */
@@ -208,17 +214,18 @@ void aocl_lapack_cgeqr(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    real r__1;
+    scomplex q__1;
     /* Local variables */
     aocl_int64_t mb, nb;
     logical mint, minw;
-    aocl_int64_t nblcks;
+    aocl_int64_t lwmin, lwreq, nblcks;
     logical lminws, lquery;
     aocl_int64_t mintsz;
-    /* -- LAPACK computational routine (version 3.9.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
-    /* November 2019 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -295,11 +302,16 @@ void aocl_lapack_cgeqr(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64
         nblcks = 1;
     }
     /* Determine if the workspace size satisfies minimal size */
+    lwmin = fla_max(1, *n);
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n * nb; // , expr subst
+    lwreq = fla_max(i__1, i__2);
     lminws = FALSE_;
     /* Computing MAX */
     i__1 = 1;
     i__2 = nb * *n * nblcks + 5; // , expr subst
-    if((*tsize < fla_max(i__1, i__2) || *lwork < nb * *n) && *lwork >= *n && *tsize >= mintsz
+    if((*tsize < fla_max(i__1, i__2) || *lwork < lwreq) && *lwork >= *n && *tsize >= mintsz
        && !lquery)
     {
         /* Computing MAX */
@@ -311,7 +323,7 @@ void aocl_lapack_cgeqr(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64
             nb = 1;
             mb = *m;
         }
-        if(*lwork < nb * *n)
+        if(*lwork < lwreq)
         {
             lminws = TRUE_;
             nb = 1;
@@ -338,47 +350,46 @@ void aocl_lapack_cgeqr(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64
         {
             *info = -6;
         }
-        else /* if(complicated condition) */
+        else if(*lwork < lwreq && !lquery && !lminws)
         {
-            /* Computing MAX */
-            i__1 = 1;
-            i__2 = *n * nb; // , expr subst
-            if(*lwork < fla_max(i__1, i__2) && !lquery && !lminws)
-            {
-                *info = -8;
-            }
+            *info = -8;
         }
     }
     if(*info == 0)
     {
         if(mint)
         {
-            t[1].real = (real)mintsz;
-            t[1].imag = 0.f; // , expr subst
+            q__1.real = (real)mintsz;
+            q__1.imag = 0.f; // , expr subst
+            t[1].real = q__1.real;
+            t[1].imag = q__1.imag; // , expr subst
         }
         else
         {
             i__1 = nb * *n * nblcks + 5;
-            t[1].real = (real)i__1;
-            t[1].imag = 0.f; // , expr subst
+            q__1.real = (real)i__1;
+            q__1.imag = 0.f; // , expr subst
+            t[1].real = q__1.real;
+            t[1].imag = q__1.imag; // , expr subst
         }
-        t[2].real = (real)mb;
-        t[2].imag = 0.f; // , expr subst
-        t[3].real = (real)nb;
-        t[3].imag = 0.f; // , expr subst
+        q__1.real = (real)mb;
+        q__1.imag = 0.f; // , expr subst
+        t[2].real = q__1.real;
+        t[2].imag = q__1.imag; // , expr subst
+        q__1.real = (real)nb;
+        q__1.imag = 0.f; // , expr subst
+        t[3].real = q__1.real;
+        t[3].imag = q__1.imag; // , expr subst
         if(minw)
         {
-            i__1 = fla_max(1, *n);
-            work[1].real = (real)i__1;
+            r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+            work[1].real = r__1;
             work[1].imag = 0.f; // , expr subst
         }
         else
         {
-            /* Computing MAX */
-            i__2 = 1;
-            i__3 = nb * *n; // , expr subst
-            i__1 = fla_max(i__2, i__3);
-            work[1].real = (real)i__1;
+            r__1 = aocl_lapack_sroundup_lwork(&lwreq);
+            work[1].real = r__1;
             work[1].imag = 0.f; // , expr subst
         }
     }
@@ -409,11 +420,8 @@ void aocl_lapack_cgeqr(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64
     {
         aocl_lapack_clatsqr(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &work[1], lwork, info);
     }
-    /* Computing MAX */
-    i__2 = 1;
-    i__3 = nb * *n; // , expr subst
-    i__1 = fla_max(i__2, i__3);
-    work[1].real = (real)i__1;
+    r__1 = aocl_lapack_sroundup_lwork(&lwreq);
+    work[1].real = r__1;
     work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

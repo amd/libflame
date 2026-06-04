@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/cungr2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -238,7 +242,7 @@ void aocl_lapack_cungr2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
         i__2 = ii - 1;
         i__3 = *n - *m + ii;
         r_cnjg(&q__1, &tau[i__]);
-        aocl_lapack_clarf("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &q__1, &a[a_offset], lda,
+        aocl_lapack_clarf1l("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &q__1, &a[a_offset], lda,
                           &work[1]);
         i__2 = *n - *m + ii - 1;
         i__3 = i__;

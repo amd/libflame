@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/cgesvj.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -417,7 +421,7 @@ void aocl_lapack_cgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
     double r_sign(real *, real *);
     /* Local variables */
     real bigtheta;
-    aocl_int64_t pskipped, i__, p, q;
+    aocl_int64_t minmn, lwmin, lrwmin, pskipped, i__, p, q;
     real t;
     aocl_int64_t n2, n4;
     real rootsfmin;
@@ -497,6 +501,17 @@ void aocl_lapack_cgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
     applv = lsame_(jobv, "A", 1, 1);
     upper = lsame_(joba, "U", 1, 1);
     lower = lsame_(joba, "L", 1, 1);
+    minmn = fla_min(*m, *n);
+    if(minmn == 0)
+    {
+        lwmin = 1;
+        lrwmin = 1;
+    }
+    else
+    {
+        lwmin = *m + *n;
+        lrwmin = fla_max(6, *n);
+    }
     lquery = *lwork == -1 || *lrwork == -1;
     if(!(upper || lower || lsame_(joba, "G", 1, 1)))
     {
@@ -534,11 +549,11 @@ void aocl_lapack_cgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
     {
         *info = -12;
     }
-    else if(*lwork < *m + *n && !lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -13;
     }
-    else if(*lrwork < fla_max(*n, 6) && !lquery)
+    else if(*lrwork < lrwmin && !lquery)
     {
         *info = -15;
     }
@@ -556,15 +571,15 @@ void aocl_lapack_cgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aoc
     }
     else if(lquery)
     {
-        i__1 = *m + *n;
-        cwork[1].real = (real)i__1;
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+        cwork[1].real = r__1;
         cwork[1].imag = 0.f; // , expr subst
-        rwork[1] = (real)fla_max(*n, 6);
+        rwork[1] = aocl_lapack_sroundup_lwork(&lrwmin);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* #:) Quick return for void matrix */
-    if(*m == 0 || *n == 0)
+    if(minmn == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;

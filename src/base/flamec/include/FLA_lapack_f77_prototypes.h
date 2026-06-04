@@ -359,6 +359,8 @@ extern "C" {
 #define F77_clarcm AOCL_LAPACK_FUNC( clarcm , CLARCM )
 #define F77_clarfb AOCL_LAPACK_FUNC( clarfb , CLARFB )
 #define F77_clarf AOCL_LAPACK_FUNC( clarf , CLARF )
+#define F77_clarf1f AOCL_LAPACK_FUNC( clarf1f , CLARF1F )
+#define F77_clarf1l AOCL_LAPACK_FUNC( clarf1l , CLARF1L )
 #define F77_clarfg AOCL_LAPACK_FUNC( clarfg , CLARFG )
 #define F77_clarfgp AOCL_LAPACK_FUNC( clarfgp , CLARFGP )
 #define F77_clarft AOCL_LAPACK_FUNC( clarft , CLARFT )
@@ -2469,6 +2471,8 @@ extern "C" {
 #define LAPACK_EXPORT_clarcm F77_FUNC( clarcm , CLARCM )
 #define LAPACK_EXPORT_clarfb F77_FUNC( clarfb , CLARFB )
 #define LAPACK_EXPORT_clarf F77_FUNC( clarf , CLARF )
+#define LAPACK_EXPORT_clarf1f F77_FUNC( clarf1f , CLARF1F )
+#define LAPACK_EXPORT_clarf1l F77_FUNC( clarf1l , CLARF1L )
 #define LAPACK_EXPORT_clarfg F77_FUNC( clarfg , CLARFG )
 #define LAPACK_EXPORT_clarfgp F77_FUNC( clarfgp , CLARFGP )
 #define LAPACK_EXPORT_clarft F77_FUNC( clarft , CLARFT )
@@ -4657,6 +4661,8 @@ void LAPACK_EXPORT_clar2v(aocl_int_t* n, scomplex* x, scomplex* y, scomplex* z, 
 void LAPACK_EXPORT_clarcm(aocl_int_t* m, aocl_int_t* n, float* a, aocl_int_t* lda, scomplex* b, aocl_int_t* ldb, scomplex* c, aocl_int_t* ldc, float* rwork);
 void LAPACK_EXPORT_clarfb(char* side, char* trans, char* direct, char* storev, aocl_int_t* m, aocl_int_t* n, aocl_int_t* k, scomplex* v, aocl_int_t* ldv, scomplex* t, aocl_int_t* ldt, scomplex* c, aocl_int_t* ldc, scomplex* work, aocl_int_t* ldwork);
 void LAPACK_EXPORT_clarf(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
+void LAPACK_EXPORT_clarf1f(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
+void LAPACK_EXPORT_clarf1l(char* side, aocl_int_t* m, aocl_int_t* n, scomplex* v, aocl_int_t* incv, scomplex* tau, scomplex* c, aocl_int_t* ldc, scomplex* work);
 void LAPACK_EXPORT_clarfg(aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* tau);
 void LAPACK_EXPORT_clarfgp(aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* tau);
 void LAPACK_EXPORT_clarft(char* direct, char* storev, aocl_int_t* n, aocl_int_t* k, scomplex* v, aocl_int_t* ldv, scomplex* tau, scomplex* t, aocl_int_t* ldt);

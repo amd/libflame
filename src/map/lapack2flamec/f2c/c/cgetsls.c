@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./cgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -27,8 +31,17 @@ static aocl_int64_t c__0 = 0;
 /* > */
 /* > CGETSLS solves overdetermined or underdetermined scomplex linear systems */
 /* > involving an M-by-N matrix A, using a tall skinny QR or short wide LQ */
-/* > factorization of A. It is assumed that A has full rank. */
+/* > factorization of A. */
 /* > */
+/* > It is assumed that A has full rank, and only a rudimentary protection */
+/* > against rank-deficient matrices is provided. This subroutine only detects */
+/* > exact rank-deficiency, where a diagonal element of the triangular factor */
+/* > of A is exactly zero. */
+/* > */
+/* > It is conceivable for one (or more) of the diagonal elements of the triangular */
+/* > factor of A to be subnormally tiny numbers without this subroutine signalling */
+/* > an error. The solutions computed for such almost-rank-deficient matrices may */
+/* > be less accurate due to a loss of numerical precision. */
 /* > */
 /* > */
 /* > The following options are provided: */
@@ -135,7 +148,7 @@ B is M-by-NRHS if TRANS = 'N', or N-by-NRHS */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. */
+/* > The dimension of the array WORK. LWORK >= 1. */
 /* > If LWORK = -1 or -2, then a workspace query is assumed. */
 /* > If LWORK = -1, the routine calculates optimal size of WORK for the */
 /* > optimal performance and returns this value in WORK(1). */
@@ -149,7 +162,7 @@ B is M-by-NRHS if TRANS = 'N', or N-by-NRHS */
 /* > = 0: successful exit */
 /* > < 0: if INFO = -i, the i-th argument had an illegal value */
 /* > > 0: if INFO = i, the i-th diagonal element of the */
-/* > triangular factor of A is zero, so that A does not have */
+/* > triangular factor of A is exactly zero, so that A does not have */
 /* > full rank;
 the least squares solution could not be */
 /* > computed. */
@@ -245,6 +258,8 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
     /* Test the input arguments. */
     /* Parameter adjustments */
     a_dim1 = *lda;
+    lwo = 0;
+    lwm = 0;
     a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
@@ -288,7 +303,14 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
     if(*info == 0)
     {
         /* Determine the optimum and minimum LWORK */
-        if(*m >= *n)
+        /* Computing MIN */
+        i__1 = fla_min(*m, *n);
+        if(fla_min(i__1, *nrhs) == 0)
+        {
+            wsizeo = 1;
+            wsizem = 1;
+        }
+        else if(*m >= *n)
         {
             aocl_lapack_cgeqr(m, n, &a[a_offset], lda, tq, &c_n1, workq, &c_n1, &info2);
             tszo = (integer)tq[0].real;

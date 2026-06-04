@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/cgelq2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -153,7 +157,6 @@ void aocl_lapack_cgelq2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     aocl_int64_t i__, k;
-    scomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,27 +210,19 @@ void aocl_lapack_cgelq2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         /* Generate elementary reflector H(i) to annihilate A(i,i+1:n) */
         i__2 = *n - i__ + 1;
         aocl_lapack_clacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
-        i__2 = i__ + i__ * a_dim1;
-        alpha.real = a[i__2].real;
-        alpha.imag = a[i__2].imag; // , expr subst
         i__2 = *n - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        aocl_lapack_clarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &tau[i__]);
+        aocl_lapack_clarfg(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
+                           &tau[i__]);
         if(i__ < *m)
         {
             /* Apply H(i) to A(i+1:m,i:n) from the right */
-            i__2 = i__ + i__ * a_dim1;
-            a[i__2].real = 1.f;
-            a[i__2].imag = 0.f; // , expr subst
             i__2 = *m - i__;
             i__3 = *n - i__ + 1;
-            aocl_lapack_clarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                              &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+            aocl_lapack_clarf1f("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                     &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
         }
-        i__2 = i__ + i__ * a_dim1;
-        a[i__2].real = alpha.real;
-        a[i__2].imag = alpha.imag; // , expr subst
         i__2 = *n - i__ + 1;
         aocl_lapack_clacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
         /* L10: */

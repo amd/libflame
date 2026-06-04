@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./chetrs_aa.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -174,7 +178,7 @@ void aocl_lapack_chetrs_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scom
     aocl_int64_t k, kp;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -207,6 +211,14 @@ void aocl_lapack_chetrs_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scom
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
+    if(fla_min(*n, *nrhs) == 0)
+    {
+        lwkmin = 1;
+    }
+    else
+    {
+        lwkmin = *n * 3 - 2;
+    }
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -227,15 +239,9 @@ void aocl_lapack_chetrs_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scom
     {
         *info = -8;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n * 3 - 2; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -10;
-        }
+        *info = -10;
     }
     if(*info != 0)
     {
@@ -246,15 +252,14 @@ void aocl_lapack_chetrs_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scom
     }
     else if(lquery)
     {
-        lwkopt = *n * 3 - 2;
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkmin);
         work[1].real = r__1;
         work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
-    if(*n == 0 || *nrhs == 0)
+    if(fla_min(*n, *nrhs) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;

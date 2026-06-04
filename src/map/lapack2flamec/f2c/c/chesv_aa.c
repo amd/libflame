@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./chesv_aa.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -205,7 +209,7 @@ void aocl_lapack_chesv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomp
     /* Local variables */
     aocl_int64_t lwkopt_hetrf__, lwkopt_hetrs__;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin, lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -237,6 +241,11 @@ void aocl_lapack_chesv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomp
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
+    /* Computing MAX */
+    i__1 = 1, i__2 = *n << 1;
+    i__1 = fla_max(i__1, i__2);
+    i__2 = *n * 3 - 2; // ; expr subst
+    lwkmin = fla_max(i__1, i__2);
     if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -257,15 +266,9 @@ void aocl_lapack_chesv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomp
     {
         *info = -8;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = *n << 1;
-        i__2 = *n * 3 - 2; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -10;
-        }
+        *info = -10;
     }
     if(*info == 0)
     {
@@ -274,7 +277,9 @@ void aocl_lapack_chesv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomp
         aocl_lapack_chetrs_aa(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                               &work[1], &c_n1, info);
         lwkopt_hetrs__ = (integer)work[1].real;
-        lwkopt = fla_max(lwkopt_hetrf__, lwkopt_hetrs__);
+        /* Computing MAX */
+        i__1 = fla_max(lwkmin, lwkopt_hetrf__);
+        lwkopt = fla_max(i__1, lwkopt_hetrs__);
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].real = r__1;
         work[1].imag = 0.f; // , expr subst

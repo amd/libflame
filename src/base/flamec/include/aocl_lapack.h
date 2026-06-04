@@ -867,6 +867,10 @@ void aocl_lapack_clarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
                              scomplex *b, aocl_int64_t *ldb, scomplex *work, aocl_int64_t *ldwork);
 void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v, aocl_int64_t *incv,
                        scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work);
+void aocl_lapack_clarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v, aocl_int64_t *incv,
+                        scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work);
+void aocl_lapack_clarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v, aocl_int64_t *incv,
+                        scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work);
 void aocl_lapack_clarfg(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int64_t *incx,
                         scomplex *tau);
 void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int64_t *incx,

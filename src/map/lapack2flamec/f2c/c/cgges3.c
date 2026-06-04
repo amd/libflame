@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./cgges3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -226,7 +230,8 @@ static aocl_int64_t c__0 = 0;
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. */
+/* > The dimension of the array WORK. LWORK >= MAX(1,2*N). */
+/* > For good performance, LWORK must generally be larger. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
 the routine */
@@ -325,7 +330,7 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset,
         i__1, i__2;
-    scomplex q__1;
+    real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
@@ -345,8 +350,10 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
     extern real slamch_(char *);
     real bignum;
     aocl_int64_t ijobvl, iright, ijobvr;
-    real anrmto, bnrmto;
+    real anrmto;
+    aocl_int64_t lwkmin;
     logical lastsl;
+    real bnrmto;
     real smlnum;
     logical wantst, lquery;
     aocl_int64_t lwkopt;
@@ -427,6 +434,10 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
     /* Test the input arguments */
     *info = 0;
     lquery = *lwork == -1;
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n << 1; // , expr subst
+    lwkmin = fla_max(i__1, i__2);
     if(ijobvl <= 0)
     {
         *info = -1;
@@ -459,22 +470,16 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
     {
         *info = -16;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n << 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -18;
-        }
+        *info = -18;
     }
     /* Compute workspace */
     if(*info == 0)
     {
         aocl_lapack_cgeqrf(n, n, &b[b_offset], ldb, &work[1], &work[1], &c_n1, &ierr);
         /* Computing MAX */
-        i__1 = 1;
+        i__1 = lwkmin;
         i__2 = *n + (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         aocl_lapack_cunmqr("L", "C", n, n, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda,
@@ -515,10 +520,17 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
             i__2 = (integer)work[1].real; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        q__1.real = (real)lwkopt;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
+        if(*n == 0)
+        {
+            work[1].real = 1.f;
+            work[1].imag = 0.f; // , expr subst
+        }
+        else
+        {
+            r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
+        }
     }
     if(*info != 0)
     {
@@ -716,10 +728,9 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
         }
     }
 L30:
-    q__1.real = (real)lwkopt;
-    q__1.imag = 0.f; // , expr subst
-    work[1].real = q__1.real;
-    work[1].imag = q__1.imag; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGGES3 */

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./chetrd_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -131,7 +135,7 @@ if UPLO */
 /* > */
 /* > \param[out] HOUS2 */
 /* > \verbatim */
-/* > HOUS2 is COMPLEX array, dimension (LHOUS2) */
+/* > HOUS2 is COMPLEX array, dimension (MAX(1,LHOUS2)) */
 /* > Stores the Householder representation of the stage2 */
 /* > band to tridiagonal. */
 /* > \endverbatim */
@@ -140,6 +144,8 @@ if UPLO */
 /* > \verbatim */
 /* > LHOUS2 is INTEGER */
 /* > The dimension of the array HOUS2. */
+/* > LHOUS2 >= 1. */
+/* > */
 /* > If LWORK = -1, or LHOUS2=-1, */
 /* > then a query is assumed;
 the routine */
@@ -153,13 +159,16 @@ the routine */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is COMPLEX array, dimension (LWORK) */
+/* > WORK is COMPLEX array, dimension (MAX(1,LWORK)) */
+/* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK = MAX(1, dimension) */
+/* > The dimension of the array WORK. */
+/* > If N = 0, LWORK >= 1, else LWORK = MAX(1, dimension). */
+/* > */
 /* > If LWORK = -1, or LHOUS2 = -1, */
 /* > then a workspace query is assumed;
 the routine */
@@ -269,6 +278,7 @@ void aocl_lapack_chetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, scomplex
 #endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
+    real r__1;
     /* Local variables */
     aocl_int64_t ib, kd;
     aocl_int64_t ldab;
@@ -310,8 +320,16 @@ void aocl_lapack_chetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, scomplex
     /* Determine the block size, the workspace size and the hous size. */
     kd = aocl_lapack_ilaenv2stage(&c__1, "CHETRD_2STAGE", vect, n, &c_n1, &c_n1, &c_n1);
     ib = aocl_lapack_ilaenv2stage(&c__2, "CHETRD_2STAGE", vect, n, &kd, &c_n1, &c_n1);
-    lhmin = aocl_lapack_ilaenv2stage(&c__3, "CHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
-    lwmin = aocl_lapack_ilaenv2stage(&c__4, "CHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+    if(*n == 0)
+    {
+        lhmin = 1;
+        lwmin = 1;
+    }
+    else
+    {
+        lhmin = aocl_lapack_ilaenv2stage(&c__3, "CHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+        lwmin = aocl_lapack_ilaenv2stage(&c__4, "CHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+    }
     /* WRITE(*,*),'CHETRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO, */
     /* $ LHMIN, LWMIN */
     if(!lsame_(vect, "N", 1, 1))
@@ -340,9 +358,11 @@ void aocl_lapack_chetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, scomplex
     }
     if(*info == 0)
     {
-        hous2[1].real = (real)lhmin;
+        r__1 = aocl_lapack_sroundup_lwork(&lhmin);
+        hous2[1].real = r__1;
         hous2[1].imag = 0.f; // , expr subst
-        work[1].real = (real)lwmin;
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+        work[1].real = r__1;
         work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -388,9 +408,8 @@ void aocl_lapack_chetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, scomplex
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    hous2[1].real = (real)lhmin;
-    hous2[1].imag = 0.f; // , expr subst
-    work[1].real = (real)lwmin;
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+    work[1].real = r__1;
     work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

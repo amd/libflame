@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/chetri2.f -- translated by f2c (version 20160102). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -94,14 +98,14 @@ if UPLO = 'L' the lower triangular part of the */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is COMPLEX array, dimension (N+NB+1)*(NB+3) */
+/* > WORK is COMPLEX array, dimension (MAX(1,LWORK)) */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
-/* > WORK is size >= (N+NB+1)*(NB+3) */
+/* > If N = 0, LWORK >= 1, else LWORK >= (N+NB+1)*(NB+3). */
 /* > If LWORK = -1, then a workspace query is assumed;
 the routine */
 /* > calculates: */
@@ -164,6 +168,7 @@ void aocl_lapack_chetri2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
 #endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
+    real r__1;
     /* Local variables */
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t nbmax;
@@ -199,7 +204,11 @@ void aocl_lapack_chetri2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
     lquery = *lwork == -1;
     /* Get blocksize */
     nbmax = aocl_lapack_ilaenv(&c__1, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1);
-    if(nbmax >= *n)
+    if(*n == 0)
+    {
+        minsize = 1;
+    }
+    else if(nbmax >= *n)
     {
         minsize = *n;
     }
@@ -223,7 +232,6 @@ void aocl_lapack_chetri2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
     {
         *info = -7;
     }
-    /* Quick return if possible */
     if(*info != 0)
     {
         i__1 = -(*info);
@@ -233,11 +241,13 @@ void aocl_lapack_chetri2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
     }
     else if(lquery)
     {
-        work[1].real = (real)minsize;
+        r__1 = aocl_lapack_sroundup_lwork(&minsize);
+        work[1].real = r__1;
         work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
+    /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

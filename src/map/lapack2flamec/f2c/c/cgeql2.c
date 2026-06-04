@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/cgeql2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -162,7 +166,6 @@ void aocl_lapack_cgeql2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     aocl_int64_t i__, k;
-    scomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,23 +217,15 @@ void aocl_lapack_cgeql2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* A(1:m-k+i-1,n-k+i) */
-        i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
-        alpha.real = a[i__1].real;
-        alpha.imag = a[i__1].imag; // , expr subst
         i__1 = *m - k + i__;
-        aocl_lapack_clarfg(&i__1, &alpha, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
+        aocl_lapack_clarfg(&i__1, &a[*m - k + i__ + (*n - k + i__) * a_dim1],
+                           &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
         /* Apply H(i)**H to A(1:m-k+i,1:n-k+i-1) from the left */
-        i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
-        a[i__1].real = 1.f;
-        a[i__1].imag = 0.f; // , expr subst
         i__1 = *m - k + i__;
         i__2 = *n - k + i__ - 1;
         r_cnjg(&q__1, &tau[i__]);
-        aocl_lapack_clarf("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &q__1,
-                          &a[a_offset], lda, &work[1]);
-        i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
-        a[i__1].real = alpha.real;
-        a[i__1].imag = alpha.imag; // , expr subst
+        aocl_lapack_clarf1l("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &q__1, &a[a_offset],
+                 lda, &work[1]);
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

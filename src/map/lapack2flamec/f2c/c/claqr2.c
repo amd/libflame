@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./claqr2.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -349,7 +353,6 @@ void aocl_lapack_claqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     aocl_int64_t knt;
     real ulp;
     aocl_int64_t lwk1, lwk2;
-    scomplex beta;
     aocl_int64_t kcol, info, ifst, ilst, ltop, krow;
     aocl_int64_t infqr, kwtop;
     extern real slamch_(char *);
@@ -612,20 +615,17 @@ void aocl_lapack_claqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                 work[i__2].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
-            beta.real = work[1].real;
-            beta.imag = work[1].imag; // , expr subst
-            aocl_lapack_clarfg(ns, &beta, &work[2], &c__1, &tau);
-            work[1].real = 1.f;
-            work[1].imag = 0.f; // , expr subst
+            aocl_lapack_clarfg(ns, &work[1], &work[2], &c__1, &tau);
             i__1 = jw - 2;
             i__2 = jw - 2;
             aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &t[t_dim1 + 3], ldt);
             r_cnjg(&q__1, &tau);
-            aocl_lapack_clarf("L", ns, &jw, &work[1], &c__1, &q__1, &t[t_offset], ldt,
-                              &work[jw + 1]);
-            aocl_lapack_clarf("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            aocl_lapack_clarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
-                              &work[jw + 1]);
+            aocl_lapack_clarf1f("Left", ns, &jw, &work[1], &c__1, &q__1, &t[t_offset], ldt,
+                                &work[jw + 1]);
+            aocl_lapack_clarf1f("Right", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt,
+                                &work[jw + 1]);
+            aocl_lapack_clarf1f("Right", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
+                                &work[jw + 1]);
             i__1 = *lwork - jw;
             aocl_lapack_cgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,
                                &info);

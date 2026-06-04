@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/cgesvdx.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -592,11 +596,9 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
             }
         }
         maxwrk = fla_max(maxwrk, minwrk);
-        r__1 = (real)maxwrk;
-        q__1.real = r__1;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
+        r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -19;

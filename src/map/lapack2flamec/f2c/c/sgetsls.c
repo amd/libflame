@@ -236,6 +236,8 @@ void aocl_lapack_sgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
     /* Test the input arguments. */
     /* Parameter adjustments */
     a_dim1 = *lda;
+    lwo = 0;
+    lwm = 0;
     a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;

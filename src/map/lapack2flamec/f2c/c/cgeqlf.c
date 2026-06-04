@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./cgeqlf.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -96,7 +100,8 @@ static aocl_int64_t c__2 = 2;
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK >= fla_max(1,N). */
+/* > The dimension of the array WORK. */
+/* > LWORK >= 1, if MIN(M,N) = 0, and LWORK >= N, otherwise. */
 /* > For optimum performance LWORK >= N*NB, where NB is */
 /* > the optimal blocksize. */
 /* > */
@@ -235,9 +240,12 @@ void aocl_lapack_cgeqlf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].real = r__1;
         work[1].imag = 0.f; // , expr subst
-        if(*lwork < fla_max(1, *n) && !lquery)
+        if(!lquery)
         {
-            *info = -7;
+            if(*lwork <= 0 || *m > 0 && *lwork < fla_max(1, *n))
+            {
+                *info = -7;
+            }
         }
     }
     if(*info != 0)

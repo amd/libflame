@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* cgghd3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -197,7 +201,7 @@ LDZ >= 1 otherwise. */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is COMPLEX array, dimension (LWORK) */
+/* > WORK is COMPLEX array, dimension (MAX(1,LWORK)) */
 /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 /* > \endverbatim */
 /* > */
@@ -281,6 +285,7 @@ void aocl_lapack_cgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4, i__5, i__6, i__7, i__8, i__9;
     scomplex q__1, q__2, q__3, q__4;
+    real r__1;
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
@@ -342,13 +347,18 @@ void aocl_lapack_cgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     /* Function Body */
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "CGGHD3", " ", n, ilo, ihi, &c_n1);
-    /* Computing MAX */
-    i__1 = *n * 6 * nb;
-    lwkopt = fla_max(i__1, 1);
-    q__1.real = (real)lwkopt;
-    q__1.imag = 0.f; // , expr subst
-    work[1].real = q__1.real;
-    work[1].imag = q__1.imag; // , expr subst
+    nh = *ihi - *ilo + 1;
+    if(nh <= 1)
+    {
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkopt = *n * 6 * nb;
+    }
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     initq = lsame_(compq, "I", 1, 1);
     wantq = initq || lsame_(compq, "V", 1, 1);
     initz = lsame_(compz, "I", 1, 1);
@@ -423,7 +433,6 @@ void aocl_lapack_cgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         aocl_lapack_claset("Lower", &i__1, &i__2, &c_b2, &c_b2, &b[b_dim1 + 2], ldb);
     }
     /* Quick return if possible */
-    nh = *ihi - *ilo + 1;
     if(nh <= 1)
     {
         work[1].real = 1.f;
@@ -1327,10 +1336,9 @@ void aocl_lapack_cgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         aocl_lapack_cgghrd(compq2, compz2, n, &jcol, ihi, &a[a_offset], lda, &b[b_offset], ldb,
                            &q[q_offset], ldq, &z__[z_offset], ldz, &ierr);
     }
-    q__1.real = (real)lwkopt;
-    q__1.imag = 0.f; // , expr subst
-    work[1].real = q__1.real;
-    work[1].imag = q__1.imag; // , expr subst
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGGHD3 */

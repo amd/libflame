@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./cbdsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -176,7 +180,9 @@ LDC >=1 if NCC = 0. */
 /* > */
 /* > \param[out] RWORK */
 /* > \verbatim */
-/* > RWORK is REAL array, dimension (4*N) */
+/* > RWORK is REAL array, dimension (LRWORK) */
+/* > LRWORK = 4*N, if NCVT = NRU = NCC = 0, and */
+/* > LRWORK = 4*(N-1), otherwise */
 /* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
@@ -509,7 +515,7 @@ void aocl_lapack_cbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
         sminoa /= sqrt((real)(*n));
         /* Computing MAX */
         r__1 = tol * sminoa;
-        r__2 = *n * (*n * unfl) * 6; // , expr subst
+        r__2 = (real)(*n) * ((real)(*n) * unfl) * 6.f; // , expr subst
         thresh = fla_max(r__1, r__2);
     }
     else
@@ -517,7 +523,7 @@ void aocl_lapack_cbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
         /* Absolute accuracy desired */
         /* Computing MAX */
         r__1 = f2c_abs(tol) * smax;
-        r__2 = *n * (*n * unfl) * 6; // , expr subst
+        r__2 = (real)(*n) * ((real)(*n) * unfl) * 6.f; // , expr subst
         thresh = fla_max(r__1, r__2);
     }
     /* Prepare for main iteration loop for the singular values */
@@ -693,7 +699,7 @@ L90:
     /* Computing MAX */
     r__1 = eps;
     r__2 = tol * .01f; // , expr subst
-    if(tol >= 0.f && *n * tol * (smin / smax) <= fla_max(r__1, r__2))
+    if(tol >= 0.f && (real)(*n) * tol * (smin / smax) <= fla_max(r__1, r__2))
     {
         /* Use a zero shift to avoid loss of relative accuracy */
         shift = 0.f;
@@ -964,6 +970,11 @@ L160:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
+        if(d__[i__] == 0.f)
+        {
+            /* Avoid -ZERO */
+            d__[i__] = 0.f;
+        }
         if(d__[i__] < 0.f)
         {
             d__[i__] = -d__[i__];

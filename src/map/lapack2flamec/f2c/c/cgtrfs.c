@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/cgtrfs.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -376,7 +380,7 @@ void aocl_lapack_cgtrfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
     nz = 4;
     eps = slamch_("Epsilon");
     safmin = slamch_("Safe minimum");
-    safe1 = nz * safmin;
+    safe1 = (real)nz * safmin;
     safe2 = safe1 / eps;
     /* Do for each right hand side */
     i__1 = *nrhs;
@@ -606,13 +610,13 @@ void aocl_lapack_cgtrfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
             {
                 i__3 = i__;
                 rwork[i__] = (r__1 = work[i__3].real, f2c_abs(r__1))
-                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
+                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + (real)nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
                 rwork[i__] = (r__1 = work[i__3].real, f2c_abs(r__1))
-                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
+                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + (real)nz * eps * rwork[i__]
                              + safe1;
             }
             /* L60: */

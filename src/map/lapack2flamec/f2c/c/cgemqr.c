@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2021-2023 Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 /* ../netlib/v3.9.0/cgemqr.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
@@ -39,9 +39,9 @@
 /* > \param[in] SIDE */
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
-/* > = 'L': apply Q or Q**T from the Left;
+/* > = 'L': apply Q or Q**H from the Left;
  */
-/* > = 'R': apply Q or Q**T from the Right. */
+/* > = 'R': apply Q or Q**H from the Right. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TRANS */
@@ -49,7 +49,7 @@
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
  */
-/* > = 'T': Transpose, apply Q**T. */
+/* > = 'C': Conjugate transpose, apply Q**H. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] M */
@@ -105,7 +105,7 @@
 /* > \verbatim */
 /* > C is COMPLEX array, dimension (LDC,N) */
 /* > On entry, the M-by-N matrix C. */
-/* > On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q. */
+/* > On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDC */
@@ -117,12 +117,13 @@
 /* > \param[out] WORK */
 /* > \verbatim */
 /* > (workspace) COMPLEX array, dimension (MAX(1,LWORK)) */
+/* > On exit, if INFO = 0, WORK(1) returns the minimal LWORK. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. */
+/* > The dimension of the array WORK. LWORK >= 1. */
 /* > If LWORK = -1, then a workspace query is assumed. The routine */
 /* > only calculates the size of the WORK array, returns this */
 /* > value as WORK(1), and no error message related to WORK */
@@ -167,6 +168,8 @@
 /* > Further Details in CLAMTSQR or CGEMQRT. */
 /* > */
 /* > \endverbatim */
+/* > */
+/* > \ingroup gemqr */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
@@ -217,16 +220,18 @@ void aocl_lapack_cgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
 #endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
+    real r__1;
     /* Local variables */
     aocl_int64_t mb, nb, mn, lw;
     logical left, tran;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
+    aocl_int64_t lwmin;
+    aocl_int64_t minmnk;
     logical notran, lquery;
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -270,6 +275,17 @@ void aocl_lapack_cgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         lw = mb * nb;
         mn = *n;
     }
+    /* Computing MIN */
+    i__1 = fla_min(*m, *n);
+    minmnk = fla_min(i__1, *k);
+    if(minmnk == 0)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        lwmin = fla_max(1, lw);
+    }
     *info = 0;
     if(!left && !right)
     {
@@ -309,7 +325,8 @@ void aocl_lapack_cgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     }
     if(*info == 0)
     {
-        work[1].real = (real)lw;
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+        work[1].real = r__1;
         work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -325,9 +342,7 @@ void aocl_lapack_cgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         return;
     }
     /* Quick return if possible */
-    /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *k) == 0)
+    if(minmnk == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -344,7 +359,8 @@ void aocl_lapack_cgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         aocl_lapack_clamtsqr(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb,
                              &c__[c_offset], ldc, &work[1], lwork, info);
     }
-    work[1].real = (real)lw;
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
+    work[1].real = r__1;
     work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -104,6 +104,5 @@ int zunmlq_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
         work[1].imag = 0.; // , expr subst
         return LAPACK_QUICK_RETURN;
     }
-
     return LAPACK_SUCCESS;
 }

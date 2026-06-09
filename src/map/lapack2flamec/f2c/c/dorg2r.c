@@ -117,6 +117,7 @@ static aocl_int64_t c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
+/* > \date September 2012 */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
@@ -260,6 +261,7 @@ void dorg2r_fla_native(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -355,4 +357,4 @@ void dorg2r_fla_native(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double
     return;
     /* End of DORG2R */
 }
-/* lapack_dorg2r */
+/* dorg2r_ */

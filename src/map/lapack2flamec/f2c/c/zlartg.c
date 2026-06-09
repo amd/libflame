@@ -312,43 +312,6 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
                 z__1.imag = z__2.real * z__3.imag + z__2.imag * z__3.real; // , expr subst
                 s->real = z__1.real, s->imag = z__1.imag;
             }
-            else
-            {
-                /* f2/h2 <= safmin may be subnormal, and h2/f2 may overflow. */
-                /* Moreover, */
-                /* safmin <= f2*f2 * safmax < f2 * h2 < h2*h2 * safmin <= sa */
-                /* sqrt(safmin) <= sqrt(f2 * h2) <= sqrt(safmax). */
-                /* Also, */
-                /* g2 >> f2, which means that h2 = g2. */
-                d__ = sqrt(f2 * h2);
-                *c__ = f2 / d__;
-                if(*c__ >= safmin)
-                {
-                    z__1.real = fs.real / *c__;
-                    z__1.imag = fs.imag / *c__; // , expr subst
-                    r__->real = z__1.real, r__->imag = z__1.imag;
-                }
-                else
-                {
-                    /* f2 / sqrt(f2 * h2) < safmin, then */
-                    /* sqrt(safmin) <= f2 * sqrt(safmax) <= h2 / sqrt(f2 * h2 */
-                    d__1 = h2 / d__;
-                    z__1.real = d__1 * fs.real;
-                    z__1.imag = d__1 * fs.imag; // , expr subst
-                    r__->real = z__1.real, r__->imag = z__1.imag;
-                }
-                d_cnjg(&z__2, &gs);
-                z__3.real = fs.real / d__;
-                z__3.imag = fs.imag / d__; // , expr subst
-                z__1.real = z__2.real * z__3.real - z__2.imag * z__3.imag;
-                z__1.imag = z__2.real * z__3.imag + z__2.imag * z__3.real; // , expr subst
-                s->real = z__1.real, s->imag = z__1.imag;
-            }
-            /* Rescale c and r */
-            *c__ *= w;
-            z__1.real = u * r__->real;
-            z__1.imag = u * r__->imag; // , expr subst
-            r__->real = z__1.real, r__->imag = z__1.imag;
         }
         else
         {

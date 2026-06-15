@@ -1,123 +1,172 @@
 """
-Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All Rights Reserved.
+Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
 Name: auto_config.py
-Purpose: To check and recognize the zen architecture family
+Purpose: To check CPU ISA support for auto configuration
 """
 
 #Global Imports
+import os
 import platform
-import re
+import shutil
 import subprocess
 import sys
+import tempfile
 
 
-def config_check():                                                             #Function to check the system info
+def helper_source():
+    """Return the C source used to detect host AVX ISA support."""
+    return """
+#include <stdio.h>
 
+#define XCR0_XMM       (1ull << 1)
+#define XCR0_YMM       (1ull << 2)
+#define XCR0_OPMASK    (1ull << 5)
+#define XCR0_ZMM_HI256 (1ull << 6)
+#define XCR0_HI16_ZMM  (1ull << 7)
+
+#define XCR0_AVX2_MASK   (XCR0_XMM | XCR0_YMM)
+#define XCR0_AVX512_MASK (XCR0_XMM | XCR0_YMM | XCR0_OPMASK | \\
+                          XCR0_ZMM_HI256 | XCR0_HI16_ZMM)
+
+#if defined(_MSC_VER)
+#include <intrin.h>
+static void cpuid_count(unsigned int leaf, unsigned int subleaf,
+                        unsigned int regs[4])
+{
+    int cpu_info[4];
+    __cpuidex(cpu_info, (int)leaf, (int)subleaf);
+    regs[0] = (unsigned int)cpu_info[0];
+    regs[1] = (unsigned int)cpu_info[1];
+    regs[2] = (unsigned int)cpu_info[2];
+    regs[3] = (unsigned int)cpu_info[3];
+}
+
+static unsigned long long xgetbv0(void)
+{
+    return _xgetbv(0);
+}
+#else
+#include <cpuid.h>
+static void cpuid_count(unsigned int leaf, unsigned int subleaf,
+                        unsigned int regs[4])
+{
+    __cpuid_count(leaf, subleaf, regs[0], regs[1], regs[2], regs[3]);
+}
+
+static unsigned long long xgetbv0(void)
+{
+    unsigned int eax;
+    unsigned int edx;
+    __asm__ volatile("xgetbv" : "=a"(eax), "=d"(edx) : "c"(0));
+    return ((unsigned long long)edx << 32) | eax;
+}
+#endif
+
+int main(void)
+{
+    unsigned int regs[4] = {0, 0, 0, 0};
+    unsigned int max_leaf;
+    unsigned long long xcr0;
+
+    cpuid_count(0, 0, regs);
+    max_leaf = regs[0];
+    if(max_leaf < 7)
+    {
+        puts("none");
+        return 0;
+    }
+
+    /* CPUID.1:ECX[27] = OSXSAVE. Without it, XCR0 is not valid here. */
+    cpuid_count(1, 0, regs);
+    if(!(regs[2] & (1u << 27)))
+    {
+        puts("none");
+        return 0;
+    }
+
+    /* CPUID reports hardware ISA support; XCR0 reports OS-enabled state. */
+    xcr0 = xgetbv0();
+    cpuid_count(7, 0, regs);
+    /* CPUID.7.0:EBX[16] = AVX512F, require XCR0 bits 1,2,5,6,7. */
+    if((regs[1] & (1u << 16)) &&
+       ((xcr0 & XCR0_AVX512_MASK) == XCR0_AVX512_MASK))
+    {
+        puts("avx512");
+        return 0;
+    }
+    /* CPUID.7.0:EBX[5] = AVX2, require XCR0 bits 1,2. */
+    if((regs[1] & (1u << 5)) &&
+       ((xcr0 & XCR0_AVX2_MASK) == XCR0_AVX2_MASK))
+    {
+        puts("avx2");
+        return 0;
+    }
+
+    puts("none");
+    return 0;
+}
+"""
+
+
+def build_helper(cc, source, output_path):
+    """Compile the CPUID helper with the selected C compiler."""
+    compiler_name = os.path.basename(cc).lower()
+
+    if compiler_name in ("cl", "cl.exe", "clang-cl", "clang-cl.exe"):
+        command = [cc, "/nologo", source, "/Fe:%s" % output_path]
+    else:
+        command = [cc, source, "-o", output_path]
+
+    return subprocess.run(command, cwd=os.path.dirname(output_path),
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                          universal_newlines=True)
+
+
+def host_is_x86():
+    """Return whether the build host CPU is an x86-family processor."""
+    machine = platform.machine().lower()
+    return machine in ("x86_64", "amd64", "i386", "i486", "i586", "i686",
+                       "x86")
+
+
+def config_check():                                                             #Function to detect the ISA token
+    """Detect and return the best supported ISA token for this host."""
+    if not host_is_x86():
+        return "none"
+
+    cc = os.environ.get("CC") or os.environ.get("CMAKE_C_COMPILER") or \
+        shutil.which("gcc") or shutil.which("clang") or shutil.which("cc") \
+        or shutil.which("cl") or shutil.which("clang-cl")
+
+    if not cc:
+        raise RuntimeError("Unable to auto-detect ISA: no C compiler found")
+
+    with tempfile.TemporaryDirectory(prefix="libflame-cpuid-") as tmpdir:
+        source = os.path.join(tmpdir, "detect_isa.c")
+        exe_name = "detect_isa.exe" if 'Windows' in platform.system() \
+            else "detect_isa"
+        output_path = os.path.join(tmpdir, exe_name)
+
+        with open(source, "w", encoding="utf-8") as source_file:
+            source_file.write(helper_source())
+
+        build_result = build_helper(cc, source, output_path)
+        if build_result.returncode != 0:
+            raise RuntimeError("Unable to build CPUID helper with %s\n%s" %
+                               (cc, build_result.stderr))
+
+        run_result = subprocess.run([output_path], stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                    universal_newlines=True)
+        if run_result.returncode != 0:
+            raise RuntimeError("CPUID helper failed\n%s" % run_result.stderr)
+
+        return run_result.stdout.strip()
+
+
+if __name__ == "__main__":
     try:
-        global model, family, vendor, stepping                                  #Global Variables
-        if 'Windows' in platform.system():
-            result = subprocess.Popen('wmic cpu get caption', shell=True,
-                                      stdout=subprocess.PIPE,
-                                      stderr=subprocess.PIPE).communicate()     #Execute wmic shell command with subprocess
-            result = result[0].decode('utf-8')
-
-            result = result.replace('\n', '')                                   #Replace the newline character with empty char
-            parse_string = result.split(" ")                                    #Parse the string into list of string
-            parse_string = [data for data in parse_string if data.strip()]      #Strip the empty strings from list
-
-            vendor = parse_string[1]
-            family = int(parse_string[3])
-            model = int(parse_string[5])
-            stepping = int(parse_string[7])
-        elif 'Linux' in platform.system():
-            result = subprocess.Popen('lscpu', shell=True,
-                                      stdout=subprocess.PIPE,
-                                      stderr=subprocess.PIPE).communicate()     #Execute lscpu command with subprocess
-
-            stepping = int(re.findall(r'\WStepping:.*', result[0].
-                                      decode('utf-8'), re.MULTILINE)[0].
-                           strip('\n').split(' ')[-1])
-            family = int(re.findall(r'\WCPU family:.*', result[0].
-                                    decode('utf-8'), re.MULTILINE)[0].
-                         strip('\n').split(' ')[-1])
-            model = int(re.findall(r'\WModel:.*', result[0].decode('utf-8'),
-                                   re.MULTILINE)[0].strip('\n').split(' ')[-1])
-            vendor = re.findall(r'\WModel name:.*', result[0].decode('utf-8'),
-                                re.MULTILINE)[0].strip('\n').split('Model '
-                                                                   'name:')[-1]
-
-        """
-        AMD family numbers
-        Zen/Zen+/Zen2 (0x17), Zen3/Zen4 (0x19) and zen5 (0x1a) family numbers
-        """
-        zen_family = [23, 25, 26]
-
-        """
-        Bulldozer / Piledriver / Steamroller / Excavator family number
-        """
-        amd_family = 21
-
-        """
-        AMD CPUID model numbers
-        """
-        zen_model = [48, 255]
-        zen2_model = [0, 255]
-        zen3_model = [(0, 15), (32, 95)]
-        zen4_model = [(16, 31), (96, 175)]
-        zen5_model = [(0, 79), (96, 119)]
-        excavator_model = [96, 127]
-        steamroller_model = [48, 63]
-        piledriver_model = [2, 16, 31]
-        bulldozer_model = [0, 1]
-
-        if vendor.count("Intel64"):                                             #Check the CPU configuration Intel64/AMD64
-            return
-        elif 'AMD' in vendor:                                                   #.count("AMD64"):
-            """
-            Extracting AMD family name
-            """
-            if family == zen_family[0]:
-                if zen_model[0] <= model <= zen_model[1]:
-                    family="zen2"
-                elif zen2_model[0] <= model <= zen2_model[1]:
-                    family="zen"
-                else:
-                    print("Unknown model number")
-            elif family == zen_family[1]:
-                if (zen3_model[0][0] <= model <= zen3_model[0][1]) or (
-                        zen3_model[1][0] <= model <= zen3_model[1][1]):
-                    family="zen3"
-                elif (zen4_model[0][0] <= model <= zen4_model[0][1]) or (
-                        zen4_model[1][0] <= model <= zen4_model[1][1]):
-                    family="zen4"
-                else:
-                    print("Unknown model number zen4")
-            elif family == zen_family[2]:
-                if ((zen5_model[0][0]) <= model <= (zen5_model[0][1])) or \
-                    ((zen5_model[1][0]) <= model <= (zen5_model[1][1])):
-                    family="zen5"
-                else:
-                    print("Unknown model number for zen5")
-            elif family == amd_family:
-                if excavator_model[0] <= model <= excavator_model[1]:           #Check for specific models of excavator family
-                    family="excavator"
-                elif steamroller_model[0] <= model <= steamroller_model[1]:     #Check for specific models of steamroller family
-                    family="steamroller"
-                elif model == piledriver_model[0] or \
-                        (piledriver_model[1] <= model <= piledriver_model[2]):  #Check for specific models of piledriver family
-                    family="piledriver"
-                elif model == bulldozer_model[0] or \
-                        model == bulldozer_model[1]:
-                    family="bulldozer"
-                else:
-                    print("Unknown model number")
-            else:
-                print("Unknown family")
-        else:
-            print("UNKNOWN CPU")
-        return family
+        print(config_check())                                                   #Function call for ISA token
     except Exception as e:
-        print("Exception due to %s" % e)
-
-config = config_check()                                                         #Function call for config family names
-print(config)
+        print("Exception due to %s" % e, file=sys.stderr)
+        sys.exit(1)

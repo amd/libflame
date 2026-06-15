@@ -205,6 +205,11 @@ the location `{CMAKE_INSTALL_PREFIX}/lib/pkgconfig/`.
 - The pkg-config metadata file should be placed at a location recognized by pkg-config tool.
 - aocl-blas and aocl-utils should be installed along with it's pkg-config metadata file.
 
+## 11. Auto ISA detection
+LF_ISA_CONFIG can be set to none, avx, avx2, avx2-strict, avx512, avx512-strict, or auto. When `-DLF_ISA_CONFIG=auto`, CMake runs a configure-time CPUID helper compiled with the configured C compiler
+(CMAKE_C_COMPILER or CC). The helper checks AVX512F and AVX2 feature bits and selects avx512, avx2,
+or none.
+
 ## Building using CMake presets
 
 AOCL-LAPACK provides with build, testing and test workflow cmake presets for most common configurations. You can list
@@ -241,7 +246,7 @@ Presets names use the following convention: `<os>-<buildsystem>-<compiler>-<st/m
 | st/mt                   | st, mt                                           | Single-threaded or multi-threaded build                                                     |
 | lp/ilp                  | lp, ilp                                          | LP64 or ILP64 build                                                                         |
 | static/shared           | static, shared                                   | Static or shared library                                                                    |
-| isa-mode                | autosia, avx, avx2, avx512                       | ISA mode for the build                                                                      |
+| isa-mode                | autoisa, avx, avx2, avx512                       | ISA mode for the build                                                                      |
 | other optional commands | test, aoclblas                                   | - **test**: Builds libflame test binary <br> - **aoclblas**: Enables tight coupling with aoclblas |
 
 

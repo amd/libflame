@@ -23,7 +23,7 @@ function(validate_and_normalize_isa_config)
             "none, avx, avx2, avx2-strict, avx512, avx512-strict, auto")
     endif()
     
-    message(STATUS "Machine ISA configuration set to ${LF_ISA_CONFIG}")
+    message(STATUS "Machine ISA configuration (LF_ISA_CONFIG) set to ${LF_ISA_CONFIG}")
     
     # Export to parent scope
     set(lf_isa_config_lower ${lf_isa_config_lower} PARENT_SCOPE)
@@ -32,10 +32,16 @@ endfunction()
 # Function to auto-detect ISA configuration
 function(auto_detect_isa_config)
     set(AUTO_CONFIG_PY "${CMAKE_SOURCE_DIR}/build/auto_config.py")
+    set(AUTO_CONFIG_ENV)
+
+    if(CMAKE_C_COMPILER)
+        list(APPEND AUTO_CONFIG_ENV "CC=${CMAKE_C_COMPILER}")
+        list(APPEND AUTO_CONFIG_ENV "CMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
+    endif()
     
-    # Run python script to find the architecture family name
+    # Run python script to detect ISA support using CPUID.
     execute_process(
-        COMMAND ${Python3_EXECUTABLE} ${AUTO_CONFIG_PY}
+        COMMAND ${CMAKE_COMMAND} -E env ${AUTO_CONFIG_ENV} ${Python3_EXECUTABLE} ${AUTO_CONFIG_PY}
         RESULT_VARIABLE CMD_RESULT
         OUTPUT_VARIABLE CMD_OUTPUT
         ERROR_VARIABLE CMD_ERROR
@@ -46,20 +52,23 @@ function(auto_detect_isa_config)
     if(NOT CMD_RESULT EQUAL 0)
         message(FATAL_ERROR
             "Auto-detecting ISA configuration failed with exit code ${CMD_RESULT}.\n"
-            "Command: ${Python3_EXECUTABLE} ${AUTO_CONFIG_PY}\n"
+            "Command: ${CMAKE_COMMAND} -E env ${AUTO_CONFIG_ENV} ${Python3_EXECUTABLE} ${AUTO_CONFIG_PY}\n"
             "stdout: ${CMD_OUTPUT}\n"
             "stderr: ${CMD_ERROR}"
         )
     endif()
     
-    message(STATUS "Auto configuring the family: ${CMD_OUTPUT}")
+    message(STATUS "Auto configuring ISA using CPUID helper: ${CMD_OUTPUT}")
     
-    if("${CMD_OUTPUT}" STREQUAL "zen" OR "${CMD_OUTPUT}" STREQUAL "zen2" OR "${CMD_OUTPUT}" STREQUAL "zen3")
-        set(lf_isa_config_lower "avx2" PARENT_SCOPE)
-    elseif("${CMD_OUTPUT}" STREQUAL "zen4" OR "${CMD_OUTPUT}" STREQUAL "zen5")
+    if("${CMD_OUTPUT}" STREQUAL "avx512")
         set(lf_isa_config_lower "avx512" PARENT_SCOPE)
-    else()
+    elseif("${CMD_OUTPUT}" STREQUAL "avx2")
+        set(lf_isa_config_lower "avx2" PARENT_SCOPE)
+    elseif("${CMD_OUTPUT}" STREQUAL "none")
         set(lf_isa_config_lower "none" PARENT_SCOPE)
+    else()
+        message(FATAL_ERROR
+            "Auto-detecting ISA configuration returned an unknown value: ${CMD_OUTPUT}")
     endif()
 endfunction()
 
@@ -210,7 +219,7 @@ macro(configure_compiler_flags)
         auto_detect_isa_config()
     endif()
     
-    message(STATUS "LF_ISA_CONFIG selected: ${LF_ISA_CONFIG}")
+    message(STATUS "LF_ISA_CONFIG selected: ${lf_isa_config_lower}")
     
     # Handle strict ISA variants
     handle_strict_isa_variants(lf_isa_config_lower)

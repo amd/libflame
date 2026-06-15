@@ -26,7 +26,7 @@ endif()
 
 message(STATUS "External blas library Path : ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}")
 message(STATUS "External blas library name : ${EXT_BLAS_LIBNAME}")
-SET(LF_ISA_CONFIG "AVX2" CACHE STRING "LibFlame Instruction set architecture Configuration")
+SET(LF_ISA_CONFIG "avx2" CACHE STRING "LibFlame ISA configuration: none, avx, avx2, avx2-strict, avx512, avx512-strict, auto")
 
 if(WIN32)
 	SET(OpenMP_libomp_LIBRARY "${OpenMP_libomp_LIB}" CACHE STRING "openmp library path")

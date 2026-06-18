@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./dlaqr2.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -720,14 +724,13 @@ L60:
             aocl_blas_dcopy(ns, &v[v_offset], ldv, &work[1], &c__1);
             beta = work[1];
             aocl_lapack_dlarfg(ns, &beta, &work[2], &c__1, &tau);
-            work[1] = 1.;
             i__1 = jw - 2;
             i__2 = jw - 2;
             aocl_lapack_dlaset("L", &i__1, &i__2, &c_b12, &c_b12, &t[t_dim1 + 3], ldt);
-            aocl_lapack_dlarf("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt,
+            aocl_lapack_dlarf1f("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt,
                               &work[jw + 1]);
-            aocl_lapack_dlarf("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            aocl_lapack_dlarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
+            aocl_lapack_dlarf1f("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
+            aocl_lapack_dlarf1f("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
                               &work[jw + 1]);
             i__1 = *lwork - jw;
             aocl_lapack_dgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,

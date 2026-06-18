@@ -1233,6 +1233,8 @@ typedef struct Namelist Namelist;
 #define dlar1v_                  DLAR1V 
 #define dlar2v_                  DLAR2V 
 #define dlarf_                   DLARF 
+#define dlarf1f_                 DLARF1F
+#define dlarf1l_                 DLARF1L
 #define dlarfb_                  DLARFB 
 #define dlarfg_                  DLARFG 
 #define dlarfgp_                 DLARFGP 
@@ -3426,6 +3428,8 @@ typedef struct Namelist Namelist;
 #define dlar1v_                  dlar1v 
 #define dlar2v_                  dlar2v 
 #define dlarf_                   dlarf 
+#define dlarf1f_                 dlarf1f 
+#define dlarf1l_                 dlarf1l 
 #define dlarfb_                  dlarfb 
 #define dlarfg_                  dlarfg 
 #define dlarfgp_                 dlarfgp 

@@ -1,3 +1,7 @@
+/*
+ *   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* dgetsqrhrt.f -- translated by f2c (version 20160102). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -323,7 +327,8 @@ void aocl_lapack_dgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1,
                 i__1 = lwt + lw1;
                 i__2 = fla_max(i__3, i__4); // , expr subst
                 lworkopt = fla_max(i__1, i__2);
-                if(*lwork < fla_max(1, lworkopt) && !lquery)
+                lworkopt = fla_max(1, lworkopt);
+                if(*lwork < lworkopt && !lquery)
                 {
                     *info = -11;
                 }

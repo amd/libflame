@@ -1,3 +1,7 @@
+/*
+ *    Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./dgelsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -328,7 +332,7 @@ void aocl_lapack_dgelsd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, do
     nlvl = fla_max(i__1, 0);
     if(*info == 0)
     {
-        maxwrk = 0;
+        maxwrk = 1;
         liwork = minmn * 3 * nlvl + minmn * 11;
         mm = *m;
         if(*m >= *n && *m >= mnthr)

@@ -200,10 +200,9 @@ void dorgl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a
         {
             if(i__ < *m)
             {
-                a[i__ + i__ * a_dim1] = 1.;
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
-                aocl_lapack_dlarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                aocl_lapack_dlarf1f("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
                                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;

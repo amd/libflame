@@ -1,3 +1,7 @@
+/*
+ *   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/dsytri_3.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -236,11 +240,19 @@ void aocl_lapack_dsytri_3(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* Determine the block size */
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = aocl_lapack_ilaenv(&c__1, "DSYTRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-    nb = fla_max(i__1, i__2);
-    lwkopt = (*n + nb + 1) * (nb + 3);
+    if(*n == 0)
+    {
+        lwkopt = 1;
+    }
+    else
+    {
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = aocl_lapack_ilaenv(&c__1, "DSYTRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
+        lwkopt = (*n + nb + 1) * (nb + 3);
+    }
+    work[1] = (doublereal)lwkopt;
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -266,7 +278,6 @@ void aocl_lapack_dsytri_3(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64
     }
     else if(lquery)
     {
-        work[1] = (doublereal)lwkopt;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

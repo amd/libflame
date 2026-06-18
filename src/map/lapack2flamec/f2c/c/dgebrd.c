@@ -240,7 +240,7 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
         int
         lapack_dgebd2(aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *, doublereal *,
                       doublereal *, doublereal *, doublereal *, doublereal *, aocl_int64_t *);
-    aocl_int64_t ldwrkx, ldwrky, lwkopt;
+    aocl_int64_t lwkmin, ldwrkx, ldwrky, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -273,16 +273,26 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     --work;
     /* Function Body */
     *info = 0;
-    /* Computing MAX */
-    i__1 = 1;
+    minmn = fla_min(*m, *n);
+    if(minmn == 0)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = fla_max(*m, *n);
+        /* Computing MAX */
+        i__1 = 1;
 #ifdef FLA_ENABLE_AMD_OPT
-    i__2 = 32;
+        i__2 = 32;
 #else
-    aocl_int64_t c__1 = 1;
-    i__2 = aocl_lapack_ilaenv(&c__1, "DGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
+        static aocl_int64_t c__1 = 1;
+        i__2 = aocl_lapack_ilaenv(&c__1, "DGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
 #endif
-    nb = fla_max(i__1, i__2);
-    lwkopt = (*m + *n) * nb;
+        nb = fla_max(i__1, i__2);
+        lwkopt = (*m + *n) * nb;
+    }
     work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
     if(*m < 0)
@@ -297,14 +307,9 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     {
         *info = -4;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*lwork < fla_max(i__1, *n) && !lquery)
-        {
-            *info = -10;
-        }
+        *info = -10;
     }
     if(*info < 0)
     {
@@ -336,7 +341,7 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
         /* Determine when to switch from blocked to unblocked code. */
         if(nx < minmn)
         {
-            ws = (*m + *n) * nb;
+            ws = lwkopt;
             if(*lwork < ws)
             {
                 /* Not enough work space for the optimal NB, consider using */

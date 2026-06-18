@@ -1,3 +1,7 @@
+/*
+ *   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/dsysv_aa_2stage.f -- translated by f2c (version 20160102). You must link the
  resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
  Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
@@ -223,11 +227,11 @@ void aocl_lapack_dsysv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs
                       ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",
                       *uplo, *n, *nrhs, *lda, *ltb, *ldb, *lwork);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin,lwkopt;
     logical tquery, wquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -264,6 +268,7 @@ void aocl_lapack_dsysv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs
     upper = lsame_(uplo, "U", 1, 1);
     wquery = *lwork == -1;
     tquery = *ltb == -1;
+    lwkmin = fla_max(1, *n);
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -280,23 +285,33 @@ void aocl_lapack_dsysv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs
     {
         *info = -5;
     }
-    else if(*ltb < *n << 2 && !tquery)
+    else /* if(complicated condition) */
     {
-        *info = -7;
-    }
-    else if(*ldb < fla_max(1, *n))
-    {
-        *info = -11;
-    }
-    else if(*lwork < *n && !wquery)
-    {
-        *info = -13;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n << 2; // , expr subst
+        if(*ltb < fla_max(i__1, i__2) && !tquery)
+        {
+            *info = -7;
+        }
+        else if(*ldb < fla_max(1, *n))
+        {
+            *info = -11;
+        }
+        else if(*lwork < lwkmin && !wquery)
+        {
+            *info = -13;
+        }
     }
     if(*info == 0)
     {
         aocl_lapack_dsytrf_aa_2stage(uplo, n, &a[a_offset], lda, &tb[1], &c_n1, &ipiv[1], &ipiv2[1],
                                      &work[1], &c_n1, info);
-        lwkopt = (integer)work[1];
+        /* Computing MAX */
+        i__1 = lwkmin;
+        i__2 = (integer)work[1]; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
+        work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)
     {

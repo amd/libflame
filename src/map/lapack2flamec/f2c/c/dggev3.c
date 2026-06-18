@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
+
 /* ./dggev3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -288,6 +292,7 @@ void aocl_lapack_dggev3(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a
     doublereal bignum;
     aocl_int64_t ijobvl, iright, ijobvr;
     doublereal anrmto, bnrmto;
+    aocl_int64_t lwkmin;
     doublereal smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
@@ -365,6 +370,10 @@ void aocl_lapack_dggev3(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a
     /* Test the input arguments */
     *info = 0;
     lquery = *lwork == -1;
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n << 3; // , expr subst
+    lwkmin = fla_max(i__1, i__2);
     if(ijobvl <= 0)
     {
         *info = -1;
@@ -393,23 +402,16 @@ void aocl_lapack_dggev3(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a
     {
         *info = -14;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n << 3; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -16;
-        }
+        *info = -16;
     }
     /* Compute workspace */
     if(*info == 0)
     {
         aocl_lapack_dgeqrf(n, n, &b[b_offset], ldb, &work[1], &work[1], &c_n1, &ierr);
         /* Computing MAX */
-        i__1 = 1, i__2 = *n << 3;
-        i__1 = fla_max(i__1, i__2);
+        i__1 = lwkmin;
         i__2 = *n * 3 + (integer)work[1]; // ; expr subst
         lwkopt = fla_max(i__1, i__2);
         aocl_lapack_dormqr("L", "T", n, n, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda,
@@ -458,7 +460,14 @@ void aocl_lapack_dggev3(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a
             i__2 = (*n << 1) + (integer)work[1]; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = (doublereal)lwkopt;
+        if(*n == 0)
+        {
+            work[1] = 1.;
+        }
+        else
+        {
+            work[1] = (doublereal)lwkopt;
+        }
     }
     if(*info != 0)
     {

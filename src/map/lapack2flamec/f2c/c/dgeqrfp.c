@@ -162,7 +162,7 @@ void dgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *
     /* Local variables */
     aocl_int64_t i__, k, nbmin, iinfo, ib, nb;
     aocl_int64_t nx;
-    aocl_int64_t ldwork, lwkopt;
+    aocl_int64_t lwkmin, ldwork, lwkopt;
     logical lquery;
     extern /* Subroutine */
         void
@@ -196,7 +196,17 @@ void dgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *
     /* Function Body */
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
-    lwkopt = *n * nb;
+    k = fla_min(*m, *n);
+    if(k == 0)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = *n;
+        lwkopt = *n * nb;
+    }
     work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
     if(*m < 0)
@@ -211,7 +221,7 @@ void dgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *
     {
         *info = -4;
     }
-    else if(*lwork < fla_max(1, *n) && !lquery)
+    else if(*lwork < lwkmin && !lquery)
     {
         *info = -7;
     }
@@ -226,7 +236,6 @@ void dgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *
         return;
     }
     /* Quick return if possible */
-    k = fla_min(*m, *n);
     if(k == 0)
     {
         work[1] = 1.;
@@ -234,7 +243,7 @@ void dgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *
     }
     nbmin = 2;
     nx = 0;
-    iws = *n;
+    iws = lwkmin;
     if(nb > 1 && nb < k)
     {
         /* Determine when to cross over from blocked to unblocked code. */

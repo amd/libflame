@@ -297,9 +297,8 @@ int lapack_dgelqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     --work;
     /* Function Body */
     *info = 0;
+    k = fla_min(*m, *n);
     nb = aocl_lapack_ilaenv(&c__1, "DGELQF", " ", m, n, &c_n1, &c_n1);
-    lwkopt = *m * nb;
-    work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -313,9 +312,12 @@ int lapack_dgelqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     {
         *info = -4;
     }
-    else if(*lwork < fla_max(1, *m) && !lquery)
+    else if(!lquery)
     {
-        *info = -7;
+        if(*lwork <= 0 || *n > 0 && *lwork < fla_max(1, *m))
+        {
+            *info = -7;
+        }
     }
     if(*info != 0)
     {
@@ -325,10 +327,18 @@ int lapack_dgelqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     }
     else if(lquery)
     {
+        if(k == 0)
+        {
+            lwkopt = 1;
+        }
+        else
+        {
+            lwkopt = *m * nb;
+        }
+        work[1] = (doublereal)lwkopt;
         return 0;
     }
     /* Quick return if possible */
-    k = fla_min(*m, *n);
     if(k == 0)
     {
         work[1] = 1.;

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./dgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -199,7 +203,7 @@ void aocl_lapack_dgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
     /* Local variables */
     aocl_int64_t i__, j;
     doublereal tq[5];
-    aocl_int64_t lw1, lw2, lwm, lwo;
+    aocl_int64_t lw1, lw2, lwm=0, lwo=0;
     doublereal anrm, bnrm;
     logical tran;
     aocl_int64_t brow, tszm, tszo, info2, iascl, ibscl;
@@ -275,7 +279,14 @@ void aocl_lapack_dgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
     if(*info == 0)
     {
         /* Determine the optimum and minimum LWORK */
-        if(*m >= *n)
+        /* Computing MIN */
+        i__1 = fla_min(*m, *n);
+        if(fla_min(i__1, *nrhs) == 0)
+        {
+            wsizem = 1;
+            wsizeo = 1;
+        }
+        else if(*m >= *n)
         {
             aocl_lapack_dgeqr(m, n, &a[a_offset], lda, tq, &c_n1, workq, &c_n1, &info2);
             tszo = (integer)tq[0];

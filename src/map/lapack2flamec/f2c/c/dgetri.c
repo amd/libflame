@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/dgetri.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link
  with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in
@@ -187,7 +191,9 @@ void aocl_lapack_dgetri(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
     else
     {
         nb = aocl_lapack_ilaenv(&c__1, "DGETRI", " ", n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst 
+        lwkopt = fla_max(i__1, i__2);
     }
     work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;

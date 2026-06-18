@@ -1,3 +1,7 @@
+/*
+ *   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/dsytrf_aa_2stage.f -- translated by f2c (version 20160102). You must link the
  resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
  Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
@@ -249,13 +253,19 @@ void aocl_lapack_dsytrf_aa_2stage(char *uplo, aocl_int64_t *n, doublereal *a, ao
     {
         *info = -4;
     }
-    else if(*ltb < *n << 2 && !tquery)
+    else /* if(complicated condition) */
     {
-        *info = -6;
-    }
-    else if(*lwork < *n && !wquery)
-    {
-        *info = -10;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n << 2; // , expr subst
+        if(*ltb < fla_max(i__1, i__2) && !tquery)
+        {
+            *info = -6;
+        }
+        else if(*lwork < fla_max(1, *n) && !wquery)
+        {
+            *info = -10;
+        }
     }
     if(*info != 0)
     {
@@ -270,11 +280,17 @@ void aocl_lapack_dsytrf_aa_2stage(char *uplo, aocl_int64_t *n, doublereal *a, ao
     {
         if(tquery)
         {
-            tb[1] = (doublereal)((nb * 3 + 1) * *n);
+            /* Computing MAX */
+            i__1 = 1;
+            i__2 = (nb * 3 + 1) * *n; // , expr subst
+            tb[1] = (doublereal)fla_max(i__1, i__2);
         }
         if(wquery)
         {
-            work[1] = (doublereal)(*n * nb);
+            /* Computing MAX */
+            i__1 = 1;
+            i__2 = *n * nb; // , expr subst
+            work[1] = (doublereal)fla_max(i__1, i__2);
         }
     }
     if(tquery || wquery)

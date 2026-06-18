@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/dgeqlf.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -228,9 +232,12 @@ void aocl_lapack_dgeqlf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
             lwkopt = *n * nb;
         }
         work[1] = (doublereal)lwkopt;
-        if(*lwork < fla_max(1, *n) && !lquery)
+        if(!lquery)
         {
-            *info = -7;
+            if(*lwork <= 0 || *m > 0 && *lwork < fla_max(1, *n))
+            {
+                *info = -7;
+            }
         }
     }
     if(*info != 0)

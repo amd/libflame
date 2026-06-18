@@ -1,3 +1,7 @@
+/*
+ *   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/dsyevx.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -358,7 +362,6 @@ void aocl_lapack_dsyevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, do
     indeig = lsame_(range, "I", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    lwkopt = 0;
     if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
@@ -412,7 +415,7 @@ void aocl_lapack_dsyevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, do
         if(*n <= 1)
         {
             lwkmin = 1;
-            work[1] = (doublereal)lwkmin;
+            lwkopt = 1;
         }
         else
         {
@@ -427,8 +430,8 @@ void aocl_lapack_dsyevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, do
             i__1 = lwkmin;
             i__2 = (nb + 3) * *n; // , expr subst
             lwkopt = fla_max(i__1, i__2);
-            work[1] = (doublereal)lwkopt;
         }
+        work[1] = (doublereal)lwkopt;
         if(*lwork < lwkmin && !lquery)
         {
             *info = -17;

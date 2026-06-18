@@ -293,7 +293,10 @@ void dsytrd_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, d
     {
         /* Determine the block size. */
         nb = aocl_lapack_ilaenv(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
         work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)

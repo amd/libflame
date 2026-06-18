@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/dorbdb.f -- translated by f2c (version 20160102). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -547,7 +551,6 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                 aocl_lapack_dlarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + i__ * x11_dim1],
                                     &c__1, &taup1[i__]);
             }
-            x11[i__ + i__ * x11_dim1] = 1.;
             if(*m - *p > i__)
             {
                 i__2 = *m - *p - i__ + 1;
@@ -560,33 +563,32 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                 aocl_lapack_dlarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1],
                                     &c__1, &taup2[i__]);
             }
-            x21[i__ + i__ * x21_dim1] = 1.;
             if(*q > i__)
             {
                 i__2 = *p - i__ + 1;
                 i__3 = *q - i__;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
                                   &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[1]);
             }
             if(*m - *q + 1 > i__)
             {
                 i__2 = *p - i__ + 1;
                 i__3 = *m - *q - i__ + 1;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
                                   &x12[i__ + i__ * x12_dim1], ldx12, &work[1]);
             }
             if(*q > i__)
             {
                 i__2 = *m - *p - i__ + 1;
                 i__3 = *q - i__;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
                                   &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[1]);
             }
             if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *p - i__ + 1;
                 i__3 = *m - *q - i__ + 1;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
                                   &x22[i__ + i__ * x22_dim1], ldx22, &work[1]);
             }
             if(i__ < *q)
@@ -627,7 +629,6 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                     aocl_lapack_dlarfgp(&i__2, &x11[i__ + (i__ + 1) * x11_dim1],
                                         &x11[i__ + (i__ + 2) * x11_dim1], ldx11, &tauq1[i__]);
                 }
-                x11[i__ + (i__ + 1) * x11_dim1] = 1.;
             }
             if(*q + i__ - 1 < *m)
             {
@@ -644,17 +645,16 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                         &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &tauq2[i__]);
                 }
             }
-            x12[i__ + i__ * x12_dim1] = 1.;
             if(i__ < *q)
             {
                 i__2 = *p - i__;
                 i__3 = *q - i__;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
                                   &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11,
                                   &work[1]);
                 i__2 = *m - *p - i__;
                 i__3 = *q - i__;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
                                   &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21,
                                   &work[1]);
             }
@@ -662,14 +662,14 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
             {
                 i__2 = *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
                                   &x12[i__ + 1 + i__ * x12_dim1], ldx12, &work[1]);
             }
             if(*m - *p > i__)
             {
                 i__2 = *m - *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
                                   &x22[i__ + 1 + i__ * x22_dim1], ldx22, &work[1]);
             }
         }
@@ -692,19 +692,18 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                 aocl_lapack_dlarfgp(&i__2, &x12[i__ + i__ * x12_dim1],
                                     &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &tauq2[i__]);
             }
-            x12[i__ + i__ * x12_dim1] = 1.;
             if(*p > i__)
             {
                 i__2 = *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
                                   &x12[i__ + 1 + i__ * x12_dim1], ldx12, &work[1]);
             }
             if(*m - *p - *q >= 1)
             {
                 i__2 = *m - *p - *q;
                 i__3 = *m - *q - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
                                   &x22[*q + 1 + i__ * x22_dim1], ldx22, &work[1]);
             }
         }
@@ -729,12 +728,11 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                     &x22[*q + i__ + (*p + i__ + 1) * x22_dim1], ldx22,
                                     &tauq2[*p + i__]);
             }
-            x22[*q + i__ + (*p + i__) * x22_dim1] = 1.;
             if(i__ < *m - *p - *q)
             {
                 i__2 = *m - *p - *q - i__;
                 i__3 = *m - *p - *q - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22,
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22,
                                   &tauq2[*p + i__], &x22[*q + i__ + 1 + (*p + i__) * x22_dim1],
                                   ldx22, &work[1]);
             }
@@ -783,7 +781,6 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
             i__2 = *p - i__ + 1;
             aocl_lapack_dlarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1],
                                 ldx11, &taup1[i__]);
-            x11[i__ + i__ * x11_dim1] = 1.;
             if(i__ == *m - *p)
             {
                 i__2 = *m - *p - i__ + 1;
@@ -796,33 +793,32 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                 aocl_lapack_dlarfgp(&i__2, &x21[i__ + i__ * x21_dim1],
                                     &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &taup2[i__]);
             }
-            x21[i__ + i__ * x21_dim1] = 1.;
             if(*q > i__)
             {
                 i__2 = *q - i__;
                 i__3 = *p - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
                                   &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[1]);
             }
             if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *p - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
                                   &x12[i__ + i__ * x12_dim1], ldx12, &work[1]);
             }
             if(*q > i__)
             {
                 i__2 = *q - i__;
                 i__3 = *m - *p - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
                                   &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[1]);
             }
             if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - i__ + 1;
-                aocl_lapack_dlarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
+                aocl_lapack_dlarf1f("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
                                   &x22[i__ + i__ * x22_dim1], ldx22, &work[1]);
             }
             if(i__ < *q)
@@ -863,7 +859,6 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                     aocl_lapack_dlarfgp(&i__2, &x11[i__ + 1 + i__ * x11_dim1],
                                         &x11[i__ + 2 + i__ * x11_dim1], &c__1, &tauq1[i__]);
                 }
-                x11[i__ + 1 + i__ * x11_dim1] = 1.;
             }
             if(*m - *q > i__)
             {
@@ -877,29 +872,28 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                 aocl_lapack_dlarfgp(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1],
                                     &c__1, &tauq2[i__]);
             }
-            x12[i__ + i__ * x12_dim1] = 1.;
             if(i__ < *q)
             {
                 i__2 = *q - i__;
                 i__3 = *p - i__;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1,
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1,
                                   &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11,
                                   &work[1]);
                 i__2 = *q - i__;
                 i__3 = *m - *p - i__;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1,
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1,
                                   &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21,
                                   &work[1]);
             }
             i__2 = *m - *q - i__ + 1;
             i__3 = *p - i__;
-            aocl_lapack_dlarf("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+            aocl_lapack_dlarf1f("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
                               &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &work[1]);
             if(*m - *p - i__ > 0)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - i__;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
                                   &x22[i__ + (i__ + 1) * x22_dim1], ldx22, &work[1]);
             }
         }
@@ -913,19 +907,18 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
             i__2 = *m - *q - i__ + 1;
             aocl_lapack_dlarfgp(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1],
                                 &c__1, &tauq2[i__]);
-            x12[i__ + i__ * x12_dim1] = 1.;
             if(*p > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *p - i__;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
                                   &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &work[1]);
             }
             if(*m - *p - *q >= 1)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - *q;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
                                   &x22[i__ + (*q + 1) * x22_dim1], ldx22, &work[1]);
             }
         }
@@ -951,11 +944,10 @@ void aocl_lapack_dorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                     &tauq2[*p + i__]);
                 i__2 = *m - *p - *q - i__ + 1;
                 i__3 = *m - *p - *q - i__;
-                aocl_lapack_dlarf("L", &i__2, &i__3, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1,
+                aocl_lapack_dlarf1f("L", &i__2, &i__3, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1,
                                   &tauq2[*p + i__], &x22[*p + i__ + (*q + i__ + 1) * x22_dim1],
                                   ldx22, &work[1]);
             }
-            x22[*p + i__ + (*q + i__) * x22_dim1] = 1.;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

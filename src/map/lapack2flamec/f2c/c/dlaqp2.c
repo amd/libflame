@@ -1,12 +1,13 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
+
 /* ../netlib/dlaqp2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
- /* Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
-  */
- 
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b DLAQP2 computes a QR factorization with column pivoting of the matrix block. */
@@ -179,7 +180,7 @@ void aocl_lapack_dlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
     double sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, mn;
-    doublereal aii, vn1_j;
+    doublereal vn1_j;
     aocl_int64_t pvt;
     doublereal temp;
     doublereal temp2, tol3z;
@@ -270,13 +271,10 @@ void aocl_lapack_dlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
         if(i__ < *n)
         {
             /* Apply H(i)**T to A(offset+i:m,i+1:n) from the left. */
-            aii = a[offpi + i__ * a_dim1];
-            a[offpi + i__ * a_dim1] = 1.;
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
-            aocl_lapack_dlarf("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
+            aocl_lapack_dlarf1f("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
                               &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
-            a[offpi + i__ * a_dim1] = aii;
         }
         /* Update partial column norms. */
         i__2 = *n;

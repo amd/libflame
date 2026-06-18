@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/dgeql2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -151,7 +155,6 @@ void aocl_lapack_dgeql2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t i__, k;
-    doublereal aii;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,13 +210,10 @@ void aocl_lapack_dgeql2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
         aocl_lapack_dlarfg(&i__1, &a[*m - k + i__ + (*n - k + i__) * a_dim1],
                            &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
         /* Apply H(i) to A(1:m-k+i,1:n-k+i-1) from the left */
-        aii = a[*m - k + i__ + (*n - k + i__) * a_dim1];
-        a[*m - k + i__ + (*n - k + i__) * a_dim1] = 1.;
         i__1 = *m - k + i__;
         i__2 = *n - k + i__ - 1;
-        aocl_lapack_dlarf("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__],
+        aocl_lapack_dlarf1l("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__],
                           &a[a_offset], lda, &work[1]);
-        a[*m - k + i__ + (*n - k + i__) * a_dim1] = aii;
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

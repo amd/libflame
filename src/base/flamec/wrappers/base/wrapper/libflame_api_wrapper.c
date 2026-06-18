@@ -9571,6 +9571,36 @@ void DLARF_(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* inc
 	return dlarf_( side, m, n, v, incv, tau, c, ldc, work);
 }
 
+void DLARF1F(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work)
+{
+    return dlarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void dlarf1f(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work)
+{
+    return dlarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void DLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work)
+{
+    return dlarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void DLARF1L(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work)
+{
+    return dlarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void dlarf1l(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work)
+{
+    return dlarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void DLARF1L_(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work)
+{
+    return dlarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
 void DLARFG(aocl_int_t* n, double* alpha, double* x, aocl_int_t* incx, double* tau)
 {
 	return dlarfg_( n, alpha, x, incx, tau);

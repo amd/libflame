@@ -786,6 +786,8 @@ extern "C" {
 #define F77_dlar2v AOCL_LAPACK_FUNC( dlar2v , DLAR2V )
 #define F77_dlarfb AOCL_LAPACK_FUNC( dlarfb , DLARFB )
 #define F77_dlarf AOCL_LAPACK_FUNC( dlarf , DLARF )
+#define F77_dlarf1f AOCL_LAPACK_FUNC( dlarf1f , DLARF1F )
+#define F77_dlarf1l AOCL_LAPACK_FUNC( dlarf1l , DLARF1L )
 #define F77_dlarfg AOCL_LAPACK_FUNC( dlarfg , DLARFG )
 #define F77_dlarfgp AOCL_LAPACK_FUNC( dlarfgp , DLARFGP )
 #define F77_dlarft AOCL_LAPACK_FUNC( dlarft , DLARFT )
@@ -2898,6 +2900,8 @@ extern "C" {
 #define LAPACK_EXPORT_dlar2v F77_FUNC( dlar2v , DLAR2V )
 #define LAPACK_EXPORT_dlarfb F77_FUNC( dlarfb , DLARFB )
 #define LAPACK_EXPORT_dlarf F77_FUNC( dlarf , DLARF )
+#define LAPACK_EXPORT_dlarf1f F77_FUNC( dlarf1f , DLARF1F )
+#define LAPACK_EXPORT_dlarf1l F77_FUNC( dlarf1l , DLARF1L )
 #define LAPACK_EXPORT_dlarfg F77_FUNC( dlarfg , DLARFG )
 #define LAPACK_EXPORT_dlarfgp F77_FUNC( dlarfgp , DLARFGP )
 #define LAPACK_EXPORT_dlarft F77_FUNC( dlarft , DLARFT )
@@ -5064,6 +5068,8 @@ void LAPACK_EXPORT_dlar1v(aocl_int_t* n, aocl_int_t* b1, aocl_int_t* bn, double*
 void LAPACK_EXPORT_dlar2v(aocl_int_t* n, double* x, double* y, double* z, aocl_int_t* incx, double* c, double* s, aocl_int_t* incc);
 void LAPACK_EXPORT_dlarfb(char* side, char* trans, char* direct, char* storev, aocl_int_t* m, aocl_int_t* n, aocl_int_t* k, double* v, aocl_int_t* ldv, double* t, aocl_int_t* ldt, double* c, aocl_int_t* ldc, double* work, aocl_int_t* ldwork);
 void LAPACK_EXPORT_dlarf(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
+void LAPACK_EXPORT_dlarf1f(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
+void LAPACK_EXPORT_dlarf1l(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
 void LAPACK_EXPORT_dlarfg(aocl_int_t* n, double* alpha, double* x, aocl_int_t* incx, double* tau);
 void LAPACK_EXPORT_dlarfgp(aocl_int_t* n, double* alpha, double* x, aocl_int_t* incx, double* tau);
 void LAPACK_EXPORT_dlarft(char* direct, char* storev, aocl_int_t* n, aocl_int_t* k, double* v, aocl_int_t* ldv, double* tau, double* t, aocl_int_t* ldt);

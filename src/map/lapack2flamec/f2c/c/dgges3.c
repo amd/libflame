@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./dgges3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -354,6 +358,7 @@ void aocl_lapack_dgges3(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, a
     doublereal bignum;
     aocl_int64_t ijobvl, iright, ijobvr;
     doublereal anrmto, bnrmto;
+    aocl_int64_t lwkmin;
     logical lastsl;
     doublereal smlnum;
     logical wantst, lquery;
@@ -435,6 +440,14 @@ void aocl_lapack_dgges3(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, a
     /* Test the input arguments */
     *info = 0;
     lquery = *lwork == -1;
+    if(*n == 0)
+    {
+        lwkmin = 1;
+    }
+    else
+    {
+        lwkmin = *n * 6 + 16;
+    }
     if(ijobvl <= 0)
     {
         *info = -1;
@@ -467,7 +480,7 @@ void aocl_lapack_dgges3(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, a
     {
         *info = -17;
     }
-    else if(*lwork < *n * 6 + 16 && !lquery)
+    else if(*lwork < lwkmin && !lquery)
     {
         *info = -19;
     }
@@ -476,7 +489,7 @@ void aocl_lapack_dgges3(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, a
     {
         aocl_lapack_dgeqrf(n, n, &b[b_offset], ldb, &work[1], &work[1], &c_n1, &ierr);
         /* Computing MAX */
-        i__1 = *n * 6 + 16;
+        i__1 = lwkmin;
         i__2 = *n * 3 + (integer)work[1]; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         aocl_lapack_dormqr("L", "T", n, n, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda,
@@ -518,7 +531,14 @@ void aocl_lapack_dgges3(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, a
             i__2 = (*n << 1) + (integer)work[1]; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = (doublereal)lwkopt;
+        if(*n == 0)
+        {
+            work[1] = 1.;
+        }
+        else
+        {
+            work[1] = (doublereal)lwkopt;
+        }
     }
     if(*info != 0)
     {

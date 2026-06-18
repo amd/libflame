@@ -1,3 +1,7 @@
+/*
+ *   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* dsytrf_aa.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -168,7 +172,7 @@ void aocl_lapack_dsytrf_aa(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int6
     doublereal alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -201,6 +205,16 @@ void aocl_lapack_dsytrf_aa(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int6
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
+    if(*n <= 1)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = *n << 1;
+        lwkopt = (nb + 1) * *n;
+    }
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -213,19 +227,12 @@ void aocl_lapack_dsytrf_aa(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int6
     {
         *info = -4;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n << 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -7;
-        }
+        *info = -7;
     }
     if(*info == 0)
     {
-        lwkopt = (nb + 1) * *n;
         work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)

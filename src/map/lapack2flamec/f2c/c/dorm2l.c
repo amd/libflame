@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/dorm2l.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -192,7 +196,6 @@ void aocl_lapack_dorm2l(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t i__, i1, i2, i3, mi, ni, nq;
-    doublereal aii;
     logical left;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical notran;
@@ -315,11 +318,8 @@ void aocl_lapack_dorm2l(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
             ni = *n - *k + i__;
         }
         /* Apply H(i) */
-        aii = a[nq - *k + i__ + i__ * a_dim1];
-        a[nq - *k + i__ + i__ * a_dim1] = 1.;
-        aocl_lapack_dlarf(side, &mi, &ni, &a[i__ * a_dim1 + 1], &c__1, &tau[i__], &c__[c_offset],
+        aocl_lapack_dlarf1l(side, &mi, &ni, &a[i__ * a_dim1 + 1], &c__1, &tau[i__], &c__[c_offset],
                           ldc, &work[1]);
-        a[nq - *k + i__ + i__ * a_dim1] = aii;
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

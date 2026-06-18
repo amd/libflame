@@ -2575,6 +2575,14 @@ extern void DLARF(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_
 extern void dlarf(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
 extern void DLARF_(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
 
+extern void DLARF1F(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
+extern void dlarf1f(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
+extern void DLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
+
+extern void DLARF1L(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
+extern void dlarf1l(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
+extern void DLARF1L_(char* side, aocl_int_t* m, aocl_int_t* n, double* v, aocl_int_t* incv, double* tau, double* c, aocl_int_t* ldc, double* work);
+
 extern void DLARFG(aocl_int_t* n, double* alpha, double* x, aocl_int_t* incx, double* tau);
 extern void dlarfg(aocl_int_t* n, double* alpha, double* x, aocl_int_t* incx, double* tau);
 extern void DLARFG_(aocl_int_t* n, double* alpha, double* x, aocl_int_t* incx, double* tau);

@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/zhetrf_rk.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -346,7 +350,10 @@ void aocl_lapack_zhetrf_rk(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
     {
         /* Determine the block size */
         nb = aocl_lapack_ilaenv(&c__1, "ZHETRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
         work[1].real = (doublereal)lwkopt;
         work[1].imag = 0.; // , expr subst
     }

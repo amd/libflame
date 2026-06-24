@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/zhetrf_aa_2stage.f -- translated by f2c (version 20160102). You must link the
  resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
  Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
@@ -253,11 +257,11 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
     {
         *info = -4;
     }
-    else if(*ltb < *n << 2 && !tquery)
+    else if(*ltb < fla_max(1, *n << 2) && !tquery)
     {
         *info = -6;
     }
-    else if(*lwork < *n && !wquery)
+    else if(*lwork < fla_max(1, *n) && !wquery)
     {
         *info = -10;
     }
@@ -274,13 +278,19 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
     {
         if(tquery)
         {
-            i__1 = (nb * 3 + 1) * *n;
+            /* Computing MAX */
+            i__2 = 1;
+            i__3 = (nb * 3 + 1) * *n; // , expr subst
+            i__1 = fla_max(i__2, i__3);
             tb[1].real = (doublereal)i__1;
             tb[1].imag = 0.; // , expr subst
         }
         if(wquery)
         {
-            i__1 = *n * nb;
+            /* Computing MAX */
+            i__2 = 1;
+            i__3 = *n * nb; // , expr subst
+            i__1 = fla_max(i__2, i__3);
             work[1].real = (doublereal)i__1;
             work[1].imag = 0.; // , expr subst
         }

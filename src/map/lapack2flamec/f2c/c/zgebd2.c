@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/zgebd2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -297,16 +301,13 @@ void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                                &tauq[i__]);
             i__2 = i__;
             d__[i__2] = alpha.real;
-            i__2 = i__ + i__ * a_dim1;
-            a[i__2].real = 1.;
-            a[i__2].imag = 0.; // , expr subst
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             if(i__ < *n)
             {
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
                 d_cnjg(&z__1, &tauq[i__]);
-                aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
+                aocl_lapack_zlarf1f("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
                                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             }
             i__2 = i__ + i__ * a_dim1;
@@ -329,13 +330,10 @@ void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                                    &taup[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
-                i__2 = i__ + (i__ + 1) * a_dim1;
-                a[i__2].real = 1.;
-                a[i__2].imag = 0.; // , expr subst
                 /* Apply G(i) to A(i+1:m,i+1:n) from the right */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
-                aocl_lapack_zlarf("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda,
+                aocl_lapack_zlarf1f("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda,
                                   &taup[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = *n - i__;
                 aocl_lapack_zlacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
@@ -372,15 +370,12 @@ void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                                &taup[i__]);
             i__2 = i__;
             d__[i__2] = alpha.real;
-            i__2 = i__ + i__ * a_dim1;
-            a[i__2].real = 1.;
-            a[i__2].imag = 0.; // , expr subst
             /* Apply G(i) to A(i+1:m,i:n) from the right */
             if(i__ < *m)
             {
                 i__2 = *m - i__;
                 i__3 = *n - i__ + 1;
-                aocl_lapack_zlarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
+                aocl_lapack_zlarf1f("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
                                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__2 = *n - i__ + 1;
@@ -403,14 +398,11 @@ void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                                    &tauq[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
-                i__2 = i__ + 1 + i__ * a_dim1;
-                a[i__2].real = 1.;
-                a[i__2].imag = 0.; // , expr subst
                 /* Apply H(i)**H to A(i+1:m,i+1:n) from the left */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
                 d_cnjg(&z__1, &tauq[i__]);
-                aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
+                aocl_lapack_zlarf1f("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
                                   &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = i__ + 1 + i__ * a_dim1;
                 i__3 = i__;

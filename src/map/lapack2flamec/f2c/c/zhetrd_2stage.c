@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./zhetrd_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -299,8 +303,16 @@ void aocl_lapack_zhetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, dcomplex
     /* Determine the block size, the workspace size and the hous size. */
     kd = aocl_lapack_ilaenv2stage(&c__1, "ZHETRD_2STAGE", vect, n, &c_n1, &c_n1, &c_n1);
     ib = aocl_lapack_ilaenv2stage(&c__2, "ZHETRD_2STAGE", vect, n, &kd, &c_n1, &c_n1);
-    lhmin = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
-    lwmin = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+    if(*n == 0)
+    {
+        lhmin = 1;
+        lwmin = 1;
+    }
+    else
+    {
+        lhmin = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+        lwmin = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+    }
     /* WRITE(*,*),'ZHETRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO, */
     /* $ LHMIN, LWMIN */
     if(!lsame_(vect, "N", 1, 1))
@@ -377,8 +389,6 @@ void aocl_lapack_zhetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, dcomplex
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    hous2[1].real = (doublereal)lhmin;
-    hous2[1].imag = 0.; // , expr subst
     work[1].real = (doublereal)lwmin;
     work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT

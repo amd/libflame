@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/zgemqr.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -209,6 +213,8 @@ void aocl_lapack_zgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
     logical notran, lquery;
+    aocl_int64_t lwmin;
+    aocl_int64_t minmnk;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -256,6 +262,17 @@ void aocl_lapack_zgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         lw = mb * nb;
         mn = *n;
     }
+    /* Computing MIN */
+    i__1 = fla_min(*m, *n);
+    minmnk = fla_min(i__1, *k);
+    if(minmnk == 0)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        lwmin = fla_max(1, lw);
+    }
     *info = 0;
     if(!left && !right)
     {
@@ -289,13 +306,13 @@ void aocl_lapack_zgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         *info = -11;
     }
-    else if(*lwork < fla_max(1, lw) && !lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -13;
     }
     if(*info == 0)
     {
-        work[1].real = (doublereal)lw;
+        work[1].real = (doublereal)lwmin;
         work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
@@ -312,8 +329,7 @@ void aocl_lapack_zgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *k) == 0)
+    if(minmnk == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -330,7 +346,7 @@ void aocl_lapack_zgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         aocl_lapack_zlamtsqr(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb,
                              &c__[c_offset], ldc, &work[1], lwork, info);
     }
-    work[1].real = (doublereal)lw;
+    work[1].real = (doublereal)lwmin;
     work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

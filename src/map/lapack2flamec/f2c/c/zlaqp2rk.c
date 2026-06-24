@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./zlaqp2rk.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -396,7 +400,6 @@ void aocl_lapack_zlaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
     double z_abs(dcomplex *);
     /* Local variables */
     aocl_int64_t i__, j, jmaxc2nrm, minmnfact, minmnupdt, kk, kp;
-    dcomplex aikk;
     doublereal temp, temp2, tol3z;
     aocl_int64_t itemp;
     extern doublereal dlamch_(char *);
@@ -657,20 +660,11 @@ void aocl_lapack_zlaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         /* condition is satisfied, not only KK < N+NRHS ) */
         if(kk < minmnupdt)
         {
-            i__2 = i__ + kk * a_dim1;
-            aikk.real = a[i__2].real;
-            aikk.imag = a[i__2].imag; // , expr subst
-            i__2 = i__ + kk * a_dim1;
-            a[i__2].real = 1.;
-            a[i__2].imag = 0.; // , expr subst
             i__2 = *m - i__ + 1;
             i__3 = *n + *nrhs - kk;
             d_cnjg(&z__1, &tau[kk]);
-            aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &z__1,
-                              &a[i__ + (kk + 1) * a_dim1], lda, &work[1]);
-            i__2 = i__ + kk * a_dim1;
-            a[i__2].real = aikk.real;
-            a[i__2].imag = aikk.imag; // , expr subst
+            aocl_lapack_zlarf1f("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &z__1,
+                                &a[i__ + (kk + 1) * a_dim1], lda, &work[1]);
         }
         if(kk < minmnfact)
         {

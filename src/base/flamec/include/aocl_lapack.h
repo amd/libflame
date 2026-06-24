@@ -5344,6 +5344,12 @@ void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
 void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
                        aocl_int64_t *incv, dcomplex *tau, dcomplex *c__,
                        aocl_int64_t *ldc, dcomplex *work);
+void aocl_lapack_zlarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
+                         aocl_int64_t *incv, dcomplex *tau, dcomplex *c__,
+                         aocl_int64_t *ldc, dcomplex *work);
+void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
+                         aocl_int64_t *incv, dcomplex *tau, dcomplex *c__,
+                         aocl_int64_t *ldc, dcomplex *work);
 void aocl_lapack_zlarfg(aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int64_t *incx,
                         dcomplex *tau);
 void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
@@ -11355,6 +11361,12 @@ void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
 void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
                        aocl_int64_t *incv, dcomplex *tau, dcomplex *c__,
                        aocl_int64_t *ldc, dcomplex *work);
+void aocl_lapack_zlarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
+                         aocl_int64_t *incv, dcomplex *tau, dcomplex *c__,
+                         aocl_int64_t *ldc, dcomplex *work);
+void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
+                         aocl_int64_t *incv, dcomplex *tau, dcomplex *c__,
+                         aocl_int64_t *ldc, dcomplex *work);
 void aocl_lapack_zlarfg(aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int64_t *incx,
                         dcomplex *tau);
 void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,

@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./zgetc2.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -211,10 +215,10 @@ void aocl_lapack_zgetc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_in
         /* Find max element in matrix A */
         xmax = 0.;
         i__2 = *n;
-        for(ip = i__; ip <= i__2; ++ip)
+        for(jp = i__; jp <= i__2; ++jp)
         {
             i__3 = *n;
-            for(jp = i__; jp <= i__3; ++jp)
+            for(ip = i__; ip <= i__3; ++ip)
             {
                 if(z_abs(&a[ip + jp * a_dim1]) >= xmax)
                 {

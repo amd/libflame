@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/zgghd3.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -343,9 +347,15 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     /* Function Body */
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "ZGGHD3", " ", n, ilo, ihi, &c_n1);
-    /* Computing MAX */
-    i__1 = *n * 6 * nb;
-    lwkopt = fla_max(i__1, 1);
+    nh = *ihi - *ilo + 1;
+    if(nh <= 1)
+    {
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkopt = *n * 6 * nb;
+    }
     z__1.real = (doublereal)lwkopt;
     z__1.imag = 0.; // , expr subst
     work[1].real = z__1.real;
@@ -424,7 +434,6 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         aocl_lapack_zlaset("Lower", &i__1, &i__2, &c_b2, &c_b2, &b[b_dim1 + 2], ldb);
     }
     /* Quick return if possible */
-    nh = *ihi - *ilo + 1;
     if(nh <= 1)
     {
         work[1].real = 1.;

@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/zgebrd.f -- translated by f2c (version 20160102). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -250,7 +254,7 @@ void aocl_lapack_zgebrd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
     dcomplex z__1;
     /* Local variables */
     aocl_int64_t i__, j, nb, nx, ws, nbmin, iinfo, minmn;
-    aocl_int64_t ldwrkx, ldwrky, lwkopt;
+    aocl_int64_t lwkmin, ldwrkx, ldwrky, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -284,11 +288,21 @@ void aocl_lapack_zgebrd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
     --work;
     /* Function Body */
     *info = 0;
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = aocl_lapack_ilaenv(&c__1, "ZGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
-    nb = fla_max(i__1, i__2);
-    lwkopt = (*m + *n) * nb;
+    minmn = fla_min(*m, *n);
+    if(minmn == 0)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = fla_max(*m, *n);
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = aocl_lapack_ilaenv(&c__1, "ZGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
+        lwkopt = (*m + *n) * nb;
+    }
     d__1 = (doublereal)lwkopt;
     work[1].real = d__1;
     work[1].imag = 0.; // , expr subst
@@ -305,14 +319,9 @@ void aocl_lapack_zgebrd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
     {
         *info = -4;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*lwork < fla_max(i__1, *n) && !lquery)
-        {
-            *info = -10;
-        }
+        *info = -10;
     }
     if(*info < 0)
     {
@@ -327,7 +336,6 @@ void aocl_lapack_zgebrd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         return;
     }
     /* Quick return if possible */
-    minmn = fla_min(*m, *n);
     if(minmn == 0)
     {
         work[1].real = 1.;
@@ -348,7 +356,7 @@ void aocl_lapack_zgebrd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         /* Determine when to switch from blocked to unblocked code. */
         if(nx < minmn)
         {
-            ws = (*m + *n) * nb;
+            ws = lwkopt;
             if(*lwork < ws)
             {
                 /* Not enough work space for the optimal NB, consider using */

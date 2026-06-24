@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* zlamswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -239,6 +243,8 @@ void aocl_lapack_zlamswlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t
     logical left, tran;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
+    aocl_int64_t lwmin;
+    aocl_int64_t minmnk;
     logical notran, lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -268,7 +274,8 @@ void aocl_lapack_zlamswlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t
     c__ -= c_offset;
     --work;
     /* Function Body */
-    lquery = *lwork < 0;
+    *info = 0;
+    lquery = *lwork == -1;
     notran = lsame_(trans, "N", 1, 1);
     tran = lsame_(trans, "C", 1, 1);
     left = lsame_(side, "L", 1, 1);
@@ -281,7 +288,17 @@ void aocl_lapack_zlamswlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t
     {
         lw = *m * *mb;
     }
-    *info = 0;
+    /* Computing MIN */
+    i__1 = fla_min(*m, *n);
+    minmnk = fla_min(i__1, *k);
+    if(minmnk == 0)
+    {
+        lwmin = 1;
+    }
+    else
+    {
+        lwmin = fla_max(1, lw);
+    }
     if(!left && !right)
     {
         *info = -1;
@@ -318,30 +335,29 @@ void aocl_lapack_zlamswlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t
     {
         *info = -13;
     }
-    else if(*lwork < fla_max(1, lw) && !lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -15;
+    }
+    if(*info == 0)
+    {
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         aocl_blas_xerbla("ZLAMSWLQ", &i__1, (ftnlen)8);
-        work[1].real = (doublereal)lw;
-        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        work[1].real = (doublereal)lw;
-        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *k) == 0)
+    if(minmnk == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -471,7 +487,7 @@ void aocl_lapack_zlamswlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t
                                 &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
     }
-    work[1].real = (doublereal)lw;
+    work[1].real = (doublereal)lwmin;
     work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

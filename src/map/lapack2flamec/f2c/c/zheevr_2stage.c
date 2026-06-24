@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./zheevr_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -538,15 +542,18 @@ void aocl_lapack_zheevr_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
     ib = aocl_lapack_ilaenv2stage(&c__2, "ZHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
     lhtrd = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
     lwtrd = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
-    lwmin = *n + lhtrd + lwtrd;
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = *n * 24; // , expr subst
-    lrwmin = fla_max(i__1, i__2);
-    /* Computing MAX */
-    i__1 = 1;
-    i__2 = *n * 10; // , expr subst
-    liwmin = fla_max(i__1, i__2);
+    if(*n <= 1)
+    {
+        lwmin = 1;
+        lrwmin = 1;
+        liwmin = 1;
+    }
+    else
+    {
+        lwmin = *n + lhtrd + lwtrd;
+        lrwmin = *n * 24;
+        liwmin = *n * 10;
+    }
     *info = 0;
     if(!lsame_(jobz, "N", 1, 1))
     {
@@ -638,7 +645,7 @@ void aocl_lapack_zheevr_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
     }
     if(*n == 1)
     {
-        work[1].real = 2.;
+        work[1].real = 1.;
         work[1].imag = 0.; // , expr subst
         if(alleig || indeig)
         {

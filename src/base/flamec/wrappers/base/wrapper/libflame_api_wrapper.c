@@ -24750,6 +24750,36 @@ void ZLARF_(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* i
 	return zlarf_( side, m, n, v, incv, tau, c, ldc, work);
 }
 
+void ZLARF1F(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work)
+{
+	return zlarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void zlarf1f(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work)
+{
+	return zlarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void ZLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work)
+{
+	return zlarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void ZLARF1L(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work)
+{
+	return zlarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void zlarf1l(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work)
+{
+	return zlarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void ZLARF1L_(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work)
+{
+	return zlarf1l_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
 void ZLARFG(aocl_int_t* n, dcomplex* alpha, dcomplex* x, aocl_int_t* incx, dcomplex* tau)
 {
 	return zlarfg_( n, alpha, x, incx, tau);

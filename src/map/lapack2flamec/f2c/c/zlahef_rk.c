@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/zlahef_rk.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -293,7 +297,7 @@ void aocl_lapack_zlahef_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_i
                       ", ldw %" FLA_IS "",
                       *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3, z__4, z__5;
     /* Builtin functions */
@@ -304,7 +308,7 @@ void aocl_lapack_zlahef_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_i
     aocl_int64_t j, k, p;
     doublereal t, r1;
     dcomplex d11, d21, d22;
-    aocl_int64_t jb, ii, jj, kk, kp, kw, kkw;
+    aocl_int64_t ii, kk, kp, kw, kkw;
     logical done;
     aocl_int64_t imax, jmax;
     doublereal alpha;
@@ -834,50 +838,13 @@ void aocl_lapack_zlahef_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_i
         goto L10;
     L30: /* Update the upper triangle of A11 (= A(1:k,1:k)) as */
         /* A11 := A11 - U12*D*U12**H = A11 - U12*W**H */
-        /* computing blocks of NB columns at a time (note that conjg(W) is */
-        /* actually stored) */
-        i__1 = -(*nb);
-        for(j = (k - 1) / *nb * *nb + 1; i__1 < 0 ? j >= 1 : j <= 1; j += i__1)
-        {
-            /* Computing MIN */
-            i__2 = *nb;
-            i__3 = k - j + 1; // , expr subst
-            jb = fla_min(i__2, i__3);
-            /* Update the upper triangle of the diagonal block */
-            i__2 = j + jb - 1;
-            for(jj = j; jj <= i__2; ++jj)
-            {
-                i__3 = jj + jj * a_dim1;
-                i__4 = jj + jj * a_dim1;
-                d__1 = a[i__4].real;
-                a[i__3].real = d__1;
-                a[i__3].imag = 0.; // , expr subst
-                i__3 = jj - j + 1;
-                i__4 = *n - k;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("No transpose", &i__3, &i__4, &z__1, &a[j + (k + 1) * a_dim1], lda,
-                                &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
-                i__3 = jj + jj * a_dim1;
-                i__4 = jj + jj * a_dim1;
-                d__1 = a[i__4].real;
-                a[i__3].real = d__1;
-                a[i__3].imag = 0.; // , expr subst
-                /* L40: */
-            }
-            /* Update the rectangular superdiagonal block */
-            if(j >= 2)
-            {
-                i__2 = j - 1;
-                i__3 = *n - k;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemm("No transpose", "Transpose", &i__2, &jb, &i__3, &z__1,
-                                &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw,
-                                &c_b1, &a[j * a_dim1 + 1], lda);
-            }
-            /* L50: */
-        }
+        /* (note that conjg(W) is actually stored) */
+        i__1 = *n - k;
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        aocl_blas_zgemmtr("Upper", "No transpose", "Transpose", &k, &i__1, &z__1,
+                          &a[(k + 1) * a_dim1 + 1], lda, &w[(kw + 1) * w_dim1 + 1], ldw, &c_b1,
+                          &a[a_dim1 + 1], lda);
         /* Set KB to the number of columns factorized */
         *kb = *n - k;
     }
@@ -1356,51 +1323,13 @@ void aocl_lapack_zlahef_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_i
         goto L70;
     L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
         /* A22 := A22 - L21*D*L21**H = A22 - L21*W**H */
-        /* computing blocks of NB columns at a time (note that conjg(W) is */
-        /* actually stored) */
-        i__1 = *n;
-        i__2 = *nb;
-        for(j = k; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
-        {
-            /* Computing MIN */
-            i__3 = *nb;
-            i__4 = *n - j + 1; // , expr subst
-            jb = fla_min(i__3, i__4);
-            /* Update the lower triangle of the diagonal block */
-            i__3 = j + jb - 1;
-            for(jj = j; jj <= i__3; ++jj)
-            {
-                i__4 = jj + jj * a_dim1;
-                i__5 = jj + jj * a_dim1;
-                d__1 = a[i__5].real;
-                a[i__4].real = d__1;
-                a[i__4].imag = 0.; // , expr subst
-                i__4 = j + jb - jj;
-                i__5 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda,
-                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
-                i__4 = jj + jj * a_dim1;
-                i__5 = jj + jj * a_dim1;
-                d__1 = a[i__5].real;
-                a[i__4].real = d__1;
-                a[i__4].imag = 0.; // , expr subst
-                /* L100: */
-            }
-            /* Update the rectangular subdiagonal block */
-            if(j + jb <= *n)
-            {
-                i__3 = *n - j - jb + 1;
-                i__4 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &z__1,
-                                &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b1,
-                                &a[j + jb + j * a_dim1], lda);
-            }
-            /* L110: */
-        }
+        /* (note that conjg(W) is actually stored) */
+        i__1 = *n - k + 1;
+        i__2 = k - 1;
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        aocl_blas_zgemmtr("Lower", "No transpose", "Transpose", &i__1, &i__2, &z__1, &a[k + a_dim1],
+                          lda, &w[k + w_dim1], ldw, &c_b1, &a[k + k * a_dim1], lda);
         /* Set KB to the number of columns factorized */
         *kb = k - 1;
     }

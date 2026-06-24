@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/zgeqr.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -201,11 +205,11 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
                       ", lwork %" FLA_IS "",
                       *m, *n, *lda, *tsize, *lwork);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t mb, nb;
     logical mint, minw;
-    aocl_int64_t nblcks;
+    aocl_int64_t lwmin, lwreq, nblcks;
     logical lminws;
     logical lquery;
     aocl_int64_t mintsz;
@@ -289,11 +293,16 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
         nblcks = 1;
     }
     /* Determine if the workspace size satisfies minimal size */
+    lwmin = fla_max(1, *n);
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n * nb; // , expr subst
+    lwreq = fla_max(i__1, i__2);
     lminws = FALSE_;
     /* Computing MAX */
     i__1 = 1;
     i__2 = nb * *n * nblcks + 5; // , expr subst
-    if((*tsize < fla_max(i__1, i__2) || *lwork < nb * *n) && *lwork >= *n && *tsize >= mintsz
+    if((*tsize < fla_max(i__1, i__2) || *lwork < lwreq) && *lwork >= *n && *tsize >= mintsz
        && !lquery)
     {
         /* Computing MAX */
@@ -305,7 +314,7 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
             nb = 1;
             mb = *m;
         }
-        if(*lwork < nb * *n)
+        if(*lwork < lwreq)
         {
             lminws = TRUE_;
             nb = 1;
@@ -332,15 +341,9 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
         {
             *info = -6;
         }
-        else /* if(complicated condition) */
+        else if(*lwork < lwreq && !lquery && !lminws)
         {
-            /* Computing MAX */
-            i__1 = 1;
-            i__2 = *n * nb; // , expr subst
-            if(*lwork < fla_max(i__1, i__2) && !lquery && !lminws)
-            {
-                *info = -8;
-            }
+            *info = -8;
         }
     }
     if(*info == 0)
@@ -362,17 +365,12 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
         t[3].imag = 0.; // , expr subst
         if(minw)
         {
-            i__1 = fla_max(1, *n);
-            work[1].real = (doublereal)i__1;
+            work[1].real = (doublereal)lwmin;
             work[1].imag = 0.; // , expr subst
         }
         else
         {
-            /* Computing MAX */
-            i__2 = 1;
-            i__3 = nb * *n; // , expr subst
-            i__1 = fla_max(i__2, i__3);
-            work[1].real = (doublereal)i__1;
+            work[1].real = (doublereal)lwreq;
             work[1].imag = 0.; // , expr subst
         }
     }
@@ -403,11 +401,7 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
     {
         aocl_lapack_zlatsqr(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &work[1], lwork, info);
     }
-    /* Computing MAX */
-    i__2 = 1;
-    i__3 = nb * *n; // , expr subst
-    i__1 = fla_max(i__2, i__3);
-    work[1].real = (doublereal)i__1;
+    work[1].real = (doublereal)lwreq;
     work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

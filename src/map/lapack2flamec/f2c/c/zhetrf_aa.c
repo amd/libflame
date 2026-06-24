@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/zhetrf_aa.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -172,7 +176,7 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
     dcomplex alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    aocl_int64_t lwkopt;
+    aocl_int64_t lwkmin, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -206,6 +210,16 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
+    if(*n <= 1)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = *n << 1;
+        lwkopt = (nb + 1) * *n;
+    }
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -218,19 +232,12 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
     {
         *info = -4;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n << 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -7;
-        }
+        *info = -7;
     }
     if(*info == 0)
     {
-        lwkopt = (nb + 1) * *n;
         work[1].real = (doublereal)lwkopt;
         work[1].imag = 0.; // , expr subst
     }

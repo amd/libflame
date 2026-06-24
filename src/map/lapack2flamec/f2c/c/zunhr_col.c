@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/v3.9.0/zunhr_col.f -- translated by f2c (version 20160102). You must link the resulting
  object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
@@ -471,7 +475,7 @@ void aocl_lapack_zunhr_col(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, d
         i__3 = jb + jnb - 2;
         for(j = jb; j <= i__3; ++j)
         {
-            i__4 = *nb;
+            i__4 = fla_min(*nb, *n);
             for(i__ = j - jbtemp2; i__ <= i__4; ++i__)
             {
                 i__5 = i__ + j * t_dim1;

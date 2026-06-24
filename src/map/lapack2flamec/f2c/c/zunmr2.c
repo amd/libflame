@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/zunmr2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -191,7 +195,6 @@ void aocl_lapack_zunmr2(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     aocl_int64_t i__, i1, i2, i3, mi, ni, nq;
-    dcomplex aii;
     logical left;
     dcomplex taui;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
@@ -329,17 +332,8 @@ void aocl_lapack_zunmr2(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         }
         i__3 = nq - *k + i__ - 1;
         aocl_lapack_zlacgv(&i__3, &a[i__ + a_dim1], lda);
-        i__3 = i__ + (nq - *k + i__) * a_dim1;
-        aii.real = a[i__3].real;
-        aii.imag = a[i__3].imag; // , expr subst
-        i__3 = i__ + (nq - *k + i__) * a_dim1;
-        a[i__3].real = 1.;
-        a[i__3].imag = 0.; // , expr subst
-        aocl_lapack_zlarf(side, &mi, &ni, &a[i__ + a_dim1], lda, &taui, &c__[c_offset], ldc,
+        aocl_lapack_zlarf1l(side, &mi, &ni, &a[i__ + a_dim1], lda, &taui, &c__[c_offset], ldc,
                           &work[1]);
-        i__3 = i__ + (nq - *k + i__) * a_dim1;
-        a[i__3].real = aii.real;
-        a[i__3].imag = aii.imag; // , expr subst
         i__3 = nq - *k + i__ - 1;
         aocl_lapack_zlacgv(&i__3, &a[i__ + a_dim1], lda);
         /* L10: */

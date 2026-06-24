@@ -6615,6 +6615,14 @@ extern void ZLARF(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_in
 extern void zlarf(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work);
 extern void ZLARF_(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work);
 
+extern void ZLARF1F(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work);
+extern void zlarf1f(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work);
+extern void ZLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work);
+
+extern void ZLARF1L(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work);
+extern void zlarf1l(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work);
+extern void ZLARF1L_(char* side, aocl_int_t* m, aocl_int_t* n, dcomplex* v, aocl_int_t* incv, dcomplex* tau, dcomplex* c, aocl_int_t* ldc, dcomplex* work);
+
 extern void ZLARFG(aocl_int_t* n, dcomplex* alpha, dcomplex* x, aocl_int_t* incx, dcomplex* tau);
 extern void zlarfg(aocl_int_t* n, dcomplex* alpha, dcomplex* x, aocl_int_t* incx, dcomplex* tau);
 extern void ZLARFG_(aocl_int_t* n, dcomplex* alpha, dcomplex* x, aocl_int_t* incx, dcomplex* tau);

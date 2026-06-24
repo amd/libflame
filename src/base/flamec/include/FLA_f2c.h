@@ -2313,6 +2313,8 @@ typedef struct Namelist Namelist;
 #define zlar2v_                  ZLAR2V 
 #define zlarcm_                  ZLARCM 
 #define zlarf_                   ZLARF 
+#define zlarf1f_                 ZLARF1F 
+#define zlarf1l_                 ZLARF1L 
 #define zlarfb_                  ZLARFB 
 #define zlarfg_                  ZLARFG 
 #define zlarfgp_                 ZLARFGP 
@@ -4508,6 +4510,8 @@ typedef struct Namelist Namelist;
 #define zlar2v_                  zlar2v 
 #define zlarcm_                  zlarcm 
 #define zlarf_                   zlarf 
+#define zlarf1f_                 zlarf1f 
+#define zlarf1l_                 zlarf1l 
 #define zlarfb_                  zlarfb 
 #define zlarfg_                  zlarfg 
 #define zlarfgp_                 zlarfgp 

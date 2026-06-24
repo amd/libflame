@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/zgeqrfp.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -170,7 +174,7 @@ void aocl_lapack_zgeqrfp(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     aocl_int64_t i__, k, ib, nb, nx, iws, nbmin, iinfo;
-    aocl_int64_t ldwork;
+    aocl_int64_t lwkmin, ldwork;
     aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -201,7 +205,17 @@ void aocl_lapack_zgeqrfp(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
     /* Function Body */
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
-    lwkopt = *n * nb;
+    k = fla_min(*m, *n);
+    if(k == 0)
+    {
+        lwkmin = 1;
+        lwkopt = 1;
+    }
+    else
+    {
+        lwkmin = *n;
+        lwkopt = *n * nb;
+    }
     work[1].real = (doublereal)lwkopt;
     work[1].imag = 0.; // , expr subst
     lquery = *lwork == -1;
@@ -217,7 +231,7 @@ void aocl_lapack_zgeqrfp(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
     {
         *info = -4;
     }
-    else if(*lwork < fla_max(1, *n) && !lquery)
+    else if(*lwork < lwkmin && !lquery)
     {
         *info = -7;
     }
@@ -234,7 +248,6 @@ void aocl_lapack_zgeqrfp(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         return;
     }
     /* Quick return if possible */
-    k = fla_min(*m, *n);
     if(k == 0)
     {
         work[1].real = 1.;
@@ -244,7 +257,7 @@ void aocl_lapack_zgeqrfp(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
     }
     nbmin = 2;
     nx = 0;
-    iws = *n;
+    iws = lwkmin;
     if(nb > 1 && nb < k)
     {
         /* Determine when to cross over from blocked to unblocked code. */

@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./zgges3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -339,6 +343,7 @@ void aocl_lapack_zgges3(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, a
     logical lastsl;
     doublereal smlnum;
     logical wantst, lquery;
+    aocl_int64_t lwkmin;
     aocl_int64_t lwkopt;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -417,6 +422,10 @@ void aocl_lapack_zgges3(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, a
     /* Test the input arguments */
     *info = 0;
     lquery = *lwork == -1;
+    /* Computing MAX */
+    i__1 = 1;
+    i__2 = *n << 1; // , expr subst
+    lwkmin = fla_max(i__1, i__2);
     if(ijobvl <= 0)
     {
         *info = -1;
@@ -449,22 +458,16 @@ void aocl_lapack_zgges3(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, a
     {
         *info = -16;
     }
-    else /* if(complicated condition) */
+    else if(*lwork < lwkmin && !lquery)
     {
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n << 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
-        {
-            *info = -18;
-        }
+        *info = -18;
     }
     /* Compute workspace */
     if(*info == 0)
     {
         aocl_lapack_zgeqrf(n, n, &b[b_offset], ldb, &work[1], &work[1], &c_n1, &ierr);
         /* Computing MAX */
-        i__1 = 1;
+        i__1 = lwkmin;
         i__2 = *n + (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         aocl_lapack_zunmqr("L", "C", n, n, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda,
@@ -505,10 +508,18 @@ void aocl_lapack_zgges3(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, a
             i__2 = (integer)work[1].real; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        z__1.real = (doublereal)lwkopt;
-        z__1.imag = 0.; // , expr subst
-        work[1].real = z__1.real;
-        work[1].imag = z__1.imag; // , expr subst
+        if(*n == 0)
+        {
+            work[1].real = 1.;
+            work[1].imag = 0.; // , expr subst
+        }
+        else
+        {
+            z__1.real = (doublereal)lwkopt;
+            z__1.imag = 0.; // , expr subst
+            work[1].real = z__1.real;
+            work[1].imag = z__1.imag; // , expr subst
+        }
     }
     if(*info != 0)
     {

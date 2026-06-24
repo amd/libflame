@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./zlarfgp.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -172,45 +176,22 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
     xnorm = aocl_blas_dznrm2(&i__1, &x[1], incx);
     alphr = alpha->real;
     alphi = d_imag(alpha);
-    if(xnorm <= eps * z_abs(alpha))
+    if(xnorm <= eps * z_abs(alpha) && alphi == 0.)
     {
         /* H = [1-alpha/abs(alpha) 0;
         0 I], sign chosen so ALPHA >= 0. */
-        if(alphi == 0.)
+        if(alphr >= 0.)
         {
-            if(alphr >= 0.)
-            {
-                /* When TAU.eq.ZERO, the vector is special-cased to be */
-                /* all zeros in the application routines. We do not need */
-                /* to clear it. */
-                tau->real = 0., tau->imag = 0.;
-            }
-            else
-            {
-                /* However, the application routines rely on explicit */
-                /* zero checks when TAU.ne.ZERO, and we must clear X. */
-                tau->real = 2., tau->imag = 0.;
-                i__1 = *n - 1;
-                for(j = 1; j <= i__1; ++j)
-                {
-                    i__2 = (j - 1) * *incx + 1;
-                    x[i__2].real = 0.;
-                    x[i__2].imag = 0.; // , expr subst
-                }
-                z__1.real = -alpha->real;
-                z__1.imag = -alpha->imag; // , expr subst
-                alpha->real = z__1.real, alpha->imag = z__1.imag;
-            }
+            /* When TAU.eq.ZERO, the vector is special-cased to be */
+            /* all zeros in the application routines. We do not need */
+            /* to clear it. */
+            tau->real = 0., tau->imag = 0.;
         }
         else
         {
-            /* Only "reflecting" the diagonal entry to be real and non-negative. */
-            xnorm = dlapy2_(&alphr, &alphi);
-            d__1 = 1. - alphr / xnorm;
-            d__2 = -alphi / xnorm;
-            z__1.real = d__1;
-            z__1.imag = d__2; // , expr subst
-            tau->real = z__1.real, tau->imag = z__1.imag;
+            /* However, the application routines rely on explicit */
+            /* zero checks when TAU.ne.ZERO, and we must clear X. */
+            tau->real = 2., tau->imag = 0.;
             i__1 = *n - 1;
             for(j = 1; j <= i__1; ++j)
             {
@@ -218,7 +199,9 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                 x[i__2].real = 0.;
                 x[i__2].imag = 0.; // , expr subst
             }
-            alpha->real = xnorm, alpha->imag = 0.;
+            z__1.real = -alpha->real;
+            z__1.imag = -alpha->imag; // , expr subst
+            alpha->real = z__1.real, alpha->imag = z__1.imag;
         }
     }
     else

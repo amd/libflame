@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/zungl2.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -229,13 +233,10 @@ void aocl_lapack_zungl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
             aocl_lapack_zlacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             if(i__ < *m)
             {
-                i__1 = i__ + i__ * a_dim1;
-                a[i__1].real = 1.;
-                a[i__1].imag = 0.; // , expr subst
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
                 d_cnjg(&z__1, &tau[i__]);
-                aocl_lapack_zlarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &z__1,
+                aocl_lapack_zlarf1f("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &z__1,
                                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;

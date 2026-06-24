@@ -1462,6 +1462,8 @@ void zlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublerea
 void zlar2v_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *z__, integer *incx, doublereal *c__, doublecomplex *s, integer *incc);
 void zlarcm_(integer *m, integer *n, doublereal *a, integer * lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublereal *rwork);
 void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer * ldc, doublecomplex *work);
+void zlarf1f_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work);
+void zlarf1l_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work);
 void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt, doublecomplex *c__, integer * ldc, doublecomplex *work, integer *ldwork);
 void zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, doublecomplex *tau);
 void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *tau);

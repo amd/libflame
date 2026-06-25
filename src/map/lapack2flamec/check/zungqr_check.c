@@ -13,7 +13,6 @@ int zungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
     aocl_int64_t nb;
     aocl_int64_t lwkopt;
     logical lquery;
-    aocl_int64_t lwkopt;
 
     /* Parameter adjustments */
     a_dim1 = *lda;

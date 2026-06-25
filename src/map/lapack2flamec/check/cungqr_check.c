@@ -63,5 +63,6 @@ int cungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a,
         work[1].imag = 0.f; // , expr subst
         return LAPACK_QUICK_RETURN;
     }
+
     return LAPACK_SUCCESS;
 }

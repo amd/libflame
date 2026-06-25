@@ -42,6 +42,5 @@ int sorg2r_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, float *a, ao
     {
         return LAPACK_QUICK_RETURN;
     }
-
     return LAPACK_SUCCESS;
 }

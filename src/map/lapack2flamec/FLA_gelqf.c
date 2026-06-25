@@ -189,10 +189,6 @@ LAPACK_gelqf(d)
     AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
-#endif
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
-}
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_gelqf(c)
@@ -292,10 +288,6 @@ LAPACK_gelq2(d)
         /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
-}
-#endif
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 #endif
     AOCL_DTL_TRACE_LOG_EXIT

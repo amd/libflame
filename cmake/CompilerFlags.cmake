@@ -31,7 +31,10 @@ endfunction()
 
 # Function to auto-detect ISA configuration
 function(auto_detect_isa_config)
-    set(AUTO_CONFIG_PY "${CMAKE_SOURCE_DIR}/build/auto_config.py")
+    # Unified-build fix: use ${FLAME_ROOT} (libflame's own source root) instead
+    # of ${CMAKE_SOURCE_DIR}, which points at the top-level AOCL project when
+    # libflame is brought in via add_subdirectory.
+    set(AUTO_CONFIG_PY "${FLAME_ROOT}/build/auto_config.py")
     set(AUTO_CONFIG_ENV)
 
     if(CMAKE_C_COMPILER)
@@ -192,7 +195,7 @@ endfunction()
 # Function to set PIC and other Unix-specific flags
 function(set_unix_pic_flags)
     if(UNIX)
-        add_compile_options(-fPIC -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=.)
+        add_compile_options(-fPIC -fmacro-prefix-map=${FLAME_ROOT}=.)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=2" PARENT_SCOPE)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2" PARENT_SCOPE)
     endif()

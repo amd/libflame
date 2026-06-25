@@ -16,9 +16,20 @@ else()
 	message( FATAL_ERROR "OS Undetected")
 endif()
 
+# --- Target-based build support -------------------------------------------
+# libflame uses the top-level source-dir builtin throughout to refer to its OWN
+# source tree, which only holds when libflame is the top-level project. Under
+# add_subdirectory/FetchContent that builtin points at the parent (aocl) project
+# and every such path breaks. Capture libflame's root ONCE into FLAME_ROOT and
+# use ${FLAME_ROOT} for all path references -- uniform with the other unified
+# AOCL components' <PKG>_ROOT pattern (a cache variable is visible in all scopes
+# and unaffected by nesting).
+set(FLAME_ROOT "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "libflame source root")
+# --------------------------------------------------------------------------
+
 if(WIN32)
 	SET(OpenMP_libomp_LIB "C:/Program Files/LLVM/lib/libomp.lib" CACHE STRING "openmp library path")
-	SET(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH "${CMAKE_SOURCE_DIR}/bin/Release" CACHE STRING "BLAS library path")
+	SET(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH "${FLAME_ROOT}/bin/Release" CACHE STRING "BLAS library path")
 	SET(EXT_BLAS_LIBNAME "" CACHE STRING "BLAS library name")
 	SET(LIBAOCLUTILS_LIBRARY_PATH "" CACHE STRING "AOCLUtils library name")
 	SET(LIBAOCLUTILS_INCLUDE_PATH "" CACHE STRING "AOCLUtils library header files path")
@@ -37,9 +48,9 @@ message(STATUS "C compiler version: ${CMAKE_C_COMPILER_VERSION}")
 
 
 #set the output directory path for windows and Linux
-set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
+set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${FLAME_ROOT}/lib")
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${FLAME_ROOT}/lib")
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${FLAME_ROOT}/bin")
 # Added for debugging purpose
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
@@ -476,8 +487,30 @@ else()
 	set(REQ_BLAS_PKGNAME "blis")
 endif()
 
-# Include the AOCL-BLAS path check cmake directory
-include(cmake/find_dep_libs.cmake)
+# Include the AOCL-BLAS path check cmake directory.
+# --- Target-based build support -------------------------------------------
+# When libflame is pulled into a parent build (FetchContent/add_subdirectory)
+# that already provides AOCL-BLAS as an in-tree CMake target, the BLAS library
+# is NOT installed yet at configure time, so the install-path discovery in
+# find_dep_libs.cmake cannot find it. In that case, consume the BLAS target
+# directly: target-linking it propagates its headers to our compilation, and
+# the parent supplies the BLAS include dir via AOCL_TB_BLAS_INCLUDE_DIR.
+if(TARGET AOCL::BLAS)
+	set(BLAS_LIBRARY AOCL::BLAS)
+	# Prefer the include dirs propagated by the target; fall back to the
+	# parent-provided cache variable (if any) for unified builds.
+	get_target_property(_blas_incdirs AOCL::BLAS INTERFACE_INCLUDE_DIRECTORIES)
+	if(_blas_incdirs)
+		set(BLAS_INCLUDE_DIR "${_blas_incdirs}")
+	else()
+		set(BLAS_INCLUDE_DIR "${AOCL_TB_BLAS_INCLUDE_DIR}")
+	endif()
+	message(STATUS "[libflame] target-based build: using in-tree AOCL::BLAS target")
+	message(STATUS "[libflame] BLAS include dir: ${BLAS_INCLUDE_DIR}")
+else()
+	include(cmake/find_dep_libs.cmake)
+endif()
+# --------------------------------------------------------------------------
 
 # AOCL-BLAS library linking option. If ENABLE_AOCL_BLAS is set, then the AOCL-BLAS library will be linked.
 # Note: This block has to come after the FLA_ENABLE_ILP64 block, as that decides the type of AOCL-BLAS library thats linked.
@@ -527,10 +560,10 @@ else ()
 endif()
 #generates the FLA_config.h header file
 if(WIN32)
-	configure_file (cmake.config.h.in ${CMAKE_SOURCE_DIR}/windows/build/FLA_config.h @ONLY)
+	configure_file (cmake.config.h.in ${FLAME_ROOT}/windows/build/FLA_config.h @ONLY)
 elseif(UNIX)
 # As per the current build system
-	configure_file(cmake.config.h.in ${CMAKE_SOURCE_DIR}/build/FLA_config.h @ONLY)
+	configure_file(cmake.config.h.in ${FLAME_ROOT}/build/FLA_config.h @ONLY)
 else()
 	message(FATAL_ERROR " OS not found")
 endif()
@@ -541,268 +574,268 @@ endif()
 
 #genreating the monolithic headers
 if(WIN32)
-	set (MK_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/windows/build")
+	set (MK_HEADER_DIR_PATHS "${FLAME_ROOT}/windows/build")
 elseif(UNIX)
-	set(MK_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/build")
+	set(MK_HEADER_DIR_PATHS "${FLAME_ROOT}/build")
 else()
 	message(FATAL_ERROR "OS NOT DETECTED")
 endif()
 string (APPEND MK_HEADER_DIR_PATHS
-	" ${CMAKE_SOURCE_DIR}/src/aocl_dtl/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/include/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/blis/include/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/control/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/control/init"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/blis/include/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/control/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/control/init/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/hierarchy/include/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/include/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/supermatrix/gpu/include/"
-    " ${CMAKE_SOURCE_DIR}/src/base/flamec/wrappers/base/wrapper/"
-	" ${CMAKE_SOURCE_DIR}/src/base/flamec/supermatrix/include/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/axpy/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/axpy/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/axpyt/c/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/axpyt/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/axpyt/h/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/axpyt/n/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/axpyt/t/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copy/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copy/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copyr/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copyr/l/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copyr/u/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copyt/c/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copyt/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copyt/h/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copyt/n/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/copyt/t/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/scal/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/scal/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/scalr/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/scalr/l/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/1/scalr/u/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/gemv/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/gemv/h/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/gemv/n/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/gemv/t/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/trsv/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/trsv/lc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/trsv/ln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/trsv/lt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/trsv/uc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/trsv/un/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/2/trsv/ut/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/cc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/ch/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/cn/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/ct/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/hc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/hh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/hn/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/ht/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/nc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/nh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/nn/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/nt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/tc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/th/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/tn/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/gemm/tt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/hemm/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/hemm/ll/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/hemm/lu/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/hemm/rl/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/hemm/ru/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/her2k/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/her2k/lh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/her2k/ln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/her2k/uh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/her2k/un/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/herk/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/herk/lh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/herk/ln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/herk/uh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/herk/un/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/symm/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/symm/ll/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/symm/lu/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/symm/rl/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/symm/ru/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syr2k/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syr2k/ln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syr2k/lt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syr2k/un/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syr2k/ut/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syrk/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syrk/ln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syrk/lt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syrk/un/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/syrk/ut/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/llc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/llh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/lln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/llt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/luc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/luh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/lun/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/lut/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/rlc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/rlh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/rln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/rlt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/ruc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/ruh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/run/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trmm/rut/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/llc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/llh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/lln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/llt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/luc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/luh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/lun/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/lut/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/rlc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/rlh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/rln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/rlt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/ruc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/ruh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/run/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/blas/3/trsm/rut/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/bsvd/ext/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/bsvd/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/bsvd/n/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/bsvd/v/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/chol/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/chol/l/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/chol/u/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/hevd/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/hevd/ln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/hevd/lv/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/lu/incpiv/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/lu/incpiv/zaux/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/lu/nopiv/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/lu/nopiv/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/lu/piv/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/lu/piv/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/caqr2ut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/caqr2ut/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/caqrutinc/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/lqut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/lqut/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/qr2ut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/qr2ut/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/qrut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/qrut/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/qrutinc/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/qrutpiv/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/q/qrutpiv/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/svd/ext/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/svd/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/svd/uv/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/tevd/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/tevd/n/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/dec/tevd/v/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/fblas/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/fblas/front"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/fblas/src"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/inv/spd/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/inv/tri/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/inv/tri/ln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/inv/tri/lu/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/inv/tri/un/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/inv/tri/uu/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/misc/ttmm/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/misc/ttmm/l/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/misc/ttmm/u/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/misc/uddateut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/misc/uddateut/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/misc/uddateutinc/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/bidiagut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/bidiagut/u/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/eig/gest/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/eig/gest/il/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/eig/gest/iu/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/eig/gest/nl/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/eig/gest/nu/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/hessut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/hessut/vars/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/tridiagut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/red/tridiagut/l/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/sol/lyap/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/sol/lyap/h/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/sol/lyap/n/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/sol/sylv/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/sol/sylv/hh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/sol/sylv/hn/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/sol/sylv/nh/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/sol/sylv/nn/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/accum/tut/fc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/accum/tut/fr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/accum/tut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/caq2ut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/caq2ut/lhfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/caqutinc/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/caqutinc/lhfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/givens/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/givens/lb/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/givens/lf/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/givens/rb/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/givens/rf/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/h2ut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/h2ut/l/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/h2ut/r/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/hudut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/hudut/l/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/piv/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/piv/ln/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/piv/lt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/piv/rn/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/piv/rt/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/q2ut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/q2ut/lhfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/q2ut/lnfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qudut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qudut/lhfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qudutinc/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qudutinc/lhfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/lhbc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/lhbr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/lhfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/lhfr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/lnbc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/lnbr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/lnfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/lnfr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/rhbc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/rhbr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/rhfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/rhfr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/rnbc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/rnbr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/rnfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qut/rnfr/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qutinc/front/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qutinc/lhfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapack/util/app/qutinc/lnfc/flamec/"
-	" ${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/example/"
-	" ${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/include/"
-	" ${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/src/"
-	" ${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/utils/"
-	" ${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/"
-    " ${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/check"
-	" ${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c"
-	" ${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/c"
-	" ${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/flamec"
-	" ${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/install/util/io/"
-    " ${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/install/static/"
+	" ${FLAME_ROOT}/src/aocl_dtl/"
+	" ${FLAME_ROOT}/src/base/flamec/include/"
+	" ${FLAME_ROOT}/src/base/flamec/blis/include/"
+	" ${FLAME_ROOT}/src/base/flamec/control/"
+	" ${FLAME_ROOT}/src/base/flamec/control/init"
+	" ${FLAME_ROOT}/src/base/flamec/blis/include/"
+	" ${FLAME_ROOT}/src/base/flamec/control/"
+	" ${FLAME_ROOT}/src/base/flamec/control/init/"
+	" ${FLAME_ROOT}/src/base/flamec/hierarchy/include/"
+	" ${FLAME_ROOT}/src/base/flamec/include/"
+	" ${FLAME_ROOT}/src/base/flamec/supermatrix/gpu/include/"
+    " ${FLAME_ROOT}/src/base/flamec/wrappers/base/wrapper/"
+	" ${FLAME_ROOT}/src/base/flamec/supermatrix/include/"
+	" ${FLAME_ROOT}/src/blas/1/axpy/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/axpy/vars/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/axpyt/c/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/axpyt/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/axpyt/h/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/axpyt/n/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/axpyt/t/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copy/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copy/vars/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copyr/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copyr/l/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copyr/u/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copyt/c/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copyt/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copyt/h/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copyt/n/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/copyt/t/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/scal/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/scal/vars/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/scalr/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/scalr/l/flamec/"
+	" ${FLAME_ROOT}/src/blas/1/scalr/u/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/gemv/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/gemv/h/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/gemv/n/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/gemv/t/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/trsv/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/trsv/lc/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/trsv/ln/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/trsv/lt/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/trsv/uc/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/trsv/un/flamec/"
+	" ${FLAME_ROOT}/src/blas/2/trsv/ut/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/cc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/ch/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/cn/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/ct/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/hc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/hh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/hn/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/ht/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/nc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/nh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/nn/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/nt/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/tc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/th/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/tn/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/gemm/tt/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/hemm/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/hemm/ll/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/hemm/lu/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/hemm/rl/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/hemm/ru/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/her2k/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/her2k/lh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/her2k/ln/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/her2k/uh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/her2k/un/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/herk/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/herk/lh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/herk/ln/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/herk/uh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/herk/un/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/symm/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/symm/ll/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/symm/lu/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/symm/rl/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/symm/ru/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syr2k/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syr2k/ln/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syr2k/lt/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syr2k/un/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syr2k/ut/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syrk/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syrk/ln/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syrk/lt/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syrk/un/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/syrk/ut/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/llc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/llh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/lln/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/llt/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/luc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/luh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/lun/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/lut/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/rlc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/rlh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/rln/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/rlt/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/ruc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/ruh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/run/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trmm/rut/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/front/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/llc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/llh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/lln/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/llt/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/luc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/luh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/lun/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/lut/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/rlc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/rlh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/rln/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/rlt/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/ruc/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/ruh/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/run/flamec/"
+	" ${FLAME_ROOT}/src/blas/3/trsm/rut/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/bsvd/ext/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/bsvd/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/bsvd/n/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/bsvd/v/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/chol/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/chol/l/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/chol/u/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/hevd/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/hevd/ln/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/hevd/lv/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/lu/incpiv/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/lu/incpiv/zaux/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/lu/nopiv/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/lu/nopiv/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/lu/piv/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/lu/piv/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/caqr2ut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/caqr2ut/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/caqrutinc/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/lqut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/lqut/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/qr2ut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/qr2ut/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/qrut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/qrut/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/qrutinc/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/qrutpiv/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/q/qrutpiv/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/svd/ext/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/svd/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/svd/uv/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/tevd/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/tevd/n/flamec/"
+	" ${FLAME_ROOT}/src/lapack/dec/tevd/v/flamec/"
+	" ${FLAME_ROOT}/src/lapack/fblas/"
+	" ${FLAME_ROOT}/src/lapack/fblas/front"
+	" ${FLAME_ROOT}/src/lapack/fblas/src"
+	" ${FLAME_ROOT}/src/lapack/inv/spd/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/inv/tri/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/inv/tri/ln/flamec/"
+	" ${FLAME_ROOT}/src/lapack/inv/tri/lu/flamec/"
+	" ${FLAME_ROOT}/src/lapack/inv/tri/un/flamec/"
+	" ${FLAME_ROOT}/src/lapack/inv/tri/uu/flamec/"
+	" ${FLAME_ROOT}/src/lapack/misc/ttmm/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/misc/ttmm/l/flamec/"
+	" ${FLAME_ROOT}/src/lapack/misc/ttmm/u/flamec/"
+	" ${FLAME_ROOT}/src/lapack/misc/uddateut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/misc/uddateut/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/misc/uddateutinc/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/bidiagut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/bidiagut/u/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/eig/gest/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/eig/gest/il/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/eig/gest/iu/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/eig/gest/nl/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/eig/gest/nu/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/hessut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/hessut/vars/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/tridiagut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/red/tridiagut/l/flamec/"
+	" ${FLAME_ROOT}/src/lapack/sol/lyap/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/sol/lyap/h/flamec/"
+	" ${FLAME_ROOT}/src/lapack/sol/lyap/n/flamec/"
+	" ${FLAME_ROOT}/src/lapack/sol/sylv/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/sol/sylv/hh/flamec/"
+	" ${FLAME_ROOT}/src/lapack/sol/sylv/hn/flamec/"
+	" ${FLAME_ROOT}/src/lapack/sol/sylv/nh/flamec/"
+	" ${FLAME_ROOT}/src/lapack/sol/sylv/nn/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/accum/tut/fc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/accum/tut/fr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/accum/tut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/caq2ut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/caq2ut/lhfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/caqutinc/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/caqutinc/lhfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/givens/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/givens/lb/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/givens/lf/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/givens/rb/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/givens/rf/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/h2ut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/h2ut/l/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/h2ut/r/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/hudut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/hudut/l/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/piv/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/piv/ln/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/piv/lt/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/piv/rn/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/piv/rt/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/q2ut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/q2ut/lhfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/q2ut/lnfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qudut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qudut/lhfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qudutinc/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qudutinc/lhfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/lhbc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/lhbr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/lhfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/lhfr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/lnbc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/lnbr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/lnfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/lnfr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/rhbc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/rhbr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/rhfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/rhfr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/rnbc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/rnbr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/rnfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qut/rnfr/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qutinc/front/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qutinc/lhfc/flamec/"
+	" ${FLAME_ROOT}/src/lapack/util/app/qutinc/lnfc/flamec/"
+	" ${FLAME_ROOT}/src/lapacke/LAPACKE/example/"
+	" ${FLAME_ROOT}/src/lapacke/LAPACKE/include/"
+	" ${FLAME_ROOT}/src/lapacke/LAPACKE/src/"
+	" ${FLAME_ROOT}/src/lapacke/LAPACKE/utils/"
+	" ${FLAME_ROOT}/src/map/lapack2flamec/"
+    " ${FLAME_ROOT}/src/map/lapack2flamec/check"
+	" ${FLAME_ROOT}/src/map/lapack2flamec/f2c"
+	" ${FLAME_ROOT}/src/map/lapack2flamec/f2c/c"
+	" ${FLAME_ROOT}/src/map/lapack2flamec/f2c/flamec"
+	" ${FLAME_ROOT}/src/map/lapack2flamec/f2c/install/util/io/"
+    " ${FLAME_ROOT}/src/map/lapack2flamec/f2c/install/static/"
 	)
 
 set (C_COMMENT "-c")
@@ -811,9 +844,9 @@ set (BASE_INC_PATH "include")
 file(MAKE_DIRECTORY ${BASE_INC_PATH})
 # Run python script to generate monolithic header at configuration time
 # this will generate  blis1.h file in windows/include
-set (BLIS1_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/blis1.h")
-set (BLIS1__H_SRC_PATH "${CMAKE_SOURCE_DIR}/src/base/flamec/blis/include/blis1.h" )
-set (FLA_FLATTEN_HEADER "${CMAKE_SOURCE_DIR}/build/flatten-headers.py")
+set (BLIS1_TARGET_PATH "${FLAME_ROOT}/${BASE_INC_PATH}/blis1.h")
+set (BLIS1__H_SRC_PATH "${FLAME_ROOT}/src/base/flamec/blis/include/blis1.h" )
+set (FLA_FLATTEN_HEADER "${FLAME_ROOT}/build/flatten-headers.py")
 
 execute_process(
     COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
@@ -824,8 +857,8 @@ execute_process(
 
 # Run python script to generate monolithic header at configuration time
 # this will generate FLA_f2c.h in windows/include
-set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLA_f2c.h")
-set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLA_f2c.h" )
+set (FLAME_TARGET_PATH "${FLAME_ROOT}/${BASE_INC_PATH}/FLA_f2c.h")
+set (FLAME_H_SRC_PATH  "${FLAME_ROOT}/src/base/flamec/include/FLA_f2c.h" )
 
 execute_process(
     COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
@@ -836,8 +869,8 @@ execute_process(
 
 # Run python script to generate monolithic header at configuration time
 # this will generate FLAME.h in windows/include
-set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLAME.h")
-set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLAME.h" )
+set (FLAME_TARGET_PATH "${FLAME_ROOT}/${BASE_INC_PATH}/FLAME.h")
+set (FLAME_H_SRC_PATH  "${FLAME_ROOT}/src/base/flamec/include/FLAME.h" )
 execute_process(
     COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
@@ -846,8 +879,8 @@ execute_process(
 	)
 
 # Run python script to generate libflame_interface header at configuration time
-set (INTERFACE_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/src/src_cpp")
-set (INTERFACE_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
+set (INTERFACE_HEADER_DIR_PATHS "${FLAME_ROOT}/src/src_cpp")
+set (INTERFACE_TARGET_PATH "${FLAME_ROOT}/${BASE_INC_PATH}/libflame_interface.hh")
 execute_process(
 	COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER}  "${VERBOSE}"
 	"${INTERFACE_HEADER_DIR_PATHS}/libflame_interface.hh" "${INTERFACE_TARGET_PATH}"
@@ -857,8 +890,8 @@ execute_process(
 	)
 
 # Run python script to generate libflame_interface header at configuration time
-set (LAPACKE_HEADER_SRC_PATH "${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/include/")
-set (LAPACKE_HEADER_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/lapacke.h")
+set (LAPACKE_HEADER_SRC_PATH "${FLAME_ROOT}/src/lapacke/LAPACKE/include/")
+set (LAPACKE_HEADER_TARGET_PATH "${FLAME_ROOT}/${BASE_INC_PATH}/lapacke.h")
 execute_process(
 	COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER}  "${VERBOSE}"
 	"${LAPACKE_HEADER_SRC_PATH}/lapacke.h" "${LAPACKE_HEADER_TARGET_PATH}"
@@ -867,45 +900,45 @@ execute_process(
     OUTPUT_VARIABLE CMD_OUTPUT
 	)
 
-include_directories(${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/.)
+include_directories(${FLAME_ROOT}/${BASE_INC_PATH}/.)
 if(ENABLE_AOCL_DTL)
 	#only enabling aocl dtl when ENABLE_AOCL_DTL is set to a valid value
-	include_directories(${CMAKE_SOURCE_DIR}/src/aocl_dtl)
+	include_directories(${FLAME_ROOT}/src/aocl_dtl)
 endif()
-include_directories(${CMAKE_SOURCE_DIR}/src/base/flamec/include)
-include_directories(${CMAKE_SOURCE_DIR}/src/base/flamec/supermatrix/include)
-include_directories(${CMAKE_SOURCE_DIR}/src/base/flamec/supermatrix/gpu/include)
-include_directories(${CMAKE_SOURCE_DIR}/src/base/flamec/blis/include)
-include_directories(${CMAKE_SOURCE_DIR}/src/base/flamec/hierarchy/include)
-include_directories(${CMAKE_SOURCE_DIR}/src/base/flamec/control)
-include_directories(${CMAKE_SOURCE_DIR}/src/base/flamec/wrappers/base/wrapper)
-include_directories(${CMAKE_SOURCE_DIR}/src/map)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/check)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/c)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/flamec)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/flamec/front)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/flamec/gelq)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/flamec/geqr)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/flamec/hetd)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/flamec/spffrt)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/install)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/install/static)
-include_directories(${CMAKE_SOURCE_DIR}/src/map/lapack2flamec/f2c/install/util)
-include_directories(${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/include)
-include_directories(${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/src)
-include_directories(${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/utils)
-include_directories(${CMAKE_SOURCE_DIR}/src/lapack/x86/front)
-include_directories(${CMAKE_SOURCE_DIR}/src/lapack/x86/avx2)
-include_directories(${CMAKE_SOURCE_DIR}/src/lapack/x86/avx512)
-include_directories(${CMAKE_SOURCE_DIR}/src/lapack/fblas/front)
-include_directories(${CMAKE_SOURCE_DIR}/src/lapack/fblas/src)
+include_directories(${FLAME_ROOT}/src/base/flamec/include)
+include_directories(${FLAME_ROOT}/src/base/flamec/supermatrix/include)
+include_directories(${FLAME_ROOT}/src/base/flamec/supermatrix/gpu/include)
+include_directories(${FLAME_ROOT}/src/base/flamec/blis/include)
+include_directories(${FLAME_ROOT}/src/base/flamec/hierarchy/include)
+include_directories(${FLAME_ROOT}/src/base/flamec/control)
+include_directories(${FLAME_ROOT}/src/base/flamec/wrappers/base/wrapper)
+include_directories(${FLAME_ROOT}/src/map)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/check)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/c)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/flamec)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/flamec/front)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/flamec/gelq)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/flamec/geqr)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/flamec/hetd)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/flamec/spffrt)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/install)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/install/static)
+include_directories(${FLAME_ROOT}/src/map/lapack2flamec/f2c/install/util)
+include_directories(${FLAME_ROOT}/src/lapacke/LAPACKE/include)
+include_directories(${FLAME_ROOT}/src/lapacke/LAPACKE/src)
+include_directories(${FLAME_ROOT}/src/lapacke/LAPACKE/utils)
+include_directories(${FLAME_ROOT}/src/lapack/x86/front)
+include_directories(${FLAME_ROOT}/src/lapack/x86/avx2)
+include_directories(${FLAME_ROOT}/src/lapack/x86/avx512)
+include_directories(${FLAME_ROOT}/src/lapack/fblas/front)
+include_directories(${FLAME_ROOT}/src/lapack/fblas/src)
 if(ENABLE_AOCL_BLAS)
 	include_directories(${BLAS_INCLUDE_DIR})
 endif()
 
-file(GLOB headers ${CMAKE_SOURCE_DIR}/*.h)
+file(GLOB headers ${FLAME_ROOT}/*.h)
 
 if(WIN32)
 	cmake_policy(SET CMP0091 NEW)
@@ -927,9 +960,9 @@ if (BUILD_SHARED_LIBS)
 	if(WIN32)
 		set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 	endif()
-	add_library("${PROJECT_NAME}" SHARED ${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/blis1.h
-                 ${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLA_f2c.h
-                 ${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLAME.h
+	add_library("${PROJECT_NAME}" SHARED ${FLAME_ROOT}/${BASE_INC_PATH}/blis1.h
+                 ${FLAME_ROOT}/${BASE_INC_PATH}/FLA_f2c.h
+                 ${FLAME_ROOT}/${BASE_INC_PATH}/FLAME.h
                  ${OBJECT_LIBRARIES}
                  )
 	message(STATUS "Shared library PROJECT_NAME: ${PROJECT_NAME}")
@@ -937,14 +970,20 @@ if (BUILD_SHARED_LIBS)
 	target_compile_definitions("${PROJECT_NAME}" PUBLIC -DLIBFLAME_ENABLE_SHARED)
 else ()
 
-	add_library("${PROJECT_NAME}" STATIC ${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/blis1.h
-                 ${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLA_f2c.h
-               	 ${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLAME.h
+	add_library("${PROJECT_NAME}" STATIC ${FLAME_ROOT}/${BASE_INC_PATH}/blis1.h
+                 ${FLAME_ROOT}/${BASE_INC_PATH}/FLA_f2c.h
+               	 ${FLAME_ROOT}/${BASE_INC_PATH}/FLAME.h
                  ${OBJECT_LIBRARIES}
 		)
 
 	message(STATUS "Static library PROJECT_NAME: ${PROJECT_NAME}")
 endif ()
+
+# AOCL Build-It-Yourself unified build: contribute libflame's object files to the
+# single libaocl. OBJECT_LIBRARIES is a list of $<TARGET_OBJECTS:...> genexes.
+if(AOCL_TB_UNIFIED_BUILD AND COMMAND aocl_tb_add_objects)
+	aocl_tb_add_objects(${OBJECT_LIBRARIES})
+endif()
 
 if(WIN32)
 	set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" CACHE STRING "AOCL-LAPACK lib/ include/ installation path")
@@ -952,8 +991,8 @@ endif()
 message(STATUS "CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 
 set(LIBFLAME_PUBLIC_HEADERS	"include/FLAME.h"
-				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/lapacke.h"
-				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
+				"${FLAME_ROOT}/${BASE_INC_PATH}/lapacke.h"
+				"${FLAME_ROOT}/${BASE_INC_PATH}/libflame_interface.hh")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${LIBFLAME_PUBLIC_HEADERS}")
 
@@ -1167,6 +1206,20 @@ link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 add_definitions(-DEXPMODULE)
 add_subdirectory(src)
 
+# AOCL Build-It-Yourself unified build: the f2c LAPACK translation units (which
+# define ilaver, sbbcsd, aocl_lapack_dlaset, ...) are attached to the main
+# libflame target via target_sources() inside add_subdirectory(src) above, so
+# they compile straight into the STATIC/SHARED libflame target rather than into a
+# standalone OBJECT library. The OBJECT_LIBRARIES list registered earlier only
+# covers the arch kernels (FLA_LAPACK_AVX2/AVX512) and LAPACKE; recompile the
+# target's own sources into an OBJECT twin so those f2c symbols are contributed to
+# the single libaocl too. Must run AFTER add_subdirectory(src) so SOURCES is
+# complete, and in this (target-defining) directory scope so the twin inherits the
+# same include directories and compile definitions.
+if(AOCL_TB_UNIFIED_BUILD AND COMMAND aocl_tb_objectify)
+	aocl_tb_objectify(${PROJECT_NAME})
+endif()
+
 if (BUILD_TEST OR BUILD_LEGACY_TEST OR BUILD_NETLIB_TEST)
 
 	if (NOT CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH OR NOT EXT_BLAS_LIBNAME)
@@ -1316,7 +1369,11 @@ endif()
 
 set(REQ_PKG_LIB ${PROJECT_NAME})
 configure_file(aocl-lapack.pc.in flame.pc @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/flame.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+# configure_file writes flame.pc into THIS project's binary dir
+# (CMAKE_CURRENT_BINARY_DIR). Under the AOCL-BIY in-tree build CMAKE_BINARY_DIR is
+# the parent (aocl) tree, so install must read from CMAKE_CURRENT_BINARY_DIR; the
+# two coincide for the standalone build.
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/flame.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
 # To View Added Definitions and C Flags
 get_directory_property( DirDefs COMPILE_DEFINITIONS )
@@ -1327,7 +1384,7 @@ set_property(
         TARGET ${PROJECT_NAME}
         APPEND
         PROPERTY ADDITIONAL_CLEAN_FILES
-		${CMAKE_SOURCE_DIR}/build/FLA_config.h ${CMAKE_SOURCE_DIR}/include/
+		${FLAME_ROOT}/build/FLA_config.h ${FLAME_ROOT}/include/
 )
 if (BUILD_DOC)
     add_subdirectory(docs/libflame)

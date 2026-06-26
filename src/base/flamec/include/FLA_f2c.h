@@ -159,7 +159,7 @@
 #define FLA_SPFFRT2__BSIZE1           (8)
 #define FLA_SPFFRT2__BSIZE2           (32)
 #define FLA_SPFFRT2__BSIZE3           (64)
-
+#define FLA_DSPFFRT2_ST__NTHREAD0     (128)
 
 /* typedef long fla_dim_t fla_dim_t; */
 #ifdef __cplusplus

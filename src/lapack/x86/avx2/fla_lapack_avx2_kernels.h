@@ -68,5 +68,7 @@ void fla_zlarf_left_apply_incv1_avx2(aocl_int64_t m, aocl_int64_t n, dcomplex *a
                                      dcomplex *v, dcomplex *ntau, dcomplex *work);
 int fla_dpotrf_small_avx2(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *info);
 void fla_dpotri_small_avx2(char *uplo, aocl_int64_t *n, double *A, aocl_int64_t *lda, aocl_int64_t *info);
+int fla_dcopy_scal_ix1_avx2(aocl_int64_t n, doublereal da, const doublereal *dx, doublereal *dy);
+void fla_dspr_lower_avx2(aocl_int64_t len, doublereal alpha, const doublereal *x, doublereal *ap);
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_LAPACK_AVX2_KERNELS_DEFS_H */

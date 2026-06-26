@@ -52,4 +52,7 @@ real fla_get_max_cabs_element_vector(aocl_int64_t m, scomplex *a, aocl_int64_t a
 doublereal fla_get_max_zabs_element_vector(aocl_int64_t m, dcomplex *a, aocl_int64_t a_dim);
 void fla_zlarf_left_invc1_opt(aocl_int64_t m, aocl_int64_t n, dcomplex *a_buff, aocl_int64_t ldr,
                               dcomplex *v, dcomplex *ntau, dcomplex *work);
+void fla_dspr_lower(aocl_int64_t len, doublereal alpha, const doublereal *x, doublereal *ap);
+void fla_dcopy_scal(aocl_int64_t n, doublereal alpha, const doublereal *x, aocl_int64_t incx,
+                    doublereal *y, aocl_int64_t incy);
 #endif

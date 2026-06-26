@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #if ENABLE_AOCL_EXTENSION_APIS
@@ -160,7 +160,7 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
     else if(FLA_SKIP_VALIDATION_MODE)
     {
         /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(n, n, err_thresh, err_thresh);
+        FLA_PRINT_TEST_STATUS(n, ncolm, err_thresh, err_thresh);
     }
     else if((ncolm <= n && n > 0 && ncolm > 0))
     {

@@ -133,6 +133,7 @@ void fla_dscal(aocl_int64_t *n, doublereal *da, doublereal *dx, aocl_int64_t *in
     }
     return;
 }
+
 /* Double QR (DGEQRF) for small sizes */
 int fla_dgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
                      doublereal *work)
@@ -501,6 +502,75 @@ void fla_zlarf_left_invc1_opt(aocl_int64_t m, aocl_int64_t n, dcomplex *a_buff, 
         aocl_blas_zgerc(&m, &n, (dcomplex *)ntau, (dcomplex *)&v[1], &c__1, (dcomplex *)&work[1], &c__1,
                (dcomplex *)&a_buff[a_offset], &ldr);
     }
+}
+
+/**
+ * libFLAME implementation of DSPR routine.
+ */
+void fla_dspr_lower(aocl_int64_t len, doublereal alpha, const doublereal *x, doublereal *ap)
+{
+    aocl_fla_init();
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        fla_dspr_lower_avx512(len, alpha, x, ap);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        fla_dspr_lower_avx2(len, alpha, x, ap);
+    }
+    else
+    {
+        aocl_int64_t i, j;
+        doublereal *ap_col = ap;
+
+        for(j = 0; j < len; j++)
+        {
+            doublereal temp = alpha * x[j];
+
+            if(temp == 0.0)
+            {
+                ap_col += (len - j);
+                continue;
+            }
+
+            aocl_int64_t col_len = len - j;
+
+            for(i = 0; i < col_len; i++)
+            {
+                ap_col[i] += x[j + i] * temp;
+            }
+
+            ap_col += col_len;
+        }
+    }
+}
+
+/**
+ * Performs y = da * x
+ */
+void fla_dcopy_scal(aocl_int64_t n, doublereal da, const doublereal *dx, aocl_int64_t incx,
+                    doublereal *dy, aocl_int64_t incy)
+{
+    /* Initialize global context data */
+    aocl_fla_init();
+
+    if(incx == 1 && da != 0 && n >= 1 && incy == 1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+        {
+            fla_dcopy_scal_ix1_avx512(n, da, dx, dy);
+        }
+        else
+        {
+            fla_dcopy_scal_ix1_avx2(n, da, dx, dy);
+        }
+    }
+    else
+    {
+        aocl_blas_dcopy(&n, dx, &incx, dy, &incy);
+        aocl_blas_dscal(&n, &da, dy, &incy);
+    }
+    return;
 }
 
 #endif

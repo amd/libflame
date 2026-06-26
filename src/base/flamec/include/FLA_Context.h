@@ -1,5 +1,5 @@
 /* ************************************************************************
- * Copyright (c) 2022-2023 Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -163,5 +163,25 @@ void aocl_fla_init();
  *  \brief Deallocate and clean all initalized buffers
  */
 void aocl_fla_finalize();
+
+/*! \ingroup aux_module
+ *  \brief Returns the maximum number of threads that can be used by
+ *  the library based on environment variable settings and OpenMP settings.
+ *
+ *  Note: The function internally invokes aocl_fla_init().
+ *
+ *  \retval int
+ *  The maximum number of threads that can be used by the library.
+ */
+int fla_thread_get_num_threads();
+
+/*! \ingroup aux_module
+ *  \brief Set the number of threads to be used by library to n_threads.
+ *
+ *  Note: The function internally invokes aocl_fla_init().
+ *
+ *  \retval none.
+ */
+void fla_thread_set_num_threads(int n_threads);
 
 #endif // FLA_CONTEXT_H

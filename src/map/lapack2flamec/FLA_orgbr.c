@@ -8,6 +8,10 @@
 
 */
 
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include "FLAME.h"
 
 #ifdef FLA_ENABLE_LAPACK2FLAME
@@ -36,7 +40,8 @@
 */
 
 /** Generated wrapper function */
-void sorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+void sorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A,
+             aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sorgbr(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
@@ -48,14 +53,17 @@ void sorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff
     aocl_int64_t lwork_64 = *lwork;
     aocl_int64_t info_64 = *info;
 
-    aocl_lapack_sorgbr(vect, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+    aocl_lapack_sorgbr(vect, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64,
+                       &info_64);
 
     *info = (aocl_int_t)info_64;
 #endif
 }
 
 /** Generated wrapper function */
-void dorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+void dorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A,
+             aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork,
+             aocl_int_t *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_dorgbr(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
@@ -67,17 +75,19 @@ void dorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal
     aocl_int64_t lwork_64 = *lwork;
     aocl_int64_t info_64 = *info;
 
-    aocl_lapack_dorgbr(vect, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+    aocl_lapack_dorgbr(vect, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64,
+                       &info_64);
 
     *info = (aocl_int_t)info_64;
 #endif
 }
 
-#define LAPACK_orgbr(prefix, name)                                                              \
-    void aocl_lapack_##prefix##name##br(                                                                \
-        char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                               \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
+#define LAPACK_orgbr(prefix, name)                                                      \
+    void aocl_lapack_##prefix##name##br(                                                \
+        char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,                  \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,                  \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_t, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, \
+        aocl_int64_t * lwork, aocl_int64_t * info)
 
 // buff_t shoud not include any zero. if it has one, that is the right dimension to go.
 #define LAPACK_orgbr_body(prefix)                                               \
@@ -85,7 +95,7 @@ void dorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal
     FLA_Obj A, ATL, ATR, ABL, ABR, A1, A2, Ah, T, TL, TR, t;                    \
     FLA_Error init_result;                                                      \
     FLA_Uplo uplo;                                                              \
-    fla_dim_t m_A, n_A, m_t;                                                        \
+    fla_dim_t m_A, n_A, m_t;                                                    \
                                                                                 \
     FLA_Init_safe(&init_result);                                                \
                                                                                 \
@@ -166,7 +176,7 @@ void dorgbr_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal
         FLA_Obj_create(datatype, m_t, 1, 0, 0, &rL);                            \
         FLA_Obj_create(datatype, m_t, 1, 0, 0, &rR);                            \
                                                                                 \
-        /* Extract diagonals (scomplex) and realify them. */                     \
+        /* Extract diagonals (scomplex) and realify them. */                    \
         /* This is tricky as the shape of A is explicitly */                    \
         /* assumed by m, n, k. */                                               \
         if(uplo == FLA_UPPER_TRIANGULAR)                                        \
@@ -253,8 +263,8 @@ LAPACK_orgbr(d, org)
         return;
     }
 #else
+    int fla_error = LAPACK_SUCCESS;
     {
-        int fla_error = LAPACK_SUCCESS;
         LAPACK_RETURN_CHECK_VAR1(
             dorgbr_check(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info), fla_error)
     }

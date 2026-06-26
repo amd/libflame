@@ -9,7 +9,7 @@
 */
 
 /*
-    Modifications Copyright (c) 2021-2026 Advanced Micro Devices, Inc.  All rights reserved.
+    Modifications Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 
@@ -247,6 +247,9 @@
 #define FLA_DGEQRF_MT_LARGE_N_THRESH (128)
 #define FLA_DGEQRF_MT_LARGE_PANEL_SIZE (16)
 #define FLA_DGEQRF_MT_THRESHOLD_8_THREADS (15848840)
+
+// Cache line size in bytes, used for memory alignment
+#define FLA_CACHE_LINE_SIZE_BYTES (64)
 
 // Matrix size thresholds for choosing transposed QR for LQ
 #define FLA_DELQF_TRAN_THRESH (1280)

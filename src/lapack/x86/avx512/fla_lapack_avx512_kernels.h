@@ -35,6 +35,8 @@ doublereal fla_dnrm2_blas_avx512(aocl_int64_t *sd, doublereal *a, aocl_int64_t *
 void fla_zlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, dcomplex *a_buff, aocl_int64_t ldr,
                                        dcomplex *v, dcomplex *ntau, dcomplex *work);
 int fla_dpotrf_small_avx512(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *info);
+void fla_dspr_lower_avx512(aocl_int64_t len, doublereal alpha, const doublereal *x, doublereal *ap);
+int fla_dcopy_scal_ix1_avx512(aocl_int64_t n, doublereal da, const doublereal *dx, doublereal *dy);
 
 #endif
 #endif

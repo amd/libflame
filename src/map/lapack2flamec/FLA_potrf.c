@@ -46,7 +46,7 @@ extern int cpotf2_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
 extern int zpotf2_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
 extern int lapack_spotf2(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
 extern int lapack_dpotf2(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int lapack_dpotrf_var1(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int lapack_dpotrf_var2(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
 
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
@@ -200,7 +200,7 @@ void zpotf2_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, ao
         else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
             fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
         else if((*n >= FLA_POTRF_BLOCK_SIZE))                                     \
-            lapack_dpotrf_var1(uplo, n, buff_A, ldim_A, info);                    \
+            lapack_dpotrf_var2(uplo, n, buff_A, ldim_A, info);                    \
         else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
             lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
         else                                                                      \

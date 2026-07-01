@@ -1,3 +1,7 @@
+#
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+#
+
 #!/bin/bash
 
 echo
@@ -87,6 +91,13 @@ rm -rf libflame_netlib
 
 ./create_new_testdir.sh $LAPACK_TEST_DIR libflame_netlib
 cd libflame_netlib
+
+# This is the AOCC/flang runner, so use '-Mrecursive' instead of the
+# gfortran-style '-frecursive' inherited from make.inc.example. AOCC 6.0+
+# (LLVM flang-new) only accepts '-Mrecursive', and older AOCC (Classic Flang)
+# accepts it as well, so applying it unconditionally is safe for all AOCC
+# versions.
+sed -i "s/-frecursive/-Mrecursive/g" make.inc
 
 cp $BLAS_LIB_PATH/$BLAS_LIB .
 cp $LAPACK_LIB_PATH/$LAPACK_LIB .

@@ -449,7 +449,9 @@ static int dpotrf_var2(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t 
 
     /* The barrier at the end of the parallel region ensures all work is done
      * before we read ctx.err. */
+#ifdef FLA_OPENMP_MULTITHREADING
 #pragma omp parallel num_threads(num_threads) shared(ctx)
+#endif
     {
         dpotrf_worker(&ctx);
     }

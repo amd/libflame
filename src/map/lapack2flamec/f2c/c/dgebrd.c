@@ -1,15 +1,11 @@
 /*
- *     Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
- */
-
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
 /* dgebrd.f -- translated by f2c (version 20160102). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-/*
- *     Modifications Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
- */
 #include "FLAME.h"
 #if FLA_ENABLE_AOCL_BLAS
 #include "blis.h"
@@ -20,6 +16,42 @@ static aocl_int64_t c__3 = 3;
 static aocl_int64_t c__2 = 2;
 static doublereal c_b21 = -1.;
 static doublereal c_b22 = 1.;
+
+extern int fla_thread_get_num_threads(void);
+
+/* Select the number of threads to use for the DLABRD routine based on the size of the matrix*/
+static int fla_get_dlabrd_threads(aocl_int64_t m, aocl_int64_t n, int max_threads)
+{
+    aocl_int64_t min_m_n = fla_min(m, n);
+    int chosen_threads;
+    if(min_m_n < 1000)
+    {
+        chosen_threads = 8;
+    }
+    else if(min_m_n < 4600)
+    {
+        chosen_threads = 64;
+    }
+    else if(min_m_n < 6000)
+    {
+        chosen_threads = 96;
+    }
+    else
+    {
+        chosen_threads = 192;
+    }
+
+    if(chosen_threads > max_threads)
+    {
+        chosen_threads = max_threads;
+    }
+    if(chosen_threads < 1)
+    {
+        chosen_threads = 1;
+    }
+
+    return chosen_threads;
+}
 /* > \brief \b DGEBRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -240,8 +272,23 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
         int
         lapack_dgebd2(aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *, doublereal *,
                       doublereal *, doublereal *, doublereal *, doublereal *, aocl_int64_t *);
+    extern void fla_dlabrd(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * nb, doublereal * a,
+                           aocl_int64_t * lda, doublereal * d__, doublereal * e, doublereal * tauq,
+                           doublereal * taup, doublereal * x, aocl_int64_t * ldx, doublereal * y,
+                           aocl_int64_t * ldy);
+#ifdef FLA_OPENMP_MULTITHREADING
+    extern void fla_dlabrd_var1(
+        aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * nb, doublereal * a, aocl_int64_t * lda,
+        doublereal * d__, doublereal * e, doublereal * tauq, doublereal * taup, doublereal * x,
+        aocl_int64_t * ldx, doublereal * y, aocl_int64_t * ldy, volatile FLA_BARRIER * barrier,
+        doublereal * gemv_a_row_buffer, int requested_num_threads);
+#endif
     aocl_int64_t lwkmin, ldwrkx, ldwrky, lwkopt;
     logical lquery;
+#ifdef FLA_OPENMP_MULTITHREADING
+    volatile FLA_BARRIER barrier;
+    int dlabrd_threads = 1;
+#endif
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -285,7 +332,7 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
         /* Computing MAX */
         i__1 = 1;
 #ifdef FLA_ENABLE_AMD_OPT
-        i__2 = 32;
+        i__2 = 110;
 #else
         static aocl_int64_t c__1 = 1;
         i__2 = aocl_lapack_ilaenv(&c__1, "DGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
@@ -365,6 +412,23 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     }
     i__1 = minmn - nx;
     i__2 = nb;
+    i__3 = 0;
+    i__ = 1;
+    i__4 = 0;
+#ifdef FLA_OPENMP_MULTITHREADING
+    doublereal *gemv_a_row_buffer = NULL;
+
+    if(i__1 > 0 && *m >= *n)
+    {
+        dlabrd_threads = fla_get_dlabrd_threads(*m, *n, fla_thread_get_num_threads());
+        /* fla_dlabrd_var1 (m >= n, OpenMP) uses scratch as: [0..nb-1], [nb..2nb-1],
+         * memcpy staging at [2*nb + i__5] (needs up to index 3*nb - 2), and
+         * [(*n_sub) + i__5] for X staging (needs up to *n_sub + nb - 1). */
+        i__3 = fla_max(3 * nb, fla_max(*m, *n) + nb);
+        gemv_a_row_buffer = (doublereal *)malloc((size_t)i__3 * sizeof(doublereal));
+    }
+#endif
+
     for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* Reduce rows and columns i:i+nb-1 to bidiagonal form and return */
@@ -372,9 +436,19 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
         /* part of the matrix */
         i__3 = *m - i__ + 1;
         i__4 = *n - i__ + 1;
-        aocl_lapack_dlabrd(&i__3, &i__4, &nb, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__],
-                           &tauq[i__], &taup[i__], &work[1], &ldwrkx, &work[ldwrkx * nb + 1],
-                           &ldwrky);
+#ifdef FLA_OPENMP_MULTITHREADING
+        if(gemv_a_row_buffer != NULL)
+        {
+            fla_dlabrd_var1(&i__3, &i__4, &nb, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__],
+                            &tauq[i__], &taup[i__], &work[1], &ldwrkx, &work[ldwrkx * nb + 1],
+                            &ldwrky, &barrier, &gemv_a_row_buffer[0], dlabrd_threads);
+        }
+        else
+#endif
+        {
+            fla_dlabrd(&i__3, &i__4, &nb, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__],
+                       &tauq[i__], &taup[i__], &work[1], &ldwrkx, &work[ldwrkx * nb + 1], &ldwrky);
+        }
         /* Update the trailing submatrix A(i+nb:m,i+nb:n), using an update */
         /* of the form A := A - V*Y**T - X*U**T */
         i__3 = *m - i__ - nb + 1;
@@ -382,8 +456,10 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
         aocl_blas_dgemm("No transpose", "Transpose", &i__3, &i__4, &nb, &c_b21,
                         &a[i__ + nb + i__ * a_dim1], lda, &work[ldwrkx * nb + nb + 1], &ldwrky,
                         &c_b22, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+
         i__3 = *m - i__ - nb + 1;
         i__4 = *n - i__ - nb + 1;
+
         aocl_blas_dgemm("No transpose", "No transpose", &i__3, &i__4, &nb, &c_b21, &work[nb + 1],
                         &ldwrkx, &a[i__ + (i__ + nb) * a_dim1], lda, &c_b22,
                         &a[i__ + nb + (i__ + nb) * a_dim1], lda);
@@ -410,6 +486,13 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
         }
         /* L30: */
     }
+
+#ifdef FLA_OPENMP_MULTITHREADING
+    if(gemv_a_row_buffer != NULL)
+    {
+        free(gemv_a_row_buffer);
+    }
+#endif
     /* Use unblocked code to reduce the remainder of the matrix */
     i__2 = *m - i__ + 1;
     i__1 = *n - i__ + 1;

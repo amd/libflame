@@ -343,8 +343,10 @@
 // TRTRI, threshold numbers to chose paths for performance
 #define FLA_TRTRI_SMALL_THRESH0      (60)
 
-// DGEBRD and DGEBD2 thresholds for lapack_API based code path for small sizes
-#define FLA_DGEBRD_SMALL_SIZE_THRESH    (128)
+// DGEBRD thresholds for lapack_API based code path for large sizes
+#define FLA_DGEBRD_LARGE_SIZE_THRESH    (10000)
+
+// DGEBD2 thresholds for lapack_API based code path for small sizes
 #define FLA_DGEBD2_SMALL_SIZE_THRESH   (140)
 
 // --- Error-related macro definitions -----------------------------------------

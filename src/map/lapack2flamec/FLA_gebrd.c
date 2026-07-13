@@ -249,7 +249,7 @@ LAPACK_gebrd(d)
 #if FLA_ENABLE_AMD_OPT
     /* Initialize global context data */
     aocl_fla_init();
-    if(*m <= FLA_DGEBRD_SMALL_SIZE_THRESH && *n <= FLA_DGEBRD_SMALL_SIZE_THRESH)
+    if(*m <= FLA_DGEBRD_LARGE_SIZE_THRESH && *n <= FLA_DGEBRD_LARGE_SIZE_THRESH)
     {
         lapack_dgebrd(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, lwork, info);
         AOCL_DTL_TRACE_LOG_EXIT

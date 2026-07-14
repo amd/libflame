@@ -126,9 +126,9 @@ int cgeql2_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *ld
                  aocl_int64_t *info);
 int cgeqlf_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *work,
                  aocl_int64_t *lwork, aocl_int64_t *info);
-int cgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *jpvt, scomplex *tau,
+int cgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt, scomplex *tau,
                  scomplex *work, aocl_int64_t *lwork, float *rwork, aocl_int64_t *info);
-int cgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *jpvt, scomplex *tau,
+int cgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt, scomplex *tau,
                  scomplex *work, float *rwork, aocl_int64_t *info);
 int cgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *work,
                  aocl_int64_t *info);
@@ -1212,9 +1212,9 @@ int dgeql2_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda,
                  aocl_int64_t *info);
 int dgeqlf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *tau, double *work,
                  aocl_int64_t *lwork, aocl_int64_t *info);
-int dgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *jpvt, double *tau,
+int dgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int_t *jpvt, double *tau,
                  double *work, aocl_int64_t *lwork, aocl_int64_t *info);
-int dgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *jpvt, double *tau,
+int dgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int_t *jpvt, double *tau,
                  double *work, aocl_int64_t *info);
 int dgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *tau, double *work,
                  aocl_int64_t *info);
@@ -2344,9 +2344,9 @@ int sgeql2_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, 
                  aocl_int64_t *info);
 int sgeqlf_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *tau, float *work,
                  aocl_int64_t *lwork, aocl_int64_t *info);
-int sgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *jpvt, float *tau,
+int sgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int_t *jpvt, float *tau,
                  float *work, aocl_int64_t *lwork, aocl_int64_t *info);
-int sgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *jpvt, float *tau,
+int sgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int_t *jpvt, float *tau,
                  float *work, aocl_int64_t *info);
 int sgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *tau, float *work,
                  aocl_int64_t *info);
@@ -3430,9 +3430,9 @@ int zgeql2_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *ld
                  aocl_int64_t *info);
 int zgeqlf_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
                  aocl_int64_t *lwork, aocl_int64_t *info);
-int zgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *jpvt, dcomplex *tau,
+int zgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt, dcomplex *tau,
                  dcomplex *work, aocl_int64_t *lwork, double *rwork, aocl_int64_t *info);
-int zgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *jpvt, dcomplex *tau,
+int zgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt, dcomplex *tau,
                  dcomplex *work, double *rwork, aocl_int64_t *info);
 int zgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
                  aocl_int64_t *info);

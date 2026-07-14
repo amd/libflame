@@ -448,9 +448,13 @@ static int dpotrf_var2(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     ctx.err = 0;
 
     /* The barrier at the end of the parallel region ensures all work is done
-     * before we read ctx.err. */
+     * before we read ctx.err. Guard the pragma so builds without OpenMP
+     * (e.g. multithreading disabled) don't emit -Wunknown-pragmas; the block
+     * below is valid with or without the parallel region. */
 #ifdef FLA_OPENMP_MULTITHREADING
 #pragma omp parallel num_threads(num_threads) shared(ctx)
+#else
+    (void)num_threads;
 #endif
     {
         dpotrf_worker(&ctx);

@@ -1,3 +1,6 @@
+/*
+    Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
 /* ./dhgeqz.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -348,7 +351,9 @@ void aocl_lapack_dhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
                       ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
                       ", ldz %" FLA_IS ", lwork %" FLA_IS "",
                       *job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
+#if FLA_ENABLE_AMD_OPT
     extern fla_context fla_global_context;
+#endif
     extern void fla_dhgeqz_opt(
         char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi,
         doublereal *h__, aocl_int64_t *ldh, doublereal *t, aocl_int64_t *ldt, doublereal *alphar,

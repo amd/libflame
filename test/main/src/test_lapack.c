@@ -1526,8 +1526,10 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
                     params->n_repeats = n_repeats;
                     if(n_threads > 1)
                     {
+#ifdef _OPENMP
 #pragma omp parallel num_threads(n_threads)
 #pragma omp for
+#endif
                         for(ith = 0; ith < n_threads; ith++)
                         {
                             f_exp(func_str, params, datatype, p_cur, q_cur, range_loop_counter,

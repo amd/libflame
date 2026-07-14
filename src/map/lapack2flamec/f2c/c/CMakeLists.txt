@@ -2090,3 +2090,22 @@ ${CMAKE_CURRENT_SOURCE_DIR}/sorcsd2by1.c
 ${CMAKE_CURRENT_SOURCE_DIR}/sorghr.c
 ${CMAKE_CURRENT_SOURCE_DIR}/sormhr.c
 )
+
+# When DTL logging is enabled, the trace/log calls in these generated f2c
+# sources print aocl_int64_t arguments (always 'long int' on Linux, regardless
+# of ILP64) using %d/%lld in their non-ILP64 branches, which trips -Wformat.
+# Every format string here is a compile-time literal, so the mismatch is a
+# benign diagnostic-only issue. -Wno-format silences it, but because the global
+# flags enable -Wformat-security, GCC would then emit "'-Wformat-security'
+# ignored without '-Wformat'" once per TU; -Wno-format-security is required to
+# quiet that meta-warning. -Wformat-security only fires on non-literal format
+# strings, so scoping it off for these literal-only generated files loses no
+# real coverage, and both flags stay active for the rest of the library.
+if(ENABLE_AOCL_DTL AND UNIX)
+	file(GLOB _f2c_dtl_sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
+	set_property(
+		SOURCE ${_f2c_dtl_sources}
+		TARGET_DIRECTORY ${PROJECT_NAME}
+		PROPERTY COMPILE_OPTIONS "-Wno-format;-Wno-format-security"
+	)
+endif()

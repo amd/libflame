@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2021-2022 Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "FLAME.h"
@@ -15,7 +15,9 @@
     *info = 0;
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    sprintf(buffer, "dgesvd inputs: jobu %c, jobvt %c, m %d, n %d, lda %d, ldu %d, ldvt %d\n",
+    sprintf(buffer,
+            "dgesvd inputs: jobu %c, jobvt %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
+            ", ldu %" FLA_IS ", ldvt %" FLA_IS "\n",
             *jobu, *jobvt, *m, *n, *lda, *ldu, *ldvt);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

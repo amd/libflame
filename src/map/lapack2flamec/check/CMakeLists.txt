@@ -1,4 +1,4 @@
-##Copyright (C) 2020, Advanced Micro Devices, Inc.## 
+##Copyright (C) 2020-2026, Advanced Micro Devices, Inc. All rights reserved.## 
 target_sources("${PROJECT_NAME}" 
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/cbdsqr_check.c
@@ -185,3 +185,19 @@ ${CMAKE_CURRENT_SOURCE_DIR}/zspffrt2_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/zspffrtx_check.c
 
    )
+
+# See src/map/lapack2flamec/f2c/c/CMakeLists.txt: when DTL logging is enabled
+# these generated argument-checkers print aocl_int64_t (always 'long int' on
+# Linux) with %d/%lld in their non-ILP64 branches, tripping -Wformat on benign
+# compile-time literal log strings. -Wno-format silences it; -Wno-format-security
+# is also needed because the global -Wformat-security would otherwise be
+# "ignored without -Wformat" (a meta-warning emitted once per TU). Both are
+# scoped to this generated directory only and stay active elsewhere.
+if(ENABLE_AOCL_DTL AND UNIX)
+	file(GLOB _check_dtl_sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
+	set_property(
+		SOURCE ${_check_dtl_sources}
+		TARGET_DIRECTORY ${PROJECT_NAME}
+		PROPERTY COMPILE_OPTIONS "-Wno-format;-Wno-format-security"
+	)
+endif()

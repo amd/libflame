@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "FLAME.h"
@@ -10,18 +10,19 @@
 #include "fla_lapack_x86_common.h"
 
 #ifdef FLA_ENABLE_AMD_OPT
+#ifdef FLA_OPENMP_MULTITHREADING
 static real d__1 = -1;
 static real c_b1 = 1;
+#endif
 extern int fla_thread_get_num_threads(void);
 
 void FLA_get_optimum_params_sgetrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads)
 {
+#ifdef FLA_OPENMP_MULTITHREADING
     int available_n_threads;
 
     /* Get maximum thread available*/
     available_n_threads = fla_thread_get_num_threads();
-
-#ifdef FLA_OPENMP_MULTITHREADING
 
     if(m <= 512 || n <= 512)
     {

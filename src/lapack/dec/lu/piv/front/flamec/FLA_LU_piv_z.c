@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2023-2025 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "FLAME.h"
@@ -22,13 +22,12 @@ static fla_dim_t c__1 = 1;
 
 void FLA_get_optimum_params_zgetrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads)
 {
+#ifdef FLA_OPENMP_MULTITHREADING
     int available_n_threads;
     extern int fla_thread_get_num_threads(void);
 
     /* Get maximum thread available*/
     available_n_threads = fla_thread_get_num_threads();
-
-#ifdef FLA_OPENMP_MULTITHREADING
 
     if(m <= 100 || n <= 100)
     {

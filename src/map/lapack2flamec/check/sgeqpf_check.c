@@ -1,7 +1,11 @@
+/******************************************************************************
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
+
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 
-int sgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *jpvt, float *tau,
+int sgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int_t *jpvt, float *tau,
                  float *work, aocl_int64_t *info)
 {
     /* System generated locals */

@@ -101,6 +101,14 @@ endif()
 
 add_executable("${PROJECT_NAME}" "")
 
+# Always compile the test-suite with OpenMP so _OPENMP is defined regardless of
+# ENABLE_MULTITHREADING; otherwise the omp-guarded parallel paths compile out.
+if(UNIX)
+    target_compile_options("${PROJECT_NAME}" PRIVATE -fopenmp)
+elseif(WIN32)
+    target_compile_options("${PROJECT_NAME}" PRIVATE -Xclang -fopenmp)
+endif()
+
 message("${CMAKE_BUILD_TYPE}")
 
 if(UNIX)

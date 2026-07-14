@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 /*
 
@@ -125,8 +125,15 @@ extern void dgeqpf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int
     FLA_Obj A, t, T, w, p, jpiv;                                             \
     fla_dim_t min_m_n = fla_min(*m, *n);                                     \
     FLA_Error init_result;                                                   \
-    fla_dim_t *buff_p64 = (fla_dim_t *) FLA_malloc( sizeof(fla_dim_t) * min_m_n ); \
-    if(buff_p64 == NULL) { return; }                                         \
+    /* The column-pivot array jpvt has length n (one entry per column), so   \
+       the fla_dim_t scratch must be sized by n, not min(m,n); otherwise     \
+       wide matrices (n > m) overrun this buffer. */                         \
+    fla_dim_t *buff_p64 = (fla_dim_t *) FLA_malloc( sizeof(fla_dim_t) * (*n) ); \
+    /* FLA_malloc(0) returns NULL by design when *n == 0; a zero-column      \
+       GEQPF is valid, so only validate the pointer for a genuine (nonzero)  \
+       allocation. */                                                        \
+    if(*n > 0)                                                               \
+        FLA_Check_error_code( FLA_Check_malloc_pointer( buff_p64 ) );         \
     for(aocl_int64_t i = 0; i < *n; i++)                                     \
         buff_p64[i] = (aocl_int64_t) buff_p[i];                               \
                                                                              \
@@ -382,7 +389,7 @@ LAPACK_geqp3(d)
 
 #define LAPACK_geqp3_complex(prefix)                                                         \
     void aocl_lapack_##prefix##geqp3(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             aocl_int64_t * ldim_A, aocl_int64_t * buff_p,                             \
+                             aocl_int64_t * ldim_A, aocl_int_t * buff_p,                               \
                              PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                         \
                              PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,        \
                              PREFIX2LAPACK_REALDEF(prefix) * buff_r, aocl_int64_t * info)

@@ -3,6 +3,9 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANHS returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
@@ -265,7 +268,7 @@ real aocl_lapack_clanhs(char *norm, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         value = scale * sqrt(sum);
     }
     ret_val = value;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return ret_val;
     /* End of CLANHS */
 }

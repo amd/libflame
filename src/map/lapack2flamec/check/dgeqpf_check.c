@@ -1,7 +1,11 @@
+/******************************************************************************
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
+
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *jpvt, double *tau,
+int dgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int_t *jpvt, double *tau,
                  double *work, aocl_int64_t *info)
 {
     /* System generated locals */

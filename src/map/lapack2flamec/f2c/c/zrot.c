@@ -1,3 +1,6 @@
+/*
+    Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
 /* ../netlib/zrot.f -- translated by f2c (version 20100827). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -128,7 +131,9 @@ void aocl_lapack_zrot(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomple
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zrot inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
                       *incy);
+#ifdef FLA_ENABLE_AMD_OPT
     extern fla_context fla_global_context;
+#endif
     extern void fla_zrot(aocl_int64_t * n, dcomplex * cx, aocl_int64_t * incx,
                          dcomplex * cy, aocl_int64_t * incy, doublereal * c__,
                          dcomplex * s);

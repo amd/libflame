@@ -1,9 +1,13 @@
+/******************************************************************************
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
+
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 
-int zgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *jpvt, dcomplex *tau,
+int zgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt, dcomplex *tau,
                  dcomplex *work, aocl_int64_t *lwork, double *rwork, aocl_int64_t *info)
 {
     /* System generated locals */

@@ -202,7 +202,7 @@ void aocl_lapack_sgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
     /* Local variables */
     aocl_int64_t i__, j;
     real tq[5];
-    aocl_int64_t lw1, lw2, lwm, lwo;
+    aocl_int64_t lw1, lw2, lwm = 0, lwo = 0;
     real anrm, bnrm;
     logical tran;
     aocl_int64_t brow, tszm, tszo, info2, iascl, ibscl;

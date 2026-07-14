@@ -124,7 +124,9 @@ static aocl_int64_t c__1 = 1;
 void dorg2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
                 doublereal *tau, doublereal *work, aocl_int64_t *info)
 {
+#if FLA_ENABLE_AMD_OPT
     extern fla_context fla_global_context;
+#endif
     extern void dorg2r_fla_opt(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * k, doublereal * a,
                                aocl_int64_t * lda, doublereal * tau, doublereal * work,
                                aocl_int64_t * info);

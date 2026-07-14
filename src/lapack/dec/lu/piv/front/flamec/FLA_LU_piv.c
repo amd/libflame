@@ -1,3 +1,6 @@
+/******************************************************************************
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 /*
 
     Copyright (C) 2014, The University of Texas at Austin
@@ -36,9 +39,8 @@ FLA_Error FLA_LU_piv( FLA_Obj A, FLA_Obj p )
 
 void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads)
 {
-    int available_n_threads = fla_thread_get_num_threads();
-
 #ifdef FLA_OPENMP_MULTITHREADING
+    int available_n_threads = fla_thread_get_num_threads();
 
     double ratio = (double)m / (double)n;
 
@@ -187,6 +189,8 @@ void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *
     *nb = ((*nb + 3) / 4) * 4;
 
 #else
+    (void)m;
+    (void)n;
     *nb = 64;
     *n_threads = 1;
 #endif

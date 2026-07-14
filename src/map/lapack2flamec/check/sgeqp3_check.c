@@ -1,9 +1,13 @@
+/******************************************************************************
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
+
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 
-int sgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *jpvt, float *tau,
+int sgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int_t *jpvt, float *tau,
                  float *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */

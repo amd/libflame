@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
+    Copyright (C) 2019-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 /* zlange.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
@@ -148,7 +148,7 @@ doublereal aocl_lapack_zlange(char *norm, aocl_int64_t *m, aocl_int64_t *n, dcom
     /* Builtin functions */
     double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
-    aocl_int64_t i__, j, j_a_dim;
+    aocl_int64_t i__, j;
     doublereal sum, temp, scale;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
@@ -194,10 +194,10 @@ doublereal aocl_lapack_zlange(char *norm, aocl_int64_t *m, aocl_int64_t *n, dcom
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            j_a_dim = j * a_dim1;
 
 #if FLA_ENABLE_AMD_OPT
             /* Select optimized path for AMD architecture*/
+            aocl_int64_t j_a_dim = j * a_dim1;
             temp = fla_get_max_zabs_element_vector(i__2, a, j_a_dim);
 
             if(value < temp || temp != temp)

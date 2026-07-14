@@ -106,7 +106,7 @@ void dormbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
     FLA_Trans trans_fla;                                                                      \
     fla_dim_t nq, /* nw, */ m_t, mm, nn;                                                          \
     FLA_Obj A, C, T, W, t;                                                                    \
-    FLA_Obj d2, e2, rL, rR;                                                                   \
+    FLA_Obj d2, e2 = {0}, rL, rR;                                                             \
     FLA_Uplo uplo;                                                                            \
     FLA_Error init_result;                                                                    \
                                                                                               \

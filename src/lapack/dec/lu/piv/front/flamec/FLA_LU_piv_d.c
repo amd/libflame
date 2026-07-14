@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2024-2025 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "FLAME.h"
@@ -11,8 +11,10 @@
 
 #ifdef FLA_ENABLE_AMD_OPT
 
+#ifdef FLA_OPENMP_MULTITHREADING
 static doublereal d__1 = -1;
 static doublereal c_b1 = 1;
+#endif
 extern int fla_thread_get_num_threads(void);
 extern void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads);
     /* LU factorization blocked varaiant */

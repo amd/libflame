@@ -299,31 +299,42 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
 #define LAPACK_getrf_body_s LAPACK_getrf_body
 
 /* Original FLA path */
-#define LAPACK_getrf_body_d(prefix)                         \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);  \
-    FLA_Obj A, p;                                           \
-    integer min_m_n = fla_min(*m, *n);                      \
-    FLA_Error e_val = FLA_SUCCESS;                          \
-    FLA_Error init_result;                                  \
-    FLA_Bool skip = FALSE;                                  \
-                                                            \
-    FLA_Init_safe(&init_result);                            \
-                                                            \
-    FLA_Obj_create_without_buffer(datatype, *m, *n, &A);    \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);          \
-                                                            \
-    FLA_Obj_create_without_buffer(FLA_INT, min_m_n, 1, &p); \
-    FLA_Obj_attach_buffer(buff_p, 1, min_m_n, &p);          \
-                                                            \
-    e_val = FLA_LU_piv(A, p);                               \
-    FLA_Shift_pivots_to(FLA_LAPACK_PIVOTS, p);              \
-                                                            \
-    FLA_Obj_free_without_buffer(&A);                        \
-    FLA_Obj_free_without_buffer(&p);                        \
-                                                            \
-    FLA_Finalize_safe(init_result);                         \
-                                                            \
-    if(e_val != FLA_SUCCESS)                                \
+/* The FLA_INT pivot object stores indices as fla_dim_t (64-bit). buff_p is the   */
+/* LAPACK pivot array (aocl_int_t), which is 32-bit in the LP64 ABI. Attaching     */
+/* buff_p directly would make FLA_LU_piv write 64-bit pivots into a 32-bit buffer  */
+/* and overrun it. Use a fla_dim_t scratch buffer and narrow back to buff_p.       */
+#define LAPACK_getrf_body_d(prefix)                                          \
+    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                   \
+    FLA_Obj A, p;                                                            \
+    aocl_int64_t min_m_n = fla_min(*m, *n);                                  \
+    FLA_Error e_val = FLA_SUCCESS;                                           \
+    FLA_Error init_result;                                                   \
+    fla_dim_t *buff_p64 = (fla_dim_t *)FLA_malloc(sizeof(fla_dim_t) * min_m_n); \
+    /* FLA_malloc(0) returns NULL by design; only a nonzero pivot count    */ \
+    /* is a genuine allocation that must succeed.                          */ \
+    if(min_m_n > 0)                                                          \
+        FLA_Check_error_code( FLA_Check_malloc_pointer( buff_p64 ) );        \
+                                                                            \
+    FLA_Init_safe(&init_result);                                            \
+                                                                            \
+    FLA_Obj_create_without_buffer(datatype, *m, *n, &A);                    \
+    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);                          \
+                                                                            \
+    FLA_Obj_create_without_buffer(FLA_INT, min_m_n, 1, &p);                 \
+    FLA_Obj_attach_buffer(buff_p64, 1, min_m_n, &p);                        \
+                                                                            \
+    e_val = FLA_LU_piv(A, p);                                               \
+    FLA_Shift_pivots_to(FLA_LAPACK_PIVOTS, p);                              \
+                                                                            \
+    FLA_Obj_free_without_buffer(&A);                                        \
+    FLA_Obj_free_without_buffer(&p);                                        \
+                                                                            \
+    FLA_Finalize_safe(init_result);                                        \
+    for(aocl_int64_t ip = 0; ip < min_m_n; ip++)                            \
+        buff_p[ip] = (aocl_int_t)buff_p64[ip];                             \
+    FLA_free(buff_p64);                                                     \
+                                                                            \
+    if(e_val != FLA_SUCCESS)                                                \
         *info = e_val + 1;
 
 #endif /* FLA_ENABLE_AMD_OPT */
@@ -366,7 +377,9 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
                 && *n < FLA_GETRF_DOUBLE_COMPLEX))                                           \
     {                                                                                        \
         fla_dim_t *buff_p64 = (fla_dim_t *) FLA_malloc(sizeof(fla_dim_t) * min_m_n);         \
-        if(buff_p64 == NULL) { return; }                                                     \
+        /* FLA_malloc(0) returns NULL by design when min_m_n == 0; skip the check then. */   \
+        if(min_m_n > 0)                                                                       \
+            FLA_Check_error_code( FLA_Check_malloc_pointer( buff_p64 ) );                     \
         FLA_Init_safe(&init_result);                                                         \
                                                                                              \
         FLA_Obj_create_without_buffer(datatype, *m, *n, &A);                                 \
@@ -422,13 +435,20 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
 #define LAPACK_getrf_body_z LAPACK_getrf_body
 
 // Note that p should be set zero.
+/* The FLA_INT pivot object stores indices as fla_dim_t (64-bit). buff_p is the   */
+/* LAPACK pivot array (aocl_int_t), which is 32-bit in the LP64 ABI. Use a         */
+/* fla_dim_t scratch buffer for the FLAME/FLASH pivots and narrow back to buff_p.  */
 #define LAPACK_getrf_body(prefix)                            \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);   \
     FLA_Obj A, p, AH, ph;                                    \
-    integer min_m_n = fla_min(*m, *n);                       \
+    aocl_int64_t min_m_n = fla_min(*m, *n);                  \
     fla_dim_t nth, b_flash;                                  \
     FLA_Error e_val;                                         \
     FLA_Error init_result;                                   \
+    fla_dim_t *buff_p64 = (fla_dim_t *)FLA_malloc(sizeof(fla_dim_t) * min_m_n); \
+    /* FLA_malloc(0) returns NULL by design when min_m_n == 0; skip check. */ \
+    if(min_m_n > 0)                                          \
+        FLA_Check_error_code( FLA_Check_malloc_pointer( buff_p64 ) ); \
                                                              \
     nth = FLASH_get_num_threads(1);                          \
     b_flash = FLA_EXT_HIER_BLOCKSIZE;                        \
@@ -440,7 +460,7 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
     FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);           \
                                                              \
     FLA_Obj_create_without_buffer(FLA_INT, min_m_n, 1, &p);  \
-    FLA_Obj_attach_buffer(buff_p, 1, min_m_n, &p);           \
+    FLA_Obj_attach_buffer(buff_p64, 1, min_m_n, &p);         \
                                                              \
     FLA_Set(FLA_ZERO, p);                                    \
                                                              \
@@ -460,6 +480,9 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
     FLA_Obj_free_without_buffer(&p);                         \
                                                              \
     FLA_Finalize_safe(init_result);                          \
+    for(aocl_int64_t ip = 0; ip < min_m_n; ip++)             \
+        buff_p[ip] = (aocl_int_t)buff_p64[ip];               \
+    FLA_free(buff_p64);                                      \
                                                              \
     if(e_val != FLA_SUCCESS)                                 \
         *info = e_val + 1;                                   \

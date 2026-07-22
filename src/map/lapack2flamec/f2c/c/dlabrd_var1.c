@@ -351,6 +351,7 @@ void fla_dlabrd_var1(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doubler
 
 #ifdef FLA_OPENMP_MULTITHREADING
 
+                    i__2 = *n - i__;
                     FLA_Thread_get_subrange_chunks(thread_id, optimal_num_threads, sizeof(double),
                                                    i__, &i__4, &i__5, &thread_threshold);
 

@@ -63,8 +63,8 @@ aocl_int64_t fla_dgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal 
                 for(i_1 = 0; i_1 < n_t; i_1++)
                 {
                     t_val = apiv[i_1 * lda_t];
-                    apiv[i_1 * lda_t] = asrc[i_1 * lda_t];
-                    asrc[i_1 * lda_t] = t_val;
+                    apiv[i_1 * *lda] = asrc[i_1 * lda_t];
+                    asrc[i_1 * *lda] = t_val;
                 }
             }
 

@@ -8,6 +8,10 @@
 
 */
 
+/*
+    Modifications Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
+
 #include "FLAME.h"
 
 // Internal array to hold error strings.
@@ -223,6 +227,8 @@ void FLA_Error_messages_init( void )
              "Invalid svd type parameters (FLA_SVD_VECTORS_OVERWRITE) and trans parameters combination." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_COMPARABLE),
              "Expected real or integer object." );
+	sprintf( FLA_Error_string_for_code(FLA_MEMORY_ALLOCATION_FAILURE),
+             "Memory allocation failure." );
 }
 
 /* ***************************************************************************

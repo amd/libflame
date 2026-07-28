@@ -7,6 +7,9 @@
     directory, or at http://opensource.org/licenses/BSD-3-Clause
 
 */
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 
 #include "FLAME.h"
 
@@ -372,8 +375,8 @@ FLA_Error FLASH_Obj_adjust_views_hierarchy( FLA_Bool attach_buffer, fla_dim_t of
 
 		// Acquire the scalar length and width of the top-left (full) block
 		// at the current hierarchical level.
-		b_m_full = FLASH_Obj_scalar_length_tl( A );
-		b_n_full = FLASH_Obj_scalar_width_tl( A );
+		b_m_full = fla_max( 1, FLASH_Obj_scalar_length_tl( A ) );
+		b_n_full = fla_max( 1, FLASH_Obj_scalar_width_tl( A ) );
 /*
 printf( "-----------------\n" );
 printf( "b_m/n_full:    %d %d\n", b_m_full, b_n_full );
@@ -871,7 +874,7 @@ FLA_Error FLASH_Obj_show_hierarchy( FLA_Obj H, fla_dim_t i, char* elem_format )
 		fla_dim_t i_next;
 
 		// Get the scalar length of the top-left block.
-		b_m_scalar = FLASH_Obj_scalar_length_tl( H );
+		b_m_scalar = fla_max( 1, FLASH_Obj_scalar_length_tl( H ) );
 
 #if 0
 printf( "\n------------------------\n" );

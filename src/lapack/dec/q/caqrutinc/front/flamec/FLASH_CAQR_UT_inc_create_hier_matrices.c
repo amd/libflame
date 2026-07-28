@@ -8,6 +8,10 @@
 
 */
 
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include "FLAME.h"
 
 FLA_Error FLASH_CAQR_UT_inc_create_hier_matrices( fla_dim_t p, FLA_Obj A_flat, fla_dim_t depth, fla_dim_t* b_flash, fla_dim_t b_alg, FLA_Obj* A, FLA_Obj* ATW, FLA_Obj* R, FLA_Obj* RTW )
@@ -85,7 +89,10 @@ FLA_Error FLASH_CAQR_UT_inc_adjust_views( FLA_Obj A, FLA_Obj TW )
 
 	// If the bottom-right-most block along the diagonal is a partial block,
 	// adjust the view of the corresponding T block.
-	n_last = FLASH_Obj_scalar_width( A ) % b_flash;
+	if ( b_flash != 0 )
+		n_last = FLASH_Obj_scalar_width( A ) % b_flash;
+	else
+		n_last = 0;
 
 	if ( n_last > 0 )
 	{

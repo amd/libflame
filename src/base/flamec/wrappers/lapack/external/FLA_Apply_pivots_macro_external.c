@@ -8,6 +8,10 @@
 
 */
 
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include "FLAME.h"
 
 FLA_Error FLA_Apply_pivots_macro_external( FLA_Side side, FLA_Trans trans, FLA_Obj p, FLA_Obj A )
@@ -29,6 +33,10 @@ FLA_Error FLA_Apply_pivots_macro_external( FLA_Side side, FLA_Trans trans, FLA_O
    fla_dim_t* cs = ( fla_dim_t* ) malloc( m_blocks * sizeof( fla_dim_t ) );
    //fla_dim_t m[m_blocks];
    //fla_dim_t cs[m_blocks];
+   if( m == NULL || cs == NULL )
+   {
+      FLA_Check_error_code( FLA_MEMORY_ALLOCATION_FAILURE );
+   }
 #endif
 
    if ( side != FLA_LEFT || trans != FLA_NO_TRANSPOSE )
@@ -43,6 +51,10 @@ FLA_Error FLA_Apply_pivots_macro_external( FLA_Side side, FLA_Trans trans, FLA_O
 #else
          float** buffer = ( float** ) malloc( m_blocks * sizeof( float* ) );
          //float*  buffer[m_blocks];
+         if( buffer == NULL )
+         {
+            FLA_Check_error_code( FLA_MEMORY_ALLOCATION_FAILURE );
+         }
 #endif
          for ( i = 0; i < m_blocks; i++ )
          {
@@ -84,6 +96,10 @@ FLA_Error FLA_Apply_pivots_macro_external( FLA_Side side, FLA_Trans trans, FLA_O
 #else
          double** buffer = ( double** ) malloc( m_blocks * sizeof( double* ) );
          //double*  buffer[m_blocks];
+         if( buffer == NULL )
+         {
+            FLA_Check_error_code( FLA_MEMORY_ALLOCATION_FAILURE );
+         }
 #endif
          for ( i = 0; i < m_blocks; i++ )
          {
@@ -125,6 +141,10 @@ FLA_Error FLA_Apply_pivots_macro_external( FLA_Side side, FLA_Trans trans, FLA_O
 #else
          scomplex** buffer = ( scomplex** ) malloc( m_blocks * sizeof( scomplex* ) );
          //scomplex*  buffer[m_blocks];
+         if( buffer == NULL )
+         {
+            FLA_Check_error_code( FLA_MEMORY_ALLOCATION_FAILURE );
+         }
 #endif
          for ( i = 0; i < m_blocks; i++ )
          {
@@ -166,6 +186,10 @@ FLA_Error FLA_Apply_pivots_macro_external( FLA_Side side, FLA_Trans trans, FLA_O
 #else
          dcomplex** buffer = ( dcomplex** ) malloc( m_blocks * sizeof( dcomplex* ) );
          //dcomplex*  buffer[m_blocks];
+         if ( buffer == NULL )
+         {
+            FLA_Check_error_code( FLA_MEMORY_ALLOCATION_FAILURE );
+         }
 #endif
          for ( i = 0; i < m_blocks; i++ )
          {

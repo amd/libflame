@@ -8,6 +8,10 @@
 
 */
 
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include "FLAME.h"
 
 FLA_Error FLA_LU_piv_blk_var5( FLA_Obj A, FLA_Obj p, fla_lu_t* cntl )
@@ -59,9 +63,9 @@ FLA_Error FLA_LU_piv_blk_var5( FLA_Obj A, FLA_Obj p, fla_lu_t* cntl )
     r_val_sub = FLA_LU_piv_internal( AB1, p1, 
 				     FLA_Cntl_sub_lu( cntl ) );
 
-    // If the unblocked algorithm returns a null pivot, 
+    // If the unblocked algorithm returns a null pivot,
     // update the pivot index and return it.
-    if ( r_val == FLA_SUCCESS && r_val_sub >= 0 )
+    if ( r_val_sub >= 0 )
     {
         r_val = FLA_Obj_length( A01 ) + r_val_sub;
     }

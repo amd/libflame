@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc. All rights reserved.
- * */
+ *     Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 
 #include "FLAME.h"
 
@@ -8,7 +8,13 @@ FLA_Error FLA_LU_nopiv_is_blk_var1( fla_dim_t m_A, fla_dim_t n_A, FLA_Obj A, flo
 {
   void* FLA_memset( void* str, fla_dim_t c, fla_dim_t len );
   float* copy_A = (float*)FLA_malloc(m_A*n_A*sizeof(float));
-  FLA_memset(copy_A,0,sizeof(copy_A));
+
+  if ( copy_A == NULL )
+  {
+    FLA_Check_error_code( FLA_MEMORY_ALLOCATION_FAILURE );
+  }
+
+  FLA_memset(copy_A,0,m_A*n_A*sizeof(float));
 
   for(fla_dim_t i=0;i<nfact;i++)
   {

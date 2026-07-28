@@ -451,9 +451,10 @@
 #define FLA_INVALID_SVD_TYPE_COMBINATION      (-109)
 #define FLA_INVALID_SVD_TYPE_AND_TRANS_COMBINATION (-110)
 #define FLA_OBJECT_NOT_COMPARABLE             (-111)
+#define FLA_MEMORY_ALLOCATION_FAILURE         (-112)
 
 // Necessary when computing whether an error code is defined.
-#define FLA_ERROR_CODE_MAX                    (-111)
+#define FLA_ERROR_CODE_MAX                    (-112)
 
 // Internal string matrix limits.
 #define FLA_MAX_NUM_ERROR_MSGS                 150

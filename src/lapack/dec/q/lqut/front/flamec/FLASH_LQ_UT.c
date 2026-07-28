@@ -8,6 +8,10 @@
 
 */
 
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include "FLAME.h"
 
 extern TLS_CLASS_SPEC fla_lqut_t*   flash_lqut_cntl;
@@ -49,7 +53,7 @@ FLA_Error FLASH_LQ_UT( FLA_Obj A, FLA_Obj TW )
 
   // The traditional (non-incremental) LQ_UT algorithm-by-blocks requires
   // that min_dim(A) % b_flash == 0.
-  if ( FLASH_Obj_scalar_min_dim( A ) % b_flash != 0 )
+  if ( b_flash != 0 && ( FLASH_Obj_scalar_min_dim( A ) % b_flash != 0 ) )
   {
     FLA_Print_message( "FLASH_LQ_UT() requires that min_dim( A ) %% b_store == 0",
                        __FILE__, __LINE__ );

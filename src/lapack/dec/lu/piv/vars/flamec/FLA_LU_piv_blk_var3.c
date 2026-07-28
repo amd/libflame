@@ -8,6 +8,10 @@
 
 */
 
+/*
+ *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include "FLAME.h"
 
 #ifdef FLA_ENABLE_NON_CRITICAL_CODE
@@ -85,12 +89,12 @@ FLA_Error FLA_LU_piv_blk_var3( FLA_Obj A, FLA_Obj p, fla_lu_t* cntl )
                    A21,      &AB1 );
 
     // AB1, p1 = LU_piv( AB1 )
-    r_val = FLA_LU_piv_internal( AB1, p1, 
-                                 FLA_Cntl_sub_lu( cntl ) );
+    r_val_sub = FLA_LU_piv_internal( AB1, p1,
+                                     FLA_Cntl_sub_lu( cntl ) );
 
-    // If the unblocked algorithm returns a null pivot, 
+    // If the unblocked algorithm returns a null pivot,
     // update the pivot index and return it.
-    if ( r_val == FLA_SUCCESS && r_val_sub >= 0 )
+    if ( r_val_sub >= 0 )
     {
         r_val = FLA_Obj_length( A01 ) + r_val_sub;
     }

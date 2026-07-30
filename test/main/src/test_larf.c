@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -9,20 +9,50 @@
 
 extern double perf;
 extern double time_min;
+
+typedef enum
+{
+    FLA_LARF = 0,
+    FLA_LARF1F = 1,
+    FLA_LARF1L = 2
+} fla_larf_variant_t;
+
 /* Local prototypes */
 void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
                               integer q_cur, integer pci, integer n_repeats, integer einfo);
-void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v, integer incv,
-                      void *tau, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                      void *work, integer interfacetype, test_params_t *params);
-void invoke_larf(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
-                 void *tau, void *c__, integer *ldc, void *work);
-void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
-                  void *tau);
+void prepare_larf_run(fla_larf_variant_t larf_variant, integer datatype, char side, integer m,
+                      integer n, void *v, integer incv, void *tau, void *c__, integer ldc__,
+                      void *c__out, integer ldc__out, void *work, integer interfacetype,
+                      test_params_t *params);
+
+void invoke_larf_common(fla_larf_variant_t larf_variant, integer datatype, char *side, integer *m,
+                        integer *n, void *v, integer *incv, void *tau, void *c__, integer *ldc,
+                        void *work);
+void invoke_cpp_larf_common(fla_larf_variant_t larf_variant, integer datatype, char *side,
+                            integer *m, integer *n, void *v, integer *incv, void *tau, void *c__,
+                            integer *ldc, void *work);
+void invoke_larfg(integer datatype, integer *n, void *alpha, void *x, integer *incx, void *tau);
+void fla_test_larf_common(integer argc, char **argv, test_params_t *params, char *front_str);
+
 void fla_test_larf(integer argc, char **argv, test_params_t *params)
 {
+    fla_test_larf_common(argc, argv, params, "LARF");
+}
+
+void fla_test_larf1f(integer argc, char **argv, test_params_t *params)
+{
+    fla_test_larf_common(argc, argv, params, "LARF1F");
+}
+
+void fla_test_larf1l(integer argc, char **argv, test_params_t *params)
+{
+    fla_test_larf_common(argc, argv, params, "LARF1L");
+}
+
+void fla_test_larf_common(integer argc, char **argv, test_params_t *params, char *front_str)
+{
     char *op_str = "Auxilary routines";
-    char *front_str = "LARF";
+
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
 
     if(argc == 1)
@@ -71,6 +101,14 @@ void fla_test_larf(integer argc, char **argv, test_params_t *params)
                     continue;
                 }
 
+                // Skip test for datatype and API combinations not supported.
+                if(fla_skip_test(front_str, stype))
+                {
+                    printf("\nDatatype %c is not supported for %s, skipping the test.\n", stype,
+                           front_str);
+                    continue;
+                }
+
                 /* Check for duplicate datatype presence */
                 if(type_flag[datatype - FLOAT] == 1)
                     continue;
@@ -86,8 +124,9 @@ void fla_test_larf(integer argc, char **argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for larf \n");
-        printf("./<EXE> LARF <precisions - sdcz>  <SIDE> <M> <N> <INCV> <LDC> <repeats>\n");
+        printf("\nIllegal arguments for %s\n", front_str);
+        printf("./<EXE> %s <precisions - sdcz>  <SIDE> <M> <N> <INCV> <LDC> <repeats>\n",
+               front_str);
     }
     if(invalid_dtype)
     {
@@ -120,6 +159,18 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     integer incv = params->aux_paramslist[pci].incv;
     integer ldc = params->aux_paramslist[pci].ldc;
     integer interfacetype = params->interfacetype;
+
+    /* Choose the variant based on tst_api */
+    fla_larf_variant_t larf_variant = FLA_LARF;
+
+    if(same_string(tst_api, "LARF1F"))
+    {
+        larf_variant = FLA_LARF1F;
+    }
+    else if(same_string(tst_api, "LARF1L"))
+    {
+        larf_variant = FLA_LARF1L;
+    }
 
     m = p_cur;
     n = q_cur;
@@ -154,16 +205,66 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
         create_vector(datatype, &v_tmp, v_length);
         rand_vector(datatype, v_num_elements, v_tmp, incv_abs, d_zero, d_zero, 'R');
 
+        /* To test correct handing of operations reduction due to zeroes in
+         * v and C, we induce zeroes in v and C. A random length in 0 to 0.5 * length
+         * is chosen and those many zeroes are induced in v and C.
+         *
+         * Do not set zeroes in benchmark mode or test-mode=perf as
+         * it will not reflect the actual performance of the routine.
+         */
+        integer set_zero_flag = (params->benchmark_mode || params->test_mode == FLA_TEST_MODE_PERF
+                                 || params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
+                                    ? 0
+                                    : 1;
+        integer num_zeroes_v = set_zero_flag ? (rand() % ((v_num_elements >> 1) + 1)) : 0;
+        if(larf_variant != FLA_LARF1L)
+        {
+            /* put zeroes in the end of the vector */
+            reset_vector(
+                datatype,
+                get_v_ptr(datatype, v_tmp, v_num_elements, v_num_elements - num_zeroes_v, incv_abs),
+                num_zeroes_v, incv_abs);
+        }
+        else
+        {
+            /* put zeroes in the starting of the vector */
+            reset_vector(datatype, v_tmp, num_zeroes_v, incv_abs);
+        }
+
         /* Input generation (v_tmp and tau) for larf from larfg
         Increment of v_tmp for larfg must be positive. Hence calling larfg with incv_abs
         Increment of v for larf could be positive or negative. Hence copying
         from v_tmp using incv(which could be positive or negative)
         */
-        invoke_larfg(datatype, &v_num_elements, v_tmp, &incv_abs, &incv_abs, tau);
-        assign_value(datatype, v_tmp, 1, 0);
+        void *alpha = larf_variant != FLA_LARF1L ? v_tmp
+                                                 : get_v_ptr(datatype, v_tmp, v_num_elements,
+                                                             v_num_elements - 1, incv_abs);
+        void *x_for_larfg = larf_variant != FLA_LARF1L
+                                ? get_v_ptr(datatype, v_tmp, v_num_elements, 1, incv_abs)
+                                : v_tmp;
+        invoke_larfg(datatype, &v_num_elements, alpha, x_for_larfg, &incv_abs, tau);
+        if(larf_variant == FLA_LARF)
+            assign_value(datatype, v_tmp, 1, 0);
+
         copy_vector(datatype, v_num_elements, v_tmp, incv_abs, v, incv);
 
         init_matrix(datatype, c__, m, n, ldc, g_ext_fptr, params->imatrix_char);
+
+        integer num_zeroes_c = set_zero_flag ? (rand() % ((v_num_elements >> 1) + 1)) : 0;
+
+        if(same_char(side, 'L'))
+        {
+            /* put zeroes in the last num_zeroes_c columns */
+            reset_matrix(datatype, m, num_zeroes_c,
+                         get_m_ptr(datatype, c__, 0, n - num_zeroes_c, ldc), ldc);
+        }
+        else
+        {
+            /* put zeroes in the last num_zeroes_c rows */
+            reset_matrix(datatype, num_zeroes_c, n,
+                         get_m_ptr(datatype, c__, m - num_zeroes_c, 0, ldc), ldc);
+        }
+
         free_vector(v_tmp);
     }
     FLA_BRT_PROCESS_THREE_INPUT(datatype, m, n, c__, ldc, datatype, v_length, 1, v, v_length,
@@ -177,8 +278,8 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out, ldc);
 
     /* call to API */
-    prepare_larf_run(datatype, side, m, n, v, incv, tau, c__, ldc, c__out, ldc, work, interfacetype,
-                     params);
+    prepare_larf_run(larf_variant, datatype, side, m, n, v, incv, tau, c__, ldc, c__out, ldc, work,
+                     interfacetype, params);
 
     /* execution time */
     if(time_min == d_zero)
@@ -191,6 +292,23 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     {
         perf *= 4.0;
     }
+
+    /* Testing.
+      LARF- Leave the vector as it is
+      LARF1F- Set the first element of the vector to be 1
+      LARF1L- Set the last element of the vector to be 1
+    */
+
+    if(larf_variant == FLA_LARF1F)
+    {
+        assign_value(datatype, get_v_ptr(datatype, v, v_num_elements, 0, incv), 1, 0);
+    }
+    else if(larf_variant == FLA_LARF1L)
+    {
+        assign_value(datatype, get_v_ptr(datatype, v, v_num_elements, v_num_elements - 1, incv), 1,
+                     0);
+    }
+
     /* Output Validation */
     IF_FLA_BRT_VALIDATION(
         m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, c__out, ldc),
@@ -225,9 +343,10 @@ free_buffers:
     free_vector(tau);
 }
 
-void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v, integer incv,
-                      void *tau, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                      void *work, integer interfacetype, test_params_t *params)
+void prepare_larf_run(fla_larf_variant_t larf_variant, integer datatype, char side, integer m,
+                      integer n, void *v, integer incv, void *tau, void *c__, integer ldc__,
+                      void *c__out, integer ldc__out, void *work, integer interfacetype,
+                      test_params_t *params)
 {
     double exe_time;
 
@@ -240,7 +359,8 @@ void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v
         {
             exe_time = fla_test_clock();
             /* Call larf CPP API */
-            invoke_cpp_larf(datatype, &side, &m, &n, v, &incv, tau, c__out, &ldc__out, work);
+            invoke_cpp_larf_common(larf_variant, datatype, &side, &m, &n, v, &incv, tau, c__out,
+                                   &ldc__out, work);
             exe_time = fla_test_clock() - exe_time;
         }
         else
@@ -248,7 +368,8 @@ void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v
         {
             exe_time = fla_test_clock();
             /* call larf API */
-            invoke_larf(datatype, &side, &m, &n, v, &incv, tau, c__out, &ldc__out, work);
+            invoke_larf_common(larf_variant, datatype, &side, &m, &n, v, &incv, tau, c__out,
+                               &ldc__out, work);
             exe_time = fla_test_clock() - exe_time;
         }
 
@@ -258,6 +379,7 @@ void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v
 }
 
 /* larf API call interface */
+
 void invoke_larf(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
                  void *tau, void *c__, integer *ldc__, void *work)
 {
@@ -281,6 +403,110 @@ void invoke_larf(integer datatype, char *side, integer *m, integer *n, void *v, 
         case DOUBLE_COMPLEX:
         {
             fla_lapack_zlarf(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+    }
+}
+
+void invoke_larf1f(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
+                   void *tau, void *c__, integer *ldc__, void *work)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            fla_lapack_slarf1f(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case DOUBLE:
+        {
+            fla_lapack_dlarf1f(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case COMPLEX:
+        {
+            fla_lapack_clarf1f(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            fla_lapack_zlarf1f(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+    }
+}
+
+void invoke_larf1l(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
+                   void *tau, void *c__, integer *ldc__, void *work)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            fla_lapack_slarf1l(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case DOUBLE:
+        {
+            fla_lapack_dlarf1l(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case COMPLEX:
+        {
+            fla_lapack_clarf1l(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            fla_lapack_zlarf1l(side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+    }
+}
+
+void invoke_larf_common(fla_larf_variant_t larf_variant, integer datatype, char *side, integer *m,
+                        integer *n, void *v, integer *incv, void *tau, void *c__, integer *ldc__,
+                        void *work)
+{
+    switch(larf_variant)
+    {
+        case FLA_LARF:
+        {
+            invoke_larf(datatype, side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case FLA_LARF1F:
+        {
+            invoke_larf1f(datatype, side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case FLA_LARF1L:
+        {
+            invoke_larf1l(datatype, side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+    }
+}
+
+void invoke_cpp_larf_common(fla_larf_variant_t larf_variant, integer datatype, char *side,
+                            integer *m, integer *n, void *v, integer *incv, void *tau, void *c__,
+                            integer *ldc__, void *work)
+{
+    switch(larf_variant)
+    {
+        case FLA_LARF:
+        {
+            invoke_cpp_larf(datatype, side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case FLA_LARF1F:
+        {
+            invoke_cpp_larf1f(datatype, side, m, n, v, incv, tau, c__, ldc__, work);
+            break;
+        }
+        case FLA_LARF1L:
+        {
+            invoke_cpp_larf1l(datatype, side, m, n, v, incv, tau, c__, ldc__, work);
             break;
         }
     }

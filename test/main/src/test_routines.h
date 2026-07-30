@@ -76,6 +76,8 @@ void fla_test_gbsvx(integer argc, char **argv, test_params_t *params);
 void fla_test_getc2(integer argc, char **argv, test_params_t *params);
 void fla_test_potrf2(integer argc, char **argv, test_params_t *params);
 void fla_test_potf2(integer argc, char **argv, test_params_t *params);
+void fla_test_larf1f(integer argc, char **argv, test_params_t *params);
+void fla_test_larf1l(integer argc, char **argv, test_params_t *params);
 
 #define LIN_ID 0
 #define EIG_ID 1
@@ -128,7 +130,19 @@ OPERATIONS API_test_functions[]
        {LIN_ID, "gbsv", fla_test_gbsv},       {LIN_ID, "getrf2", fla_test_getrf2},
        {LIN_ID, "getf2", fla_test_getf2},     {LIN_ID, "gbtf2", fla_test_gbtf2},
        {LIN_ID, "gbsvx", fla_test_gbsvx},     {LIN_ID, "getc2", fla_test_getc2},
-       {LIN_ID, "potrf2", fla_test_potrf2},   {LIN_ID, "potf2", fla_test_potf2}};
+       {LIN_ID, "potrf2", fla_test_potrf2},   {LIN_ID, "potf2", fla_test_potf2},
+       {AUX_ID, "larf1f", fla_test_larf1f},   {AUX_ID, "larf1l", fla_test_larf1l}};
 
 /* Add test API's group entry below */
 char *API_test_group[] = {"LIN", "EIG", "SVD", "AUX"};
+
+/* Structure to skip certain precision for specific API. If the skip_{precision} flag is set to 1, then 
+   the tests for that precision will be skipped for the API mentioned in ops string.
+ */
+
+SKIP_OPERATIONS skip_operations_list[] = {
+    {.ops = "stevd", .skip_scomplex = 1, .skip_dcomplex = 1},
+    {.ops = "hetrf", .skip_single = 1, .skip_double = 1},
+    {.ops = "hetrf_rook", .skip_single = 1, .skip_double = 1},
+    {.ops = "hetri_rook", .skip_single = 1, .skip_double = 1}
+};

@@ -165,6 +165,7 @@ void aocl_lapack_slarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
     aocl_int64_t lastc;
     aocl_int64_t lastv;
     aocl_int64_t firstv;
+    aocl_int64_t istart;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -204,13 +205,25 @@ void aocl_lapack_slarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
         {
             lastv = *n;
         }
-        i__ = 1;
+        if(*incv > 0)
+        {
+            i__ = 1;
+        }
+        else
+        {
+            i__ = 1 + (1 - lastv) * *incv;
+        }
         /* Look for the last non-zero row in V. */
         while(lastv > firstv && v[i__] == 0.f)
         {
             ++firstv;
             i__ += *incv;
         }
+
+        /* When incv < 0, leading zeros in v are at higher addresses.
+           Set the start pointer to the second last element.  */
+        istart = *incv < 0 ? 1 - *incv : i__;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -240,8 +253,8 @@ void aocl_lapack_slarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
         {
             /* w(1:lastc,1) := C(firstv:lastv-1,1:lastc)**T * v(firstv:lastv-1,1) */
             i__1 = lastv - firstv;
-            aocl_blas_sgemv("Transpose", &i__1, &lastc, &c_b4, &c__[firstv + c_dim1], ldc, &v[i__],
-                            incv, &c_b5, &work[1], &c__1);
+            aocl_blas_sgemv("Transpose", &i__1, &lastc, &c_b4, &c__[firstv + c_dim1], ldc,
+                            &v[istart], incv, &c_b5, &work[1], &c__1);
             /* w(1:lastc,1) += C(lastv,1:lastc)**T * v(lastv,1) */
             aocl_blas_saxpy(&lastc, &c_b4, &c__[lastv + c_dim1], ldc, &work[1], &c__1);
             /* C(lastv,1:lastc) += - tau * v(lastv,1) * w(1:lastc,1)**T */
@@ -250,7 +263,7 @@ void aocl_lapack_slarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
             /* C(firstv:lastv-1,1:lastc) += - tau * v(firstv:lastv-1,1) * w(1:lastc,1)**T */
             i__1 = lastv - firstv;
             r__1 = -(*tau);
-            aocl_blas_sger(&i__1, &lastc, &r__1, &v[i__], incv, &work[1], &c__1,
+            aocl_blas_sger(&i__1, &lastc, &r__1, &v[istart], incv, &work[1], &c__1,
                            &c__[firstv + c_dim1], ldc);
         }
     }
@@ -268,7 +281,7 @@ void aocl_lapack_slarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
             /* w(1:lastc,1) := C(1:lastc,firstv:lastv-1) * v(firstv:lastv-1,1) */
             i__1 = lastv - firstv;
             aocl_blas_sgemv("No transpose", &lastc, &i__1, &c_b4, &c__[firstv * c_dim1 + 1], ldc,
-                            &v[i__], incv, &c_b5, &work[1], &c__1);
+                            &v[istart], incv, &c_b5, &work[1], &c__1);
             /* w(1:lastc,1) += C(1:lastc,lastv) * v(lastv,1) */
             aocl_blas_saxpy(&lastc, &c_b4, &c__[lastv * c_dim1 + 1], &c__1, &work[1], &c__1);
             /* C(1:lastc,lastv) += - tau * v(lastv,1) * w(1:lastc,1) */
@@ -277,7 +290,7 @@ void aocl_lapack_slarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
             /* C(1:lastc,firstv:lastv-1) += - tau * w(1:lastc,1) * v(firstv:lastv-1)**T */
             i__1 = lastv - firstv;
             r__1 = -(*tau);
-            aocl_blas_sger(&lastc, &i__1, &r__1, &work[1], &c__1, &v[i__], incv,
+            aocl_blas_sger(&lastc, &i__1, &r__1, &work[1], &c__1, &v[istart], incv,
                            &c__[firstv * c_dim1 + 1], ldc);
         }
     }

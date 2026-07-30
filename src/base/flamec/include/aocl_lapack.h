@@ -2130,12 +2130,12 @@ void aocl_lapack_dlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
 void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal *v,
                        aocl_int64_t *incv, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
                        doublereal *work);
-void aocl_lapack_dlarf1f(char* side, aocl_int64_t* m, aocl_int64_t* n, double* v,
-                         aocl_int64_t* incv, double* tau, double* c, aocl_int64_t* ldc,
-                         double* work);
-void aocl_lapack_dlarf1l(char* side, aocl_int64_t* m, aocl_int64_t* n, double* v,
-                         aocl_int64_t* incv, double* tau, double* c, aocl_int64_t* ldc,
-                         double* work);
+void aocl_lapack_dlarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal *v,
+                         aocl_int64_t *incv, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
+                         doublereal *work);
+void aocl_lapack_dlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal *v,
+                         aocl_int64_t *incv, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
+                         doublereal *work);
 void aocl_lapack_dlarfg(aocl_int64_t *n, doublereal *alpha, doublereal *x, aocl_int64_t *incx,
                         doublereal *tau);
 void aocl_lapack_dlarfgp(aocl_int64_t *n, doublereal *alpha, doublereal *x, aocl_int64_t *incx,

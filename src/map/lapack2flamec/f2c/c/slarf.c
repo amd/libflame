@@ -1,3 +1,7 @@
+/*
+ *    Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/slarf.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -155,6 +159,7 @@ void aocl_lapack_slarf(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, ao
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t lastc;
     aocl_int64_t lastv;
+    aocl_int64_t istart;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,6 +214,11 @@ void aocl_lapack_slarf(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, ao
             --lastv;
             i__ -= *incv;
         }
+
+        /* If incv < 0, zeros at the end of v appear at the start address.
+           V is adjusted to point to the last non-zero element. */
+        istart = *incv < 0 ? i__ : 1;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -229,11 +239,11 @@ void aocl_lapack_slarf(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, ao
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-            aocl_blas_sgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                            &c_b5, &work[1], &c__1);
+            aocl_blas_sgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[istart],
+                            incv, &c_b5, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
             r__1 = -(*tau);
-            aocl_blas_sger(&lastv, &lastc, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
+            aocl_blas_sger(&lastv, &lastc, &r__1, &v[istart], incv, &work[1], &c__1, &c__[c_offset],
                            ldc);
         }
     }
@@ -243,11 +253,11 @@ void aocl_lapack_slarf(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, ao
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            aocl_blas_sgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                            &c_b5, &work[1], &c__1);
+            aocl_blas_sgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[istart],
+                            incv, &c_b5, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             r__1 = -(*tau);
-            aocl_blas_sger(&lastc, &lastv, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
+            aocl_blas_sger(&lastc, &lastv, &r__1, &work[1], &c__1, &v[istart], incv, &c__[c_offset],
                            ldc);
         }
     }

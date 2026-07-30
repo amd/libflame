@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -104,8 +104,8 @@ integer invoke_lapacke_hgeqz(integer datatype, int layout, char job, char compq,
 integer invoke_lapacke_hseqr(integer datatype, int layout, char job, char compz, integer n,
                              integer ilo, integer ihi, void *h, integer ldh, void *w, void *wr,
                              void *wi, void *z, integer ldz);
-integer invoke_lapacke_larfg(integer datatype, integer *n, void *x, integer *incx,
-                             integer *abs_incx, void *tau);
+integer invoke_lapacke_larfg(integer datatype, integer *n, void *alpha, void *x, integer *incx,
+                             void *tau);
 integer invoke_lapacke_sytrf_rook(integer datatype, integer layout, char uplo, integer n, void *a,
                                   integer lda, integer *ipiv);
 integer invoke_lapacke_hetrf_rook(integer datatype, integer layout, char uplo, integer n, void *a,
@@ -128,8 +128,8 @@ integer invoke_lapacke_gebrd(integer datatype, int layout, integer m, integer n,
                              integer lda, void *d, void *e, void *tauq, void *taup);
 integer invoke_lapacke_trtri(integer datatype, int layout, char uplo, char diag, integer n, void *a,
                              integer lda);
-integer invoke_lapacke_trtrs(integer datatype, int layout, char *uplo, char *trans,
-     char *diag, integer n, integer nrhs, void *A, integer lda, void *b, integer ldb);
+integer invoke_lapacke_trtrs(integer datatype, int layout, char *uplo, char *trans, char *diag,
+                             integer n, integer nrhs, void *A, integer lda, void *b, integer ldb);
 integer invoke_lapacke_geqpf(integer datatype, int layout, integer m, integer n, void *a,
                              integer lda, integer *jpvt, void *tau);
 integer invoke_lapacke_bdsqr(integer datatype, int layout, char uplo, integer n, integer ncvt,

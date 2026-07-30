@@ -16,8 +16,8 @@
  * Memory locations of a and b are assumed to be different
  * without any overlapping memory
  * */
-void fla_dtranspose(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *b,
-                    aocl_int64_t *ldb)
+void fla_dtranspose(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                    doublereal *b, aocl_int64_t *ldb)
 {
     aocl_int64_t i, j;
 
@@ -48,8 +48,8 @@ int fla_dhrot3(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *v,
     return 0;
 }
 /* 2x2 Plane Rotation */
-int fla_drot(aocl_int64_t *n, doublereal *dx, aocl_int64_t *incx, doublereal *dy, aocl_int64_t *incy,
-             doublereal *c__, doublereal *s)
+int fla_drot(aocl_int64_t *n, doublereal *dx, aocl_int64_t *incx, doublereal *dy,
+             aocl_int64_t *incy, doublereal *c__, doublereal *s)
 {
 #ifndef FLA_ENABLE_AOCL_BLAS
 #endif
@@ -135,8 +135,8 @@ void fla_dscal(aocl_int64_t *n, doublereal *da, doublereal *dx, aocl_int64_t *in
 }
 
 /* Double QR (DGEQRF) for small sizes */
-int fla_dgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
-                     doublereal *work)
+int fla_dgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                     doublereal *tau, doublereal *work)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -145,8 +145,8 @@ int fla_dgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64
     return 0;
 }
 /* Double QR (DGEQRF) for small sizes */
-int fla_dgelqf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
-                     doublereal *work)
+int fla_dgelqf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                     doublereal *tau, doublereal *work)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -199,8 +199,8 @@ void fla_sscal(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx)
     return;
 }
 /* Rank 1 Operation */
-void fla_sger(aocl_int64_t *m, aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx, real *y, aocl_int64_t *incy,
-              real *a, aocl_int64_t *lda)
+void fla_sger(aocl_int64_t *m, aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx, real *y,
+              aocl_int64_t *incy, real *a, aocl_int64_t *lda)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -216,8 +216,8 @@ void fla_sger(aocl_int64_t *m, aocl_int64_t *n, real *alpha, real *x, aocl_int64
 /* LU factorization.
  * To be used only when vectorized code via avx2/avx512 is enabled
  * */
-int fla_dgetrf_small_simd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                          aocl_int64_t *info)
+int fla_dgetrf_small_simd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                          aocl_int_t *ipiv, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -233,8 +233,8 @@ int fla_dgetrf_small_simd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_
 /* Double Complex LU for small sizes,
  * Optimized for AVX2 and AVX512 ISAs
  */
-int fla_zgetrf_small_simd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                          aocl_int64_t *info)
+int fla_zgetrf_small_simd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                          aocl_int_t *ipiv, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -253,22 +253,24 @@ int fla_zgetrf_small_simd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_in
 
 /* SVD for small tall-matrices in DGESVD
  */
-void fla_dgesvd_xx_small10(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *ncu, doublereal *a,
-                           aocl_int64_t *lda, doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
-                           aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *info)
+void fla_dgesvd_xx_small10(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m, aocl_int64_t *n,
+                           aocl_int64_t *ncu, doublereal *a, aocl_int64_t *lda, doublereal *s,
+                           doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
+                           doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        fla_dgesvd_xx_small10_avx2(wntus, wntvs, m, n, ncu, a, lda, s, u, ldu, vt, ldvt, work, info);
+        fla_dgesvd_xx_small10_avx2(wntus, wntvs, m, n, ncu, a, lda, s, u, ldu, vt, ldvt, work,
+                                   info);
     }
     return;
 }
 
 /* SVD for small fat-matrices in DGESVD
  */
-void fla_dgesvd_xs_small10T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *s,
-                            doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
-                            doublereal *work, aocl_int64_t *info)
+void fla_dgesvd_xs_small10T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                            doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
+                            aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -280,9 +282,10 @@ void fla_dgesvd_xs_small10T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aoc
 /* SVD for small fat-matrices with LQ factorization
  * already computed
  */
-void fla_dgesvd_small6(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
-                       aocl_int64_t *lda, doublereal *qr, aocl_int64_t *ldqr, doublereal *s, doublereal *u,
-                       aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *info)
+void fla_dgesvd_small6(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m, aocl_int64_t *n,
+                       doublereal *a, aocl_int64_t *lda, doublereal *qr, aocl_int64_t *ldqr,
+                       doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
+                       aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -294,8 +297,8 @@ void fla_dgesvd_small6(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m, 
 
 /* SVD for small fat-matrices for path 1T in DGESVD
  */
-void fla_dgesvd_nn_small1T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *s,
-                           doublereal *work, aocl_int64_t *info)
+void fla_dgesvd_nn_small1T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                           doublereal *s, doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -307,9 +310,10 @@ void fla_dgesvd_nn_small1T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl
 /* SVD for small fat-matrices with LQ factorization
  * already computed
  */
-void fla_dgesvd_small6T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *ql,
-                        aocl_int64_t *ldql, doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
-                        aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *info)
+void fla_dgesvd_small6T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        doublereal *ql, aocl_int64_t *ldql, doublereal *s, doublereal *u,
+                        aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt, doublereal *work,
+                        aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -319,8 +323,9 @@ void fla_dgesvd_small6T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
 }
 
 /* Small DGETRS path (NOTRANS) should only be used for size between 3 to 8 and NRHS <= N */
-int fla_dgetrs_small_notrans(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda,
-                             aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info)
+int fla_dgetrs_small_notrans(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
+                             aocl_int64_t *lda, aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb,
+                             aocl_int64_t *info)
 {
     return fla_dgetrs_small_trsm_ll_avx2(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
 }
@@ -387,7 +392,7 @@ real fla_get_max_cabs_element_vector(aocl_int64_t m, scomplex *a, aocl_int64_t a
     real max_value = 0.0, temp;
     aocl_int64_t i__;
     /* Path when AVX512 ISA is supported */
-    if(m > FLA_CLANGEM_SIMD_AVX512_THRESH_M &&  FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    if(m > FLA_CLANGEM_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
         max_value = fla_get_max_cabs_element_vector_avx512(m, a, a_diml);
     }
@@ -437,8 +442,8 @@ doublereal fla_get_max_zabs_element_vector(aocl_int64_t m, dcomplex *a, aocl_int
 /* DLARF for small sizes
  * To be used only when vectorized code via avx2/avx512 is enabled
  * */
-void fla_dlarf_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff, aocl_int64_t ldr,
-                                doublereal *v, doublereal ntau, doublereal *work)
+void fla_dlarf_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff,
+                                aocl_int64_t ldr, doublereal *v, doublereal ntau, doublereal *work)
 {
     /* Select AVX512 kernel based on preset threshold and ISA support  */
     if(m > FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
@@ -452,11 +457,49 @@ void fla_dlarf_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_bu
     return;
 }
 
+/* DLARF1F for small sizes
+ * To be used only when vectorized code via avx2/avx512 is enabled
+ * */
+void fla_dlarf1f_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff,
+                                  aocl_int64_t ldr, doublereal *v, doublereal ntau,
+                                  doublereal *work)
+{
+    /* Select AVX512 kernel based on preset threshold and ISA support  */
+    if(m > FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        fla_dlarf1f_left_apply_incv1_avx512(m, n, a_buff, ldr, v, ntau, work);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        fla_dlarf1f_left_apply_incv1_avx2(m, n, a_buff, ldr, v, ntau, work);
+    }
+    return;
+}
+
+/* DLARF1L for small sizes
+ * To be used only when vectorized code via avx2/avx512 is enabled
+ * */
+void fla_dlarf1l_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff,
+                                  aocl_int64_t ldr, doublereal *v, doublereal ntau,
+                                  doublereal *work)
+{
+    /* Select AVX512 kernel based on preset threshold and ISA support  */
+    if(m > FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        fla_dlarf1l_left_apply_incv1_avx512(m, n, a_buff, ldr, v, ntau, work);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        fla_dlarf1l_left_apply_incv1_avx2(m, n, a_buff, ldr, v, ntau, work);
+    }
+    return;
+}
+
 /* dnrm2 for small input sizes */
 doublereal fla_dnrm2_blas_kernel(aocl_int64_t *sd, doublereal *a, aocl_int64_t *inc)
 {
     doublereal value = 0.;
-    /* TODO : Call DNRM2 AVX2 and AVX512 kernels using AOCL_BLAS_ENABLE 
+    /* TODO : Call DNRM2 AVX2 and AVX512 kernels using AOCL_BLAS_ENABLE
        feature and call directly */
     if(*sd > FLA_DNRM2_SMALL_THRESH0 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -497,10 +540,10 @@ void fla_zlarf_left_invc1_opt(aocl_int64_t m, aocl_int64_t n, dcomplex *a_buff, 
 
         /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
         aocl_blas_zgemv("Conjugate transpose", &m, &n, &c_b1, (dcomplex *)&a_buff[a_offset], &ldr,
-               (dcomplex *)&v[1], &c__1, (dcomplex *)&c_b2, (dcomplex *)&work[1], &c__1);
+                        (dcomplex *)&v[1], &c__1, (dcomplex *)&c_b2, (dcomplex *)&work[1], &c__1);
         /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
-        aocl_blas_zgerc(&m, &n, (dcomplex *)ntau, (dcomplex *)&v[1], &c__1, (dcomplex *)&work[1], &c__1,
-               (dcomplex *)&a_buff[a_offset], &ldr);
+        aocl_blas_zgerc(&m, &n, (dcomplex *)ntau, (dcomplex *)&v[1], &c__1, (dcomplex *)&work[1],
+                        &c__1, (dcomplex *)&a_buff[a_offset], &ldr);
     }
 }
 

@@ -320,6 +320,16 @@
 #define fla_lapack_clarf CLARF_
 #define fla_lapack_zlarf ZLARF_
 
+#define fla_lapack_slarf1f SLARF1F_
+#define fla_lapack_dlarf1f DLARF1F_
+#define fla_lapack_clarf1f CLARF1F_
+#define fla_lapack_zlarf1f ZLARF1F_
+
+#define fla_lapack_slarf1l SLARF1L_
+#define fla_lapack_dlarf1l DLARF1L_
+#define fla_lapack_clarf1l CLARF1L_
+#define fla_lapack_zlarf1l ZLARF1L_
+
 #define fla_lapack_sgtsv SGTSV_
 #define fla_lapack_dgtsv DGTSV_
 #define fla_lapack_cgtsv CGTSV_
@@ -738,6 +748,16 @@
 #define fla_lapack_dlarf DLARF
 #define fla_lapack_clarf CLARF
 #define fla_lapack_zlarf ZLARF
+
+#define fla_lapack_slarf1f SLARF1F
+#define fla_lapack_dlarf1f DLARF1F
+#define fla_lapack_clarf1f CLARF1F
+#define fla_lapack_zlarf1f ZLARF1F
+
+#define fla_lapack_slarf1l SLARF1L
+#define fla_lapack_dlarf1l DLARF1L
+#define fla_lapack_clarf1l CLARF1L
+#define fla_lapack_zlarf1l ZLARF1L
 
 #define fla_lapack_sgtsv SGTSV
 #define fla_lapack_dgtsv DGTSV
@@ -1158,6 +1178,16 @@
 #define fla_lapack_clarf clarf
 #define fla_lapack_zlarf zlarf
 
+#define fla_lapack_slarf1f slarf1f
+#define fla_lapack_dlarf1f dlarf1f
+#define fla_lapack_clarf1f clarf1f
+#define fla_lapack_zlarf1f zlarf1f
+
+#define fla_lapack_slarf1l slarf1l
+#define fla_lapack_dlarf1l dlarf1l
+#define fla_lapack_clarf1l clarf1l
+#define fla_lapack_zlarf1l zlarf1l
+
 #define fla_lapack_sgtsv sgtsv
 #define fla_lapack_dgtsv dgtsv
 #define fla_lapack_cgtsv cgtsv
@@ -1577,6 +1607,16 @@
 #define fla_lapack_clarf clarf_
 #define fla_lapack_zlarf zlarf_
 
+#define fla_lapack_slarf1f slarf1f_
+#define fla_lapack_dlarf1f dlarf1f_
+#define fla_lapack_clarf1f clarf1f_
+#define fla_lapack_zlarf1f zlarf1f_
+
+#define fla_lapack_slarf1l slarf1l_
+#define fla_lapack_dlarf1l dlarf1l_
+#define fla_lapack_clarf1l clarf1l_
+#define fla_lapack_zlarf1l zlarf1l_
+
 #define fla_lapack_sgtsv sgtsv_
 #define fla_lapack_dgtsv dgtsv_
 #define fla_lapack_cgtsv cgtsv_
@@ -1776,9 +1816,9 @@ extern void invoke_gelqf(integer datatype, integer *m, integer *n, void *a, inte
                          void *work, integer *lwork, integer *info);
 
 /* Used for BDSQR() */
-extern void invoke_gebrd(integer datatype, integer *m, integer *n, void *a, integer *lda,
-                         void *d, void *e, void *tauq, void *taup, void *work,
-                         integer *lwork, integer *info);
+extern void invoke_gebrd(integer datatype, integer *m, integer *n, void *a, integer *lda, void *d,
+                         void *e, void *tauq, void *taup, void *work, integer *lwork,
+                         integer *info);
 extern void invoke_orgbr(integer datatype, char *vect, integer *m, integer *n, integer *k, void *A,
                          integer *lda, void *tau, void *work, integer *lwork, integer *info);
 extern void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda,

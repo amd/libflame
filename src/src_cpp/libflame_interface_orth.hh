@@ -1,18 +1,17 @@
 /******************************************************************************
- * Copyright (C) 2021-2025, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file libflame_interface_orth.hh
- *  libflame_interface.hh defines all the orthogonal/unitary factors routines for 
+ *  libflame_interface.hh defines all the orthogonal/unitary factors routines for
  *  Libflame CPP templated public interfaces.
  *  */
 #ifndef LIBFLAME_INTERFACE_ORTH_HH
 #define LIBFLAME_INTERFACE_ORTH_HH
 
-
 namespace libflame
 {
-     /** @defgroup Orthogonal Orthogonal/Unitary factors(QR, CS, etc)
+    /** @defgroup Orthogonal Orthogonal/Unitary factors(QR, CS, etc)
      * @ingroup LAPACK
      * @{
      */
@@ -7391,6 +7390,120 @@ determined by sgerqf
               T *work)
     {
         larf(side, m, n, v, incv, tau, c, ldc, work);
+    }
+
+    /**
+ * @details
+ * \b Purpose:
+    \verbatim
+    LARF1F applies a real elementary reflector H to a real m by n matrix
+    C, from either the left or the right. H is represented in the form
+
+          H = I - tau * v * v**T
+
+    where tau is a real scalar and v is a real vector.
+
+    If tau = 0, then H is taken to be the unit matrix.
+    \endverbatim
+
+ * @param[in] SIDE
+          SIDE is CHARACTER*1 \n
+          = 'L': form  H * C \n
+          = 'R': form  C * H \n
+ * @param[in] M
+          M is INTEGER \n
+          The number of rows of the matrix C. \n
+ * @param[in] N
+          N is INTEGER \n
+          The number of columns of the matrix C. \n
+ * @param[in] V
+          V is REAL array, dimension \n
+                     (1 + (M-1)*abs(INCV)) if SIDE = 'L' \n
+                  or (1 + (N-1)*abs(INCV)) if SIDE = 'R' \n
+          The vector v in the representation of H. V is not used if
+          TAU = 0. V(1) is not referenced or modified. \n
+ * @param[in] INCV
+          INCV is INTEGER \n
+          The increment between elements of v. INCV <> 0. \n
+ * @param[in] TAU
+          TAU is REAL \n
+          The value tau in the representation of H. \n
+ * @param[in,out] C
+          C is REAL array, dimension (LDC,N) \n
+          On entry, the m by n matrix C. \n
+          On exit, C is overwritten by the matrix H * C if SIDE = 'L',
+          or C * H if SIDE = 'R'. \n
+ * @param[in] LDC
+          LDC is INTEGER \n
+          The leading dimension of the array C. LDC >= fla_max(1,M). \n
+ * @param[out] WORK
+          WORK is REAL array, dimension \n
+                         (N) if SIDE = 'L' \n
+                      or (M) if SIDE = 'R'  \n
+
+ *  * */
+    template <typename T>
+    void larf1f(char *side, integer *m, integer *n, T *v, integer *incv, T *tau, T *c, integer *ldc,
+                T *work)
+    {
+        larf1f(side, m, n, v, incv, tau, c, ldc, work);
+    }
+
+    /**
+ * @details
+ * \b Purpose:
+    \verbatim
+    LARF1L applies a real elementary reflector H to a real m by n matrix
+    C, from either the left or the right. H is represented in the form
+
+          H = I - tau * v * v**T
+
+    where tau is a real scalar and v is a real vector.
+
+    If tau = 0, then H is taken to be the unit matrix.
+    \endverbatim
+
+ * @param[in] SIDE
+          SIDE is CHARACTER*1 \n
+          = 'L': form  H * C \n
+          = 'R': form  C * H \n
+ * @param[in] M
+          M is INTEGER \n
+          The number of rows of the matrix C. \n
+ * @param[in] N
+          N is INTEGER \n
+          The number of columns of the matrix C. \n
+ * @param[in] V
+          V is REAL array, dimension \n
+                     (1 + (M-1)*abs(INCV)) if SIDE = 'L' \n
+                  or (1 + (N-1)*abs(INCV)) if SIDE = 'R' \n
+          The vector v in the representation of H. V is not used if
+          TAU = 0. \n
+ * @param[in] INCV
+          INCV is INTEGER \n
+          The increment between elements of v. INCV <> 0. \n
+ * @param[in] TAU
+          TAU is REAL \n
+          The value tau in the representation of H. \n
+ * @param[in,out] C
+          C is REAL array, dimension (LDC,N) \n
+          On entry, the m by n matrix C. \n
+          On exit, C is overwritten by the matrix H * C if SIDE = 'L',
+          or C * H if SIDE = 'R'. \n
+ * @param[in] LDC
+          LDC is INTEGER \n
+          The leading dimension of the array C. LDC >= fla_max(1,M). \n
+ * @param[out] WORK
+          WORK is REAL array, dimension \n
+                         (N) if SIDE = 'L' \n
+                      or (M) if SIDE = 'R'  \n
+
+ *  * */
+    template <typename T>
+    void larf1l(char *side, integer *m, integer *n, T *v, integer *incv, T *tau, T *c, integer *ldc,
+                T *work)
+    {
+        larf1l(side, m, n, v, incv, tau, c, ldc, work);
     }
     /** @}*/ // end of larf
 

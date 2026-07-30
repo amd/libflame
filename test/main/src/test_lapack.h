@@ -106,10 +106,10 @@ typedef enum
 /* Test mode enumeration */
 typedef enum
 {
-    FLA_TEST_MODE_DEFAULT = 0,       /* API-specific init + validation */
-    FLA_TEST_MODE_PERF = 1,         /* API-specific init + no validation */
-    FLA_TEST_MODE_RANDOM = 2,       /* Random init + validation */
-    FLA_TEST_MODE_RANDOM_PERF = 3   /* Random init + no validation */
+    FLA_TEST_MODE_DEFAULT = 0, /* API-specific init + validation */
+    FLA_TEST_MODE_PERF = 1, /* API-specific init + no validation */
+    FLA_TEST_MODE_RANDOM = 2, /* Random init + validation */
+    FLA_TEST_MODE_RANDOM_PERF = 3 /* Random init + no validation */
 } fla_test_mode_t;
 
 // API categories
@@ -238,12 +238,10 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
     (same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))
 
 #define FLA_RANDOM_INIT_MODE \
-    (params->test_mode == FLA_TEST_MODE_RANDOM || \
-     params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
+    (params->test_mode == FLA_TEST_MODE_RANDOM || params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
 
 #define FLA_SKIP_VALIDATION_MODE \
-    (params->test_mode == FLA_TEST_MODE_PERF || \
-     params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
+    (params->test_mode == FLA_TEST_MODE_PERF || params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
 
 /* Macro to check if a LAPACK API have different names for its
    (precision)variants and modify API display string
@@ -277,16 +275,6 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
         else if(strcmp(func_str, "ORMLQ") == 0)               \
             func_str = "UNMLQ";                               \
     }
-
-/* Macro to skip scomplex and double scomplex tests of not supported APIs */
-#define FLA_SKIP_TEST(datatype_char, func_str)                                      \
-    ((((same_char(datatype_char, 'c') || same_char(datatype_char, 'z'))             \
-       && strcmp(func_str, "STEVD") == 0)                                           \
-      || ((same_char(datatype_char, 's') || same_char(datatype_char, 'd'))          \
-          && (strcmp(func_str, "HETRF") == 0 || strcmp(func_str, "HETRF_ROOK") == 0 \
-              || strcmp(func_str, "HETRI_ROOK") == 0)))                             \
-         ? TRUE                                                                     \
-         : FALSE)
 
 /* Assign leading dimension value based on matrix layout and cmdline/config inputs */
 #define SELECT_LDA(g_ext_fptr, config_data, layout, n, rm_lda, lda_t) \
@@ -619,7 +607,7 @@ typedef struct SVD_paramlist_t
     integer nru_bdsqr; // The number of rows of the matrix U. NRU >= 0.
     integer ncc_bdsqr; // The number of columns of the matrix C. NCC >= 0.
     integer ldc; // The leading dimension of the array C. LDC >= max(1,N) if NCC > 0; LDC >=1
-                       // if NCC = 0.
+                 // if NCC = 0.
 
     char data_types_char[MAX_NUM_DATATYPES];
     char jobu; // Must be 'U' or 'N'.
@@ -803,6 +791,18 @@ typedef struct
     void (*fp)(integer argc, char **argv, test_params_t *);
 } OPERATIONS;
 
+/* Structure to skip certain precision for specific API. If the skip_{precision} flag is set to 1,
+   then the tests for that precision will be skipped for the API mentioned in ops string.
+ */
+typedef struct
+{
+    const char *ops;
+    char skip_single;
+    char skip_double;
+    char skip_scomplex;
+    char skip_dcomplex;
+} SKIP_OPERATIONS;
+
 // Prototypes.
 char *fla_test_get_string_for_result(double residual, integer datatype, double thresh);
 void fla_test_init_strings(void);
@@ -861,6 +861,8 @@ double fla_stat_get_val(test_params_t *test_params, fla_stat_t *stat_desc);
 void fla_test_runtime_ctx_init(test_params_t *params);
 void fla_test_runtime_ctx_reset(test_params_t *params);
 void fla_test_runtime_ctx_free(test_params_t *params);
-double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params);
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base,
+                            integer m, void *params);
 double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params);
+FLA_Bool fla_skip_test(char *ops, char precision);
 #endif // TEST_LAPACK_H

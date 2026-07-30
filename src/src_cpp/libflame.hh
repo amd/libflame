@@ -8366,7 +8366,6 @@ inline void larf1f(char *side, integer *m, integer *n, double *v, integer *incv,
 {
   dlarf1f_(side, m, n, v, incv, tau, c, ldc, work);
 }
-
 inline void larf1f(char *side, integer *m, integer *n, scomplex *v, integer *incv, scomplex *tau, scomplex *c, integer *ldc, scomplex *work)
 {
   clarf1f_(side, m, n, v, incv, tau, c, ldc, work);
@@ -8381,16 +8380,14 @@ inline void larf1l(char *side, integer *m, integer *n, float *v, integer *incv, 
 {
   slarf1l_(side, m, n, v, incv, tau, c, ldc, work);
 }
-
 inline void larf1l(char *side, integer *m, integer *n, double *v, integer *incv, double *tau, double *c, integer *ldc, double *work)
 {
   dlarf1l_(side, m, n, v, incv, tau, c, ldc, work);
 }
-
 inline void larf1l(char *side, integer *m, integer *n, scomplex *v, integer *incv, scomplex *tau, scomplex *c, integer *ldc, scomplex *work)
 {
   clarf1l_(side, m, n, v, incv, tau, c, ldc, work);
-}
+} 
 
 inline void larf1l(char *side, integer *m, integer *n, dcomplex *v, integer *incv, dcomplex *tau, dcomplex *c, integer *ldc, dcomplex *work)
 {

@@ -1,3 +1,7 @@
+/*
+ *    Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ../netlib/clarf.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -143,8 +147,9 @@ void clarf_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *i
 #endif
 }
 
-void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v, aocl_int64_t *incv,
-                       scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work)
+void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v,
+                       aocl_int64_t *incv, scomplex *tau, scomplex *c__, aocl_int64_t *ldc,
+                       scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -166,6 +171,7 @@ void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v
     logical applyleft;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t lastc, lastv;
+    aocl_int64_t istart;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,6 +230,11 @@ void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v
             --lastv;
             i__ -= *incv;
         }
+
+        /* If incv < 0, zeros at the end of v appear at the start address.
+           V is adjusted to point to the last non-zero element. */
+        istart = *incv < 0 ? i__ : 1;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -245,12 +256,12 @@ void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v
         {
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
             aocl_blas_cgemv("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc,
-                            &v[1], incv, &c_b2, &work[1], &c__1);
+                            &v[istart], incv, &c_b2, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
             q__1.real = -tau->real;
             q__1.imag = -tau->imag; // , expr subst
-            aocl_blas_cgerc(&lastv, &lastc, &q__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
-                            ldc);
+            aocl_blas_cgerc(&lastv, &lastc, &q__1, &v[istart], incv, &work[1], &c__1,
+                            &c__[c_offset], ldc);
         }
     }
     else
@@ -259,13 +270,13 @@ void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            aocl_blas_cgemv("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv,
-                            &c_b2, &work[1], &c__1);
+            aocl_blas_cgemv("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[istart],
+                            incv, &c_b2, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H */
             q__1.real = -tau->real;
             q__1.imag = -tau->imag; // , expr subst
-            aocl_blas_cgerc(&lastc, &lastv, &q__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
-                            ldc);
+            aocl_blas_cgerc(&lastc, &lastv, &q__1, &work[1], &c__1, &v[istart], incv,
+                            &c__[c_offset], ldc);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

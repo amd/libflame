@@ -86,8 +86,7 @@ void invoke_cpp_hseqr(integer datatype, char *job, char *compz, integer *n, inte
                       integer *ldz, void *work, integer *lwork, integer *info);
 void invoke_cpp_larf(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
                      void *tau, void *c__, integer *ldc__, void *work);
-void invoke_cpp_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
-                      void *tau);
+void invoke_cpp_larfg(integer datatype, integer *n, void *alpha, void *x, integer *incx, void *tau);
 void invoke_cpp_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r);
 void invoke_cpp_org2r(integer datatype, integer *m, integer *n, integer *min_A, void *a,
                       integer *lda, void *tau, void *work, integer *info);
@@ -159,6 +158,10 @@ void invoke_cpp_geqpf(integer datatype, integer *m, integer *n, void *a, integer
 void invoke_cpp_bdsqr(integer datatype, char *uplo, integer *n, integer *ncvt, integer *nru,
                       integer *ncc, void *d, void *e, void *vt, integer *ldvt, void *u,
                       integer *ldu, void *c, integer *ldc, void *work, integer *info);
+void invoke_cpp_larf1f(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
+                       void *tau, void *c__, integer *ldc__, void *work);
+void invoke_cpp_larf1l(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
+                       void *tau, void *c__, integer *ldc__, void *work);
 #ifdef __cplusplus
 }
 #endif

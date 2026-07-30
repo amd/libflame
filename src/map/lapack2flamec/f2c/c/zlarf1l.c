@@ -170,6 +170,7 @@ void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex 
     aocl_int64_t lastc;
     aocl_int64_t lastv;
     aocl_int64_t firstv;
+    aocl_int64_t istart;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,7 +212,14 @@ void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex 
         {
             lastv = *n;
         }
-        i__ = 1;
+        if(*incv > 0)
+        {
+            i__ = 1;
+        }
+        else
+        {
+            i__ = 1 + (1 - lastv) * *incv;
+        }
         /* Look for the last non-zero row in V. */
         for(;;)
         {
@@ -222,6 +230,11 @@ void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex 
             ++firstv;
             i__ += *incv;
         }
+
+        /* When incv < 0, leading zeros in v are at higher addresses.
+           Set the start pointer to the second last element.  */
+        istart = *incv < 0 ? 1 - *incv : i__;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -253,7 +266,7 @@ void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex 
             /* w(1:lastc,1) := C(firstv:lastv-1,1:lastc)**T * v(firstv:lastv-1,1) */
             i__1 = lastv - firstv;
             aocl_blas_zgemv("Conjugate transpose", &i__1, &lastc, &c_b1, &c__[firstv + c_dim1], ldc,
-                            &v[i__], incv, &c_b2, &work[1], &c__1);
+                            &v[istart], incv, &c_b2, &work[1], &c__1);
             /* w(1:lastc,1) += C(lastv,1:lastc)**H * v(lastv,1) */
             i__1 = lastc;
             for(j = 1; j <= i__1; ++j)
@@ -284,7 +297,7 @@ void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex 
             i__1 = lastv - firstv;
             z__1.real = -tau->real;
             z__1.imag = -tau->imag; // , expr subst
-            aocl_blas_zgerc(&i__1, &lastc, &z__1, &v[i__], incv, &work[1], &c__1,
+            aocl_blas_zgerc(&i__1, &lastc, &z__1, &v[istart], incv, &work[1], &c__1,
                             &c__[firstv + c_dim1], ldc);
         }
     }
@@ -303,7 +316,7 @@ void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex 
             /* w(1:lastc,1) := C(1:lastc,firstv:lastv-1) * v(firstv:lastv-1,1) */
             i__1 = lastv - firstv;
             aocl_blas_zgemv("No transpose", &lastc, &i__1, &c_b1, &c__[firstv * c_dim1 + 1], ldc,
-                            &v[i__], incv, &c_b2, &work[1], &c__1);
+                            &v[istart], incv, &c_b2, &work[1], &c__1);
             /* w(1:lastc,1) += C(1:lastc,lastv) * v(lastv,1) */
             aocl_blas_zaxpy(&lastc, &c_b1, &c__[lastv * c_dim1 + 1], &c__1, &work[1], &c__1);
             /* C(1:lastc,lastv) += - tau * v(lastv,1) * w(1:lastc,1) */
@@ -314,7 +327,7 @@ void aocl_lapack_zlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex 
             i__1 = lastv - firstv;
             z__1.real = -tau->real;
             z__1.imag = -tau->imag; // , expr subst
-            aocl_blas_zgerc(&lastc, &i__1, &z__1, &work[1], &c__1, &v[i__], incv,
+            aocl_blas_zgerc(&lastc, &i__1, &z__1, &work[1], &c__1, &v[istart], incv,
                             &c__[firstv * c_dim1 + 1], ldc);
         }
     }

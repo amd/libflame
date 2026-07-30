@@ -8,6 +8,23 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
+
+#ifdef FLA_ENABLE_AMD_OPT
+#include "fla_lapack_x86_common.h"
+
+void fla_dlarf_left_tuning_params(aocl_int64_t m, aocl_int64_t n, FLA_Bool *use_blocked_flag,
+                                  aocl_int64_t *nthreads);
+void fla_dlarf_right_tuning_params(aocl_int64_t m, aocl_int64_t n, aocl_int64_t *block_size,
+                                   aocl_int64_t *nthreads);
+
+#endif
+
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#else
+extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+#endif
+
 static doublereal c_b4 = 1.;
 static doublereal c_b5 = 0.;
 static aocl_int64_t c__1 = 1;
@@ -150,16 +167,24 @@ void aocl_lapack_dlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, doublerea
                          aocl_int64_t *incv, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
                          doublereal *work)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlarf1l inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
+
     /* System generated locals */
-    aocl_int64_t c_dim1, c_offset, i__1;
+    aocl_int64_t c_dim1, c_offset;
+#ifndef FLA_ENABLE_AMD_OPT
+    aocl_int64_t i__1;
+#endif
     doublereal d__1;
     /* Local variables */
     aocl_int64_t i__;
     logical applyleft;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t lastc;
     aocl_int64_t lastv;
     aocl_int64_t firstv;
+    aocl_int64_t istart;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -199,13 +224,25 @@ void aocl_lapack_dlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, doublerea
         {
             lastv = *n;
         }
-        i__ = 1;
-        /* Look for the last non-zero row in V. */
+        if(*incv > 0)
+        {
+            i__ = 1;
+        }
+        else
+        {
+            i__ = 1 + (1 - lastv) * *incv;
+        }
+        /* Look for the first non-zero row in V. */
         while(lastv > firstv && v[i__] == 0.)
         {
             ++firstv;
             i__ += *incv;
         }
+
+        /* When incv < 0, leading zeros in v are at higher addresses.
+           Set the start pointer to the second last element.  */
+        istart = *incv < 0 ? 1 - *incv : i__;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -219,6 +256,7 @@ void aocl_lapack_dlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, doublerea
     }
     if(lastc == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(applyleft)
@@ -231,15 +269,20 @@ void aocl_lapack_dlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, doublerea
             if(lastv == firstv)
             {
                 d__1 = 1. - *tau;
+#ifndef FLA_ENABLE_AMD_OPT
                 aocl_blas_dscal(&lastc, &d__1, &c__[firstv + c_dim1], ldc);
+#else
+                fla_dscal(&lastc, &d__1, &c__[firstv + c_dim1], ldc);
+#endif
             }
             else
             {
+#ifndef FLA_ENABLE_AMD_OPT
                 /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
                 /* w(1:lastc,1) := C(1:lastv-1,1:lastc)**T * v(1:lastv-1,1 */
                 i__1 = lastv - firstv;
                 aocl_blas_dgemv("Transpose", &i__1, &lastc, &c_b4, &c__[firstv + c_dim1], ldc,
-                                &v[i__], incv, &c_b5, &work[1], &c__1);
+                                &v[istart], incv, &c_b5, &work[1], &c__1);
                 /* w(1:lastc,1) += C(lastv,1:lastc)**T * v(lastv,1) = C(la */
                 aocl_blas_daxpy(&lastc, &c_b4, &c__[lastv + c_dim1], ldc, &work[1], &c__1);
                 /* C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**T */
@@ -250,8 +293,98 @@ void aocl_lapack_dlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, doublerea
                 /* C(1:lastv-1,1:lastc) := C(...) - tau * v(1:lastv-1,1)*w */
                 i__1 = lastv - firstv;
                 d__1 = -(*tau);
-                aocl_blas_dger(&i__1, &lastc, &d__1, &v[i__], incv, &work[1], &c__1,
+                aocl_blas_dger(&i__1, &lastc, &d__1, &v[istart], incv, &work[1], &c__1,
                                &c__[firstv + c_dim1], ldc);
+#else
+                /* Get threshold sizes to take optimized path*/
+                FLA_Bool min_lastc_lastv = (lastc <= FLA_DGEMV_DGER_SIMD_SMALL_THRESH)
+                                           && (lastv >= FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M
+                                               && lastv <= FLA_DGEMV_DGER_SIMD_SMALL_THRESH);
+
+                /* Initialize global context data */
+                aocl_fla_init();
+                d__1 = -(*tau);
+
+                /* If the size of the matrix is small and incv =1, use the optimized path */
+                if(min_lastc_lastv && *incv == c__1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+                {
+                    /* Call optimized routine */
+                    fla_dlarf1l_small_incv1_simd(lastv - firstv + 1, lastc, &c__[firstv + c_dim1],
+                                                 *ldc, &v[istart], d__1, &work[1]);
+                }
+                else
+                {
+
+                    FLA_Bool use_blocked = 0;
+                    aocl_int64_t opt_nthreads = 1;
+
+                    fla_dlarf_left_tuning_params(lastv, lastc, &use_blocked, &opt_nthreads);
+                    const aocl_int64_t lastv_eff = lastv - firstv;
+
+                    /* If use_blocked is 1, process in blocks */
+                    if(use_blocked)
+                    {
+                        /* Process in blocks */
+#ifdef FLA_OPENMP_MULTITHREADING
+#pragma omp parallel for num_threads(opt_nthreads) private(i__)
+#endif
+                        /* Loop for each column of C */
+                        for(i__ = 1; i__ <= lastc; ++i__)
+                        {
+                            /* W(i) =  C(firstv:lastv - 1,i)**T * v(firstv:lastv-1,1)  */
+                            work[i__] = aocl_blas_ddot(&lastv_eff, &v[istart], incv,
+                                                       &c__[i__ * *ldc + firstv], &c__1);
+                            /* W(i) += C(lastv,i) * v(lastv,1) = C(lastv,i) */
+                            work[i__] += c__[i__ * *ldc + lastv];
+                            doublereal d__2 = d__1 * work[i__];
+                            /* C(firstv:lastv - 1,i) := C(...) - tau * v(firstv:lastv-1,1) * W(i) */
+                            aocl_blas_daxpy(&lastv_eff, &d__2, &v[istart], incv,
+                                            &c__[i__ * *ldc + firstv], &c__1);
+                            /* C(lastv,i) := C(...) - tau * v(lastv,1) * W(i) = C(...) - tau * W(i)
+                             */
+                            c__[i__ * *ldc + lastv] += d__2;
+                        }
+                    }
+                    else
+                    {
+                        /* Process in a single call */
+                        /* W(1:lastc,1) =  C(firstv:lastv - 1,1:lastc)**T * v(firstv:lastv-1,1) */
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
+                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *incv > 0)
+                        {
+                            /* Use direct single threaded BLIS kernel */
+                            bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, lastv_eff,
+                                                 lastc, &c_b4, &c__[firstv + c_dim1], 1, *ldc,
+                                                 &v[istart], *incv, &c_b5, &work[1], c__1, NULL);
+                        }
+                        else
+                        {
+#ifdef FLA_OPENMP_MULTITHREADING
+#pragma omp teams num_teams(1) thread_limit(1)
+#endif
+                            {
+                                aocl_blas_dgemv("Transpose", &lastv_eff, &lastc, &c_b4,
+                                                &c__[firstv + c_dim1], ldc, &v[istart], incv, &c_b5,
+                                                &work[1], &c__1);
+                            }
+                        }
+#else
+                        aocl_blas_dgemv("Transpose", &lastv_eff, &lastc, &c_b4,
+                                        &c__[firstv + c_dim1], ldc, &v[istart], incv, &c_b5,
+                                        &work[1], &c__1);
+#endif
+                        /* w(1:lastc,1) += C(lastv,1:lastc)**T * v(lastv,1) = C(lastv,1:lastc)**T */
+                        aocl_blas_daxpy(&lastc, &c_b4, &c__[lastv + c_dim1], ldc, &work[1], &c__1);
+                        /* C(firstv:lastv-1,1:lastc) := C(...) - tau * v(firstv:lastv-1,1) *
+                         * w(1:lastc,1)**T */
+                        aocl_blas_dger(&lastv_eff, &lastc, &d__1, &v[istart], incv, &work[1], &c__1,
+                                       &c__[firstv + c_dim1], ldc);
+                        /* C(lastv,1:lastc) := C(...) - tau * v(lastv,1) * w(1:lastc,1)**T */
+                        /* = C(...) - tau * w(1:lastc,1)**T (since v(lastv)=1) */
+                        aocl_blas_daxpy(&lastc, &d__1, &work[1], &c__1, &c__[lastv + c_dim1], ldc);
+                    }
+                }
+#endif
             }
         }
     }
@@ -265,15 +398,20 @@ void aocl_lapack_dlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, doublerea
             if(lastv == firstv)
             {
                 d__1 = 1. - *tau;
+#ifndef FLA_ENABLE_AMD_OPT
                 aocl_blas_dscal(&lastc, &d__1, &c__[c_offset], &c__1);
+#else
+                fla_dscal(&lastc, &d__1, &c__[c_offset], &c__1);
+#endif
             }
             else
             {
+#ifndef FLA_ENABLE_AMD_OPT
                 /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
                 /* w(1:lastc,1) := C(1:lastc,1:lastv-1) * v(1:lastv-1,1) */
                 i__1 = lastv - firstv;
                 aocl_blas_dgemv("No transpose", &lastc, &i__1, &c_b4, &c__[firstv * c_dim1 + 1],
-                                ldc, &v[i__], incv, &c_b5, &work[1], &c__1);
+                                ldc, &v[istart], incv, &c_b5, &work[1], &c__1);
                 /* w(1:lastc,1) += C(1:lastc,lastv) * v(lastv,1) = C(1:las */
                 aocl_blas_daxpy(&lastc, &c_b4, &c__[lastv * c_dim1 + 1], &c__1, &work[1], &c__1);
                 /* C(1:lastc,1:lastv) := C(...) - tau * w(1:lastc,1) * v(1:lastv,1)**T */
@@ -284,11 +422,101 @@ void aocl_lapack_dlarf1l(char *side, aocl_int64_t *m, aocl_int64_t *n, doublerea
                 /* C(1:lastc,1:lastv-1) := C(...) - tau * w(1:lastc,1) * v */
                 i__1 = lastv - firstv;
                 d__1 = -(*tau);
-                aocl_blas_dger(&lastc, &i__1, &d__1, &work[1], &c__1, &v[i__], incv,
+                aocl_blas_dger(&lastc, &i__1, &d__1, &work[1], &c__1, &v[istart], incv,
                                &c__[firstv * c_dim1 + 1], ldc);
+#else
+                aocl_int64_t opt_nthreads = 1;
+                aocl_int64_t nb = 0;
+
+                fla_dlarf_right_tuning_params(lastc, lastv, &nb, &opt_nthreads);
+
+                const aocl_int64_t lastv_eff = lastv - firstv;
+                d__1 = -(*tau);
+
+                /* If nb is non zero, process in blocks */
+                if(nb && opt_nthreads > 1)
+                {
+                    /* The first panel will process starting unaligned elements
+                     * to ensure that all other panels aligned memory addresses
+                     */
+                    uint64_t unaligned_bytes
+                        = ((uint64_t)(c__ + c_offset)) % ((nb * sizeof(doublereal)));
+                    aocl_int64_t first_thread_rows
+                        = fla_min((nb - (unaligned_bytes / sizeof(doublereal))), lastc);
+                    aocl_int64_t panels
+                        = (!!first_thread_rows) + (((lastc - first_thread_rows) + (nb - 1)) / nb);
+
+#ifdef FLA_OPENMP_MULTITHREADING
+#pragma omp parallel for num_threads(opt_nthreads) private(i__)
+#endif
+                    for(i__ = 1; i__ <= panels; i__ += 1)
+                    {
+                        aocl_int64_t completed_rows
+                            = i__ == 1 ? 0 : (i__ - 2) * nb + first_thread_rows;
+                        aocl_int64_t current_block_size
+                            = i__ == 1 ? first_thread_rows : fla_min(nb, lastc - completed_rows);
+                        aocl_int64_t cur_idx = completed_rows + 1;
+
+                        /* w(1:lastc,1) += C(1:lastc,firstv:lastv-1) * v(firstv:lastv-1,1) */
+                        aocl_blas_dgemv("No transpose", &current_block_size, &lastv_eff, &c_b4,
+                                        &c__[(c_dim1 * firstv) + cur_idx], ldc, &v[istart], incv,
+                                        &c_b5, &work[cur_idx], &c__1);
+                        /* W(1:lastc,1) += C(1:lastc,lastv) * v(lastv,1) = C(1:lastc,lastv) */
+                        aocl_blas_daxpy(&current_block_size, &c_b4,
+                                        &c__[(c_dim1 * lastv) + cur_idx], &c__1, &work[cur_idx],
+                                        &c__1);
+                        /* C(1:lastc,firstv:lastv-1) := C(...) - tau * w(1:lastc,1) *
+                         * v(firstv:lastv-1,1)**T */
+                        aocl_blas_dger(&current_block_size, &lastv_eff, &d__1, &work[cur_idx],
+                                       &c__1, &v[istart], incv, &c__[(c_dim1 * firstv) + cur_idx],
+                                       ldc);
+                        /* C(1:lastc,lastv) := C(...) - tau * w(1:lastc,1) * v(lastv,1) =
+                         * C(1:lastc,lastv) - tau * w(1:lastc,1) */
+                        aocl_blas_daxpy(&current_block_size, &d__1, &work[cur_idx], &c__1,
+                                        &c__[(c_dim1 * lastv) + cur_idx], &c__1);
+                    }
+                }
+                else
+                {
+                    /* w(1:lastc,1) += C(1:lastc,firstv:lastv-1) * v(firstv:lastv-1,1) */
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
+                    aocl_fla_init();
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *incv > 0)
+                    {
+                        bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, lastc,
+                                                     lastv_eff, &c_b4, &c__[(c_dim1 * firstv) + 1],
+                                                     c__1, c_dim1, &v[istart], *incv, &c_b5,
+                                                     &work[1], c__1, NULL);
+                    }
+                    else
+                    {
+                        aocl_blas_dgemv("No transpose", &lastc, &lastv_eff, &c_b4,
+                                        &c__[(c_dim1 * firstv) + 1], ldc, &v[istart], incv, &c_b5,
+                                        &work[1], &c__1);
+                    }
+#else
+                    aocl_blas_dgemv("No transpose", &lastc, &lastv_eff, &c_b4,
+                                    &c__[(c_dim1 * firstv) + 1], ldc, &v[istart], incv, &c_b5,
+                                    &work[1], &c__1);
+#endif
+                    /* w(1:lastc,1) += C(1:lastc,lastv) * v(lastv,1) = C(1:lastc,lastv) */
+                    aocl_blas_daxpy(&lastc, &c_b4, &c__[(c_dim1 * lastv) + 1], &c__1, &work[1],
+                                    &c__1);
+
+                    /* C(1:lastc,firstv:lastv-1) := C(...) - w(1:lastc,1) * v(firstv:lastv-1,1)**T
+                     */
+                    aocl_blas_dger(&lastc, &lastv_eff, &d__1, &work[1], &c__1, &v[istart], incv,
+                                   &c__[(c_dim1 * firstv) + 1], ldc);
+
+                    /* C(1:lastc,lastv) = C(1:lastc,lastv) - tau * w(1:lastc,1) */
+                    aocl_blas_daxpy(&lastc, &d__1, &work[1], &c__1, &c__[(c_dim1 * lastv) + 1],
+                                    &c__1);
+                }
+#endif
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLARF1L */
 }

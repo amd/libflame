@@ -166,6 +166,7 @@ void aocl_lapack_clarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t lastc;
     aocl_int64_t lastv;
+    aocl_int64_t istart;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -225,6 +226,11 @@ void aocl_lapack_clarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex 
             --lastv;
             i__ -= *incv;
         }
+
+        /* If incv < 0, zeros at the end of v appear at the start address.
+           V is adjusted to point to the last non-zero element. */
+        istart = *incv < 0 ? i__ : *incv + 1;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -256,7 +262,7 @@ void aocl_lapack_clarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex 
             /* w(1:lastc,1) := C(2:lastv,1:lastc)**H * v(2:lastv,1) */
             i__1 = lastv - 1;
             aocl_blas_cgemv("Conjugate transpose", &i__1, &lastc, &c_b1, &c__[c_dim1 + 2], ldc,
-                            &v[*incv + 1], incv, &c_b2, &work[1], &c__1);
+                            &v[istart], incv, &c_b2, &work[1], &c__1);
             /* w(1:lastc,1) += v(1,1) * C(1,1:lastc)**H */
             i__1 = lastc;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -287,7 +293,7 @@ void aocl_lapack_clarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex 
             i__1 = lastv - 1;
             q__1.real = -tau->real;
             q__1.imag = -tau->imag; // , expr subst
-            aocl_blas_cgerc(&i__1, &lastc, &q__1, &v[*incv + 1], incv, &work[1], &c__1,
+            aocl_blas_cgerc(&i__1, &lastc, &q__1, &v[istart], incv, &work[1], &c__1,
                             &c__[c_dim1 + 2], ldc);
         }
     }
@@ -306,7 +312,7 @@ void aocl_lapack_clarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex 
             /* w(1:lastc,1) := C(1:lastc,2:lastv) * v(2:lastv,1) */
             i__1 = lastv - 1;
             aocl_blas_cgemv("No transpose", &lastc, &i__1, &c_b1, &c__[(c_dim1 << 1) + 1], ldc,
-                            &v[*incv + 1], incv, &c_b2, &work[1], &c__1);
+                            &v[istart], incv, &c_b2, &work[1], &c__1);
             /* w(1:lastc,1) += v(1,1) * C(1:lastc,1) */
             aocl_blas_caxpy(&lastc, &c_b1, &c__[c_offset], &c__1, &work[1], &c__1);
             /* C(1:lastc,1) += - tau * v(1,1) * w(1:lastc,1) */
@@ -317,7 +323,7 @@ void aocl_lapack_clarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex 
             i__1 = lastv - 1;
             q__1.real = -tau->real;
             q__1.imag = -tau->imag; // , expr subst
-            aocl_blas_cgerc(&lastc, &i__1, &q__1, &work[1], &c__1, &v[*incv + 1], incv,
+            aocl_blas_cgerc(&lastc, &i__1, &q__1, &work[1], &c__1, &v[istart], incv,
                             &c__[(c_dim1 << 1) + 1], ldc);
         }
     }

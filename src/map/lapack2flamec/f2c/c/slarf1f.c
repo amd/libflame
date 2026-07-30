@@ -128,7 +128,7 @@ static aocl_int64_t c__1 = 1;
 /* Subroutine */
 /** Generated wrapper function */
 void slarf1f_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, aocl_int_t *incv, real *tau,
-            real *c__, aocl_int_t *ldc, real *work)
+              real *c__, aocl_int_t *ldc, real *work)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slarf1f(side, m, n, v, incv, tau, c__, ldc, work);
@@ -143,7 +143,7 @@ void slarf1f_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, aocl_int_t *inc
 }
 
 void aocl_lapack_slarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, aocl_int64_t *incv,
-                       real *tau, real *c__, aocl_int64_t *ldc, real *work)
+                         real *tau, real *c__, aocl_int64_t *ldc, real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarf1f inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
@@ -158,6 +158,7 @@ void aocl_lapack_slarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t lastc;
     aocl_int64_t lastv;
+    aocl_int64_t istart;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -212,6 +213,11 @@ void aocl_lapack_slarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
             --lastv;
             i__ -= *incv;
         }
+
+        /* If incv < 0, zeros at the end of v appear at the start address.
+           V is adjusted to point to the last non-zero element. */
+        istart = *incv < 0 ? i__ : *incv + 1;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -223,10 +229,10 @@ void aocl_lapack_slarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
             lastc = aocl_lapack_ilaslr(m, &lastv, &c__[c_offset], ldc);
         }
     }
-	if (lastc == 0)
+    if(lastc == 0)
     {
-	    AOCL_DTL_TRACE_LOG_EXIT
-	    return;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Note that lastc.eq.0 renders the BLAS operations null;
     no special */
@@ -234,21 +240,21 @@ void aocl_lapack_slarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
     if(applyleft)
     {
         /* Form H * C */
-        if(lastv == 1 )
+        if(lastv == 1)
         {
             /*  C(1,1:lastc) := ( 1 - tau ) * C(1,1:lastc) */
-	        r__1 = 1.f - *tau;
-	        aocl_blas_sscal(&lastc, &r__1, &c__[c_offset], ldc);
-	    }
-		else
-		{
+            r__1 = 1.f - *tau;
+            aocl_blas_sscal(&lastc, &r__1, &c__[c_offset], ldc);
+        }
+        else
+        {
             /*  w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1) */
-	        i__1 = lastv - 1;
-	        aocl_blas_sgemv("Transpose", &i__1, &lastc, &c_b4, &c__[c_dim1 + 2], ldc,
-		                    &v[*incv + 1], incv, &c_b5, &work[1], &c__1);
+            i__1 = lastv - 1;
+            aocl_blas_sgemv("Transpose", &i__1, &lastc, &c_b4, &c__[c_dim1 + 2], ldc, &v[istart],
+                            incv, &c_b5, &work[1], &c__1);
 
             /* w(1:lastc,1) += v(1,1) * C(1,1:lastc)**T */
-	        aocl_blas_saxpy(&lastc, &c_b4, &c__[c_offset], ldc, &work[1], &c__1);
+            aocl_blas_saxpy(&lastc, &c_b4, &c__[c_offset], ldc, &work[1], &c__1);
 
             /*  C(1, 1:lastc) += - tau * v(1,1) * w(1:lastc,1)**T */
             r__1 = -(*tau);
@@ -257,29 +263,29 @@ void aocl_lapack_slarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
             /* C(2:lastv,1:lastc) += - tau * v(2:lastv,1) * w(1:lastc,1)**T */
             i__1 = lastv - 1;
             r__1 = -(*tau);
-            aocl_blas_sger(&i__1, &lastc, &r__1, &v[*incv + 1], incv, &work[1], &c__1,
-		                   &c__[c_dim1 + 2], ldc);
-	    }
+            aocl_blas_sger(&i__1, &lastc, &r__1, &v[istart], incv, &work[1], &c__1,
+                           &c__[c_dim1 + 2], ldc);
+        }
     }
     else
     {
         /* Form C * H */
-        if(lastv == 1 )
+        if(lastv == 1)
         {
-		    /* C(1:lastc,1) := ( 1 - tau ) * C(1:lastc,1) */
-	        r__1 = 1.f - *tau;
-	        aocl_blas_sscal(&lastc, &r__1, &c__[c_offset], &c__1);
-	    }
-		else
-		{
+            /* C(1:lastc,1) := ( 1 - tau ) * C(1:lastc,1) */
+            r__1 = 1.f - *tau;
+            aocl_blas_sscal(&lastc, &r__1, &c__[c_offset], &c__1);
+        }
+        else
+        {
 
             /*  w(1:lastc,1) := C(1:lastc,2:lastv) * v(2:lastv,1) */
-	        i__1 = lastv - 1;
-	        aocl_blas_sgemv("No transpose", &lastc, &i__1, &c_b4, &c__[(c_dim1 << 1) +
-		                     1], ldc, &v[*incv + 1], incv, &c_b5, &work[1], &c__1);
+            i__1 = lastv - 1;
+            aocl_blas_sgemv("No transpose", &lastc, &i__1, &c_b4, &c__[(c_dim1 << 1) + 1], ldc,
+                            &v[istart], incv, &c_b5, &work[1], &c__1);
 
             /* w(1:lastc,1) += v(1,1) * C(1:lastc,1) */
-	        aocl_blas_saxpy(&lastc, &c_b4, &c__[c_offset], &c__1, &work[1], &c__1);
+            aocl_blas_saxpy(&lastc, &c_b4, &c__[c_offset], &c__1, &work[1], &c__1);
 
             /* C(1:lastc,1) += - tau * v(1,1) * w(1:lastc,1) */
             r__1 = -(*tau);
@@ -287,10 +293,10 @@ void aocl_lapack_slarf1f(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, 
 
             /* C(1:lastc,2:lastv) += - tau * w(1:lastc,1) * v(2:lastv)**T */
             i__1 = lastv - 1;
-	        r__1 = -(*tau);
-            aocl_blas_sger(&lastc, &i__1, &r__1, &work[1], &c__1, &v[*incv + 1], incv,
-		                    &c__[(c_dim1 << 1) + 1], ldc);
-	    }
+            r__1 = -(*tau);
+            aocl_blas_sger(&lastc, &i__1, &r__1, &work[1], &c__1, &v[istart], incv,
+                           &c__[(c_dim1 << 1) + 1], ldc);
+        }
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

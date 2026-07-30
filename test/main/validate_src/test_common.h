@@ -635,4 +635,9 @@ void init_padding(integer datatype, integer m, integer n, void *A, integer lda);
    Same column-major layout contract as init_padding (see note above). */
 double check_padding(integer datatype, integer m, integer n, void *A, integer lda);
 
+/**
+ * Get pointer to the i-th element of vector A with increment inca.
+ * i is 0-based index.
+ */
+void *get_v_ptr(integer datatype, void *A, integer m, integer i, integer inca);
 #endif // TEST_COMMON_H

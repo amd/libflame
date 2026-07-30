@@ -6,6 +6,8 @@
 #include "test_lapack.h"
 #include "test_routines.h"
 
+#include <stddef.h>
+
 // Global variables.
 int n_threads = 1;
 
@@ -69,8 +71,9 @@ fla_stat_info_t AVAILABLE_STATS[FLA_NUM_STATS]
 int fla_check_cmd_config_dir(int argc, char **argv);
 
 #if AOCL_FLA_SET_PROGRESS_ENABLE == 1
-int aocl_fla_progress(const char *const api, const aocl_int64_t lenapi, const aocl_int64_t *const progress,
-                      const aocl_int64_t *const current_thread, const aocl_int64_t *const total_threads)
+int aocl_fla_progress(const char *const api, const aocl_int64_t lenapi,
+                      const aocl_int64_t *const progress, const aocl_int64_t *const current_thread,
+                      const aocl_int64_t *const total_threads)
 {
     printf("In AOCL FLA  Progress thread  %" FT_IS ", at API  %s, progress  %" FT_IS
            " total threads= %" FT_IS "\n",
@@ -80,8 +83,9 @@ int aocl_fla_progress(const char *const api, const aocl_int64_t lenapi, const ao
 #endif
 
 #if AOCL_FLA_SET_PROGRESS_ENABLE == 2
-int test_progress(const char *const api, const aocl_int64_t lenapi, const aocl_int64_t *const progress,
-                  const aocl_int64_t *const current_thread, const aocl_int64_t *const total_threads)
+int test_progress(const char *const api, const aocl_int64_t lenapi,
+                  const aocl_int64_t *const progress, const aocl_int64_t *const current_thread,
+                  const aocl_int64_t *const total_threads)
 {
     printf("In AOCL Progress thread  %" FT_IS ", at API  %s, progress %" FT_IS
            " total threads= %" FT_IS " \n",
@@ -1517,7 +1521,7 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
             datatype = params->datatype[dt];
             datatype_char = params->datatype_char[dt];
             /* Skip scomplex and double scomplex tests of not supported APIs */
-            if(!FLA_SKIP_TEST(datatype_char, func_str))
+            if(!fla_skip_test(func_str, datatype_char))
             {
                 /* Loop over the requested problem sizes */
                 for(p_cur = p_first, q_cur = q_first; (p_cur <= p_max && q_cur <= q_max);
@@ -2128,7 +2132,8 @@ integer fla_parse_test_mode_arg(integer argc, char **argv, test_params_t *params
             {
                 printf("\nError: Invalid test-mode argument: %s\n", argv[i]);
                 printf("       Available modes are:\n");
-                printf("         default     : API-specific initialization + validation (default)\n");
+                printf(
+                    "         default     : API-specific initialization + validation (default)\n");
                 printf("         perf        : API-specific initialization + no validation\n");
                 printf("         random      : Random initialization + validation\n");
                 printf("         random-perf : Random initialization + no validation\n");
@@ -2372,7 +2377,8 @@ void fla_test_runtime_ctx_free(test_params_t *params)
  * If norm_base <= 0, then residual is 0.
  *
  * @param[in] datatype    Data type of the computation (FLOAT, DOUBLE, COMPLEX, or DOUBLE_COMPLEX)
- * @param[in] eps_type    Type of epsilon to use ('P' or 'p' for precision epsilon, otherwise standard epsilon ('E' or 'e'))
+ * @param[in] eps_type    Type of epsilon to use ('P' or 'p' for precision epsilon, otherwise
+ * standard epsilon ('E' or 'e'))
  * @param[in] norm        The computed norm (e.g., norm of difference between expected and actual)
  * @param[in] norm_base   The base norm (e.g., norm of original matrix)
  * @param[in] m           Problem dimension (used as scaling factor)
@@ -2381,14 +2387,16 @@ void fla_test_runtime_ctx_free(test_params_t *params)
  * @return The normalized residual value. Returns 0.0 if m <= 0 or norm_base <= safe_min
  *
  * @note This function selects appropriate epsilon and safe minimum values based on datatype
- * @note For FLOAT/COMPLEX types, uses single precision constants; for DOUBLE/DOUBLE_COMPLEX, uses double precision
+ * @note For FLOAT/COMPLEX types, uses single precision constants; for DOUBLE/DOUBLE_COMPLEX, uses
+ * double precision
  */
-double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params)
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base,
+                            integer m, void *params)
 {
     double safe_min, eps;
 
     /* Early return for invalid dimension */
-    if (m <= 0)
+    if(m <= 0)
     {
         return 0.;
     }
@@ -2420,15 +2428,14 @@ double fla_compute_residual(integer datatype, char eps_type, double norm, double
     }
 
     /* Check if norm_base is valid for division */
-    if (norm_base <= safe_min)
+    if(norm_base <= safe_min)
     {
         return 0.;
     }
-    
+
     /* Compute residual = norm / (norm_base * eps * m) */
     return (norm / norm_base) / (eps * m);
 }
-
 
 /**
  * @brief Compute residual normalized by matrix norm.
@@ -2445,7 +2452,8 @@ double fla_compute_residual(integer datatype, char eps_type, double norm, double
  * @return The normalized residual value. Returns 0.0 if norm_a <= safe_min
  *
  * @note This function selects appropriate safe minimum value based on datatype
- * @note For FLOAT/COMPLEX types, uses single precision safe_min; for DOUBLE/DOUBLE_COMPLEX, uses double precision
+ * @note For FLOAT/COMPLEX types, uses single precision safe_min; for DOUBLE/DOUBLE_COMPLEX, uses
+ * double precision
  */
 double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params)
 {
@@ -2468,4 +2476,44 @@ double fla_compute_norm_based_residual(integer datatype, double norm, double nor
 
     /* Compute residual = norm / norm_a */
     return (norm / norm_a);
+}
+
+FLA_Bool fla_skip_test(char *ops, char precision)
+{
+    integer skip_list_count = sizeof(skip_operations_list) / sizeof(SKIP_OPERATIONS);
+
+    integer field_offset = -1;
+
+    switch(toupper(precision))
+    {
+        case 'S':
+            field_offset = offsetof(SKIP_OPERATIONS, skip_single);
+            break;
+        case 'D':
+            field_offset = offsetof(SKIP_OPERATIONS, skip_double);
+            break;
+        case 'C':
+            field_offset = offsetof(SKIP_OPERATIONS, skip_scomplex);
+            break;
+        case 'Z':
+            field_offset = offsetof(SKIP_OPERATIONS, skip_dcomplex);
+            break;
+        default:
+            printf("Invalid precision '%c' provided for skip test check.\n", precision);
+            return FALSE;
+    }
+
+    for(integer i = 0; i < skip_list_count; i++)
+    {
+        if(same_string(ops, skip_operations_list[i].ops))
+        {
+            char *skip_field_ptr = (char *)&skip_operations_list[i] + field_offset;
+            if(*skip_field_ptr == 1)
+            {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
 }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- *     Modifications Copyright (c) 2024-2026 Advanced Micro Devices, Inc.  All rights reserved.
+ *     Modifications Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
 #if FLA_ENABLE_AOCL_BLAS
@@ -160,11 +160,10 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
     /* Local variables */
     aocl_int64_t i__;
     logical applyleft;
+    aocl_int64_t istart;
 #ifdef FLA_ENABLE_AMD_OPT
     extern void fla_dlarf_small_incv1_simd(aocl_int64_t lastv, aocl_int64_t lastc, double *c__,
                                            aocl_int64_t ldc, double *v, double tau, double *work);
-#if !FLA_ENABLE_AOCL_BLAS
-#endif
     void fla_dlarf_left_tuning_params(aocl_int64_t m, aocl_int64_t n, FLA_Bool * use_blocked_flag,
                                       aocl_int64_t * nthreads);
     void fla_dlarf_right_tuning_params(aocl_int64_t m, aocl_int64_t n, aocl_int64_t * block_size,
@@ -228,6 +227,11 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
             --lastv;
             i__ -= *incv;
         }
+
+        /* If incv < 0, zeros at the end of v appear at the start address.
+           V is adjusted to point to the last non-zero element. */
+        istart = *incv < 0 ? i__ : 1;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -251,11 +255,11 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
 
 #ifndef FLA_ENABLE_AMD_OPT
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-            aocl_blas_dgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+            aocl_blas_dgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[istart], incv,
                             &c_b5, &work[1], &c__1);
 
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
-            aocl_blas_dger(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
+            aocl_blas_dger(&lastv, &lastc, &d__1, &v[istart], incv, &work[1], &c__1, &c__[c_offset],
                            ldc);
 #else
             /* Get threshold sizes to take optimized path*/
@@ -270,7 +274,8 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
             if(min_lastc_lastv && *incv == c__1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
             {
                 /* Call optimized routine */
-                fla_dlarf_small_incv1_simd(lastv, lastc, c__, *ldc, v, d__1, work);
+                fla_dlarf_small_incv1_simd(lastv, lastc, &c__[c_offset], *ldc, &v[1], d__1,
+                                           &work[1]);
             }
             else
             {
@@ -292,10 +297,11 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
                     {
                         /* W(i) =  C(1:lastv,i)**T * v(1:lastv,1)  */
                         work[i__]
-                            = aocl_blas_ddot(&lastv, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
+                            = aocl_blas_ddot(&lastv, &v[istart], incv, &c__[i__ * *ldc + 1], &c__1);
                         /* C(1:lastv,i) = C(1:lastv,i) - v(1:lastv,1) * -tau * W(i) */
                         doublereal d__2 = -(*tau) * work[i__];
-                        aocl_blas_daxpy(&lastv, &d__2, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
+                        aocl_blas_daxpy(&lastv, &d__2, &v[istart], incv, &c__[i__ * *ldc + 1],
+                                        &c__1);
                     }
                 }
                 else
@@ -307,8 +313,8 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
                     {
                         /* Use direct single threaded BLIS kernel */
                         bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, lastv, lastc, &c_b4,
-                                             &c__[c_offset], 1, *ldc, &v[1], *incv, &c_b5, &work[1],
-                                             c__1, NULL);
+                                             &c__[c_offset], 1, *ldc, &v[istart], *incv, &c_b5,
+                                             &work[1], c__1, NULL);
                     }
                     else
                     {
@@ -317,15 +323,15 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
 #endif
                         {
                             aocl_blas_dgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc,
-                                            &v[1], incv, &c_b5, &work[1], &c__1);
+                                            &v[istart], incv, &c_b5, &work[1], &c__1);
                         }
                     }
 #else
-                    aocl_blas_dgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1],
-                                    incv, &c_b5, &work[1], &c__1);
+                    aocl_blas_dgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc,
+                                    &v[istart], incv, &c_b5, &work[1], &c__1);
 #endif
                     /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
-                    aocl_blas_dger(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1,
+                    aocl_blas_dger(&lastv, &lastc, &d__1, &v[istart], incv, &work[1], &c__1,
                                    &c__[c_offset], ldc);
                 }
             }
@@ -339,11 +345,11 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
         {
 #ifndef FLA_ENABLE_AMD_OPT
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                            &c_b5, &work[1], &c__1);
+            aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[istart],
+                            incv, &c_b5, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             d__1 = -(*tau);
-            aocl_blas_dger(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
+            aocl_blas_dger(&lastc, &lastv, &d__1, &work[1], &c__1, &v[istart], incv, &c__[c_offset],
                            ldc);
 #else
             aocl_int64_t opt_nthreads = 1;
@@ -377,10 +383,10 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
                     aocl_int64_t cur_idx = completed_rows + 1;
                     /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
                     aocl_blas_dgemv("No transpose", &current_block_size, &lastv, &c_b4,
-                                    &c__[c_dim1 + cur_idx], ldc, &v[1], incv, &c_b5, &work[cur_idx],
-                                    &c__1);
-                    aocl_blas_dger(&current_block_size, &lastv, &d__1, &work[cur_idx], &c__1, &v[1],
-                                   incv, &c__[c_dim1 + cur_idx], ldc);
+                                    &c__[c_dim1 + cur_idx], ldc, &v[istart], incv, &c_b5,
+                                    &work[cur_idx], &c__1);
+                    aocl_blas_dger(&current_block_size, &lastv, &d__1, &work[cur_idx], &c__1,
+                                   &v[istart], incv, &c__[c_dim1 + cur_idx], ldc);
                 }
             }
             else
@@ -391,22 +397,22 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
                 if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *incv > 0)
                 {
                     bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, lastc, lastv,
-                                                 &c_b4, &c__[c_offset], c__1, c_dim1, &v[1], *incv,
-                                                 &c_b5, &work[1], c__1, NULL);
+                                                 &c_b4, &c__[c_offset], c__1, c_dim1, &v[istart],
+                                                 *incv, &c_b5, &work[1], c__1, NULL);
                 }
                 else
                 {
                     aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc,
-                                    &v[1], incv, &c_b5, &work[1], &c__1);
+                                    &v[istart], incv, &c_b5, &work[1], &c__1);
                 }
 #else
-                aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1],
-                                incv, &c_b5, &work[1], &c__1);
+                aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc,
+                                &v[istart], incv, &c_b5, &work[1], &c__1);
 #endif
                 /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
                 d__1 = -(*tau);
-                aocl_blas_dger(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
-                               ldc);
+                aocl_blas_dger(&lastc, &lastv, &d__1, &work[1], &c__1, &v[istart], incv,
+                               &c__[c_offset], ldc);
             }
 #endif /* FLA_ENABLE_AMD_OPT */
         }

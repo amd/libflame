@@ -619,6 +619,43 @@ void *get_m_ptr(integer datatype, void *A, integer M, integer N, integer LDA)
     return mat;
 }
 
+/**
+ * Returns a pointer to the i-th element of a vector, taking into account the increment and vector
+ * length i is 0th indexed
+ */
+void *get_v_ptr(integer datatype, void *A, integer m, integer i, integer inca)
+{
+    void *vec = NULL;
+
+    integer offset = inca > 0 ? i * inca : (1 - m + i) * inca;
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            vec = ((float *)A) + offset;
+            break;
+        }
+        case DOUBLE:
+        {
+            vec = ((double *)A) + offset;
+            break;
+        }
+        case COMPLEX:
+        {
+            vec = ((scomplex *)A) + offset;
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            vec = ((dcomplex *)A) + offset;
+            break;
+        }
+    }
+
+    return vec;
+}
+
 /* free matrix */
 void free_matrix(void *A)
 {
@@ -7011,8 +7048,7 @@ double compare_vector(integer datatype, integer vect_len, void *A, integer inca,
 
     for(i = 0; i < vect_len; i++)
     {
-        const unsigned char *ea
-            = pa + ((size_t)i * (size_t)inca + (size_t)(offset_A - 1)) * esize;
+        const unsigned char *ea = pa + ((size_t)i * (size_t)inca + (size_t)(offset_A - 1)) * esize;
         const unsigned char *eb = pb + (size_t)i * (size_t)incb * esize;
         if(memcmp(ea, eb, esize) != 0)
         {

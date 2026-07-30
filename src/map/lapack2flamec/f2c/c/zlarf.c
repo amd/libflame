@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
+    Modifications Copyright (C) 2019-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 /* ../netlib/zlarf.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
@@ -134,8 +134,8 @@ static aocl_int64_t c__1 = 1;
 /* ===================================================================== */
 /* Subroutine */
 /** Generated wrapper function */
-void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *incv,
-            dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
+void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *incv, dcomplex *tau,
+            dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_zlarf(side, m, n, v, incv, tau, c__, ldc, work);
@@ -150,8 +150,8 @@ void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *i
 }
 
 void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
-                       aocl_int64_t *incv, dcomplex *tau, dcomplex *c__,
-                       aocl_int64_t *ldc, dcomplex *work)
+                       aocl_int64_t *incv, dcomplex *tau, dcomplex *c__, aocl_int64_t *ldc,
+                       dcomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
@@ -166,10 +166,10 @@ void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v
     logical applyleft;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t lastc;
+    aocl_int64_t istart;
 #if FLA_ENABLE_AMD_OPT
     void fla_zlarf_left_invc1_opt(aocl_int64_t m, aocl_int64_t n, dcomplex * a_buff,
-                                  aocl_int64_t ldr, dcomplex * v, dcomplex * ntau,
-                                  dcomplex * work);
+                                  aocl_int64_t ldr, dcomplex * v, dcomplex * ntau, dcomplex * work);
 #endif
     aocl_int64_t lastv;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -230,6 +230,11 @@ void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v
             --lastv;
             i__ -= *incv;
         }
+
+        /* If incv < 0, zeros at the end of v appear at the start address.
+           V is adjusted to point to the last non-zero element. */
+        istart = *incv < 0 ? i__ : 1;
+
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
@@ -256,25 +261,25 @@ void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v
             {
                 aocl_fla_init();
                 /* Apply optimised kernel */
-                fla_zlarf_left_invc1_opt(*m, *n, c__, *ldc, v, &z__1, work);
+                fla_zlarf_left_invc1_opt(*m, *n, c__, *ldc, &v[istart - 1], &z__1, work);
             }
             else
             {
                 /* Original code */
                 /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
                 aocl_blas_zgemv("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc,
-                                &v[1], incv, &c_b2, &work[1], &c__1);
+                                &v[istart], incv, &c_b2, &work[1], &c__1);
                 /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
-                aocl_blas_zgerc(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
-                                ldc);
+                aocl_blas_zgerc(&lastv, &lastc, &z__1, &v[istart], incv, &work[1], &c__1,
+                                &c__[c_offset], ldc);
             }
 #else
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
             aocl_blas_zgemv("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc,
-                            &v[1], incv, &c_b2, &work[1], &c__1);
+                            &v[istart], incv, &c_b2, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
-            aocl_blas_zgerc(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
-                            ldc);
+            aocl_blas_zgerc(&lastv, &lastc, &z__1, &v[istart], incv, &work[1], &c__1,
+                            &c__[c_offset], ldc);
 #endif
         }
     }
@@ -284,13 +289,13 @@ void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            aocl_blas_zgemv("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv,
-                            &c_b2, &work[1], &c__1);
+            aocl_blas_zgemv("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[istart],
+                            incv, &c_b2, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H */
             z__1.real = -tau->real;
             z__1.imag = -tau->imag; // , expr subst
-            aocl_blas_zgerc(&lastc, &lastv, &z__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
-                            ldc);
+            aocl_blas_zgerc(&lastc, &lastv, &z__1, &work[1], &c__1, &v[istart], incv,
+                            &c__[c_offset], ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

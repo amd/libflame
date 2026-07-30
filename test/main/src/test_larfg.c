@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -16,8 +16,7 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, void *tau,
                        integer interfacetype, test_params_t *params);
-void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
-                  void *tau);
+void invoke_larfg(integer datatype, integer *n, void *alpha, void *x, integer *incx, void *tau);
 
 void fla_test_larfg(integer argc, char **argv, test_params_t *params)
 {
@@ -123,7 +122,7 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
     n = p_cur;
 
     inc_x = fla_i_abs(&incx);
-    x_length = (1 + (n - 2) * inc_x) + inc_x;
+    x_length = (1 + (n - 1) * inc_x);
     create_vector(datatype, &x, x_length);
     create_vector(datatype, &tau, 1);
 
@@ -205,7 +204,7 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
     integer x_length;
     double exe_time;
     integer inc_x = fla_i_abs(&incx);
-    x_length = (1 + (n_A - 2) * inc_x) + inc_x;
+    x_length = (1 + (n_A - 1) * inc_x);
     void *x_save;
     create_vector(datatype, &x_save, x_length);
 
@@ -219,7 +218,8 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
         {
             exe_time = fla_test_clock();
 
-            invoke_lapacke_larfg(datatype, &n_A, x_save, &incx, &inc_x, tau);
+            invoke_lapacke_larfg(datatype, &n_A, get_v_ptr(datatype, x_save, n_A, 0, inc_x),
+                                 get_v_ptr(datatype, x_save, n_A, 1, inc_x), &incx, tau);
 
             exe_time = fla_test_clock() - exe_time;
         }
@@ -227,7 +227,8 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
         else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP larfg API */
         {
             exe_time = fla_test_clock();
-            invoke_cpp_larfg(datatype, &n_A, x_save, &incx, &inc_x, tau);
+            invoke_cpp_larfg(datatype, &n_A, get_v_ptr(datatype, x_save, n_A, 0, inc_x),
+                             get_v_ptr(datatype, x_save, n_A, 1, inc_x), &incx, tau);
             exe_time = fla_test_clock() - exe_time;
         }
 #endif
@@ -235,7 +236,8 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
         {
             exe_time = fla_test_clock();
 
-            invoke_larfg(datatype, &n_A, x_save, &incx, &inc_x, tau);
+            invoke_larfg(datatype, &n_A, get_v_ptr(datatype, x_save, n_A, 0, inc_x),
+                         get_v_ptr(datatype, x_save, n_A, 1, inc_x), &incx, tau);
 
             exe_time = fla_test_clock() - exe_time;
         }
@@ -252,37 +254,28 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
 }
 
 /* larfg API call interface */
-void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
-                  void *tau)
+void invoke_larfg(integer datatype, integer *n, void *alpha, void *x, integer *incx, void *tau)
 {
     switch(datatype)
     {
         case FLOAT:
         {
-            /* First value of the x vector is treated as Alpha -> x[0] */
-            float *x_ptr = x;
-            fla_lapack_slarfg(n, &x_ptr[0], &x_ptr[*abs_incx], incx, tau);
+            fla_lapack_slarfg(n, alpha, x, incx, tau);
             break;
         }
         case DOUBLE:
         {
-            /* First value of the x vector is treated as Alpha -> x[0] */
-            double *x_ptr = x;
-            fla_lapack_dlarfg(n, &x_ptr[0], &x_ptr[*abs_incx], incx, tau);
+            fla_lapack_dlarfg(n, alpha, x, incx, tau);
             break;
         }
         case COMPLEX:
         {
-            /* First value of the x vector is treated as Alpha -> x[0] */
-            scomplex *x_ptr = x;
-            fla_lapack_clarfg(n, &x_ptr[0], &x_ptr[*abs_incx], incx, tau);
+            fla_lapack_clarfg(n, alpha, x, incx, tau);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            /* First value of the x vector is treated as Alpha -> x[0] */
-            dcomplex *x_ptr = x;
-            fla_lapack_zlarfg(n, &x_ptr[0], &x_ptr[*abs_incx], incx, tau);
+            fla_lapack_zlarfg(n, alpha, x, incx, tau);
             break;
         }
     }

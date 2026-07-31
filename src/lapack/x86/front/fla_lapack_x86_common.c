@@ -144,7 +144,37 @@ int fla_dgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64
     }
     return 0;
 }
-/* Double QR (DGEQRF) for small sizes */
+/* Single QR (SGEQRF) for small sizes */
+int fla_sgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
+                     real *work)
+{
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        fla_sgeqrf_small_avx2(m, n, a, lda, tau, work);
+    }
+    return 0;
+}
+/* Single complex QR (CGEQRF) for small sizes */
+int fla_cgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau,
+                     scomplex *work)
+{
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        fla_cgeqrf_small_ker(m, n, a, lda, tau, work);
+    }
+    return 0;
+}
+/* Double complex QR (ZGEQRF) for small sizes */
+int fla_zgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *tau,
+                     dcomplex *work)
+{
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        fla_zgeqrf_small_ker(m, n, a, lda, tau, work);
+    }
+    return 0;
+}
+/* Double LQ (DGELQF) for small sizes */
 int fla_dgelqf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
                      doublereal *tau, doublereal *work)
 {

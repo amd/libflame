@@ -46,7 +46,7 @@
          #define TLS_CLASS_SPEC
       #endif
    #else
-     #define TLS_CLASS_SPEC __thread 
+     #define TLS_CLASS_SPEC __thread
    #endif
 #else
    #define TLS_CLASS_SPEC
@@ -237,19 +237,30 @@
 #define FLA_BIDIAG_INNER_TO_OUTER_B_RATIO  (0.25)
 #define FLA_CAQR_INNER_TO_OUTER_B_RATIO    (0.25)
 
-// Matrix size thresholds for choosing unbloked non-FLA variant of QR for
-// small matrices
+// Matrix size thresholds for choosing the unblocked small-QR kernel
 #define FLA_GEQRF_STHRESH (32)
+#define FLA_CGEQRF_STHRESH (48)
+#define FLA_ZGEQRF_STHRESH (22)
 #define FLA_GEQRF_BLOCK_SIZE (32)
-
-// Matrix size thresholds for choosing multithreaded QR for large matrices
-#define FLA_DGEQRF_MT_LARGE_M_THRESH (128)
-#define FLA_DGEQRF_MT_LARGE_N_THRESH (128)
-#define FLA_DGEQRF_MT_LARGE_PANEL_SIZE (16)
-#define FLA_DGEQRF_MT_THRESHOLD_8_THREADS (15848840)
 
 // Cache line size in bytes, used for memory alignment
 #define FLA_CACHE_LINE_SIZE_BYTES (64)
+
+// Matrix size thresholds for choosing multithreaded QR for large matrices
+#define FLA_GEQRF_MT_LARGE_M_THRESH (128)
+#define FLA_GEQRF_MT_LARGE_N_THRESH (128)
+#define FLA_GEQRF_MT_LARGE_PANEL_SIZE (16)
+
+#define FLA_GEQRF_MT_THRESHOLD_8_THREADS_REAL (15848840)
+#define FLA_CGEQRF_MT_THRESHOLD_8_THREADS (1500000)
+#define FLA_ZGEQRF_MT_THRESHOLD_8_THREADS (4000000)
+
+#define FLA_SGEQRF_MT_MIN_ELEMS (50000)
+#define FLA_GEQRF_MT_HUGE_MIN_THREADS (32)
+#define FLA_GEQRF_MT_WIDE_ASPECT (2)
+#define FLA_GEQRF_MT_WIDE_MIN_ELEMS (1000000)
+#define FLA_CGEQRF_MT_HUGE_THRESH (9000000)
+#define FLA_ZGEQRF_MT_HUGE_THRESH (25000000)
 
 // Matrix size thresholds for choosing transposed QR for LQ
 #define FLA_DELQF_TRAN_THRESH (1280)

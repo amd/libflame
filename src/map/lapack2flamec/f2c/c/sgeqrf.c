@@ -6,6 +6,8 @@
  * the libraries: -lf2c -lm (in that order) */
 
 #include "FLA_f2c.h" /* Table of constant values */
+#include "fla_lapack_x86_common.h"
+#include "fla_geqrf_dispatch.h"
 #if !FLA_ENABLE_AMD_OPT
 static aocl_int64_t c__1 = 1;
 #endif
@@ -16,6 +18,15 @@ static aocl_int64_t c__2 = 2;
 extern int fla_thread_get_num_threads();
 
 integer get_block_size_sgeqrf(aocl_int64_t *m, aocl_int64_t *n);
+
+#if FLA_ENABLE_AMD_OPT
+static void sgeqrf_mt_large(aocl_int64_t gm, aocl_int64_t gn, real *a, aocl_int64_t lda, real *tau,
+                            real *work, aocl_int64_t nthreads, aocl_int64_t *info);
+static integer sgeqrf_mt_large_num_threads(aocl_int64_t gm, aocl_int64_t gn);
+static integer sgeqrf_mt_large_lwork(aocl_int64_t gm, aocl_int64_t gn, aocl_int64_t num_threads);
+void sgeqr2_fla(aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *, real *, real *,
+                aocl_int64_t *);
+#endif
 
 /* > \brief \b SGEQRF */
 /* =========== DOCUMENTATION =========== */
@@ -210,6 +221,17 @@ void sgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, re
 #else
     nb = aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
 #endif
+    lwkopt = *n * nb;
+#if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
+    /* If the matrix is large, use the multithreaded version */
+    /* Need to tune this threshold */
+    aocl_int64_t opt_mt_threads = 1;
+    if(*m >= FLA_GEQRF_MT_LARGE_M_THRESH && *n >= FLA_GEQRF_MT_LARGE_N_THRESH)
+    {
+        opt_mt_threads = sgeqrf_mt_large_num_threads(*m, *n);
+        lwkopt = sgeqrf_mt_large_lwork(*m, *n, opt_mt_threads);
+    }
+#endif
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -239,10 +261,6 @@ void sgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, re
         {
             lwkopt = 1;
         }
-        else
-        {
-            lwkopt = *n * nb;
-        }
         work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         return;
     }
@@ -263,6 +281,23 @@ void sgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, re
         aocl_fla_progress_ptr = aocl_fla_progress;
 #endif
 #endif
+
+/* Path for small sizes */
+#if FLA_ENABLE_AMD_OPT
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m <= FLA_GEQRF_STHRESH && *n <= FLA_GEQRF_STHRESH)
+    {
+        fla_sgeqrf_small(m, n, &a[a_offset], lda, &tau[1], &work[1]);
+        return;
+    }
+#if FLA_OPENMP_MULTITHREADING
+    else if(FLA_GEQRF_MT_LARGE_DISPATCH(S, *m, *n, opt_mt_threads, *lwork, lwkopt))
+    {
+        sgeqrf_mt_large(*m, *n, &a[a_offset], *lda, &tau[1], &work[1], opt_mt_threads, info);
+        return;
+    }
+#endif
+#endif
+
     if(nb > 1 && nb < k)
     {
         /* Determine when to cross over from blocked to unblocked code. */
@@ -396,3 +431,6 @@ integer get_block_size_sgeqrf(aocl_int64_t *m, aocl_int64_t *n)
 }
 
 /* sgeqrf_ */
+
+#define GEQRF_MT_PRECISION S
+#include "fla_geqrf_mt_large_kernel.h"

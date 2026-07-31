@@ -4,9 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
+#include "fla_lapack_x86_common.h"
+#include "fla_geqrf_dispatch.h"
 #if !FLA_ENABLE_AMD_OPT
 static aocl_int64_t c__1 = 1;
 #endif
@@ -17,6 +19,14 @@ static aocl_int64_t c__2 = 2;
 extern int fla_thread_get_num_threads();
 
 integer get_block_size_zgeqrf(aocl_int64_t *m, aocl_int64_t *n);
+
+#if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
+static void zgeqrf_mt_large(aocl_int64_t gm, aocl_int64_t gn, dcomplex *a, aocl_int64_t lda,
+                            dcomplex *tau, dcomplex *work, aocl_int64_t nthreads,
+                            aocl_int64_t *info);
+static integer zgeqrf_mt_large_num_threads(aocl_int64_t gm, aocl_int64_t gn);
+static integer zgeqrf_mt_large_lwork(aocl_int64_t gm, aocl_int64_t gn, aocl_int64_t num_threads);
+#endif
 
 /* > \brief \b ZGEQRF */
 /* =========== DOCUMENTATION =========== */
@@ -224,6 +234,16 @@ void aocl_lapack_zgeqrf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
 #endif
     k = fla_min(*m, *n);
     *info = 0;
+#if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
+    /* If the matrix is large, use the multithreaded version */
+    aocl_int64_t opt_mt_threads = 1;
+    aocl_int64_t lwkopt_mt = 0;
+    if(*m >= FLA_GEQRF_MT_LARGE_M_THRESH && *n >= FLA_GEQRF_MT_LARGE_N_THRESH)
+    {
+        opt_mt_threads = zgeqrf_mt_large_num_threads(*m, *n);
+        lwkopt_mt = zgeqrf_mt_large_lwork(*m, *n, opt_mt_threads);
+    }
+#endif
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -261,7 +281,14 @@ void aocl_lapack_zgeqrf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         {
             lwkopt = *n * nb;
         }
-        work[1].real = (doublereal)lwkopt;
+#if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
+        /* Report enough workspace for the multithreaded large-size path */
+        if(lwkopt_mt > lwkopt)
+        {
+            lwkopt = lwkopt_mt;
+        }
+#endif
+        work[1].real = aocl_lapack_droundup_lwork(&lwkopt);
         work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -274,6 +301,24 @@ void aocl_lapack_zgeqrf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
+#if FLA_ENABLE_AMD_OPT
+    /* Path for small sizes (complex-double uses a lower cap, FLA_ZGEQRF_STHRESH) */
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m <= FLA_ZGEQRF_STHRESH && *n <= FLA_ZGEQRF_STHRESH)
+    {
+        fla_zgeqrf_small(m, n, &a[a_offset], lda, &tau[1], &work[1]);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+#endif
+#if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
+    /* Multithreaded large-size path (only when more than one thread is used) */
+    if(FLA_GEQRF_MT_LARGE_DISPATCH(Z, *m, *n, opt_mt_threads, *lwork, lwkopt_mt))
+    {
+        zgeqrf_mt_large(*m, *n, &a[a_offset], *lda, &tau[1], &work[1], opt_mt_threads, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+#endif
     nbmin = 2;
     nx = 0;
     iws = *n;
@@ -350,6 +395,9 @@ void aocl_lapack_zgeqrf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
     return;
     /* End of ZGEQRF */
 }
+
+#define GEQRF_MT_PRECISION Z
+#include "fla_geqrf_mt_large_kernel.h"
 
 integer get_block_size_zgeqrf(aocl_int64_t *m, aocl_int64_t *n)
 {

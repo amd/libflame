@@ -225,7 +225,7 @@ void dgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *l
     /* If the matrix is large, use the multithreaded version */
     /* Need to tune this threshold */
     aocl_int64_t opt_mt_threads = 1;
-    if(*m >= FLA_DGEQRF_MT_LARGE_M_THRESH && *n >= FLA_DGEQRF_MT_LARGE_N_THRESH)
+    if(*m >= FLA_GEQRF_MT_LARGE_M_THRESH && *n >= FLA_GEQRF_MT_LARGE_N_THRESH)
     {
         opt_mt_threads = dgeqrf_mt_large_num_threads(*m, *n);
         lwkopt = dgeqrf_mt_large_lwork(*m, *n, opt_mt_threads);
@@ -285,7 +285,7 @@ void dgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *l
         return;
     }
 #if FLA_OPENMP_MULTITHREADING
-    else if(*m >= FLA_DGEQRF_MT_LARGE_M_THRESH && *n >= FLA_DGEQRF_MT_LARGE_N_THRESH
+    else if(*m >= FLA_GEQRF_MT_LARGE_M_THRESH && *n >= FLA_GEQRF_MT_LARGE_N_THRESH
             && *lwork >= lwkopt)
     {
         dgeqrf_mt_large(*m, *n, &a[a_offset], *lda, &tau[1], &work[1], opt_mt_threads, info);
@@ -427,164 +427,5 @@ integer get_block_size_dgeqrf(aocl_int64_t *m, aocl_int64_t *n)
 
 /* dgeqrf_ */
 
-#if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
-
-/* Returns the optimial number of threads to use for dgeqrf_mt_large */
-static integer dgeqrf_mt_large_num_threads(aocl_int64_t gm, aocl_int64_t gn)
-{
-    long long num_elems = (long long)gm * gn;
-    aocl_int64_t opt_nthreads;
-    if(num_elems <= FLA_DGEQRF_MT_THRESHOLD_8_THREADS)
-    {
-        opt_nthreads = 8;
-    }
-    else
-    {
-        opt_nthreads = 64;
-    }
-    return fla_min(fla_thread_get_num_threads(), opt_nthreads);
-}
-
-/* Returns the number of containers needed for given nb items of size item_size
- * to fit in a container of size container_size */
-static inline size_t containers_needed_for_size(aocl_int64_t nb, size_t item_size,
-                                                size_t container_size)
-{
-    size_t size_needed = item_size * nb;
-    return (size_needed - 1) / container_size + 1;
-}
-
-/* Returns the optimal lwork for multithreaded dgeqrf */
-static integer dgeqrf_mt_large_lwork(aocl_int64_t gm, aocl_int64_t gn, aocl_int64_t num_threads)
-{
-
-    aocl_int64_t nb = FLA_DGEQRF_MT_LARGE_PANEL_SIZE;
-
-    /* Number of panels */
-    aocl_int64_t nt = ((gn - 1) / nb) + 1;
-
-    /* Storage to keep triangular factors for each panel */
-    aocl_int64_t triangular_factor_req = (nb * nb) * nt;
-
-    aocl_int64_t per_thread_work_req = (nb * nb) * num_threads;
-
-    /* Dependency list to keep track of which panels are ready */
-    aocl_int64_t depend_list_req
-        = containers_needed_for_size(nt, sizeof(uint8_t), sizeof(doublereal));
-
-    aocl_int64_t lwork = triangular_factor_req + per_thread_work_req + depend_list_req;
-
-    return lwork;
-}
-
-static void dgeqrf_large_mt_thread_fn(aocl_int64_t m, aocl_int64_t n, doublereal *a,
-                                      aocl_int64_t lda, doublereal *tau, doublereal *T_storage,
-                                      uint8_t *a_dependency, aocl_int64_t nb, aocl_int64_t k,
-                                      doublereal *per_thread_work,
-                                      aocl_int64_t per_thread_work_size, aocl_int64_t *info)
-{
-    /* Get the current thread number */
-    aocl_int64_t thread_num = omp_get_thread_num();
-    aocl_int64_t iinfo;
-    /* Get the thread-local workspace */
-    doublereal *t_work = per_thread_work + thread_num * per_thread_work_size;
-
-    aocl_int64_t ldwork = nb;
-
-    /* Apply block reflector to all panels in left
-     * columns of the current block.
-     */
-    for(aocl_int64_t i = 0; i < fla_min(m, k); i += nb)
-    {
-        /* If the block reflector is not ready, wait for it */
-        while(a_dependency[i / nb] == 0)
-        {
-            /* Wait for all memory operation to be completed */
-            __asm__ __volatile__("lfence");
-            /* Use pause instruction for busy waiting */
-            __asm__ __volatile__("pause");
-        }
-
-        /* Apply the block reflector to the current panel */
-        aocl_int64_t mvai = m - i;
-        aocl_int64_t n_reflector = fla_min(mvai, nb);
-        aocl_lapack_dlarfb("Left", "Transpose", "Forward", "Columnwise", &mvai, &n, &n_reflector,
-                           &a[i + i * lda], &lda, T_storage + (nb * i), &nb, &a[k * lda + i], &lda,
-                           t_work, &ldwork);
-    }
-
-    aocl_int64_t mvak = m - k;
-
-    /* If there are no more rows to process, return */
-    if(mvak <= 0)
-    {
-        return;
-    }
-
-    /* Factor the current panel */
-    dgeqr2_fla(&mvak, &n, &a[k * lda + k], &lda, &tau[k], t_work, &iinfo);
-
-    /* If the factorization failed, set the info and return */
-    if(iinfo != 0)
-    {
-        *info = iinfo;
-        return;
-    }
-
-    /* Generate the triangular factor of the block reflector */
-    aocl_int64_t k_reflector = fla_min(mvak, n);
-    aocl_lapack_dlarft("Forward", "Columnwise", &mvak, &k_reflector, &a[k * lda + k], &lda, &tau[k],
-                       T_storage + (nb * k), &nb);
-
-    /* Set the block reflector as ready */
-    a_dependency[k / nb] = 1;
-    /* Ensure all memory operations are completed */
-    __asm__ __volatile__("sfence");
-}
-
-static void dgeqrf_mt_large(aocl_int64_t gm, aocl_int64_t gn, doublereal *a, aocl_int64_t lda,
-                            doublereal *tau, doublereal *work, aocl_int64_t nthreads,
-                            aocl_int64_t *info)
-{
-
-    aocl_int64_t nb = FLA_DGEQRF_MT_LARGE_PANEL_SIZE;
-
-    aocl_int64_t iinfo = 0;
-
-    /* Number of panels */
-    aocl_int64_t nt = ((gn - 1) / nb) + 1;
-
-    /* Storage to keep triangular factors for each panel */
-    doublereal *T_storage = work;
-
-    /* Dependency list to keep track of which panels are ready */
-    uint8_t *a_dependency = (uint8_t *)(T_storage + (nb * nb) * nt);
-
-    /* Per-thread workspace */
-    doublereal *per_thread_work
-        = ((doublereal *)a_dependency)
-          + containers_needed_for_size(nt, sizeof(uint8_t), sizeof(doublereal));
-
-    /* Initialize the dependency list to 0 */
-    memset(a_dependency, 0, nt);
-
-    /* Work size for each thread */
-    aocl_int64_t per_thread_work_size = (nb * nb);
-
-/* Schedule threads to process panels
- * Panels are assigned to threads in a round-robin manner
- */
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1) proc_bind(close)
-    for(aocl_int64_t i = 0; i < gn; i += nb)
-    {
-        /* Get the number of coulmns in current panel */
-        aocl_int64_t n_thread = fla_min(nb, gn - i);
-        dgeqrf_large_mt_thread_fn(gm, n_thread, a, lda, tau, T_storage, a_dependency, nb, i,
-                                  per_thread_work, per_thread_work_size, &iinfo);
-    }
-
-    /* Set the info */
-    *info = iinfo;
-}
-
-#endif
+#define GEQRF_MT_PRECISION D
+#include "fla_geqrf_mt_large_kernel.h"

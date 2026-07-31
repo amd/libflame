@@ -3,8 +3,14 @@ add_library(FLA_LAPACK_AVX2
      OBJECT
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_lapack_avx2_kernels.h
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgesvd_small_avx2.h
+${CMAKE_CURRENT_SOURCE_DIR}/fla_geqrf_small_avx2_kernel.h
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgeqrf_small_avx2.h
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgeqrf_small_avx2.c
+${CMAKE_CURRENT_SOURCE_DIR}/fla_sgeqrf_small_avx2.h
+${CMAKE_CURRENT_SOURCE_DIR}/fla_sgeqrf_small_avx2.c
+${CMAKE_CURRENT_SOURCE_DIR}/fla_geqrf_small_cmplx_avx2_kernel.h
+${CMAKE_CURRENT_SOURCE_DIR}/fla_cgeqrf_small_ker.c
+${CMAKE_CURRENT_SOURCE_DIR}/fla_zgeqrf_small_ker.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgetrf_small_avx2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dhrot3_avx2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_drot_avx2.c

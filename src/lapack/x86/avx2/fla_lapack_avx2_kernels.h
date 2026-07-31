@@ -45,6 +45,12 @@ int fla_zgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_in
                           aocl_int_t *ipiv, aocl_int64_t *info);
 int fla_dgeqrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
                           doublereal *tau, doublereal *work);
+int fla_sgeqrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
+                          real *work);
+int fla_cgeqrf_small_ker(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                         scomplex *tau, scomplex *work);
+int fla_zgeqrf_small_ker(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                         dcomplex *tau, dcomplex *work);
 void fla_dgesvd_nn_small1T_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
                                 doublereal *s, doublereal *work, aocl_int64_t *info);
 void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m,

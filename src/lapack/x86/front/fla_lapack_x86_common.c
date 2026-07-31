@@ -646,4 +646,17 @@ void fla_dcopy_scal(aocl_int64_t n, doublereal da, const doublereal *dx, aocl_in
     return;
 }
 
+/* DLASR for side='L' with a variable pivot (pivot='V')
+ * To be used only when vectorized code via avx2 is enabled
+ * Kept last in this file so that adding it leaves the code placement of the
+ * functions above unchanged.
+ * */
+void fla_dlasr_left_pivotv_simd(logical forward, aocl_int64_t m, aocl_int64_t n, doublereal *c__,
+                                doublereal *s, doublereal *a, aocl_int64_t a_dim1)
+{
+    /* No AVX512 kernel here, hence not checking for any ISA support. */
+    fla_dlasr_left_pivotv_avx2(forward, m, n, c__, s, a, a_dim1);
+    return;
+}
+
 #endif

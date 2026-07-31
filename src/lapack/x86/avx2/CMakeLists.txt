@@ -37,6 +37,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/fla_dpotrf_small_avx2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dpotri_small_avx2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dspr_avx2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dcopy_scal_avx2.c
+${CMAKE_CURRENT_SOURCE_DIR}/fla_dlasr_kernels_avx2.c
 )
 
 if(WIN32)

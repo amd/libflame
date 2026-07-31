@@ -3,7 +3,13 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+ /*
+  * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+  */
+
 #include "FLA_f2c.h" /* > \brief \b DLASR applies a sequence of plane rotations to a general rectangular matrix. */
+#include "fla_lapack_x86_common.h"
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -288,6 +294,10 @@ void aocl_lapack_dlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
+#ifdef FLA_ENABLE_AMD_OPT
+            /* Populate arch_id before any FLA_IS_MIN_ARCH_ID test */
+    aocl_fla_init();
+#endif
     if(lsame_(side, "L", 1, 1))
     {
         /* Form P * A */
@@ -295,74 +305,67 @@ void aocl_lapack_dlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
         {
             if(lsame_(direct, "F", 1, 1))
             {
-                double ct0, ct1;
-                double st0, st1;
-                double tmp0, tmp1, tmp2;
-                double res0, res1, res2;
-
-                i__1 = *m - 1;
-                /* Apply two rotations in an iteration */
-                for(j = 1; j < i__1; j += 2)
+#ifdef FLA_ENABLE_AMD_OPT
+                if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
                 {
-                    ct0 = c__[j];
-                    st0 = s[j];
-                    ct1 = c__[j + 1];
-                    st1 = s[j + 1];
-                    i__2 = *n;
-                    for(i__ = 1; i__ <= i__2; ++i__)
-                    {
-                        tmp0 = a[j + 0 + i__ * a_dim1];
-                        tmp1 = a[j + 1 + i__ * a_dim1];
-                        tmp2 = a[j + 2 + i__ * a_dim1];
-
-                        res0 = ct0 * tmp0 + st0 * tmp1;
-                        tmp1 = ct0 * tmp1 - st0 * tmp0;
-
-                        res1 = ct1 * tmp1 + st1 * tmp2;
-                        res2 = ct1 * tmp2 - st1 * tmp1;
-
-                        a[j + 0 + i__ * a_dim1] = res0;
-                        a[j + 1 + i__ * a_dim1] = res1;
-                        a[j + 2 + i__ * a_dim1] = res2;
-                    }
+                    fla_dlasr_left_pivotv_simd(TRUE_, *m, *n, c__, s, a, a_dim1);
                 }
-                /* Apply the remaining rotation */
-                if(i__1 & 1)
+                else
+#endif
                 {
-                    ct0 = c__[i__1];
-                    st0 = s[i__1];
-                    if(ct0 != 1. || st0 != 0.)
+                    i__1 = *m - 1;
+                    for (j = 1;
+                            j <= i__1;
+                            ++j)
                     {
-                        i__2 = *n;
-                        j = i__1;
-                        for(i__ = 1; i__ <= i__2; ++i__)
+                        ctemp = c__[j];
+                        stemp = s[j];
+                        if (ctemp != 1. || stemp != 0.)
                         {
-                            tmp0 = a[j + 1 + i__ * a_dim1];
-                            a[j + 1 + i__ * a_dim1] = ct0 * tmp0 - st0 * a[j + i__ * a_dim1];
-                            a[j + i__ * a_dim1] = st0 * tmp0 + ct0 * a[j + i__ * a_dim1];
-                            /* L10: */
+                            i__2 = *n;
+
+                            for (i__ = 1;
+                                    i__ <= i__2;
+                                    ++i__)
+                            {
+                                temp = a[j + 1 + i__ * a_dim1];
+                                a[j + 1 + i__ * a_dim1] = ctemp * temp - stemp * a[j + i__ * a_dim1];
+                                a[j + i__ * a_dim1] = stemp * temp + ctemp * a[j + i__ * a_dim1];
+                                /* L10: */
+                            }
                         }
+                        /* L20: */
                     }
                 }
             }
             else if(lsame_(direct, "B", 1, 1))
             {
-                for(j = *m - 1; j >= 1; --j)
+#ifdef FLA_ENABLE_AMD_OPT
+                if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
                 {
-                    ctemp = c__[j];
-                    stemp = s[j];
-                    if(ctemp != 1. || stemp != 0.)
+                    fla_dlasr_left_pivotv_simd(FALSE_, *m, *n, c__, s, a, a_dim1);
+                }
+                else
+#endif
+                {
+                    for(j = *m - 1; j >= 1; --j)
                     {
-                        i__1 = *n;
-                        for(i__ = 1; i__ <= i__1; ++i__)
+                        ctemp = c__[j];
+                        stemp = s[j];
+                        if(ctemp != 1. || stemp != 0.)
                         {
-                            temp = a[j + 1 + i__ * a_dim1];
-                            a[j + 1 + i__ * a_dim1] = ctemp * temp - stemp * a[j + i__ * a_dim1];
-                            a[j + i__ * a_dim1] = stemp * temp + ctemp * a[j + i__ * a_dim1];
-                            /* L30: */
+                            i__1 = *n;
+                            for(i__ = 1; i__ <= i__1; ++i__)
+                            {
+                                temp = a[j + 1 + i__ * a_dim1];
+                                a[j + 1 + i__ * a_dim1]
+                                    = ctemp * temp - stemp * a[j + i__ * a_dim1];
+                                a[j + i__ * a_dim1] = stemp * temp + ctemp * a[j + i__ * a_dim1];
+                                /* L30: */
+                            }
                         }
+                        /* L40: */
                     }
-                    /* L40: */
                 }
             }
         }

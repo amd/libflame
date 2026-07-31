@@ -76,6 +76,8 @@ void fla_dlarf1f_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_
 void fla_dlarf1l_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff,
                                   aocl_int64_t ldr, doublereal *v, doublereal ntau,
                                   doublereal *work);
+void fla_dlasr_left_pivotv_simd(logical forward, aocl_int64_t m, aocl_int64_t n, doublereal *c__,
+                                doublereal *s, doublereal *a, aocl_int64_t a_dim1);
 #endif
 
 #endif /* FLA_LAPACK_X86_COMMON_H */

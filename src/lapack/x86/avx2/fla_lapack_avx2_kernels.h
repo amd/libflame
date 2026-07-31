@@ -92,5 +92,7 @@ void fla_dpotri_small_avx2(char *uplo, aocl_int64_t *n, double *A, aocl_int64_t 
                            aocl_int64_t *info);
 int fla_dcopy_scal_ix1_avx2(aocl_int64_t n, doublereal da, const doublereal *dx, doublereal *dy);
 void fla_dspr_lower_avx2(aocl_int64_t len, doublereal alpha, const doublereal *x, doublereal *ap);
+void fla_dlasr_left_pivotv_avx2(logical forward, aocl_int64_t m, aocl_int64_t n, doublereal *c__,
+                                doublereal *s, doublereal *a, aocl_int64_t a_dim1);
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_LAPACK_AVX2_KERNELS_DEFS_H */

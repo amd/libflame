@@ -9,6 +9,10 @@
 #ifndef TEST_COMMON_H
 #define TEST_COMMON_H
 
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include "blis.h"
 #include "validate_common.h"
 #include "test_output_routines.h"

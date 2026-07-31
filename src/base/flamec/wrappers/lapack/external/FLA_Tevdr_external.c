@@ -43,6 +43,8 @@ FLA_Error FLA_Tevdr_external( FLA_Evd_type jobz, FLA_Obj d, FLA_Obj e, FLA_Obj l
 
   vl = 0;
   vu = 0;
+  il = 0;
+  iu = 0;
 
   // Hard-code some parameters.
   blas_range = 'A';

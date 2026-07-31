@@ -266,7 +266,7 @@ int lapack_dgebrd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    aocl_int64_t i__, j, nb, nx, ws;
+    aocl_int64_t i__, j, nb = 0, nx, ws;
     aocl_int64_t nbmin, iinfo, minmn;
     extern /* Subroutine */
         int

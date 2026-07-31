@@ -217,7 +217,7 @@ void aocl_lapack_dlasyf(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int6
     /* Local variables */
     aocl_int64_t j, k;
     doublereal t, r1, d11, d21, d22;
-    aocl_int64_t jj, kk, jp, kp, kw, kkw, imax, jmax;
+    aocl_int64_t jj, kk, jp, kp, kw, kkw, imax = 0, jmax;
     doublereal alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;

@@ -227,7 +227,7 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
     aocl_int64_t lwm, lwo;
     real anrm, bnrm;
     logical tran;
-    aocl_int64_t brow, tszm, tszo, info2, iascl, ibscl;
+    aocl_int64_t brow, tszm = 0, tszo = 0, info2, iascl, ibscl;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t maxmn;
     scomplex workq[1];

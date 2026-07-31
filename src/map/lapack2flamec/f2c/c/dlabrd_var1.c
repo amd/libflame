@@ -27,8 +27,8 @@ void fla_dlabrd_var1(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doubler
      * current operation*/
     fla_dim_t thread_threshold;
     aocl_int64_t i__4, i__5;
-    int actual_num_threads;
-    int optimal_num_threads;
+    int actual_num_threads = 1;
+    int optimal_num_threads = 1;
 #endif
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

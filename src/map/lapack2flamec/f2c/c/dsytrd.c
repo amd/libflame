@@ -225,7 +225,7 @@ void dsytrd_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, d
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__, j, nb, kk, nx, iws;
+    aocl_int64_t i__, j, nb = 0, kk, nx, iws;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t nbmin, iinfo;
     logical upper;

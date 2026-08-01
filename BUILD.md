@@ -33,6 +33,23 @@ Use the following command to configure project
      With ILP64
          cmake ../ -DENABLE_ILP64=ON -DENABLE_AMD_AOCC_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
 
+#### AOC:
+
+     export CC=aoc
+     export CXX=aoc++
+     export FC=aof
+     export FLIBS="-laof"
+
+     With LP64
+         cmake ../ -DENABLE_AMD_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+     
+     With ILP64
+         cmake ../ -DENABLE_ILP64=ON -DENABLE_AMD_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+
+    Note:
+    Turn ENABLE_AMD_FLAGS ON when using the AOF compiler. The AOF compiler returns complex
+    values in the LLVM/GNU style, so this flag is required for correct results.
+
 Shared library is turned on by default. To generate Static library provide additional option
 
     -DBUILD_SHARED_LIBS=OFF

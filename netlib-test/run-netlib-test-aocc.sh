@@ -99,6 +99,12 @@ cd libflame_netlib
 # versions.
 sed -i "s/-frecursive/-Mrecursive/g" make.inc
 
+FORTRAN_FLAGS="flang -fopenmp"
+
+if [[ "$FC" == "aof" ]]; then
+    sed -i "s/-Mrecursive/-fsave-main-program -fstack-arrays -fstack-repack-arrays/g" make.inc
+	FORTRAN_FLAGS="aof -fopenmp"
+fi
 cp $BLAS_LIB_PATH/$BLAS_LIB .
 cp $LAPACK_LIB_PATH/$LAPACK_LIB .
 
@@ -119,13 +125,12 @@ fi
 
 ulimit -s unlimited
 
-FORTRAN_FLAGS="flang -fopenmp"
 C_FLAGS="-O2"
 TESTLAPACKLIB="$PWD/liblapack.a $AOCLUTILS_LIB_PATH/$AOCLUTILS_LIB"
 
 if [[ $ILP64 =~ ("1"|"ON") ]]
 then
-	FORTRAN_FLAGS="flang -fopenmp -fdefault-integer-8"
+	FORTRAN_FLAGS="${FORTRAN_FLAGS} -fdefault-integer-8"
 	C_FLAGS="${C_FLAGS} -DINT_64BIT"
 fi
 

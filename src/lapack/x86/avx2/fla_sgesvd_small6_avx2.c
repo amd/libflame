@@ -1,9 +1,9 @@
 /******************************************************************************
- * Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
-/*! @file fla_dgesvd_small6_avx2_.c
- *  @brief DGESVD Small path (path 6)
+/*! @file fla_sgesvd_small6_avx2.c
+ *  @brief SGESVD Small path (path 6)
  *  without the LQ Factorization.
  *  */
 
@@ -16,14 +16,13 @@
 /* SVD for small tall-matrices with QR factorization
  * already computed
  */
-void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m,
-                            aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *qr,
-                            aocl_int64_t *ldqr, doublereal *s, doublereal *u, aocl_int64_t *ldu,
-                            doublereal *vt, aocl_int64_t *ldvt, doublereal *work,
-                            aocl_int64_t *info)
+void fla_sgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m,
+                            aocl_int64_t *n, real *a, aocl_int64_t *lda, real *qr,
+                            aocl_int64_t *ldqr, real *s, real *u, aocl_int64_t *ldu, real *vt,
+                            aocl_int64_t *ldvt, real *work, aocl_int64_t *info)
 {
     /* Declare and init local variables */
-    FLA_GEQRF_INIT_DSMALL();
+    FLA_GEQRF_INIT_SSMALL();
 
     aocl_int64_t ie;
     aocl_int64_t itau, itauq, itaup;
@@ -34,12 +33,12 @@ void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t
     aocl_int64_t *ldau;
     aocl_int64_t c__1 = 1;
 
-    doublereal *tau, *tauq, *taup;
-    doublereal *e, *au;
-    doublereal stau, d__1;
-    doublereal dum[2];
-    doublereal c_zero = 0.;
-    doublereal c_one = 1.;
+    real *tau, *tauq, *taup;
+    real *e, *au;
+    real stau, d__1;
+    real dum[2];
+    real c_zero = 0.f;
+    real c_one = 1.f;
 
     /* indices for partitioning work buffer */
     ie = 1;
@@ -65,7 +64,7 @@ void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t
     taup = &work[itaup - 1];
 
     /* QR Factorization */
-    fla_dgeqrf_small(m, n, &a[1 + *lda], lda, &work[itau], &work[ie]);
+    fla_sgeqrf_small(m, n, &a[1 + *lda], lda, &work[itau], &work[ie]);
 
     /* Upper Bidiagonalization */
     if(wntus)
@@ -74,7 +73,7 @@ void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t
         au = u;
         ldau = ldu;
         /* Copy R to U */
-        aocl_lapack_dlacpy("U", n, n, &a[1 + *lda], lda, &au[1 + *ldau], ldau);
+        aocl_lapack_slacpy("U", n, n, &a[1 + *lda], lda, &au[1 + *ldau], ldau);
     }
     else
     {
@@ -84,9 +83,9 @@ void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t
     }
     /* Set lower part of U to zero */
     tn = *n - 1;
-    aocl_lapack_dlaset("L", &tn, &tn, &c_zero, &c_zero, &au[2 + *ldau], ldau);
+    aocl_lapack_slaset("L", &tn, &tn, &c_zero, &c_zero, &au[2 + *ldau], ldau);
 
-    FLA_BIDIAGONALIZE_DSMALL(*n, *n, au, ldau, tauq, taup, s, e);
+    FLA_BIDIAGONALIZE_SSMALL(*n, *n, au, ldau, tauq, taup, s, e);
 
     /* Form Vt' in vt from HH vectors in U (right bi-diagonalizing Q) */
     if(wntvs)
@@ -103,20 +102,20 @@ void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t
     }
 
     /* Compute SVD for bi-diagonal matrix
-     * (dbdsqr with no lwork)
+     * (sbdsqr with no lwork)
      * */
     if(*n == 2)
     {
         /* 2 by 2 block, handle separately */
-        FLA_GESVD_LASV2_2X2_DSMALL(s, e, sigmn, sigmx, sinr, cosr, sinl, cosl);
+        FLA_GESVD_LASV2_2X2_SSMALL(s, e, sigmn, sigmx, sinr, cosr, sinl, cosl);
         /* Compute singular vectors, if desired */
         if(ncvt > 0)
         {
-            FLA_COMPUTE_VT_D2X2(vt, ldvt, sigmx, sigmn, cosr, sinr);
+            FLA_COMPUTE_VT_S2X2(vt, ldvt, sigmx, sigmn, cosr, sinr);
         }
         if(nru > 0)
         {
-            fla_drot_avx2(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
+            fla_srot_avx2(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
         }
 
         /* Normalize singular values and scale corresponding vectors for 2x2 case */
@@ -126,15 +125,15 @@ void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t
     else
     {
         /* Compute Singular Values and Vectors */
-        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
-                            &u[1 + *ldu], ldu, info);
+        lapack_sbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
+                            ldu, info);
     }
 
     /* Compute U by updating U' by applying from the left the Q from QR */
     if(wntus)
     {
         tau = &work[itau - 1];
-        FLA_GESVD_UAPPLY_QR_DSMALL(m, n, u, ldu, qr, ldqr, tau);
+        FLA_GESVD_UAPPLY_QR_SSMALL(m, n, u, ldu, qr, ldqr, tau);
     }
 
     return;

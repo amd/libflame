@@ -1,9 +1,9 @@
 /******************************************************************************
- * Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
-/*! @file fla_dgesvd_xx_small10_avx2.c
- *  @brief DGESVD Small path (Path 10)
+/*! @file fla_sgesvd_nn_small10_avx2.c
+ *  @brief SGESVD Small path (Path 10)
  *  */
 
 #include "FLAME.h"
@@ -11,21 +11,20 @@
 
 #if FLA_ENABLE_AMD_OPT
 
-void fla_dgesvd_xx_small10_avx2(aocl_int64_t wntu, aocl_int64_t wntv, aocl_int64_t *m,
-                                aocl_int64_t *n, aocl_int64_t *ncu, doublereal *a,
-                                aocl_int64_t *lda, doublereal *s, doublereal *u, aocl_int64_t *ldu,
-                                doublereal *vt, aocl_int64_t *ldvt, doublereal *work,
-                                aocl_int64_t *info)
+void fla_sgesvd_xx_small10_avx2(aocl_int64_t wntu, aocl_int64_t wntv, aocl_int64_t *m,
+                                aocl_int64_t *n, aocl_int64_t *ncu, real *a, aocl_int64_t *lda,
+                                real *s, real *u, aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt,
+                                real *work, aocl_int64_t *info)
 {
     /* Declare and init local variables */
-    FLA_GEQRF_INIT_DSMALL();
+    FLA_GEQRF_INIT_SSMALL();
 
-    doublereal d__1;
-    doublereal *tau, *tauq, *taup;
-    doublereal *e;
-    doublereal stau;
-    doublereal c_one = 1.;
-    doublereal cosu = 0., sinu = 0.;
+    real d__1;
+    real *tau, *tauq, *taup;
+    real *e;
+    real stau;
+    real c_one = 1.f;
+    real cosu = 0.f, sinu = 0.f;
 
     aocl_int64_t ncvt, nru;
     aocl_int64_t c__1 = 1;
@@ -55,11 +54,11 @@ void fla_dgesvd_xx_small10_avx2(aocl_int64_t wntu, aocl_int64_t wntv, aocl_int64
     if(*m == 2 && *n == 2)
     {
         /* 2x2 matrix Bi-Diag using Givens */
-        FLA_BIDIAG_2X2_GIVENS_DSMALL(a, lda, s, e, cosu, sinu);
+        FLA_BIDIAG_2X2_GIVENS_SSMALL(a, lda, s, e, cosu, sinu);
     }
     else
     {
-        FLA_BIDIAGONALIZE_DSMALL(*m, *n, a, lda, tauq, taup, s, e);
+        FLA_BIDIAGONALIZE_SSMALL(*m, *n, a, lda, tauq, taup, s, e);
 
         /* Generate Qr (from bidiag) in vt from work[iu] (a here) */
         if(wntv)
@@ -88,15 +87,15 @@ void fla_dgesvd_xx_small10_avx2(aocl_int64_t wntu, aocl_int64_t wntv, aocl_int64
     if(*m == 2 && *n == 2)
     {
         /* 2 by 2 block, handle separately */
-        FLA_GESVD_LASV2_2X2_DSMALL(s, e, sigmn, sigmx, sinr, cosr, sinl, cosl);
+        FLA_GESVD_LASV2_2X2_SSMALL(s, e, sigmn, sigmx, sinr, cosr, sinl, cosl);
         /* Compute singular vectors, if desired */
         if(ncvt > 0)
         {
-            FLA_COMPUTE_VT_D2X2(vt, ldvt, sigmx, sigmn, cosr, sinr);
+            FLA_COMPUTE_VT_S2X2(vt, ldvt, sigmx, sigmn, cosr, sinr);
         }
         if(nru > 0)
         {
-            FLA_GESVD_U_FROM_2X2_GIVENS_DSMALL(u, ldu, cosl, sinl, cosu, sinu);
+            FLA_GESVD_U_FROM_2X2_GIVENS_SSMALL(u, ldu, cosl, sinl, cosu, sinu);
         }
 
         /* Normalize singular values and scale corresponding vectors for 2x2 case */
@@ -106,8 +105,8 @@ void fla_dgesvd_xx_small10_avx2(aocl_int64_t wntu, aocl_int64_t wntv, aocl_int64
     else
     {
         /* Compute Singular Values and Vectors */
-        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
-                            &u[1 + *ldu], ldu, info);
+        lapack_sbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
+                            ldu, info);
     }
     return;
 }

@@ -1,9 +1,9 @@
 /******************************************************************************
- * Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
-/*! @file fla_dgesvd_nn_small1T_avx2_.c
- *  @brief DGESVD Small path (path 1T)
+/*! @file fla_sgesvd_nn_small1T_avx2.c
+ *  @brief SGESVD Small path (path 1T)
  *  */
 
 #include "FLAME.h"
@@ -11,15 +11,15 @@
 
 #ifdef FLA_ENABLE_AMD_OPT
 
-void fla_dgesvd_nn_small1T_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *s,
-                                doublereal *work, aocl_int64_t *info)
+void fla_sgesvd_nn_small1T_avx2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                                real *s, real *work, aocl_int64_t *info)
 {
     /* Declare and init local variables */
-    FLA_GEQRF_INIT_DSMALL();
+    FLA_GEQRF_INIT_SSMALL();
 
-    doublereal d__1;
-    doublereal *tau, *tauq, *taup;
-    doublereal *e;
+    real d__1;
+    real *tau, *tauq, *taup;
+    real *e;
 
     aocl_int64_t c__0 = 0;
     aocl_int64_t c__1 = 1;
@@ -44,10 +44,10 @@ void fla_dgesvd_nn_small1T_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
     taup = &work[itaup - 1];
 
     /* Upper Bidiagonalization */
-    FLA_BIDIAGONALIZE_DSMALL(*m, *m, a, lda, tauq, taup, s, e);
+    FLA_BIDIAGONALIZE_SSMALL(*m, *m, a, lda, tauq, taup, s, e);
 
-    /* Compute Singular Values and Vetcors */
-    lapack_dbdsqr_small("U", m, &c__0, &c__0, &s[1], &e[1], NULL, &c__1, NULL, &c__1, info);
+    /* Compute Singular Values and Vectors */
+    lapack_sbdsqr_small("U", m, &c__0, &c__0, &s[1], &e[1], NULL, &c__1, NULL, &c__1, info);
 
     return;
 }

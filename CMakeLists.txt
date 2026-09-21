@@ -79,13 +79,13 @@ option (ENABLE_AMD_OPT "Enable AMD optimized path" OFF)
 option (ENABLE_AMD_COMMON_FLAGS "Enable AMD FLAGS internally enables ENABLE_BLAS_EXT_GEMMT, ENABLE_AMD_OPT, ENABLE_BUILTIN_LAPACK2FLAME, ENABLE_EXT_LAPACK_INTERFACE, ENABLE_MULTITHREADING" OFF)
 # hiding this option from cmake gui
 mark_as_advanced(ENABLE_AMD_COMMON_FLAGS)
-option (ENABLE_AMD_FLAGS "Enable AMD FLAGS internally enables ENABLE_AMD_COMMON_FLAGS" OFF)
+option (ENABLE_AMD_FLAGS "Enable AMD FLAGS internally enables ENABLE_AMD_COMMON_FLAGS" ON)
 option (ENABLE_AMD_AOCC_FLAGS "Enable AMD FLAGS internally enables Enable AMD FLAGS internally enables ENABLE_AMD_COMMON_FLAGS, ENABLE_F2C_DOTC, ENABLE_VOID_RETURN_COMPLEX_FUNCTION" OFF)
 # Since AOCC isn't used in windows hiding this option from cmake gui
 if(WIN32)
 	mark_as_advanced(ENABLE_AMD_AOCC_FLAGS)
 endif()
-option (ENABLE_AOCL_BLAS "Enables tight coupling with AOCL-BLAS library in order to use AOCL-BLAS internal routines" OFF)
+option (ENABLE_AOCL_BLAS "Enables tight coupling with AOCL-BLAS library in order to use AOCL-BLAS internal routines" ON)
 option (ENABLE_ILP64 "Enable ILP64" OFF)
 option (ENABLE_UPPERCASE "Enable uppercase API's" OFF)
 option (ENABLE_WRAPPER "Enable wrapper code" ON)
@@ -124,8 +124,28 @@ option (ENABLE_UPPERCASE_BLAS "Enable invocation of Blas with Flame" OFF)
 option (ENABLE_UPPERCASE_LAPACK "Enable invocation of Lapack with Flame" OFF)
 option (ENABLE_GPU "Enable gpu advantage" OFF)
 option (ENABLE_XBLAS "Enable xblas API's" OFF)
-option (ENABLE_F2C_DOTC "Enable invoking Complex datatype BLAS functions DOTC and DOTU using Fortran To C calling convention with void return instead of complex return type" OFF)
-option (ENABLE_VOID_RETURN_COMPLEX_FUNCTION "Enable 'void' return instead of complex return type for libFLAME functions such as cladiv/zladiv that by default have complex return type" OFF)
+
+# Setting defaults for ENABLE_F2C_DOTC and 
+# ENABLE_VOID_RETURN_COMPLEX_FUNCTION based on Compiler.
+# WIN32					ON
+# UNIX
+# 	aocc aoc/aof 		OFF
+# 	aocc clang/flang 	ON
+#	gcc					OFF
+get_filename_component(_cc_name "${CMAKE_C_COMPILER}" NAME)
+set(_flame_complex_abi_default OFF)
+
+if(WIN32)
+  set(_flame_complex_abi_default ON)
+elseif(UNIX)
+  if(_cc_name MATCHES "clang")
+    set(_flame_complex_abi_default ON)
+  endif()
+endif()
+
+option (ENABLE_F2C_DOTC "Enable invoking Complex datatype BLAS functions DOTC and DOTU using Fortran To C calling convention with void return instead of complex return type" ${_flame_complex_abi_default})
+option (ENABLE_VOID_RETURN_COMPLEX_FUNCTION "Enable 'void' return instead of complex return type for libFLAME functions such as cladiv/zladiv that by default have complex return type" ${_flame_complex_abi_default})
+
 option (ENABLE_SET_LIB_VERSION "Set library version" OFF)
 option (ENABLE_BLAS_EXT_GEMMT "Enable BLAS GEMMT Usage" ON)
 set(ENABLE_AOCL_DTL OFF CACHE STRING "Enable DTL Usage. USE with Option ALL to Enable both Trace and Log, TRACE to enable Trace, and LOG to ENABLE only Input Logging ")
@@ -231,8 +251,6 @@ if(ENABLE_AMD_AOCC_FLAGS)
 		set	(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 	endif()
     set (ENABLE_AMD_COMMON_FLAGS TRUE)
-    set (ENABLE_F2C_DOTC TRUE)
-    set (ENABLE_VOID_RETURN_COMPLEX_FUNCTION TRUE)
 	message(STATUS "Enabled ENABLE_AMD_AOCC_FLAGS : ${ENABLE_AMD_AOCC_FLAGS}")
 endif()
 
@@ -516,10 +534,25 @@ endif()
 # Note: This block has to come after the FLA_ENABLE_ILP64 block, as that decides the type of AOCL-BLAS library thats linked.
 if (ENABLE_AOCL_BLAS)
     message(STATUS "AOCL-BLAS library linking option selected")
-
-	if(NOT BLAS_LIBRARY)
-		message (FATAL_ERROR "Error: Either AOCL_ROOT environment variable is not set or could not find a suitable installation of AOCL-BLAS Library in \$AOCL_ROOT=${AOCL_ROOT}")
-	endif()
+    if(NOT BLAS_LIBRARY)
+        if(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND BLAS_HEADER_PATH)
+            if(NOT EXISTS "${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}")
+                message(FATAL_ERROR
+                    "ENABLE_AOCL_BLAS fallback BLAS not found: "
+                    "${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}")
+            endif()
+            set(BLAS_LIBRARY "${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}")
+            set(BLAS_LIB_PATH "${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}")
+            set(BLAS_LIB_NAME "${EXT_BLAS_LIBNAME}")
+            set(BLAS_INCLUDE_DIR "${BLAS_HEADER_PATH}")
+            message(STATUS "AOCL-BLAS found via CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH, EXT_BLAS_LIBNAME, and BLAS_HEADER_PATH")
+        else()
+            message(FATAL_ERROR
+                "ENABLE_AOCL_BLAS is ON but AOCL-BLAS was not found. "
+                "Set AOCL_ROOT, or provide CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH, "
+                "EXT_BLAS_LIBNAME, and BLAS_HEADER_PATH.")
+        endif()
+    endif()
 endif()
 
 # If the external BLAS library path is not set, then check if the BLAS_LIBRARY is set from AOCL_ROOT environment. 

@@ -11,10 +11,10 @@ Use the following command to configure project
 #### GCC:
 
     With LP64
-        cmake ../ -DENABLE_AMD_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+        cmake ../ -DCMAKE_INSTALL_PREFIX=<path>
     
     With ILP64
-        cmake ../ -DENABLE_ILP64=ON -DENABLE_AMD_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+        cmake ../ -DENABLE_ILP64=ON -DCMAKE_INSTALL_PREFIX=<path>
 	
     Note: Use -DCMAKE_C_COMPILER flag to set the compiler
             -DCMAKE_C_COMPILER=gcc OR
@@ -28,10 +28,13 @@ Use the following command to configure project
      export FLIBS="-lflang"
 
      With LP64
-         cmake ../ -DENABLE_AMD_AOCC_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+         cmake ../ -DCMAKE_INSTALL_PREFIX=<path>
      
      With ILP64
-         cmake ../ -DENABLE_ILP64=ON -DENABLE_AMD_AOCC_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+         cmake ../ -DENABLE_ILP64=ON -DCMAKE_INSTALL_PREFIX=<path>
+
+    Note:
+    Complex return ABI is now selected automatically based on the compiler (see "Complex return ABI" below).
 
 #### AOC:
 
@@ -40,14 +43,28 @@ Use the following command to configure project
      export FC=aof
 
      With LP64
-         cmake ../ -DENABLE_AMD_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+         cmake ../ -DCMAKE_INSTALL_PREFIX=<path>
      
      With ILP64
-         cmake ../ -DENABLE_ILP64=ON -DENABLE_AMD_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+         cmake ../ -DENABLE_ILP64=ON -DCMAKE_INSTALL_PREFIX=<path>
 
-    Note:
-    Turn ENABLE_AMD_FLAGS ON when using the AOF compiler. The AOF compiler returns complex
-    values in the LLVM/GNU style, so this flag is required for correct results.
+#### Complex return ABI:
+
+ENABLE_F2C_DOTC and ENABLE_VOID_RETURN_COMPLEX_FUNCTION control whether complex valued functions
+(BLAS cdotc/cdotu/zdotc/zdotu and libFLAME routines such as cladiv/zladiv) return their result
+through a hidden pointer argument instead of a complex return type. Their default is derived from
+the configured C compiler:
+
+| Platform | Compiler           | Default |
+|----------|--------------------|---------|
+| Windows  | All                | ON      |
+| Linux    | clang/flang (AOCC) | ON      |
+| Linux    | aoc/aof (AOCC)     | OFF     |
+| Linux    | gcc                | OFF     |
+
+Note:
+ENABLE_AMD_FLAGS is ON by default, so the AMD optimized code paths are enabled without 
+passing any extra option. Pass -DENABLE_AMD_FLAGS=OFF to build the reference (non AMD optimized) library.
 
 Shared library is turned on by default. To generate Static library provide additional option
 
@@ -63,16 +80,14 @@ Install the library
 
 Linking with AOCL-BLAS
 ------------------------------------
-AOCL-LAPACK can be linked with any Netlib BLAS compliant library when compiled with standard cmake options above. However, AOCL-LAPACK provides an option to explicitly to link with AOCL-BLAS library at compile time. This option helps achieve better performance for certain APIs on AMD "Zen" CPUs by invoking lower level AOCL-BLAS APIs directly. To force AOCL-LAPACK to use AOCL-BLAS library, provide option ENABLE_AOCL_BLAS in cmake configuration
-
-`cmake -DENABLE_AMD_AOCC_FLAGS=ON -DENABLE_AOCL_BLAS=ON ...`
+AOCL-LAPACK can be linked with any Netlib BLAS compliant library when compiled with standard cmake options above. However, AOCL-LAPACK provides an option to explicitly to link with AOCL-BLAS library at compile time. This option helps achieve better performance for certain APIs on AMD "Zen" CPUs by invoking lower level AOCL-BLAS APIs directly. This is controlled by ENABLE_AOCL_BLAS, which is ON by default, so a path to AOCL-BLAS must be available at configure time. Pass `-DENABLE_AOCL_BLAS=OFF` to build without the tight coupling
 
 The path of AOCL-BLAS library can be provided in one of the following methods
 1. Set "AOCL_ROOT" environment variable to the root path where AOCL-BLAS library `($AOCL_ROOT/lib)` and header files `("$AOCL_ROOT"/include)` are located. AOCL_ROOT must ideally be path where all AOCL libraries are installed including AOCL-Utils and AOCL-BLAS.
 `export AOCL_ROOT=<path to AOCL-libraries>`
 
 2. Specify root path of AOCL-BLAS library through cmake option "AOCL_ROOT"
-`cmake -DENABLE_AMD_AOCC_FLAGS=ON -DENABLE_AOCL_BLAS=ON -DAOCL_ROOT=<path to AOCL-BLAS> ...`
+`cmake -DAOCL_ROOT=<path to AOCL-BLAS> ...`
 
 The path specified in AOCL_ROOT must have "include" directory and a "lib" directory that contains the necesaary header files and AOCL-BLAS binary respectively.
 
@@ -86,14 +101,14 @@ The path of AOCL-Utils library can be provided in one of the following methods
 `export AOCL_ROOT=<path to AOCL-libraries>`
 
 2. Specify root path of AOCL-Utils library through cmake option "AOCL_ROOT"
-    `cmake -DENABLE_AMD_AOCC_FLAGS=ON -DENABLE_AOCL_BLAS=ON -DAOCL_ROOT=<path to AOCL-Utils> ...`
+    `cmake -DAOCL_ROOT=<path to AOCL-Utils> ...`
 
 3. Use individual cmake flags to specify AOCL-Utils library and header paths separately:
     - Use `-DLIBAOCLUTILS_LIBRARY_PATH=<path>` to specify the full path to the AOCL-Utils library file (including the library filename)
     - Use `-DLIBAOCLUTILS_INCLUDE_PATH=<path>` to specify the path to the AOCL-Utils header files directory
     
     e.g.
-    `cmake -DENABLE_AMD_AOCC_FLAGS=ON -DLIBAOCLUTILS_LIBRARY_PATH=/path/to/libaoclutils.so -DLIBAOCLUTILS_INCLUDE_PATH=/path/to/aoclutils/include ...`
+    `cmake -DLIBAOCLUTILS_LIBRARY_PATH=/path/to/libaoclutils.so -DLIBAOCLUTILS_INCLUDE_PATH=/path/to/aoclutils/include ...`
 
 The path specified in AOCL_ROOT must have "include" directory and a "lib" directory that contains the necessary header files and AOCL-Utils binary respectively. When using individual flags, provide the exact paths to the library file and include directory.
 
@@ -144,7 +159,7 @@ Note: Windows requires running create_new_testdir.bat script before running netl
     # To build the documentation in /libflame/docs/libflame/sphinx/html directory use
      -DBUILD_DOC=ON
     e.g.
-        cmake ../ -DBUILD_DOC=ON -DENABLE_AMD_FLAGS=ON -DCMAKE_INSTALL_PREFIX=<path>
+        cmake ../ -DBUILD_DOC=ON -DCMAKE_INSTALL_PREFIX=<path>
 
 ## 5. ENABLE TRACE and LOGS
     
@@ -153,7 +168,7 @@ along with setting the value of Macros `LF_AOCL_DTL_TRACE_ENABLE` and `LF_AOCL_D
 
 e.g.
     
-    cmake ../ -DENABLE_ILP64=OFF -DENABLE_AMD_FLAGS=ON -DBUILD_TEST=ON -DENABLE_AOCL_DTL=[DTL_OPTION] -DCMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH="<path to blas library>" -DEXT_BLAS_LIBNAME=<BLAS_lib_name> -DCMAKE_INSTALL_PREFIX=<path> -DBLAS_HEADER_PATH="<path to AOCL-BLAS header file blis.h>" -DLIBAOCLUTILS_LIBRARY_PATH="<full path to AOCL-Utils library including library file>"
+    cmake ../ -DENABLE_ILP64=OFF -DBUILD_TEST=ON -DENABLE_AOCL_DTL=[DTL_OPTION] -DCMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH="<path to blas library>" -DEXT_BLAS_LIBNAME=<BLAS_lib_name> -DCMAKE_INSTALL_PREFIX=<path> -DBLAS_HEADER_PATH="<path to AOCL-BLAS header file blis.h>" -DLIBAOCLUTILS_LIBRARY_PATH="<full path to AOCL-Utils library including library file>"
 
 #### DTL_OPTIONS:
 

@@ -1,6 +1,9 @@
-set(LAPACKE_INCLUDE lapack.h)
+###############################################################################
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+###############################################################################
+set(LAPACKE_INCLUDE lapack.h lapacke_config.h)
 IF(LAPACKE)
-    list(APPEND LAPACKE_INCLUDE lapacke.h lapacke_config.h lapacke_utils.h)
+    list(APPEND LAPACKE_INCLUDE lapacke.h lapacke_utils.h)
 endif()
 
 # file(COPY ${LAPACKE_INCLUDE} DESTINATION ${LAPACK_BINARY_DIR}/include)

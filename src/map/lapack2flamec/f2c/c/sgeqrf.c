@@ -226,10 +226,17 @@ void sgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, re
     /* If the matrix is large, use the multithreaded version */
     /* Need to tune this threshold */
     aocl_int64_t opt_mt_threads = 1;
+    aocl_int64_t lwkopt_mt = 0;
     if(*m >= FLA_GEQRF_MT_LARGE_M_THRESH && *n >= FLA_GEQRF_MT_LARGE_N_THRESH)
     {
         opt_mt_threads = sgeqrf_mt_large_num_threads(*m, *n);
-        lwkopt = sgeqrf_mt_large_lwork(*m, *n, opt_mt_threads);
+        lwkopt_mt = sgeqrf_mt_large_lwork(*m, *n, opt_mt_threads);
+        /* Ensure the reported workspace is maximum of MT and
+           ST path sizes (n*NB). */
+        if(lwkopt_mt > lwkopt)
+        {
+            lwkopt = lwkopt_mt;
+        }
     }
 #endif
     lquery = *lwork == -1;
@@ -290,7 +297,7 @@ void sgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, re
         return;
     }
 #if FLA_OPENMP_MULTITHREADING
-    else if(FLA_GEQRF_MT_LARGE_DISPATCH(S, *m, *n, opt_mt_threads, *lwork, lwkopt))
+    else if(FLA_GEQRF_MT_LARGE_DISPATCH(S, *m, *n, opt_mt_threads, *lwork, lwkopt_mt))
     {
         sgeqrf_mt_large(*m, *n, &a[a_offset], *lda, &tau[1], &work[1], opt_mt_threads, info);
         return;

@@ -80,7 +80,7 @@ option (ENABLE_AMD_COMMON_FLAGS "Enable AMD FLAGS internally enables ENABLE_BLAS
 # hiding this option from cmake gui
 mark_as_advanced(ENABLE_AMD_COMMON_FLAGS)
 option (ENABLE_AMD_FLAGS "Enable AMD FLAGS internally enables ENABLE_AMD_COMMON_FLAGS" ON)
-option (ENABLE_AMD_AOCC_FLAGS "Enable AMD FLAGS internally enables Enable AMD FLAGS internally enables ENABLE_AMD_COMMON_FLAGS, ENABLE_F2C_DOTC, ENABLE_VOID_RETURN_COMPLEX_FUNCTION" OFF)
+option (ENABLE_AMD_AOCC_FLAGS "Enable AMD AOCC compiler specific FLAGS when DTL is enabled" OFF)
 # Since AOCC isn't used in windows hiding this option from cmake gui
 if(WIN32)
 	mark_as_advanced(ENABLE_AMD_AOCC_FLAGS)
@@ -236,11 +236,6 @@ endif()
 
 if(ENABLE_AMD_FLAGS)
 	set(ENABLE_AMD_COMMON_FLAGS TRUE)
-	if(WIN32)
-	# Since windows uses only enable AMD flags
-		set (ENABLE_F2C_DOTC TRUE)
-		set (ENABLE_VOID_RETURN_COMPLEX_FUNCTION TRUE)
-	endif()
 	message(STATUS "Enabled ENABLE_AMD_FLAGS : ${ENABLE_AMD_FLAGS}")
 endif()
 
@@ -250,8 +245,38 @@ if(ENABLE_AMD_AOCC_FLAGS)
 		set	(CMAKE_C_STANDARD 11)
 		set	(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 	endif()
-    set (ENABLE_AMD_COMMON_FLAGS TRUE)
 	message(STATUS "Enabled ENABLE_AMD_AOCC_FLAGS : ${ENABLE_AMD_AOCC_FLAGS}")
+endif()
+
+if(UNIX)
+	if(_cc_name MATCHES "aoc" OR _cc_name MATCHES "gcc")
+		if(ENABLE_F2C_DOTC OR ENABLE_VOID_RETURN_COMPLEX_FUNCTION)
+			message(WARNING
+				"Configuring libflame with ${_cc_name} compiler while "
+				"ENABLE_F2C_DOTC and/or ENABLE_VOID_RETURN_COMPLEX_FUNCTION are enabled. "
+				"This may cause complex-valued BLAS/libFLAME ABI incompatibilities. "
+				"For the ${_cc_name} default, configure with "
+				"-DENABLE_F2C_DOTC=OFF -DENABLE_VOID_RETURN_COMPLEX_FUNCTION=OFF.")
+		endif()
+	elseif(_cc_name MATCHES "clang")
+		if(NOT(ENABLE_F2C_DOTC AND ENABLE_VOID_RETURN_COMPLEX_FUNCTION))
+			message(WARNING
+				"Configuring libflame with ${_cc_name} compiler while "
+				"ENABLE_F2C_DOTC and/or ENABLE_VOID_RETURN_COMPLEX_FUNCTION are disabled. "
+				"This may cause complex-valued BLAS/libFLAME ABI incompatibilities. "
+				"For the ${_cc_name} default, configure with "
+				"-DENABLE_F2C_DOTC=ON -DENABLE_VOID_RETURN_COMPLEX_FUNCTION=ON.")
+		endif()
+	endif()
+elseif(WIN32)
+	if(NOT(ENABLE_F2C_DOTC AND ENABLE_VOID_RETURN_COMPLEX_FUNCTION))
+		message(WARNING
+			"Configuring libflame on windows while "
+			"ENABLE_F2C_DOTC and/or ENABLE_VOID_RETURN_COMPLEX_FUNCTION are disabled. "
+			"This may cause complex-valued BLAS/libFLAME ABI incompatibilities. "
+			"For the windows default, configure with "
+			"-DENABLE_F2C_DOTC=ON -DENABLE_VOID_RETURN_COMPLEX_FUNCTION=ON.")
+	endif()
 endif()
 
 if(ENABLE_AMD_COMMON_FLAGS)

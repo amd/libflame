@@ -7,16 +7,13 @@
         {
             "name": "linux-make-aoc",
             "inherits": [
-                "base",
-                "amdgccopt"
+                "base"
             ],
             "hidden": true,
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "aoc",
                 "CMAKE_CXX_COMPILER": "aoc++",
-                "CMAKE_Fortran_COMPILER": "aof",
-                "ENABLE_F2C_DOTC": "OFF",
-                "ENABLE_VOID_RETURN_COMPLEX_FUNCTION": "OFF"
+                "CMAKE_Fortran_COMPILER": "aof"
             },
             "generator": "Unix Makefiles",
             "condition": {
@@ -32,7 +29,8 @@
                 "st",
                 "lp64",
                 "static",
-                "autoisa"
+                "autoisa",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-autoisa"
@@ -46,6 +44,7 @@
                 "lp64",
                 "static",
                 "autoisa",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -60,8 +59,7 @@
                 "st",
                 "lp64",
                 "static",
-                "autoisa",
-                "aoclblas"
+                "autoisa"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-autoisa-aoclblas"
@@ -75,7 +73,6 @@
                 "lp64",
                 "static",
                 "autoisa",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -90,7 +87,8 @@
                 "st",
                 "lp64",
                 "static",
-                "avx"
+                "avx",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx"
@@ -104,6 +102,7 @@
                 "lp64",
                 "static",
                 "avx",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -118,8 +117,7 @@
                 "st",
                 "lp64",
                 "static",
-                "avx",
-                "aoclblas"
+                "avx"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx-aoclblas"
@@ -133,7 +131,6 @@
                 "lp64",
                 "static",
                 "avx",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -148,7 +145,8 @@
                 "st",
                 "lp64",
                 "static",
-                "avx2"
+                "avx2",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx2"
@@ -162,6 +160,7 @@
                 "lp64",
                 "static",
                 "avx2",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -176,8 +175,7 @@
                 "st",
                 "lp64",
                 "static",
-                "avx2",
-                "aoclblas"
+                "avx2"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx2-aoclblas"
@@ -191,7 +189,6 @@
                 "lp64",
                 "static",
                 "avx2",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -206,7 +203,8 @@
                 "st",
                 "lp64",
                 "static",
-                "avx512"
+                "avx512",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx512"
@@ -220,6 +218,7 @@
                 "lp64",
                 "static",
                 "avx512",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -234,8 +233,7 @@
                 "st",
                 "lp64",
                 "static",
-                "avx512",
-                "aoclblas"
+                "avx512"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx512-aoclblas"
@@ -249,7 +247,6 @@
                 "lp64",
                 "static",
                 "avx512",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -264,7 +261,8 @@
                 "st",
                 "lp64",
                 "shared",
-                "autoisa"
+                "autoisa",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-autoisa"
@@ -278,6 +276,7 @@
                 "lp64",
                 "shared",
                 "autoisa",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -291,8 +290,7 @@
                 "st",
                 "lp64",
                 "shared",
-                "autoisa",
-                "aoclblas"
+                "autoisa"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-autoisa-aoclblas"
@@ -306,7 +304,6 @@
                 "lp64",
                 "shared",
                 "autoisa",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -320,7 +317,8 @@
                 "st",
                 "lp64",
                 "shared",
-                "avx"
+                "avx",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx"
@@ -334,6 +332,7 @@
                 "lp64",
                 "shared",
                 "avx",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -347,8 +346,7 @@
                 "st",
                 "lp64",
                 "shared",
-                "avx",
-                "aoclblas"
+                "avx"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx-aoclblas"
@@ -362,7 +360,6 @@
                 "lp64",
                 "shared",
                 "avx",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -376,7 +373,8 @@
                 "st",
                 "lp64",
                 "shared",
-                "avx2"
+                "avx2",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx2"
@@ -390,6 +388,7 @@
                 "lp64",
                 "shared",
                 "avx2",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -403,8 +402,7 @@
                 "st",
                 "lp64",
                 "shared",
-                "avx2",
-                "aoclblas"
+                "avx2"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx2-aoclblas"
@@ -418,7 +416,6 @@
                 "lp64",
                 "shared",
                 "avx2",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -432,7 +429,8 @@
                 "st",
                 "lp64",
                 "shared",
-                "avx512"
+                "avx512",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx512"
@@ -446,6 +444,7 @@
                 "lp64",
                 "shared",
                 "avx512",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -459,8 +458,7 @@
                 "st",
                 "lp64",
                 "shared",
-                "avx512",
-                "aoclblas"
+                "avx512"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-lp64-avx512-aoclblas"
@@ -474,7 +472,6 @@
                 "lp64",
                 "shared",
                 "avx512",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -488,7 +485,8 @@
                 "st",
                 "ilp64",
                 "static",
-                "autoisa"
+                "autoisa",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-autoisa"
@@ -502,6 +500,7 @@
                 "ilp64",
                 "static",
                 "autoisa",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -516,8 +515,7 @@
                 "st",
                 "ilp64",
                 "static",
-                "autoisa",
-                "aoclblas"
+                "autoisa"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-autoisa-aoclblas"
@@ -531,7 +529,6 @@
                 "ilp64",
                 "static",
                 "autoisa",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -546,7 +543,8 @@
                 "st",
                 "ilp64",
                 "static",
-                "avx"
+                "avx",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx"
@@ -560,6 +558,7 @@
                 "ilp64",
                 "static",
                 "avx",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -574,8 +573,7 @@
                 "st",
                 "ilp64",
                 "static",
-                "avx",
-                "aoclblas"
+                "avx"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx-aoclblas"
@@ -589,7 +587,6 @@
                 "ilp64",
                 "static",
                 "avx",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -604,7 +601,8 @@
                 "st",
                 "ilp64",
                 "static",
-                "avx2"
+                "avx2",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx2"
@@ -618,6 +616,7 @@
                 "ilp64",
                 "static",
                 "avx2",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -632,8 +631,7 @@
                 "st",
                 "ilp64",
                 "static",
-                "avx2",
-                "aoclblas"
+                "avx2"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx2-aoclblas"
@@ -647,7 +645,6 @@
                 "ilp64",
                 "static",
                 "avx2",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -662,7 +659,8 @@
                 "st",
                 "ilp64",
                 "static",
-                "avx512"
+                "avx512",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx512"
@@ -676,6 +674,7 @@
                 "ilp64",
                 "static",
                 "avx512",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -690,8 +689,7 @@
                 "st",
                 "ilp64",
                 "static",
-                "avx512",
-                "aoclblas"
+                "avx512"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx512-aoclblas"
@@ -705,7 +703,6 @@
                 "ilp64",
                 "static",
                 "avx512",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -720,7 +717,8 @@
                 "st",
                 "ilp64",
                 "shared",
-                "autoisa"
+                "autoisa",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-autoisa"
@@ -734,6 +732,7 @@
                 "ilp64",
                 "shared",
                 "autoisa",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -747,8 +746,7 @@
                 "st",
                 "ilp64",
                 "shared",
-                "autoisa",
-                "aoclblas"
+                "autoisa"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-autoisa-aoclblas"
@@ -762,7 +760,6 @@
                 "ilp64",
                 "shared",
                 "autoisa",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -776,7 +773,8 @@
                 "st",
                 "ilp64",
                 "shared",
-                "avx"
+                "avx",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx"
@@ -790,6 +788,7 @@
                 "ilp64",
                 "shared",
                 "avx",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -803,8 +802,7 @@
                 "st",
                 "ilp64",
                 "shared",
-                "avx",
-                "aoclblas"
+                "avx"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx-aoclblas"
@@ -818,7 +816,6 @@
                 "ilp64",
                 "shared",
                 "avx",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -832,7 +829,8 @@
                 "st",
                 "ilp64",
                 "shared",
-                "avx2"
+                "avx2",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx2"
@@ -846,6 +844,7 @@
                 "ilp64",
                 "shared",
                 "avx2",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -859,8 +858,7 @@
                 "st",
                 "ilp64",
                 "shared",
-                "avx2",
-                "aoclblas"
+                "avx2"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx2-aoclblas"
@@ -874,7 +872,6 @@
                 "ilp64",
                 "shared",
                 "avx2",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -888,7 +885,8 @@
                 "st",
                 "ilp64",
                 "shared",
-                "avx512"
+                "avx512",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx512"
@@ -902,6 +900,7 @@
                 "ilp64",
                 "shared",
                 "avx512",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -915,8 +914,7 @@
                 "st",
                 "ilp64",
                 "shared",
-                "avx512",
-                "aoclblas"
+                "avx512"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-st-ilp64-avx512-aoclblas"
@@ -930,7 +928,6 @@
                 "ilp64",
                 "shared",
                 "avx512",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -944,7 +941,8 @@
                 "mt",
                 "lp64",
                 "static",
-                "autoisa"
+                "autoisa",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-autoisa"
@@ -958,6 +956,7 @@
                 "lp64",
                 "static",
                 "autoisa",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -972,8 +971,7 @@
                 "mt",
                 "lp64",
                 "static",
-                "autoisa",
-                "aoclblas"
+                "autoisa"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-autoisa-aoclblas"
@@ -987,7 +985,6 @@
                 "lp64",
                 "static",
                 "autoisa",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1002,7 +999,8 @@
                 "mt",
                 "lp64",
                 "static",
-                "avx"
+                "avx",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx"
@@ -1016,6 +1014,7 @@
                 "lp64",
                 "static",
                 "avx",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1030,8 +1029,7 @@
                 "mt",
                 "lp64",
                 "static",
-                "avx",
-                "aoclblas"
+                "avx"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx-aoclblas"
@@ -1045,7 +1043,6 @@
                 "lp64",
                 "static",
                 "avx",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1060,7 +1057,8 @@
                 "mt",
                 "lp64",
                 "static",
-                "avx2"
+                "avx2",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx2"
@@ -1074,6 +1072,7 @@
                 "lp64",
                 "static",
                 "avx2",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1088,8 +1087,7 @@
                 "mt",
                 "lp64",
                 "static",
-                "avx2",
-                "aoclblas"
+                "avx2"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx2-aoclblas"
@@ -1103,7 +1101,6 @@
                 "lp64",
                 "static",
                 "avx2",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1118,7 +1115,8 @@
                 "mt",
                 "lp64",
                 "static",
-                "avx512"
+                "avx512",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx512"
@@ -1132,6 +1130,7 @@
                 "lp64",
                 "static",
                 "avx512",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1146,8 +1145,7 @@
                 "mt",
                 "lp64",
                 "static",
-                "avx512",
-                "aoclblas"
+                "avx512"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx512-aoclblas"
@@ -1161,7 +1159,6 @@
                 "lp64",
                 "static",
                 "avx512",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1176,7 +1173,8 @@
                 "mt",
                 "lp64",
                 "shared",
-                "autoisa"
+                "autoisa",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-autoisa"
@@ -1190,6 +1188,7 @@
                 "lp64",
                 "shared",
                 "autoisa",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1203,8 +1202,7 @@
                 "mt",
                 "lp64",
                 "shared",
-                "autoisa",
-                "aoclblas"
+                "autoisa"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-autoisa-aoclblas"
@@ -1218,7 +1216,6 @@
                 "lp64",
                 "shared",
                 "autoisa",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1232,7 +1229,8 @@
                 "mt",
                 "lp64",
                 "shared",
-                "avx"
+                "avx",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx"
@@ -1246,6 +1244,7 @@
                 "lp64",
                 "shared",
                 "avx",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1259,8 +1258,7 @@
                 "mt",
                 "lp64",
                 "shared",
-                "avx",
-                "aoclblas"
+                "avx"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx-aoclblas"
@@ -1274,7 +1272,6 @@
                 "lp64",
                 "shared",
                 "avx",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1288,7 +1285,8 @@
                 "mt",
                 "lp64",
                 "shared",
-                "avx2"
+                "avx2",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx2"
@@ -1302,6 +1300,7 @@
                 "lp64",
                 "shared",
                 "avx2",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1315,8 +1314,7 @@
                 "mt",
                 "lp64",
                 "shared",
-                "avx2",
-                "aoclblas"
+                "avx2"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx2-aoclblas"
@@ -1330,7 +1328,6 @@
                 "lp64",
                 "shared",
                 "avx2",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1344,7 +1341,8 @@
                 "mt",
                 "lp64",
                 "shared",
-                "avx512"
+                "avx512",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx512"
@@ -1358,6 +1356,7 @@
                 "lp64",
                 "shared",
                 "avx512",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1371,8 +1370,7 @@
                 "mt",
                 "lp64",
                 "shared",
-                "avx512",
-                "aoclblas"
+                "avx512"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-lp64-avx512-aoclblas"
@@ -1386,7 +1384,6 @@
                 "lp64",
                 "shared",
                 "avx512",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1400,7 +1397,8 @@
                 "mt",
                 "ilp64",
                 "static",
-                "autoisa"
+                "autoisa",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-autoisa"
@@ -1414,6 +1412,7 @@
                 "ilp64",
                 "static",
                 "autoisa",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1428,8 +1427,7 @@
                 "mt",
                 "ilp64",
                 "static",
-                "autoisa",
-                "aoclblas"
+                "autoisa"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-autoisa-aoclblas"
@@ -1443,7 +1441,6 @@
                 "ilp64",
                 "static",
                 "autoisa",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1458,7 +1455,8 @@
                 "mt",
                 "ilp64",
                 "static",
-                "avx"
+                "avx",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx"
@@ -1472,6 +1470,7 @@
                 "ilp64",
                 "static",
                 "avx",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1486,8 +1485,7 @@
                 "mt",
                 "ilp64",
                 "static",
-                "avx",
-                "aoclblas"
+                "avx"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx-aoclblas"
@@ -1501,7 +1499,6 @@
                 "ilp64",
                 "static",
                 "avx",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1516,7 +1513,8 @@
                 "mt",
                 "ilp64",
                 "static",
-                "avx2"
+                "avx2",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx2"
@@ -1530,6 +1528,7 @@
                 "ilp64",
                 "static",
                 "avx2",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1544,8 +1543,7 @@
                 "mt",
                 "ilp64",
                 "static",
-                "avx2",
-                "aoclblas"
+                "avx2"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx2-aoclblas"
@@ -1559,7 +1557,6 @@
                 "ilp64",
                 "static",
                 "avx2",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1574,7 +1571,8 @@
                 "mt",
                 "ilp64",
                 "static",
-                "avx512"
+                "avx512",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx512"
@@ -1588,6 +1586,7 @@
                 "ilp64",
                 "static",
                 "avx512",
+                "noaoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1602,8 +1601,7 @@
                 "mt",
                 "ilp64",
                 "static",
-                "avx512",
-                "aoclblas"
+                "avx512"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx512-aoclblas"
@@ -1617,7 +1615,6 @@
                 "ilp64",
                 "static",
                 "avx512",
-                "aoclblas",
                 "test",
                 "test-netlib"
             ],
@@ -1632,7 +1629,8 @@
                 "mt",
                 "ilp64",
                 "shared",
-                "autoisa"
+                "autoisa",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-autoisa"
@@ -1646,6 +1644,7 @@
                 "ilp64",
                 "shared",
                 "autoisa",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1659,8 +1658,7 @@
                 "mt",
                 "ilp64",
                 "shared",
-                "autoisa",
-                "aoclblas"
+                "autoisa"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-autoisa-aoclblas"
@@ -1674,7 +1672,6 @@
                 "ilp64",
                 "shared",
                 "autoisa",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1688,7 +1685,8 @@
                 "mt",
                 "ilp64",
                 "shared",
-                "avx"
+                "avx",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx"
@@ -1702,6 +1700,7 @@
                 "ilp64",
                 "shared",
                 "avx",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1715,8 +1714,7 @@
                 "mt",
                 "ilp64",
                 "shared",
-                "avx",
-                "aoclblas"
+                "avx"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx-aoclblas"
@@ -1730,7 +1728,6 @@
                 "ilp64",
                 "shared",
                 "avx",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1744,7 +1741,8 @@
                 "mt",
                 "ilp64",
                 "shared",
-                "avx2"
+                "avx2",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx2"
@@ -1758,6 +1756,7 @@
                 "ilp64",
                 "shared",
                 "avx2",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1771,8 +1770,7 @@
                 "mt",
                 "ilp64",
                 "shared",
-                "avx2",
-                "aoclblas"
+                "avx2"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx2-aoclblas"
@@ -1786,7 +1784,6 @@
                 "ilp64",
                 "shared",
                 "avx2",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1800,7 +1797,8 @@
                 "mt",
                 "ilp64",
                 "shared",
-                "avx512"
+                "avx512",
+                "noaoclblas"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx512"
@@ -1814,6 +1812,7 @@
                 "ilp64",
                 "shared",
                 "avx512",
+                "noaoclblas",
                 "test"
             ],
             "cacheVariables": {
@@ -1827,8 +1826,7 @@
                 "mt",
                 "ilp64",
                 "shared",
-                "avx512",
-                "aoclblas"
+                "avx512"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx512-aoclblas"
@@ -1842,7 +1840,6 @@
                 "ilp64",
                 "shared",
                 "avx512",
-                "aoclblas",
                 "test"
             ],
             "cacheVariables": {

@@ -72,10 +72,10 @@
             }
         },
         {
-            "name": "aoclblas",
+            "name": "noaoclblas",
             "hidden": true,
             "cacheVariables": {
-                "ENABLE_AOCL_BLAS": "ON"
+                "ENABLE_AOCL_BLAS": "OFF"
             }
         },
         {

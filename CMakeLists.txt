@@ -1054,6 +1054,22 @@ set(LIBFLAME_PUBLIC_HEADERS	"include/FLAME.h"
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${LIBFLAME_PUBLIC_HEADERS}")
 
+# On UNIX, the shared libflame and its runtime dependencies (libblis, libaoclutils)
+# are installed side-by-side in ${CMAKE_INSTALL_PREFIX}/lib. Embed a relative
+# DT_RUNPATH of $ORIGIN so the loader resolves those dependencies from the install
+# directory itself, without the user having to set LD_LIBRARY_PATH. We deliberately
+# avoid baking absolute link-time paths (INSTALL_RPATH_USE_LINK_PATH) into the
+# library, which would leak non-portable build-machine paths into the release.
+if(UNIX AND BUILD_SHARED_LIBS)
+            set_target_properties(${PROJECT_NAME} PROPERTIES
+                          INSTALL_RPATH "$ORIGIN"
+                          INSTALL_RPATH_USE_LINK_PATH OFF
+                          BUILD_WITH_INSTALL_RPATH OFF)
+            # Use DT_RUNPATH (new dtags) so LD_LIBRARY_PATH still takes precedence for users
+            # who need to override, matching standard distro behavior.
+            target_link_options(${PROJECT_NAME} PRIVATE "-Wl,--enable-new-dtags")
+endif()
+
 #Strip DWARF debug info from the release shared library.
 if(BUILD_SHARED_LIBS AND UNIX AND CMAKE_STRIP
    AND NOT CMAKE_BUILD_TYPE STREQUAL "Debug"

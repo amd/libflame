@@ -31,9 +31,9 @@ if(WIN32)
 	SET(OpenMP_libomp_LIB "C:/Program Files/LLVM/lib/libomp.lib" CACHE STRING "openmp library path")
 	SET(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH "${FLAME_ROOT}/bin/Release" CACHE STRING "BLAS library path")
 	SET(EXT_BLAS_LIBNAME "" CACHE STRING "BLAS library name")
-	SET(LIBAOCLUTILS_LIBRARY_PATH "" CACHE STRING "AOCLUtils library name")
-	SET(LIBAOCLUTILS_INCLUDE_PATH "" CACHE STRING "AOCLUtils library header files path")
 endif()
+
+SET(LIBAOCLUTILS_INCLUDE_PATH "" CACHE STRING "Override path to the aocl-utils SDK/Include directory (the one that contains Capi/), skips the FetchContent download")
 
 message(STATUS "External blas library Path : ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}")
 message(STATUS "External blas library name : ${EXT_BLAS_LIBNAME}")
@@ -60,19 +60,33 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter)
 # Note: ISA validation and configuration is now handled by cmake/CompilerFlags.cmake
 # via the configure_compiler_flags() macro called below
 
-#set AOCL Utilities library path values
-set(LIBAOCLUTILS_PROJECT "libaoclutils")
-set(LIBAOCLUTILS_INSTALL_DIR_NAME "install-aoclutils")
-set(LIBAOCLUTILS_GIT_URL "https://github.com/amd/aocl-utils.git" CACHE STRING "libaoclutils repository URL to be used")
-set(LIBAOCLUTILS_GIT_TAG "5.0" CACHE STRING "libaoclutils repository tag to be used")
+# ---- AOCL-Utils CPUID: header-only interface ------------------------------
+# au_cpuid_header_only.h is a generated, self-contained single-header amalgamation
+# of the AOCL-Utils C CPUID API: it inlines as static functions, so nothing is
+# built or linked. FetchContent only downloads the source tree to make the
+# header reachable -- no add_subdirectory, no compiled libaoclutils.
+# TODO: Once AOCL-Utils 6.0 is publicly released, update the Git URL and tag
+# below to use the public aocl-utils repository and release tag.
+set(LIBAOCLUTILS_GIT_URL "git@github.com:AMD-AOCL/aocl-utils.git" CACHE STRING "aocl-utils repository used to fetch the header-only CPUID header")
+set(LIBAOCLUTILS_GIT_TAG "amd-main" CACHE STRING "aocl-utils repository tag/branch used to fetch the header-only CPUID header")
 
-if(UNIX)
-	set(LIBAOCLUTILS_SHAREDLIB "libaoclutils.so")
-	set(LIBAOCLUTILS_STATICLIB "libaoclutils.a")
+if(LIBAOCLUTILS_INCLUDE_PATH)
+	message(STATUS "Using user-provided AOCL-Utils SDK/Include path: ${LIBAOCLUTILS_INCLUDE_PATH}")
+	set(AOCLUTILS_CPUID_HEADER_DIR ${LIBAOCLUTILS_INCLUDE_PATH})
 else()
-	set(LIBAOCLUTILS_SHAREDLIB "libaoclutils.dll")
-	set(LIBAOCLUTILS_STATICLIB "libaoclutils_static.lib")
-endif ()
+	include(FetchContent)
+	FetchContent_Declare(aoclutils_hdr
+		GIT_REPOSITORY ${LIBAOCLUTILS_GIT_URL}
+		GIT_TAG        ${LIBAOCLUTILS_GIT_TAG})
+	FetchContent_GetProperties(aoclutils_hdr)
+	if(NOT aoclutils_hdr_POPULATED)
+		FetchContent_Populate(aoclutils_hdr)
+	endif()
+	set(AOCLUTILS_CPUID_HEADER_DIR ${aoclutils_hdr_SOURCE_DIR}/SDK/Include)
+endif()
+
+add_library(aoclutils_headeronly INTERFACE)
+target_include_directories(aoclutils_headeronly INTERFACE ${AOCLUTILS_CPUID_HEADER_DIR})
 
 #enabling the configuration options
 option (ENABLE_AMD_OPT "Enable AMD optimized path" OFF)
@@ -150,7 +164,6 @@ option (ENABLE_SET_LIB_VERSION "Set library version" OFF)
 option (ENABLE_BLAS_EXT_GEMMT "Enable BLAS GEMMT Usage" ON)
 set(ENABLE_AOCL_DTL OFF CACHE STRING "Enable DTL Usage. USE with Option ALL to Enable both Trace and Log, TRACE to enable Trace, and LOG to ENABLE only Input Logging ")
 set_property(CACHE ENABLE_AOCL_DTL PROPERTY STRINGS ALL TRACE_AND_LOG TRACE LOG OFF )
-option (ENABLE_EMBED_AOCLUTILS "Enables embedding aocl-utils library in AOCL-LAPACK" OFF)
 option (ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN " For LAPACKE interface enables lsame arguments length based on Fortran interface " OFF)
 option (ENABLE_ASAN "Enable Address Sanitizer (Debug build)" OFF)
 # By default build LAPACKE Index-32 API library
@@ -517,12 +530,9 @@ if(ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN)
     add_definitions(-DLAPACK_LSAME_FORTRAN_STRLEN_END)
 endif()
 
+# AOCL-Utils CPUID is header-only (inlined at compile time): no runtime
+# library dependency to advertise via pkg-config.
 set(REQ_LIBAOCLUTILS_PKGNAME "")
-# Configuration for pkg-config
-if(NOT ENABLE_EMBED_AOCLUTILS)
-	# set the variable if aocl-utils library is not embedded
-	set(REQ_LIBAOCLUTILS_PKGNAME "aocl-utils")
-endif()
 # Get the required AOCL-BLAS library pkg name
 if (ENABLE_MULTITHREADING)
     set(REQ_BLAS_PKGNAME "blis-mt")
@@ -1144,137 +1154,9 @@ endif ()
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/front)
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/generic)
 
-# IF AOCL-UTILS paths is not provided by user, try to get it from AOCL_ROOT environment vriable
-if (NOT LIBAOCLUTILS_INCLUDE_PATH OR NOT LIBAOCLUTILS_LIBRARY_PATH)
-	if (NOT LIBAOCLUTILS_INCLUDE_PATH)
-		if(AOCL_UTILS_LIBRARY)
-			message("LIBAOCLUTILS_INCLUDE_PATH not set. AOCL-UTILS library path provided by AOCL_ROOT environment variable will be used")
-			set(LIBAOCLUTILS_INCLUDE_PATH ${AOCL_UTILS_INCLUDE_DIR})
-			set(LIBAOCLUTILS_LIBRARY_PATH ${AOCL_UTILS_LIBRARY})
-		else()
-			message(FATAL_ERROR "AOCL-UTILS library header path not provided! Set the same using flag LIBAOCLUTILS_INCLUDE_PATH or AOCL_ROOT environment variable")
-		endif()
-	elseif(NOT LIBAOCLUTILS_LIBRARY_PATH AND (BUILD_SHARED_LIBS OR BUILD_TEST OR BUILD_LEGACY_TEST OR BUILD_NETLIB_TEST))
-		if (AOCL_UTILS_LIBRARY)
-			message("LIBAOCLUTILS_LIBRARY_PATH not set. AOCL-UTILS library path provided by AOCL_ROOT environment variable will be used")
-			set(LIBAOCLUTILS_LIBRARY_PATH ${AOCL_UTILS_LIBRARY})
-			set(LIBAOCLUTILS_INCLUDE_PATH ${AOCL_UTILS_INCLUDE_DIR})
-		else()
-			message(FATAL_ERROR "AOCL-UTILS library path not provided! Set the same using flag LIBAOCLUTILS_LIBRARY_PATH or AOCL_ROOT environment variable")
-		endif()
-	endif()
-endif()
-
-message(STATUS "AOCL-UTILS library path : ${LIBAOCLUTILS_LIBRARY_PATH}")
-message(STATUS "AOCL-UTILS library headers path : ${LIBAOCLUTILS_INCLUDE_PATH}")
-
-#If embedding AOCL-UTILS library in AOCL-LAPACK option is selected
-if(ENABLE_EMBED_AOCLUTILS)
-  #AOCLUtils library path handling
-  #If user has provided the library path, use it.
-  if(LIBAOCLUTILS_LIBRARY_PATH AND LIBAOCLUTILS_INCLUDE_PATH)
-
-	message(STATUS "User provided AOCLUtils library path : " ${LIBAOCLUTILS_LIBRARY_PATH})
-	message(STATUS "User provided AOCLUtils library headers path : " ${LIBAOCLUTILS_INCLUDE_PATH})
-
-	target_include_directories(${PROJECT_NAME} PUBLIC ${LIBAOCLUTILS_INCLUDE_PATH})
-
-  else(LIBAOCLUTILS_LIBRARY_PATH AND LIBAOCLUTILS_INCLUDE_PATH)
-	#Else build from source if EMBED_AOCLUTILS is selected
-	message(STATUS "LIBAOCLUTILS_LIBRARY_PATH and LIBAOCLUTILS_INCLUDE_PATH flags not provded")
-
-	set(LIBAOCLUTILS_SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/${LIBAOCLUTILS_PROJECT}-prefix/src/${LIBAOCLUTILS_PROJECT}")
-	set(LIBAOCLUTILS_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/${LIBAOCLUTILS_PROJECT}-prefix/src/${LIBAOCLUTILS_PROJECT}-build/${LIBAOCLUTILS_INSTALL_DIR_NAME}")
-        if(UNIX)
-		set(CHECK_LIB_EXISTS ${LIBAOCLUTILS_INSTALL_DIR})
-	elseif(WIN32)
-		set(CHECK_LIB_EXISTS "${LIBAOCLUTILS_INSTALL_DIR}/lib/*.lib")
-	endif ()
-	message(STATUS "Check AOCL Utils path ${LIBAOCLUTILS_SOURCE_DIR} exists..")
-	if (EXISTS ${CHECK_LIB_EXISTS})
-		message(STATUS "Found AOCL Utils source directory. Won't rebuild it")
-	else()
-		message(STATUS "AOCLUtils library neither provided by user nor earlier build exists. Downloading from GitHub repository")
-		message(STATUS "libaoclutils  will be cloned from URL ${LIBAOCLUTILS_GIT_URL} and tag ${LIBAOCLUTILS_GIT_TAG}")
-		#Download AOCLUtils library from Github
-		include(ExternalProject)
-		ExternalProject_Add(
-			${LIBAOCLUTILS_PROJECT}
-			GIT_REPOSITORY ${LIBAOCLUTILS_GIT_URL}
-			GIT_TAG ${LIBAOCLUTILS_GIT_TAG}
-			CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${LIBAOCLUTILS_INSTALL_DIR_NAME}
-			UPDATE_DISCONNECTED TRUE
-			LOG_DOWNLOAD TRUE
-			LOG_CONFIGURE TRUE
-			LOG_BUILD TRUE
-		)
-
-		ExternalProject_Get_Property(${LIBAOCLUTILS_PROJECT} source_dir)
-		ExternalProject_Get_Property(${LIBAOCLUTILS_PROJECT} binary_dir)
-
-		set(LIBAOCLUTILS_SOURCE_DIR ${source_dir})
-		set(LIBAOCLUTILS_INSTALL_DIR ${binary_dir}/${LIBAOCLUTILS_INSTALL_DIR_NAME})
-
-		message(STATUS "libaoclutils source directory ${LIBAOCLUTILS_SOURCE_DIR}")
-		message(STATUS "libaoclutils install directory ${LIBAOCLUTILS_INSTALL_DIR}")
-
-		add_dependencies(${PROJECT_NAME} ${LIBAOCLUTILS_PROJECT})
-	endif()
-
-	set(LIBAOCLUTILS_LIBRARY_PATH ${LIBAOCLUTILS_INSTALL_DIR}/lib/${LIBAOCLUTILS_STATICLIB})
-	target_include_directories(${PROJECT_NAME} PUBLIC ${LIBAOCLUTILS_SOURCE_DIR}/include)
-
-  endif()
-
-  #For libflame shared library, Link directly with libaoclutils library
-  #For libflame static library, merge libaoclutils and libflame binaries into a single static library
-  if(BUILD_SHARED_LIBS)
-	target_link_libraries(${PROJECT_NAME} ${LIBAOCLUTILS_LIBRARY_PATH})
-  else ()
-	if(UNIX)
-		#Merge libflame and libaoclutils libraries in post build step using archive command
-		add_custom_command(TARGET ${PROJECT_NAME}
-				POST_BUILD
-				COMMAND ar -x ${LIBAOCLUTILS_LIBRARY_PATH}
-				COMMAND ar -x ${LIBFLAME_STATICLIB_PATH}
-				COMMAND ar -crs ${LIBFLAME_STATICLIB_NAME} *.o
-				COMMAND rm *.o
-				COMMAND mv ${LIBFLAME_STATICLIB_NAME} ${LIBFLAME_STATICLIB_PATH}
-				COMMENT "Merging libflame and libaoclutils library object files into single binary"
-				)
-	elseif(WIN32)
-		#Merge libaoclutils static library with libflame static library in post build step
-		add_custom_command(TARGET ${PROJECT_NAME}
-				POST_BUILD
-				COMMAND lib.exe /OUT:${LIBFLAME_STATICLIB_PATH} ${LIBFLAME_STATICLIB_PATH} ${LIBAOCLUTILS_LIBRARY_PATH}
-				COMMENT "Merging libflame and libaoclutils libraries"
-				)
-	endif ()
-  endif()
-
-  if(UNIX)
-	#Linking with libstdc++ library is needed for libaoclutils library dependency
-	target_link_libraries(${PROJECT_NAME} "libstdc++.so")
-  endif ()
-
-elseif(BUILD_SHARED_LIBS)
-	if(LIBAOCLUTILS_LIBRARY_PATH AND LIBAOCLUTILS_INCLUDE_PATH)
-		target_include_directories(${PROJECT_NAME} PUBLIC ${LIBAOCLUTILS_INCLUDE_PATH})
-		target_link_libraries(${PROJECT_NAME} ${LIBAOCLUTILS_LIBRARY_PATH})
-	else()
-		message(FATAL_ERROR "Shared Library build requires AOCL-Utils library and header path to be set! Please set the same using LIBAOCLUTILS_LIBRARY_PATH and LIBAOCLUTILS_INCLUDE_PATH options respectively")
-
-	endif()
-
-elseif(LIBAOCLUTILS_INCLUDE_PATH)
-
-	message(STATUS "User provided AOCLUtils library headers path : " ${LIBAOCLUTILS_INCLUDE_PATH})
-
-	target_include_directories(${PROJECT_NAME} PUBLIC ${LIBAOCLUTILS_INCLUDE_PATH})
-
-else()
-	message(FATAL_ERROR "Header file path of aocl-utils library not set! Please set the same using LIBAOCLUTILS_INCLUDE_PATH option")
-endif()
+# AOCL-Utils CPUID: header-only, nothing to link (see aoclutils_headeronly
+# declared earlier). The include dir is propagated via the INTERFACE target.
+target_link_libraries(${PROJECT_NAME} aoclutils_headeronly)
 
 # TODO : enable this flag to build source supplied blas library
 # link externally built blas library
@@ -1357,12 +1239,7 @@ if (BUILD_TEST OR BUILD_LEGACY_TEST)
 	message(STATUS "CTEST ENABLED")
 
 	add_library(blas SHARED IMPORTED)
-	add_library(aoclutils SHARED IMPORTED)
-	if(NOT ENABLE_EMBED_AOCLUTILS AND NOT EXISTS ${LIBAOCLUTILS_LIBRARY_PATH})
-		message(FATAL_ERROR "aocl-utils library path not set! Please set the same using LIBAOCLUTILS_LIBRARY_PATH \
-		option or make sure aocl-utils pkg-config file is in PKG_CONFIG_PATH")
-	endif()
-		
+
 	if(UNIX)
 		# CHECKS if blas library path is explicitly set
 		if (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND (NOT ENABLE_AOCL_BLAS))
@@ -1391,11 +1268,6 @@ if (BUILD_TEST OR BUILD_LEGACY_TEST)
 			message(STATUS "BLAS library from environment")
 		endif()
 
-		set_target_properties(aoclutils PROPERTIES
-		IMPORTED_LOCATION ${LIBAOCLUTILS_LIBRARY_PATH}
-		POSITION_INDEPENDENT_CODE ON
-		)
-
 	elseif(WIN32)
 		# CHECKS if blas library is explicitly set
 		if (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND (NOT ENABLE_AOCL_BLAS))
@@ -1416,11 +1288,6 @@ if (BUILD_TEST OR BUILD_LEGACY_TEST)
 			POSITION_INDEPENDENT_CODE ON
 			)
 		endif()
-
-		set_target_properties(aoclutils PROPERTIES
-		IMPORTED_IMPLIB ${LIBAOCLUTILS_LIBRARY_PATH}
-		POSITION_INDEPENDENT_CODE ON
-		)
 	endif()
 endif()
 

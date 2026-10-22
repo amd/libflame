@@ -1858,7 +1858,6 @@
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx2-embedutils-noext-amdaoccopt",
-                "ENABLE_EMBED_AOCLUTILS": "ON",
                 "ENABLE_BLAS_EXT_GEMMT": "OFF"
             }
         },
@@ -1876,7 +1875,6 @@
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-linux-mt-ilp64-avx2-embedutils-noext-amdaoccopt",
-                "ENABLE_EMBED_AOCLUTILS": "ON",
                 "ENABLE_BLAS_EXT_GEMMT": "OFF"
             }
         }

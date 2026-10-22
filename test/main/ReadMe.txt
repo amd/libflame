@@ -21,13 +21,12 @@ The test suite directory has (test/main) the following contents,
 
 ## Compiling
 
-Before running the test suite, we must set BLAS, LAPACK and AOCL-Utils library paths.
+Before running the test suite, we must set BLAS and LAPACK library paths.
 
 BLAS library and header paths has to be set using 'LIBBLAS' and 'BLAS_HEADER_PATH' flags
-respectively. AOCL-Utils library path has to be set using LIBAOCLUTILS_LIBRARY_PATH flag.
+respectively.
    $ make BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
           LIBBLAS=<full path to BLAS library including library file>
-          LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
 
 By default, the make file is programmed to look for libflame.a in `../../lib/
 x86_64-unknown-linux-gnu` directory for LAPACK library. However, if the users
@@ -45,7 +44,6 @@ execute `make`:
    $ make LIBFLAME=lapack.a LIB_PATH=/usr/local
           BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
           LIBBLAS=<full path to BLAS library including library file>
-          LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
 
 When you are ready to compile, simply run `make` from the current directory.
 After `make` is complete, an executable named `test_lapack.x` is created.

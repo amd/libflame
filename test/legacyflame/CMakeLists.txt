@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 add_executable(test_libFLAME "")
 
@@ -15,14 +15,6 @@ if(UNIX)
 else(UNIX)
 	target_link_libraries(test_libFLAME debug "${CMAKE_PROJECT_NAME}" "${Legacy_Flame_FLAGS}" blas)
 	target_link_libraries(test_libFLAME optimized "${Legacy_Flame_FLAGS}" "${CMAKE_PROJECT_NAME}" blas)
-endif()
-
-if(NOT ENABLE_EMBED_AOCLUTILS)
-  target_link_libraries(test_libFLAME optimized "${Legacy_Flame_FLAGS}" "${CMAKE_PROJECT_NAME}" aoclutils)
-  target_link_libraries(test_libFLAME debug "${CMAKE_PROJECT_NAME}" "${Legacy_Flame_FLAGS}" aoclutils)
-  if(UNIX)
-	  target_link_libraries(test_libFLAME "libstdc++.so")
-  endif()
 endif()
 
 target_include_directories(test_libFLAME PRIVATE "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}" blas)

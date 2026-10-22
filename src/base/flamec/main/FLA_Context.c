@@ -22,7 +22,7 @@
  * ************************************************************************ */
 
 #include "FLAME.h"
-#include "Capi/au/cpuid/cpuid.h"
+#include <Capi/au/cpuid/au_cpuid_header_only.h>
 
 #if defined(FLA_NO_CONTEXT)
 

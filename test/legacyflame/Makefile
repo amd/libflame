@@ -65,7 +65,6 @@ LIBLAPACK      :=
 #
 # ----- AOCL-Utils library path
 #
-LIBAOCLUTILS_LIBRARY_PATH := 
 
 
 #
@@ -96,7 +95,7 @@ $(TEST_OBJ_PATH)/%.o: $(TEST_SRC_PATH)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test_$(FNAME): $(TEST_OBJS)
-	$(LINKER) $(TEST_OBJS) $(LIBFLAME) $(LIBLAPACK) $(LIBBLAS) $(LIBAOCLUTILS_LIBRARY_PATH) $(LDFLAGS) -o $(TEST_BIN)
+	$(LINKER) $(TEST_OBJS) $(LIBFLAME) $(LIBLAPACK) $(LIBBLAS) $(LDFLAGS) -o $(TEST_BIN)
 
 clean:
 	$(RM_F) $(TEST_OBJS) $(TEST_BIN)

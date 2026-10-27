@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -211,7 +211,16 @@ void fla_test_gebrd_experiment(char *tst_api, test_params_t *params, integer dat
      * The number of floating point operations in GEBRD is 4n^2(3m - n)/3 if m>=n else 4m^2(3n-m)/3
      * See: https://support.nag.com/numeric/nl/nagdoc_latest/clhtml/f08/f08kec.html
      */
-    perf = (double)(((4.0 * n * n) * ((3.0 * m) - n)) / 3.0) / time_min / FLOPS_PER_UNIT_PERF;
+    if(m >= n)
+    {
+        perf = (double)(((4.0 * n * n) * ((3.0 * m) - n)) / 3.0) / time_min
+               / FLOPS_PER_UNIT_PERF;
+    }
+    else
+    {
+        perf = (double)(((4.0 * m * m) * ((3.0 * n) - m)) / 3.0) / time_min
+               / FLOPS_PER_UNIT_PERF;
+    }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 

@@ -95,9 +95,24 @@ AOCL-Utils CPUID header
 -----------------------
 AOCL-LAPACK uses the header-only AOCL-Utils CPUID implementation. It is
 inlined into libflame at compile time, so no AOCL-Utils library path or
-binary library is required. The header can be supplied with
-`-DLIBAOCLUTILS_INCLUDE_PATH=<path to the AOCL-Utils SDK/Include directory>`.
+binary library is required.
 
+AOCL-Utils can be found through the `AOCL_ROOT` environment variable:
+
+    export AOCL_ROOT=/path/to/aocl
+
+or through the `AOCL_ROOT` CMake cache variable:
+
+    cmake -DAOCL_ROOT=/path/to/aocl ...
+
+The header must exist in one of these locations:
+
+    $AOCL_ROOT/include/Capi/au/cpuid/au_cpuid_header_only.h
+    $AOCL_ROOT/SDK/Include/Capi/au/cpuid/au_cpuid_header_only.h
+
+Alternatively, provide the AOCL-Utils include directory explicitly:
+
+    cmake -DLIBAOCLUTILS_INCLUDE_PATH=/path/to/SDK/Include ...
 
 ## 2. Building main Test and AOCL_FLA_PROGRESS Test Suite
 In order to build tests an additional flag, BUILD_TEST, must be set ON
@@ -270,22 +285,24 @@ Examples:
 
 Building AOCL-LAPACK without tests:
 
-- Using the default AOCL-Utils FetchContent header source
+- Using AOCL-Utils headers from `AOCL_ROOT`
 
+        export AOCL_ROOT=/path/to/aocl
         cmake --preset <preset-name>
 
-- Without the default AOCL-Utils header source
+- Using an explicit AOCL-Utils include directory
 
         cmake --preset <preset-name> -DLIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files>
 
 
 Building AOCL-LAPACK with tests:
 
-- Using the default AOCL-Utils header source with BLAS configuration
+- Using AOCL-Utils headers from `AOCL_ROOT` with BLAS configuration
 
+        export AOCL_ROOT=/path/to/aocl
         cmake --preset <preset-name ending with test>
     
-- Without the default AOCL-Utils header source and BLAS configuration
+- Using an explicit AOCL-Utils include directory with BLAS configuration
             
         cmake --preset <preset-name ending with test> -DLIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files> -DCMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH=<path/to/blas/lib> -DEXT_BLAS_LIBNAME=<blas_lib_name> -DBLAS_HEADER_PATH=<path/to/blis.h>
 

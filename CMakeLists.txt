@@ -33,7 +33,13 @@ if(WIN32)
 	SET(EXT_BLAS_LIBNAME "" CACHE STRING "BLAS library name")
 endif()
 
-SET(LIBAOCLUTILS_INCLUDE_PATH "" CACHE STRING "Override path to the aocl-utils SDK/Include directory (the one that contains Capi/), skips the FetchContent download")
+set(AOCL_ROOT "" CACHE PATH "AOCL-BLAS installation path and AOCL-UTILS header path")
+# Use the environment value when no cache value was supplied.
+if(NOT AOCL_ROOT AND DEFINED ENV{AOCL_ROOT})
+    set(AOCL_ROOT "$ENV{AOCL_ROOT}" CACHE PATH
+        "AOCL-BLAS installation path and AOCL-UTILS header path" FORCE)
+endif()
+SET(LIBAOCLUTILS_INCLUDE_PATH "" CACHE STRING "Override path to the aocl-utils SDK/Include directory (the one that contains Capi/)")
 
 message(STATUS "External blas library Path : ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}")
 message(STATUS "External blas library name : ${EXT_BLAS_LIBNAME}")
@@ -63,26 +69,39 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter)
 # ---- AOCL-Utils CPUID: header-only interface ------------------------------
 # au_cpuid_header_only.h is a generated, self-contained single-header amalgamation
 # of the AOCL-Utils C CPUID API: it inlines as static functions, so nothing is
-# built or linked. FetchContent only downloads the source tree to make the
-# header reachable -- no add_subdirectory, no compiled libaoclutils.
-# TODO: Once AOCL-Utils 6.0 is publicly released, update the Git URL and tag
-# below to use the public aocl-utils repository and release tag.
-set(LIBAOCLUTILS_GIT_URL "git@github.com:AMD-AOCL/aocl-utils.git" CACHE STRING "aocl-utils repository used to fetch the header-only CPUID header")
-set(LIBAOCLUTILS_GIT_TAG "amd-main" CACHE STRING "aocl-utils repository tag/branch used to fetch the header-only CPUID header")
+# built or linked. Compiled libaoclutils is not required, only this header is needed.
 
-if(LIBAOCLUTILS_INCLUDE_PATH)
+unset(AOCLUTILS_CPUID_HEADER_DIR CACHE)
+if(AOCL_ROOT)
+    find_path(AOCLUTILS_CPUID_HEADER_DIR
+        NAMES Capi/au/cpuid/au_cpuid_header_only.h
+        PATHS
+            "${AOCL_ROOT}/include"
+            "${AOCL_ROOT}/SDK/Include"
+        NO_DEFAULT_PATH)
+    if(NOT AOCLUTILS_CPUID_HEADER_DIR)
+        message(WARNING
+            "AOCL-Utils headers were not found below AOCL_ROOT: "
+            "${AOCL_ROOT}\n"
+            "Expected Capi/au/cpuid/au_cpuid_header_only.h in "
+            "${AOCL_ROOT}/include or ${AOCL_ROOT}/SDK/Include")
+	else()
+		message(STATUS
+        	"Using AOCL-Utils headers from: "
+        	"${AOCLUTILS_CPUID_HEADER_DIR}")
+	endif()
+endif()
+
+if(LIBAOCLUTILS_INCLUDE_PATH AND NOT AOCLUTILS_CPUID_HEADER_DIR)
 	message(STATUS "Using user-provided AOCL-Utils SDK/Include path: ${LIBAOCLUTILS_INCLUDE_PATH}")
 	set(AOCLUTILS_CPUID_HEADER_DIR ${LIBAOCLUTILS_INCLUDE_PATH})
-else()
-	include(FetchContent)
-	FetchContent_Declare(aoclutils_hdr
-		GIT_REPOSITORY ${LIBAOCLUTILS_GIT_URL}
-		GIT_TAG        ${LIBAOCLUTILS_GIT_TAG})
-	FetchContent_GetProperties(aoclutils_hdr)
-	if(NOT aoclutils_hdr_POPULATED)
-		FetchContent_Populate(aoclutils_hdr)
+	if(NOT EXISTS "${LIBAOCLUTILS_INCLUDE_PATH}/Capi/au/cpuid/au_cpuid_header_only.h")
+		message(FATAL_ERROR "AOCL-Utils header not found under ${LIBAOCLUTILS_INCLUDE_PATH}")
 	endif()
-	set(AOCLUTILS_CPUID_HEADER_DIR ${aoclutils_hdr_SOURCE_DIR}/SDK/Include)
+endif()
+
+if (NOT AOCLUTILS_CPUID_HEADER_DIR)
+	message(FATAL_ERROR "UTILS header neither found in AOCL_ROOT nor LIBAOCLUTILS_INCLUDE_PATH is set.")
 endif()
 
 add_library(aoclutils_headeronly INTERFACE)
@@ -191,7 +210,6 @@ if(WIN32)
        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     endif()
 endif()
-set(AOCL_ROOT "" CACHE STRING "AOCL-BLAS installation path")
 
 # ============================================================================
 # Include CMake modules for better organization

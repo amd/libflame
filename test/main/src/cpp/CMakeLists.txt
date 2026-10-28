@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-comment -Wno-unused-function")
@@ -17,6 +17,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gbtrs.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_geev.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_geevx.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gehrd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_gebal.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gelqf.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gels.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gelsd.cc

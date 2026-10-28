@@ -47,6 +47,8 @@ integer invoke_lapacke_geevx(integer datatype, int layout, char balanc, char job
                              integer *ihi, void *scale, void *abnrm, void *rconde, void *rcondv);
 integer invoke_lapacke_gehrd(integer datatype, int layout, integer n, integer ilo, integer ihi,
                              void *a, integer lda, void *tau);
+integer invoke_lapacke_gebal(integer datatype, int layout, char job, integer n, void *a,
+                             integer lda, integer *ilo, integer *ihi, void *scale);
 integer invoke_lapacke_gelqf(integer datatype, int layout, integer m, integer n, void *a,
                              integer lda, void *tau);
 integer invoke_lapacke_gels(integer datatype, integer layout, char trans, integer m, integer n,

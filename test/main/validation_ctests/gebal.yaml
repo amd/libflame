@@ -1,0 +1,49 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gebal:
+  description: "Balance a general matrix"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [job, n, lda, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {job: B, n: 1, lda: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {job: B, repeats: 1, square: {range: [2, 16]}}
+
+    - name: job_n
+      precisions: sdcz
+      labels: []
+      params: {job: N, n: 32, lda: 32, repeats: 1}
+
+    - name: job_p
+      precisions: sdcz
+      labels: []
+      params: {job: P, n: 32, lda: 32, repeats: 1}
+
+    - name: job_s
+      precisions: sdcz
+      labels: []
+      params: {job: S, n: 32, lda: 32, repeats: 1}
+
+    - name: job_b
+      precisions: sdcz
+      labels: []
+      params: {job: B, n: 50, lda: 50, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {job: B, n: 128, lda: 128, repeats: 1}
+
+    - name: lda_gt_n
+      precisions: sdcz
+      labels: []
+      params: {job: B, n: 32, lda: 40, repeats: 1}

@@ -226,6 +226,7 @@ double fla_test_max(double v1, double v2);
 
 /* Integer absolute function */
 integer fla_i_abs(integer *x);
+double get_abs(integer datatype, void *A, integer lda, integer i, integer j);
 /* vector functions*/
 void create_vector(integer datatype, void **A, integer M);
 void create_realtype_vector(integer datatype, void **A, integer M);

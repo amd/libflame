@@ -1,5 +1,5 @@
 ############################################################################## #
-#Copyright(C) 2025, Advanced Micro Devices, Inc.All rights reserved.
+# Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
 ############################################################################## #
 
 target_sources(${PROJECT_NAME}
@@ -10,6 +10,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gecon.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_geev.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_geevx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gehrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gebal.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gelqf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gels.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gelsd.c

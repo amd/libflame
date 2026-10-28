@@ -34,6 +34,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_syev.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_spffrt2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_spffrtx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gehrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gebal.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_hgeqz.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gghrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_rot.c

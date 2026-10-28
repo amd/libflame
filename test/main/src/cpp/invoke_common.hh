@@ -20,6 +20,8 @@ void invoke_cpp_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, 
                       integer *lwork, void *rwork, integer *iwork, integer *info);
 void invoke_cpp_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void *A,
                       integer *lda, void *tau, void *work, integer *lwork, integer *info);
+void invoke_cpp_gebal(integer datatype, char *job, integer *n, void *A, integer *lda, integer *ilo,
+                      integer *ihi, void *scale, integer *info);
 void invoke_cpp_gelqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                       void *work, integer *lwork, integer *info);
 void invoke_cpp_gels(integer datatype, char *trans, integer *m, integer *n, integer *nrhs, void *A,

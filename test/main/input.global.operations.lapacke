@@ -8,6 +8,7 @@
 1   geev    Eigen Decomposition                           (0 = disable; 1 = enable; 2 = enable only this)
 1   geevx   Eigen Decomposition                           (0 = disable; 1 = enable; 2 = enable only this)
 1   gehrd   Hessenberg form by orthogonal transformation  (0 = disable; 1 = enable; 2 = enable only this)
+1   gebal   Balance a general matrix                      (0 = disable; 1 = enable; 2 = enable only this)
 1   gelqf   LQ factorization                              (0 = disable; 1 = enable; 2 = enable only this)
 1   geqp3   QR factorization with column pivoting         (0 = disable; 1 = enable; 2 = enable only this)
 1   geqrf   QR factorization                              (0 = disable; 1 = enable; 2 = enable only this)

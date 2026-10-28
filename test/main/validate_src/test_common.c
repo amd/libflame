@@ -5,6 +5,8 @@
 #include "test_common.h"
 #include "test_prototype.h"
 
+#include <math.h>
+
 /* Padding pattern for memory corruption detection */
 #define FLA_PADDING_PATTERN_32 0xFACEFEED
 #define FLA_PADDING_PATTERN_64 0xFACEFEEDFACEFEED
@@ -63,6 +65,31 @@ integer fla_i_abs(integer *x)
 {
     return (*x >= 0 ? (*x) : (-*x));
 }
+
+/* Return the absolute value of the matrix entry A(i,j) for the given datatype.
+   For complex matrices this returns the complex magnitude, sqrt(real^2 + imag^2).
+   The matrix is addressed in LAPACK column-major layout with leading dimension lda. */
+double get_abs(integer datatype, void *A, integer lda, integer i, integer j)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+            return FLA_FABS((double)((float *)A)[j * lda + i]);
+        case DOUBLE:
+            return FLA_FABS(((double *)A)[j * lda + i]);
+        case COMPLEX:
+        {
+            scomplex z = ((scomplex *)A)[j * lda + i];
+            return hypot((double)z.real, (double)z.imag);
+        }
+        default:
+        {
+            dcomplex z = ((dcomplex *)A)[j * lda + i];
+            return hypot(z.real, z.imag);
+        }
+    }
+}
+
 /* Allocate dynamic memory. If FLA_MEM_UNALIGNED is set, unaligned memory is allocated */
 char *fla_mem_alloc(size_t size)
 {

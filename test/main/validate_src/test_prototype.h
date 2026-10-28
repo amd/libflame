@@ -250,6 +250,11 @@
 #define fla_lapack_cgehrd CGEHRD_
 #define fla_lapack_zgehrd ZGEHRD_
 
+#define fla_lapack_sgebal SGEBAL_
+#define fla_lapack_dgebal DGEBAL_
+#define fla_lapack_cgebal CGEBAL_
+#define fla_lapack_zgebal ZGEBAL_
+
 #define fla_lapack_sorghr SORGHR_
 #define fla_lapack_dorghr DORGHR_
 #define fla_lapack_cunghr CUNGHR_
@@ -274,6 +279,11 @@
 #define fla_lapack_dgehrd DGEHRD_
 #define fla_lapack_cgehrd CGEHRD_
 #define fla_lapack_zgehrd ZGEHRD_
+
+#define fla_lapack_sgebal SGEBAL_
+#define fla_lapack_dgebal DGEBAL_
+#define fla_lapack_cgebal CGEBAL_
+#define fla_lapack_zgebal ZGEBAL_
 
 #define fla_lapack_sorghr SORGHR_
 #define fla_lapack_dorghr DORGHR_
@@ -679,6 +689,11 @@
 #define fla_lapack_cgehrd CGEHRD
 #define fla_lapack_zgehrd ZGEHRD
 
+#define fla_lapack_sgebal SGEBAL
+#define fla_lapack_dgebal DGEBAL
+#define fla_lapack_cgebal CGEBAL
+#define fla_lapack_zgebal ZGEBAL
+
 #define fla_lapack_sorghr SORGHR
 #define fla_lapack_dorghr DORGHR
 #define fla_lapack_cunghr CUNGHR
@@ -703,6 +718,11 @@
 #define fla_lapack_dgehrd DGEHRD
 #define fla_lapack_cgehrd CGEHRD
 #define fla_lapack_zgehrd ZGEHRD
+
+#define fla_lapack_sgebal SGEBAL
+#define fla_lapack_dgebal DGEBAL
+#define fla_lapack_cgebal CGEBAL
+#define fla_lapack_zgebal ZGEBAL
 
 #define fla_lapack_sorghr SORGHR
 #define fla_lapack_dorghr DORGHR
@@ -1108,6 +1128,11 @@
 #define fla_lapack_cgehrd cgehrd
 #define fla_lapack_zgehrd zgehrd
 
+#define fla_lapack_sgebal sgebal
+#define fla_lapack_dgebal dgebal
+#define fla_lapack_cgebal cgebal
+#define fla_lapack_zgebal zgebal
+
 #define fla_lapack_sorghr sorghr
 #define fla_lapack_dorghr dorghr
 #define fla_lapack_cunghr cunghr
@@ -1132,6 +1157,11 @@
 #define fla_lapack_dgehrd dgehrd
 #define fla_lapack_cgehrd cgehrd
 #define fla_lapack_zgehrd zgehrd
+
+#define fla_lapack_sgebal sgebal
+#define fla_lapack_dgebal dgebal
+#define fla_lapack_cgebal cgebal
+#define fla_lapack_zgebal zgebal
 
 #define fla_lapack_sorghr sorghr
 #define fla_lapack_dorghr dorghr
@@ -1537,6 +1567,11 @@
 #define fla_lapack_cgehrd cgehrd_
 #define fla_lapack_zgehrd zgehrd_
 
+#define fla_lapack_sgebal sgebal_
+#define fla_lapack_dgebal dgebal_
+#define fla_lapack_cgebal cgebal_
+#define fla_lapack_zgebal zgebal_
+
 #define fla_lapack_sorghr sorghr_
 #define fla_lapack_dorghr dorghr_
 #define fla_lapack_cunghr cunghr_
@@ -1561,6 +1596,11 @@
 #define fla_lapack_dgehrd dgehrd_
 #define fla_lapack_cgehrd cgehrd_
 #define fla_lapack_zgehrd zgehrd_
+
+#define fla_lapack_sgebal sgebal_
+#define fla_lapack_dgebal dgebal_
+#define fla_lapack_cgebal cgebal_
+#define fla_lapack_zgebal zgebal_
 
 #define fla_lapack_sorghr sorghr_
 #define fla_lapack_dorghr dorghr_

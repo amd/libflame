@@ -144,6 +144,10 @@ void validate_gghrd(char *tst_api, char *compq, char *compz, integer n, void *A,
 void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A, void *A_test,
                     integer lda, void *tau, integer datatype, double err_thresh, void *params);
 
+void validate_gebal(char *tst_api, char job, integer n, integer ilo, integer ihi, void *A,
+                    void *A_test, integer lda, void *scale, integer datatype,
+                    double err_thresh, void *params);
+
 void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx_test, integer incx,
                   void *cy, void *cy_test, integer incy, void *c, void *s, void *c_save,
                   void *s_save, double err_thresh, void *params);

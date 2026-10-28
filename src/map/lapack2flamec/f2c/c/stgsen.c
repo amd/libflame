@@ -1,3 +1,7 @@
+/*
+ *     Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./stgsen.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
@@ -269,7 +273,7 @@ The leading M */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= 4*N+16. */
-/* > If IJOB = 1, 2 or 4, LWORK >= MAX(4*N+16, 2*M*(N-M)). */
+/* > If IJOB = 1, 2 or 4, LWORK >= MAX(4*N+16, 2*M*(N-M) + 1). */
 /* > If IJOB = 3 or 5, LWORK >= MAX(4*N+16, 4*M*(N-M)). */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -656,7 +660,7 @@ void aocl_lapack_stgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         /* Computing MAX */
         i__1 = 1, i__2 = (*n << 2) + 16;
         i__1 = fla_max(i__1, i__2);
-        i__2 = (*m << 1) * (*n - *m); // ; expr subst
+        i__2 = (*m << 1) * (*n - *m) + 1; // ; expr subst
         lwmin = fla_max(i__1, i__2);
         /* Computing MAX */
         i__1 = 1;

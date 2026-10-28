@@ -30,6 +30,10 @@
 * Author: Intel Corporation
 *****************************************************************************/
 
+/*
+ *     Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include "lapacke_utils.h"
 
 lapack_int API_SUFFIX(LAPACKE_stgsen_work)( int matrix_layout, lapack_int ijob,
@@ -82,20 +86,24 @@ lapack_int API_SUFFIX(LAPACKE_stgsen_work)( int matrix_layout, lapack_int ijob,
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stgsen_work", info );
             return info;
         }
-        /* Query optimal working array(s) size if requested */
-        if( liwork == -1 || lwork == -1 ) {
-            LAPACK_stgsen( &ijob, &wantq, &wantz, select, &n, a, &lda_t, b,
-                           &ldb_t, alphar, alphai, beta, q, &ldq_t, z, &ldz_t,
-                           m, pl, pr, dif, work, &lwork, iwork, &liwork,
-                           &info );
-            return (info < 0) ? (info - 1) : info;
-        }
-        /* Allocate memory for temporary array(s) */
+        /* Allocate memory for temporary array A */
         a_t = (float*)LAPACKE_malloc( sizeof(float) * lda_t * MAX(1,n) );
         if( a_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
+        /* Transpose input matrices */
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
+        /* Query optimal working array(s) size if requested */
+        if( liwork == -1 || lwork == -1 ) {
+            LAPACK_stgsen( &ijob, &wantq, &wantz, select, &n, a_t, &lda_t, b,
+                           &ldb_t, alphar, alphai, beta, q, &ldq_t, z, &ldz_t,
+                           m, pl, pr, dif, work, &lwork, iwork, &liwork,
+                           &info );
+            LAPACKE_free( a_t );
+            return (info < 0) ? (info - 1) : info;
+        }
+        /* Allocate memory for temporary array(s) */
         b_t = (float*)LAPACKE_malloc( sizeof(float) * ldb_t * MAX(1,n) );
         if( b_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
@@ -116,7 +124,6 @@ lapack_int API_SUFFIX(LAPACKE_stgsen_work)( int matrix_layout, lapack_int ijob,
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
         API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         if( wantq ) {
             API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, n, q, ldq, q_t, ldq_t );

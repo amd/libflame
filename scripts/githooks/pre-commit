@@ -1,0 +1,125 @@
+#!/bin/bash
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+# Rewrite staged source files in the working tree with clang-format and the AMD
+# banner rules, then reject the commit if anything changed. Nothing is staged
+# by this hook; review the changes and stage them manually before committing.
+# A partly staged source file is formatted in full, including its unstaged edits.
+# Git does not run this file after a clone. From the repository root, once:
+#   ln -sfn ../../scripts/githooks/pre-commit .git/hooks/pre-commit
+# On Windows, if ln cannot create that link, copy the hook instead:
+#   cp -f scripts/githooks/pre-commit .git/hooks/pre-commit
+# That connects .git/hooks/pre-commit to this file. core.hooksPath is left unset.
+# Python 3 is python3, or python, or py -3, whichever runs first.
+# A Windows checkout may save this file with CRLF. The next lines re-run it
+# with LF before any other command. The trailing comments swallow a CR so
+# those lines can still be parsed.
+# After a rewrite, the hook lists the files that clang-format or the copyright
+# step changed. Files that were already correct allow the commit to proceed.
+# Skip this hook with: git commit --no-verify
+if [ -z "${HOOK_LF-}" ] && grep -q "$(printf '\r')" "$0"; then #
+  HOOK_LF=1 exec bash -c 'sed "s/\r$//" "$1" | bash' _ "$0" "$@" #
+fi #
+
+set -euo pipefail
+
+# The hook imports scripts/apply_format_changes.py. Do not leave a
+# scripts/__pycache__ directory in the working tree.
+export PYTHONDONTWRITEBYTECODE=1
+
+root=$(git rev-parse --show-toplevel)
+cd "$root"
+
+is_python3() {
+    "$@" -c 'import sys; raise SystemExit(0 if sys.version_info[0] >= 3 else 1)' \
+        >/dev/null 2>&1
+}
+
+if is_python3 python3; then
+    PYTHON=(python3)
+elif is_python3 python; then
+    PYTHON=(python)
+elif is_python3 py -3; then
+    PYTHON=(py -3)
+else
+    echo "error: Python 3 was not found. Tried python3, python, and py -3." >&2
+    exit 1
+fi
+
+# End of hook.
+groups=$(mktemp)
+trap 'rm -f "$groups"' EXIT
+"${PYTHON[@]}" - > "$groups" <<'PY'
+import sys
+
+sys.path.insert(0, "scripts")
+import apply_format_changes as af
+
+full, partial = af.staged_rewrite_groups()
+out = sys.stdout.buffer
+for path in full:
+    out.write(b"F\0" + path.encode("utf-8", "surrogateescape") + b"\0")
+for path in partial:
+    out.write(b"P\0" + path.encode("utf-8", "surrogateescape") + b"\0")
+PY
+
+full=()
+partial=()
+while IFS= read -r -d '' tag; do
+    IFS= read -r -d '' path || exit 1
+    if [[ "$tag" == F ]]; then
+        full+=("$path")
+    elif [[ "$tag" == P ]]; then
+        partial+=("$path")
+    fi
+done < "$groups"
+
+if ((${#full[@]} == 0 && ${#partial[@]} == 0)); then
+    exit 0
+fi
+
+for path in "${full[@]}" "${partial[@]}"; do
+    # The leaf and every parent must stay inside the repository. A symlinked
+    # parent would make the backup and the formatter follow the link.
+    if ! "${PYTHON[@]}" -c 'import sys
+sys.path.insert(0, "scripts")
+import apply_format_changes as af
+raise SystemExit(1 if af.symlink_blocks_rewrite(sys.argv[1], sys.argv[2]) else 0)' "$path" "$root"; then
+        echo "error: ${path} escapes the repository through a symlink; not rewriting it" >&2
+        exit 1
+    fi
+    meta=$(git ls-files -s -- "$path")
+    mode=${meta%% *}
+    if [[ "$mode" == 120000 ]]; then
+        echo "error: ${path} is a symlink in the index; not rewriting it" >&2
+        exit 1
+    fi
+done
+
+# Format the working-tree copies directly. This intentionally leaves the index
+# untouched, including for partly staged files. Deleted worktree files have no
+# content to format and are skipped.
+existing=()
+for path in "${full[@]}" "${partial[@]}"; do
+    if [[ -f "$path" ]]; then
+        existing+=("$path")
+    fi
+done
+
+if ((${#existing[@]} == 0)); then
+    exit 0
+fi
+
+if ! out=$("${PYTHON[@]}" scripts/apply_format_changes.py --apply -- "${existing[@]}" 2>&1); then
+    printf '%s\n' "$out" >&2
+    echo "error: clang-format or copyright update failed; commit rejected" >&2
+    exit 1
+fi
+
+printf '%s\n' "$out"
+if [[ "$out" =~ fixed:\ ([1-9][0-9]*)\ of\ [0-9]+\ file\(s\)\ changed ]]; then
+    echo "pre-commit: files were rewritten in the working tree and were not staged."
+    echo "Review the changes, run 'git add' on the intended files, and commit again using below command:"
+    echo "git commit --no-verify -m \"<commit message>\""
+    exit 1
+fi
+

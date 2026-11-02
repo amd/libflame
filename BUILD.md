@@ -241,13 +241,28 @@ LF_ISA_CONFIG can be set to none, avx, avx2, avx2-strict, avx512, avx512-strict,
 (CMAKE_C_COMPILER or CC). The helper checks AVX512F and AVX2 feature bits and selects avx512, avx2,
 or none.
 
+## 12. Pre-commit hook (clang-format and copyright)
+The tracked hook `scripts/githooks/pre-commit` rewrites eligible staged files in the working tree
+with clang-format and the AMD copyright banner rules, leaves the index unchanged, and lists the
+files it changed. If it rewrites any files, it rejects the commit so you can review the changes
+and stage them manually. Git does not run it after a clone. From the repository root, run below
+command once per clone.
+Create a symlink for pre-commit, as it cannot be stored in .git/hooks path (Linux only):
+    ln -sfn ../../scripts/githooks/pre-commit .git/hooks/pre-commit
+or
+Change the git hooks path for pre-commit:
+    git config core.hooksPath scripts/githooks
+
+It needs Python 3 and `clang-format` (version 10 or newer) on `PATH`. Skip it with `git commit --no-verify`.
+To check or fix files manually, run `python3 scripts/apply_format_changes.py -h`.
+
 ## Building using CMake presets
 
 AOCL-LAPACK provides with build, testing and test workflow cmake presets for most common configurations. You can list
 all available configurations with the following command:
 
 
-| Preset type        |Command                                       |
+| Preset type        | Command                                      |
 |--------------------|----------------------------------------------|
 | Configuration      | `cmake --list-presets`                       |
 | Build              | `cmake --build --list-presets`               |

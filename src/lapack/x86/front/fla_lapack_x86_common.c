@@ -625,88 +625,6 @@ void fla_dlarf_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_bu
     return;
 }
 
-/* DLARF1F for small sizes
- * To be used only when vectorized code via avx2/avx512 is enabled
- * */
-void fla_dlarf1f_small_left_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff,
-                                       aocl_int64_t ldr, doublereal *v, doublereal ntau,
-                                       doublereal *work)
-{
-    /* Below one full vector block of rows a scalar loop beats the kernels */
-    if(m < 4)
-    {
-        aocl_int64_t i, j;
-        for(j = 0; j < n; j++)
-        {
-            doublereal *acol = &a_buff[j * ldr];
-            doublereal dtmp = acol[0]; /* v(1) = 1 */
-            for(i = 1; i < m; i++)
-            {
-                dtmp += acol[i] * v[i];
-            }
-            work[j] = dtmp;
-            dtmp *= ntau;
-            acol[0] += dtmp;
-            for(i = 1; i < m; i++)
-            {
-                acol[i] += dtmp * v[i];
-            }
-        }
-        return;
-    }
-    /* Select AVX512 kernel based on preset threshold and ISA support  */
-    if(m > FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
-    {
-        fla_dlarf1f_left_apply_incv1_avx512(m, n, a_buff, ldr, v, ntau, work);
-    }
-    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
-    {
-        fla_dlarf1f_left_apply_incv1_avx2(m, n, a_buff, ldr, v, ntau, work);
-    }
-    return;
-}
-
-/* DLARF1L for small sizes
- * To be used only when vectorized code via avx2/avx512 is enabled
- * */
-void fla_dlarf1l_small_left_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff,
-                                       aocl_int64_t ldr, doublereal *v, doublereal ntau,
-                                       doublereal *work)
-{
-    /* Below one full vector block of rows a scalar loop beats the kernels */
-    if(m < 4)
-    {
-        aocl_int64_t i, j, mlast = m - 1;
-        for(j = 0; j < n; j++)
-        {
-            doublereal *acol = &a_buff[j * ldr];
-            doublereal dtmp = acol[mlast]; /* v(m) = 1 */
-            for(i = 0; i < mlast; i++)
-            {
-                dtmp += acol[i] * v[i];
-            }
-            work[j] = dtmp;
-            dtmp *= ntau;
-            acol[mlast] += dtmp;
-            for(i = 0; i < mlast; i++)
-            {
-                acol[i] += dtmp * v[i];
-            }
-        }
-        return;
-    }
-    /* Select AVX512 kernel based on preset threshold and ISA support  */
-    if(m > FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
-    {
-        fla_dlarf1l_left_apply_incv1_avx512(m, n, a_buff, ldr, v, ntau, work);
-    }
-    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
-    {
-        fla_dlarf1l_left_apply_incv1_avx2(m, n, a_buff, ldr, v, ntau, work);
-    }
-    return;
-}
-
 /**
  * DLARF1F/DLARF1L applied from the right, for small sizes
  * To be used only when vectorized code via avx2/avx512 is enabled
@@ -733,10 +651,11 @@ void fla_dlarf1_small_right_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublerea
     return;
 }
 
-/* Folds the column of C that pairs with the implicit v element 1 into the GEMV
- * result and updates it, for DLARF1F/DLARF1L applied from the right.
- * Unlike the other kernels here this one is reached on every right side call, so
- * it carries a scalar fallback for targets without AVX2.
+/* For DLARF1F/DLARF1L applied from the right, folds the column of C that pairs
+ * with the implicit v element 1 into the GEMV result and applies the rank 1
+ * update to that column:
+ *    work = work + c1
+ *    c1   = c1 + ntau * work
  * */
 void fla_dlarf1_right_update_c1_simd(aocl_int64_t m, doublereal *c1, doublereal ntau,
                                      doublereal *work)

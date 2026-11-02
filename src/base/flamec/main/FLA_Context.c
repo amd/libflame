@@ -408,7 +408,7 @@ void fla_isa_init(fla_context *context)
         // If user has chosen a lower level ISA, then same will
         // be used
 
-        if(fla_req_id == FLA_ARCH_AVX2 && fla_arch_id == FLA_ARCH_AVX512)
+        if(fla_req_id == FLA_ARCH_AVX2 && fla_arch_id >= FLA_ARCH_AVX512)
         {
             fla_arch_id = FLA_ARCH_AVX2;
         }

@@ -272,7 +272,10 @@ void fla_dlarf1f_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doubler
         }
         if(k == m)
         {
-            acol[k] += dtmp * v[k];
+            vd2_inp = _mm_load_sd(&acol[k]);
+            vd2_vj = _mm_load_sd(&v[k]);
+            vd2_inp = _mm_add_sd(_mm_mul_sd(vd2_dtmp, vd2_vj), vd2_inp);
+            _mm_store_sd(&acol[k], vd2_inp);
         }
     }
 }
@@ -373,7 +376,10 @@ void fla_dlarf1l_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doubler
             }
             if(k == m - 1)
             {
-                acol[k] += dtmp * v[k];
+                vd2_inp = _mm_load_sd(&acol[k]);
+                vd2_vj = _mm_load_sd(&v[k]);
+                vd2_inp = _mm_add_sd(_mm_mul_sd(vd2_dtmp, vd2_vj), vd2_inp);
+                _mm_store_sd(&acol[k], vd2_inp);
             }
             acol[m] += dtmp;
         }
